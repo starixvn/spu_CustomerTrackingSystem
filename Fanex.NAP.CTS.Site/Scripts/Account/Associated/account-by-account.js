@@ -1,9 +1,11 @@
-﻿function account_by_account() {
+﻿const { debug } = require("util");
+
+function account_by_account() {
     var divAddAssociation = $('#divAddAssociation');
     var btnAddAssociation = $('#btnAddAssociation');
     var btnSearch = $('#account-by-account-btn-search');
     var btnViewOnGraph = $('#account-by-account-btn-on-graph');
-    var associatedByAccountTable = $('#account-by-account-table');    
+    var associatedByAccountTable = $('#account-by-account-table');
     var asscomment = $('#txtasscomment');
     var btnSaveAssociation = $('#btnsaveassociation');
     var btnCancelAssociation = $('#btncancelassociation');
@@ -15,28 +17,30 @@
     let spanAddAssociationUserName = $('#spanAddAssociationUserName');
     let spanAddAssociationUserNameMaxTag = $('#spanAddAssociationUserNameMaxTag');
     let spanAddAssociationChangeHidden = $('#spanAddAssociationChangeHidden');
-    let inputTagUsername = $('#inputTagUsername'); 
+    let inputTagUsername = $('#inputTagUsername');
     let maxTags = 50;
     let divMatchBettingPattern = $('#divMatchBettingPattern');
     let tableMatchBettingPattern = $('#tblMatchBettingPattern');
     let dataTableMatchBettingPattern = null;
-    let spanBettingPatternTotalMatch = $('#spanBettingPatternTotalMatch');
-	let divIPAssociation = $('#divIPAssociation');
+    let divIPAssociation = $('#divIPAssociation');
     let tblIPAssociation = $('#tblIPAssociation');
     let dataTableIPAssociation = null;
     let spanIPAssociationTotalMatches = $('#spanIPAssociationTotalMatches');
-    let spanIPAssociationTotalIPSharing = $('#spanIPAssociationTotalIPSharing');    let cbbAssociationCategory = $('#cbbAssociationCategory');
+    let spanIPAssociationTotalIPSharing = $('#spanIPAssociationTotalIPSharing'); let cbbAssociationCategory = $('#cbbAssociationCategory');
     let isSkipTracking = true;
     let isInProcessing = false;
+    let tableStakeIPPattern = $("#tblStakeIPPattern");
+    let configdataTableStakeIPPattern = false;
+    let isProcessingTableStakeIPPattern = false;
 
     function RenderTag(obj) {
         let html = "";
 
         if (obj.IsFlaggedTag)
-            html += "<span class='icon icon-Flagged' title='Flagged'></span>";        
+            html += "<span class='icon icon-Flagged' title='Flagged'></span>";
 
         if (obj.IsAffectedTag)
-            html += "<span class='icon icon-Affected'  title='Affected'></span>";            
+            html += "<span class='icon icon-Affected'  title='Affected'></span>";
 
         return html === "" ? "-" : html;
     }
@@ -49,7 +53,7 @@
         }
 
         return null;
-    } 
+    }
 
     function RenderCategoryNames(categoryNames) {
         let html = '';
@@ -229,9 +233,9 @@
                 });
             }
         });
-        
+
         return table;
-    }  
+    }
 
     function AssociationStatus(isLinked) {
         var html = '<div class="toggle ' + (isLinked ? 'toggle-on' : '') + '" id="switch">';
@@ -242,7 +246,7 @@
 
         return html;
     }
-   
+
     function ActiveRemove(obj, fromCTSCustId, fromSubscriberId) {
         common.showConfirmation("<div class='popup-content'><div class='popup-title'>Do you want to update Association Status between <b>" + _username + "</b> and <b>" + obj.Username + "</b> ?</div></div>",
             function () {
@@ -328,7 +332,7 @@
             let usernameEqual = $("tag[data-user-name='" + x + "']");
             if (usernameEqual !== undefined) {
                 usernameEqual.removeClass('valid').addClass('invalid-username');
-            }            
+            }
         });
 
         data.UserNameDuplicatedList.map(function (x) {
@@ -371,13 +375,13 @@
                             $("#account-by-account-cbb-association-type").val(3);
                             LoadGrid(true);
                             GetTotalAssociation(fromCTSCustId);
-                        }, 1000);                        
+                        }, 1000);
                     } else {
                         BindResultValidatedManualAssociationMultiple(response.ResultValidated);
                     }
                 },
                 complete: function () {
-                    divAddAssociation.removeClass("loading-block");                   
+                    divAddAssociation.removeClass("loading-block");
                 },
                 error: function (errMsg) {
                     console.log(errMsg);
@@ -400,7 +404,7 @@
         });
 
         return userNameList.join();
-    }       
+    }
 
     function InitInputTagUsername(fromCTSCustid) {
         spanAddAssociationUserNameMaxTag.text(maxTags);
@@ -438,15 +442,15 @@
 
         function OnChangeTags(tagName, cssClass) {
             let maxCountTags = parseInt(spanAddAssociationUserNameMaxTag.text());
-            let isTextUnicode = IsTextUnicode($(tagName.tag).text()); 
+            let isTextUnicode = IsTextUnicode($(tagName.tag).text());
 
             if (!isTextUnicode) {
-                inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);                
+                inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
             }
             else if (maxCountTags > 0) {
                 let $tag = $(tagName.tag);
                 let textReplaced = $tag.text();
-                textReplaced = textReplaced.replace(new RegExp("'", 'g'), "").replace(new RegExp("\"", 'g'), "");                
+                textReplaced = textReplaced.replace(new RegExp("'", 'g'), "").replace(new RegExp("\"", 'g'), "");
                 if (textReplaced.length > 50)
                     textReplaced = textReplaced.substr(0, 50);
                 $tag.val(textReplaced);
@@ -458,7 +462,7 @@
 
                 btnRemove.on('click', function (e) {
                     let currentTag = $(e.target).parent();
-                    
+
                     ResetMaxTag();
                     ValidateManualAssociationMultiple(fromCTSCustid, currentTag.text().trim());
                     EnableButtonAdd();
@@ -466,11 +470,11 @@
 
                 spanAddAssociationUserNameMaxTag.text(maxCountTags - 1);
             } else {
-                inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);                
+                inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
             }
             btnSaveAssociation.prop('disabled', true);
         }
-        
+
         inputTagUsername.tagify({
             pattern: null,
             delimiters: /\r?\n|\r| |,/,
@@ -496,8 +500,8 @@
             .off('invalid').on('invalid', function (_, tagName) {
                 OnChangeTags(tagName, 'invalid-duplicated');
                 spanAddAssociationChangeHidden.text("1");
-            });            
-        
+            });
+
         inputTagUsername.off('keydown').on('keydown', function () {
             let keyCode = event.keyCode;
 
@@ -508,7 +512,7 @@
                     spanAddAssociationUserName.find('tags').removeClass('ctrlA');
                 }
             }
-            
+
             if (event.ctrlKey) {
                 if (keyCode === 65 || keyCode === 97) {
                     return AddBorderTags();
@@ -521,7 +525,7 @@
             let isOutSiteInput = !spanAddAssociationUserName.is(e.target) && spanAddAssociationUserName.has(e.target).length === 0;
             let isTagsFocus = spanAddAssociationUserName.find('tags.tagify--focus').length > 0;
             let isChange = spanAddAssociationChangeHidden.text();
-            if (isOutSiteInput && isTagsFocus || isChange === "1") {               
+            if (isOutSiteInput && isTagsFocus || isChange === "1") {
                 asscomment.focus();
                 spanAddAssociationUserName.addClass("loading-value");
                 setTimeout(() => {
@@ -537,11 +541,11 @@
         btnSaveAssociation.prop('disabled', true);
     }
 
-    function ShowMatchBettingPattern(custId, groupIDs, originGroupIDs) {        
+    function ShowMatchBettingPattern(custId, groupIDs, originGroupIDs) {
 
         divMatchBettingPattern.dialog({
             modal: true,
-            width: '1200px',
+            width: '1400px',
             title: 'ASSOCIATION DETAILS',
             resizable: false,
             draggable: true,
@@ -554,119 +558,130 @@
         });
 
         if (dataTableMatchBettingPattern === null) {
-            dataTableMatchBettingPattern = tableMatchBettingPattern.DataTable({
-                language: {
-                    zeroRecords: "There's no data"
-                },
-                info: false,
-                ordering: false,
-                searching: false,
-                scrollX: false,
-                paging: false,
-                columnDefs: [
-                    { targets: "_all", defaultContent: "-" },
-                    { targets: [-1, -2], className: "text-center" },
-                    { targets: [0], visible: false },
-                    { targets: [1], width: "5%", className: "text-center" },
-                    { targets: [2], width: "15%", className: "text-left" },
-                    { targets: [3], width: "15%", className: "text-left" },
-                    { targets: [4], width: "15%", className: "text-center" },
-                    { targets: [5], width: "15%", className: "text-left" },
-                    { targets: [6], width: "10%", className: "text-left" },
-                    { targets: [7], width: "5%", className: "text-left" },
-                    { targets: [8], width: "10%", className: "text-center" },
-                    { targets: [9], width: "5%", className: "text-center" },
-                    { targets: [10], width: "5%", className: "text-center" }
-                ],
-                columns: [
-                    { data: obj => obj.MatchDesc },
-                    { data: obj => obj.GroupID },
-                    { data: obj => obj.Description },
-                    { data: obj => obj.UserName },
-                    { data: obj => obj.TransDateString },
-                    { data: obj => obj.TransId },
-                    { data: obj => obj.BetType },
-                    { data: obj => obj.BetTeam },
-                    { data: obj => obj.Stake },
-                    { data: obj => obj.Odds },
-                    { data: obj => obj.LiveScore }
-                ],
-                createdRow: function (row, _) {
-                    if (!$(row).hasClass('detail')) {
-                        $(row).addClass('hide');
-                    }
-                },
-                drawCallback: function () {
-                    let api = this.api();
-                    let rows = api.rows({ page: 'current' }).nodes();
-                    var data = api.rows({ page: 'current' }).data();
-                    let last = null;
-
-                    api.column(0, { page: 'current' }).data().each(function (group, i) {
-                        if (last !== group) {
-                            let html = '<tr class="group group-site"><td colspan="10"><span class="column-group-match"';
-                            html += ' data-match-id=' + data[i].MatchID;
-                            html += ' data-event-date-string=' + data[i].EventDateString;
-                            html += ' data-custID1=' + data[i].CustID1;
-                            html += ' data-custID2=' + data[i].CustID2;
-                            html += ' data-groupIDs=' + data[i].GroupIDs;
-                            html += ' data-orgin-groupIDs=' + data[i].OrginGroupIDs+ '>';
-                            html += '<i class="icon icon-chevron-right icon-open"></i> ' + group;
-                            html += '</span></td></tr>';
-
-                            $(rows).eq(i).before(html);
-                            last = group;
-                        }
-                    });
-                }
-            }); 
-
-            $('tbody', tableMatchBettingPattern).on('click', 'tr.group', function () {
-                let trGroup = $(this);
-                let colGroupMatch = trGroup.find('.column-group-match');
-                if (colGroupMatch !== undefined) {
-                    let iGroup = $('i.icon', trGroup);
-
-                    if (!iGroup.hasClass('has-detail')) {                        
-                        let params = {
-                            MatchId: colGroupMatch.attr('data-match-id'),
-                            EventDateString: colGroupMatch.attr('data-event-date-string'),
-                            CustID1: colGroupMatch.attr('data-custID1'),
-                            CustID2: colGroupMatch.attr('data-custID2'),
-                            GroupIDs: colGroupMatch.attr('data-groupIDs'),
-                            OrginGroupIDs: colGroupMatch.attr('data-orgin-groupIDs')
-                        }
-
-                        if (!isInProcessing) {
-                            GetMatchBettingPatternDetail(params, trGroup);
-                        }
-
-                        iGroup.removeClass('icon-chevron-right').addClass('icon-chevron-down');
-                    } else {                        
-                        if (iGroup.hasClass('icon-chevron-right'))
-                            iGroup.removeClass('icon-chevron-right').addClass('icon-chevron-down');
-                        else
-                            iGroup.removeClass('icon-chevron-down').addClass('icon-chevron-right');
-                        
-                        $('tr[data-match-id="' + colGroupMatch.attr('data-match-id') + '"]', tableMatchBettingPattern).each(function () {
-                            let trCurrent = $(this);
-                            if (trCurrent.hasClass('hide'))
-                                trCurrent.removeClass('hide');
-                            else
-                                trCurrent.addClass('hide');
-                        });
-                    }
-                }
-            });
+            ConfigDataTableMatchBettingPattern();
         }
+        GetMatchBettingPattern($('#hdCustId').val(), custId, groupIDs, originGroupIDs);
 
-        GetMatchBettingPattern($('#hdCustId').val(), custId, groupIDs, originGroupIDs);    
+        ConfigDataTableStakeIPPattern();
+        GetStakeIpPattern($('#hdCustId').val(), custId)
 
         $('.ui-dialog .ui-dialog-content').css('padding', '0');
     }
 
+    function ConfigDataTableMatchBettingPattern() {
+        dataTableMatchBettingPattern = tableMatchBettingPattern.DataTable({
+            language: {
+                zeroRecords: "There's no data"
+            },
+            info: false,
+            ordering: false,
+            searching: false,
+            scrollX: false,
+            paging: false,
+            columnDefs: [
+                { targets: "_all", defaultContent: "-" },
+                { targets: [-1, -2], className: "text-center" },
+                { targets: [0], visible: false },
+                { targets: [1], width: "5%", className: "text-center" },
+                { targets: [2], width: "10%", className: "text-left" },
+                { targets: [3], width: "10%", className: "text-left" },
+                { targets: [4], width: "15%", className: "text-center" },
+                { targets: [5], width: "15%", className: "text-left" },
+                { targets: [6], width: "5%", className: "text-left" },
+                { targets: [7], width: "5%", className: "text-left" },
+                { targets: [8], width: "5%", className: "text-center" },
+                { targets: [9], width: "5%", className: "text-center" },
+                { targets: [10], width: "5%", className: "text-center" },
+                { targets: [11], width: "5%", className: "text-center" },
+                { targets: [12], width: "5%", className: "text-center" },
+                { targets: [13], width: "10%", className: "text-center" }
+            ],
+            columns: [
+                { data: obj => obj['MatchDesc'] },
+                { data: obj => obj['GroupID'] },
+                { data: obj => obj['Description'] },
+                { data: obj => obj['UserName'] },
+                { data: obj => obj['TransDateString'] },
+                { data: obj => obj['TransId'] },
+                { data: obj => obj['BetType'] },
+                { data: obj => obj['BetTeam'] },
+                { data: obj => obj['StakeRM'] },
+                { data: obj => obj['Stake'] },
+                { data: obj => obj['Currency'] },
+                { data: obj => obj['Odds'] },
+                { data: obj => obj['LiveScore'] },
+                { data: obj => obj['IP'] }
+            ],
+            createdRow: function (row, _) {
+                if (!$(row).hasClass('detail')) {
+                    $(row).addClass('hide');
+                }
+            },
+            drawCallback: function () {
+                let api = this.api();
+                let rows = api.rows({ page: 'current' }).nodes();
+                var data = api.rows({ page: 'current' }).data();
+                let last = null;
+
+                api.column(0, { page: 'current' }).data().each(function (group, i) {
+                    if (last !== group) {
+                        let html = '<tr class="group group-site"><td colspan="13"><span class="column-group-match"';
+                        html += ' data-match-id=' + data[i].MatchID;
+                        html += ' data-event-date-string=' + data[i].EventDateString;
+                        html += ' data-custID1=' + data[i].CustID1;
+                        html += ' data-custID2=' + data[i].CustID2;
+                        html += ' data-groupIDs=' + data[i].GroupIDs;
+                        html += ' data-orgin-groupIDs=' + data[i].OrginGroupIDs + '>';
+                        html += '<i class="icon icon-chevron-right icon-open"></i> ' + group;
+                        html += '</span></td></tr>';
+
+                        $(rows).eq(i).before(html);
+                        last = group;
+                    }
+                });
+            }
+        });
+
+        $('tbody', tableMatchBettingPattern).on('click', 'tr.group', function () {
+            let trGroup = $(this);
+            let colGroupMatch = trGroup.find('.column-group-match');
+            if (colGroupMatch !== undefined) {
+                let iGroup = $('i.icon', trGroup);
+
+                if (!iGroup.hasClass('has-detail')) {
+                    let params = {
+                        MatchId: colGroupMatch.attr('data-match-id'),
+                        EventDateString: colGroupMatch.attr('data-event-date-string'),
+                        CustID1: colGroupMatch.attr('data-custID1'),
+                        CustID2: colGroupMatch.attr('data-custID2'),
+                        GroupIDs: colGroupMatch.attr('data-groupIDs'),
+                        OrginGroupIDs: colGroupMatch.attr('data-orgin-groupIDs')
+                    }
+
+                    if (!isInProcessing) {
+                        GetMatchBettingPatternDetail(params, trGroup);
+                    }
+
+                    iGroup.removeClass('icon-chevron-right').addClass('icon-chevron-down');
+                } else {
+                    if (iGroup.hasClass('icon-chevron-right'))
+                        iGroup.removeClass('icon-chevron-right').addClass('icon-chevron-down');
+                    else
+                        iGroup.removeClass('icon-chevron-down').addClass('icon-chevron-right');
+
+                    $('tr[data-match-id="' + colGroupMatch.attr('data-match-id') + '"]', tableMatchBettingPattern).each(function () {
+                        let trCurrent = $(this);
+                        if (trCurrent.hasClass('hide'))
+                            trCurrent.removeClass('hide');
+                        else
+                            trCurrent.addClass('hide');
+                    });
+                }
+            }
+        });
+    }
+
     function GetMatchBettingPattern(custId1, custId2, groupIDs, originGroupIDs) {
-        spanBettingPatternTotalMatch.text("");        
 
         var url = common.modifyRelativeUrl('Account/GetMatchesAssociationByAI');
 
@@ -684,14 +699,13 @@
             success: function (response) {
                 if (response !== undefined) {
                     if (response.ErrorMessage === null || response.ErrorMessage === '' && response.MatchesInfo.length > 0) {
-                        tableMatchBettingPattern.DataTable().clear().rows.add(response.MatchesInfo).draw();                        
+                        tableMatchBettingPattern.DataTable().clear().rows.add(response.MatchesInfo).draw();
                         tableMatchBettingPattern.DataTable().columns.adjust();
-                        spanBettingPatternTotalMatch.text(response.TotalMatchCount);
                     } else {
                         console.log(response.ErrorMessage);
                         common.showError(response.ErrorMessage);
-                    }                    
-                } 
+                    }
+                }
             },
             complete: function () {
                 tableMatchBettingPattern.find('tbody').removeClass('loading');
@@ -747,22 +761,268 @@
         });
     }
 
-    function RenderBettingPatternDetailRowHTML(response, matchId, index, isRowMember, rowspanNumer)
-    {
+    function RenderBettingPatternDetailRowHTML(response, matchId, index, isRowMember, rowspanNumer) {
         let newRow = $('<tr role="row" class="odd detail" data-match-id=' + matchId + '>')
-                      .append('<td class="hide">' + response[index]["MatchDesc"] + '</td>')
-                      .append('<td class="text-center" ' + (isRowMember ? 'style="display: none;' : ('rowspan = "' + rowspanNumer)) + '" >' + response[index]["GroupID"] + '</td>')
-                      .append('<td class="text-center" ' + (isRowMember ? 'style="display: none;' : ('rowspan = "' + rowspanNumer)) + '" >'+ response[index]["Description"] + '</td>')
-                      .append('<td class="text-center">' + response[index]["UserName"] + '</td>')
-                      .append('<td class="text-center">' + response[index]["TransDateString"] + '</td>')
-                      .append('<td class="text-center">' + response[index]["TransId"] + '</td>')
-                      .append('<td class="text-center">' + response[index]["BetType"] + '</td>')
-                      .append('<td class="text-center">' + response[index]["BetTeam"] + '</td>')
-                      .append('<td class="text-center">' + response[index]["Stake"] + '</td>')
-                      .append('<td class="text-center"><span ' + (response[index]["Odds"] < 0 ? 'class="red"' : '') + '>' + response[index]["Odds"] + '</span></td>')
-                      .append('<td class="text-center">' + response[index]["LiveScore"] + '</td>')
-                      .append('</tr>');
+            .append('<td class="hide">' + response[index]["MatchDesc"] + '</td>')
+            .append('<td class="text-center" ' + (isRowMember ? 'style="display: none;' : ('rowspan = "' + rowspanNumer)) + '" >' + response[index]["GroupID"] + '</td>')
+            .append('<td class="text-center" ' + (isRowMember ? 'style="display: none;' : ('rowspan = "' + rowspanNumer)) + '" >' + response[index]["Description"] + '</td>')
+            .append('<td class="text-center">' + response[index]["UserName"] + '</td>')
+            .append('<td class="text-center" style="Color: red">' + response[index]["TransDateString"] + '</td>')
+            .append('<td class="text-center">' + response[index]["TransId"] + '</td>')
+            .append('<td class="text-center">' + response[index]["BetType"] + '</td>')
+            .append('<td class="text-center">' + response[index]["BetTeam"] + '</td>')
+            .append('<td class="text-center">' + response[index]["StakeRM"] + '</td>')
+            .append('<td class="text-center">' + response[index]["Stake"] + '</td>')
+            .append('<td class="text-center">' + response[index]["Currency"] + '</td>')
+            .append('<td class="text-center"><span ' + (response[index]["Odds"] < 0 ? 'class="red"' : '') + '>' + response[index]["Odds"] + '</span></td>')
+            .append('<td class="text-center">' + response[index]["LiveScore"] + '</td>')
+            .append('<td class="text-center">' + response[index]["IP"] + '</td>')
 
+            .append('</tr>');
+
+        return newRow;
+    }
+
+    function ConfigDataTableStakeIPPattern() {
+        if (configdataTableStakeIPPattern) {
+            return
+        }
+
+        tableStakeIPPattern.DataTable({
+            language: {
+                zeroRecords: "There's no data"
+            },
+            info: false,
+            ordering: false,
+            searching: false,
+            scrollX: false,
+            paging: false,
+            columnDefs: [
+                { targets: "_all", defaultContent: "-" },
+                { targets: [-1, -2], className: "text-center" },
+                { targets: [0], width: "10%", className: "text-center" },
+                { targets: [1], width: "15%", className: "text-center" },
+                { targets: [2], width: "10%", className: "text-center" },
+                { targets: [3], width: "5%", className: "text-center" },
+                { targets: [4], width: "15%", className: "text-center" },
+                { targets: [5], width: "5%", className: "text-center" },
+                { targets: [6], width: "5%", className: "text-center" },
+                { targets: [7], width: "10%", className: "text-center" },
+                { targets: [8], width: "15%", className: "text-center" },
+                { targets: [9], width: "5%", className: "text-center" },
+                { targets: [10], width: "5%", className: "text-center" },
+                { targets: [11], width: "5%", className: "text-center" },
+                { targets: [12], width: "5%", className: "text-center" },
+            ],
+            columns: [
+                { data: obj => obj.Description },
+                { data: obj => obj.UserName },
+                { data: obj => obj.MatchID },
+                { data: obj => obj.IP },
+                { data: obj => obj.StakeRM },
+                { data: obj => obj.Stake },
+                { data: obj => obj.Currency },
+                { data: obj => obj.TransDateString },
+                { data: obj => obj.TransId },
+                { data: obj => obj.BetType },
+                { data: obj => obj.BetTeam },
+                { data: obj => obj.Odds },
+                { data: obj => obj.LiveScore }
+            ],
+            createdRow: function (row, _) {
+                if (!$(row).hasClass('detail')) {
+                    $(row).addClass('hide');
+                }
+            },
+
+            drawCallback: function () {
+                let api = this.api();
+                let rows = api.rows({ page: 'current' }).nodes();
+                var data = api.rows({ page: 'current' }).data();
+
+                api.column(0, { page: 'current' }).data().each(function (group, i) {
+                    let html = '<tr class="group group-site"><td colspan="13"><span class="column-group-match"';
+                    html += ' data-couple-id=' + data[i].CoupleID;
+                    html += ' data-from-date-string=' + data[i].FromDateString;
+                    html += ' data-to-date-string=' + data[i].ToDateString;
+                    html += ' ><i class="icon icon-chevron-right icon-open"></i> ' + data[i].Group;
+                    html += '</span></td></tr>';
+
+
+                    $(rows).eq(i).before(html);
+                    last = group;
+
+                });
+            }
+        });
+
+        $('tbody', tableStakeIPPattern).on('click', 'tr.group', function () {
+            let trGroup = $(this);
+            let colGroupMatch = trGroup.find('.column-group-match');
+            if (colGroupMatch !== undefined) {
+                let iGroup = $('i.icon', trGroup);
+
+                if (!iGroup.hasClass('has-detail')) {
+                    let params = {
+                        CoupleId: colGroupMatch.attr('data-couple-id'),
+                        FromDateString: colGroupMatch.attr('data-from-date-string'),
+                        ToDateString: colGroupMatch.attr('data-to-date-string'),
+                    }
+
+                    if (!isProcessingTableStakeIPPattern) {
+                        GetStakeIPPatternDetail(params, trGroup);
+                    }
+
+                    iGroup.removeClass('icon-chevron-right').addClass('icon-chevron-down');
+                } else {
+                    if (iGroup.hasClass('icon-chevron-right'))
+                        iGroup.removeClass('icon-chevron-right').addClass('icon-chevron-down');
+                    else
+                        iGroup.removeClass('icon-chevron-down').addClass('icon-chevron-right');
+
+                    $('tr[data-couple-id="' + colGroupMatch.attr('data-couple-id') + '"]', tableStakeIPPattern).each(function () {
+                        let trCurrent = $(this);
+                        if (trCurrent.hasClass('hide'))
+                            trCurrent.removeClass('hide');
+                        else
+                            trCurrent.addClass('hide');
+                    });
+                }
+            }
+        });
+
+        configdataTableStakeIPPattern = true;
+    }
+
+    function GetStakeIpPattern(custId1, custId2) {
+        var url = common.modifyRelativeUrl('Account/GetStakeIpPatternByAI');
+
+        $.ajax(url, {
+            type: 'POST',
+            beforeSend: function () {
+                tableStakeIPPattern.find('tbody').addClass('loading');
+            },
+            data: {
+                custID1: custId1,
+                custID2: custId2
+            },
+            success: function (response) {
+                if (response !== undefined) {
+                    if ((response.ErrorMessage === null || response.ErrorMessage === '') && response.StakeIpPatternInformations.length > 0) {
+                        tableStakeIPPattern.DataTable().clear().rows.add(response.StakeIpPatternInformations).draw();
+                        tableStakeIPPattern.DataTable().columns.adjust();
+                    } else {
+                        console.log(response.ErrorMessage);
+                        common.showError(response.ErrorMessage);
+                    }
+                }
+            },
+            complete: function () {
+                tableStakeIPPattern.find('tbody').removeClass('loading');
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function GetStakeIPPatternDetail(params, target) {
+        var url = common.modifyRelativeUrl('Account/GetStakeIPPatternDetailByAI');
+        $.ajax(url, {
+            type: 'POST',
+            beforeSend: function () {
+                tableStakeIPPattern.find('tbody').addClass('loading');
+                isProcessingTableStakeIPPattern = true;
+            },
+            data: params,
+            success: function (response) {
+                if (response === undefined) {
+                    return;
+                }
+                let groupCounter = 1;
+                for (var i = response.length - 1; i >= 0; i--) {
+                    if (i - 1 >= 0) {
+                        if (response[i]["GroupID"] == response[i - 1]["GroupID"]) {
+                            target.last().after(RenderStakeIPPatternDetailRowHTML(response, i, true, 0));
+                            groupCounter++;
+                        }
+                        else {
+                            target.last().after(RenderStakeIPPatternDetailRowHTML(response, i, false, groupCounter));
+                            groupCounter = 1;
+                        }
+                    } else {
+                        target.last().after(RenderStakeIPPatternDetailRowHTML(response, i, false, groupCounter));
+                    }
+                }
+
+                tableStakeIPPattern.DataTable().columns.adjust();
+
+                let iGroup = $('i.icon', target);
+                iGroup.addClass('has-detail');
+
+            },
+            complete: function () {
+                tableStakeIPPattern.find('tbody').removeClass('loading');
+                isProcessingTableStakeIPPattern = false;
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+                isProcessingTableStakeIPPattern = false;
+            }
+        });
+    }
+
+    function RenderStakeIPPatternDetailRowHTML(response, index, isRowMember, rowspanNumer) {
+        let IsStakePattern = response[index]["IsStakePattern"];
+        let styleRedFont = 'color: red;'
+        let styleRedFontInStake = '';
+        let styleRedFontInIpPattern = '';
+        if (IsStakePattern) {
+            styleRedFontInStake = styleRedFont;
+        }
+        else {
+            styleRedFontInIpPattern = styleRedFont;
+        }
+        let descriptionStyle = 'border:none; border-bottom:.5pt solid black; background:#fafafa;border-top:0.5pt solid windowtext; border-right:0.5pt solid windowtext; border-left:0.5pt solid windowtext; white-space:normal;'
+        let descriptionAttribute = isRowMember ? ('style="display: none;' + descriptionStyle + '"') : ('style="' + descriptionStyle + '" rowspan = "' + rowspanNumer + '"');
+
+        let oddStyle = "border:0.5pt solid windowtext; background:#fde9d9; border-top:none;";
+        let envenStyle = "border:0.5pt solid windowtext; background:#c5d9f1; border-left:none;"
+        let defaultStyle = response[index]["GroupUserNameID"] % 2 == 0 ? envenStyle : oddStyle;
+
+        let isUserNameRowMember;
+        let userNameRowSpanNumer;
+        if (index - 1 >= 0) {
+            if (response[index]["GroupUserNameID"] == response[index - 1]["GroupUserNameID"]) {
+                isUserNameRowMember = true;
+                userNameRowSpanNumer = 0;
+            }
+            else {
+                isUserNameRowMember = false;
+                userNameRowSpanNumer = response[index]["TotalStakePattern"];
+            }
+        }
+        else {
+            isUserNameRowMember = false;
+            userNameRowSpanNumer = response[index]["TotalStakePattern"];
+        }
+        let userAttribute = isUserNameRowMember ? ('style="display: none;' + defaultStyle + '"') : ('style="' + defaultStyle + '" rowspan = "' + userNameRowSpanNumer + '"');
+
+        let newRow = $('<tr role="row" class="odd detail" data-couple-id=' + response[index]["CoupleID"] + '>')
+            .append('<td class="text-center" width="15%" ' + descriptionAttribute + '>' + response[index]["Description"] + '</td>')
+            .append('<td class="text-center" ' + userAttribute + '>' + response[index]["UserName"] + '</td>')
+            .append('<td class="text-center" ' + userAttribute + '>' + response[index]["MatchID"] + '</td>')
+            .append('<td class="text-center" style = "' + defaultStyle + styleRedFontInIpPattern + '">' + response[index]["IP"] + '</td>')
+            .append('<td class="text-center" style = "' + defaultStyle + styleRedFontInStake + '">' + response[index]["StakeRM"] + '</td>')
+            .append('<td class="text-center" style = "' + defaultStyle + styleRedFontInStake + '">' + response[index]["Stake"] + '</td>')
+            .append('<td class="text-center" style = "' + defaultStyle + styleRedFontInStake + '">' + response[index]["Currency"] + '</td>')
+            .append('<td class="text-center" style = "' + defaultStyle + '">' + response[index]["TransDateString"] + '</td>')
+            .append('<td class="text-center" style = "' + defaultStyle + '">' + response[index]["TransId"] + '</td>')
+            .append('<td class="text-center" style = "' + defaultStyle + '">' + response[index]["BetType"] + '</td>')
+            .append('<td class="text-center" style = "' + defaultStyle + '">' + response[index]["BetTeam"] + '</td>')
+            .append('<td class="text-center" style = "' + defaultStyle + '">' + response[index]["Odds"] + '</td>')
+            .append('<td class="text-center" style = "' + defaultStyle + '">' + response[index]["LiveScore"] + '</td>')
+            .append('</tr>');
         return newRow;
     }
 
@@ -790,7 +1050,7 @@
                 ordering: false,
                 searching: false,
                 scrollX: false,
-                paging: false,                
+                paging: false,
                 columnDefs: [
                     { targets: "_all", defaultContent: "-" },
                     { targets: [0], width: "15%", className: "text-center" },
@@ -811,7 +1071,7 @@
             });
         }
 
-        GetIPAssociation($('#hdCustId').val(), custId);        
+        GetIPAssociation($('#hdCustId').val(), custId);
 
         $('.ui-dialog .ui-dialog-content').css('padding', '0');
     }
@@ -869,10 +1129,10 @@
         dataTable
             ? dataTable.ajax.reload(null, true)
             : dataTable = RenderGrid();
-    } 
+    }
 
     this.Initial = function (ctsCustid, username, subscriberId, subscriber, hostPermission) {
-        _username = username;        
+        _username = username;
 
         DisableButton(hostPermission);
 
@@ -951,7 +1211,7 @@
         btnAddAssociation.on('click', function () {
             asscomment.val('');
 
-            InitInputTagUsername(ctsCustid);            
+            InitInputTagUsername(ctsCustid);
 
             divAddAssociation.dialog({
                 modal: true,
@@ -959,14 +1219,14 @@
                 title: 'ADD ASSOCIATION',
                 resizable: true,
                 draggable: true,
-                close: function () {                    
+                close: function () {
                     $(this).dialog('close');
                 }
-            });            
-        });        
+            });
+        });
         btnSaveAssociation.on('click', () => InsertManualAssociationMultiple(subscriberId, ctsCustid));
         btnCancelAssociation.on('click', () => {
             divAddAssociation.dialog('close');
-        });    
+        });
     };
 }

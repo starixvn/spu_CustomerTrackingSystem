@@ -61,8 +61,8 @@
         private readonly IRobotBettingService _robotBettingService;
         private readonly IAntiFraudCenterService _antiFraudCenterService;
         private readonly IProblemAccountManagementService _pamService;
-	    private readonly IProblemAccountClassificationService _problemAccountClassificationService;
-	    private readonly IDataLogTrackingServices dataLogTrackingServices;
+        private readonly IProblemAccountClassificationService _problemAccountClassificationService;
+        private readonly IDataLogTrackingServices dataLogTrackingServices;
         private readonly ICustomerClassificationBySportService _custClassificationBySportService;
 
         public override string BaseControllerName { get => string.Empty; }
@@ -125,7 +125,7 @@
 
                             throw;
                         }
-                    },                   
+                    },
                     () =>
                     {
                         try
@@ -160,17 +160,17 @@
             {
                 var customerInfo = _accountService.GetCustInfoByCustID(custId.ToString());
 
-                if(customerInfo != null && customerInfo.Any())
+                if (customerInfo != null && customerInfo.Any())
                 {
                     return RedirectToAction("Index", "Account", new { Id = customerInfo.FirstOrDefault().CTSCustID });
-                }    
+                }
             }
 
             return RedirectToAction("Index", "Home");
         }
 
 
-            [HttpPost]
+        [HttpPost]
         public ActionResult GetStatusRobotClassification(int custID)
         {
             var result = _robotClassificationService.GetStatusRobotClassification(custID);
@@ -222,7 +222,7 @@
         public ActionResult GetLastestCustomerClassification(long custId)
         {
             var customerClassification = string.Empty;
-              
+
             var result = _customerClassificationService.GetLatestCCAndDangerLevel(new List<long>() { custId });
 
             if (result != null && result.Any())
@@ -312,7 +312,7 @@
                         custProfileEvidence.Class = cc != null
                             ? cc.CustomerClassName + " (" + cc.CustomerClass.ToString() + ")"
                             : string.Empty;
-                    }                      
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -476,6 +476,30 @@
                 }).ToList();
             }
 
+#if DEBUG
+            result.Add(new CustomerAssociationByAccountDetailViewModel()
+            {
+                CustId = 777,
+                Username = "35345",
+                LoginId = 456.ToString(),
+                AssociationDate = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                AssociationType = new List<int>() { 1, 2 },
+                AssociationTypeName = StandardizeAssociationTypeName(Consts.AssociationTypeName_BettingPattern),
+                Status = "Open",
+                StatusId = 1,
+                SubscriberId = 6,
+                SubscriberName = "MaxBet",
+                CTSCustId = 54756,
+                IsLinked = true,
+                IsProblemAccount = true,
+                IsPAProbation = false,
+                CategoryIds = 200.ToString(),
+                CategoryNames = "-",
+                CustomerClasses = "Betting Pattern",
+                GroupIDs = "435,546",
+                OriginGroupIDs = "546456,45645"
+            });
+#endif
             return Json(new
             {
                 draw = model.draw,
@@ -730,6 +754,15 @@
         public ActionResult GetMatchesAssociationByAI(long custID1, long custID2, string groupIDs, string originGroupIDs)
         {
             var data = new MatchesAssociationByAIViewModel();
+#if DEBUG
+            var eventDate = DateTime.UtcNow;
+            data.MatchesInfo = new List<MatchesInfoViewModel>() { 
+                new MatchesInfoViewModel() { EventDateString = eventDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss), MatchID = 1,
+                        MatchDesc = $"1 - HaNoi FC vs HAGL FC {eventDate.ToString(Consts.FormatDateToString_MMMddyyyy)}",
+                    CustID1 = custID1, CustID2 = custID2, GroupIDs = groupIDs, OrginGroupIDs = groupIDs }
+            };
+
+#else
 
             try
             {
@@ -766,7 +799,7 @@
                                                          OrginGroupIDs = originGroupIDs
                                                      })
                         };
-                    }                    
+                    }
                 }
 
                 if (groupBettingAssociation.ErrorCode != 0)
@@ -782,14 +815,35 @@
 
                 LogService.Error(logMessage);
             }
-
+#endif
             return Json(data, JsonRequestBehavior.AllowGet);
         }
-        
+
         [HttpPost]
         public ActionResult GetMatchesAssociationDetailByAI(MatchesAssociationDetailViewModel para)
         {
             var data = new List<MatchesDetailInfoViewModel>();
+
+#if DEBUG
+            data.Add(
+                new MatchesDetailInfoViewModel()
+                {
+                    BetTeam = "h",
+                    GroupID = 3713,
+                    LiveScore = "2-0",
+                    Odds = (decimal)0.81,
+                    Stake = 100,
+                    TransId = 10000000000000000.ToString(),
+                    TransDate = DateTime.UtcNow,
+                    BetType = "HD",
+                    UserName = "member1",
+                    StakeRM = 20,
+                    Currency = "VND",
+                    IP = "192.168.110.200",
+                    IsGGB = false,
+                    TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss)
+                });
+#else
 
             try
             {
@@ -837,7 +891,7 @@
                                     if (ggbTicketDetails != null && ggbTicketDetails.Any())
                                     {
                                         ggbData = _accountService.MergeCustGroupTicketInfo(matchGroupInfo.Distinct(x => new { x.CustID, x.GroupID }), ggbTicketDetails, true);
-                                    }                                   
+                                    }
                                 }
                             }
                         });
@@ -855,9 +909,179 @@
 
                 LogService.Error(logMessage);
             }
+#endif
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
+        public ActionResult GetStakeIpPatternByAI(long custID1, long custID2)
+        {
+            var data = new StakeIpPatternByAIViewModel();
+
+            try
+            {
+#if DEBUG
+                var first30Days = new StakeIpPatternInfoViewModel()
+                {
+                    CoupleID = 1,
+                    FromDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
+                    ToDateString = DateTime.UtcNow.AddDays(30).ToString(Consts.FormatDateToString_yyyyMMddHHmmss)
+                };
+
+                var last30Days = new StakeIpPatternInfoViewModel()
+                {
+                    CoupleID = 2,
+                    FromDateString = first30Days.ToDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
+                    ToDateString = first30Days.ToDate.AddDays(30).ToString(Consts.FormatDateToString_yyyyMMddHHmmss)
+                };
+                data.StakeIpPatternInformations = new List<StakeIpPatternInfoViewModel>() { first30Days, last30Days };
+#endif
+                data.StakeIpPatternInformations = data.StakeIpPatternInformations.OrderBy(o => o.FromDate);
+            }
+
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+            }
 
             return Json(data, JsonRequestBehavior.AllowGet);
-        }     
+        }
+
+        [HttpPost]
+        public ActionResult GetStakeIPPatternDetailByAI(StakeIpPatternInfoViewModel para)
+        {
+            var data = new List<StakeIpPatternDetailViewModel>();
+
+            try
+            {
+                if (para == null)
+                {
+                    return Json(data, JsonRequestBehavior.AllowGet);
+                }
+
+                data.AddRange(GetStakePatternDetail(para).OrderBy(o => o.GroupID).ThenBy(o=> o.GroupUserNameID));
+                data.AddRange(GetIpPatternDetail(para));
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                         .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                         .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+            }
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+        private ICollection<StakeIpPatternDetailViewModel> GetStakePatternDetail(StakeIpPatternInfoViewModel para)
+        {
+            var result = new List<StakeIpPatternDetailViewModel>();
+
+#if DEBUG
+            result.AddRange(new List<StakeIpPatternDetailViewModel>() {
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 1, GroupUserNameID = 1, IsStakePattern = true, UserName = "Member 01",MatchID = 10000000, TransId = 11000000000000000, IP = "123.253.33.172",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 200, 
+                    BetTeam = "a", BetType = "OU", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 4},
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 1, GroupUserNameID = 1, IsStakePattern = true, UserName = "Member 01",MatchID = 10000000, TransId = 12000000000000000, IP = "123.253.33.172",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 200,
+                    BetTeam = "a", BetType = "OU", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 4},
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 1, GroupUserNameID = 1, IsStakePattern = true, UserName = "Member 01",MatchID = 10000000, TransId = 13000000000000000, IP = "123.253.33.172",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 200,
+                    BetTeam = "a", BetType = "OU", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 4},
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 1, GroupUserNameID = 1, IsStakePattern = true, UserName = "Member 01",MatchID = 10000000, TransId = 14000000000000000, IP = "123.253.33.172",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 200,
+                    BetTeam = "a", BetType = "OU", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 4},
+                
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 1, GroupUserNameID = 2, IsStakePattern = true, UserName = "Member 01",MatchID = 20000000, TransId = 15000000000000000, IP = "123.253.33.173",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 200,
+                    BetTeam = "a", BetType = "1st OU", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 4},
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 1, GroupUserNameID = 2, IsStakePattern = true, UserName = "Member 01",MatchID = 20000000, TransId = 16000000000000000, IP = "123.253.33.174",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 300,
+                    BetTeam = "a", BetType = "1st OU", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 4},
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 1, GroupUserNameID = 2, IsStakePattern = true, UserName = "Member 01",MatchID = 20000000, TransId = 17000000000000000, IP = "123.253.33.175",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 400,
+                    BetTeam = "a", BetType = "OU", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 4},
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 1, GroupUserNameID = 2, IsStakePattern = true, UserName = "Member 01",MatchID = 20000000, TransId = 18000000000000000, IP = "123.253.33.176",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 500,
+                    BetTeam = "a", BetType = "OU", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 4},
+                
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 1, GroupUserNameID = 3, IsStakePattern = true, UserName = "Member 01",MatchID = 30000000, TransId = 19000000000000000, IP = "123.253.33.172",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 200,
+                    BetTeam = "a", BetType = "HDP", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 4},
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 1, GroupUserNameID = 3, IsStakePattern = true, UserName = "Member 01",MatchID = 30000000, TransId = 20000000000000000, IP = "123.253.33.172",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 300,
+                    BetTeam = "a", BetType = "1st HDP", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 4},
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 1, GroupUserNameID = 3, IsStakePattern = true, UserName = "Member 01",MatchID = 30000000, TransId = 21000000000000000, IP = "123.253.33.172",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 400,
+                    BetTeam = "a", BetType = "1st HDP", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 4},
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 1, GroupUserNameID = 3, IsStakePattern = true, UserName = "Member 01",MatchID = 30000000, TransId = 22000000000000000, IP = "123.253.33.172",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 500,
+                    BetTeam = "a", BetType = "OU", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 4},
+                
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 1, GroupUserNameID = 4, IsStakePattern = true, UserName = "Member 02",MatchID = 40000000, TransId = 23000000000000000, IP = "123.253.33.172",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 200,
+                    BetTeam = "a", BetType = "OU", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 4},
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 1, GroupUserNameID = 4, IsStakePattern = true, UserName = "Member 02",MatchID = 40000000, TransId = 24000000000000000, IP = "123.253.33.172",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 300,
+                    BetTeam = "a", BetType = "OU", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 4},
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 1, GroupUserNameID = 4, IsStakePattern = true, UserName = "Member 02",MatchID = 40000000, TransId = 25000000000000000, IP = "123.253.33.172",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 400,
+                    BetTeam = "a", BetType = "OU", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 4},
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 1, GroupUserNameID = 4, IsStakePattern = true, UserName = "Member 02",MatchID = 40000000, TransId = 26000000000000000, IP = "123.253.33.172",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 500,
+                    BetTeam = "a", BetType = "OU", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 4},
+
+
+
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 2, GroupUserNameID = 5, IsStakePattern = true, UserName = "Member 01",MatchID = 80000000, TransId = 45000000000000000, IP = "123.253.33.172",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 1200,
+                    BetTeam = "a", BetType = "Handicap", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 1},
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 2, GroupUserNameID = 6, IsStakePattern = true, UserName = "Member 02",MatchID = 90000000, TransId = 46000000000000000, IP = "123.253.33.175",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 1200,
+                    BetTeam = "a", BetType = "Handicap", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 1},
+
+
+
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 3, GroupUserNameID = 7, IsStakePattern = true, UserName = "Member 01",MatchID = 14000000, TransId = 62000000000000000, IP = "123.253.33.172",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 200,
+                    BetTeam = "a", BetType = "OU", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 2},
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 3, GroupUserNameID = 7, IsStakePattern = true, UserName = "Member 01",MatchID = 140000000, TransId = 63000000000000000, IP = "123.253.33.173",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 300,
+                    BetTeam = "a", BetType = "OU", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 2},
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 3, GroupUserNameID = 8, IsStakePattern = true, UserName = "Member 02",MatchID = 15000000, TransId = 64000000000000000, IP = "123.253.33.174",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 400,
+                    BetTeam = "a", BetType = "OU", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 2},
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 3, GroupUserNameID = 8, IsStakePattern = true, UserName = "Member 02",MatchID = 15000000, TransId = 65000000000000000, IP = "123.253.33.175",
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 500,
+                    BetTeam = "a", BetType = "OU", Currency = "VND", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 2},
+            });
+#endif
+
+            return result;
+        }
+        private ICollection<StakeIpPatternDetailViewModel> GetIpPatternDetail(StakeIpPatternInfoViewModel para)
+        {
+            var result = new List<StakeIpPatternDetailViewModel>();
+
+#if DEBUG
+            result.AddRange(new List<StakeIpPatternDetailViewModel>()
+            {
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 4, GroupUserNameID = 9, IsStakePattern = false, UserName = "Member 01",MatchID = 16000000, TransId = 66000000000000000, IP = "123.253.33.174", IPPatternType = IPPatternType.AtLeast3IPsSameDay,
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 100,
+                    BetTeam = "a", BetType = "Handicap", Currency = "HKK", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 1},
+                new StakeIpPatternDetailViewModel(){ CoupleID = para.CoupleID, GroupID = 4, GroupUserNameID = 10, IsStakePattern = false, UserName = "Member 02",MatchID = 17000000, TransId = 67000000000000000, IP = "123.253.33.174", IPPatternType = IPPatternType.AtLeast3IPsSameDay,
+                    Odds = (decimal)0.72, Stake = 100, StakeRM = 100,
+                    BetTeam = "a", BetType = "Handicap", Currency = "HKK", LiveScore = null, TransDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss), TotalStakePattern = 1},
+            });
+#endif
+
+            return result;
+        }
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
@@ -886,7 +1110,7 @@
                     TotalMatchCount = info.TotalMatchCount,
                     TotalIPSharingCount = info.TotalIPCount,
                     ErrorMessage = info.ErrorMessage,
-                   
+
                     ItemList = info.ItemList.Select(x =>
                     {
                         var homeName = CachedRef.GetTeamName(x.HomeID);
@@ -917,8 +1141,8 @@
 
                         var match = matchInfos.Where(y => y.MatchID == x.MatchID).FirstOrDefault();
 
-                        if (match != null && match.EventDate != DateTime.MinValue)                        
-                            eventDateStr = match.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy);                        
+                        if (match != null && match.EventDate != DateTime.MinValue)
+                            eventDateStr = match.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy);
 
                         return new AssociationByIPItemViewModel
                         {
@@ -1161,7 +1385,7 @@
 
         //    if (result.ErrorCode == 0)
         //    {
-         
+
 
         //        var syncCustIds = Enumerable.Empty<long>();
 
@@ -1289,7 +1513,7 @@
                 {
                     var custId = _accountService.GetCustomerInfoByCTSCustId(model.CTSCustId).CustID;
 
-                    _problemAccountClassificationService.UpdateBetLimitOfFlaggedCustomer( new List<long> { custId });
+                    _problemAccountClassificationService.UpdateBetLimitOfFlaggedCustomer(new List<long> { custId });
                 }
             }
 
@@ -1405,8 +1629,8 @@
                         CategoryType = x.CategoryType,
                         CategoryName = x.CategoryName ?? string.Empty,
                         IsProblemAccount = x.CategoryType == 2
-                    }).ToList();              
-                
+                    }).ToList();
+
                 isVVip = categoryList.Any(x => x.CategoryId == 210); // VVIP             
                 isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
 
@@ -1421,7 +1645,7 @@
                 {
                     CreatedTimeString = x.CreatedTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     SourceTypeName = x.SourceTypeName,
-                    CategoryName = (x.SourceTypeID == (int)SourceTypeID.NoShow_Detail) ? "-" : ( x.CategoryName != null ? x.CategoryName : string.Empty),
+                    CategoryName = (x.SourceTypeID == (int)SourceTypeID.NoShow_Detail) ? "-" : (x.CategoryName != null ? x.CategoryName : string.Empty),
                     CustomerClass = x.CustomerClass,
                     Reason = GetReason(x, roleID),
                     TurnOver = x.TurnOver,
@@ -1431,7 +1655,7 @@
                     ActiveDays = x.ActiveDays,
                     LastXDaysMargin = x.LastXDaysMargin,
                     ProbationPeriodWinloss = x.ProbationPeriodWinloss,
-                    CreatedBy = x.CreatedBy                                  
+                    CreatedBy = x.CreatedBy
                 }).ToList();
             }
 
@@ -1445,7 +1669,7 @@
                 categoryList,
                 data = classificationHistoryList,
             }, JsonRequestBehavior.AllowGet);
-        }       
+        }
 
         private string GetReason(CustomerClassificationHistoryModel cc, int roleID)
         {
@@ -1456,7 +1680,9 @@
             if (cc.SourceTypeID == (int)SourceTypeID.Classification_Rescan)
             {
                 spanReason += $"Win lost: {winlost}";
-            } else if (cc.IsFromTVS) {
+            }
+            else if (cc.IsFromTVS)
+            {
                 if (cc.TVSRequestID > 0)
                     spanReason += $"Void by RequestID: { cc.TVSRequestID } ";
                 else
@@ -1535,7 +1761,7 @@
                 case (int)ClassificationSourceType.ProPunterInactive:
                     spanReason += $"<span> { cc.SourceTypeName } </span>";
                     break;
-                                   
+
                 case (int)ClassificationSourceType.RobotUser61:
                 case (int)ClassificationSourceType.RobotUser163:
                 case (int)ClassificationSourceType.RobotUser164:
@@ -1564,7 +1790,7 @@
                     }
 
                     break;
-                
+
                 default:
                     break;
             }
@@ -1583,20 +1809,20 @@
                     if (!string.IsNullOrEmpty(cc.Remark) && cc.Remark.Contains(Consts.MarkPA_AssociatedGroup))
                     {
                         spanReason += $"<span> { cc.Remark } </span>";
-                        
-                        if (roleID == 1)             
+
+                        if (roleID == 1)
                             spanReason += $"| Win lost: {winlost} ";
                     }
                     else
                     {
                         spanReason += $"<span> { cc.SourceTypeName } </span>";
-                        if (roleID == 1)                        
+                        if (roleID == 1)
                             spanReason += $"| Win lost: {winlost} ";
 
                         if (!string.IsNullOrEmpty(cc.Remark))
                             spanReason += $"| {cc.Remark}";
                     }
-                   
+
                     break;
                 case (int)SourceTypeID.Classification_PAUnmarkDirectly:
                 case (int)SourceTypeID.Classification_UnmarkingPAAffectedDirectly:
@@ -1614,7 +1840,7 @@
                     else
                     {
                         spanReason += $"Win lost: {winlost}";
-                    }                    
+                    }
 
                     break;
                 case (int)SourceTypeID.NoShow_Detail:
@@ -1629,7 +1855,7 @@
 
         private string MappingAdditionalReason(CustomerClassificationHistoryModel cc)
         {
-            if(cc.SourceTypeID != (int)SourceTypeID.NoShow_Detail && !string.IsNullOrEmpty(cc.LicVIP))
+            if (cc.SourceTypeID != (int)SourceTypeID.NoShow_Detail && !string.IsNullOrEmpty(cc.LicVIP))
             {
                 return $"<div>{cc.LicVIP}</div>";
             }
@@ -1668,7 +1894,7 @@
                 if (result.ErrorCode == 0
                     && !isProblemAccount
                     && custSubId == 0)
-                {                    
+                {
                     _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
                         CustIds = new List<long> { custId },
@@ -1692,7 +1918,7 @@
                 return Json(new { errorCode = -1, errorMessage = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-        
+
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult MarkCustomerCategory(long ctsCustID, int roleID, string userName, bool isRobotUser, bool isPinCategory)
         {
@@ -1710,11 +1936,11 @@
             if (classifications != null && classifications.Any())
             {
                 result.CategoryList = classifications.Select(x => new CustomerCategoryViewModel
-                    {
-                        CategoryId = x.CategoryID,
-                        CategoryName = x.CategoryName ?? string.Empty,
-                        CategoryGroup = x.CategoryGroup
-                    });
+                {
+                    CategoryId = x.CategoryID,
+                    CategoryName = x.CategoryName ?? string.Empty,
+                    CategoryGroup = x.CategoryGroup
+                });
 
                 result.IsVVip = classifications.Any(x => x.CategoryID == 210); // VVIP
             }
@@ -1795,7 +2021,7 @@
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]
         public ActionResult SaveMarkCustomerCategory(SaveMarkCustomerCategoryViewModel model)
-        {            
+        {
             var pas = new List<InsertProblemAccountModel>()
             {
                 new InsertProblemAccountModel
@@ -1807,14 +2033,14 @@
                     IsLicensee = model.IsLicensee,
                     CategoryID = model.CategoryID,
                     CategoryGroup = model.CategoryGroup,
-                    Remark = model.Remark,    
+                    Remark = model.Remark,
                     IsDirectPA = true,
                     IsFromCTS = true,
                     CreatedBy = CurrentSession.UserId
                 }
             };
 
-            var result = _problemAccountClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Category, "ProfileAddProblemAccount", FromFlow.CTSWEB, true);            
+            var result = _problemAccountClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Category, "ProfileAddProblemAccount", FromFlow.CTSWEB, true);
 
             return Json(new
             {
@@ -1837,7 +2063,7 @@
                         Remark = model.Remark,
                         IsDirect = true,
                         IsFromCTS = true,
-                        CreatedBy = CurrentSession.UserId                       
+                        CreatedBy = CurrentSession.UserId
                     }
                 };
 
@@ -1908,7 +2134,7 @@
                         _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                         {
                             CustIds = new List<long> { model.CustId },
-                            IsRescanPA = true ,
+                            IsRescanPA = true,
                             IsToQueue = (model.RoleId != 1 && !model.IsAffectToAllDownlines), // add to queue for case SMA and not checking affect to downline to affect PA for downline
                             IsPushCCToSoon88 = true,
                             IsUpdateDangerToMainDB = true,
@@ -1958,8 +2184,8 @@
             if (unmarkPAResult.ErrorCode == 0 && unmarkPAResult.CustomerInfo.Any())
             {
                 var custIds = unmarkPAResult.CustomerInfo.Select(x => x.CustID);
-               
-                _problemAccountClassificationService.UpdateBetLimitOfUnflaggedCustomer(custIds.Distinct());                
+
+                _problemAccountClassificationService.UpdateBetLimitOfUnflaggedCustomer(custIds.Distinct());
 
                 var paramRescan = new RescanCustClassificationModel
                 {
@@ -2379,6 +2605,6 @@
         }
 
         #endregion Betting Statistic
-        
+
     }
 }

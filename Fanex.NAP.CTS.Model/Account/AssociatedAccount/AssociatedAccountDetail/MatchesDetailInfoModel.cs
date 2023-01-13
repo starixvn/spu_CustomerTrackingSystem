@@ -23,5 +23,10 @@
         public decimal LiveHomeScore { get; set; }
 
         public decimal LiveAwayScore { get; set; }
+
+        public decimal StakeRM { get; set; }
+
+        public string Currency { get; set; }
+        public string IP { get; set; }
     }
 }
