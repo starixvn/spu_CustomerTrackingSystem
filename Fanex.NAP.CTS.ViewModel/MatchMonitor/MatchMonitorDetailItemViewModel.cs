@@ -103,7 +103,9 @@
 
         public string TransTimeToString { get; set; }
 
-        public string Group { get; set; }        
+        public string Group { get; set; }
+
+        public int GroupID { get; set; }
 
         public Int64 TransId { get; set; }
 

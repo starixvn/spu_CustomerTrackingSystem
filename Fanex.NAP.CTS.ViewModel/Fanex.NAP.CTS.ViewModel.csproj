@@ -160,6 +160,7 @@
     <Compile Include="MatchMonitor\DetectGroupAssociationListViewModel.cs" />
     <Compile Include="MatchMonitor\DetectGroupAssociationItemViewModel.cs" />
     <Compile Include="MatchMonitor\GetMatchMonitorViewModel.cs" />
+    <Compile Include="MatchMonitor\GroupInfoViewModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorBetTypeViewModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailFilterViewModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailItemViewModel.cs" />

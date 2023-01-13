@@ -6,6 +6,7 @@
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.MatchMonitor;
@@ -241,7 +242,7 @@
         {
             var list = new List<MatchMonitorDetailItemViewModel>();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 20; i++)
             {
                 list.Add(new MatchMonitorDetailItemViewModel
                 {
@@ -251,7 +252,7 @@
                     Username = "Member10" + i,
                     CustomerClass = 200 + i,
                     Danger1 = 1,
-                    Danger2 = 2,
+                    //Danger2 = 2,
                     Odds = new decimal(-0.81),
                     BetID = 54026075788804200,
                     TransId = 54026075788804200,
@@ -260,19 +261,21 @@
                     HDP1 = new decimal(0.75),
                     HDP2 = new decimal(1.25),
                     Score = i.ToString() + "-0",
-                    TransTimeToString = "14:56:12",
+                    TransTimeToString = DateTime.Now.ToString(Consts.FormatDateToString_ddMMhhmmss),
                     Group = (i + 1).ToString(),
+                    GroupID = -1,
                     Reason = "HEG,FG",
                     BetTeam = "h"
                 });
             }
            
             return list;
-        }       
+        }
 
         [HttpPost]
         public ActionResult DetectGroupAssociation(string ctsCustIDList)
         {
+            var result = new DetectGroupAssociationListViewModel();
             var mergeGroupInfo = new MergeGroupInfoModel { CTSCustIDs = ctsCustIDList };
 
             var assByPrimary = _associationDetectionService.DetectAssociationByPrimary(new DetectAssociationByPrimaryFilterModel
@@ -283,15 +286,19 @@
                 IsIP = true
             });
 
-            mergeGroupInfo.AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary);
-
-            var data = _associationDetectionService.DetectGroupDetectAssociation(mergeGroupInfo).Select(x=> new DetectGroupAssociationItemViewModel(x));
-
-            var result = new DetectGroupAssociationListViewModel
+            if (assByPrimary.Any())
             {
-                ItemList = data,
-                GroupList = data.Select(x => x.GroupID).Distinct().OrderBy(x => x)
-            };
+                mergeGroupInfo.AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary);
+
+                var data = _associationDetectionService.DetectGroupDetectAssociation(mergeGroupInfo).Select(x => new DetectGroupAssociationItemViewModel(x));
+
+                result = new DetectGroupAssociationListViewModel
+                {
+                    ItemList = data,
+                    GroupList = data.Select(x => new GroupInfoViewModel { GroupID = x.GroupID, GroupName = x.GroupName })
+                                    .Distinct(x => x.GroupID).OrderBy(x => x.GroupID)
+                };
+            }            
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -525,8 +532,9 @@
                                                                 Score = c.ticket.LiveIndicator ? (c.ticket.LiveHomeScore + " - " + c.ticket.LiveAwayScore) : "-",
                                                                 TicketStatus = c.ticket.TicketStatus,
                                                                 TransTime = c.ticket.TransDate,
-                                                                TransTimeToString = c.ticket.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                                                                Group = GetGroup(mappingTransInfo, c.ticket),                                                               
+                                                                TransTimeToString = c.ticket.TransDate.ToString(Consts.FormatDateToString_ddMMhhmmss),
+                                                                Group = GetGroup(mappingTransInfo, c.ticket), 
+                                                                GroupID = -1,
                                                                 TransId = c.ticket.TransId,
                                                                 RobotType = null,
                                                                 IsRobot = false,                                                                
@@ -576,7 +584,8 @@
                                         TicketStatus = group.m.TicketStatus,
                                         TransTime = group.m.TransTime,
                                         TransTimeToString = group.m.TransTimeToString,
-                                        Group = group.m.Group,                                       
+                                        Group = group.m.Group,
+                                        GroupID = group.m.GroupID,
                                         TransId = group.m.TransId,
                                         RobotType = (temp != null) ? temp?.RobotType : null,
                                         IsRobot = (temp != null) && temp.IsRobot,

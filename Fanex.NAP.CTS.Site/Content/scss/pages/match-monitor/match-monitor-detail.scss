@@ -70,6 +70,18 @@
                         }
                     }
 
+                    .width-160 {
+                        min-width: 120px;
+                    }
+
+                    .width-180 {
+                        min-width: 180px;
+                    }
+
+                    .width-240 {
+                        min-width: 240px;
+                    }
+
                     .group-button {
                         margin-left: 10px;
 
@@ -181,6 +193,8 @@
             }
 
             #monitor-datatable, #first-monitor-datatable, #second-monitor-datatable {
+                flex: 50%;
+
                 .table-report {
                     font-family: $font-family;
 
@@ -240,21 +254,31 @@
                                     padding-right: 0.1rem;
                                     border-right: none;
                                     border-bottom: none;
-                                    /*font-size: 13px;*/
+                                    font-size: 12px;
+                                    line-height: 10px;
+
                                     .click-view-details, .click-view-name {
                                         cursor: pointer;
                                     }
 
                                     .container-checkbox {
+                                        padding-left: 19px;
+
                                         .checkmark {
                                             top: 50%;
-                                            left: 30%;
+                                            /*left: 5%;*/
                                             z-index: 1;
                                             transform: translate(50%,-50%);
+                                            /*height: 8px;*/
+                                            width: 6px;
                                         }
 
                                         pointer-events: none;
                                     }
+                                }
+
+                                .col-transtime, .col-reason {
+                                    font-size: 10px !important;
                                 }
                             }
 
@@ -277,6 +301,24 @@
                                     border-radius: 50%;
                                     width: 2.4rem;
                                     height: 2.4rem;
+                                    border: 0.25rem solid rgba(57, 110, 248, 0.2);
+                                    border-top-color: rgba(57, 110, 248, 1);
+                                    -webkit-animation: spin 1s infinite linear;
+                                    animation: spin 1s infinite linear;
+                                }
+                            }
+
+                            .icon-loading-group {
+                                position: relative;
+
+                                &:after {
+                                    content: '';
+                                    position: absolute;
+                                    left: -0.8rem;
+                                    top: -1rem;
+                                    border-radius: 50%;
+                                    width: 1.8rem;
+                                    height: 1.8rem;
                                     border: 0.25rem solid rgba(57, 110, 248, 0.2);
                                     border-top-color: rgba(57, 110, 248, 1);
                                     -webkit-animation: spin 1s infinite linear;
@@ -335,6 +377,44 @@
                 padding-right: 1rem;
             }
         }
+    }
+
+    .checkbox-container {
+        margin-top: 12px;
+
+        span {
+            &:before {
+                top: 1px;
+                height: 16px;
+                width: 16px;
+            }
+
+            &:after {
+                top: 5px;
+                left: 3px;
+            }
+        }
+    }    
+}
+
+.flex-container {
+    display: flex;
+    margin-bottom: 10px;
+
+    .checkbox-all {
+        cursor: pointer;
+        color: #2097fd;
+        font-size: 12px;
+    }
+
+    .box-left {
+        background: #E7EDFF;
+        padding-left: 10px;
+    }
+
+    .box-right {
+        margin-top: 17px;
+        margin-left: 15px;
     }
 }
 

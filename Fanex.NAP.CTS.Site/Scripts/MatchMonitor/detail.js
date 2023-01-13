@@ -13,17 +13,35 @@
         cbbReason: $('#cbbReason'),
         cbbGroup: $('#cbbGroup'),
         cbbSites: $('#cbbSites'),
-        cbbBetChoice: $('#cbbBetChoice'),        
+        cbbBetChoice: $('#cbbBetChoice'),
         tblMMHomeTeam: $('#tblMMHomeTeam'),
         tblMMAwayTeam: $('#tblMMAwayTeam'),
         spanReason: $('#spanReason'),
+        divPopupAssDetect: $('#divPopupAssDetect'),
+        btnShowPopupAssDetection: $('#btnShowPopupAssDetection'),
+        tickCheckAll: $('#tickCheckAll'),
+        tickUncheckAll: $('#tickUncheckAll'),
+        inputOptBP: $('#inputOptBP'),
+        inputOptDevice: $('#inputOptDevice'),
+        inputOptIP: $('#inputOptIP'),
+        inputOptAgent: $('#inputOptAgent'),
+        inputOptIPLast3Days: $('#inputOptIPLast3Days'),
+        inputOpt3MatchesLast7Days: $('#inputOpt3MatchesLast7Days'),
         btnRefresh: $('#btnRefresh'),
-        btnGenerateDetail: $('#btnGenerate-detail'),       
+        btnGenerateDetail: $('#btnGenerate-detail'),
         btnShowAll: $('#btnShowAll'),
         btnAssDetection: $('#btnAssDetection'),
         btnExportExcel: $('#btnExportExcel'),
         btnVerifyAndClose: $('#btnVerifyAndClose')
     };
+
+    let filterOptions = {
+        isShowAll: true,
+        isAssDetect: false,
+        isFilterScore: false,
+        isFilterReason: false,
+        isFilterGroup: false
+    }
 
     function InitialDetailGird(element) {
         element.DataTable({
@@ -43,7 +61,7 @@
                 zeroRecords: "There's no data"
             },
             ordering: false,
-            searching: false,
+            searching: true,
             paging: false,
             bInfo: false,
             lengthMenu: [1000, 1500, 2000],
@@ -53,7 +71,7 @@
             autoWidth: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 15], className: "text-center" },
                 { targets: [0], width: "5%" },
                 { targets: [1], width: "25%" },
                 { targets: [2], width: "5%" },
@@ -65,14 +83,18 @@
                 { targets: [8], width: "5%" },
                 { targets: [9], width: "5%" },
                 { targets: [10], width: "5%" },
-                { targets: [11], width: "5%" },
+                { targets: [11], width: "7%", className: "text-center col-transtime" },
                 { targets: [12], width: "5%" },
-                { targets: [13], width: "5%" },
+                { targets: [13], width: "5%", className: "text-center col-reason" },
                 { targets: [14], width: "5%" },
                 { targets: [15], visible: false }
             ],
             columns: [
-                { data: obj => "x" },
+                {
+                    data: obj => () => {
+                        return '<label class="container-checkbox"><input class="chk-selected" type="checkbox"><span class="checkmark"></span></label>'; 
+                    }
+                },
                 {
                     data: obj => () => {
                         let url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustID);
@@ -89,11 +111,21 @@
                 { data: obj => obj.HDP },
                 { data: obj => obj.Score },
                 { data: obj => obj.TransTimeToString },
-                { data: obj => obj.GroupID },
+                {
+                    data: obj => {
+                        if (obj.GroupID == -1)
+                            return `<span class="has-icon icon-loading-group"></span>`;                        
+                        else return obj.Group;
+                    }
+                },
                 { data: obj => obj.Reason },
-                { data: obj => "x" },
-                //{ data: obj => obj.PICVerified },
-                //{ data: obj => obj.TransIdToString }
+                {
+                    data: obj => () => {
+                        if (obj.PICVerified) return "<span class='icon-Check'></span>";
+                        return "";
+                    }
+                },
+                { data: obj => obj.TransIdToString }
             ],
             createdRow: function (row, data, index) {
                 if (data.TicketStatus == 102)
@@ -104,10 +136,8 @@
                     $(row.cells[1]).addClass('username-hightlight');
                 }
             }
-        });    
-        
-        element.DataTable().columns.adjust();
-    }
+        });   
+    }   
 
     function GetMatchMonitorDetail() {
         $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorDetail'), {
@@ -138,11 +168,11 @@
 
                 if (response.data.CTSCustIDList != '') {
                     $.post(common.modifyRelativeUrl('MatchMonitor/DetectGroupAssociation'), { ctsCustIDList: response.data.CTSCustIDList },
-                        function (xResponse) {                            
+                        function (xResponse) {            
                             RenderAssociationGroup(domElements.tblMMHomeTeam, xResponse.ItemList);
                             RenderAssociationGroup(domElements.tblMMAwayTeam, xResponse.ItemList);
 
-                            RefreshFilter(domElements.cbbGroup, xResponse.GroupList);
+                            RefreshGroupFilter(xResponse.GroupList);                            
                         });
                 }
             },
@@ -160,35 +190,55 @@
         });
     }
 
-    function RefreshFilter(element, data) {       
+    function RefreshFilter(element, data) {
         element.multiselect().empty();
-
+       
         for (var i = 0; i < data.length; i++) {
             element.append(`<option selected value='${data[i]}'>${data[i]}</option>`);
         }
 
-        element.multiselect("refresh");       
+        element.multiselect("refresh");
+    }
+
+    function RefreshGroupFilter(data) {
+        domElements.cbbGroup.multiselect().empty();
+
+        if (data.length == 0) {
+            domElements.cbbGroup.append(`<option selected value='-1'>None</option>`);
+        }
+        for (var i = 0; i < data.length; i++) {
+            domElements.cbbGroup.append(`<option selected value='${data[i].GroupID}'>${data[i].GroupName}</option>`);
+        }
+
+        domElements.cbbGroup.multiselect("refresh");
     }
 
     function RenderAssociationGroup(elements, associations) {
         elements.DataTable().rows().every(function () {
             let rowData = this.data();
 
-            rowData.GroupID = GetAssociationGroup(rowData.CustID, associations);
+            let group = GetAssociationGroup(rowData.CustID, associations);
+            if (group != undefined) {
+                rowData.Group = group.GroupName;
+                rowData.GroupID = group.GroupID;
+            } else {
+                rowData.Group = '-';
+                rowData.GroupID = 0;
+            }
 
             this.invalidate();
         });
-
+        
         elements.DataTable().draw();        
     }
 
     function GetAssociationGroup(custID, associations) {
         for (var i = 0; i < associations.length; i++) {
             if (associations[i].CustID == custID) {
-                return associations[i].GroupID;
+                return associations[i];
             }
         }
-        return '-';
+        return undefined;
     }
     
     function RenderBotIcon(robotType, isRobot) {
@@ -264,6 +314,56 @@
         return tranIds;
     }
 
+    function DetectAssociation() {
+        filterOptions.isAssDetect = true;
+
+        domElements.divPopupAssDetect.dialog('close');
+
+        DrawGrid();
+
+        filterOptions.isAssDetect = false;
+    }
+
+    function ToggleTickCheckAll(isCheckAll) {
+        domElements.inputOptBP.prop("checked", isCheckAll);
+        domElements.inputOptDevice.prop("checked", isCheckAll);
+        domElements.inputOptIP.prop("checked", isCheckAll);
+        domElements.inputOptAgent.prop("checked", isCheckAll);
+        domElements.inputOpt3MatchesLast7Days.prop("checked", isCheckAll);
+        domElements.inputOptIPLast3Days.prop("checked", isCheckAll);
+    }
+
+    function DrawGrid() {
+        domElements.tblMMHomeTeam.DataTable().draw();
+        domElements.tblMMAwayTeam.DataTable().draw();
+    }
+
+    function FilterGrid() {
+        $.fn.dataTable.ext.search.push(
+            function (settings, searchData, index, rowData, counter) {
+                let isEqualScore = true;
+                let isEqualReason = true;
+                let isEqualGroupID = true;
+                let arrScores = domElements.cbbMatchScore.val();
+                let arrReasons = domElements.cbbReason.val();
+                let arrGroupIDs = domElements.cbbGroup.val();
+
+                if (arrGroupIDs.length == 0) return true;
+                
+                if (arrScores.find(e => e == rowData['Score']) == undefined) { isEqualScore = false; }
+
+                if (arrReasons.find(e => e == rowData['Reason']) == undefined) { isEqualReason = false; }
+                
+                if (arrGroupIDs.find(e => e == rowData['GroupID']) == undefined) { isEqualGroupID = false; }
+
+                if (isEqualScore && isEqualReason && isEqualGroupID) return true;               
+                else return false;
+
+                return true;
+            }
+        );
+    }
+
     function resizeDataTable() {
         var widthTables = domElements.tblMMHomeTeam[0].offsetWidth + 37;
 
@@ -281,7 +381,7 @@
             menuWidth: 260,
             menuHeight: 260,
             selectedText: "# of # selected",
-            noneSelectedText: "Select Match Score "
+            noneSelectedText: "Select Score "
         });
 
         domElements.cbbGroup.multiselect({
@@ -299,23 +399,68 @@
         });
 
         InitialDetailGird(domElements.tblMMHomeTeam);
+
         InitialDetailGird(domElements.tblMMAwayTeam);
 
-        domElements.btnGenerateDetail.on('click', function () {
-            GetMatchMonitorDetail();
+        domElements.cbbMatchScore.change(function () { filterOptions.isFilterScore = true; })
+
+        domElements.cbbReason.change(function () { filterOptions.isFilterReason = true; })
+
+        domElements.cbbGroup.change(function () { filterOptions.isFilterGroup = true; })
+
+        domElements.btnRefresh.on('click', function () { GetMatchMonitorDetail(); })
+
+        domElements.btnGenerateDetail.on('click', function () { DrawGrid(); })
+
+        domElements.tickCheckAll.on('click', function () {
+            ToggleTickCheckAll(true);           
+        });
+
+        domElements.tickUncheckAll.on('click', function () {
+            ToggleTickCheckAll(false);           
+        });
+
+        domElements.btnShowAll.on('click', function () {
+            filterOptions.isShowAll = true;
+            DrawGrid();
+            filterOptions.isShowAll = false;
+        })
+
+        domElements.btnShowPopupAssDetection.on('click', function () {
+            domElements.divPopupAssDetect.dialog({
+                modal: true,
+                width: '700px',
+                title: 'ASSOCIATION DETECTION',
+                titleIsHtml: false,
+                resizable: true,
+                draggable: true,
+                close: function () {
+                    $(this).dialog('close');
+                }
+            })
+        })
+
+        domElements.btnAssDetection.on('click', function () {
+            DetectAssociation();
+        })
+
+        domElements.btnExportExcel.on('click', function () {
+
         })
 
         domElements.btnVerifyAndClose.on('click', function () {
             common.showConfirmation2('<div class="popup - content">Are you sure about this?<br>Once confirmed, all tickets\' review status will be updated to "Verified".</div>', function () {
                 VerifyTransMatchMonitorDetail();
             });
-        })
+        })    
+
+        FilterGrid();
     }
 
     $(document).ready(function () {
         Initial();
 
-        //GetMatchMonitorDetail();
+        GetMatchMonitorDetail();
 
         $(window).resize(function () {
             resizeDataTable();

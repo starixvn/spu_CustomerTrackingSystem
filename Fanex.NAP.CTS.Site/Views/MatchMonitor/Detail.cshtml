@@ -30,7 +30,7 @@
 
                         <div class="blank"></div>
                        
-                        <div class="group width-180" style="display: none;">
+                        <div class="group width-160" style="display: none;">
                             <label class="text">Bet choice</label>
                             <select class="control width-select" id="cbbBetChoice">
                                 @if (ViewBag.BetChoice != null)
@@ -42,7 +42,7 @@
                                 }
                             </select>
                         </div>
-                        <div class="group width-180" @(ViewBag.IsDisableScoreFilter ? "hidden" : "")   >
+                        <div class="group width-160" @(ViewBag.IsDisableScoreFilter ? "hidden" : "")   >
                             <label class="text">Score</label>
                             <select class="control width-select" id="cbbMatchScore" multiple="multiple">
                                 @if (ViewBag.MatchScore != null)
@@ -55,13 +55,13 @@
                             </select>
                         </div>
 
-                        <div class="group">
+                        <div class="group width-160">
                             <label class="text">Reason</label>
                             <select class="control width-select" id="cbbReason" multiple="multiple">                              
                             </select>
                         </div>
 
-                        <div class="group width-180">
+                        <div class="group width-160">
                             <label class="text">Group</label>
                             <select class="control width-select" id="cbbGroup" multiple="multiple">                               
                             </select>
@@ -82,7 +82,7 @@
                 <div class="breadcrumb-button">
                     <div class="">
                         <button class="button button-primary-outline" id="btnShowAll">Show All</button>
-                        <button class="button button-primary-outline" id="btnAssDetection">Association Detection</button>
+                        <button class="button button-primary-outline" id="btnShowPopupAssDetection">Association Detection</button>
                         <button class="button button-primary-outline" id="btnExportExcel">Export Excel</button>
                         <button class="button button-primary-outline" id="btnVerifyAndClose">Verify and Close</button>
                     </div>
@@ -143,7 +143,8 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>               
+
         <div class="hide">
             <input id="hdEventDataToString" type="hidden" value="@ViewBag.EventDateToString" />
             <input id="hdMatchID" type="hidden" value="@ViewBag.MatchID" />
@@ -153,8 +154,87 @@
             <input id="hdreason" type="hidden" value="@ViewBag.Reason" />           
             <input id="hdIsHostPermission" type="hidden" IsHostPermission="@ViewBag.IsHostPermission.ToString()" />
         </div>
-    </div>
+    </div>    
 </section>
+
+<div id="divPopupAssDetect" class="popup-add" style="display: none">
+    <div class="flex-container">
+        <div class="box-left">
+            <div class="flex-container" style="border-bottom: 1px solid #C0C0C0;">
+                <div style="margin-top: 1px; margin-bottom: 1px;">
+                    <span class='icon-Check'></span>
+                    <span class="checkbox-filter checkbox-all">
+                        <span class="checkbox-filter" id="tickCheckAll">Check all</span>
+                    </span>
+
+                    <span class='icon-Close'></span>
+                    <span class="checkbox-filter checkbox-all">
+                        <span class="checkbox-filter" id="tickUncheckAll">Uncheck all</span>
+                    </span>
+                </div>
+
+            </div> <!--div end - flex-container-->
+
+            <div class="flex-container">
+                <div>
+                    <span class="checkbox-filter">
+                        <label class="checkbox-container" id="ckbOptBPContainer">
+                            <input id="inputOptBP" type="checkbox">
+                            <span class="checkmark"></span>
+                            Betting Pattern
+                        </label>
+                    </span>
+
+                    <span class="checkbox-filter">
+                        <label class="checkbox-container" id="ckbOptDeviceContainer">
+                            <input id="inputOptDevice" type="checkbox">
+                            <span class="checkmark"></span>
+                            Device
+                        </label>
+                    </span>
+
+                    <span class="checkbox-filter">
+                        <label class="checkbox-container" id="ckbOptIPContainer">
+                            <input id="inputOptIP" type="checkbox">
+                            <span class="checkmark"></span>
+                            IP
+                        </label>
+                    </span>
+
+                    <span class="checkbox-filter">
+                        <label class="checkbox-container" id="ckbOptAgentContainer">
+                            <input id="inputOptAgent" type="checkbox" checked>
+                            <span class="checkmark"></span>
+                            Agent
+                        </label>
+                    </span>
+
+                    <span class="checkbox-filter">
+                        <label class="checkbox-container" id="ckbOpt3MatchesLast7DaysContainer">
+                            <input id="inputOpt3MatchesLast7Days" type="checkbox" checked>
+                            <span class="checkmark"></span>
+                            3 Matches(last 7 days)
+                        </label>
+                    </span>
+
+                    <span style="margin-right: 10px;">
+                        <label class="checkbox-container" id="ckbOptIPLast3DaysContainer">
+                            <input id="inputOptIPLast3Days" type="checkbox" checked>
+                            <span class="checkmark"></span>
+                            IP(last 3 days)
+                        </label>
+
+                    </span>
+                </div>
+            </div> <!--div end - flex-container margin-top-10-->
+        </div>
+
+        <div class="box-right">
+            <button id="btnAssDetection" class="button btn btn-detect" title="Association Detection">Detect</button>
+        </div>
+    </div>
+</div>
+
 @section scripts{
     @Scripts.Render("~/match-monitor-detail-scripts")
 }

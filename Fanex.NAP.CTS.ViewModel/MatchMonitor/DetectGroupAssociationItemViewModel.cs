@@ -8,10 +8,21 @@
         {
             this.CTSCustID = data.CTSCustID;
             this.CustID = data.CustID;
-            this.GroupID = data.GroupID.HasValue ? data.GroupID.Value.ToString() : string.Empty;
+            if (data.GroupID.HasValue)
+            {
+                this.GroupID = data.GroupID.Value;
+                this.GroupName = data.GroupID.Value.ToString();
+            }
+            else
+            {
+                this.GroupID = 0;
+                this.GroupName = "None";
+            }
         }
 
-        public string GroupID { get; set; }
+        public int? GroupID { get; set; }
+
+        public string GroupName { get; set; }
 
         public long CTSCustID { get; set; }
 
