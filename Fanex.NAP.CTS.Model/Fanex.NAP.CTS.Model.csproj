@@ -319,6 +319,7 @@
     <Compile Include="MatchMonitor\MatchMonitorReasonModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorSportModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorStaticListModel.cs" />
+    <Compile Include="MatchMonitor\MMDetailCustModel.cs" />
     <Compile Include="MatchMonitor\RobotStatusModel.cs" />
     <Compile Include="MatchMonitor\TransGroupModel.cs" />
     <Compile Include="MatchMonitor\CustInfoModel.cs" />

@@ -13,9 +13,12 @@
             this.ScoreList = Enumerable.Empty<string>();
             this.ReasonList = Enumerable.Empty<string>();
             this.ReasonInfos = string.Empty;
-        }
+            this.TotalCust = 0;
+        }        
 
         public string CTSCustIDList { get; set; }
+
+        public int TotalCust { get; set; }
 
         public IEnumerable<MatchMonitorDetailItemViewModel> HomeMatchItemList { get; set; }
 
@@ -32,7 +35,10 @@
             var reasons = new List<string>();
             
             foreach (var item in rawReasons)
-                reasons.AddRange(item.Split(','));
+            {
+                if (!string.IsNullOrEmpty(item))
+                    reasons.AddRange(item.Split(','));
+            }                
 
             this.ReasonList = reasons.Distinct();
             this.ReasonInfos = string.Join(",", ReasonList);

@@ -49,8 +49,12 @@
             get
             {
                 var rs = "-";
-                var HomeName = CachedRef.GetTeamName(HomeID);
-                var AwayName = CachedRef.GetTeamName(AwayID);
+                //var HomeName = CachedRef.GetTeamName(HomeID);
+                //var AwayName = CachedRef.GetTeamName(AwayID);
+#if DEBUG
+                var HomeName = "HomeNameGetTeamName";
+                var AwayName = "AwayNameGetTeamName";
+#endif
 
                 if (!string.IsNullOrEmpty(HomeName) || !string.IsNullOrEmpty(AwayName))
                 {
@@ -65,7 +69,10 @@
         {
             get
             {
-                return CachedRef.GetLeagueName(LeagueID);
+#if DEBUG
+                return "GetLeagueName";
+#endif
+                //return CachedRef.GetLeagueName(LeagueID);
             }
         }
 

@@ -12,11 +12,12 @@
         cbbMatchScore: $('#cbbMatchScore'),
         cbbReason: $('#cbbReason'),
         cbbGroup: $('#cbbGroup'),
-        cbbSites: $('#cbbSites'),
-        cbbBetChoice: $('#cbbBetChoice'),
+        cbbSites: $('#cbbSites'),    
         tblMMHomeTeam: $('#tblMMHomeTeam'),
         tblMMAwayTeam: $('#tblMMAwayTeam'),
         spanReasonInfo: $('#spanReasonInfo'),
+        inputHomeSelectAll: $('#inputHomeSelectAll'),
+        inputAwaySelectAll: $('#inputAwaySelectAll'),
         divPopupAssDetect: $('#divPopupAssDetect'),
         btnShowPopupAssDetection: $('#btnShowPopupAssDetection'),
         tickCheckAll: $('#tickCheckAll'),
@@ -35,13 +36,9 @@
         btnAssDetection: $('#btnAssDetection'),
         btnExportExcel: $('#btnExportExcel'),
         btnVerifyAndClose: $('#btnVerifyAndClose')
-    };
+    };   
 
-    let filterOptions = {
-        isFilterScore: false,
-        isFilterReason: false,
-        isFilterGroup: false
-    }
+    let isFilterOption = false;
 
     function InitialDetailGird(element) {
         element.DataTable({
@@ -71,23 +68,25 @@
             autoWidth: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 15], className: "text-center" },
+                { targets: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 12, 14, 15], className: "text-center" },
                 {
-                    targets: [0], width: "5%", checkboxes: { selectRow: true }
+                    targets: [0], width: "5%", render: function (data, type, full, meta) {
+                        return '<input type="checkbox" class="col-checkbox" name="chkbx" value="' + $('<div/>').text(data).html() + '">';
+                    }
                 },
-                { targets: [1], width: "25%" },
+                { targets: [1], width: "16%" },
                 { targets: [2], width: "5%" },
                 { targets: [3], width: "5%" },
-                { targets: [4], width: "5%" },
+                { targets: [4], width: "10%", className: "text-center col-dgr" },
                 { targets: [5], width: "5%" },
                 { targets: [6], width: "5%" },
                 { targets: [7], width: "5%" },
                 { targets: [8], width: "5%" },
                 { targets: [9], width: "5%" },
-                { targets: [10], width: "5%" },
+                { targets: [10], width: "6%" },
                 { targets: [11], width: "7%", className: "text-center col-transtime" },
                 { targets: [12], width: "5%" },
-                { targets: [13], width: "5%", className: "text-center col-reason" },
+                { targets: [13], width: "8%", className: "text-center col-reason" },
                 { targets: [14], width: "5%" },
                 { targets: [15], visible: false }
             ],            
@@ -109,7 +108,13 @@
                 { data: obj => obj.Odds },
                 { data: obj => obj.TransIdToString },
                 { data: obj => obj.Currency },
-                { data: obj => obj.Amount },
+                {
+                    data: obj => obj.Amount, createdCell: (cell, _, row) => {
+                        if (row.Amount > 1000) {
+                            $(cell).addClass('col-red')
+                        }
+                    }
+                },               
                 { data: obj => obj.HDP },
                 { data: obj => obj.Score },
                 { data: obj => obj.TransTimeToString },
@@ -120,11 +125,11 @@
                         else return obj.Group;
                     }
                 },
-                { data: obj => obj.Reason },
+                { data: obj => obj.ReasonList },
                 {
                     data: obj => () => {
                         if (obj.PICVerified) return "<span class='icon-Check'></span>";
-                        return "";
+                        return "-";
                     }
                 },
                 { data: obj => obj.TransIdToString }
@@ -150,25 +155,22 @@
                 MatchID: function () { return domElements.matchID; },
                 BetTypeID: function () { return domElements.betTypeID; },
                 BetID: function () { return domElements.betIDToString; },
-                Sites: function () { return domElements.cbbSites.val(); },
-                BetChoice: function () { return domElements.cbbBetChoice.val(); },
+                Sites: function () { return domElements.cbbSites.val(); },              
                 Reason: function () { return domElements.reason; },
-                LiveIndicator: function () { return domElements.liveIndicator; },
-                ListScore: function () { return domElements.cbbMatchScore.val().join(); },
-                ListGroup: function () { return "[" + domElements.cbbGroup.val().join() + "]"; }
+                LiveIndicator: function () { return domElements.liveIndicator; }                       
             },
             beforeSend: function () {
                 domElements.tblMMHomeTeam.find('tbody').addClass('loading');
                 domElements.tblMMAwayTeam.find('tbody').addClass('loading');
             },
             success: function (response) {
+                RefreshFilter(domElements.cbbMatchScore, response.data.ScoreList);
+                RefreshFilter(domElements.cbbReason, response.data.ReasonList);              
+
                 domElements.tblMMHomeTeam.DataTable().clear().rows.add(response.data.HomeMatchItemList).draw();
                 domElements.tblMMAwayTeam.DataTable().clear().rows.add(response.data.AwayMatchItemList).draw();
-
-                RefreshFilter(domElements.cbbMatchScore, response.data.ScoreList);
-                RefreshFilter(domElements.cbbReason, response.data.ReasonList);
-
-                if (response.data.CTSCustIDList != '') {
+                
+                if (response.data.TotalCust <= 5000) {
                     $.post(common.modifyRelativeUrl('MatchMonitor/DetectGroupAssDefault'), { ctsCustIDList: response.data.CTSCustIDList },
                         function (xResponse) {
                             domElements.spanReasonInfo.text(response.data.ReasonInfos);
@@ -178,6 +180,7 @@
                             RefreshGroupFilter(xResponse.GroupList);
                         });
                 }
+
             },
             complete: function (response) {
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');   
@@ -280,8 +283,7 @@
                 LiveIndicator: domElements.liveIndicator == "True",
                 BettypeID: domElements.betTypeID,
                 BetID: domElements.betIDToString,
-                TranIds: GetTranIds().join(),
-                Reason: domElements.reason
+                TranIds: GetTranIds().join()               
             },
             beforeSend: function () {
                 domElements.tblMMHomeTeam.addClass('loading-value');
@@ -303,16 +305,19 @@
     }
 
     function GetTranIds() {
-        var firstTableInfo = domElements.tblMMHomeTeam.DataTable().data().toArray();
-        var tranIds = new Array();
-
-        firstTableInfo.forEach(element =>
-        {
-            if (element.PICVerified == "-")
-            {
-                tranIds.push(element.TransIdToString);
-            }
+        let tranIds = [];
+        domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {            
+            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')
+                && (data.PICVerified == '' || data.PICVerified == null)) {
+                tranIds.push(data.TransIdToString);
+            }                
         });
+        domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
+            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')
+                && (data.PICVerified == '' || data.PICVerified == null)) {
+                tranIds.push(data.TransIdToString);
+            }
+        });        
 
         return tranIds;
     }
@@ -337,19 +342,22 @@
             }              
         });
 
-        domElements.hdSelectedCTSCustIDs.val(ctsCustIDs.filter(OnlyUnique).join());
-        domElements.hdSelectedCustIDs.val(custIDs.filter(OnlyUnique).join());
-        domElements.divPopupAssDetect.dialog({
-            modal: true,
-            width: '700px',
-            title: 'ASSOCIATION DETECTION',
-            titleIsHtml: false,
-            resizable: true,
-            draggable: true,
-            close: function () {
-                $(this).dialog('close');
-            }
-        })
+        let custSelectedLength = custIDs.length;
+        if (custSelectedLength > 0 && custSelectedLength <= 1001) {
+            domElements.hdSelectedCTSCustIDs.val(ctsCustIDs.filter(OnlyUnique).join());
+            domElements.hdSelectedCustIDs.val(custIDs.filter(OnlyUnique).join());
+            domElements.divPopupAssDetect.dialog({
+                modal: true,
+                width: '750px',
+                title: 'ASSOCIATION DETECTION',
+                titleIsHtml: false,
+                resizable: true,
+                draggable: true,
+                close: function () {
+                    $(this).dialog('close');
+                }
+            })       
+        }
     }
 
     function DetectAssociation() {        
@@ -395,7 +403,7 @@
         table.rows().every(function () {
             let rowData = this.data();
             if ($(this.node()).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
-                let newGroupData = itemList.find(function (x) { return x.CTSCustID == rowData.CTSCustID; });               
+                let newGroupData = itemList.find(function (x) { return x.CustID == rowData.CustID; });               
                 if (newGroupData != undefined) {
                     rowData.GroupID = newGroupData.GroupID;
                     rowData.Group = newGroupData.GroupName;
@@ -408,7 +416,7 @@
         })
     }
 
-    function ShowAllData(table) {        
+    function ShowAllData(table) {
         table.rows().every(function () {
             $(this.node()).css('display', '');
 
@@ -436,32 +444,33 @@
                 let isEqualScore = true;
                 let isEqualReason = true;
                 let isEqualGroupID = true;
-                let arrScores = filterOptions.isFilterScore ? domElements.cbbMatchScore.val() : [];
-                let arrReasons = filterOptions.isFilterReason ? domElements.cbbReason.val() : [];
-                let arrGroupIDs = filterOptions.isFilterGroup ? domElements.cbbGroup.val() : [];
+                
+                if (!isFilterOption) return true;
 
-                if (arrScores.length == 0 || arrReasons.length == 0 || arrGroupIDs.length == 0) return true;
+                let arrScores = domElements.cbbMatchScore.val();
+                let arrReasons = domElements.cbbReason.val();
+                let arrGroupIDs = domElements.cbbGroup.val();                
                 
                 if (arrScores.find(e => e == rowData['Score']) == undefined) { isEqualScore = false; }
 
-                if (arrReasons.find(e => e == rowData['Reason']) == undefined) { isEqualReason = false; }
+                let reason = arrReasons.find(e => rowData['ReasonList'].includes(e));
+                if (reason == false || reason == undefined) { isEqualReason = false; }
                 
                 if (arrGroupIDs.find(e => e == rowData['GroupID']) == undefined) { isEqualGroupID = false; }
 
-                if (isEqualScore && isEqualReason && isEqualGroupID) return true;               
-                else return false;
+                if (isEqualScore && isEqualReason && isEqualGroupID)               
+                    return true;               
+                else
+                    return false;
 
                 return true;
             }
         );
     }
 
-    function ResetFilterOptions() {
-        filterOptions = {                     
-            isFilterScore: false,
-            isFilterReason: false,
-            isFilterGroup: false
-        }
+    function ToggleGridSelectAll(input, table) {        
+        var rows = table.rows({ 'search': 'applied' }).nodes();
+        $('input[type="checkbox"][name="chkbx"]', rows).prop('checked', input.is(":checked"));   
     }
 
     function resizeDataTable() {
@@ -501,19 +510,17 @@
         InitialDetailGird(domElements.tblMMHomeTeam);
 
         InitialDetailGird(domElements.tblMMAwayTeam);
-
-        domElements.cbbMatchScore.change(function () { filterOptions.isFilterScore = true; })
-
-        domElements.cbbReason.change(function () { filterOptions.isFilterReason = true; })
-
-        domElements.cbbGroup.change(function () { filterOptions.isFilterGroup = true; })
-
+      
         domElements.btnRefresh.on('click', function () {
-            ResetFilterOptions();
+            isFilterOption = false;
             GetMatchMonitorDetail();
         })
 
-        domElements.btnGenerateDetail.on('click', function () { DrawGrid(); })
+        domElements.btnGenerateDetail.on('click', function () { isFilterOption = true; DrawGrid(); })
+
+        domElements.inputHomeSelectAll.on('click', function () { ToggleGridSelectAll(domElements.inputHomeSelectAll, domElements.tblMMHomeTeam.DataTable()) });
+
+        domElements.inputAwaySelectAll.on('click', function () { ToggleGridSelectAll(domElements.inputAwaySelectAll, domElements.tblMMAwayTeam.DataTable()) })
 
         domElements.tickCheckAll.on('click', function () { ToggleTickCheckAll(true); });
 

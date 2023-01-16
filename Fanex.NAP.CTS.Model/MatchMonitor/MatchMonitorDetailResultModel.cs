@@ -4,6 +4,8 @@
 
     public class MatchMonitorDetailResultModel
     {
+        public IEnumerable<MMDetailCustModel> Custs { get; set; }
+
         public IEnumerable<MatchMonitorDetailModel> MatchDetails { get; set; }
 
         public IEnumerable<MatchMonitorDetailVerifyTransResultModel> VerifiedTrans { get; set; }      

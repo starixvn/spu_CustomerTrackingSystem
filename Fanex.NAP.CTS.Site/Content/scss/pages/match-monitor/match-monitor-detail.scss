@@ -41,7 +41,7 @@
         }
 
         .title-league-name {
-            color: #516792;                       
+            color: #516792;
             font-weight: 600;
             font-size: 13px;
             line-height: 20px;
@@ -305,14 +305,12 @@
                                     }
                                 }
 
-                                .col-transtime, .col-reason {
-                                    font-size: 10px !important;
+                                .col-red {
+                                    color: $account-formular;
                                 }
 
-                                .col-checkbox {
-                                    display: inline;
-                                    transition: all ease-in-out 0.3s;
-                                    cursor: pointer;
+                                .col-dgr, .col-transtime, .col-reason {
+                                    font-size: 10px !important;
                                 }
                             }
 
@@ -365,6 +363,12 @@
                                 padding-right: 1.5rem !important;
                             }
                         }
+                    }
+
+                    .col-checkbox {
+                        display: inline;
+                        transition: all ease-in-out 0.3s;
+                        cursor: pointer;
                     }
 
                     .table-monitor-detail {
@@ -434,6 +438,10 @@
 .flex-container {
     display: flex;
     margin-bottom: 10px;
+
+    .checkbox-filter {
+        margin-right: 10px;
+    }
 
     .checkbox-all {
         cursor: pointer;

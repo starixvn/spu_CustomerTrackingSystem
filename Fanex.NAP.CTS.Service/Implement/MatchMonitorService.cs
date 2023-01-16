@@ -39,15 +39,14 @@
 
         public DBResult VerifyTransMatchMonitorDetail(MatchMonitorDetailVerifyTransParaModel para)
         {
-            var criteria = new MatchMonitorDetailVerifyCriteria()
+            var criteria = new MatchMonitorDetailVerifyCriteria
             {
                 MatchID = para.MatchId,
                 LiveIndicator = para.LiveIndicator,
                 BettypeID = para.BettypeID,
                 BetID = para.BetID,
                 TranIds = para.TranIds,
-                VerifiedBy = para.VerifiedBy,
-                Reason = para.Reason
+                VerifiedBy = para.VerifiedBy                
             };
 
             repository.Fetch<DBResult>(criteria);
@@ -99,6 +98,7 @@
 
                 return new MatchMonitorDetailResultModel
                 {
+                    Custs = result?.Read<MMDetailCustModel>() ?? new List<MMDetailCustModel>(),
                     MatchDetails = result?.Read<MatchMonitorDetailModel>() ?? new List<MatchMonitorDetailModel>(),
                     VerifiedTrans = result?.Read<MatchMonitorDetailVerifyTransResultModel>() ?? new List<MatchMonitorDetailVerifyTransResultModel>()
                 };

@@ -121,7 +121,7 @@
 
         public bool IsRobot { get; set; }
 
-        public string Reason { get; set; }
+        public string ReasonList { get; set; }
 
         public string CustomerClassToString
         {
