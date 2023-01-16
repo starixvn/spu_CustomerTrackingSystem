@@ -20,6 +20,34 @@
         z-index: 999999;
     }
 
+    .page-title-match {
+        padding: 8px 16px;
+        text-transform: uppercase;
+        color: #DF5615;
+        background: #DDE2E6;
+        font-size: 1.6rem;
+        line-height: 18px;
+        display: block;
+
+        .title-description {
+            font-weight: bold;
+        }
+
+        .title-match-name {
+            color: #2b2b2b;
+            font-weight: 600;
+            font-size: 13px;
+            line-height: 20px;
+        }
+
+        .title-league-name {
+            color: #516792;                       
+            font-weight: 600;
+            font-size: 13px;
+            line-height: 20px;
+        }
+    }
+
     .monitor-container {
         margin: 0 1.6rem 1rem 1.6rem;
 
@@ -280,6 +308,12 @@
                                 .col-transtime, .col-reason {
                                     font-size: 10px !important;
                                 }
+
+                                .col-checkbox {
+                                    display: inline;
+                                    transition: all ease-in-out 0.3s;
+                                    cursor: pointer;
+                                }
                             }
 
                             tr td:last-child {
@@ -394,7 +428,7 @@
                 left: 3px;
             }
         }
-    }    
+    }
 }
 
 .flex-container {

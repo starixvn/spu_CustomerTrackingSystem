@@ -7,7 +7,11 @@
 
 <section class="detailpage" id="detailpage">
     <div class="content">
-        <h2 class="page-title">MATCH MONITOR DETAIL</h2>
+        <div class="page-title-match">
+            <span class="title-description">MATCH MONITOR DETAIL</span>
+            <span class="title-match-name"> - @ViewBag.MatchName</span>
+            <span class="title-league-name"> - @ViewBag.LeagueName</span>
+        </div>
     </div>
 
     <div class="monitor-container">
@@ -42,6 +46,7 @@
                                 }
                             </select>
                         </div>
+
                         <div class="group width-160" @(ViewBag.IsDisableScoreFilter ? "hidden" : "")   >
                             <label class="text">Score</label>
                             <select class="control width-select" id="cbbMatchScore" multiple="multiple">
@@ -66,16 +71,15 @@
                             <select class="control width-select" id="cbbGroup" multiple="multiple">                               
                             </select>
                         </div>
+
                         <div class="group-button">
                             <button class="button button-generate" id="btnGenerate-detail">Generate</button>
                         </div>                        
                     </div>
-                    <div class="detail-area">
-                        <span>@ViewBag.MatchName <br /></span>
-                        <span class="league-highlight">@ViewBag.LeagueName<br /></span>
+                    <div class="detail-area">                        
                         <span>@ViewBag.SportName - @ViewBag.BettypeName - <span class="market-highlight">@ViewBag.MarketName</span><br /></span>
                         <span id="spanKOTime">KO Time: @ViewBag.KOTime<br /></span>
-                        <span class="reason-highlight" id="spanReason">TODO</span>
+                        <span class="reason-highlight" id="spanReasonInfo"></span>
                     </div>
                 </div>
 
@@ -231,6 +235,11 @@
 
         <div class="box-right">
             <button id="btnAssDetection" class="button btn btn-detect" title="Association Detection">Detect</button>
+        </div>
+
+        <div class="hide">
+            <input id="hdSelectedCTSCustIDs" type="hidden" />
+            <input id="hdSelectedCustIDs" type="hidden" />
         </div>
     </div>
 </div>

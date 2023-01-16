@@ -12,6 +12,7 @@
             this.AwayMatchItemList = Enumerable.Empty<MatchMonitorDetailItemViewModel>();
             this.ScoreList = Enumerable.Empty<string>();
             this.ReasonList = Enumerable.Empty<string>();
+            this.ReasonInfos = string.Empty;
         }
 
         public string CTSCustIDList { get; set; }
@@ -23,6 +24,19 @@
         public IEnumerable<string> ScoreList { get; set; }
 
         public IEnumerable<string> ReasonList { get; set; }
-        
+
+        public string ReasonInfos { get; set; }
+
+        public void BindReasons(IEnumerable<string> rawReasons)
+        {
+            var reasons = new List<string>();
+            
+            foreach (var item in rawReasons)
+                reasons.AddRange(item.Split(','));
+
+            this.ReasonList = reasons.Distinct();
+            this.ReasonInfos = string.Join(",", ReasonList);
+        }
+
     }
 }

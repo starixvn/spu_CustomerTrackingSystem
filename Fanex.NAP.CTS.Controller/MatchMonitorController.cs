@@ -205,15 +205,15 @@
                         mdItemList = GetRobotStatus(mergeInfo, para.BetTypeID);
 
                         mdItemList = FilterSite(mdItemList, para.Sites);
-
+                        
                         mdResult = new MatchMonitorDetailListViewModel
                         {
                             CTSCustIDList = string.Join(",", mdItemList.Select(x => x.CTSCustID).Distinct()),
                             HomeMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)),
                             AwayMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)),
-                            ScoreList = mdItemList.Select(x => x.Score).Distinct().OrderBy(x => x),
-                            ReasonList = mdItemList.Select(x => x.Reason).Distinct()
+                            ScoreList = mdItemList.Select(x => x.Score).Distinct().OrderBy(x => x),                            
                         };
+                        mdResult.BindReasons(mdItemList.Select(x => x.Reason).Distinct());
                     }
                 }
             }
@@ -232,6 +232,8 @@
                 mdResult.CTSCustIDList = string.Join(",", mdResult.HomeMatchItemList.Select(x => x.CTSCustID).Distinct());
                 mdResult.ScoreList = mdResult.HomeMatchItemList.Select(x => x.Score).Distinct().OrderBy(x => x);
                 mdResult.ReasonList = mdResult.HomeMatchItemList.Select(x => x.Reason).Distinct();
+                mdResult.ScoreList = mdResult.HomeMatchItemList.Select(x => x.Score).Distinct().OrderBy(x => x);
+                mdResult.BindReasons(mdResult.HomeMatchItemList.Select(x => x.Reason).Distinct());
             }
             // end for test
 
@@ -273,7 +275,7 @@
         }
 
         [HttpPost]
-        public ActionResult DetectGroupAssociation(string ctsCustIDList)
+        public ActionResult DetectGroupAssDefault(string ctsCustIDList)
         {
             var result = new DetectGroupAssociationListViewModel();
             var mergeGroupInfo = new MergeGroupInfoModel { CTSCustIDs = ctsCustIDList };
@@ -298,9 +300,81 @@
                     GroupList = data.Select(x => new GroupInfoViewModel { GroupID = x.GroupID, GroupName = x.GroupName })
                                     .Distinct(x => x.GroupID).OrderBy(x => x.GroupID)
                 };
-            }            
+            }
 
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult DetectGroupAssWithOptions(DetectGroupAssFilterViewModel model)
+        {
+            var result = new DetectGroupAssociationListViewModel();
+            var mergeGroupInfo = new MergeGroupInfoModel { CTSCustIDs = model.CTSCustIDs };
+
+            Parallel.Invoke(() =>
+            {
+                var detectAssByIP = model.IsOptIPLast3Days ? _associationDetectionService.DetectAssociationByIP(model.CustIDs) : Enumerable.Empty<DetectAssociationBySharedIPMatchesModel>();
+                //var assBySharedIP = model.IsOptIPLast3Days ? DetectAssociationByIP(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
+
+                //mergeGroupInfo.AssociationByIPJson = GetAssociationCust(assBySharedIP);
+            }, () => {
+                var detectAssByAssMatches = model.IsOpt3MatchesLast7Days ? _associationDetectionService.DetectAssociationBySharedMatches(model.CustIDs) : Enumerable.Empty<DetectAssociationBySharedIPMatchesModel>();
+
+                //mergeGroupInfo.AssociationByMatchesJson = GetAssociationCust(assBySharedMatches);
+            },
+            () => {
+                if (model.IsOptBP || model.IsOptDevice || model.IsOptIP)
+                {
+                    var assByPrimary = _associationDetectionService.DetectAssociationByPrimary(new DetectAssociationByPrimaryFilterModel
+                    {
+                        CTSCustIDs = model.CTSCustIDs,
+                        IsBP = model.IsOptBP,
+                        IsDevice = model.IsOptDevice,
+                        IsIP = model.IsOptIP
+                    });
+                    mergeGroupInfo.AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary);
+                }                
+            }, () => {
+                var assByAgent = Enumerable.Empty<DetectAssociationByPrimaryModel>();
+
+                if (model.IsOptAgent)
+                    assByAgent = _associationDetectionService.DetectAssociationByAgent(model.CTSCustIDs);
+
+                mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);
+            });
+
+            var data = _associationDetectionService.DetectGroupDetectAssociation(mergeGroupInfo).Select(x => new DetectGroupAssociationItemViewModel(x));
+
+#if DEBUG
+            data = GenerateGroup_DataTest();
+#endif
+
+            result = new DetectGroupAssociationListViewModel
+            {
+                ItemList = data,
+                GroupList = data.Select(x => new GroupInfoViewModel { GroupID = x.GroupID, GroupName = x.GroupName })
+                                    .Distinct(x => x.GroupID).OrderBy(x => x.GroupID)
+            };
+
+            return Json(new
+            {
+                data = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<DetectGroupAssociationItemViewModel> GenerateGroup_DataTest() 
+        {
+            var list = new List<DetectGroupAssociationItemViewModel>();
+            for (int i = 1; i < 4; i++)
+            {
+                list.Add(new DetectGroupAssociationItemViewModel(new DetectAssociationMergeGroupModel
+                {
+                    CTSCustID = i,
+                    GroupID = 1
+                }));
+            }            
+
+            return list;
         }
 
         [HttpPost]

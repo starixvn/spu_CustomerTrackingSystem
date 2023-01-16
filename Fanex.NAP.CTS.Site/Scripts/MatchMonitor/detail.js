@@ -16,7 +16,7 @@
         cbbBetChoice: $('#cbbBetChoice'),
         tblMMHomeTeam: $('#tblMMHomeTeam'),
         tblMMAwayTeam: $('#tblMMAwayTeam'),
-        spanReason: $('#spanReason'),
+        spanReasonInfo: $('#spanReasonInfo'),
         divPopupAssDetect: $('#divPopupAssDetect'),
         btnShowPopupAssDetection: $('#btnShowPopupAssDetection'),
         tickCheckAll: $('#tickCheckAll'),
@@ -27,6 +27,8 @@
         inputOptAgent: $('#inputOptAgent'),
         inputOptIPLast3Days: $('#inputOptIPLast3Days'),
         inputOpt3MatchesLast7Days: $('#inputOpt3MatchesLast7Days'),
+        hdSelectedCTSCustIDs: $('#hdSelectedCTSCustIDs'),
+        hdSelectedCustIDs: $('#hdSelectedCustIDs'),
         btnRefresh: $('#btnRefresh'),
         btnGenerateDetail: $('#btnGenerate-detail'),
         btnShowAll: $('#btnShowAll'),
@@ -36,8 +38,6 @@
     };
 
     let filterOptions = {
-        isShowAll: true,
-        isAssDetect: false,
         isFilterScore: false,
         isFilterReason: false,
         isFilterGroup: false
@@ -72,7 +72,9 @@
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 15], className: "text-center" },
-                { targets: [0], width: "5%" },
+                {
+                    targets: [0], width: "5%", checkboxes: { selectRow: true }
+                },
                 { targets: [1], width: "25%" },
                 { targets: [2], width: "5%" },
                 { targets: [3], width: "5%" },
@@ -88,11 +90,11 @@
                 { targets: [13], width: "5%", className: "text-center col-reason" },
                 { targets: [14], width: "5%" },
                 { targets: [15], visible: false }
-            ],
+            ],            
             columns: [
                 {
-                    data: obj => () => {
-                        return '<label class="container-checkbox"><input class="chk-selected" type="checkbox"><span class="checkmark"></span></label>'; 
+                    data: obj => () => {         
+                        return `<input type="checkbox" name="chkbx" class="col-checkbox" />`;
                     }
                 },
                 {
@@ -167,12 +169,13 @@
                 RefreshFilter(domElements.cbbReason, response.data.ReasonList);
 
                 if (response.data.CTSCustIDList != '') {
-                    $.post(common.modifyRelativeUrl('MatchMonitor/DetectGroupAssociation'), { ctsCustIDList: response.data.CTSCustIDList },
-                        function (xResponse) {            
+                    $.post(common.modifyRelativeUrl('MatchMonitor/DetectGroupAssDefault'), { ctsCustIDList: response.data.CTSCustIDList },
+                        function (xResponse) {
+                            domElements.spanReasonInfo.text(response.data.ReasonInfos);
+
                             RenderAssociationGroup(domElements.tblMMHomeTeam, xResponse.ItemList);
                             RenderAssociationGroup(domElements.tblMMAwayTeam, xResponse.ItemList);
-
-                            RefreshGroupFilter(xResponse.GroupList);                            
+                            RefreshGroupFilter(xResponse.GroupList);
                         });
                 }
             },
@@ -314,14 +317,103 @@
         return tranIds;
     }
 
-    function DetectAssociation() {
-        filterOptions.isAssDetect = true;
+    function OnlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
 
-        domElements.divPopupAssDetect.dialog('close');
+    function ShowPopupAssDetection() {        
+        let ctsCustIDs = [];
+        let custIDs = [];
+        domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
+            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                ctsCustIDs.push(data.CTSCustID);
+                custIDs.push(data.CustID);
+            }                
+        });
+        domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
+            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                ctsCustIDs.push(data.CTSCustID);
+                custIDs.push(data.CustID);
+            }              
+        });
 
-        DrawGrid();
+        domElements.hdSelectedCTSCustIDs.val(ctsCustIDs.filter(OnlyUnique).join());
+        domElements.hdSelectedCustIDs.val(custIDs.filter(OnlyUnique).join());
+        domElements.divPopupAssDetect.dialog({
+            modal: true,
+            width: '700px',
+            title: 'ASSOCIATION DETECTION',
+            titleIsHtml: false,
+            resizable: true,
+            draggable: true,
+            close: function () {
+                $(this).dialog('close');
+            }
+        })
+    }
 
-        filterOptions.isAssDetect = false;
+    function DetectAssociation() {        
+        let params = {
+            CTSCustIDs: domElements.hdSelectedCTSCustIDs.val(),
+            CustIDs: domElements.hdSelectedCustIDs.val(),
+            IsOptBP: domElements.inputOptBP.is(":checked"),
+            IsOptDevice: domElements.inputOptDevice.is(":checked"),
+            IsOptIP: domElements.inputOptIP.is(":checked"),
+            IsOptAgent: domElements.inputOptAgent.is(":checked"),
+            IsOpt3MatchesLast7Days: domElements.inputOpt3MatchesLast7Days.is(":checked"),
+            IsOptIPLast3Days: domElements.inputOptIPLast3Days.is(":checked")
+        }
+
+        $.ajax(common.modifyRelativeUrl('MatchMonitor/DetectGroupAssWithOptions'), {
+            type: 'POST',
+            data: params,
+            beforeSend: function () {
+                domElements.tblMMHomeTeam.find('tbody').addClass('loading');
+                domElements.tblMMAwayTeam.find('tbody').addClass('loading');
+            },
+            success: function (response) {                
+                BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam.DataTable(), response.data.ItemList);
+                BindChangeGroupAssWithOptions(domElements.tblMMAwayTeam.DataTable(), response.data.ItemList);
+            },
+            complete: function (response) {
+                domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
+                domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
+
+                resizeDataTable();
+            },
+            error: function (error) {
+                domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
+                domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
+                console.log(error);
+            }
+        });
+
+        domElements.divPopupAssDetect.dialog('close');        
+    }
+
+    function BindChangeGroupAssWithOptions(table, itemList) {        
+        table.rows().every(function () {
+            let rowData = this.data();
+            if ($(this.node()).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                let newGroupData = itemList.find(function (x) { return x.CTSCustID == rowData.CTSCustID; });               
+                if (newGroupData != undefined) {
+                    rowData.GroupID = newGroupData.GroupID;
+                    rowData.Group = newGroupData.GroupName;
+                }
+            } else {
+                $(this.node()).css('display', 'none');
+            }
+
+            this.invalidate();
+        })
+    }
+
+    function ShowAllData(table) {        
+        table.rows().every(function () {
+            $(this.node()).css('display', '');
+
+            this.invalidate();
+        })
     }
 
     function ToggleTickCheckAll(isCheckAll) {
@@ -344,11 +436,11 @@
                 let isEqualScore = true;
                 let isEqualReason = true;
                 let isEqualGroupID = true;
-                let arrScores = domElements.cbbMatchScore.val();
-                let arrReasons = domElements.cbbReason.val();
-                let arrGroupIDs = domElements.cbbGroup.val();
+                let arrScores = filterOptions.isFilterScore ? domElements.cbbMatchScore.val() : [];
+                let arrReasons = filterOptions.isFilterReason ? domElements.cbbReason.val() : [];
+                let arrGroupIDs = filterOptions.isFilterGroup ? domElements.cbbGroup.val() : [];
 
-                if (arrGroupIDs.length == 0) return true;
+                if (arrScores.length == 0 || arrReasons.length == 0 || arrGroupIDs.length == 0) return true;
                 
                 if (arrScores.find(e => e == rowData['Score']) == undefined) { isEqualScore = false; }
 
@@ -362,6 +454,14 @@
                 return true;
             }
         );
+    }
+
+    function ResetFilterOptions() {
+        filterOptions = {                     
+            isFilterScore: false,
+            isFilterReason: false,
+            isFilterGroup: false
+        }
     }
 
     function resizeDataTable() {
@@ -408,41 +508,25 @@
 
         domElements.cbbGroup.change(function () { filterOptions.isFilterGroup = true; })
 
-        domElements.btnRefresh.on('click', function () { GetMatchMonitorDetail(); })
+        domElements.btnRefresh.on('click', function () {
+            ResetFilterOptions();
+            GetMatchMonitorDetail();
+        })
 
         domElements.btnGenerateDetail.on('click', function () { DrawGrid(); })
 
-        domElements.tickCheckAll.on('click', function () {
-            ToggleTickCheckAll(true);           
-        });
+        domElements.tickCheckAll.on('click', function () { ToggleTickCheckAll(true); });
 
-        domElements.tickUncheckAll.on('click', function () {
-            ToggleTickCheckAll(false);           
-        });
+        domElements.tickUncheckAll.on('click', function () { ToggleTickCheckAll(false); });
 
         domElements.btnShowAll.on('click', function () {
-            filterOptions.isShowAll = true;
-            DrawGrid();
-            filterOptions.isShowAll = false;
+            ShowAllData(domElements.tblMMHomeTeam.DataTable());
+            ShowAllData(domElements.tblMMAwayTeam.DataTable());
         })
 
-        domElements.btnShowPopupAssDetection.on('click', function () {
-            domElements.divPopupAssDetect.dialog({
-                modal: true,
-                width: '700px',
-                title: 'ASSOCIATION DETECTION',
-                titleIsHtml: false,
-                resizable: true,
-                draggable: true,
-                close: function () {
-                    $(this).dialog('close');
-                }
-            })
-        })
+        domElements.btnShowPopupAssDetection.on('click', function () { ShowPopupAssDetection(); })
 
-        domElements.btnAssDetection.on('click', function () {
-            DetectAssociation();
-        })
+        domElements.btnAssDetection.on('click', function () { DetectAssociation(); })
 
         domElements.btnExportExcel.on('click', function () {
 
