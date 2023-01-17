@@ -16,7 +16,7 @@
 
         public string VerifiedDate { get; set; }
       
-        public string VerifiedBy { get; set; }
+        public string VerifiedTransID { get; set; }
 
         public string GetReasonName(IEnumerable<MatchMonitorReasonModel> Reasons, string reason)
         {

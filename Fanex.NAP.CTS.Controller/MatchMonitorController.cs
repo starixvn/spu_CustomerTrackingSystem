@@ -484,7 +484,7 @@
                     {
                         TransID = i.TransID,
                         ReasonList = i.ReasonList,
-                        VerifiedBy = verifyTranInfo?.VerifiedBy ?? string.Empty,
+                        VerifiedTransID = verifyTranInfo?.VerifiedTransID.ToString() ?? string.Empty,
                         VerifiedDate = verifyTranInfo?.VerifiedDate.ToString(FormatDateToString_MMMddhhmmss) ?? string.Empty
                     };
 
@@ -495,25 +495,7 @@
             }
 
             return transGroupBetting;
-        }       
-
-        private string GetVerifiedTrans(IEnumerable<TransGroupModel> mappingTransInfo, TicketDetailModel ticketDetail)
-        {
-            string verifiedTran = "-";
-
-            if (mappingTransInfo != null && mappingTransInfo.Any())
-            {
-                var transGroup = mappingTransInfo.Where(c => c.TransID == ticketDetail.TransId);
-
-                var verifiedBy = transGroup?.FirstOrDefault()?.VerifiedBy;
-
-                var verifiedDate = transGroup?.FirstOrDefault()?.VerifiedDate;
-
-                return string.IsNullOrEmpty(verifiedBy) && string.IsNullOrEmpty(verifiedDate) ? verifiedTran : string.Concat(verifiedBy, ", ", verifiedDate);
-            }
-
-            return verifiedTran;
-        }       
+        }              
         
         private IEnumerable<MatchMonitorDetailItemViewModel> MergeMatchMonitorDetail(IEnumerable<TransGroupModel> mappingTransInfo, IEnumerable<CustInfoModel> custInfo, IEnumerable<TicketDetailModel> ticketDetail)
         {
@@ -529,7 +511,7 @@
                                                             (ticket, cust) => new { ticket, cust })
                                                             .Select(c => {
                                                                 var transGroup = mappingTransInfo.FirstOrDefault(x => x.TransID == c.ticket.TransId);
-                                                                var verifiedBy = transGroup?.VerifiedBy;
+                                                                var verifiedBy = transGroup?.VerifiedTransID;
                                                                 
                                                                 return new MatchMonitorDetailItemViewModel
                                                                 {
@@ -538,7 +520,7 @@
                                                                     SubscriberType = c.cust.SubscriberType,
                                                                     Username = c.cust.UserName,
                                                                     CustomerClass = c.cust.CustomerClass,
-                                                                    PICVerified = transGroup?.VerifiedBy,
+                                                                    PICVerified = transGroup?.VerifiedTransID,
                                                                     Danger1 = c.ticket.Danger1,
                                                                     Danger2 = c.ticket.Danger2,
                                                                     Danger3 = c.ticket.Danger3,

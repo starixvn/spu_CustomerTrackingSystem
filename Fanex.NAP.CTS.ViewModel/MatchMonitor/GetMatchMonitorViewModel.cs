@@ -17,17 +17,11 @@
             this.EventDate = data.EventDate;
             this.Market = data.Market;
             this.HomeID = data.HomeID;
-#if DEBUG
-            //this.HomeName = CachedRef.GetTeamName(data.HomeID);
-#endif
+            this.HomeName = CachedRef.GetTeamName(data.HomeID);
             this.AwayID = data.AwayID;
-#if DEBUG
-            //this.AwayName = CachedRef.GetTeamName(data.AwayID);
-#endif
+            this.AwayName = CachedRef.GetTeamName(data.AwayID);
             this.LeagueID = data.LeagueID;
-#if DEBUG
-            //this.LeagueName = CachedRef.GetLeagueName(data.LeagueID);
-#endif          
+            this.LeagueName = CachedRef.GetLeagueName(data.LeagueID);     
             this.BettypeID = data.BettypeID;
             this.BettypeName = this.GetBettypeName(mmStatic.BetTypes, data.BettypeID);
             this.BetID = data.BetID;
@@ -38,19 +32,6 @@
             this.IsVerified = data.IsVerified;
             this.VerifiedBy = data.VerifiedBy;
             this.KOTime = data.KickOffTime.ToString(Consts.FormatTimeToString_hhmmss_2);
-#if DEBUG
-            this.HomeName = "HomeName";
-            this.AwayName = "AwayName";
-            this.LeagueName = "LeagueName";
-
-            try
-            {
-                //this.HomeName = CachedRef.GetTeamName(data.HomeID);
-                //this.AwayName = CachedRef.GetTeamName(data.AwayID);
-                //this.LeagueName = CachedRef.GetLeagueName(data.LeagueID);
-            }
-            catch (Exception ex) { }
-#endif
         }
 
         public Int64 ID { get; set; }

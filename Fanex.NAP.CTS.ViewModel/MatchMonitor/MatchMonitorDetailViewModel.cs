@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
     using Fanex.NAP.CTS.Core.BaseClasses;
-    using Fanex.NAP.CTS.Model.MatchMonitor;
     using System;
     using System.Collections.Generic;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -49,12 +48,8 @@
             get
             {
                 var rs = "-";
-                //var HomeName = CachedRef.GetTeamName(HomeID);
-                //var AwayName = CachedRef.GetTeamName(AwayID);
-#if DEBUG
-                var HomeName = "HomeNameGetTeamName";
-                var AwayName = "AwayNameGetTeamName";
-#endif
+                var HomeName = CachedRef.GetTeamName(HomeID);
+                var AwayName = CachedRef.GetTeamName(AwayID);
 
                 if (!string.IsNullOrEmpty(HomeName) || !string.IsNullOrEmpty(AwayName))
                 {
@@ -69,10 +64,7 @@
         {
             get
             {
-#if DEBUG
-                return "GetLeagueName";
-#endif
-                //return CachedRef.GetLeagueName(LeagueID);
+                return CachedRef.GetLeagueName(LeagueID);
             }
         }
 
