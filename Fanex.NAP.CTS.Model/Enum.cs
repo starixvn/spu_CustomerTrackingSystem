@@ -154,7 +154,7 @@
         SystemDetectGroupBetting = 63
     }
 
-    public enum IPPatternType
+    public enum IPPatternType3S
     {
         IPShared3Days = 1,
         AtLeast3IPsSameDay = 2,

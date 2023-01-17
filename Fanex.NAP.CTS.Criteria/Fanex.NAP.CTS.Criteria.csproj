@@ -47,6 +47,7 @@
     <Compile Include="Account\Associated\AssociatedAccountDetail\GetCustomerGroupCriteria.cs" />
     <Compile Include="Account\Associated\AssociatedAccountDetail\GetMatchesInfoCriteria.cs" />
     <Compile Include="Account\Associated\ChangeUpdateTaggingAssWithPACriteria.cs" />
+    <Compile Include="Account\Associated\GetCoupleFraudDetailCriteria.cs" />
     <Compile Include="Account\Associated\GetAssociationByIPByCustIdCriteria.cs" />
     <Compile Include="Account\Associated\GetAssociationByIPInfoCriteria.cs" />
     <Compile Include="Account\Associated\GetAssociationProfileCriteria.cs" />
@@ -55,6 +56,8 @@
     <Compile Include="Account\Associated\AssociatedAccountDetail\GetMatchesDetailInfoCriteria.cs" />
     <Compile Include="Account\Associated\AssociatedAccountDetail\GetBettingPatternMatchesInfoCriteria.cs" />
     <Compile Include="Account\Associated\AssociatedAccountDetail\GetMatchesAssociationByAICriteria.cs" />
+    <Compile Include="Account\Associated\GetCoupleInfoCriteria.cs" />
+    <Compile Include="Account\Associated\GetCoupleIPFraudDetailCriteria.cs" />
     <Compile Include="Account\Associated\InsertManualAssociationMultipleCriteria.cs" />
     <Compile Include="Account\Associated\ValidateManualAssociationMultipleCriteria.cs" />
     <Compile Include="Account\Associated\CustomerStaticAccountStatusCriteria.cs" />
@@ -242,6 +245,7 @@
     <Compile Include="SubscriberAssignment\GetAllSubscriberCriteria.cs" />
     <Compile Include="SyncCustomerToMainDb\SyncCustomerClassToMainDbCriteria.cs" />
     <Compile Include="TransactionReport\TransactionReportCriteria.cs" />
+    <Compile Include="Transaction\GetTicketDetailsCriteria.cs" />
     <Compile Include="TWProblemAccountDetection\GetCustomerPerformanceCriteria.cs" />
     <Compile Include="TWProblemAccountDetection\NapProblemAccInsertCriteria.cs" />
     <Compile Include="TWProblemAccountDetection\InsertSystemFormulaBetCriteria.cs" />

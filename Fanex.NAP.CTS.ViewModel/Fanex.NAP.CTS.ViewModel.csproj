@@ -54,8 +54,7 @@
     <Compile Include="Account\Associated\InsertManualAssociationMultipleViewModel.cs" />
     <Compile Include="Account\Associated\MatchesDetailInfoViewModel.cs" />
     <Compile Include="Account\Associated\MatchesInfoViewModel.cs" />
-    <Compile Include="Account\Associated\StakeIpPatternByAIViewModel.cs" />
-    <Compile Include="Account\Associated\StakeIpPatternInfoViewModel.cs" />
+    <Compile Include="Account\Associated\CoupleInfoViewModel.cs" />
     <Compile Include="Account\Associated\ValidateManualAssociationMultipleViewModel.cs" />
     <Compile Include="Account\BettingStatistic\LiveIndicatorViewModel.cs" />
     <Compile Include="Account\BettingStatistic\SportBettingStatisticViewModel.cs" />

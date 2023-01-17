@@ -17,6 +17,8 @@
         public string BetTeam { get; set; }
 
         public decimal Stake { get; set; }
+
+        public decimal StakeRM { get; set; }
         
         public decimal Odds { get; set; }
 
@@ -24,9 +26,8 @@
 
         public decimal LiveAwayScore { get; set; }
 
-        public decimal StakeRM { get; set; }
+        public string CurrencyName { get; set; }
 
-        public string Currency { get; set; }
         public string IP { get; set; }
     }
 }

@@ -6,27 +6,35 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 
     public class StakeIpPatternDetailViewModel
     {
-        public int CoupleID { get; set; }
-        public Int64 GroupID { get; set; }
-        public Int64 GroupUserNameID { get; set; }
-        public int TotalStakePattern { get; set; }
-        public IPPatternType IPPatternType { get; set; }
+        public long CoupleID { get; set; }
+
+        public int GroupID { get; set; }
+
+        public int GroupCustID { get; set; }
+
+        public decimal TotalStake { get; set; }
+        
+        public int TicketsPerMatch { get; set; }
+
+        public IPPatternType3S IPPatternType { get; set; }
+
         public bool IsStakePattern { get; set; }
+
         public string Description
         {
             get
             {
                 if (IsStakePattern)
                 {
-                    return $" Total Stake / Tickets per Match: {StakeRM}RM / {TotalStakePattern}";
+                    return $" Total Stake / Tickets per Match: {TotalStake}RM / {TicketsPerMatch}";
                 }
                 switch (this.IPPatternType)
                 {
-                    case IPPatternType.IPShared3Days:
+                    case IPPatternType3S.IPShared3Days:
                         return "IP is shared on exact 3 days";
-                    case IPPatternType.IPAlternative:
+                    case IPPatternType3S.IPAlternative:
                         return "At least 3 IPs are on same day";
-                    case IPPatternType.AtLeast3IPsSameDay:
+                    case IPPatternType3S.AtLeast3IPsSameDay:
                         return "IP Alternative";
                     default:
                         return "";
@@ -47,7 +55,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
             }
         }
 
-        public int MatchID { get; set; }
+        public long MatchID { get; set; }
 
         private string _transDateString { get; set; }
         public string TransDateString

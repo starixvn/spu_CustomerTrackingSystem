@@ -5,7 +5,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
     using System;
     using System.Globalization;
 
-    public class StakeIpPatternInfoViewModel
+    public class CoupleInfoViewModel
     {
         public int CoupleID { get; set; }
         public DateTime FromDate { get {
@@ -34,6 +34,10 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
             }
         }
         public string ToDateString { get; set; }
+
+        public long CustID1 { get; set; }
+
+        public long CustID2 { get; set; }
 
         public string Group
         {

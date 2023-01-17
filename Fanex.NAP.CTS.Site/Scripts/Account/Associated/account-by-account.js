@@ -563,7 +563,7 @@ function account_by_account() {
         GetMatchBettingPattern($('#hdCustId').val(), custId, groupIDs, originGroupIDs);
 
         ConfigDataTableStakeIPPattern();
-        GetStakeIpPattern($('#hdCustId').val(), custId)
+        GetCoupleInformations($('#hdCustId').val(), custId)
 
         $('.ui-dialog .ui-dialog-content').css('padding', '0');
     }
@@ -845,6 +845,8 @@ function account_by_account() {
                     html += ' data-couple-id=' + data[i].CoupleID;
                     html += ' data-from-date-string=' + data[i].FromDateString;
                     html += ' data-to-date-string=' + data[i].ToDateString;
+                    html += ' data-custId-1-string=' + data[i].CustID1;
+                    html += ' data-custId-2-string=' + data[i].CustID2;
                     html += ' ><i class="icon icon-chevron-right icon-open"></i> ' + data[i].Group;
                     html += '</span></td></tr>';
 
@@ -867,6 +869,8 @@ function account_by_account() {
                         CoupleId: colGroupMatch.attr('data-couple-id'),
                         FromDateString: colGroupMatch.attr('data-from-date-string'),
                         ToDateString: colGroupMatch.attr('data-to-date-string'),
+                        CustID1: colGroupMatch.attr('data-custId-1-string'),
+                        CustID2: colGroupMatch.attr('data-custId-2-string'),
                     }
 
                     if (!isProcessingTableStakeIPPattern) {
@@ -894,8 +898,8 @@ function account_by_account() {
         configdataTableStakeIPPattern = true;
     }
 
-    function GetStakeIpPattern(custId1, custId2) {
-        var url = common.modifyRelativeUrl('Account/GetStakeIpPatternByAI');
+    function GetCoupleInformations(custId1, custId2) {
+        var url = common.modifyRelativeUrl('Account/GetCoupleInformationsByAI');
 
         $.ajax(url, {
             type: 'POST',
@@ -907,14 +911,9 @@ function account_by_account() {
                 custID2: custId2
             },
             success: function (response) {
-                if (response !== undefined) {
-                    if ((response.ErrorMessage === null || response.ErrorMessage === '') && response.StakeIpPatternInformations.length > 0) {
-                        tableStakeIPPattern.DataTable().clear().rows.add(response.StakeIpPatternInformations).draw();
-                        tableStakeIPPattern.DataTable().columns.adjust();
-                    } else {
-                        console.log(response.ErrorMessage);
-                        common.showError(response.ErrorMessage);
-                    }
+                if (response !== undefined && response.length > 0) {
+                    tableStakeIPPattern.DataTable().clear().rows.add(response).draw();
+                    tableStakeIPPattern.DataTable().columns.adjust();
                 }
             },
             complete: function () {
@@ -984,29 +983,30 @@ function account_by_account() {
             styleRedFontInIpPattern = styleRedFont;
         }
         let descriptionStyle = 'border:none; border-bottom:.5pt solid black; background:#fafafa;border-top:0.5pt solid windowtext; border-right:0.5pt solid windowtext; border-left:0.5pt solid windowtext; white-space:normal;'
-        let descriptionAttribute = isRowMember ? ('style="display: none;' + descriptionStyle + '"') : ('style="' + descriptionStyle + '" rowspan = "' + rowspanNumer + '"');
+        let descriptionAttribute = GetAttributeWithRowSpan(descriptionStyle, isRowMember, rowspanNumer);
 
         let oddStyle = "border:0.5pt solid windowtext; background:#fde9d9; border-top:none;";
         let envenStyle = "border:0.5pt solid windowtext; background:#c5d9f1; border-left:none;"
-        let defaultStyle = response[index]["GroupUserNameID"] % 2 == 0 ? envenStyle : oddStyle;
+        let defaultStyle = response[index]["GroupCustID"] % 2 == 0 ? envenStyle : oddStyle;
 
         let isUserNameRowMember;
         let userNameRowSpanNumer;
         if (index - 1 >= 0) {
-            if (response[index]["GroupUserNameID"] == response[index - 1]["GroupUserNameID"]) {
+            if (response[index]["GroupCustID"] == response[index - 1]["GroupCustID"]) {
                 isUserNameRowMember = true;
                 userNameRowSpanNumer = 0;
             }
             else {
                 isUserNameRowMember = false;
-                userNameRowSpanNumer = response[index]["TotalStakePattern"];
+                userNameRowSpanNumer = response[index]["TicketsPerMatch"];
             }
         }
         else {
             isUserNameRowMember = false;
-            userNameRowSpanNumer = response[index]["TotalStakePattern"];
+            userNameRowSpanNumer = response[index]["TicketsPerMatch"];
         }
-        let userAttribute = isUserNameRowMember ? ('style="display: none;' + defaultStyle + '"') : ('style="' + defaultStyle + '" rowspan = "' + userNameRowSpanNumer + '"');
+
+        let userAttribute = GetAttributeWithRowSpan(defaultStyle, isUserNameRowMember, userNameRowSpanNumer);
 
         let newRow = $('<tr role="row" class="odd detail" data-couple-id=' + response[index]["CoupleID"] + '>')
             .append('<td class="text-center" width="15%" ' + descriptionAttribute + '>' + response[index]["Description"] + '</td>')
@@ -1024,6 +1024,18 @@ function account_by_account() {
             .append('<td class="text-center" style = "' + defaultStyle + '">' + response[index]["LiveScore"] + '</td>')
             .append('</tr>');
         return newRow;
+    }
+
+    function GetAttributeWithRowSpan(defaultStyle, isMemberRow, rowSpan) {
+        if (isMemberRow) {
+            return 'style="display: none;' + defaultStyle + '"';
+        }
+        else if (rowSpan <= 1) {
+            return 'style="' + defaultStyle + '"';
+        }
+        else {
+            return 'style="' + defaultStyle + '" rowspan = "' + rowSpan + '"';
+        }
     }
 
     function ShowIPAssociation(custId) {

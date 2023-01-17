@@ -231,6 +231,9 @@
     <Compile Include="AssociationDetection\SharedIPMatchesInfoModel.cs" />
     <Compile Include="AssociationReport\AssociationDetailFromMySqlModel.cs" />
     <Compile Include="AssociationReport\AssociationFromMySqlModel.cs" />
+    <Compile Include="Association\CoupleFraudDetailModel.cs" />
+    <Compile Include="Association\CoupleIPFraudDetailModel.cs" />
+    <Compile Include="Association\StakeIpPatternDetailModel.cs" />
     <Compile Include="Common\SiteModel.cs" />
     <Compile Include="Common\SubscriberGroupModel.cs" />
     <Compile Include="Association\AssociationWithCategory.cs" />
@@ -410,6 +413,7 @@
     <Compile Include="Transaction\DataTableAjaxPostModel.cs" />
     <Compile Include="Transaction\Transaction.cs" />
     <Compile Include="Transaction\HistoryTransactionModel.cs" />
+    <Compile Include="Transaction\TicketDetailsModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

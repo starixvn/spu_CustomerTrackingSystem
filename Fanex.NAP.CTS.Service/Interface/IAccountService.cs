@@ -9,12 +9,10 @@
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassification;
-    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;
-    using Fanex.NAP.CTS.Model.ImportEvidences;
-    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
+    using Fanex.NAP.CTS.Model.Transaction;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using System;
     using System.Collections.Generic;
@@ -152,6 +150,13 @@
         IEnumerable<CategoryInfoModel> GetAllCategory();		
 
 		AssociationByIPInfoModel GetAssociationByIPInfo(long custId1, long custId2);
-        
+
+        IEnumerable<CoupleInfoViewModel> GetCoupleInfos(long custID1, long custID2);
+
+        IEnumerable<CoupleFraudDetailModel> GetCoupleFraudDetails(long coupleID, DateTime fromDate, DateTime toDate);
+
+        IEnumerable<CoupleIPFraudDetailModel> GetCoupleIPFraudDetails(long coupleID, DateTime fromDate, DateTime toDate);
+
+        IEnumerable<TicketDetailsModel> GetTicketDetailsModel(string transIds);
     }
 }
