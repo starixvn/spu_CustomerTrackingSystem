@@ -18,20 +18,11 @@ namespace Fanex.NAP.CTS.ViewModel.Account.BettingStatistic
 
         public long BetCount { get; set; }
 
-        public decimal TurnOver14 { get; set; }
-
-        public long BetCount14  { get; set; }
-
         public string StakeLevel
         {
             get
             {
-                if (BetCount14 == 0 || TurnOver14 == 0)
-                {
-                    return "Inactive";
-                }
-
-                decimal tempValue = TurnOver14 / BetCount14;
+                decimal tempValue = (BetCount == 0) ? 0 : (TurnOver / BetCount);
 
                 if (tempValue > 5000)
                 {

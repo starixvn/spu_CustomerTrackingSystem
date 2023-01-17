@@ -108,18 +108,21 @@
 
     function HighlightStakeLevel(stakeLevel, targetElement)
     {
-        if (stakeLevel == "High Stake") {
+        if (stakeLevel == "High Stake")
+        {
             targetElement.addClass('high-stake');
         }
-        else if (stakeLevel == "Medium Stake") {
+        else if (stakeLevel == "Medium Stake")
+        {
             targetElement.addClass('medium-stake');
         }
-        else if (stakeLevel == "Low Stake") {
+        else
+        {
             targetElement.addClass('normal-stake');
-        }
-        else {
-            targetElement.addClass('inactive-stake');
-        }
+        };
+        //else {
+        //    targetElement.addClass('inactive-stake');
+        //}
     }
 
     function isEllipsisActive(element) {
