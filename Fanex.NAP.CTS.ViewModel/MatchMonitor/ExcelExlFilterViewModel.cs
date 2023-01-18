@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class ExExcelFilterViewModel
+    public class ExcelExlFilterViewModel
     {
         public string EventDateToString { get; set; }
 

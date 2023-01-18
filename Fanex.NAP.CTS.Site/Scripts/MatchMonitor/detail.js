@@ -305,17 +305,15 @@
 
     function GetTranIds() {
         let tranIds = [];
-        domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {            
-            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')
-                && (data.PICVerified == '' || data.PICVerified == null)) {
+        domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {   
+            if (data.PICVerified == '-' || data.PICVerified == '' || data.PICVerified == null) {
                 tranIds.push(data.TransIdToString);
-            }                
+            }         
         });
         domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
-            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')
-                && (data.PICVerified == '' || data.PICVerified == null)) {
+            if (data.PICVerified == '' || data.PICVerified == '' || data.PICVerified == null) {
                 tranIds.push(data.TransIdToString);
-            }
+            }           
         });        
 
         return tranIds;

@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -37,7 +38,7 @@
             foreach (var item in rawReasons)
             {
                 if (!string.IsNullOrEmpty(item))
-                    reasons.AddRange(item.Split(','));
+                    reasons.AddRange(item.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries));
             }                
 
             this.ReasonList = reasons.Distinct();

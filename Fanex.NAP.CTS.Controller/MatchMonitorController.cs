@@ -379,7 +379,7 @@
         #region Export to Excel
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailRpt)]
-        public ActionResult ExportToExcelMMDetail(ExExcelFilterViewModel model)
+        public ActionResult ExportToExcelMMDetail(ExcelExlFilterViewModel model)
         {
             var templatePath = Server.MapPath(MMDetailTemplate);
             var dateTime = DateTime.UtcNow.AddHours(-4);
@@ -393,21 +393,22 @@
 
             return File(excelFile, "application/vnd.ms-excel", fileName);
         }
+
         private MatchMonitorDetailListViewModel Generate_DataTest()
         {
             var mdResult = new MatchMonitorDetailListViewModel();
 
-            mdResult.HomeMatchItemList = this.GenerateMMDetail_DataTest();
-            mdResult.AwayMatchItemList = this.GenerateMMDetail_DataTest();
+            mdResult.HomeMatchItemList = this.GenerateMMDetail_DataTest(5);
+            mdResult.AwayMatchItemList = this.GenerateMMDetail_DataTest(9);
 
             return mdResult;
         }
 
-        private IEnumerable<MatchMonitorDetailItemViewModel> GenerateMMDetail_DataTest()
+        private IEnumerable<MatchMonitorDetailItemViewModel> GenerateMMDetail_DataTest(int length)
         {
             var list = new List<MatchMonitorDetailItemViewModel>();
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < length; i++)
             {
                 list.Add(new MatchMonitorDetailItemViewModel
                 {
@@ -452,28 +453,28 @@
             return false;
         }
                 
-        private MatchMonitorDetailResultModel GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter, List<MatchGroupKeyModel> groupKeys)
-        {
-            if (groupKeys != null && groupKeys.Any())
-            {
-                var matchDetails = _matchMonitorService.GetMatchMonitorDetail(filter);
+        //private MatchMonitorDetailResultModel GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter, List<MatchGroupKeyModel> groupKeys)
+        //{
+        //    if (groupKeys != null && groupKeys.Any())
+        //    {
+        //        var matchDetails = _matchMonitorService.GetMatchMonitorDetail(filter);
 
-                if (matchDetails != null && matchDetails.MatchDetails.Any())
-                {
-                    var matchs = matchDetails.MatchDetails.Join(groupKeys, m => (m.ScoreDiff)
-                                                            , r => (r.ScoreDiff)
-                                                            , (m, r) => m);
+        //        if (matchDetails != null && matchDetails.MatchDetails.Any())
+        //        {
+        //            var matchs = matchDetails.MatchDetails.Join(groupKeys, m => (m.ScoreDiff)
+        //                                                    , r => (r.ScoreDiff)
+        //                                                    , (m, r) => m);
 
-                    return new MatchMonitorDetailResultModel
-                    {
-                        MatchDetails = matchs ?? new List<MatchMonitorDetailModel>(),
-                        VerifiedTrans = matchDetails.VerifiedTrans ?? new List<MatchMonitorDetailVerifyTransResultModel>()
-                    };
-                }
-            }
+        //            return new MatchMonitorDetailResultModel
+        //            {
+        //                MatchDetails = matchs ?? new List<MatchMonitorDetailModel>(),
+        //                VerifiedTrans = matchDetails.VerifiedTrans ?? new List<MatchMonitorDetailVerifyTransResultModel>()
+        //            };
+        //        }
+        //    }
 
-            return new MatchMonitorDetailResultModel { MatchDetails = new List<MatchMonitorDetailModel>(), VerifiedTrans = new List<MatchMonitorDetailVerifyTransResultModel>() };
-        }
+        //    return new MatchMonitorDetailResultModel { MatchDetails = new List<MatchMonitorDetailModel>(), VerifiedTrans = new List<MatchMonitorDetailVerifyTransResultModel>() };
+        //}
 
         private IEnumerable<TransGroupModel> MappingTransInfo(MatchMonitorDetailResultModel matchDetail, IEnumerable<MatchMonitorReasonModel> reasons)
         {

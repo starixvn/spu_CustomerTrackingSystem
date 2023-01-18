@@ -167,28 +167,127 @@
 
         private void FillRowData(MatchMonitorDetailListViewModel mmDetail, ref ExcelTemplateWriter writer)
         {
-            foreach (var item in mmDetail.HomeMatchItemList)
-            {
-                var record = new object[]
-                {
-                    item.SubscriberType,
-                    item.Username,
-                    item.CustomerClass,
-                    (item.IsRobot ? "x" : "-"),
-                    item.DangerToString,
-                    item.Odds,
-                    item.Currency,
-                    item.Amount,
-                    item.HDP,
-                    item.Score,
-                    item.TransTimeToString,
-                    item.Group,
-                    item.ReasonList,
-                    (!string.IsNullOrEmpty(item.PICVerified) ? "x" : "-")
-                };
+            var tblHome = mmDetail.HomeMatchItemList.ToArray();
+            var tblAway = mmDetail.AwayMatchItemList.ToArray();
+            var lengthH = tblHome.Length;
+            var lengthA = tblAway.Length;
 
-                writer.WriteRow(1, record);
+            if (lengthH > lengthA)
+            {
+                for (int i = 0; i < lengthH; i++)
+                {                   
+                    if (i < lengthA)
+                    {                        
+                        writer.WriteRow(1, NewRecordTblHomeAway(tblHome[i], tblAway[i]));
+                    }
+                    else
+                    {
+                        writer.WriteRow(1, NewRecordTblHome(tblHome[i]));
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < lengthA; i++)
+                {
+                    if (i < lengthH)
+                    {                       
+                        writer.WriteRow(1, NewRecordTblHomeAway(tblHome[i], tblAway[i]));
+                    }
+                    else
+                    {
+                        writer.WriteRow(1, NewRecordTblAway(tblAway[i]));
+                    }
+                }
             }
         }
+
+        private object[] NewRecordTblHome(MatchMonitorDetailItemViewModel itemH)
+        {
+            return new object[]
+                {
+                    itemH.SubscriberType,
+                    itemH.Username,
+                    itemH.CustomerClass,
+                    (itemH.IsRobot ? "x" : "-"),
+                    itemH.DangerToString,
+                    itemH.Odds,
+                    itemH.BetID.ToString(),
+                    itemH.Currency,
+                    itemH.Amount,
+                    itemH.HDP,
+                    itemH.Score,
+                    itemH.TransTimeToString,
+                    itemH.Group,
+                    itemH.ReasonList,
+                    (!string.IsNullOrEmpty(itemH.PICVerified) ? "x" : "-")
+                };
+        }
+
+        private object[] NewRecordTblAway(MatchMonitorDetailItemViewModel itemA)
+        {
+            return new object[]
+                {
+                    "", "", "",
+                    "", "", "",
+                    "", "", "",
+                    "", "", "",
+                    "", "", "", "",
+                    itemA.SubscriberType,
+                    itemA.Username,
+                    itemA.CustomerClass,
+                    (itemA.IsRobot ? "x" : "-"),
+                    itemA.DangerToString,
+                    itemA.Odds,
+                    itemA.BetID.ToString(),
+                    itemA.Currency,
+                    itemA.Amount,
+                    itemA.HDP,
+                    itemA.Score,
+                    itemA.TransTimeToString,
+                    itemA.Group,
+                    itemA.ReasonList,
+                    (!string.IsNullOrEmpty(itemA.PICVerified) ? "x" : "-")
+                };
+        }
+
+        private object[] NewRecordTblHomeAway(MatchMonitorDetailItemViewModel itemH, MatchMonitorDetailItemViewModel itemA)
+        {
+            return new object[]
+                {
+                    itemH.SubscriberType,                    
+                    itemH.Username,
+                    itemH.CustomerClass,
+                    (itemH.IsRobot ? "x" : "-"),
+                    itemH.DangerToString,
+                    itemH.Odds,
+                    itemH.BetID.ToString(),
+                    itemH.Currency,
+                    itemH.Amount,
+                    itemH.HDP,
+                    itemH.Score,
+                    itemH.TransTimeToString,
+                    itemH.Group,
+                    itemH.ReasonList,                    
+                    (!string.IsNullOrEmpty(itemH.PICVerified) ? "x" : "-"),
+                    "",
+                    itemA.SubscriberType,
+                    itemA.Username,
+                    itemA.CustomerClass,
+                    (itemA.IsRobot ? "x" : "-"),
+                    itemA.DangerToString,
+                    itemA.Odds,
+                    itemA.BetID.ToString(),
+                    itemA.Currency,
+                    itemA.Amount,
+                    itemA.HDP,
+                    itemA.Score,
+                    itemA.TransTimeToString,
+                    itemA.Group,
+                    itemA.ReasonList,
+                    (!string.IsNullOrEmpty(itemA.PICVerified) ? "x" : "-")
+                };
+        }
+
     }
 }

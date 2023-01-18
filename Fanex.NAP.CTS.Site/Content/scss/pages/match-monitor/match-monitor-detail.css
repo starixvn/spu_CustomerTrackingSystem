@@ -371,12 +371,12 @@
   .detailpage .page-title-match .title-description {
     font-weight: bold; }
   .detailpage .page-title-match .title-match-name {
-    color: #2b2b2b;
+    color: #516792;
     font-weight: 600;
     font-size: 13px;
     line-height: 20px; }
   .detailpage .page-title-match .title-league-name {
-    color: #516792;
+    color: #70809e;
     font-weight: 600;
     font-size: 13px;
     line-height: 20px; }
@@ -474,7 +474,6 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    margin-top: 2rem;
     padding: 1rem;
     background-color: #E3E9F6;
     border-radius: 1px; }
@@ -486,8 +485,7 @@
     background: #FFFFFF;
     width: 100%; }
   .detailpage .monitor-container .monitor-table .filter-group {
-    z-index: 11;
-    height: 125px; }
+    z-index: 11; }
   .detailpage .monitor-container .monitor-table .group-table {
     display: flex;
     /*padding: 2rem 0;*/
