@@ -56,7 +56,7 @@
 
         public decimal Odds { get; set; }
 
-        public Int64 BetID { get; set; }
+        public string BetID { get; set; }
 
         public string BetTeam { get; set; }
 

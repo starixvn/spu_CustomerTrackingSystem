@@ -379,7 +379,8 @@
         #region Export to Excel
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailRpt)]
-        public ActionResult ExportToExcelMMDetail(ExcelExlFilterViewModel model)
+        public ActionResult ExportToExcelMMDetail(IEnumerable<ExportExcelViewModel> homeMItems
+            , IEnumerable<ExportExcelViewModel> awayMItems)
         {
             var templatePath = Server.MapPath(MMDetailTemplate);
             var dateTime = DateTime.UtcNow.AddHours(-4);
@@ -387,13 +388,12 @@
             var fileName = string.Format("MM_Hue-Lao_{0}_{1}.xlsx"
                 , dateTime.ToString(FormatDateTimeToString_YYYYmmdd)
                 , dateTime.ToString(Consts.FormatTimeToString_hhmmss));
-            
-            var dataTest = Generate_DataTest();
-            var excelFile = _matchMonitorService.ExportExcelMMDetail(dataTest, fileName, templatePath);
+                   
+            var excelFile = _matchMonitorService.ExportExcelMMDetail(homeMItems, awayMItems, fileName, templatePath);
 
             return File(excelFile, "application/vnd.ms-excel", fileName);
         }
-
+#if DEBUG
         private MatchMonitorDetailListViewModel Generate_DataTest()
         {
             var mdResult = new MatchMonitorDetailListViewModel();
@@ -420,7 +420,7 @@
                     Danger1 = 1,
                     //Danger2 = 2,
                     Odds = new decimal(-0.81),
-                    BetID = 54026075788804200,
+                    BetID = 54026075788804200.ToString(),
                     TransId = 54026075788804200,
                     Currency = "HKK",
                     Amount = new decimal(1200),
@@ -437,8 +437,9 @@
 
             return list;
         }
+#endif
 
-        #endregion
+#endregion
 
         #region Private Methods
 
@@ -532,7 +533,7 @@
                                                                     Danger4 = c.ticket.Danger4,
                                                                     Danger5 = c.ticket.Danger5,
                                                                     Odds = c.ticket.Odds,
-                                                                    BetID = c.ticket.TransId,
+                                                                    BetID = c.ticket.TransId.ToString(),
                                                                     BetTeam = c.ticket.BetTeam,
 
                                                                     Currency = c.cust.Currency,
@@ -585,7 +586,7 @@
                                         Danger4 = group.m.Danger4,
                                         Danger5 = group.m.Danger5,
                                         Odds = group.m.Odds,
-                                        BetID = group.m.TransId,
+                                        BetID = group.m.TransId.ToString(),
                                         BetTeam = group.m.BetTeam,
                                         BetTypeID = betTypeID,
                                         Currency = group.m.Currency,

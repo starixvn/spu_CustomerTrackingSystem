@@ -153,22 +153,23 @@
             };
         }
 
-        public byte[] ExportExcelMMDetail(MatchMonitorDetailListViewModel mmDetail, string fileName, string templatePath)
+        public byte[] ExportExcelMMDetail(IEnumerable<ExportExcelViewModel> homeMItems, IEnumerable<ExportExcelViewModel> awayMItems
+            , string fileName, string templatePath)
         {
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Sheet1");
             writer.CopyRows(0, 1);
 
-            FillRowData(mmDetail, ref writer);
+            FillRowData(homeMItems, awayMItems, ref writer);
 
             writer.SyncColumnsWidth(31);
 
             return writer.ToBytes();
         }
 
-        private void FillRowData(MatchMonitorDetailListViewModel mmDetail, ref ExcelTemplateWriter writer)
+        private void FillRowData(IEnumerable<ExportExcelViewModel> homeMItems, IEnumerable<ExportExcelViewModel> awayMItems, ref ExcelTemplateWriter writer)
         {
-            var tblHome = mmDetail.HomeMatchItemList.ToArray();
-            var tblAway = mmDetail.AwayMatchItemList.ToArray();
+            var tblHome = homeMItems != null ? homeMItems.ToArray() : new ExportExcelViewModel[0];
+            var tblAway = awayMItems != null ? awayMItems.ToArray() : new ExportExcelViewModel[0];
             var lengthH = tblHome.Length;
             var lengthA = tblAway.Length;
 
@@ -177,13 +178,9 @@
                 for (int i = 0; i < lengthH; i++)
                 {                   
                     if (i < lengthA)
-                    {                        
                         writer.WriteRow(1, NewRecordTblHomeAway(tblHome[i], tblAway[i]));
-                    }
                     else
-                    {
                         writer.WriteRow(1, NewRecordTblHome(tblHome[i]));
-                    }
                 }
             }
             else
@@ -191,24 +188,20 @@
                 for (int i = 0; i < lengthA; i++)
                 {
                     if (i < lengthH)
-                    {                       
                         writer.WriteRow(1, NewRecordTblHomeAway(tblHome[i], tblAway[i]));
-                    }
                     else
-                    {
                         writer.WriteRow(1, NewRecordTblAway(tblAway[i]));
-                    }
                 }
             }
         }
 
-        private object[] NewRecordTblHome(MatchMonitorDetailItemViewModel itemH)
+        private object[] NewRecordTblHome(ExportExcelViewModel itemH)
         {
             return new object[]
                 {
                     itemH.SubscriberType,
                     itemH.Username,
-                    itemH.CustomerClass,
+                    itemH.CustomerClass == -1 ? "-" : itemH.CustomerClass.ToString(),
                     (itemH.IsRobot ? "x" : "-"),
                     itemH.DangerToString,
                     itemH.Odds,
@@ -220,22 +213,27 @@
                     itemH.TransTimeToString,
                     itemH.Group,
                     itemH.ReasonList,
-                    (!string.IsNullOrEmpty(itemH.PICVerified) ? "x" : "-")
+                    (!string.IsNullOrEmpty(itemH.PICVerified) ? "x" : "-"),
+                    null, null, null, null,
+                    null, null, null,
+                    null, null, null,
+                    null, null, null,
+                    null, null, null
                 };
         }
 
-        private object[] NewRecordTblAway(MatchMonitorDetailItemViewModel itemA)
+        private object[] NewRecordTblAway(ExportExcelViewModel itemA)
         {
             return new object[]
                 {
-                    "", "", "",
-                    "", "", "",
-                    "", "", "",
-                    "", "", "",
-                    "", "", "", "",
+                    null, null, null,
+                    null, null, null,
+                    null, null, null,
+                    null, null, null,
+                    null, null, null, null,
                     itemA.SubscriberType,
                     itemA.Username,
-                    itemA.CustomerClass,
+                    itemA.CustomerClass == -1 ? "-" : itemA.CustomerClass.ToString(),
                     (itemA.IsRobot ? "x" : "-"),
                     itemA.DangerToString,
                     itemA.Odds,
@@ -251,13 +249,13 @@
                 };
         }
 
-        private object[] NewRecordTblHomeAway(MatchMonitorDetailItemViewModel itemH, MatchMonitorDetailItemViewModel itemA)
+        private object[] NewRecordTblHomeAway(ExportExcelViewModel itemH, ExportExcelViewModel itemA)
         {
             return new object[]
                 {
                     itemH.SubscriberType,                    
                     itemH.Username,
-                    itemH.CustomerClass,
+                    itemH.CustomerClass == -1 ? "-" : itemH.CustomerClass.ToString(),
                     (itemH.IsRobot ? "x" : "-"),
                     itemH.DangerToString,
                     itemH.Odds,
@@ -273,7 +271,7 @@
                     "",
                     itemA.SubscriberType,
                     itemA.Username,
-                    itemA.CustomerClass,
+                    itemA.CustomerClass == -1 ? "-" : itemA.CustomerClass.ToString(),
                     (itemA.IsRobot ? "x" : "-"),
                     itemA.DangerToString,
                     itemA.Odds,

@@ -26,6 +26,7 @@
      
         MatchMonitorStaticListModel GetMMStaticList();
 
-        byte[] ExportExcelMMDetail(MatchMonitorDetailListViewModel mdResult, string fileName, string templatePath);
+        byte[] ExportExcelMMDetail(IEnumerable<ExportExcelViewModel> homeMItems, IEnumerable<ExportExcelViewModel> awayMItems
+            , string fileName, string templatePath);
     }
 }

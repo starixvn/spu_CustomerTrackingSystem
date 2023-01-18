@@ -340,7 +340,10 @@
         });
 
         let custSelectedLength = custIDs.length;
-        if (custSelectedLength > 0 && custSelectedLength <= 1001) {
+        if (custSelectedLength <= 1) {
+            common.showError("Please select at least 2 Usernames to proceed!");
+        }
+        else if (custSelectedLength > 1 && custSelectedLength <= 1001) {
             domElements.hdSelectedCTSCustIDs.val(ctsCustIDs.filter(OnlyUnique).join());
             domElements.hdSelectedCustIDs.val(custIDs.filter(OnlyUnique).join());
             domElements.divPopupAssDetect.dialog({
@@ -470,18 +473,46 @@
         $('input[type="checkbox"][name="chkbx"]', rows).prop('checked', input.is(":checked"));   
     }
 
-    function ExportToExcel() {
-        let paras = {
-            EventDateToString: domElements.eventDataToString,
-            MatchID: domElements.matchID,
-            BetTypeID: domElements.betTypeID,
-            BetID: domElements.betIDToString,
-            Sites: domElements.cbbSites.val(),
-            Reason: domElements.reason,
-            LiveIndicator: domElements.liveIndicator
-        };
+    function ExportToExcel() {       
+        let mmDetails = {
+            homeMItems: GetDataSelectedInGrid(domElements.tblMMHomeTeam.DataTable()),
+            awayMItems: GetDataSelectedInGrid(domElements.tblMMAwayTeam.DataTable())
+        }
+        let lengthItem = mmDetails.homeMItems.length + mmDetails.awayMItems.length;
+        if (lengthItem <= 1) {
+            common.showError("Please select at least 2 Usernames to proceed!");
+        } else {
+            common.downloadFileExcel(common.modifyRelativeUrl('MatchMonitor/ExportToExcelMMDetail'), mmDetails);
+        }       
+    }
 
-        common.downloadFileExcel(common.modifyRelativeUrl('MatchMonitor/ExportToExcelMMDetail'), paras);
+    function GetDataSelectedInGrid(table) {
+        let datas = [];
+        table.rows(function (idx, data, node) {
+            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                datas.push({
+                    SubscriberType: data.SubscriberType,
+                    CTSCustID: data.CTSCustID,
+                    CustID: data.CustID,
+                    Username: data.Username,
+                    CustomerClass: data.CustomerClass,
+                    IsRobot: data.IsRobot,
+                    DangerToString: data.DangerToString,
+                    Odds: data.Odds,
+                    BetID: data.BetID,
+                    BetTeam: data.BetTeam,
+                    Currency: data.Currency,
+                    Amount: data.Amount,
+                    HDP: data.HDP,
+                    Score: data.Score,
+                    TransTimeToString: data.TransTimeToString,
+                    Group: data.Group,
+                    ReasonList: data.ReasonList,
+                    PICVerified: data.PICVerified
+                });
+            }
+        });
+        return datas;
     }
 
     function resizeDataTable() {
