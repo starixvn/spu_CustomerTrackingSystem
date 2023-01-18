@@ -25,5 +25,7 @@
         IEnumerable<RobotStatusModel> GetRobotStatus(string transJson);
      
         MatchMonitorStaticListModel GetMMStaticList();
+
+        byte[] ExportExcelMMDetail(MatchMonitorDetailListViewModel mdResult, string fileName, string templatePath);
     }
 }

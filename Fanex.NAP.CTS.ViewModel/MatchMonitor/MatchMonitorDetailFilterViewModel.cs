@@ -14,8 +14,6 @@
 
         public string Sites { get; set; }
 
-        public int Reason { get; set; }
-
         public bool LiveIndicator { get; set; }
       
         public DateTime EventDate

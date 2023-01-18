@@ -68,26 +68,26 @@
             autoWidth: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 12, 14, 15], className: "text-center" },
+                { targets: [0, 1, 2, 3, 5, 7, 8, 9, 10, 12, 14, 15], className: "text-center" },
                 {
-                    targets: [0], width: "5%", render: function (data, type, full, meta) {
+                    targets: [0], width: "3%", render: function (data, type, full, meta) {
                         return '<input type="checkbox" class="col-checkbox" name="chkbx" value="' + $('<div/>').text(data).html() + '">';
                     }
                 },
-                { targets: [1], width: "16%" },
-                { targets: [2], width: "5%" },
-                { targets: [3], width: "5%" },
-                { targets: [4], width: "10%", className: "text-center col-dgr" },
+                { targets: [1], width: "18%" },
+                { targets: [2], width: "4%" },
+                { targets: [3], width: "4%" },
+                { targets: [4], width: "12%", className: "text-center col-dgr" },
                 { targets: [5], width: "5%" },
-                { targets: [6], width: "5%" },
+                { targets: [6], width: "5%", className: "text-center col-betid" },
                 { targets: [7], width: "5%" },
-                { targets: [8], width: "5%" },
+                { targets: [8], width: "6%" },
                 { targets: [9], width: "5%" },
                 { targets: [10], width: "6%" },
-                { targets: [11], width: "7%", className: "text-center col-transtime" },
+                { targets: [11], width: "8%", className: "text-center col-transtime" },
                 { targets: [12], width: "5%" },
                 { targets: [13], width: "8%", className: "text-center col-reason" },
-                { targets: [14], width: "5%" },
+                { targets: [14], width: "3%" },
                 { targets: [15], visible: false }
             ],            
             columns: [
@@ -247,31 +247,30 @@
         return undefined;
     }
     
-    function RenderBotIcon(robotType, isRobot) {
-        let html = "";
-
-        switch (robotType) {
-            case -1:
-                html += "<span class='icon-base-robot'><span class='path1'></span><span class='path2'></span><span class='path3'></span><span class='path4'></span><span class='path5'></span><span class='path6'></span></span>";
-                break;
-            case 0:
-                html += "<span class='icon-ob-robot'><span class='path1'></span><span class='path2'></span><span class='path3'></span><span class='path4'></span><span class='path5'></span><span class='path6'></span></span>";
-                break;
-            case 1:
-                html += "<span class='icon-good-robot'><span class='path1'></span><span class='path2'></span><span class='path3'></span><span class='path4'></span><span class='path5'></span><span class='path6'></span></span>";
-                break;
-            case 2:
-                html += "<span class='icon-bad-robot'><span class='path1'></span><span class='path2'></span><span class='path3'></span><span class='path4'></span><span class='path5'></span><span class='path6'></span></span>";
-                break;
-            default:
-                break;
-        }
-
+    function RenderBotIcon(robotType, isRobot) {        
+        let html = '-';
+        let spanHtml = '<span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span>';
+        
         if (isRobot) {
-            html += "<span class='icon-big-robot'><span class='path1'></span><span class='path2'></span><span class='path3'></span><span class='path4'></span><span class='path5'></span><span class='path6'></span></span>";
+            switch (robotType) {
+                case -1:
+                    html += `<span class="icon-big-Robot icon-big-robot">${spanHtml}</span>`;
+                    break;
+                case 0:
+                    html += `<span class="icon-big-Robot icon-big-observation-robot">${spanHtml}</span>`;
+                    break;
+                case 1:
+                    html += `<span class="icon-big-Robot icon-big-good-robot">${spanHtml}</span>`;
+                    break;
+                case 2:
+                    html += `<span class="icon-big-Robot icon-big-bad-robot">${spanHtml}</span>`;
+                    break;
+                default:
+                    break;
+            }            
         }
 
-        return html === "" ? "-" : html;
+        return html;
     }
 
     function VerifyTransMatchMonitorDetail() {
@@ -473,6 +472,20 @@
         $('input[type="checkbox"][name="chkbx"]', rows).prop('checked', input.is(":checked"));   
     }
 
+    function ExportToExcel() {
+        let paras = {
+            EventDateToString: domElements.eventDataToString,
+            MatchID: domElements.matchID,
+            BetTypeID: domElements.betTypeID,
+            BetID: domElements.betIDToString,
+            Sites: domElements.cbbSites.val(),
+            Reason: domElements.reason,
+            LiveIndicator: domElements.liveIndicator
+        };
+
+        common.downloadFileExcel(common.modifyRelativeUrl('MatchMonitor/ExportToExcelMMDetail'), paras);
+    }
+
     function resizeDataTable() {
         var widthTables = domElements.tblMMHomeTeam[0].offsetWidth + 37;
 
@@ -535,15 +548,13 @@
 
         domElements.btnAssDetection.on('click', function () { DetectAssociation(); })
 
-        domElements.btnExportExcel.on('click', function () {
-
-        })
+        domElements.btnExportExcel.on('click', function () { ExportToExcel(); })
 
         domElements.btnVerifyAndClose.on('click', function () {
             common.showConfirmation2('<div class="popup - content">Are you sure about this?<br>Once confirmed, all tickets\' review status will be updated to "Verified".</div>', function () {
                 VerifyTransMatchMonitorDetail();
             });
-        })    
+        })
 
         FilterGrid();
     }

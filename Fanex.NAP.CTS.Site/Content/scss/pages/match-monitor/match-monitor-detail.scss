@@ -276,14 +276,16 @@
                         }
 
                         tbody {
-                            tr {
+                            tr {                               
                                 td {
                                     padding-left: 0.1rem;
                                     padding-right: 0.1rem;
                                     border-right: none;
                                     border-bottom: none;
                                     font-size: 12px;
-                                    line-height: 10px;
+                                    padding-top: 5px;
+                                    padding-bottom: 5px;
+                                    line-height: 10px !important;
 
                                     .click-view-details, .click-view-name {
                                         cursor: pointer;
@@ -309,7 +311,7 @@
                                     color: $account-formular;
                                 }
 
-                                .col-dgr, .col-transtime, .col-reason {
+                                .col-betid, .col-dgr, .col-transtime, .col-reason {
                                     font-size: 10px !important;
                                 }
                             }
@@ -369,6 +371,7 @@
                         display: inline;
                         transition: all ease-in-out 0.3s;
                         cursor: pointer;
+                        margin: 0.1px;
                     }
 
                     .table-monitor-detail {

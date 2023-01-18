@@ -7,8 +7,10 @@
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
+    using Fanex.NAP.TGRS.Core.ExcelUtility;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class MatchMonitorService : IMatchMonitorService
     {
@@ -149,6 +151,44 @@
                 Sports = result.secondResultSet,
                 BetTypes = result.thirdResultSet
             };
+        }
+
+        public byte[] ExportExcelMMDetail(MatchMonitorDetailListViewModel mmDetail, string fileName, string templatePath)
+        {
+            var writer = new ExcelTemplateWriter(templatePath, fileName, "Sheet1");
+            writer.CopyRows(0, 1);
+
+            FillRowData(mmDetail, ref writer);
+
+            writer.SyncColumnsWidth(31);
+
+            return writer.ToBytes();
+        }
+
+        private void FillRowData(MatchMonitorDetailListViewModel mmDetail, ref ExcelTemplateWriter writer)
+        {
+            foreach (var item in mmDetail.HomeMatchItemList)
+            {
+                var record = new object[]
+                {
+                    item.SubscriberType,
+                    item.Username,
+                    item.CustomerClass,
+                    (item.IsRobot ? "x" : "-"),
+                    item.DangerToString,
+                    item.Odds,
+                    item.Currency,
+                    item.Amount,
+                    item.HDP,
+                    item.Score,
+                    item.TransTimeToString,
+                    item.Group,
+                    item.ReasonList,
+                    (!string.IsNullOrEmpty(item.PICVerified) ? "x" : "-")
+                };
+
+                writer.WriteRow(1, record);
+            }
         }
     }
 }
