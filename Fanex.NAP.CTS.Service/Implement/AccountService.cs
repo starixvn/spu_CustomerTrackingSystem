@@ -17,6 +17,7 @@
     using Fanex.NAP.CTS.Criteria.Account.CustomerCategoryBySport;
     using Fanex.NAP.CTS.Criteria.Account.CustomerInfo;
     using Fanex.NAP.CTS.Criteria.Home;
+    using Fanex.NAP.CTS.Criteria.Transaction;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Account.AssociatedAccount;
@@ -729,201 +730,57 @@
 
         public IEnumerable<CoupleInfoViewModel> GetCoupleInfos(long custID1, long custID2)
         {
-
-#if DEBUG
-            List<CoupleInfoViewModel> result = new List<CoupleInfoViewModel>();
-            var first30Days = new CoupleInfoViewModel()
+            var criteria = new GetCoupleInfoCriteria
             {
-                CoupleID = 1,
-                FromDateString = DateTime.UtcNow.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
-                ToDateString = DateTime.UtcNow.AddDays(30).ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
-                CustID1 = custID1,
-                CustID2 = custID2
-            };
-
-            var last30Days = new CoupleInfoViewModel()
-            {
-                CoupleID = 2,
-                FromDateString = first30Days.ToDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
-                ToDateString = first30Days.ToDate.AddDays(30).ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
-                CustID1 = custID1,
-                CustID2 = custID2
-            };
-            result.Add(first30Days); result.Add(last30Days);
-
-            return result;
-#else
-                  var criteria = new GetCoupleInfoCriteria
-            {
-                ip_CustID1 = custID1.ToString(),
-                ip_CustID2 = custID2.ToString()
+                CustId1 = custID1,
+                CustId2 = custID2
             };
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<CoupleInfoViewModel>(criteria).Select(s => { s.CustID1 = custID1; s.CustID2 = custID2; return s; });
             }
-#endif
         }
 
         public IEnumerable<CoupleFraudDetailModel> GetCoupleFraudDetails(long coupleID, DateTime fromDate, DateTime toDate)
         {
-#if DEBUG
-            List<CoupleFraudDetailModel> result = new List<CoupleFraudDetailModel>();
-
-            result.AddRange(new List<CoupleFraudDetailModel>() {
-                new CoupleFraudDetailModel(){StateID  = 1, MatchID = 10000000, FraudTransList = "11000000000000000,12000000000000000,13000000000000000,14000000000000000",SumStake = 1400 , BetCount = 4, EventDate = DateTime.UtcNow},
-                new CoupleFraudDetailModel(){StateID  = 1, MatchID = 20000000, FraudTransList = "15000000000000000,16000000000000000,17000000000000000,18000000000000000",SumStake = 1400 , BetCount = 4, EventDate = DateTime.UtcNow},
-                new CoupleFraudDetailModel(){StateID  = 1, MatchID = 30000000, FraudTransList = "19000000000000000,20000000000000000,21000000000000000,22000000000000000",SumStake = 1400 , BetCount = 4, EventDate = DateTime.UtcNow},
-                new CoupleFraudDetailModel(){StateID  = 1, MatchID = 40000000, FraudTransList = "23000000000000000,24000000000000000,25000000000000000,26000000000000000",SumStake = 1400 , BetCount = 4, EventDate = DateTime.UtcNow},
-
-                new CoupleFraudDetailModel(){StateID  = 2, MatchID = 80000000, FraudTransList = "45000000000000000,46000000000000000",SumStake = 1200 , BetCount = 2, EventDate = DateTime.UtcNow},
-
-                new CoupleFraudDetailModel(){StateID  = 3, MatchID = 14000000, FraudTransList = "62000000000000000,63000000000000000",SumStake = 200 , BetCount = 2, EventDate = DateTime.UtcNow},
-                new CoupleFraudDetailModel(){StateID  = 3, MatchID = 15000000, FraudTransList = "64000000000000000,65000000000000000",SumStake = 200 , BetCount = 2, EventDate = DateTime.UtcNow},
-            });
-
-            return result;
-#else
             var criteria = new GetCoupleFraudDetailCriteria
             {
-                ip_CoupleID = coupleID.ToString(),
-                ip_FromDate = fromDate,
-                ip_ToDate = toDate
+                CoupleID = coupleID,
+                FromDate = fromDate,
+                ToDate = toDate
             };
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<CoupleInfoViewModel>(criteria)
-                
+                return db.Query<CoupleFraudDetailModel>(criteria);                
             }
-#endif
         }
 
         public IEnumerable<CoupleIPFraudDetailModel> GetCoupleIPFraudDetails(long coupleID, DateTime fromDate, DateTime toDate)
         {
-#if DEBUG
-            List<CoupleIPFraudDetailModel> result = new List<CoupleIPFraudDetailModel>();
-
-            result.AddRange(new List<CoupleIPFraudDetailModel>() {
-                new CoupleIPFraudDetailModel(){TypeIPEntanglement = (int)IPPatternType3S.IPShared3Days, MatchID = 16000000, FraudTransList = "66000000000000000", EventDate = DateTime.UtcNow},
-                new CoupleIPFraudDetailModel(){TypeIPEntanglement = (int)IPPatternType3S.IPShared3Days, MatchID = 17000000, FraudTransList = "67000000000000000", EventDate = DateTime.UtcNow}
-            });
-            return result;
-#else
             var criteria = new GetCoupleIPFraudDetailCriteria
             {
-                ip_CoupleID = coupleID.ToString(),
-                ip_FromDate = fromDate,
-                ip_ToDate = toDate
+                CoupleID = coupleID,
+                FromDate = fromDate,
+                ToDate = toDate
             };
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<CoupleInfoViewModel>(criteria)
-                
+                return db.Query<CoupleIPFraudDetailModel>(criteria);                
             }
-#endif
         }
+        
         public IEnumerable<TicketDetailsModel> GetTicketDetailsModel(string transIds)
         {
             var result = new List<TicketDetailsModel>();
 
-#if DEBUG
-            result.AddRange(new List<TicketDetailsModel>()
-            {
-                    new TicketDetailsModel(){ UserName = "Member 01",MatchID = 10000000, TransId = 11000000000000000, IP = "123.253.33.172",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 200,
-                    BetTeam = "a", BetType = "OU", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-                new TicketDetailsModel(){ UserName = "Member 01",MatchID = 10000000, TransId = 12000000000000000, IP = "123.253.33.172",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 200,
-                    BetTeam = "a", BetType = "OU", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-                new TicketDetailsModel(){ UserName = "Member 01",MatchID = 10000000, TransId = 13000000000000000, IP = "123.253.33.172",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 200,
-                    BetTeam = "a", BetType = "OU", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-                new TicketDetailsModel(){ UserName = "Member 01",MatchID = 10000000, TransId = 14000000000000000, IP = "123.253.33.172",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 200,
-                    BetTeam = "a", BetType = "OU", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-
-                new TicketDetailsModel(){ UserName = "Member 01",MatchID = 20000000, TransId = 15000000000000000, IP = "123.253.33.173",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 200,
-                    BetTeam = "a", BetType = "1st OU", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-                new TicketDetailsModel(){ UserName = "Member 01",MatchID = 20000000, TransId = 16000000000000000, IP = "123.253.33.174",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 300,
-                    BetTeam = "a", BetType = "1st OU", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-                new TicketDetailsModel(){ UserName = "Member 01",MatchID = 20000000, TransId = 17000000000000000, IP = "123.253.33.175",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 400,
-                    BetTeam = "a", BetType = "OU", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-                new TicketDetailsModel(){ UserName = "Member 01",MatchID = 20000000, TransId = 18000000000000000, IP = "123.253.33.176",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 500,
-                    BetTeam = "a", BetType = "OU", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-
-                new TicketDetailsModel(){ UserName = "Member 01",MatchID = 30000000, TransId = 19000000000000000, IP = "123.253.33.172",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 200,
-                    BetTeam = "a", BetType = "HDP", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-                new TicketDetailsModel(){ UserName = "Member 01",MatchID = 30000000, TransId = 20000000000000000, IP = "123.253.33.172",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 300,
-                    BetTeam = "a", BetType = "1st HDP", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-                new TicketDetailsModel(){ UserName = "Member 01",MatchID = 30000000, TransId = 21000000000000000, IP = "123.253.33.172",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 400,
-                    BetTeam = "a", BetType = "1st HDP", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-                new TicketDetailsModel(){ UserName = "Member 01",MatchID = 30000000, TransId = 22000000000000000, IP = "123.253.33.172",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 500,
-                    BetTeam = "a", BetType = "OU", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-
-                new TicketDetailsModel(){ UserName = "Member 02",MatchID = 40000000, TransId = 23000000000000000, IP = "123.253.33.172",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 200,
-                    BetTeam = "a", BetType = "OU", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-                new TicketDetailsModel(){ UserName = "Member 02",MatchID = 40000000, TransId = 24000000000000000, IP = "123.253.33.172",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 300,
-                    BetTeam = "a", BetType = "OU", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-                new TicketDetailsModel(){ UserName = "Member 02",MatchID = 40000000, TransId = 25000000000000000, IP = "123.253.33.172",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 400,
-                    BetTeam = "a", BetType = "OU", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-                new TicketDetailsModel(){ UserName = "Member 02",MatchID = 40000000, TransId = 26000000000000000, IP = "123.253.33.172",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 500,
-                    BetTeam = "a", BetType = "OU", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-
-
-
-                new TicketDetailsModel(){ UserName = "Member 01",MatchID = 80000000, TransId = 45000000000000000, IP = "123.253.33.172",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 1200,
-                    BetTeam = "a", BetType = "Handicap", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-                new TicketDetailsModel(){ UserName = "Member 02",MatchID = 90000000, TransId = 46000000000000000, IP = "123.253.33.175",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 1200,
-                    BetTeam = "a", BetType = "Handicap", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-
-
-
-                new TicketDetailsModel(){ UserName = "Member 01",MatchID = 14000000, TransId = 62000000000000000, IP = "123.253.33.172",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 200,
-                    BetTeam = "a", BetType = "OU", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-                new TicketDetailsModel(){ UserName = "Member 01",MatchID = 140000000, TransId = 63000000000000000, IP = "123.253.33.173",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 300,
-                    BetTeam = "a", BetType = "OU", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-                new TicketDetailsModel(){ UserName = "Member 02",MatchID = 15000000, TransId = 64000000000000000, IP = "123.253.33.174",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 400,
-                    BetTeam = "a", BetType = "OU", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-                new TicketDetailsModel(){  UserName = "Member 02",MatchID = 15000000, TransId = 65000000000000000, IP = "123.253.33.175",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 500,
-                    BetTeam = "a", BetType = "OU", CurrencyName = "VND", TransDate = DateTime.UtcNow},
-
-                new TicketDetailsModel(){ UserName = "Member 01",MatchID = 16000000, TransId = 66000000000000000, IP = "123.253.33.174",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 100, BetTeam = "a", BetType = "Handicap", CurrencyName = "HKK", TransDate = DateTime.UtcNow},
-                new TicketDetailsModel(){ UserName = "Member 02",MatchID = 17000000, TransId = 67000000000000000, IP = "123.253.33.174",
-                    Odds = (decimal)0.72, Stake = 100, StakeRM = 100,BetTeam = "a", BetType = "Handicap", CurrencyName = "HKK", TransDate = DateTime.UtcNow},
-            });
-#else
-
-            var criteria = new GetTicketDetailsCriteria
+            var criteria = new GetTicketDetailsCriteria()
             {
                 ListTransId = transIds
             };
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<TicketDetailsModel>(criteria)
+                return db.Query<TicketDetailsModel>(criteria);
             }
-#endif
-
-
-            return result;
         }
         #endregion
 

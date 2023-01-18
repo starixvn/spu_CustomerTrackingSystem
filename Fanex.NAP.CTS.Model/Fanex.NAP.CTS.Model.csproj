@@ -151,6 +151,7 @@
     <Compile Include="Account\AssociatedAccount\AssociatedAccountDetail\GBAssociationAIModel.cs" />
     <Compile Include="Account\AssociatedAccount\AccountStaticStatusModel.cs" />
     <Compile Include="Account\AssociatedAccount\AssociatedAccountDetail\MatchesInfoModel.cs" />
+    <Compile Include="Account\AssociatedAccount\CoupleInfoModel.cs" />
     <Compile Include="Account\BettingStatistic\PerformanceBySportModel.cs" />
     <Compile Include="Account\CustomerByGraphDB.cs" />
     <Compile Include="Account\CustomerCategoryBySport\GetCustomerCategoryBySportModel.cs" />
@@ -233,6 +234,7 @@
     <Compile Include="AssociationReport\AssociationFromMySqlModel.cs" />
     <Compile Include="Association\CoupleFraudDetailModel.cs" />
     <Compile Include="Association\CoupleIPFraudDetailModel.cs" />
+    <Compile Include="Association\FraudDetailModel.cs" />
     <Compile Include="Association\StakeIpPatternDetailModel.cs" />
     <Compile Include="Common\SiteModel.cs" />
     <Compile Include="Common\SubscriberGroupModel.cs" />

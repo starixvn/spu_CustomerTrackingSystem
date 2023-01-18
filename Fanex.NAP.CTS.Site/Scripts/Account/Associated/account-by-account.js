@@ -561,7 +561,6 @@ function account_by_account() {
             ConfigDataTableMatchBettingPattern();
         }
         GetMatchBettingPattern($('#hdCustId').val(), custId, groupIDs, originGroupIDs);
-
         ConfigDataTableStakeIPPattern();
         GetCoupleInformations($('#hdCustId').val(), custId)
 
@@ -863,7 +862,6 @@ function account_by_account() {
             let colGroupMatch = trGroup.find('.column-group-match');
             if (colGroupMatch !== undefined) {
                 let iGroup = $('i.icon', trGroup);
-
                 if (!iGroup.hasClass('has-detail')) {
                     let params = {
                         CoupleId: colGroupMatch.attr('data-couple-id'),

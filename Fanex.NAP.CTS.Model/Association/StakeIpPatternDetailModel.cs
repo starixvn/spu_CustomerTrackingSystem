@@ -5,8 +5,16 @@
 
     public class StakeIpPatternDetailModel
     {
+        public long CoupleID { get; set; }
+
         public int LastGroupID { get; set; }
+
         public int LastGroupCustID { get; set; }
+
         public IEnumerable<TicketDetailsModel> TicketDetailsModels { get; set; }
+        
+        public IEnumerable<CoupleFraudDetailModel> CoupleFraudDetails { get; set; }
+
+        public IEnumerable<CoupleIPFraudDetailModel> CoupleIPFraudDetails { get; set; }
     }
 }

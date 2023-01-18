@@ -14,6 +14,7 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.Account.AssociatedAccount;
     using Fanex.NAP.CTS.Model.Account.RobotBetting;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassification;
@@ -472,30 +473,6 @@
                 }).ToList();
             }
 
-#if DEBUG
-            result.Add(new CustomerAssociationByAccountDetailViewModel()
-            {
-                CustId = 777,
-                Username = "35345",
-                LoginId = 456.ToString(),
-                AssociationDate = DateTime.UtcNow.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                AssociationType = new List<int>() { 1, 2 },
-                AssociationTypeName = StandardizeAssociationTypeName(Consts.AssociationTypeName_BettingPattern),
-                Status = "Open",
-                StatusId = 1,
-                SubscriberId = 6,
-                SubscriberName = "MaxBet",
-                CTSCustId = 54756,
-                IsLinked = true,
-                IsProblemAccount = true,
-                IsPAProbation = false,
-                CategoryIds = 200.ToString(),
-                CategoryNames = "-",
-                CustomerClasses = "Betting Pattern",
-                GroupIDs = "435,546",
-                OriginGroupIDs = "546456,45645"
-            });
-#endif
             return Json(new
             {
                 draw = model.draw,
@@ -884,7 +861,10 @@
 
             try
             {
-                data = _accountService.GetCoupleInfos(custID1, custID2).ToList();
+                var para1 = (custID1 <= custID2) ? custID1 : custID2;
+                var para2 = (custID1 > custID2) ? custID1 : custID2;
+
+                data = _accountService.GetCoupleInfos(para1, para2).ToList();
                 data = data.OrderBy(o => o.FromDate).ToList();
             }
 
@@ -901,7 +881,7 @@
         }
 
         [HttpPost]
-        public ActionResult GetStakeIPPatternDetailByAI(CoupleInfoViewModel para)
+        public ActionResult GetStakeIPPatternDetailByAI(CoupleInfoModel para)
         {
             var data = new List<StakeIpPatternDetailViewModel>();
 
@@ -911,22 +891,21 @@
                 {
                     return Json(data, JsonRequestBehavior.AllowGet);
                 }
-                var coupleFraudDetails = _accountService.GetCoupleFraudDetails(para.CoupleID, para.FromDate, para.ToDate);
-                var coupleIPFraudDetails = _accountService.GetCoupleIPFraudDetails(para.CoupleID, para.FromDate, para.ToDate);
-                var transactionDetails = GetTicketDetailsModel(coupleFraudDetails, coupleIPFraudDetails);
-
-                var stakePatternDetail = GetStakePatternDetail(para, coupleFraudDetails, transactionDetails);
-                data.AddRange(stakePatternDetail);
-
-                var laststakePatternDetail = stakePatternDetail.LastOrDefault();
                 StakeIpPatternDetailModel stakeIpPatternDetailModel = new StakeIpPatternDetailModel()
                 {
-                    LastGroupID = laststakePatternDetail != null ? laststakePatternDetail.GroupID : 1,
-                    LastGroupCustID = laststakePatternDetail != null ? laststakePatternDetail.GroupCustID : 1,
-                    TicketDetailsModels = transactionDetails
+                    CoupleID = para.CoupleID,
+                    CoupleFraudDetails = _accountService.GetCoupleFraudDetails(para.CoupleID, para.FromDate, para.ToDate),
+                    CoupleIPFraudDetails = _accountService.GetCoupleIPFraudDetails(para.CoupleID, para.FromDate, para.ToDate)
                 };
-                var stakeIPPatternDetail = GetIpPatternDetail(para, coupleIPFraudDetails, stakeIpPatternDetailModel);
-                data.AddRange(stakeIPPatternDetail);
+                stakeIpPatternDetailModel.TicketDetailsModels = GetTicketDetailsModel(stakeIpPatternDetailModel.CoupleFraudDetails, stakeIpPatternDetailModel.CoupleIPFraudDetails);
+
+                data.AddRange(GetStakePatternDetail(stakeIpPatternDetailModel));
+
+                var laststakePatternDetail = data.LastOrDefault();
+                stakeIpPatternDetailModel.LastGroupCustID = laststakePatternDetail != null ? laststakePatternDetail.GroupID : 1;
+                stakeIpPatternDetailModel.LastGroupCustID = laststakePatternDetail != null ? laststakePatternDetail.GroupCustID : 1;
+
+                data.AddRange(GetIpPatternDetail(stakeIpPatternDetailModel));
 
             }
             catch (Exception ex)
@@ -949,14 +928,14 @@
             return _accountService.GetTicketDetailsModel(fraudTransList);
         }
 
-        private IEnumerable<StakeIpPatternDetailViewModel> GetStakePatternDetail(CoupleInfoViewModel para, IEnumerable<CoupleFraudDetailModel> coupleFraudDetailModels, IEnumerable<TicketDetailsModel> ticketDetailsModels)
+        private IEnumerable<StakeIpPatternDetailViewModel> GetStakePatternDetail(StakeIpPatternDetailModel stakeIpPatternDetailModel)
         {
             var result = new List<StakeIpPatternDetailViewModel>();
 
             int groupID = 0;
             long StateID = 0;
             int groupCustId = 1;
-            foreach (var coupleFraudDetailModel in coupleFraudDetailModels.OrderBy(o => o.StateID))
+            foreach (var coupleFraudDetailModel in stakeIpPatternDetailModel.CoupleFraudDetails.OrderBy(o => o.StateID))
             {
                 if (StateID != coupleFraudDetailModel.StateID)
                 {
@@ -967,7 +946,7 @@
                 {
                     StakeIpPatternDetailViewModel stakeIpPatternDetail = new StakeIpPatternDetailViewModel()
                     {
-                        CoupleID = para.CoupleID,
+                        CoupleID = stakeIpPatternDetailModel.CoupleID,
                         GroupID = groupID,
                         IsStakePattern = true,
                         TicketsPerMatch = coupleFraudDetailModel.BetCount,
@@ -976,7 +955,7 @@
                         GroupCustID = groupCustId
                     };
 
-                    TicketDetailsModel ticketDetail = ticketDetailsModels.FirstOrDefault(p => p.TransId.ToString() == fraudTranId);
+                    TicketDetailsModel ticketDetail = stakeIpPatternDetailModel.TicketDetailsModels.FirstOrDefault(p => p.TransId.ToString() == fraudTranId);
                     SetStakeIpPatternDetailViewModel(stakeIpPatternDetail, ticketDetail);
                     result.Add(stakeIpPatternDetail);
                 }
@@ -1005,13 +984,13 @@
             stakeIpPatternDetail.TransDateString = ticketDetail.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss);
         }
 
-        private IEnumerable<StakeIpPatternDetailViewModel> GetIpPatternDetail(CoupleInfoViewModel para, IEnumerable<CoupleIPFraudDetailModel> coupleIPFraudDetailModels, StakeIpPatternDetailModel stakeIpPatternDetailModel)
+        private IEnumerable<StakeIpPatternDetailViewModel> GetIpPatternDetail(StakeIpPatternDetailModel stakeIpPatternDetailModel)
         {
             var result = new List<StakeIpPatternDetailViewModel>();
             int groupID = stakeIpPatternDetailModel.LastGroupID;
             int groupCustId = stakeIpPatternDetailModel.LastGroupCustID + 1;
             int typeIPEntanglement = 0;
-            foreach (var coupleIPFraudDetailModel in coupleIPFraudDetailModels.OrderBy(o => o.TypeIPEntanglement))
+            foreach (var coupleIPFraudDetailModel in stakeIpPatternDetailModel.CoupleIPFraudDetails.OrderBy(o => o.TypeIPEntanglement))
             {
                 if (typeIPEntanglement != coupleIPFraudDetailModel.TypeIPEntanglement)
                 {
@@ -1022,12 +1001,13 @@
                 {
                     StakeIpPatternDetailViewModel stakeIpPatternDetail = new StakeIpPatternDetailViewModel()
                     {
-                        CoupleID = para.CoupleID,
+                        CoupleID = stakeIpPatternDetailModel.CoupleID,
                         GroupID = groupID,
                         IsStakePattern = false,
                         MatchID = coupleIPFraudDetailModel.MatchID,
                         GroupCustID = groupCustId,
-                        IPPatternType = coupleIPFraudDetailModel.IPPatternType
+                        IPPatternType = coupleIPFraudDetailModel.IPPatternType,
+                        TicketsPerMatch = coupleIPFraudDetailModel.FraudTransListSperation.Count()
                     };
 
                     TicketDetailsModel ticketDetail = stakeIpPatternDetailModel.TicketDetailsModels.FirstOrDefault(p => p.TransId.ToString() == fraudTranId);

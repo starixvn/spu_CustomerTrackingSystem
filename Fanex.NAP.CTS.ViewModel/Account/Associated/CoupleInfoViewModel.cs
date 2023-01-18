@@ -3,37 +3,18 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 {
     using Fanex.NAP.CTS.Resource.Consts;
     using System;
-    using System.Globalization;
 
     public class CoupleInfoViewModel
     {
         public int CoupleID { get; set; }
-        public DateTime FromDate { get {
-                if (!string.IsNullOrEmpty(FromDateString))
-                {
-                    DateTime.TryParseExact(FromDateString, Consts.FormatDateToString_yyyyMMddHHmmss, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime eventDate);
 
-                    return eventDate;
-                }
+        public DateTime FromDate { get; set; }
 
-                return DateTime.MinValue;
-            } }
-        public string FromDateString { get; set; }
-        public DateTime ToDate
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(ToDateString))
-                {
-                    DateTime.TryParseExact(ToDateString, Consts.FormatDateToString_yyyyMMddHHmmss, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime eventDate);
+        public string FromDateString { get { return FromDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss); } }
 
-                    return eventDate;
-                }
+        public DateTime ToDate { get; set; }
 
-                return DateTime.MinValue;
-            }
-        }
-        public string ToDateString { get; set; }
+        public string ToDateString { get { return ToDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss); } }
 
         public long CustID1 { get; set; }
 
