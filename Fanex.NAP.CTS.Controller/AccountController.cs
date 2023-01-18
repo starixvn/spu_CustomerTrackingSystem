@@ -864,8 +864,7 @@
                 var para1 = (custID1 <= custID2) ? custID1 : custID2;
                 var para2 = (custID1 > custID2) ? custID1 : custID2;
 
-                data = _accountService.GetCoupleInfos(para1, para2).ToList();
-                data = data.OrderBy(o => o.FromDate).ToList();
+                data = _accountService.GetCoupleInfos(para1, para2).Select(s => { s.CustID1 = custID1; s.CustID2 = custID2; return s; }).OrderByDescending(o => o.ToDate).ToList();
             }
 
             catch (Exception ex)
@@ -894,15 +893,15 @@
                 StakeIpPatternDetailModel stakeIpPatternDetailModel = new StakeIpPatternDetailModel()
                 {
                     CoupleID = para.CoupleID,
-                    CoupleFraudDetails = _accountService.GetCoupleFraudDetails(para.CoupleID, para.FromDate, para.ToDate),
+                    CoupleFraudDetails = _accountService.GetCoupleFraudDetails(para.CoupleID, para.FromDate, para.ToDate).OrderByDescending(desc => desc.SumStake),
                     CoupleIPFraudDetails = _accountService.GetCoupleIPFraudDetails(para.CoupleID, para.FromDate, para.ToDate)
                 };
-                stakeIpPatternDetailModel.TicketDetailsModels = GetTicketDetailsModel(stakeIpPatternDetailModel.CoupleFraudDetails, stakeIpPatternDetailModel.CoupleIPFraudDetails);
+                stakeIpPatternDetailModel.TicketDetailsModels = GetTicketDetailsModel(stakeIpPatternDetailModel.CoupleFraudDetails, stakeIpPatternDetailModel.CoupleIPFraudDetails).OrderByDescending(desc => desc.StakeRM);
 
                 data.AddRange(GetStakePatternDetail(stakeIpPatternDetailModel));
 
                 var laststakePatternDetail = data.LastOrDefault();
-                stakeIpPatternDetailModel.LastGroupCustID = laststakePatternDetail != null ? laststakePatternDetail.GroupID : 1;
+                stakeIpPatternDetailModel.LastGroupID = laststakePatternDetail != null ? laststakePatternDetail.GroupID : 1;
                 stakeIpPatternDetailModel.LastGroupCustID = laststakePatternDetail != null ? laststakePatternDetail.GroupCustID : 1;
 
                 data.AddRange(GetIpPatternDetail(stakeIpPatternDetailModel));
@@ -933,11 +932,11 @@
             var result = new List<StakeIpPatternDetailViewModel>();
 
             int groupID = 0;
-            long StateID = 0;
+            long? StateID = null;
             int groupCustId = 1;
             foreach (var coupleFraudDetailModel in stakeIpPatternDetailModel.CoupleFraudDetails.OrderBy(o => o.StateID))
             {
-                if (StateID != coupleFraudDetailModel.StateID)
+                if (StateID == null || StateID != coupleFraudDetailModel.StateID)
                 {
                     groupID++;
                     StateID = coupleFraudDetailModel.StateID;
@@ -989,10 +988,10 @@
             var result = new List<StakeIpPatternDetailViewModel>();
             int groupID = stakeIpPatternDetailModel.LastGroupID;
             int groupCustId = stakeIpPatternDetailModel.LastGroupCustID + 1;
-            int typeIPEntanglement = 0;
+            int? typeIPEntanglement = null;
             foreach (var coupleIPFraudDetailModel in stakeIpPatternDetailModel.CoupleIPFraudDetails.OrderBy(o => o.TypeIPEntanglement))
             {
-                if (typeIPEntanglement != coupleIPFraudDetailModel.TypeIPEntanglement)
+                if (typeIPEntanglement == null || typeIPEntanglement != coupleIPFraudDetailModel.TypeIPEntanglement)
                 {
                     groupID++;
                     typeIPEntanglement = coupleIPFraudDetailModel.TypeIPEntanglement;
@@ -1003,7 +1002,6 @@
                     {
                         CoupleID = stakeIpPatternDetailModel.CoupleID,
                         GroupID = groupID,
-                        IsStakePattern = false,
                         MatchID = coupleIPFraudDetailModel.MatchID,
                         GroupCustID = groupCustId,
                         IPPatternType = coupleIPFraudDetailModel.IPPatternType,

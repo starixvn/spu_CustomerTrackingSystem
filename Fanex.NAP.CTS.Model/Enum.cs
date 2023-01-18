@@ -156,6 +156,7 @@
 
     public enum IPPatternType3S
     {
+        None = 0,
         IPShared3Days = 1,
         AtLeast3IPsSameDay = 2,
         IPAlternative = 3

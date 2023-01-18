@@ -9,9 +9,11 @@
         {
             get
             {
-                IPPatternType3S result;
-                Enum.TryParse(TypeIPEntanglement.ToString(), out result);                
-                return result;
+                if (Enum.TryParse(TypeIPEntanglement.ToString(), out IPPatternType3S result))
+                {
+                    return result;
+                }               
+                return IPPatternType3S.None;
             }
         }
     }

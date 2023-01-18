@@ -737,7 +737,7 @@
             };
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<CoupleInfoViewModel>(criteria).Select(s => { s.CustID1 = custID1; s.CustID2 = custID2; return s; });
+                return db.Query<CoupleInfoViewModel>(criteria);
             }
         }
 
