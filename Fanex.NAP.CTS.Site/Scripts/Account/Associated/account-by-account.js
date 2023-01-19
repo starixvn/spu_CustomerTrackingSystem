@@ -1,6 +1,4 @@
-﻿const { debug } = require("util");
-
-function account_by_account() {
+﻿function account_by_account() {
     var divAddAssociation = $('#divAddAssociation');
     var btnAddAssociation = $('#btnAddAssociation');
     var btnSearch = $('#account-by-account-btn-search');
