@@ -55,7 +55,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
             }
         }
 
-        public long MatchID { get; set; }
+        public string MatchID { get; set; }
 
         private string _transDateString { get; set; }
         public string TransDateString
@@ -70,7 +70,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
             }
         }
 
-        public long TransId { get; set; }
+        public string TransId { get; set; }
 
         private string _betType { get; set; }
         public string BetType
@@ -115,7 +115,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
             }
         }
 
-        public decimal StakeRM { get; set; }
+        public string StakeRM { get; set; }
 
         private string _currency { get; set; }
         public string Currency

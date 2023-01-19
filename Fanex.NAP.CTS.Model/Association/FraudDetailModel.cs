@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.Model.Association
 {
-    using Fanex.NAP.CTS.Model.Transaction;
     using System;
     using System.Collections.Generic;
     using System.Linq;
