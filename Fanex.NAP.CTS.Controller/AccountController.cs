@@ -996,7 +996,7 @@
             var groupTypeIPEntanglements = stakeIpPatternDetailModel.CoupleIPFraudDetails.GroupBy(g => g.TypeIPEntanglement).Select(s => s.Key);
             foreach (var groupTypeIPEntanglement in groupTypeIPEntanglements)
             {
-                var coupleFraudDetailByStateId = stakeIpPatternDetailModel.CoupleIPFraudDetails.Where(p => p.TypeIPEntanglement == groupTypeIPEntanglement).OrderBy(o => o.IsCustId1);
+                var coupleFraudDetailByStateId = stakeIpPatternDetailModel.CoupleIPFraudDetails.Where(p => p.TypeIPEntanglement == groupTypeIPEntanglement).OrderByDescending(o => o.IsCustId1);
                 foreach (var coupleIPFraudDetail in coupleFraudDetailByStateId)
                 {
                     var ticketDetails = stakeIpPatternDetailModel.TicketDetails.Where(p => coupleIPFraudDetail.FraudTransListSperation.Any(transId => transId == p.TransId.ToString())).OrderBy(asc => asc.TransDate);
