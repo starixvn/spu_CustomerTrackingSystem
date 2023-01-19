@@ -10,6 +10,8 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 
         public int GroupCustID { get; set; }
 
+        public int CountGroupCustID { get; set; }
+
         public decimal TotalStake { get; set; }
         
         public int TicketsPerMatch { get; set; }

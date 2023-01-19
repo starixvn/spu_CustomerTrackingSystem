@@ -944,7 +944,7 @@
                 {
                     var transIds = coupleFraudDetail.FraudTransListSperation.ToArray();
                     var ticketDetailsByCust1 = stakeIpPatternDetailModel.TicketDetails.Where(p => coupleFraudDetail.MatchID == p.MatchID && stakeIpPatternDetailModel.CustId1 == p.CustID && transIds.Contains(p.TransId.ToString())).OrderBy(asc => asc.TransDate);
-
+                    int countTicketDetailsByCust1 = ticketDetailsByCust1.Count();
                     foreach (var ticketDetail in ticketDetailsByCust1)
                     {
                         StakeIpPatternDetailViewModel stakeIpPatternDetail = new StakeIpPatternDetailViewModel()
@@ -953,6 +953,7 @@
                             GroupID = groupID,
                             IsStakePattern = true,
                             TicketsPerMatch = coupleFraudDetail.BetCount,
+                            CountGroupCustID = countTicketDetailsByCust1,
                             TotalStake = coupleFraudDetail.SumStake,
                             MatchID = coupleFraudDetail.MatchID,
                             GroupCustID = groupCustId
@@ -964,7 +965,7 @@
                     groupCustId++;
 
                     var ticketDetailsByCust2 = stakeIpPatternDetailModel.TicketDetails.Where(p => coupleFraudDetail.MatchID == p.MatchID && stakeIpPatternDetailModel.CustId2 == p.CustID && transIds.Contains(p.TransId.ToString())).OrderBy(asc => asc.TransDate);
-
+                    int countTicketDetailsByCust2 = ticketDetailsByCust2.Count();
                     foreach (var ticketDetail in ticketDetailsByCust2)
                     {
                         StakeIpPatternDetailViewModel stakeIpPatternDetail = new StakeIpPatternDetailViewModel()
@@ -973,6 +974,7 @@
                             GroupID = groupID,
                             IsStakePattern = true,
                             TicketsPerMatch = coupleFraudDetail.BetCount,
+                            CountGroupCustID = countTicketDetailsByCust2,
                             TotalStake = coupleFraudDetail.SumStake,
                             MatchID = coupleFraudDetail.MatchID,
                             GroupCustID = groupCustId
@@ -1033,7 +1035,7 @@
                             MatchID = coupleIPFraudDetail.MatchID,
                             GroupCustID = groupCustId,
                             IPPatternType = coupleIPFraudDetail.IPPatternType,
-                            TicketsPerMatch = countTicketDetailsByCust1
+                            CountGroupCustID = countTicketDetailsByCust1
                         };
 
                         SetStakeIpPatternDetailViewModel(stakeIpPatternDetail, ticketDetail);
@@ -1042,7 +1044,7 @@
                     groupCustId++;
 
                     var ticketDetailsByCust2 = stakeIpPatternDetailModel.TicketDetails.Where(p => coupleIPFraudDetail.MatchID == p.MatchID && stakeIpPatternDetailModel.CustId2 == p.CustID && transIds.Contains(p.TransId.ToString())).OrderBy(asc => asc.TransDate);
-                    int countTicketDetailsByCust2 = ticketDetailsByCust1.Count();
+                    int countTicketDetailsByCust2 = ticketDetailsByCust2.Count();
                     foreach (var ticketDetail in ticketDetailsByCust2)
                     {
                         StakeIpPatternDetailViewModel stakeIpPatternDetail = new StakeIpPatternDetailViewModel()
@@ -1052,7 +1054,7 @@
                             MatchID = coupleIPFraudDetail.MatchID,
                             GroupCustID = groupCustId,
                             IPPatternType = coupleIPFraudDetail.IPPatternType,
-                            TicketsPerMatch = countTicketDetailsByCust2
+                            CountGroupCustID = countTicketDetailsByCust2
                         };
 
                         SetStakeIpPatternDetailViewModel(stakeIpPatternDetail, ticketDetail);

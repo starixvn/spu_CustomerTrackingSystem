@@ -994,12 +994,12 @@
             }
             else {
                 isUserNameRowMember = false;
-                userNameRowSpanNumer = response[index]["TicketsPerMatch"];
+                userNameRowSpanNumer = response[index]["CountGroupCustID"];
             }
         }
         else {
             isUserNameRowMember = false;
-            userNameRowSpanNumer = response[index]["TicketsPerMatch"];
+            userNameRowSpanNumer = response[index]["CountGroupCustID"];
         }
 
         let userAttribute = GetAttributeWithRowSpan(defaultStyle, isUserNameRowMember, userNameRowSpanNumer);
