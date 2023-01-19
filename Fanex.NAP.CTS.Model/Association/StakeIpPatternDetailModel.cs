@@ -5,6 +5,10 @@
 
     public class StakeIpPatternDetailModel
     {
+        public long CustId1 { get; set; }
+
+        public long CustId2 { get; set; }
+
         public long CoupleID { get; set; }
 
         public int LastGroupID { get; set; }
