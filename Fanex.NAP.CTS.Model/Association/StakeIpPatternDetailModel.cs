@@ -11,8 +11,8 @@
 
         public int LastGroupCustID { get; set; }
 
-        public IEnumerable<TicketDetailsModel> TicketDetailsModels { get; set; }
-        
+        public IEnumerable<TicketDetailsModel> TicketDetails { get; set; }
+
         public IEnumerable<CoupleFraudDetailModel> CoupleFraudDetails { get; set; }
 
         public IEnumerable<CoupleIPFraudDetailModel> CoupleIPFraudDetails { get; set; }

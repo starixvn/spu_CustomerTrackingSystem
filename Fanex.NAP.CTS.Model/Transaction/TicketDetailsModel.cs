@@ -8,7 +8,7 @@
 
         public DateTime TransDate { get; set; }
 
-        public int MatchID { get; set; }
+        public long MatchID { get; set; }
 
         public DateTime EventDate { get; set; }
 

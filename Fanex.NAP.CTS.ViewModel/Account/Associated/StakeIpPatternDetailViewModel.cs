@@ -2,8 +2,6 @@
 namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 {
     using Fanex.NAP.CTS.Model;
-    using System;
-
     public class StakeIpPatternDetailViewModel
     {
         public long CoupleID { get; set; }
