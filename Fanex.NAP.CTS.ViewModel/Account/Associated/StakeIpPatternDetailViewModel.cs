@@ -26,15 +26,15 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
             {
                 if (IsStakePattern)
                 {
-                    return $" Total Stake / Tickets per Match: {TotalStake}RM / {TicketsPerMatch}";
+                    return $" Total Stake / Tickets per Match: {TotalStake} RM / {TicketsPerMatch}";
                 }
                 switch (this.IPPatternType)
                 {
                     case IPPatternType3S.IPShared3Days:
                         return "IP is shared on exact 3 days";
-                    case IPPatternType3S.IPAlternative:
-                        return "At least 3 IPs are on same day";
                     case IPPatternType3S.AtLeast3IPsSameDay:
+                        return "At least 3 IPs are on same day";
+                    case IPPatternType3S.IPAlternative:
                         return "IP Alternative";
                     default:
                         return "";

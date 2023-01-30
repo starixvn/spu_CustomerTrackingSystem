@@ -39,7 +39,6 @@
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Mvc;
@@ -992,7 +991,7 @@
                     IP = ticketDetail.IP,
                     Odds = ticketDetail.Odds,
                     Stake = ticketDetail.CurrencyName == "RM" ? "" : String.Format("{0:#.##}", ticketDetail.Stake),
-                    StakeRM = String.Format("{0:#.##}", ticketDetail.StakeRM),
+                    StakeRM = String.Format("{0:#.##}", Math.Truncate(ticketDetail.StakeRM)),
                     BetTeam = ticketDetail.BetTeam,
                     BetType = ticketDetail.BetType,
                     Currency = ticketDetail.CurrencyName == "RM" ? "" : ticketDetail.CurrencyName,
@@ -1331,106 +1330,6 @@
                 errorCode = result
             }, JsonRequestBehavior.AllowGet);
         }
-
-        //[HttpPost]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        //[TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidenceInsertEvidence)]
-        //public ActionResult PlaceEvidence(UpdatePlaceEvidenceModel model)
-        //{
-        //    model.UserId = model.UserId == 0 ? CurrentSession.UserId : model.UserId;
-        //    var result = _accountService.ProcessPlaceEvidence(model);
-
-        //    if (result.ErrorCode == 0)
-        //    {
-
-
-        //        var syncCustIds = Enumerable.Empty<long>();
-
-        //        var paLosingClassification = _rescanClassificationService.GetProblemAccountLosing(objects, FunctionId.PlaceSingleEvidence);
-
-        //        var custEvidenceJson = JsonConvert.SerializeObject(paLosingClassification);
-
-        //        var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
-
-        //        if (syncResult.ErrorCode == 0)
-        //        {
-        //            _customerClassificationService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
-        //            {
-        //                ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
-        //                IsPushCCToSoon88 = true,
-        //                IsUpdateDangerToMainDB = true,
-        //                DangerLevelType = DangerLevel.ABI
-        //            });
-
-        //            var tasks = new List<Task>
-        //            {
-        //                Task.Run(() =>
-        //                {
-        //                     _accountService.CheckNewPAAssociationCustomerForRollback(syncResult.CustInfo);
-        //                }),
-        //                Task.Run(() =>
-        //                {
-        //                    _antiFraudCenterService.InsertAFCAccounts(syncCustIds, FromFlow.CTSWEB);
-        //                })
-        //            };
-
-        //            Task.WhenAll(tasks.ToArray());
-        //        }
-        //    }
-
-        //    return Json(result, JsonRequestBehavior.AllowGet);
-        //}
-
-        //[HttpPost]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        //[TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidenceRemoveEvidence)]
-        //public ActionResult RemoveFlaggedEvidence(RemoveEvidenceModel model)
-        //{
-        //    model.UserId = CurrentSession.UserId;
-
-        //    var result = _accountService.RemoveFlaggedEvidence(model);
-
-        //    if (result.ErrorCode == 0)
-        //    {
-        //        var objects = new[] { new {
-        //           CTSCustID = model.CTSCustId,
-        //           CustID = model.CustId,
-        //           SubscriberID = model.SubscriberId,
-        //           EvidenceID = model.EvidenceId,
-        //           CreatedBy = model.UserId,
-        //           ActionType = 2
-        //        } };
-
-        //        var syncCustIds = Enumerable.Empty<long>();
-        //        var custEvidenceJson = JsonConvert.SerializeObject(objects);
-
-        //        // Sync Evidence to Category
-        //        var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
-
-        //        if (syncResult.ErrorCode == 0)
-        //        {
-        //            // Rescan Problem Account & Normal Account
-        //            _rescanClassificationService.RescanCustomerClassify(new RescanCustClassificationModel
-        //            {
-        //                CustIds = syncCustIds,
-        //                IsCheckPAFromNAP = true,
-        //                IsPushCCToSoon88 = true,
-        //                FunctionId = FunctionId.RemoveFlaggedEvidenceWeb,
-        //                IsUpdateDangerToMainDB = true,
-        //                DangerLevelType = DangerLevel.ABI
-        //            });
-        //        }
-
-        //        var custIdsFlaggedEvidences = _customerEvidenceService.CheckCleanCustFlaggedEvidence(model.CTSCustId.ToString());
-
-        //        if (custIdsFlaggedEvidences != null && custIdsFlaggedEvidences.Any())
-        //        {
-        //            _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIdsFlaggedEvidences.Select(c => c.CustID)));
-        //        }
-        //    }
-
-        //    return Json(result, JsonRequestBehavior.AllowGet);
-        //}
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
@@ -1825,20 +1724,6 @@
             return string.Empty;
         }
 
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        //[TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationPinCategory)]
-        //[HttpPost]
-        //public ActionResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory)
-        //{
-        //    var result = _accountService.PinCategoryCustomerClassification(ctsCustId, subscriberId, isPinCategory, CurrentSession.UserId);
-
-        //    return Json(new
-        //    {
-        //        errorCode = result.ErrorCode,
-        //        errorMessage = result.ErrorMsg
-        //    }, JsonRequestBehavior.AllowGet);
-        //}
-
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationNormalCategory)]
         [HttpPost]
@@ -2199,56 +2084,6 @@
             return Json(new { data = custs }, JsonRequestBehavior.AllowGet);
         }
         #endregion
-
-        #region Robot Classification
-
-        //public ActionResult RobotClassification()
-        //{
-        //    return PartialView("RobotClassfication/LastestRobotClassification");
-        //}
-
-        //[TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRobotClassification)]
-        //public ActionResult TrackingRobotClassification()
-        //{
-        //    return null;
-        //}
-
-        //[HttpPost]
-        //public ActionResult GetHistoryRobotClassification(long custId)
-        //{
-        //    var data = Enumerable.Empty<RobotClassificationViewModel>();
-        //    var bettingStatisticFormat = "Turnover: {0} | Win lost: {1} | Margin: {2}% | Bet count: {3} | Active days: {4}";
-
-        //    var robotData = _robotClassificationService.GetHistoryRobotClassification(custId);
-
-        //    if (robotData != null && robotData.Any())
-        //    {
-        //        data = robotData.OrderByDescending(d => d.FromDate).Select(x =>
-        //        {
-        //            decimal margin = 0;
-
-        //            if (x.Turnover != 0)
-        //            {
-        //                margin = x.Winloss / x.Turnover * 100;
-        //            }
-
-        //            return new RobotClassificationViewModel
-        //            {
-        //                ScannedDate = x.FromDate.ToString(Consts.FormatDateToString_MMMddyyyy),
-        //                BettingStatistic = string.Format(bettingStatisticFormat
-        //                                 , Math.Round(x.Turnover, 3).ToString("0.000").Replace(".000", string.Empty)
-        //                                 , Math.Round(x.Winloss, 3).ToString("0.000").Replace(".000", string.Empty)
-        //                                 , Math.Round(margin, 3).ToString("0.000").Replace(".000", string.Empty)
-        //                                 , x.BetCount, x.ActiveDays),
-        //                RobotType = x.RobotType
-        //            };
-        //        });
-        //    }
-
-        //    return Json(new { data }, JsonRequestBehavior.AllowGet);
-        //}
-
-        #endregion Robot Classification
 
         #region Robot Betting
 
