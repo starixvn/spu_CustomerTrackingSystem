@@ -98,7 +98,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
             }
         }
 
-        public decimal Stake { get; set; }
+        public string Stake { get; set; }
 
         public decimal Odds { get; set; }
 
