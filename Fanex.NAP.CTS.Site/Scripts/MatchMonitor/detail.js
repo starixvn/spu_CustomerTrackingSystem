@@ -17,6 +17,8 @@
         cbbSites: $('#cbbSites'),    
         tblMMHomeTeam: $('#tblMMHomeTeam'),
         tblMMAwayTeam: $('#tblMMAwayTeam'),
+        subHome: $('#subHome'),
+        subAway: $('#subAway'),
         spanReasonInfo: $('#spanReasonInfo'),
         inputHomeSelectAll: $('#inputHomeSelectAll'),
         inputAwaySelectAll: $('#inputAwaySelectAll'),
@@ -101,7 +103,11 @@
                 {
                     data: obj => () => {
                         let url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustID);
-                        return `<a class='click-view-name ' href=${url}> ${obj.Username} </a>`;
+                        let classColRed = '';
+                        if (obj.IsNormalLinkedPA || obj.IsRobot || (obj.DangerToString != '-' && obj.DangerToString != '')) {
+                            classColRed = 'col-red';
+                        }
+                        return `<a class='click-view-name ${classColRed}' href=${url}> ${obj.Username} </a>`;
                     }
                 },
                 { data: obj => obj.CustomerClassToString },
@@ -112,7 +118,7 @@
                 { data: obj => obj.Currency },
                 {
                     data: obj => obj.Amount, createdCell: (cell, _, row) => {
-                        if (row.Amount > 1000) {
+                        if (row.Amount >= 1000) {
                             $(cell).addClass('col-red')
                         }
                     }
@@ -181,8 +187,12 @@
                             RenderAssociationGroup(domElements.tblMMAwayTeam, xResponse.ItemList);
                             RefreshGroupFilter(xResponse.GroupList);
                         });
+                    domElements.subHome.addClass('hide');
+                    domElements.subAway.addClass('hide');
+                } else {
+                    domElements.subHome.removeClass('hide');
+                    domElements.subAway.removeClass('hide');
                 }
-
             },
             complete: function (response) {
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');   
@@ -259,16 +269,16 @@
         if (isRobot) {
             switch (robotType) {
                 case -1:
-                    html += `<span class="icon-big-Robot icon-big-robot">${spanHtml}</span>`;
+                    html = `<span class="icon-big-Robot icon-big-robot">${spanHtml}</span>`;
                     break;
                 case 0:
-                    html += `<span class="icon-big-Robot icon-big-observation-robot">${spanHtml}</span>`;
+                    html = `<span class="icon-big-Robot icon-big-observation-robot">${spanHtml}</span>`;
                     break;
                 case 1:
-                    html += `<span class="icon-big-Robot icon-big-good-robot">${spanHtml}</span>`;
+                    html = `<span class="icon-big-Robot icon-big-good-robot">${spanHtml}</span>`;
                     break;
                 case 2:
-                    html += `<span class="icon-big-Robot icon-big-bad-robot">${spanHtml}</span>`;
+                    html = `<span class="icon-big-Robot icon-big-bad-robot">${spanHtml}</span>`;
                     break;
                 default:
                     break;
@@ -481,52 +491,62 @@
     }
 
     function ExportToExcel() {       
-        let mmDetails = {
+        let mmDetails = {            
+            matchInfo: GetDataMatchInfo(),            
             homeMItems: GetDataSelectedInGrid(domElements.tblMMHomeTeam.DataTable()),
-            awayMItems: GetDataSelectedInGrid(domElements.tblMMAwayTeam.DataTable()),
-            matchInfo: {
-                MatchName: domElements.matchName,
-                EventDateStr: domElements.eventDataToString,
-                BetTypeName: domElements.betTypeName
-            }
+            awayMItems: GetDataSelectedInGrid(domElements.tblMMAwayTeam.DataTable())
         }
         let lengthItem = mmDetails.homeMItems.length + mmDetails.awayMItems.length;
         if (lengthItem <= 1) {
             common.showError("Please select at least 2 Usernames to proceed!");
-        } else {
-            common.downloadFileExcel(common.modifyRelativeUrl('MatchMonitor/ExportToExcelMMDetail'), mmDetails);         
+        } else {           
+            let url = common.modifyRelativeUrl('MatchMonitor/ExportToExcelMMDetail');
+
+            $('body').append('<form action="' + url + '" method="post" target="output_frame" id="postToIframe"></form>');
+            $('#postToIframe').append('<input type="hidden" asp-for="matchf" name=match value="' + mmDetails.matchInfo + '" />');
+            $('#postToIframe').append('<input type="hidden" asp-for="homef" name=homes value="[' + mmDetails.homeMItems + ']" />');
+            $('#postToIframe').append('<input type="hidden" asp-for="awayf" name=aways value="[' + mmDetails.awayMItems + ']" />');
+            $('body').append('<iframe  name="output_frame" width="0" height="0" class="display-none"></iframe>');
+            $('#postToIframe').submit().remove();
         }       
     }
 
     function GetDataSelectedInGrid(table) {
-        let datas = [];
+        let datas = '';
         table.rows(function (idx, data, node) {
             if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
-                datas.push({
-                    SubscriberType: data.SubscriberType,
-                    CTSCustID: data.CTSCustID,
-                    CustID: data.CustID,
-                    Username: data.Username,
-                    CustomerClass: data.CustomerClass,
-                    IsRobot: data.IsRobot,
-                    DangerToString: data.DangerToString,
-                    Odds: data.Odds,
-                    BetID: data.BetID,
-                    BetTeam: data.BetTeam,
-                    Currency: data.Currency,
-                    Amount: data.Amount,
-                    HDP: data.HDP,
-                    Score: data.Score,
-                    TransTimeToString: data.TransTimeToString,
-                    Group: data.Group,
-                    ReasonList: data.ReasonList,
-                    PICVerified: data.PICVerified
-                });
+                datas += `{&quot;SubscriberType&quot;:&quot;${data.SubscriberType}&quot;`;
+                datas += `,&quot;CTSCustID&quot;:&quot;${data.CTSCustID}&quot;`;
+                datas += `,&quot;CustID&quot;:&quot;${data.CustID}&quot;`;
+                datas += `,&quot;Username&quot;:&quot;${data.Username}&quot;`;
+                datas += `,&quot;CustomerClass&quot;:&quot;${data.CustomerClass}&quot;`;
+                datas += `,&quot;IsRobot&quot;:&quot;${data.IsRobot}&quot;`;
+                datas += `,&quot;DangerToString&quot;:&quot;${data.DangerToString}&quot;`;
+                datas += `,&quot;Odds&quot;:&quot;${data.Odds}&quot;`;
+                datas += `,&quot;BetID&quot;:&quot;${data.BetID}&quot;`;
+                datas += `,&quot;BetTeam&quot;:&quot;${data.BetTeam}&quot;`;
+                datas += `,&quot;Currency&quot;:&quot;${data.Currency}&quot;`;
+                datas += `,&quot;Amount&quot;:&quot;${data.Amount}&quot;`;
+                datas += `,&quot;HDP&quot;:&quot;${data.HDP}&quot;`;
+                datas += `,&quot;Score&quot;:&quot;${data.Score}&quot;`;
+                datas += `,&quot;TransTimeToString&quot;:&quot;${data.TransTimeToString}&quot;`;
+                datas += `,&quot;Group&quot;:&quot;${data.Group}&quot;`;
+                datas += `,&quot;ReasonList&quot;:&quot;${data.ReasonList}&quot;`;
+                datas += `,&quot;PICVerified&quot;:&quot;${data.PICVerified}&quot;},`;
             }
         });
-        return datas;
+
+        return datas != '' ? datas.slice(0, -1) : datas;                
     }
 
+    function GetDataMatchInfo() {
+        let datas = '';
+        datas += `{&quot;MatchName&quot;:&quot;${domElements.matchName}&quot;`;
+        datas += `,&quot;EventDateStr&quot;:&quot;${domElements.eventDataToString}&quot;`;
+        datas += `,&quot;BetTypeName&quot;:&quot;${domElements.betTypeName}&quot;}`;
+        return datas;
+    }
+    
     function ResizeDataTable(table) {
         //var widthTables = domElements.tblMMHomeTeam[0].offsetWidth + 37;
         let widthTables = table[0].offsetWidth + 37;
@@ -541,7 +561,8 @@
     }
 
     function ResizeDataTable2() {
-        
+        //let heightTbl = $('#first-monitor-datatable').height();
+        //$('#second-monitor-datatable').height(heightTbl);
     }
    
     function Initial() {
@@ -588,6 +609,9 @@
         domElements.btnShowAll.on('click', function () {
             ShowAllData(domElements.tblMMHomeTeam.DataTable());
             ShowAllData(domElements.tblMMAwayTeam.DataTable());
+
+            domElements.inputHomeSelectAll.prop('checked', false);
+            domElements.inputAwaySelectAll.prop('checked', false);
         })
 
         domElements.btnShowPopupAssDetection.on('click', function () { ShowPopupAssDetection(); })

@@ -138,6 +138,8 @@
 
         public int BetTypeID { get; set; }
 
+        public bool IsNormalLinkedPA { get; set; }
+
         public string BetChoice
         {
             get

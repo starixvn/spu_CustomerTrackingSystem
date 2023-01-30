@@ -20,6 +20,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Mvc;
+    using System.Web.Script.Serialization;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
@@ -379,17 +380,24 @@
         #region Export to Excel
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailRpt)]
-        public ActionResult ExportToExcelMMDetail(IEnumerable<ExExcelTicketInfoViewModel> homeMItems
-            , IEnumerable<ExExcelTicketInfoViewModel> awayMItems, ExExlMatchInfoViewModel matchInfo)
+        public ActionResult ExportToExcelMMDetail(FormCollection from)
         {
+            var serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = Int32.MaxValue;
+           
+            var matchInfo = serializer.Deserialize<ExExlMatchInfoViewModel>(from["match"]);
+            var homeMItems = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["homes"]);
+            var awayMItems = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["aways"]);           
+
             var templatePath = Server.MapPath(MMDetailTemplate);
-            
+
             var fileName = string.Format("MM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr);
-                   
+
             var excelFile = _matchMonitorService.ExportExcelMMDetail(homeMItems, awayMItems, fileName, templatePath);
 
             return File(excelFile, "application/vnd.ms-excel", fileName);
         }
+        
 #if DEBUG
         private MatchMonitorDetailListViewModel Generate_DataTest()
         {
@@ -547,6 +555,7 @@
                                                                     TransId = c.ticket.TransId,
                                                                     RobotType = null,
                                                                     IsRobot = false,
+                                                                    IsNormalLinkedPA = c.cust.IsNormalLinkedPA
                                                                 };
                                                             })?.OrderByDescending(c => c.TransTime)?.Distinct()?.ToList();
 
@@ -600,6 +609,7 @@
                                         TransId = group.m.TransId,
                                         RobotType = (temp != null) ? temp?.RobotType : null,
                                         IsRobot = (temp != null) && temp.IsRobot,
+                                        IsNormalLinkedPA = group.m.IsNormalLinkedPA
                                     })?.OrderByDescending(c => c.TransTime)?.Distinct()?.ToList();
 
                     return result;

@@ -21,5 +21,7 @@
         public string SubscriberType { get; set; }
 
         public int CustomerClass { get; set; }
+
+        public bool IsNormalLinkedPA { get; set; }
     }
 }
