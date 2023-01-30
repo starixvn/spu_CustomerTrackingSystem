@@ -1016,7 +1016,7 @@
             .append('<td class="text-center" style = "' + defaultStyle + '">' + response[index]["TransId"] + '</td>')
             .append('<td class="text-center" style = "' + defaultStyle + '">' + response[index]["BetType"] + '</td>')
             .append('<td class="text-center" style = "' + defaultStyle + '">' + response[index]["BetTeam"] + '</td>')
-            .append('<td class="text-center" style = "' + defaultStyle + (response[index]["Odds"] < 0 ? styleRedFontInStake : '')+'">' + response[index]["Odds"] + '</td>')
+            .append('<td class="text-center" style = "' + defaultStyle + (response[index]["Odds"] < 0 ? styleRedFont : '')+'">' + response[index]["Odds"] + '</td>')
             .append('<td class="text-center" style = "' + defaultStyle + '">' + response[index]["LiveScore"] + '</td>')
             .append('</tr>');
         return newRow;
