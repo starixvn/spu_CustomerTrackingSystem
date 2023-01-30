@@ -17,7 +17,7 @@
         width: 100%;
         position: sticky;
         top: 6rem;
-        z-index: 999999;
+        z-index: 999;
     }
 
     .page-title-match {
@@ -190,46 +190,48 @@
                 width: 100%;
                 display: flex;
                 justify-content: flex-end;
-                align-items: center;               
+                align-items: center;
                 padding: 1rem;
                 background-color: #E3E9F6;
                 border-radius: 1px;
+                position: sticky;
+                position: -webkit-sticky;
+                top: 17.8rem;
+                z-index: 7;
             }
 
             .group-info {
                 display: flex;
-                padding: 2rem 0;
+                padding: 1rem 0 1.1rem 0;
                 position: sticky;
-                top: 9rem;
+                top: 9.65rem;
                 background: #FFFFFF;
                 width: 100%;
             }
 
             .filter-group {
-                z-index: 11;              
+                z-index: 11;
             }
 
             .group-table {
                 display: flex;
-                /*padding: 2rem 0;*/
-                position: sticky;
-                /*top: 15rem !important;*/
+                /*padding: 0;*/
                 background: #FFFFFF;
                 width: 100%;
             }
 
             #monitor-datatable, #first-monitor-datatable, #second-monitor-datatable {
-                flex: 50%;
+                flex: 50%;              
 
                 .table-report {
                     font-family: $font-family;
 
                     .wrapper-info-table {
                         padding: 0 1rem;
-                        position: sticky;
+                        /* position: sticky;
                         position: -webkit-sticky;
-                        top: 22.4rem;
-                        z-index: 11;
+                        top: 21rem;*/
+                        z-index: 7;
                         transition: top 0.01s linear;
                     }
 
@@ -260,13 +262,17 @@
 
                         thead {
                             tr {
+                                position: sticky;
+                                top: 22.4rem;
+                                z-index: 11;
+
                                 th {
-                                    position: sticky;
+                                    /* position: sticky;
                                     top: 22.4rem;
-                                    font-weight: 300;
-                                    z-index: 9;
+                                    z-index: 30;*/
                                     /*padding-left: 1.5rem;
                                     padding-right: 1.5rem;*/
+                                    font-weight: 300;
                                     border-right: none;
                                     font-size: 13px;
                                 }
@@ -491,7 +497,7 @@
 .detail-area {
     position: absolute;
     right: 0;
-    padding: 0.5rem;
+    padding: 0.2rem;
     border: 1px solid #E5E5E5;
     border-radius: 5px;
     text-align: right;

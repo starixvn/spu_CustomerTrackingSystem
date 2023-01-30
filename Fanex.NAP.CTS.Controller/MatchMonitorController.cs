@@ -213,10 +213,10 @@
                             CTSCustIDList = string.Join(",", custs),
                             TotalCust = custs.Count(),
                             HomeMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)),
-                            AwayMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)),
+                            AwayMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)),                           
                             ScoreList = mdItemList.Select(x => x.Score).Distinct().OrderBy(x => x)
                         };
-                        mdResult.BindReasons(mdItemList.Select(x => x.ReasonList).Distinct());
+                        mdResult.BindReasons(mdItemList.Select(x => x.ReasonList));
                     }
                 }
             }
@@ -379,15 +379,12 @@
         #region Export to Excel
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailRpt)]
-        public ActionResult ExportToExcelMMDetail(IEnumerable<ExportExcelViewModel> homeMItems
-            , IEnumerable<ExportExcelViewModel> awayMItems)
+        public ActionResult ExportToExcelMMDetail(IEnumerable<ExExcelTicketInfoViewModel> homeMItems
+            , IEnumerable<ExExcelTicketInfoViewModel> awayMItems, ExExlMatchInfoViewModel matchInfo)
         {
             var templatePath = Server.MapPath(MMDetailTemplate);
-            var dateTime = DateTime.UtcNow.AddHours(-4);
-
-            var fileName = string.Format("MM_Hue-Lao_{0}_{1}.xlsx"
-                , dateTime.ToString(FormatDateTimeToString_YYYYmmdd)
-                , dateTime.ToString(Consts.FormatTimeToString_hhmmss));
+            
+            var fileName = string.Format("MM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr);
                    
             var excelFile = _matchMonitorService.ExportExcelMMDetail(homeMItems, awayMItems, fileName, templatePath);
 

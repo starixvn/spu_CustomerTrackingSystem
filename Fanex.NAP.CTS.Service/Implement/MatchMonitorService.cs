@@ -153,7 +153,7 @@
             };
         }
 
-        public byte[] ExportExcelMMDetail(IEnumerable<ExportExcelViewModel> homeMItems, IEnumerable<ExportExcelViewModel> awayMItems
+        public byte[] ExportExcelMMDetail(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems
             , string fileName, string templatePath)
         {
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Sheet1");
@@ -166,10 +166,10 @@
             return writer.ToBytes();
         }
 
-        private void FillRowData(IEnumerable<ExportExcelViewModel> homeMItems, IEnumerable<ExportExcelViewModel> awayMItems, ref ExcelTemplateWriter writer)
+        private void FillRowData(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems, ref ExcelTemplateWriter writer)
         {
-            var tblHome = homeMItems != null ? homeMItems.ToArray() : new ExportExcelViewModel[0];
-            var tblAway = awayMItems != null ? awayMItems.ToArray() : new ExportExcelViewModel[0];
+            var tblHome = homeMItems != null ? homeMItems.ToArray() : new ExExcelTicketInfoViewModel[0];
+            var tblAway = awayMItems != null ? awayMItems.ToArray() : new ExExcelTicketInfoViewModel[0];
             var lengthH = tblHome.Length;
             var lengthA = tblAway.Length;
 
@@ -195,7 +195,7 @@
             }
         }
 
-        private object[] NewRecordTblHome(ExportExcelViewModel itemH)
+        private object[] NewRecordTblHome(ExExcelTicketInfoViewModel itemH)
         {
             return new object[]
                 {
@@ -222,7 +222,7 @@
                 };
         }
 
-        private object[] NewRecordTblAway(ExportExcelViewModel itemA)
+        private object[] NewRecordTblAway(ExExcelTicketInfoViewModel itemA)
         {
             return new object[]
                 {
@@ -249,7 +249,7 @@
                 };
         }
 
-        private object[] NewRecordTblHomeAway(ExportExcelViewModel itemH, ExportExcelViewModel itemA)
+        private object[] NewRecordTblHomeAway(ExExcelTicketInfoViewModel itemH, ExExcelTicketInfoViewModel itemA)
         {
             return new object[]
                 {

@@ -28,7 +28,7 @@
                            r2 => r2,
                            (r1, r2) => r1.ReasonName);
 
-                return string.Join(", ", reasonNames);
+                return string.Join(",", reasonNames);
             }
 
             return string.Empty;

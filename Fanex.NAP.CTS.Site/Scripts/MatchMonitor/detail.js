@@ -5,7 +5,9 @@
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),       
         eventDataToString: $("#hdEventDataToString").val(),
         matchID: $("#hdMatchID").val(),
+        matchName: $("#hdMatchName").val(),
         betTypeID: $("#hdBetTypeID").val(),
+        betTypeName: $("#hdBetTypeName").val(),
         betIDToString: $("#hdBetIDToString").val(),
         reason: $("#hdreason").val(),
         liveIndicator: $("#hdLiveIndicator").val(),
@@ -185,8 +187,11 @@
             complete: function (response) {
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');   
                 domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
-                
-                resizeDataTable();
+
+                ResizeDataTable(domElements.tblMMHomeTeam);
+                ResizeDataTable(domElements.tblMMAwayTeam);
+
+                ResizeDataTable2();
             },
             error: function (error) {
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
@@ -387,7 +392,11 @@
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
                 domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
 
-                resizeDataTable();
+                domElements.inputHomeSelectAll.prop('checked', false);
+                domElements.inputAwaySelectAll.prop('checked', false);
+
+                ResizeDataTable(domElements.tblMMHomeTeam);
+                ResizeDataTable(domElements.tblMMAwayTeam);
             },
             error: function (error) {
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
@@ -404,13 +413,11 @@
             let rowData = this.data();
             if ($(this.node()).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
                 let newGroupData = itemList.find(function (x) { return x.CustID == rowData.CustID; });               
-                if (newGroupData != undefined) {
+                if (newGroupData != undefined && newGroupData.GroupID > 0) {
                     rowData.GroupID = newGroupData.GroupID;
                     rowData.Group = newGroupData.GroupName;
-                }
-            } else {
-                $(this.node()).css('display', 'none');
-            }
+                } else $(this.node()).css('display', 'none');
+            } else $(this.node()).css('display', 'none');
 
             this.invalidate();
         })
@@ -476,13 +483,18 @@
     function ExportToExcel() {       
         let mmDetails = {
             homeMItems: GetDataSelectedInGrid(domElements.tblMMHomeTeam.DataTable()),
-            awayMItems: GetDataSelectedInGrid(domElements.tblMMAwayTeam.DataTable())
+            awayMItems: GetDataSelectedInGrid(domElements.tblMMAwayTeam.DataTable()),
+            matchInfo: {
+                MatchName: domElements.matchName,
+                EventDateStr: domElements.eventDataToString,
+                BetTypeName: domElements.betTypeName
+            }
         }
         let lengthItem = mmDetails.homeMItems.length + mmDetails.awayMItems.length;
         if (lengthItem <= 1) {
             common.showError("Please select at least 2 Usernames to proceed!");
         } else {
-            common.downloadFileExcel(common.modifyRelativeUrl('MatchMonitor/ExportToExcelMMDetail'), mmDetails);
+            common.downloadFileExcel(common.modifyRelativeUrl('MatchMonitor/ExportToExcelMMDetail'), mmDetails);         
         }       
     }
 
@@ -515,18 +527,23 @@
         return datas;
     }
 
-    function resizeDataTable() {
-        var widthTables = domElements.tblMMHomeTeam[0].offsetWidth + 37;
+    function ResizeDataTable(table) {
+        //var widthTables = domElements.tblMMHomeTeam[0].offsetWidth + 37;
+        let widthTables = table[0].offsetWidth + 37;
 
         //if (domElements.groupTable[0].offsetWidth - widthTables > 0 && widthTables < $(window).width()) {
         if (widthTables < $(window).width()) {
-            domElements.detailpage.removeClass('page-content-monitor');
+            //domElements.detailpage.removeClass('page-content-monitor');
         }
         else{
-            domElements.detailpage.addClass('page-content-monitor');
+            //domElements.detailpage.addClass('page-content-monitor');
         }
     }
 
+    function ResizeDataTable2() {
+        
+    }
+   
     function Initial() {
         domElements.cbbMatchScore.multiselect({
             menuWidth: 260,
@@ -594,8 +611,9 @@
         GetMatchMonitorDetail();
 
         $(window).resize(function () {
-            resizeDataTable();
-        })
+            ResizeDataTable(domElements.tblMMHomeTeam);
+            ResizeDataTable(domElements.tblMMAwayTeam);
+        })             
     });
 }
 

@@ -3,7 +3,7 @@
     using System;
    
     [Serializable]
-    public class ExportExcelViewModel
+    public class ExExcelTicketInfoViewModel
     {
         public Int64 CTSCustID { get; set; }
 
