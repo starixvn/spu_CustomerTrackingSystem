@@ -18,6 +18,7 @@
         position: sticky;
         top: 6rem;
         z-index: 999;
+        margin-top: 0;
     }
 
     .page-title-match {
@@ -197,14 +198,14 @@
                 position: sticky;
                 position: -webkit-sticky;
                 top: 17.8rem;
-                z-index: 7;
+                z-index: 9;
             }
 
             .group-info {
                 display: flex;
                 padding: 1rem 0 1.1rem 0;
                 position: sticky;
-                top: 9.65rem;
+                top: 9.6rem;
                 background: #FFFFFF;
                 width: 100%;
             }
@@ -264,7 +265,7 @@
                             tr {
                                 position: sticky;
                                 top: 22.4rem;
-                                z-index: 11;
+                                z-index: 7;
 
                                 th {
                                     /* position: sticky;
@@ -433,10 +434,11 @@
                         th {
                             background: #1D2E4F;
                             border: 1px solid #C4C4C4;
-                            line-height: 17px;
+                            line-height: 1;
                             padding: 6px;
                             vertical-align: middle;
                             color: #fff;
+                            font-weight: 400;
 
                             input {
                                 margin: 0;
@@ -568,6 +570,7 @@
 
 .detailpage {
     width: 100%;
+    display : inline-grid;
 }
 
 .page-content-monitor{
