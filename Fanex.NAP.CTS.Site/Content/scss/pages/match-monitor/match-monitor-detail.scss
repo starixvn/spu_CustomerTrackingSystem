@@ -319,6 +319,12 @@
                                 .col-betid, .col-dgr, .col-transtime, .col-reason {
                                     font-size: 10px !important;
                                 }
+
+                                .icon-Check {
+                                    &::before {
+                                        color: #209005;
+                                    }
+                                }
                             }
 
                             tr td:last-child {

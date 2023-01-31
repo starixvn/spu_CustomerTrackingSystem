@@ -39,10 +39,10 @@
             {
                 if (!string.IsNullOrEmpty(item))
                     reasons.AddRange(item.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries));
-            }                
+            }
 
             this.ReasonList = reasons.Distinct();
-            this.ReasonInfos = string.Join(",", ReasonList);
+            this.ReasonInfos = string.Join(", ", ReasonList);
         }
 
     }

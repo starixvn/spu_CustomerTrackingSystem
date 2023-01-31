@@ -47,8 +47,8 @@
     };   
 
     let isFilterOption = false;
-    //let $header = '';
-    //let $fixedHeader = '';
+    let $homeHeader = '';
+    let $homeFixedHeader = '';
 
     function InitialDetailGird(element) {
         element.DataTable({
@@ -139,11 +139,18 @@
                         else return obj.Group;
                     }
                 },
-                { data: obj => obj.ReasonList },
+                {
+                    data: obj => () => {
+                        let reasonList = obj.ReasonList;
+                        if (reasonList != '')
+                            reasonList = reasonList.replace(",", ", ");
+                        return reasonList;
+                    }
+                },
                 {
                     data: obj => () => {
                         if (obj.PICVerified) return "<span class='icon-Check'></span>";
-                        return "-";
+                        return "-";                       
                     }
                 },
                 { data: obj => obj.TransIdToString }
@@ -567,9 +574,36 @@
     }
 
     function ResizeDataTable2() {
-        //let tableOffset = domElements.tblMMAwayTeam.offset().top;
-        //let $header = $('thead', domElements.tblMMAwayTeam).clone();
-        //let $fixedHeader = domElements.tblAwayHeaderFixed.append($header);
+        //$homeHeader = $('thead', domElements.tblMMHomeTeam).clone();
+        //$homeFixedHeader = domElements.tblHomeHeaderFixed.html('').append($homeHeader);
+        //$homeFixedHeader.hide();
+    }
+
+    function BindScrollHeaderFixed() {
+        let homeTargetOffset = domElements.tblMMHomeTeam.offset().top;
+        let $homeHeader = $('thead', domElements.tblMMHomeTeam).clone();
+        let $homeFixedHeader = domElements.tblHomeHeaderFixed.append($homeHeader);
+
+        let awayTargetOffset = domElements.tblMMAwayTeam.offset().top;
+        let $awayHeader = $('thead', domElements.tblMMAwayTeam).clone();
+        let $awayFixedHeader = domElements.tblAwayHeaderFixed.append($awayHeader);        
+        
+        $awayFixedHeader.hide();
+
+        $(window).bind("scroll", function () {
+            let offset = $(this).scrollTop() + 200;
+            console.log(domElements.tblMMHomeTeam.height());
+
+            if (offset >= homeTargetOffset && $homeFixedHeader.is(":hidden"))
+                $homeFixedHeader.show();
+            else if (offset < homeTargetOffset && !$homeFixedHeader.is(":hidden"))
+                $homeFixedHeader.hide();
+
+            if (offset >= awayTargetOffset && $awayFixedHeader.is(":hidden"))
+                $awayFixedHeader.show();
+            else if (offset < awayTargetOffset && !$awayFixedHeader.is(":hidden")) 
+                $awayFixedHeader.hide();           
+        })
     }
    
     function Initial() {
@@ -637,7 +671,7 @@
     }
 
     $(document).ready(function () {
-        Initial();
+        Initial();        
 
         GetMatchMonitorDetail();
 
@@ -646,20 +680,7 @@
             ResizeDataTable(domElements.tblMMAwayTeam);
         })          
 
-        let tableOffset = domElements.tblMMAwayTeam.offset().top;
-        let $header = $('thead', domElements.tblMMAwayTeam).clone();
-        let $fixedHeader = domElements.tblAwayHeaderFixed.append($header);
-
-        $(window).bind("scroll", function () {
-            let offset = $(this).scrollTop();
-
-            if (offset >= tableOffset && $fixedHeader.is(":hidden")) {
-                $fixedHeader.show();
-            }
-            else if (offset < tableOffset && !$fixedHeader.is(":hidden")) {
-                $fixedHeader.hide();
-            }
-        })
+        //BindScrollHeaderFixed();
     });
 }
 

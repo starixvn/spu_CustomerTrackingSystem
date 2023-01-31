@@ -123,8 +123,15 @@
                 },
                 { data: obj => obj.MarketName },
                 { data: obj => obj.EventDateToString },                
-                { data: obj => obj.BettypeName },
-                { data: obj => obj.ReasonName },
+                { data: obj => obj.BettypeName },              
+                {
+                    data: obj => () => {
+                        let reasonList = obj.ReasonName;
+                        if (reasonList != '')
+                            reasonList = reasonList.replace(",", ", ");
+                        return reasonList;
+                    }
+                },
                 { data: obj => RenderVerifiedUI(obj.IsVerified) },
                 { data: obj => obj.VerifiedBy },
                 { data: obj => obj.MatchSectionName }

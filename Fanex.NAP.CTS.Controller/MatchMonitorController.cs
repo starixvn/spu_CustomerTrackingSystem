@@ -496,7 +496,7 @@
                                                                     BetTeam = c.ticket.BetTeam,
 
                                                                     Currency = c.cust.Currency,
-                                                                    Amount = c.ticket.Stake,
+                                                                    Amount = c.ticket.OrgStake,
                                                                     HDP1 = c.ticket.Hdp1,
                                                                     HDP2 = c.ticket.Hdp2,
                                                                     Score = c.ticket.LiveIndicator ? (c.ticket.LiveHomeScore + " - " + c.ticket.LiveAwayScore) : "-",
