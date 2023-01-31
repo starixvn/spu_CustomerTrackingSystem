@@ -624,6 +624,22 @@
         z-index: 9; }
   .detailpage .monitor-container .monitor-table #first-monitor-datatable {
     padding-right: 1rem; }
+  .detailpage .monitor-container .monitor-table #tblHomeHeaderFixed, .detailpage .monitor-container .monitor-table #tblAwayHeaderFixed {
+    position: sticky;
+    top: 22.4rem;
+    display: none;
+    background-color: white; }
+    .detailpage .monitor-container .monitor-table #tblHomeHeaderFixed thead tr th, .detailpage .monitor-container .monitor-table #tblAwayHeaderFixed thead tr th {
+      background: #1D2E4F;
+      border: 1px solid #C4C4C4;
+      line-height: 17px;
+      padding: 6px;
+      vertical-align: middle;
+      color: #fff; }
+      .detailpage .monitor-container .monitor-table #tblHomeHeaderFixed thead tr th input, .detailpage .monitor-container .monitor-table #tblAwayHeaderFixed thead tr th input {
+        margin: 0;
+        padding: 0;
+        display: unset; }
 
 .detailpage .checkbox-container {
   margin-top: 12px; }

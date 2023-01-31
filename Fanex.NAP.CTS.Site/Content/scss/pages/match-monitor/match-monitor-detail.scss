@@ -221,7 +221,7 @@
             }
 
             #monitor-datatable, #first-monitor-datatable, #second-monitor-datatable {
-                flex: 50%;              
+                flex: 50%;
 
                 .table-report {
                     font-family: $font-family;
@@ -420,6 +420,32 @@
 
             #first-monitor-datatable {
                 padding-right: 1rem;
+            }
+
+            #tblHomeHeaderFixed, #tblAwayHeaderFixed {
+                position: sticky;
+                top: 22.4rem;
+                display: none;
+                background-color: white;
+
+                thead {
+                    tr {
+                        th {
+                            background: #1D2E4F;
+                            border: 1px solid #C4C4C4;
+                            line-height: 17px;
+                            padding: 6px;
+                            vertical-align: middle;
+                            color: #fff;
+
+                            input {
+                                margin: 0;
+                                padding: 0;
+                                display: unset;
+                            }
+                        }
+                    }
+                }
             }
         }
     }

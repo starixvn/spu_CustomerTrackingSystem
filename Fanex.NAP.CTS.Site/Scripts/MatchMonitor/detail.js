@@ -17,6 +17,10 @@
         cbbSites: $('#cbbSites'),    
         tblMMHomeTeam: $('#tblMMHomeTeam'),
         tblMMAwayTeam: $('#tblMMAwayTeam'),
+        divHomeMonitor: $('#first-monitor-datatable'),
+        divAwayMonitor: $('#second-monitor-datatable'),
+        tblHomeHeaderFixed: $('#tblHomeHeaderFixed'),
+        tblAwayHeaderFixed: $('#tblAwayHeaderFixed'),
         subHome: $('#subHome'),
         subAway: $('#subAway'),
         spanReasonInfo: $('#spanReasonInfo'),
@@ -43,6 +47,8 @@
     };   
 
     let isFilterOption = false;
+    //let $header = '';
+    //let $fixedHeader = '';
 
     function InitialDetailGird(element) {
         element.DataTable({
@@ -561,8 +567,9 @@
     }
 
     function ResizeDataTable2() {
-        //let heightTbl = $('#first-monitor-datatable').height();
-        //$('#second-monitor-datatable').height(heightTbl);
+        //let tableOffset = domElements.tblMMAwayTeam.offset().top;
+        //let $header = $('thead', domElements.tblMMAwayTeam).clone();
+        //let $fixedHeader = domElements.tblAwayHeaderFixed.append($header);
     }
    
     function Initial() {
@@ -637,7 +644,22 @@
         $(window).resize(function () {
             ResizeDataTable(domElements.tblMMHomeTeam);
             ResizeDataTable(domElements.tblMMAwayTeam);
-        })             
+        })          
+
+        let tableOffset = domElements.tblMMAwayTeam.offset().top;
+        let $header = $('thead', domElements.tblMMAwayTeam).clone();
+        let $fixedHeader = domElements.tblAwayHeaderFixed.append($header);
+
+        $(window).bind("scroll", function () {
+            let offset = $(this).scrollTop();
+
+            if (offset >= tableOffset && $fixedHeader.is(":hidden")) {
+                $fixedHeader.show();
+            }
+            else if (offset < tableOffset && !$fixedHeader.is(":hidden")) {
+                $fixedHeader.hide();
+            }
+        })
     });
 }
 
