@@ -6,7 +6,11 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 
     public class CoupleInfoViewModel
     {
-        public int CoupleID { get; set; }
+        public long CoupleID { get; set; }
+
+        public long CoupleInfoID { get; set; }
+
+        public string CoupleInfoDetails { get; set; }
 
         public DateTime FromDate { get; set; }
 

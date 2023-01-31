@@ -6,7 +6,9 @@
 
     public class CoupleInfoModel
     {
-        public int CoupleID { get; set; }
+        public long CoupleID { get; set; }
+
+        public string CoupleInfoDetails { get; set; }
 
         public DateTime FromDate
         {
@@ -45,13 +47,5 @@
         public long CustID1 { get; set; }
 
         public long CustID2 { get; set; }
-
-        public string Group
-        {
-            get
-            {
-                return $"Stake and IP Pattern from {FromDate.ToString("MMM dd")} to {ToDate.ToString("MMM dd")}";
-            }
-        }
     }
 }

@@ -43,6 +43,8 @@
     public class AccountService : IAccountService
     {
         private readonly IDynamicRepository repository;
+        private readonly char seperatorCoupleCoupleInfo = '_';
+        private readonly char seperatorRowsCoupleCoupleInfo = ';';
 
         public AccountService()
         {
@@ -647,7 +649,7 @@
                                         Odds = t.Odds,
                                         LiveScore = t.LiveHomeScore + "-" + t.LiveAwayScore,
                                         Currency = t.CurrencyName,
-                                        StakeRM = t.StakeRM,
+                                        StakeRM = Math.Truncate(t.StakeRM),
                                         IP = t.IP
                                     })?.OrderBy(c => c.GroupID).ThenByDescending(c => c.TransDate).ToList();
             }
@@ -669,7 +671,7 @@
                         Odds = c.Odds,
                         LiveScore = c.LiveHomeScore + "-" + c.LiveAwayScore,
                         Currency = c.CurrencyName,
-                        StakeRM = c.StakeRM,
+                        StakeRM = Math.Truncate(c.StakeRM),
                         IP = c.IP
                     });
                 });
@@ -735,40 +737,68 @@
                 CustId1 = custID1,
                 CustId2 = custID2
             };
+            var result = new List<CoupleInfoViewModel>();
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<CoupleInfoViewModel>(criteria);
+                result = db.Query<CoupleInfoViewModel>(criteria).ToList();
             }
+            var arrayCoupleInfoDetails = result.Select(s => s.CoupleID.ToString() + seperatorCoupleCoupleInfo + s.CoupleInfoID.ToString()).ToArray();
+            var coupleInfoDetails = string.Join(seperatorRowsCoupleCoupleInfo.ToString(), arrayCoupleInfoDetails);
+            return result.Select(s => { s.CoupleInfoDetails = coupleInfoDetails; return s; });
         }
 
-        public IEnumerable<CoupleFraudDetailModel> GetCoupleFraudDetails(long coupleID, DateTime fromDate, DateTime toDate)
+        public IEnumerable<CoupleFraudDetailModel> GetCoupleFraudDetails(long coupleID, string coupleInfoDetails, DateTime fromDate, DateTime toDate)
         {
             var criteria = new GetCoupleFraudDetailCriteria
             {
                 CoupleID = coupleID,
                 FromDate = fromDate,
-                ToDate = toDate
+                ToDate = toDate,
+               // CoupleInfoDetails = GetJsonCoupleInfoDetails(coupleInfoDetails)
             };
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<CoupleFraudDetailModel>(criteria);                
+                return db.Query<CoupleFraudDetailModel>(criteria);
             }
         }
 
-        public IEnumerable<CoupleIPFraudDetailModel> GetCoupleIPFraudDetails(long coupleID, DateTime fromDate, DateTime toDate)
+        private string GetJsonCoupleInfoDetails(string coupleInfoDetails)
+        {
+            if (string.IsNullOrEmpty(coupleInfoDetails))
+            {
+                return "[]";
+            }
+
+            var arrayCoupleInfoDetails = coupleInfoDetails.Split(seperatorRowsCoupleCoupleInfo);
+
+            var objectCoupleInfoDetails = arrayCoupleInfoDetails.Select(s =>
+            {
+                var array = s.Split(seperatorCoupleCoupleInfo);
+
+                long CoupleID = long.Parse(array[0]);
+                long CoupleInfoID = long.Parse(array[1]);
+
+                return new { CoupleID, CoupleInfoID };
+            });
+
+            return JsonConvert.SerializeObject(objectCoupleInfoDetails);
+        }
+
+        public IEnumerable<CoupleIPFraudDetailModel> GetCoupleIPFraudDetails(long coupleID, string coupleInfoDetails, DateTime fromDate, DateTime toDate)
         {
             var criteria = new GetCoupleIPFraudDetailCriteria
             {
                 CoupleID = coupleID,
                 FromDate = fromDate,
-                ToDate = toDate
+                ToDate = toDate,
+                //CoupleInfoDetails = GetJsonCoupleInfoDetails(coupleInfoDetails)
             };
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<CoupleIPFraudDetailModel>(criteria);                
+                return db.Query<CoupleIPFraudDetailModel>(criteria);
             }
         }
-        
+
         public IEnumerable<TicketDetailsModel> GetTicketDetailsModel(string transIds)
         {
             var result = new List<TicketDetailsModel>();

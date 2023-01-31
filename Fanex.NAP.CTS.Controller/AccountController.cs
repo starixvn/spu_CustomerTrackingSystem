@@ -895,8 +895,8 @@
                     CoupleID = para.CoupleID,
                     CustId1 = para.CustID1,
                     CustId2 = para.CustID2,
-                    CoupleFraudDetails = _accountService.GetCoupleFraudDetails(para.CoupleID, para.FromDate, para.ToDate),
-                    CoupleIPFraudDetails = _accountService.GetCoupleIPFraudDetails(para.CoupleID, para.FromDate, para.ToDate),
+                    CoupleFraudDetails = _accountService.GetCoupleFraudDetails(para.CoupleID, para.CoupleInfoDetails, para.FromDate, para.ToDate),
+                    CoupleIPFraudDetails = _accountService.GetCoupleIPFraudDetails(para.CoupleID, para.CoupleInfoDetails, para.FromDate, para.ToDate),
                     LastGroupCustID = 1,
                     LastGroupID = 1
                 };

@@ -681,6 +681,7 @@
     function GetMatchBettingPattern(custId1, custId2, groupIDs, originGroupIDs) {
 
         var url = common.modifyRelativeUrl('Account/GetMatchesAssociationByAI');
+        tableMatchBettingPattern.DataTable().rows().remove().draw();
 
         $.ajax(url, {
             type: 'POST',
@@ -695,7 +696,7 @@
             },
             success: function (response) {
                 if (response !== undefined) {
-                    if (response.ErrorMessage === null || response.ErrorMessage === '' && response.MatchesInfo.length > 0) {
+                    if (response.ErrorMessage === null || response.ErrorMessage === '') {
                         tableMatchBettingPattern.DataTable().clear().rows.add(response.MatchesInfo).draw();
                         tableMatchBettingPattern.DataTable().columns.adjust();
                     } else {
@@ -839,6 +840,7 @@
 
                 api.column(0, { page: 'current' }).data().each(function (group, i) {
                     let html = '<tr class="group group-site"><td colspan="13"><span class="column-group-match"';
+                    html += ' data-couple-info-details=' + data[i].CoupleInfoDetails;
                     html += ' data-couple-id=' + data[i].CoupleID;
                     html += ' data-from-date-string=' + data[i].FromDateString;
                     html += ' data-to-date-string=' + data[i].ToDateString;
@@ -863,6 +865,7 @@
                 if (!iGroup.hasClass('has-detail')) {
                     let params = {
                         CoupleId: colGroupMatch.attr('data-couple-id'),
+                        CoupleInfoDetails: colGroupMatch.attr('data-couple-info-details'),
                         FromDateString: colGroupMatch.attr('data-from-date-string'),
                         ToDateString: colGroupMatch.attr('data-to-date-string'),
                         CustID1: colGroupMatch.attr('data-custId-1-string'),
@@ -896,6 +899,7 @@
 
     function GetCoupleInformations(custId1, custId2) {
         var url = common.modifyRelativeUrl('Account/GetCoupleInformationsByAI');
+        tableStakeIPPattern.DataTable().rows().remove().draw();
 
         $.ajax(url, {
             type: 'POST',
@@ -907,9 +911,12 @@
                 custID2: custId2
             },
             success: function (response) {
-                if (response !== undefined && response.length > 0) {
-                    tableStakeIPPattern.DataTable().clear().rows.add(response).draw();
+                if (response !== undefined) {
+                    tableStakeIPPattern.DataTable().rows.add(response).draw();
                     tableStakeIPPattern.DataTable().columns.adjust();
+                } else {
+                    console.log(response.ErrorMessage);
+                    common.showError(response.ErrorMessage);
                 }
             },
             complete: function () {
@@ -1014,7 +1021,7 @@
             .append('<td class="text-center" >' + response[index]["TransId"] + '</td>')
             .append('<td class="text-center" >' + response[index]["BetType"] + '</td>')
             .append('<td class="text-center" >' + response[index]["BetTeam"] + '</td>')
-            .append('<td class="text-center" style = "' + (response[index]["Odds"] < 0 ? styleRedFont : '')+'">' + response[index]["Odds"] + '</td>')
+            .append('<td class="text-center" style = "' + (response[index]["Odds"] < 0 ? styleRedFont : '') + '">' + response[index]["Odds"] + '</td>')
             .append('<td class="text-center" >' + response[index]["LiveScore"] + '</td>')
             .append('</tr>');
         return newRow;

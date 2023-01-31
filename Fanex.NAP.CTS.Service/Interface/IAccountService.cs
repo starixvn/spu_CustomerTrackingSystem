@@ -153,9 +153,9 @@
 
         IEnumerable<CoupleInfoViewModel> GetCoupleInfos(long custID1, long custID2);
 
-        IEnumerable<CoupleFraudDetailModel> GetCoupleFraudDetails(long coupleID, DateTime fromDate, DateTime toDate);
+        IEnumerable<CoupleFraudDetailModel> GetCoupleFraudDetails(long coupleID, string coupleInfoDetails, DateTime fromDate, DateTime toDate);
 
-        IEnumerable<CoupleIPFraudDetailModel> GetCoupleIPFraudDetails(long coupleID, DateTime fromDate, DateTime toDate);
+        IEnumerable<CoupleIPFraudDetailModel> GetCoupleIPFraudDetails(long coupleID, string coupleInfoDetails, DateTime fromDate, DateTime toDate);
 
         IEnumerable<TicketDetailsModel> GetTicketDetailsModel(string transIds);
     }
