@@ -754,7 +754,7 @@
                 CoupleID = coupleID,
                 FromDate = fromDate,
                 ToDate = toDate,
-               // CoupleInfoDetails = GetJsonCoupleInfoDetails(coupleInfoDetails)
+                CoupleInfoDetails = GetJsonCoupleInfoDetails(coupleInfoDetails)
             };
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
@@ -791,7 +791,7 @@
                 CoupleID = coupleID,
                 FromDate = fromDate,
                 ToDate = toDate,
-                //CoupleInfoDetails = GetJsonCoupleInfoDetails(coupleInfoDetails)
+                CoupleInfoDetails = GetJsonCoupleInfoDetails(coupleInfoDetails)
             };
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
