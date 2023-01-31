@@ -993,7 +993,7 @@
                     Stake = ticketDetail.CurrencyName == "RM" ? "" : String.Format("{0:#.##}", ticketDetail.Stake),
                     StakeRM = String.Format("{0:#.##}", Math.Truncate(ticketDetail.StakeRM)),
                     BetTeam = ticketDetail.BetTeam,
-                    BetType = ticketDetail.BetType,
+                    BetType = ticketDetail.TypeName,
                     Currency = ticketDetail.CurrencyName == "RM" ? "" : ticketDetail.CurrencyName,
                     LiveScore = ticketDetail.LiveHomeScore != null && ticketDetail.LiveAwayScore != null ? $"{ticketDetail.LiveHomeScore}-{ticketDetail.LiveAwayScore}" : "",
                     TransDateString = ticketDetail.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
