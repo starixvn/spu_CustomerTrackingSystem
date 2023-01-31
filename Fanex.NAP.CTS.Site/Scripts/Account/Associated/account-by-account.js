@@ -978,12 +978,10 @@
         else {
             styleRedFontInIpPattern = styleRedFont;
         }
-        let descriptionStyle = 'border:none; border-bottom:.5pt solid black; background:#fafafa;border-top:0.5pt solid windowtext; border-right:0.5pt solid windowtext; border-left:0.5pt solid windowtext; white-space:normal;'
+        let descriptionStyle = ' white-space:normal;'
         let descriptionAttribute = GetAttributeWithRowSpan(descriptionStyle, isRowMember, rowspanNumer);
 
-        let oddStyle = "border:0.5pt solid windowtext; background:#fde9d9; border-top:none;";
-        let envenStyle = "border:0.5pt solid windowtext; background:#c5d9f1; border-left:none;"
-        let defaultStyle = response[index]["GroupCustID"] % 2 == 0 ? envenStyle : oddStyle;
+        let defaultStyle = '';
 
         let isUserNameRowMember;
         let userNameRowSpanNumer;
@@ -1008,29 +1006,29 @@
             .append('<td class="text-center" width="15%" ' + descriptionAttribute + '>' + response[index]["Description"] + '</td>')
             .append('<td class="text-center" ' + userAttribute + '>' + response[index]["UserName"] + '</td>')
             .append('<td class="text-center" ' + userAttribute + '>' + response[index]["MatchID"] + '</td>')
-            .append('<td class="text-center" style = "' + defaultStyle + styleRedFontInIpPattern + '">' + response[index]["IP"] + '</td>')
-            .append('<td class="text-center" style = "' + defaultStyle + styleRedFontInStake + '">' + response[index]["StakeRM"] + '</td>')
-            .append('<td class="text-center" style = "' + defaultStyle + styleRedFontInStake + '">' + response[index]["Stake"] + '</td>')
-            .append('<td class="text-center" style = "' + defaultStyle + styleRedFontInStake + '">' + response[index]["Currency"] + '</td>')
-            .append('<td class="text-center" style = "' + defaultStyle + '">' + response[index]["TransDateString"] + '</td>')
-            .append('<td class="text-center" style = "' + defaultStyle + '">' + response[index]["TransId"] + '</td>')
-            .append('<td class="text-center" style = "' + defaultStyle + '">' + response[index]["BetType"] + '</td>')
-            .append('<td class="text-center" style = "' + defaultStyle + '">' + response[index]["BetTeam"] + '</td>')
-            .append('<td class="text-center" style = "' + defaultStyle + (response[index]["Odds"] < 0 ? styleRedFont : '')+'">' + response[index]["Odds"] + '</td>')
-            .append('<td class="text-center" style = "' + defaultStyle + '">' + response[index]["LiveScore"] + '</td>')
+            .append('<td class="text-center" style = "' + styleRedFontInIpPattern + '">' + response[index]["IP"] + '</td>')
+            .append('<td class="text-center" style = "' + styleRedFontInStake + '">' + response[index]["StakeRM"] + '</td>')
+            .append('<td class="text-center" style = "' + styleRedFontInStake + '">' + response[index]["Stake"] + '</td>')
+            .append('<td class="text-center" style = "' + styleRedFontInStake + '">' + response[index]["Currency"] + '</td>')
+            .append('<td class="text-center" >' + response[index]["TransDateString"] + '</td>')
+            .append('<td class="text-center" >' + response[index]["TransId"] + '</td>')
+            .append('<td class="text-center" >' + response[index]["BetType"] + '</td>')
+            .append('<td class="text-center" >' + response[index]["BetTeam"] + '</td>')
+            .append('<td class="text-center" style = "' + (response[index]["Odds"] < 0 ? styleRedFont : '')+'">' + response[index]["Odds"] + '</td>')
+            .append('<td class="text-center" >' + response[index]["LiveScore"] + '</td>')
             .append('</tr>');
         return newRow;
     }
 
     function GetAttributeWithRowSpan(defaultStyle, isMemberRow, rowSpan) {
         if (isMemberRow) {
-            return 'style="display: none;' + defaultStyle + '"';
+            return 'style="display: none;"';
         }
         else if (rowSpan <= 1) {
-            return 'style="' + defaultStyle + '"';
+            return 'style=""';
         }
         else {
-            return 'style="' + defaultStyle + '" rowspan = "' + rowSpan + '"';
+            return 'style="" rowspan = "' + rowSpan + '"';
         }
     }
 
