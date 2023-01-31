@@ -397,54 +397,8 @@
 
             return File(excelFile, "application/vnd.ms-excel", fileName);
         }
-        
-#if DEBUG
-        private MatchMonitorDetailListViewModel Generate_DataTest()
-        {
-            var mdResult = new MatchMonitorDetailListViewModel();
 
-            mdResult.HomeMatchItemList = this.GenerateMMDetail_DataTest(5);
-            mdResult.AwayMatchItemList = this.GenerateMMDetail_DataTest(9);
-
-            return mdResult;
-        }
-
-        private IEnumerable<MatchMonitorDetailItemViewModel> GenerateMMDetail_DataTest(int length)
-        {
-            var list = new List<MatchMonitorDetailItemViewModel>();
-
-            for (int i = 0; i < length; i++)
-            {
-                list.Add(new MatchMonitorDetailItemViewModel
-                {
-                    CTSCustID = 1 + i,
-                    CustID = 1 + i,
-                    SubscriberType = "SubscriberType",
-                    Username = "Member10" + i,
-                    CustomerClass = 200 + i,
-                    Danger1 = 1,
-                    //Danger2 = 2,
-                    Odds = new decimal(-0.81),
-                    BetID = 54026075788804200.ToString(),
-                    TransId = 54026075788804200,
-                    Currency = "HKK",
-                    Amount = new decimal(1200),
-                    HDP1 = new decimal(0.75),
-                    HDP2 = new decimal(1.25),
-                    Score = i.ToString() + "-0",
-                    TransTimeToString = DateTime.Now.ToString(Consts.FormatDateToString_ddMMhhmmss),
-                    Group = (i + 1).ToString(),
-                    GroupID = -1,
-                    ReasonList = "HEG,FG",
-                    BetTeam = "h"
-                });
-            }
-
-            return list;
-        }
-#endif
-
-#endregion
+        #endregion
 
         #region Private Methods
 
