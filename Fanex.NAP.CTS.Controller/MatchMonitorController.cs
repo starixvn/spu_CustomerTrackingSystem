@@ -195,7 +195,7 @@
                             Task.Run(() =>
                             {
                                 var tranIdsOfTotalMatch =  matchDetailInfo.MatchDetails.Select(c => c.TransID).Distinct();
-                                ticketDetail = _matchMonitorService.GetTicketDetail(para.EventDate, string.Join(",",tranIdsOfTotalMatch));
+                                ticketDetail = _matchMonitorService.GetTicketDetail(para.EventDate, string.Join(",",tranIdsOfTotalMatch));                                
                             })
                         };
 
@@ -263,6 +263,7 @@
         }
 
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailManualDetectRpt)]
         public ActionResult DetectGroupAssWithOptions(DetectGroupAssFilterViewModel model)
         {
             var result = new DetectGroupAssociationListViewModel();
@@ -303,9 +304,7 @@
 
             result = new DetectGroupAssociationListViewModel
             {
-                ItemList = data,
-                GroupList = data.Select(x => new GroupInfoViewModel { GroupID = x.GroupID, GroupName = x.GroupName })
-                                    .Distinct(x => x.GroupID).OrderBy(x => x.GroupID)
+                ItemList = data                
             };
 
             return Json(new
@@ -315,7 +314,7 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailRpt)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailVerifyTransRpt)]
         public ActionResult VerifyTransMMDetail(MatchMonitorDetailVerifyTransParaModel para)
         {
             var result = new DBResult();
@@ -379,7 +378,7 @@
 
         #region Export to Excel
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailRpt)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailExportToExcelRpt)]
         public ActionResult ExportToExcelMMDetail(FormCollection from)
         {
             var serializer = new JavaScriptSerializer();
@@ -412,30 +411,7 @@
 
             return false;
         }
-                
-        //private MatchMonitorDetailResultModel GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter, List<MatchGroupKeyModel> groupKeys)
-        //{
-        //    if (groupKeys != null && groupKeys.Any())
-        //    {
-        //        var matchDetails = _matchMonitorService.GetMatchMonitorDetail(filter);
-
-        //        if (matchDetails != null && matchDetails.MatchDetails.Any())
-        //        {
-        //            var matchs = matchDetails.MatchDetails.Join(groupKeys, m => (m.ScoreDiff)
-        //                                                    , r => (r.ScoreDiff)
-        //                                                    , (m, r) => m);
-
-        //            return new MatchMonitorDetailResultModel
-        //            {
-        //                MatchDetails = matchs ?? new List<MatchMonitorDetailModel>(),
-        //                VerifiedTrans = matchDetails.VerifiedTrans ?? new List<MatchMonitorDetailVerifyTransResultModel>()
-        //            };
-        //        }
-        //    }
-
-        //    return new MatchMonitorDetailResultModel { MatchDetails = new List<MatchMonitorDetailModel>(), VerifiedTrans = new List<MatchMonitorDetailVerifyTransResultModel>() };
-        //}
-
+                      
         private IEnumerable<TransGroupModel> MappingTransInfo(MatchMonitorDetailResultModel matchDetail, IEnumerable<MatchMonitorReasonModel> reasons)
         {
             var transGroupBetting = new List<TransGroupModel>();
@@ -477,7 +453,7 @@
                                                             .Select(c => {
                                                                 var transGroup = mappingTransInfo.FirstOrDefault(x => x.TransID == c.ticket.TransId);
                                                                 var verifiedBy = transGroup?.VerifiedTransID;
-                                                                
+
                                                                 return new MatchMonitorDetailItemViewModel
                                                                 {
                                                                     CTSCustID = c.cust.CTSCustID,
@@ -496,6 +472,7 @@
                                                                     BetTeam = c.ticket.BetTeam,
 
                                                                     Currency = c.cust.Currency,
+                                                                    Stake = c.ticket.Stake,
                                                                     Amount = c.ticket.OrgStake,
                                                                     HDP1 = c.ticket.Hdp1,
                                                                     HDP2 = c.ticket.Hdp2,
@@ -504,7 +481,9 @@
                                                                     TransTime = c.ticket.TransDate,
                                                                     TransTimeToString = c.ticket.TransDate.ToString(Consts.FormatDateToString_ddMMhhmmss),
                                                                     Group = "",
-                                                                    GroupID = -1,
+                                                                    GroupID = -2,
+                                                                    MDetectGroup = "None",
+                                                                    MDetectGroupID = -2,
                                                                     ReasonList = transGroup?.ReasonNameList,
                                                                     TransId = c.ticket.TransId,
                                                                     RobotType = null,
@@ -550,6 +529,7 @@
                                         BetTeam = group.m.BetTeam,
                                         BetTypeID = betTypeID,
                                         Currency = group.m.Currency,
+                                        Stake = group.m.Stake,
                                         Amount = group.m.Amount,
                                         HDP1 = group.m.HDP1,
                                         HDP2 = group.m.HDP2,
@@ -559,6 +539,8 @@
                                         TransTimeToString = group.m.TransTimeToString,
                                         Group = group.m.Group,
                                         GroupID = group.m.GroupID,
+                                        MDetectGroup = group.m.MDetectGroup,
+                                        MDetectGroupID = group.m.MDetectGroupID,
                                         ReasonList = group.m.ReasonList,
                                         TransId = group.m.TransId,
                                         RobotType = (temp != null) ? temp?.RobotType : null,

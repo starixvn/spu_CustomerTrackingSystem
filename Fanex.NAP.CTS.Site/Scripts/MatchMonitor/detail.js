@@ -124,7 +124,7 @@
                 { data: obj => obj.Currency },
                 {
                     data: obj => obj.Amount, createdCell: (cell, _, row) => {
-                        if (row.Amount >= 1000) {
+                        if (row.Stake >= 1000) {
                             $(cell).addClass('col-red')
                         }
                     }
@@ -134,12 +134,12 @@
                 { data: obj => obj.TransTimeToString },
                 {
                     data: obj => {
-                        if (obj.GroupID == -1)
-                            return `<span class="has-icon icon-loading-group"></span>`;                        
+                        if (obj.GroupID == -2)
+                            return `<span class="has-icon icon-loading-group"></span>`;              
                         else return obj.Group;
                     }
                 },
-                { data: obj => "-" },
+                { data: obj => obj.MDetectGroup },
                 {
                     data: obj => () => {
                         let reasonList = obj.ReasonList;
@@ -191,19 +191,20 @@
 
                 domElements.tblMMHomeTeam.DataTable().clear().rows.add(response.data.HomeMatchItemList).draw();
                 domElements.tblMMAwayTeam.DataTable().clear().rows.add(response.data.AwayMatchItemList).draw();
+
+                domElements.spanReasonInfo.text(response.data.ReasonInfos);
                 
                 if (response.data.TotalCust <= MaxCustGroupCal) {
                     $.post(common.modifyRelativeUrl('MatchMonitor/DetectGroupAssDefault'), { ctsCustIDList: response.data.CTSCustIDList },
-                        function (xResponse) {
-                            domElements.spanReasonInfo.text(response.data.ReasonInfos);
-
+                        function (xResponse) {                            
                             RenderAssociationGroup(domElements.tblMMHomeTeam, xResponse.ItemList);
                             RenderAssociationGroup(domElements.tblMMAwayTeam, xResponse.ItemList);
                             RefreshGroupFilter(xResponse.GroupList);
                         });                   
                 } else {
-                    RenderEmptyAssociationGroup(domElements.tblMMHomeTeam);
-                    RenderEmptyAssociationGroup(domElements.tblMMAwayTeam);
+                    RenderNoneAssociationGroup(domElements.tblMMHomeTeam);
+                    RenderNoneAssociationGroup(domElements.tblMMAwayTeam);
+                    RefreshGroupFilter([]);
                 }
             },
             complete: function (response) {
@@ -211,9 +212,7 @@
                 domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
 
                 ResizeDataTable(domElements.tblMMHomeTeam);
-                ResizeDataTable(domElements.tblMMAwayTeam);
-
-                ResizeDataTable2();
+                ResizeDataTable(domElements.tblMMAwayTeam);              
             },
             error: function (error) {
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
@@ -255,8 +254,8 @@
                 rowData.Group = group.GroupName;
                 rowData.GroupID = group.GroupID;
             } else {
-                rowData.Group = '-';
-                rowData.GroupID = 0;
+                rowData.Group = 'None';
+                rowData.GroupID = -1;
             }
 
             this.invalidate();
@@ -265,12 +264,12 @@
         elements.DataTable().draw();        
     }
 
-    function RenderEmptyAssociationGroup(elements) {
+    function RenderNoneAssociationGroup(elements) {
         elements.DataTable().rows().every(function () {
             let rowData = this.data();
 
-            rowData.Group = '-';
-            rowData.GroupID = 0;
+            rowData.Group = 'None';
+            rowData.GroupID = -1;
 
             this.invalidate();
         });
@@ -449,8 +448,8 @@
             if ($(this.node()).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
                 let newGroupData = itemList.find(function (x) { return x.CustID == rowData.CustID; });               
                 if (newGroupData != undefined && newGroupData.GroupID > 0) {
-                    rowData.GroupID = newGroupData.GroupID;
-                    rowData.Group = newGroupData.GroupName;
+                    rowData.MDetectGroupID = newGroupData.GroupID;
+                    rowData.MDetectGroup = newGroupData.GroupName;
                 } else $(this.node()).css('display', 'none');
             } else $(this.node()).css('display', 'none');
 
@@ -550,7 +549,7 @@
                 datas += `,&quot;Odds&quot;:&quot;${data.Odds}&quot;`;
                 datas += `,&quot;BetID&quot;:&quot;${data.BetID}&quot;`;
                 datas += `,&quot;BetTeam&quot;:&quot;${data.BetTeam}&quot;`;
-                datas += `,&quot;Currency&quot;:&quot;${data.Currency}&quot;`;
+                datas += `,&quot;Currency&quot;:&quot;${data.Currency}&quot;`;               
                 datas += `,&quot;Amount&quot;:&quot;${data.Amount}&quot;`;
                 datas += `,&quot;HDP&quot;:&quot;${data.HDP}&quot;`;
                 datas += `,&quot;Score&quot;:&quot;${data.Score}&quot;`;
@@ -583,12 +582,6 @@
         else{
             //domElements.detailpage.addClass('page-content-monitor');
         }
-    }
-
-    function ResizeDataTable2() {
-        //$homeHeader = $('thead', domElements.tblMMHomeTeam).clone();
-        //$homeFixedHeader = domElements.tblHomeHeaderFixed.html('').append($homeHeader);
-        //$homeFixedHeader.hide();
     }
 
     function BindScrollHeaderFixed() {

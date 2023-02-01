@@ -324,7 +324,13 @@
             AssociatedGroupMonitorAddAccountRpt = 58, 
             AssociatedGroupMonitorTransferAccountRpt = 59,
             AssociatedGroupMonitorSetPARpt = 60,
-            AssociatedGroupMonitorExportToExcelRpt = 61,            //PlaceEvidenceForMultipleCustAPI = 200,
+            AssociatedGroupMonitorExportToExcelRpt = 61,
+
+            MatchMonitorDetailManualDetectRpt = 62,
+            MatchMonitorDetailExportToExcelRpt = 63,
+            MatchMonitorDetailVerifyTransRpt = 64,
+
+            //PlaceEvidenceForMultipleCustAPI = 200,
             GetFlaggedCustomersByLevelAPI = 201,
             GetFlaggedCustByLvAndEvidenceAPI = 202,
             //AddCustomersEvidencesAPI = 203,

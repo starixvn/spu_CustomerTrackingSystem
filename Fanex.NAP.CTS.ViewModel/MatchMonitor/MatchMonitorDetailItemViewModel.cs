@@ -62,6 +62,8 @@
 
         public string Currency { get; set; }
 
+        public decimal Stake { get; set; }
+
         public decimal Amount { get; set; }
 
         public decimal HDP1 { get; set; }
@@ -106,6 +108,10 @@
         public string Group { get; set; }
 
         public int GroupID { get; set; }
+
+        public string MDetectGroup { get; set; }
+
+        public int MDetectGroupID { get; set; }
 
         public Int64 TransId { get; set; }
 
