@@ -47,8 +47,7 @@
     };   
 
     let isFilterOption = false;
-    let $homeHeader = '';
-    let $homeFixedHeader = '';
+    let MaxCustGroupCal = 10;
 
     function InitialDetailGird(element) {
         element.DataTable({
@@ -96,9 +95,10 @@
                 { targets: [10], width: "6%" },
                 { targets: [11], width: "8%", className: "text-center col-transtime" },
                 { targets: [12], width: "5%" },
-                { targets: [13], width: "8%", className: "text-center col-reason" },
-                { targets: [14], width: "3%" },
-                { targets: [15], visible: false }
+                { targets: [13], width: "5%", className: "text-center" },
+                { targets: [14], width: "8%", className: "text-center col-reason" },
+                { targets: [15], width: "3%" },
+                { targets: [16], visible: false }
             ],            
             columns: [
                 {
@@ -139,6 +139,7 @@
                         else return obj.Group;
                     }
                 },
+                { data: obj => "-" },
                 {
                     data: obj => () => {
                         let reasonList = obj.ReasonList;
@@ -191,7 +192,7 @@
                 domElements.tblMMHomeTeam.DataTable().clear().rows.add(response.data.HomeMatchItemList).draw();
                 domElements.tblMMAwayTeam.DataTable().clear().rows.add(response.data.AwayMatchItemList).draw();
                 
-                if (response.data.TotalCust <= 5000) {
+                if (response.data.TotalCust <= MaxCustGroupCal) {
                     $.post(common.modifyRelativeUrl('MatchMonitor/DetectGroupAssDefault'), { ctsCustIDList: response.data.CTSCustIDList },
                         function (xResponse) {
                             domElements.spanReasonInfo.text(response.data.ReasonInfos);
@@ -199,12 +200,10 @@
                             RenderAssociationGroup(domElements.tblMMHomeTeam, xResponse.ItemList);
                             RenderAssociationGroup(domElements.tblMMAwayTeam, xResponse.ItemList);
                             RefreshGroupFilter(xResponse.GroupList);
-                        });
-                    domElements.subHome.addClass('hide');
-                    domElements.subAway.addClass('hide');
+                        });                   
                 } else {
-                    domElements.subHome.removeClass('hide');
-                    domElements.subAway.removeClass('hide');
+                    RenderEmptyAssociationGroup(domElements.tblMMHomeTeam);
+                    RenderEmptyAssociationGroup(domElements.tblMMAwayTeam);
                 }
             },
             complete: function (response) {
@@ -264,6 +263,19 @@
         });
         
         elements.DataTable().draw();        
+    }
+
+    function RenderEmptyAssociationGroup(elements) {
+        elements.DataTable().rows().every(function () {
+            let rowData = this.data();
+
+            rowData.Group = '-';
+            rowData.GroupID = 0;
+
+            this.invalidate();
+        });
+
+        elements.DataTable().draw();
     }
 
     function GetAssociationGroup(custID, associations) {
