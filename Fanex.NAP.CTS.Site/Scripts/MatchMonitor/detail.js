@@ -580,29 +580,29 @@
     }
 
     function BindScrollHeaderFixed() {
-        let homeTargetOffset = domElements.tblMMHomeTeam.offset().top;
         let $homeHeader = $('thead', domElements.tblMMHomeTeam).clone();
         let $homeFixedHeader = domElements.tblHomeHeaderFixed.append($homeHeader);
-
-        let awayTargetOffset = domElements.tblMMAwayTeam.offset().top;
         let $awayHeader = $('thead', domElements.tblMMAwayTeam).clone();
-        let $awayFixedHeader = domElements.tblAwayHeaderFixed.append($awayHeader);        
-        
+        let $awayFixedHeader = domElements.tblAwayHeaderFixed.append($awayHeader);
+
         $awayFixedHeader.hide();
+        $homeFixedHeader.hide();
 
         $(window).bind("scroll", function () {
-            let offset = $(this).scrollTop() + 200;
-            console.log(domElements.tblMMHomeTeam.height());
-
-            if (offset >= homeTargetOffset && $homeFixedHeader.is(":hidden"))
-                $homeFixedHeader.show();
-            else if (offset < homeTargetOffset && !$homeFixedHeader.is(":hidden"))
-                $homeFixedHeader.hide();
-
-            if (offset >= awayTargetOffset && $awayFixedHeader.is(":hidden"))
+            let offset = $(this).scrollTop();
+            var heightHome = domElements.tblMMHomeTeam.innerHeight();
+            var heightAway = domElements.tblMMAwayTeam.innerHeight();
+            if (offset >= heightAway && $awayFixedHeader.is(":hidden")) {
                 $awayFixedHeader.show();
-            else if (offset < awayTargetOffset && !$awayFixedHeader.is(":hidden")) 
-                $awayFixedHeader.hide();           
+            } else if (offset <= heightAway && !$awayFixedHeader.is(":hidden")) {
+                $awayFixedHeader.hide();
+            }
+
+            if (offset >= heightHome && $homeFixedHeader.is(":hidden")) {
+                $homeFixedHeader.show();
+            } else if (offset <= heightHome && !$homeFixedHeader.is(":hidden")) {
+                $homeFixedHeader.hide();
+            }
         })
     }
    
@@ -680,7 +680,7 @@
             ResizeDataTable(domElements.tblMMAwayTeam);
         })          
 
-        //BindScrollHeaderFixed();
+        BindScrollHeaderFixed();
     });
 }
 
