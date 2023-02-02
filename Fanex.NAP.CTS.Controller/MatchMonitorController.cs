@@ -13,6 +13,7 @@
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using Newtonsoft.Json;
     using System;
@@ -27,8 +28,8 @@
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class MatchMonitorController : BaseController
     {
-        private const string MMDetailTemplate = "~/App_Data/Excel Template/MatchMonitor/Template.xlsx";
-        private readonly IMatchMonitorService _matchMonitorService;
+        private const string MMDetailTemplate = "~/App_Data/Excel Template/MatchMonitor/Template.xlsx";        
+        private readonly IMatchMonitorService _matchMonitorService;       
         private readonly IAssociationDetectionService _associationDetectionService;
 
         public MatchMonitorController()
@@ -251,10 +252,12 @@
 
                 var data = _associationDetectionService.DetectGroupDetectAssociation(mergeGroupInfo).Select(x => new DetectGroupAssociationItemViewModel(x));
 
+                var assRearrangeGroup = this.RearrangeAssGroup(data, false);
+
                 result = new DetectGroupAssociationListViewModel
                 {
-                    ItemList = data,
-                    GroupList = data.Select(x => new GroupInfoViewModel { GroupID = x.GroupID, GroupName = x.GroupName })
+                    ItemList = assRearrangeGroup,
+                    GroupList = assRearrangeGroup.Select(x => new GroupInfoViewModel { GroupID = x.GroupID, GroupName = x.GroupName })
                                     .Distinct(x => x.GroupID).OrderBy(x => x.GroupID)
                 };
             }
@@ -269,15 +272,17 @@
             var result = new DetectGroupAssociationListViewModel();
             var mergeGroupInfo = new MergeGroupInfoModel { CTSCustIDs = model.CTSCustIDs };
 
+            var custInfo = _matchMonitorService.GetCustInfoByCustID(model.CustIDs);
+
             Parallel.Invoke(() =>
             {
                 var detectAssByIP = model.IsOptIPLast3Days ? _associationDetectionService.DetectAssociationByIP(model.CustIDs) : Enumerable.Empty<DetectAssociationBySharedIPMatchesModel>();
 
-                mergeGroupInfo.AssociationByIPJson = this.GetAssociationCust(detectAssByIP);
+                mergeGroupInfo.AssociationByIPJson = this.GetAssociationCust(detectAssByIP, custInfo);
             }, () => {
                 var detectAssByAssMatches = model.IsOpt3MatchesLast7Days ? _associationDetectionService.DetectAssociationBySharedMatches(model.CustIDs) : Enumerable.Empty<DetectAssociationBySharedIPMatchesModel>();
 
-                mergeGroupInfo.AssociationByMatchesJson = this.GetAssociationCust(detectAssByAssMatches);
+                mergeGroupInfo.AssociationByMatchesJson = this.GetAssociationCust(detectAssByAssMatches, custInfo);
             },
             () => {
                 if (model.IsOptBP || model.IsOptDevice || model.IsOptIP)
@@ -302,9 +307,11 @@
 
             var data = _associationDetectionService.DetectGroupDetectAssociation(mergeGroupInfo).Select(x => new DetectGroupAssociationItemViewModel(x));
 
+            var assRearrangeGroup = this.RearrangeAssGroup(data, true);
+
             result = new DetectGroupAssociationListViewModel
             {
-                ItemList = data                
+                ItemList = assRearrangeGroup
             };
 
             return Json(new
@@ -565,17 +572,72 @@
             return matchDetails;
         }
        
-        private string GetAssociationCust(IEnumerable<DetectAssociationBySharedIPMatchesModel> detectAss)
+        private string GetAssociationCust(IEnumerable<DetectAssociationBySharedIPMatchesModel> detectAss, IEnumerable<CustInfoModel> custInfos)
         {
-            var assCustBySharedIP = detectAss.Select(x => new AssociationCustModel
+            var assCustBySharedIP = detectAss.Select(x =>
             {
-                FromCustID = x.CustID1,             
-                ToCustID = x.CustID2,                        
-            });
+                var fromCTSCust = custInfos.FirstOrDefault(y => y.CustID.Equals(x.CustID1)) ?? new CustInfoModel();
+                var toCTSCust = custInfos.FirstOrDefault(y => y.CustID.Equals(x.CustID2)) ?? new CustInfoModel();
+
+                return new AssociationCustModel
+                {
+                    FromCustID = x.CustID1,
+                    FromCTSCustID = fromCTSCust.CTSCustID,
+                    ToCustID = x.CustID2,
+                    ToCTSCustID = toCTSCust.CTSCustID
+                };
+            }).Where(x => x.FromCTSCustID != 0 && x.ToCTSCustID != 0);
 
             return JsonConvert.SerializeObject(assCustBySharedIP);
         }
 
+        private IEnumerable<DetectGroupAssociationItemViewModel> RearrangeAssGroup(IEnumerable<DetectGroupAssociationItemViewModel> assGroupList, bool isDisableNone)
+        {
+            var result = new List<DetectGroupAssociationItemViewModel>();
+
+            if (isDisableNone)
+                assGroupList = assGroupList.Where(x => x.GroupID != 0);
+
+            if (assGroupList.Any())
+            {
+                var grouping = assGroupList
+                    .GroupBy(x => x.GroupID, (key, g) => new { GroupID = key, Items = g.ToList() })
+                    .OrderBy(x => x.GroupID);
+
+                var idx = 1;
+
+                foreach (var group in grouping)
+                {
+                    var groupID = group.GroupID;
+                    var groupName = group.GroupID.ToString();
+
+                    if (groupID.HasValue)
+                    {
+                        if (groupID == 0)
+                        {
+                            groupID = -1;
+                            groupName = "None";
+                        }
+                        else
+                        {
+                            groupID = idx;
+                            groupName = idx.ToString();
+                            idx += 1;
+                        }                        
+                    }
+
+                    result.AddRange(group.Items.Select(x =>
+                    {
+                        x.GroupID = groupID;
+                        x.GroupName = groupName;
+
+                        return x;
+                    }));
+                }
+            }
+
+            return result;
+        }
         #endregion Private Methods
 
     }

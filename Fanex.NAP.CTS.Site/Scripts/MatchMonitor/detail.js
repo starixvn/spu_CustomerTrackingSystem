@@ -512,9 +512,10 @@
         );
     }
 
-    function ToggleGridSelectAll(input, table) {        
-        var rows = table.rows({ 'search': 'applied' }).nodes();
-        $('input[type="checkbox"][name="chkbx"]', rows).prop('checked', input.is(":checked"));   
+    function ToggleGridSelectAll(input, table) {
+        var nodes = table.rows({ 'search': 'applied' }).nodes(); 
+
+        $('input[type="checkbox"][name="chkbx"]', nodes).prop('checked', input.is(":checked"));         
     }
 
     function ExportToExcel() {   
@@ -532,6 +533,8 @@
             $('#postToIframe').append('<input type="hidden" asp-for="awayf" name=aways value="[' + mmDetails.awayMItems + ']" />');
             $('body').append('<iframe  name="output_frame" width="0" height="0" class="display-none"></iframe>');
             $('#postToIframe').submit().remove();
+
+            common.showSuccess("Export excel file is in process");
         } else {
             common.showError("Please select at least 2 records to proceed!");
         }        
@@ -556,26 +559,28 @@
     function GetDataSelectedInGrid(table) {
         let datas = '';
         table.rows(function (idx, data, node) {
-            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
-                datas += `{&quot;SubscriberType&quot;:&quot;${data.SubscriberType}&quot;`;
-                datas += `,&quot;CTSCustID&quot;:&quot;${data.CTSCustID}&quot;`;
-                datas += `,&quot;CustID&quot;:&quot;${data.CustID}&quot;`;
-                datas += `,&quot;Username&quot;:&quot;${data.Username}&quot;`;
-                datas += `,&quot;CustomerClass&quot;:&quot;${data.CustomerClass}&quot;`;
-                datas += `,&quot;IsRobot&quot;:&quot;${data.IsRobot}&quot;`;
-                datas += `,&quot;DangerToString&quot;:&quot;${data.DangerToString}&quot;`;
-                datas += `,&quot;Odds&quot;:&quot;${data.Odds}&quot;`;
-                datas += `,&quot;BetID&quot;:&quot;${data.BetID}&quot;`;
-                datas += `,&quot;BetTeam&quot;:&quot;${data.BetTeam}&quot;`;
-                datas += `,&quot;Currency&quot;:&quot;${data.Currency}&quot;`;               
-                datas += `,&quot;Amount&quot;:&quot;${data.Amount}&quot;`;
-                datas += `,&quot;HDP&quot;:&quot;${data.HDP}&quot;`;
-                datas += `,&quot;Score&quot;:&quot;${data.Score}&quot;`;
-                datas += `,&quot;TransTimeToString&quot;:&quot;${data.TransTimeToString}&quot;`;
-                datas += `,&quot;ADetectGroup&quot;:&quot;${data.ADetectGroup}&quot;`;
-                datas += `,&quot;MDetectGroup&quot;:&quot;${data.MDetectGroup}&quot;`;
-                datas += `,&quot;ReasonList&quot;:&quot;${data.ReasonList}&quot;`;
-                datas += `,&quot;PICVerified&quot;:&quot;${data.PICVerified}&quot;},`;
+            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {                
+                if (!$(node).is(':hidden')) {
+                    datas += `{&quot;SubscriberType&quot;:&quot;${data.SubscriberType}&quot;`;
+                    datas += `,&quot;CTSCustID&quot;:&quot;${data.CTSCustID}&quot;`;
+                    datas += `,&quot;CustID&quot;:&quot;${data.CustID}&quot;`;
+                    datas += `,&quot;Username&quot;:&quot;${data.Username}&quot;`;
+                    datas += `,&quot;CustomerClass&quot;:&quot;${data.CustomerClass}&quot;`;
+                    datas += `,&quot;IsRobot&quot;:&quot;${data.IsRobot}&quot;`;
+                    datas += `,&quot;DangerToString&quot;:&quot;${data.DangerToString}&quot;`;
+                    datas += `,&quot;Odds&quot;:&quot;${data.Odds}&quot;`;
+                    datas += `,&quot;BetID&quot;:&quot;${data.BetID}&quot;`;
+                    datas += `,&quot;BetTeam&quot;:&quot;${data.BetTeam}&quot;`;
+                    datas += `,&quot;Currency&quot;:&quot;${data.Currency}&quot;`;
+                    datas += `,&quot;Amount&quot;:&quot;${data.Amount}&quot;`;
+                    datas += `,&quot;HDP&quot;:&quot;${data.HDP}&quot;`;
+                    datas += `,&quot;Score&quot;:&quot;${data.Score}&quot;`;
+                    datas += `,&quot;TransTimeToString&quot;:&quot;${data.TransTimeToString}&quot;`;
+                    datas += `,&quot;ADetectGroup&quot;:&quot;${data.ADetectGroup}&quot;`;
+                    datas += `,&quot;MDetectGroup&quot;:&quot;${data.MDetectGroup}&quot;`;
+                    datas += `,&quot;ReasonList&quot;:&quot;${data.ReasonList}&quot;`;
+                    datas += `,&quot;PICVerified&quot;:&quot;${data.PICVerified}&quot;},`;
+                }                
             }
         });
 

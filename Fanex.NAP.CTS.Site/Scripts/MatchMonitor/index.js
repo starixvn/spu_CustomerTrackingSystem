@@ -125,15 +125,21 @@
                 { data: obj => obj.EventDateToString },                
                 { data: obj => obj.BettypeName },              
                 {
-                    data: obj => () => {
-                        let reasonList = obj.ReasonName;
-                        if (reasonList != '')
-                            reasonList = reasonList.replace(",", ", ");
-                        return reasonList;
+                    data: obj => () => {                       
+                        if (obj.ReasonName != '')
+                            return obj.ReasonName.replaceAll(",", ", ");
+                        return obj.ReasonName;
                     }
                 },
                 { data: obj => RenderVerifiedUI(obj.IsVerified) },
-                { data: obj => obj.VerifiedBy },
+                {
+                    data: obj => () => {                        
+                        if (obj.VerifiedBy != null && obj.VerifiedBy != '') {
+                            return obj.VerifiedBy.replaceAll(",", ", ")
+                        }
+                        return obj.VerifiedBy;
+                    }
+                },                
                 { data: obj => obj.MatchSectionName }
             ],
             drawCallback: function () {
