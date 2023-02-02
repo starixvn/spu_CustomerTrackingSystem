@@ -10,13 +10,13 @@
 
         public string CoupleInfoDetails { get; set; }
 
-        public DateTime FromDate
+        public DateTime CreatedDate
         {
             get
             {
-                if (!string.IsNullOrEmpty(FromDateString))
+                if (!string.IsNullOrEmpty(CreatedDateString))
                 {
-                    DateTime.TryParseExact(FromDateString, Consts.FormatDateToString_yyyyMMddHHmmss, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime value);
+                    DateTime.TryParseExact(CreatedDateString, Consts.FormatDateToString_yyyyMMddHHmmss, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime value);
 
                     return value;
                 }
@@ -25,24 +25,7 @@
             }
         }
 
-        public string FromDateString { get; set; }
-
-        public DateTime ToDate
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(ToDateString))
-                {
-                    DateTime.TryParseExact(ToDateString, Consts.FormatDateToString_yyyyMMddHHmmss, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime value);
-
-                    return value;
-                }
-
-                return DateTime.MinValue;
-            }
-        }
-
-        public string ToDateString { get; set; }
+        public string CreatedDateString { get; set; }
 
         public long CustID1 { get; set; }
 

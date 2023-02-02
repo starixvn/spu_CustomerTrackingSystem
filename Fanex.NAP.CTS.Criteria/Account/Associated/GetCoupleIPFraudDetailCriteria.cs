@@ -9,11 +9,8 @@
         [SpParam(SqlParamName = "ip_CoupleID")]
         public long CoupleID { get; set; }
 
-        [SpParam(SqlParamName = "ip_FromDate")]
-        public DateTime FromDate { get; set; }
-
-        [SpParam(SqlParamName = "ip_ToDate")]
-        public DateTime ToDate { get; set; }
+        [SpParam(SqlParamName = "ip_CreatedDate")]
+        public DateTime CreatedDate { get; set; }
 
         [SpParam(SqlParamName = "ip_CoupleInfoDetails")]
         public string CoupleInfoDetails { get; set; }

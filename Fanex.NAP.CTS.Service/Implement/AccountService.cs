@@ -737,23 +737,25 @@
                 CustId1 = custID1,
                 CustId2 = custID2
             };
-            var result = new List<CoupleInfoViewModel>();
+
+            var result = Enumerable.Empty<CoupleInfoViewModel>();
+
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                result = db.Query<CoupleInfoViewModel>(criteria).ToList();
+                result = db.Query<CoupleInfoViewModel>(criteria);
             }
-            var arrayCoupleInfoDetails = result.Select(s => s.CoupleID.ToString() + seperatorCoupleCoupleInfo + s.CoupleInfoID.ToString()).ToArray();
+
+            var arrayCoupleInfoDetails = result?.Select(s => s.CoupleID.ToString() + seperatorCoupleCoupleInfo + s.CoupleInfoID.ToString()).ToArray();
             var coupleInfoDetails = string.Join(seperatorRowsCoupleCoupleInfo.ToString(), arrayCoupleInfoDetails);
-            return result.Select(s => { s.CoupleInfoDetails = coupleInfoDetails; return s; });
+            return result?.Select(s => { s.CoupleInfoDetails = coupleInfoDetails; return s; });
         }
 
-        public IEnumerable<CoupleFraudDetailModel> GetCoupleFraudDetails(long coupleID, string coupleInfoDetails, DateTime fromDate, DateTime toDate)
+        public IEnumerable<CoupleFraudDetailModel> GetCoupleFraudDetails(long coupleID, string coupleInfoDetails, DateTime createdDate)
         {
             var criteria = new GetCoupleFraudDetailCriteria
             {
                 CoupleID = coupleID,
-                FromDate = fromDate,
-                ToDate = toDate,
+                CreatedDate = createdDate,
                 CoupleInfoDetails = GetJsonCoupleInfoDetails(coupleInfoDetails)
             };
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -784,13 +786,12 @@
             return JsonConvert.SerializeObject(objectCoupleInfoDetails);
         }
 
-        public IEnumerable<CoupleIPFraudDetailModel> GetCoupleIPFraudDetails(long coupleID, string coupleInfoDetails, DateTime fromDate, DateTime toDate)
+        public IEnumerable<CoupleIPFraudDetailModel> GetCoupleIPFraudDetails(long coupleID, string coupleInfoDetails, DateTime createdDate)
         {
             var criteria = new GetCoupleIPFraudDetailCriteria
             {
                 CoupleID = coupleID,
-                FromDate = fromDate,
-                ToDate = toDate,
+                CreatedDate = createdDate,
                 CoupleInfoDetails = GetJsonCoupleInfoDetails(coupleInfoDetails)
             };
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

@@ -842,8 +842,7 @@
                     let html = '<tr class="group group-site"><td colspan="13"><span class="column-group-match"';
                     html += ' data-couple-info-details=' + data[i].CoupleInfoDetails;
                     html += ' data-couple-id=' + data[i].CoupleID;
-                    html += ' data-from-date-string=' + data[i].FromDateString;
-                    html += ' data-to-date-string=' + data[i].ToDateString;
+                    html += ' data-created-date-string=' + data[i].CreatedDateString;
                     html += ' data-custId-1-string=' + data[i].CustID1;
                     html += ' data-custId-2-string=' + data[i].CustID2;
                     html += ' ><i class="icon icon-chevron-right icon-open"></i> ' + data[i].Group;
@@ -866,8 +865,7 @@
                     let params = {
                         CoupleId: colGroupMatch.attr('data-couple-id'),
                         CoupleInfoDetails: colGroupMatch.attr('data-couple-info-details'),
-                        FromDateString: colGroupMatch.attr('data-from-date-string'),
-                        ToDateString: colGroupMatch.attr('data-to-date-string'),
+                        CreatedDateString: colGroupMatch.attr('data-created-date-string'),
                         CustID1: colGroupMatch.attr('data-custId-1-string'),
                         CustID2: colGroupMatch.attr('data-custId-2-string'),
                     }

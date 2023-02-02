@@ -863,7 +863,7 @@
                 var para1 = (custID1 <= custID2) ? custID1 : custID2;
                 var para2 = (custID1 > custID2) ? custID1 : custID2;
 
-                data = _accountService.GetCoupleInfos(para1, para2).Select(s => { s.CustID1 = custID1; s.CustID2 = custID2; return s; }).OrderByDescending(o => o.ToDate).ToList();
+                data = _accountService.GetCoupleInfos(para1, para2).Select(s => { s.CustID1 = custID1; s.CustID2 = custID2; return s; }).OrderByDescending(o => o.CreatedDate).ToList();
             }
 
             catch (Exception ex)
@@ -895,8 +895,8 @@
                     CoupleID = para.CoupleID,
                     CustId1 = para.CustID1,
                     CustId2 = para.CustID2,
-                    CoupleFraudDetails = _accountService.GetCoupleFraudDetails(para.CoupleID, para.CoupleInfoDetails, para.FromDate, para.ToDate),
-                    CoupleIPFraudDetails = _accountService.GetCoupleIPFraudDetails(para.CoupleID, para.CoupleInfoDetails, para.FromDate, para.ToDate),
+                    CoupleFraudDetails = _accountService.GetCoupleFraudDetails(para.CoupleID, para.CoupleInfoDetails, para.CreatedDate),
+                    CoupleIPFraudDetails = _accountService.GetCoupleIPFraudDetails(para.CoupleID, para.CoupleInfoDetails, para.CreatedDate),
                     LastGroupCustID = 1,
                     LastGroupID = 1
                 };

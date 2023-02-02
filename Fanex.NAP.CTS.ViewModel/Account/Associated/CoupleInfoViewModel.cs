@@ -12,13 +12,9 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 
         public string CoupleInfoDetails { get; set; }
 
-        public DateTime FromDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 
-        public string FromDateString { get { return FromDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss); } }
-
-        public DateTime ToDate { get; set; }
-
-        public string ToDateString { get { return ToDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss); } }
+        public string CreatedDateString { get { return CreatedDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss); } }
 
         public long CustID1 { get; set; }
 
@@ -28,7 +24,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
         {
             get
             {
-                return $"Stake and IP Pattern from {FromDate.ToString("MMM dd")} to {ToDate.ToString("MMM dd")}";
+                return $"Stake and IP Pattern detected on {CreatedDate.ToString("MMM dd, yyyy")}";
             }
         }
     }
