@@ -161,7 +161,7 @@
 
             FillRowData(homeMItems, awayMItems, ref writer);
 
-            writer.SyncColumnsWidth(31);
+            writer.SyncColumnsWidth(33);
 
             return writer.ToBytes();
         }
@@ -211,14 +211,15 @@
                     itemH.HDP,
                     itemH.Score,
                     itemH.TransTimeToString,
-                    itemH.Group,
+                    itemH.ADetectGroup,
+                    itemH.MDetectGroup,
                     itemH.ReasonList,
                     (!string.IsNullOrEmpty(itemH.PICVerified) ? "x" : "-"),
                     null, null, null, null,
                     null, null, null,
                     null, null, null,
                     null, null, null,
-                    null, null, null
+                    null, null, null, null
                 };
         }
 
@@ -226,7 +227,7 @@
         {
             return new object[]
                 {
-                    null, null, null,
+                    null, null, null, null,
                     null, null, null,
                     null, null, null,
                     null, null, null,
@@ -243,7 +244,8 @@
                     itemA.HDP,
                     itemA.Score,
                     itemA.TransTimeToString,
-                    itemA.Group,
+                    itemA.ADetectGroup,
+                    itemA.MDetectGroup,
                     itemA.ReasonList,
                     (!string.IsNullOrEmpty(itemA.PICVerified) ? "x" : "-")
                 };
@@ -265,7 +267,8 @@
                     itemH.HDP,
                     itemH.Score,
                     itemH.TransTimeToString,
-                    itemH.Group,
+                    itemH.ADetectGroup,
+                    itemH.MDetectGroup,
                     itemH.ReasonList,                    
                     (!string.IsNullOrEmpty(itemH.PICVerified) ? "x" : "-"),
                     "",
@@ -281,7 +284,8 @@
                     itemA.HDP,
                     itemA.Score,
                     itemA.TransTimeToString,
-                    itemA.Group,
+                    itemA.ADetectGroup,
+                    itemA.MDetectGroup,
                     itemA.ReasonList,
                     (!string.IsNullOrEmpty(itemA.PICVerified) ? "x" : "-")
                 };

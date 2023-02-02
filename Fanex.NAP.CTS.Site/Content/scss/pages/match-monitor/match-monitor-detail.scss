@@ -316,7 +316,11 @@
                                     color: $account-formular;
                                 }
 
-                                .col-betid, .col-dgr, .col-transtime, .col-reason {
+                                .col-transtime {
+                                    font-size: 11px !important;
+                                }
+
+                                .col-betid, .col-dgr, .col-reason {
                                     font-size: 10px !important;
                                 }
 

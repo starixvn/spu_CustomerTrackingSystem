@@ -105,9 +105,9 @@
 
         public string TransTimeToString { get; set; }
 
-        public string Group { get; set; }
+        public string ADetectGroup { get; set; }
 
-        public int GroupID { get; set; }
+        public int ADetectGroupID { get; set; }
 
         public string MDetectGroup { get; set; }
 

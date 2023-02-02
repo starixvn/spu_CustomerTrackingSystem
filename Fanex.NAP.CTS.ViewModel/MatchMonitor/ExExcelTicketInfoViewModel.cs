@@ -35,8 +35,10 @@
    
         public string TransTimeToString { get; set; }
 
-        public string Group { get; set; }
-    
+        public string ADetectGroup { get; set; }
+
+        public string MDetectGroup { get; set; }
+
         public string ReasonList { get; set; }
 
         public string PICVerified { get; set; }

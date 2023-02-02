@@ -83,17 +83,17 @@
                         return '<input type="checkbox" class="col-checkbox" name="chkbx" value="' + $('<div/>').text(data).html() + '">';
                     }
                 },
-                { targets: [1], width: "18%" },
+                { targets: [1], width: "17%" },
                 { targets: [2], width: "4%" },
                 { targets: [3], width: "4%" },
-                { targets: [4], width: "12%", className: "text-center col-dgr" },
+                { targets: [4], width: "11%", className: "text-center col-dgr" },
                 { targets: [5], width: "5%" },
                 { targets: [6], width: "5%", className: "text-center col-betid" },
                 { targets: [7], width: "5%" },
                 { targets: [8], width: "6%" },
                 { targets: [9], width: "5%" },
                 { targets: [10], width: "6%" },
-                { targets: [11], width: "8%", className: "text-center col-transtime" },
+                { targets: [11], width: "10%", className: "text-center col-transtime" },
                 { targets: [12], width: "5%" },
                 { targets: [13], width: "5%", className: "text-center" },
                 { targets: [14], width: "8%", className: "text-center col-reason" },
@@ -134,9 +134,9 @@
                 { data: obj => obj.TransTimeToString },
                 {
                     data: obj => {
-                        if (obj.GroupID == -2)
+                        if (obj.ADetectGroupID == -2)
                             return `<span class="has-icon icon-loading-group"></span>`;              
-                        else return obj.Group;
+                        else return obj.ADetectGroup;
                     }
                 },
                 { data: obj => obj.MDetectGroup },
@@ -251,11 +251,11 @@
 
             let group = GetAssociationGroup(rowData.CustID, associations);
             if (group != undefined) {
-                rowData.Group = group.GroupName;
-                rowData.GroupID = group.GroupID;
+                rowData.ADetectGroup = group.GroupName;
+                rowData.ADetectGroupID = group.GroupID;
             } else {
-                rowData.Group = 'None';
-                rowData.GroupID = -1;
+                rowData.ADetectGroup = 'None';
+                rowData.ADetectGroupID = -1;
             }
 
             this.invalidate();
@@ -268,8 +268,8 @@
         elements.DataTable().rows().every(function () {
             let rowData = this.data();
 
-            rowData.Group = 'None';
-            rowData.GroupID = -1;
+            rowData.ADetectGroup = 'None';
+            rowData.ADetectGroupID = -1;
 
             this.invalidate();
         });
@@ -378,13 +378,16 @@
             }              
         });
 
+        ctsCustIDs = ctsCustIDs.filter(OnlyUnique);
+        custIDs = custIDs.filter(OnlyUnique);
+
         let custSelectedLength = custIDs.length;
         if (custSelectedLength <= 1) {
             common.showError("Please select at least 2 Usernames to proceed!");
         }
         else if (custSelectedLength > 1 && custSelectedLength <= 1001) {
-            domElements.hdSelectedCTSCustIDs.val(ctsCustIDs.filter(OnlyUnique).join());
-            domElements.hdSelectedCustIDs.val(custIDs.filter(OnlyUnique).join());
+            domElements.hdSelectedCTSCustIDs.val(ctsCustIDs.join());
+            domElements.hdSelectedCustIDs.val(custIDs.join());
             domElements.divPopupAssDetect.dialog({
                 modal: true,
                 width: '750px',
@@ -497,7 +500,7 @@
                 let reason = arrReasons.find(e => rowData['ReasonList'].includes(e));
                 if (reason == false || reason == undefined) { isEqualReason = false; }
                 
-                if (arrGroupIDs.find(e => e == rowData['GroupID']) == undefined) { isEqualGroupID = false; }
+                if (arrGroupIDs.find(e => e == rowData['ADetectGroupID']) == undefined) { isEqualGroupID = false; }
 
                 if (isEqualScore && isEqualReason && isEqualGroupID)               
                     return true;               
@@ -514,16 +517,13 @@
         $('input[type="checkbox"][name="chkbx"]', rows).prop('checked', input.is(":checked"));   
     }
 
-    function ExportToExcel() {       
-        let mmDetails = {            
-            matchInfo: GetDataMatchInfo(),            
-            homeMItems: GetDataSelectedInGrid(domElements.tblMMHomeTeam.DataTable()),
-            awayMItems: GetDataSelectedInGrid(domElements.tblMMAwayTeam.DataTable())
-        }
-        let lengthItem = mmDetails.homeMItems.length + mmDetails.awayMItems.length;
-        if (lengthItem <= 1) {
-            common.showError("Please select at least 2 Usernames to proceed!");
-        } else {           
+    function ExportToExcel() {   
+        if (CheckRuleExportExcel()) {
+            let mmDetails = {
+                matchInfo: GetDataMatchInfo(),
+                homeMItems: GetDataSelectedInGrid(domElements.tblMMHomeTeam.DataTable()),
+                awayMItems: GetDataSelectedInGrid(domElements.tblMMAwayTeam.DataTable())
+            }
             let url = common.modifyRelativeUrl('MatchMonitor/ExportToExcelMMDetail');
 
             $('body').append('<form action="' + url + '" method="post" target="output_frame" id="postToIframe"></form>');
@@ -532,7 +532,25 @@
             $('#postToIframe').append('<input type="hidden" asp-for="awayf" name=aways value="[' + mmDetails.awayMItems + ']" />');
             $('body').append('<iframe  name="output_frame" width="0" height="0" class="display-none"></iframe>');
             $('#postToIframe').submit().remove();
-        }       
+        } else {
+            common.showError("Please select at least 2 records to proceed!");
+        }        
+    }
+
+    function CheckRuleExportExcel() {
+        let homeCheckedL = 0,
+            awayCheckedL = 0;
+        domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
+            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked'))
+                homeCheckedL = homeCheckedL + 1;
+        })
+        domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
+            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked'))
+                awayCheckedL = awayCheckedL + 1;
+        })
+        
+        if (homeCheckedL + awayCheckedL >= 2) return true;
+        else return false;
     }
 
     function GetDataSelectedInGrid(table) {
@@ -554,7 +572,8 @@
                 datas += `,&quot;HDP&quot;:&quot;${data.HDP}&quot;`;
                 datas += `,&quot;Score&quot;:&quot;${data.Score}&quot;`;
                 datas += `,&quot;TransTimeToString&quot;:&quot;${data.TransTimeToString}&quot;`;
-                datas += `,&quot;Group&quot;:&quot;${data.Group}&quot;`;
+                datas += `,&quot;ADetectGroup&quot;:&quot;${data.ADetectGroup}&quot;`;
+                datas += `,&quot;MDetectGroup&quot;:&quot;${data.MDetectGroup}&quot;`;
                 datas += `,&quot;ReasonList&quot;:&quot;${data.ReasonList}&quot;`;
                 datas += `,&quot;PICVerified&quot;:&quot;${data.PICVerified}&quot;},`;
             }
