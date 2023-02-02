@@ -47,7 +47,7 @@
     };   
 
     let isFilterOption = false;
-    let MaxCustGroupCal = 10;
+    let MaxCustGroupCal = 5000;
 
     function InitialDetailGird(element) {
         element.DataTable({
