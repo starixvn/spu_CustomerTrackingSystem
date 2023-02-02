@@ -36,6 +36,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -745,8 +746,10 @@
                 result = db.Query<CoupleInfoViewModel>(criteria);
             }
 
-            var arrayCoupleInfoDetails = result?.Select(s => s.CoupleID.ToString() + seperatorCoupleCoupleInfo + s.CoupleInfoID.ToString()).ToArray();
+            var arrayCoupleInfoDetails = result?.Select(s => s.CoupleID.ToString() + seperatorCoupleCoupleInfo + s.CoupleInfoID.ToString() + seperatorCoupleCoupleInfo + s.CreatedDateString).ToArray();
+            
             var coupleInfoDetails = string.Join(seperatorRowsCoupleCoupleInfo.ToString(), arrayCoupleInfoDetails);
+
             return result?.Select(s => { s.CoupleInfoDetails = coupleInfoDetails; return s; });
         }
 
@@ -777,10 +780,11 @@
             {
                 var array = s.Split(seperatorCoupleCoupleInfo);
 
-                long CoupleID = long.Parse(array[0]);
-                long CoupleInfoID = long.Parse(array[1]);
+                long coupleID = long.Parse(array[0]);
+                long coupleInfoID = long.Parse(array[1]);
+                DateTime.TryParseExact(array[2], Consts.FormatDateToString_yyyyMMddHHmmss, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime createdDate);
 
-                return new { CoupleID, CoupleInfoID };
+                return new { CoupleID = coupleID, CoupleInfoID = coupleInfoID, CreatedDate = createdDate };
             });
 
             return JsonConvert.SerializeObject(objectCoupleInfoDetails);
