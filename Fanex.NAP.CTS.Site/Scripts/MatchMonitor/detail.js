@@ -209,10 +209,7 @@
             },
             complete: function (response) {
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');   
-                domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
-
-                ResizeDataTable(domElements.tblMMHomeTeam);
-                ResizeDataTable(domElements.tblMMAwayTeam);              
+                domElements.tblMMAwayTeam.find('tbody').removeClass('loading');                   
             },
             error: function (error) {
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
@@ -291,22 +288,10 @@
         let spanHtml = '<span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span>';
         
         if (isRobot) {
-            switch (robotType) {
-                case -1:
-                    html = `<span class="icon-big-Robot icon-big-robot">${spanHtml}</span>`;
-                    break;
-                case 0:
-                    html = `<span class="icon-big-Robot icon-big-observation-robot">${spanHtml}</span>`;
-                    break;
-                case 1:
-                    html = `<span class="icon-big-Robot icon-big-good-robot">${spanHtml}</span>`;
-                    break;
-                case 2:
-                    html = `<span class="icon-big-Robot icon-big-bad-robot">${spanHtml}</span>`;
-                    break;
-                default:
-                    break;
-            }            
+            if (robotType == 1) 
+                html = `<span class="icon-big-Robot icon-big-good-robot">${spanHtml}</span>`;
+            else if (robotType == 2)
+                html = `<span class="icon-big-Robot icon-big-bad-robot">${spanHtml}</span>`;                 
         }
 
         return html;
@@ -430,10 +415,7 @@
                 domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
 
                 domElements.inputHomeSelectAll.prop('checked', false);
-                domElements.inputAwaySelectAll.prop('checked', false);
-
-                ResizeDataTable(domElements.tblMMHomeTeam);
-                ResizeDataTable(domElements.tblMMAwayTeam);
+                domElements.inputAwaySelectAll.prop('checked', false);           
             },
             error: function (error) {
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
@@ -593,20 +575,7 @@
         datas += `,&quot;EventDateStr&quot;:&quot;${domElements.eventDataToString}&quot;`;
         datas += `,&quot;BetTypeName&quot;:&quot;${domElements.betTypeName}&quot;}`;
         return datas;
-    }
-    
-    function ResizeDataTable(table) {
-        //var widthTables = domElements.tblMMHomeTeam[0].offsetWidth + 37;
-        let widthTables = table[0].offsetWidth + 37;
-
-        //if (domElements.groupTable[0].offsetWidth - widthTables > 0 && widthTables < $(window).width()) {
-        if (widthTables < $(window).width()) {
-            //domElements.detailpage.removeClass('page-content-monitor');
-        }
-        else{
-            //domElements.detailpage.addClass('page-content-monitor');
-        }
-    }
+    }   
 
     function BindScrollHeaderFixed() {
         let $homeHeader = $('thead', domElements.tblMMHomeTeam).clone();
@@ -702,12 +671,7 @@
     $(document).ready(function () {
         Initial();        
 
-        GetMatchMonitorDetail();
-
-        $(window).resize(function () {
-            ResizeDataTable(domElements.tblMMHomeTeam);
-            ResizeDataTable(domElements.tblMMAwayTeam);
-        })          
+        GetMatchMonitorDetail();               
 
         BindScrollHeaderFixed();
     });

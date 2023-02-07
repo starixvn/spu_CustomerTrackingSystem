@@ -32,6 +32,8 @@
         private readonly IMatchMonitorService _matchMonitorService;       
         private readonly IAssociationDetectionService _associationDetectionService;
 
+        public override string BaseControllerName { get => Consts.MenuItemMonitor; }
+
         public MatchMonitorController()
         {
             _matchMonitorService = new MatchMonitorService();
@@ -83,9 +85,9 @@
 
                     if (!string.IsNullOrEmpty(para.Event))
                     {
-                        matchMonitors = matchMonitors.Where(x => x.HomeName.Contains(para.Event)
-                        || x.AwayName.Contains(para.Event)
-                        || x.LeagueName.Contains(para.Event));
+                        matchMonitors = matchMonitors.Where(x => x.HomeName.ToUpper().Contains(para.Event)
+                        || x.AwayName.ToUpper().Contains(para.Event)
+                        || x.LeagueName.ToUpper().Contains(para.Event));
                     }
                 }
             }

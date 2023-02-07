@@ -61,7 +61,7 @@
                     IsVerified: function () { return domElements.cbbIsVerified.val(); },
                     BetTypes: function () { return "[" + domElements.cbbBetType.val().join() + "]" },
                     Reasons: function () { return domElements.cbbReason.val().join(); },
-                    Event: function () { return domElements.txtEvent.val().trim(); },
+                    Event: function () { return domElements.txtEvent.val().trim().toUpperCase(); },
                     isSkipTracking: function () { return isSkipTracking; }
                 },
                 type: "POST",
