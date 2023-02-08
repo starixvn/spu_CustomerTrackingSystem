@@ -22,7 +22,7 @@
                     firstRobotDate.text("First Robot Date: " + json.firstRobotDate);
                     lastRobotDate.text("Last Robot Date: " + json.lastRobotDate);
 
-                    HandleRobotBettingDetection(json.robotTypeClassify);
+                    //HandleRobotBettingDetection(json.robotTypeClassify);
 
                     return response;
                 },

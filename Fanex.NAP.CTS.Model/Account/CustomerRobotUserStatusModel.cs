@@ -4,14 +4,6 @@
     {
         public long? CustId { get; set; }
 
-        public int? RobotType { get; set; }
-
-        public bool IsRobotUser
-        {
-            get
-            {
-                return this.RobotType != -2;
-            }
-        }
+        public int? RobotType { get; set; }       
     }
 }

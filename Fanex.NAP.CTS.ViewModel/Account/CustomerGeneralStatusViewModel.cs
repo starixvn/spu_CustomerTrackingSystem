@@ -112,18 +112,7 @@
             }
 
             return this;
-        }
-
-        public CustomerGeneralStatusViewModel BindingRobotUser(CustomerRobotUserStatusModel robotModel)
-        {
-            if (robotModel != null)
-            {
-                this.IsRobotUser = robotModel.IsRobotUser;
-                this.RobotType = robotModel.RobotType.HasValue ? robotModel.RobotType.Value : 0;
-            }
-
-            return this;
-        }
+        }     
 
         public CustomerGeneralStatusViewModel BindingEvidences(CustomerFlagInfoModel evidenceModel)
         {
