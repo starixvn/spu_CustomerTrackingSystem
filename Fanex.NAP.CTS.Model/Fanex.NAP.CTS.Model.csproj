@@ -312,6 +312,7 @@
     <Compile Include="ManageSubscriber\DetailedSiteModel.cs" />
     <Compile Include="ManageSubscriber\UpdateSubsciberResultModel.cs" />
     <Compile Include="MatchMonitor\MatchGroupKeyModel.cs" />
+    <Compile Include="MatchMonitor\MatchFromMainInfoModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorBetTypeModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailResultModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailVerifyTransResultModel.cs" />

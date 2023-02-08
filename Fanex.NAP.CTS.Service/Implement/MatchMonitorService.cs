@@ -21,7 +21,20 @@
             repository = new DynamicRepository();
         }
 
-        public IEnumerable<GetMatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter)
+        public IEnumerable<MatchFromMainInfoModel> GetMatchFromMainInfos(MatchMonitorFilterViewModel filter, string matchIDs)
+        {
+            var criteria = new GetMatchFromMainInfoCriteria
+            {
+                MatchIDs = matchIDs,
+                FromDate = filter?.FromDate ?? DateTime.Now,
+                ToDate = filter?.ToDate ?? DateTime.Now,
+                MatchSection = filter.MatchSection
+            };
+
+            return repository.Fetch<MatchFromMainInfoModel>(criteria);
+        }
+
+        public IEnumerable<GetMatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter, string matchInfoFromMainJson)
         {
             var criteria = new MatchMonitorGetCriteria
             {
@@ -33,7 +46,8 @@
                 MatchSection = filter.MatchSection,
                 BetTypes = filter.BetTypes,
                 IsVerified = filter.IsVerified,
-                Reasons = filter.Reasons
+                Reasons = filter.Reasons,
+                MatchInfosJson = matchInfoFromMainJson
             };
 
             return repository.Fetch<GetMatchMonitorModel>(criteria);

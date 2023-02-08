@@ -4,7 +4,7 @@
 
     public class MatchMonitorFilterViewModel
     {
-        public int DateType { get; set; } /* #1: InsertDate, 2: EvenDate */
+        public int DateType { get; set; } /* #1: InsertDate, 2: EventDate */
 
         public DateTime? FromDate { get; set; }
 

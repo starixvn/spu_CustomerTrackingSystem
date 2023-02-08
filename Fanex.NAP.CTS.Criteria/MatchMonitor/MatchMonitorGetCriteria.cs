@@ -7,7 +7,7 @@
     public class MatchMonitorGetCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_DateType")]
-        public int DateType { get; set; }
+        public int DateType { get; set; } /* #1: ScanDate (InsertDate), 2: EventDate */
 
         [SpParam(SqlParamName = "ip_FromDate")]
         public DateTime FromDate { get; set; }
@@ -32,6 +32,11 @@
 
         [SpParam(SqlParamName = "ip_Reason")]
         public string Reasons { get; set; }
+
+        /* new param input */
+
+        [SpParam(SqlParamName = "ip_MatchInfos")]
+        public string MatchInfosJson { get; set; }
 
         public override string GetSettingKey()
             => "CTS_DC_MatchMonitor_Get";

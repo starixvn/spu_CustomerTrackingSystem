@@ -8,7 +8,9 @@
 
     public interface IMatchMonitorService
     {
-        IEnumerable<GetMatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter);
+        IEnumerable<MatchFromMainInfoModel> GetMatchFromMainInfos(MatchMonitorFilterViewModel filter, string matchIDs);
+
+        IEnumerable<GetMatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter, string matchInfoFromMainJson);
 
         IEnumerable<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, Int64 betId, int reason);
 
