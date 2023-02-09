@@ -313,7 +313,8 @@
                                 }
 
                                 .col-red {
-                                    color: $account-formular;
+                                    /*color: $account-formular;*/
+                                    color: #FF0000;
                                 }
 
                                 .col-transtime {
@@ -395,10 +396,10 @@
                         }
 
                         .rejected-ticket {
-                            background-color: #FF8989;
+                            background-color: #F1A0A0;
 
                             &:hover {
-                                background-color: #FF8989 !important;
+                                background-color: #F1A0A0 !important;
                             }
                         }
 
