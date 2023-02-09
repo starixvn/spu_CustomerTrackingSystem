@@ -16,6 +16,8 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 
         public string CreatedDateString { get { return CreatedDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss); } }
 
+        public DateTime FirstCreatedDate { get; set; }
+
         public long CustID1 { get; set; }
 
         public long CustID2 { get; set; }
@@ -24,7 +26,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
         {
             get
             {
-                return $"Stake and IP Pattern detected on {CreatedDate.ToString("MMM dd, yyyy")}";
+                return $"Stake and IP Pattern detected on {FirstCreatedDate.ToString("MMM dd, yyyy")}";
             }
         }
     }
