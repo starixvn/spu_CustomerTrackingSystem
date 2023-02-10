@@ -930,8 +930,8 @@
         private IEnumerable<StakeIpPatternDetailViewModel> GetStakePatternDetail(StakeIpPatternDetailModel stakeIpPatternDetailModel)
         {
             var result = new List<StakeIpPatternDetailViewModel>();
-            var groupStateIds = stakeIpPatternDetailModel.CoupleFraudDetails.GroupBy(g => g.StateID).Select(s => new { StateId = s.Key, SumStake = s.Max(m => m.SumStake) });
-            foreach (var groupStateId in groupStateIds.OrderByDescending(desc => desc.SumStake))
+            var groupStateIds = stakeIpPatternDetailModel.CoupleFraudDetails.GroupBy(g => g.StateID).Select(s => new { StateId = s.Key, BetCount = s.Max(m => m.BetCount) });
+            foreach (var groupStateId in groupStateIds.OrderByDescending(desc => desc.BetCount))
             {
                 var coupleFraudDetailByStateIds = stakeIpPatternDetailModel.CoupleFraudDetails.Where(p => p.StateID == groupStateId.StateId);
                 foreach (var coupleFraudDetail in coupleFraudDetailByStateIds)
