@@ -162,7 +162,7 @@
 
 	<Function name="RobotClassification">
 		<Setting Key="CTS_DC_RobotClassification_GetHistory" SpName="CTS_DC_RobotClassification_GetHistory" DbName="MySQL.CTS_DataCenter.Reporter" />		
-		<Setting Key="CTS_DC_RobotClassification_GetRobotStatus" SpName="CTS_DC_RobotClassification_GetRobotStatus_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_RobotClassification_GetRobotStatus" SpName="CTS_DC_RobotClassification_GetRobotStatus" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function name="TransactionMonitoringReport">
@@ -179,7 +179,7 @@
 		<Setting Key="CTS_DC_CustInfo_Profile_GetAssociationAccount" SpName="CTS_DC_CustInfo_Profile_GetAssociationAccount" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_Profile_GetEvidence" SpName="CTS_DC_CustInfo_Profile_GetEvidence" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_Profile_GetLoginStats" SpName="CTS_DC_CustInfo_Profile_GetLoginStats" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustInfo_Profile_GetDate" SpName="CTS_DC_CustInfo_Profile_GetDate_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustInfo_Profile_GetDate" SpName="CTS_DC_CustInfo_Profile_GetDate" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function name="MonitorCTSFunction">
