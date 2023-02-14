@@ -921,10 +921,27 @@
 
         private IEnumerable<TicketDetailsModel> GetTicketDetailsModel(IEnumerable<CoupleFraudDetailModel> coupleFraudDetails, IEnumerable<CoupleIPFraudDetailModel> coupleIPFraudDetails)
         {
-            var unionAllFraudTransList = coupleFraudDetails.Select(s => s.FraudTransListSperation).Union(coupleIPFraudDetails.Select(s => s.FraudTransListSperation)).ToArray();
-            var fraudTransList = string.Join(",", unionAllFraudTransList?.Distinct());
+            var unionAllFraudTransList = new List<string>();
 
-            return _accountService.GetTicketDetailsModel(fraudTransList);
+            if (coupleFraudDetails != null && coupleFraudDetails.Any())
+            {
+                coupleFraudDetails.ToList().ForEach(c =>
+                {
+                    unionAllFraudTransList.AddRange(c.FraudTransListSperation);
+                });
+            }
+
+            if (coupleIPFraudDetails != null && coupleIPFraudDetails.Any())
+            {
+                coupleIPFraudDetails.ToList().ForEach(c =>
+                {
+                    unionAllFraudTransList.AddRange(c.FraudTransListSperation);
+                });
+            }
+
+            var fraudTransList = unionAllFraudTransList.Any() ? string.Join(",", unionAllFraudTransList) : string.Empty;
+
+            return string.IsNullOrEmpty(fraudTransList) ? _accountService.GetTicketDetailsModel(fraudTransList) : Enumerable.Empty<TicketDetailsModel>();
         }
 
         private IEnumerable<StakeIpPatternDetailViewModel> GetStakePatternDetail(StakeIpPatternDetailModel stakeIpPatternDetailModel)
