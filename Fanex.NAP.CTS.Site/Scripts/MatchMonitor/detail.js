@@ -110,7 +110,7 @@
                     data: obj => () => {
                         let url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustID);
                         let classColRed = '';
-                        if (obj.IsNormalLinkedPA || obj.IsRobot || (obj.DangerToString != '-' && obj.DangerToString != '')) {
+                        if (obj.IsNormalLinkedPA || obj.IsRobot) {
                             classColRed = 'col-red';
                         }
                         return `<a class='click-view-name ${classColRed}' href=${url}> ${obj.Username} </a>`;
@@ -199,12 +199,12 @@
                         function (xResponse) {                            
                             RenderAssociationGroup(domElements.tblMMHomeTeam, xResponse.ItemList);
                             RenderAssociationGroup(domElements.tblMMAwayTeam, xResponse.ItemList);
-                            RefreshGroupFilter(xResponse.GroupList);
+                            RefreshGroupFilter(xResponse.GroupList, false);
                         });                   
                 } else {
                     RenderNoneAssociationGroup(domElements.tblMMHomeTeam);
                     RenderNoneAssociationGroup(domElements.tblMMAwayTeam);
-                    RefreshGroupFilter([]);
+                    RefreshGroupFilter([], true);
                 }
             },
             complete: function (response) {
@@ -229,12 +229,14 @@
         element.multiselect("refresh");
     }
 
-    function RefreshGroupFilter(data) {
+    function RefreshGroupFilter(data, isExceedCust) {
         domElements.cbbGroup.multiselect().empty();
 
-        if (data.length == 0) {
+        if (isExceedCust)
+            domElements.cbbGroup.append(`<option selected value='-1'>-</option>`);
+        else if (data.length == 0)
             domElements.cbbGroup.append(`<option selected value='-1'>None</option>`);
-        }
+        
         for (var i = 0; i < data.length; i++) {
             domElements.cbbGroup.append(`<option selected value='${data[i].GroupID}'>${data[i].GroupName}</option>`);
         }
@@ -265,7 +267,7 @@
         elements.DataTable().rows().every(function () {
             let rowData = this.data();
 
-            rowData.ADetectGroup = 'None';
+            rowData.ADetectGroup = '-';
             rowData.ADetectGroupID = -1;
 
             this.invalidate();
