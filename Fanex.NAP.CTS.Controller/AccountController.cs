@@ -939,9 +939,9 @@
                 });
             }
 
-            var fraudTransList = unionAllFraudTransList.Any() ? string.Join(",", unionAllFraudTransList) : string.Empty;
+            var fraudTransList = unionAllFraudTransList.Any() ? string.Join(",", unionAllFraudTransList.Distinct()) : string.Empty;
 
-            return string.IsNullOrEmpty(fraudTransList) ? _accountService.GetTicketDetailsModel(fraudTransList) : Enumerable.Empty<TicketDetailsModel>();
+            return string.IsNullOrEmpty(fraudTransList) ? Enumerable.Empty<TicketDetailsModel>() : _accountService.GetTicketDetailsModel(fraudTransList);
         }
 
         private IEnumerable<StakeIpPatternDetailViewModel> GetStakePatternDetail(StakeIpPatternDetailModel stakeIpPatternDetailModel)
