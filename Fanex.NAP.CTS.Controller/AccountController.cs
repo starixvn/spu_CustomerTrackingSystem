@@ -921,8 +921,8 @@
 
         private IEnumerable<TicketDetailsModel> GetTicketDetailsModel(IEnumerable<CoupleFraudDetailModel> coupleFraudDetails, IEnumerable<CoupleIPFraudDetailModel> coupleIPFraudDetails)
         {
-            var unionAllFraudTransList = coupleFraudDetails.Select(s => s.FraudTransList).Union(coupleIPFraudDetails.Select(s => s.FraudTransList)).ToArray();
-            var fraudTransList = string.Join(",", unionAllFraudTransList);
+            var unionAllFraudTransList = coupleFraudDetails.Select(s => s.FraudTransListSperation).Union(coupleIPFraudDetails.Select(s => s.FraudTransListSperation)).ToArray();
+            var fraudTransList = string.Join(",", unionAllFraudTransList?.Distinct());
 
             return _accountService.GetTicketDetailsModel(fraudTransList);
         }
