@@ -725,7 +725,7 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
         public ActionResult GetMatchesAssociationByAI(long custID1, long custID2, string groupIDs, string originGroupIDs)
         {
-            var data = new MatchesAssociationByAIViewModel();
+            var data = new MatchesAssociationByAIViewModel(originGroupIDs);
 
             try
             {
@@ -742,7 +742,7 @@
 
                     if (matchesInfo != null && matchesInfo.Any())
                     {
-                        data = new MatchesAssociationByAIViewModel
+                        data = new MatchesAssociationByAIViewModel(originGroupIDs)
                         {
                             ErrorMessage = groupBettingAssociation.ErrorMessage,
                             MatchesInfo = matchesInfo.OrderByDescending(c => c.EventDate)

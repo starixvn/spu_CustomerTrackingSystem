@@ -709,7 +709,7 @@
                        tableMatchBettingPattern.DataTable().clear().rows.add(response.MatchesInfo).draw();
                        tableMatchBettingPattern.DataTable().columns.adjust();
 
-                       if (response.MatchesInfo.length > 0) {
+                        if (response.MatchesInfo.length > 0 || response.IsExistGGB) {
                            tableMatchBettingPattern.show();
                            titleMatchBettingPattern.show();
                        }

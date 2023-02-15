@@ -5,9 +5,10 @@
 
     public class MatchesAssociationByAIViewModel
     {
-        public MatchesAssociationByAIViewModel()
+        public MatchesAssociationByAIViewModel(string originGroupIDs)
         {
             MatchesInfo = Enumerable.Empty<MatchesInfoViewModel>();
+            IsExistGGB = !string.IsNullOrEmpty(originGroupIDs);
         }
 
         public IEnumerable<MatchesInfoViewModel> MatchesInfo { get; set; }
@@ -24,6 +25,8 @@
                 return 0;
             }
         }
+
+        public bool IsExistGGB { get; set; }
 
         public string ErrorMessage { get; set; }
     }
