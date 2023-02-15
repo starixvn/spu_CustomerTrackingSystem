@@ -816,26 +816,26 @@
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [-1, -2], className: "text-center" },
-                { targets: [0], width: "10%", className: "text-center" },
-                { targets: [1], width: "15%", className: "text-center" },
+                { targets: [0], width: "15%", className: "text-center" },
+                { targets: [1], width: "20%", className: "text-center" },
                 { targets: [2], width: "10%", className: "text-center" },
                 { targets: [3], width: "5%", className: "text-center" },
-                { targets: [4], width: "15%", className: "text-center" },
+                //{ targets: [4], width: "15%", className: "text-center" },
+                { targets: [4], width: "5%", className: "text-center" },
                 { targets: [5], width: "5%", className: "text-center" },
-                { targets: [6], width: "5%", className: "text-center" },
-                { targets: [7], width: "10%", className: "text-center" },
-                { targets: [8], width: "15%", className: "text-center" },
+                { targets: [6], width: "10%", className: "text-center" },
+                { targets: [7], width: "15%", className: "text-center" },
+                { targets: [8], width: "10%", className: "text-center" },
                 { targets: [9], width: "5%", className: "text-center" },
                 { targets: [10], width: "5%", className: "text-center" },
                 { targets: [11], width: "5%", className: "text-center" },
-                { targets: [12], width: "5%", className: "text-center" },
             ],
             columns: [
                 { data: obj => obj.Description },
                 { data: obj => obj.UserName },
                 { data: obj => obj.MatchID },
                 { data: obj => obj.IP },
-                { data: obj => obj.StakeRM },
+                //{ data: obj => obj.StakeRM },
                 { data: obj => obj.Stake },
                 { data: obj => obj.Currency },
                 { data: obj => obj.TransDateString },
@@ -1043,7 +1043,7 @@
             .append('<td class="text-center" ' + userAttribute + '>' + response[index]["UserName"] + '</td>')
             .append('<td class="text-center" ' + userAttribute + '>' + response[index]["MatchID"] + '</td>')
             .append('<td class="text-center" style = "' + styleRedFontInIpPattern + '">' + response[index]["IP"] + '</td>')
-            .append('<td class="text-center" style = "' + styleRedFontInStake + '">' + response[index]["StakeRM"] + '</td>')
+            //.append('<td class="text-center" style = "' + styleRedFontInStake + '">' + response[index]["StakeRM"] + '</td>')
             .append('<td class="text-center" style = "' + styleRedFontInStake + '">' + response[index]["Stake"] + '</td>')
             .append('<td class="text-center" style = "' + styleRedFontInStake + '">' + response[index]["Currency"] + '</td>')
             .append('<td class="text-center" >' + response[index]["TransDateString"] + '</td>')

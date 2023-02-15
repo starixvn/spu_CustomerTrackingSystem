@@ -26,7 +26,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
             {
                 if (IsStakePattern)
                 {
-                    return $" Total Stake / Tickets per Match: {TotalStake} RM / {TicketsPerMatch}";
+                    return $" Total Stake / Tickets per Match: ~{TotalStake} RM / {TicketsPerMatch}";
                 }
                 switch (this.IPPatternType)
                 {
@@ -115,7 +115,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
             }
         }
 
-        public string StakeRM { get; set; }
+        //public string StakeRM { get; set; }
 
         private string _currency { get; set; }
         public string Currency

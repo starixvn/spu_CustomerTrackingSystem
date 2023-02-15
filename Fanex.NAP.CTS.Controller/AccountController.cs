@@ -1008,7 +1008,7 @@
                     IP = ticketDetail.IP,
                     Odds = ticketDetail.Odds,
                     Stake = ticketDetail.CurrencyName == "RM" ? "" : String.Format("{0:#.##}", ticketDetail.Stake),
-                    StakeRM = String.Format("{0:#.##}", Math.Truncate(ticketDetail.StakeRM)),
+                    //StakeRM = String.Format("{0:#.##}", Math.Truncate(ticketDetail.StakeRM)),
                     BetTeam = ticketDetail.BetTeam,
                     BetType = ticketDetail.TypeName,
                     Currency = ticketDetail.CurrencyName == "RM" ? "" : ticketDetail.CurrencyName,
