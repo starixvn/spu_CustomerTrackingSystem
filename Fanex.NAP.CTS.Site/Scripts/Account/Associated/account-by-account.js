@@ -595,8 +595,7 @@
                 { targets: [9], width: "5%", className: "text-center" },
                 { targets: [10], width: "5%", className: "text-center" },
                 { targets: [11], width: "5%", className: "text-center" },
-                { targets: [12], width: "5%", className: "text-center" },
-                { targets: [13], width: "10%", className: "text-center" }
+                { targets: [12], width: "10%", className: "text-center" }
             ],
             columns: [
                 { data: obj => obj['MatchDesc'] },
@@ -607,7 +606,7 @@
                 { data: obj => obj['TransId'] },
                 { data: obj => obj['BetType'] },
                 { data: obj => obj['BetTeam'] },
-                { data: obj => obj['StakeRM'] },
+                //{ data: obj => obj['StakeRM'] },
                 { data: obj => obj['Stake'] },
                 { data: obj => obj['Currency'] },
                 { data: obj => obj['Odds'] },
@@ -787,7 +786,7 @@
             .append('<td class="text-center">' + response[index]["TransId"] + '</td>')
             .append('<td class="text-center">' + response[index]["BetType"] + '</td>')
             .append('<td class="text-center">' + response[index]["BetTeam"] + '</td>')
-            .append('<td class="text-center">' + response[index]["StakeRM"] + '</td>')
+            //.append('<td class="text-center">' + response[index]["StakeRM"] + '</td>')
             .append('<td class="text-center">' + response[index]["Stake"] + '</td>')
             .append('<td class="text-center">' + response[index]["Currency"] + '</td>')
             .append('<td class="text-center"><span ' + (response[index]["Odds"] < 0 ? 'class="red"' : '') + '>' + response[index]["Odds"] + '</span></td>')
