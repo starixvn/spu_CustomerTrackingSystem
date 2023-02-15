@@ -30,6 +30,11 @@
     let tableStakeIPPattern = $("#tblStakeIPPattern");
     let configdataTableStakeIPPattern = false;
     let isProcessingTableStakeIPPattern = false;
+    let titleMatchBettingPattern = $('#titleMatchBettingPattern');
+    let titleStakeIPPattern = $('#titleStakeIPPattern');
+    let assDetailsPopup = $("#assicationDetails");
+    let isLoadingMatchBettingPattern;
+    let isLoadingStakeIPPattern;
 
     function RenderTag(obj) {
         let html = "";
@@ -679,7 +684,6 @@
     }
 
     function GetMatchBettingPattern(custId1, custId2, groupIDs, originGroupIDs) {
-
         var url = common.modifyRelativeUrl('Account/GetMatchesAssociationByAI');
         tableMatchBettingPattern.DataTable().rows().remove().draw();
 
@@ -687,6 +691,10 @@
             type: 'POST',
             beforeSend: function () {
                 tableMatchBettingPattern.find('tbody').addClass('loading');
+                tableMatchBettingPattern.hide();
+                titleMatchBettingPattern.hide();
+                isLoadingMatchBettingPattern = false;
+                assDetailsPopup.addClass('loading');
             },
             data: {
                 custID1: custId1,
@@ -696,10 +704,16 @@
             },
             success: function (response) {
                 if (response !== undefined) {
-                    if (response.ErrorMessage === null || response.ErrorMessage === '') {
-                        tableMatchBettingPattern.DataTable().clear().rows.add(response.MatchesInfo).draw();
-                        tableMatchBettingPattern.DataTable().columns.adjust();
-                    } else {
+                    if (response.ErrorMessage === null || response.ErrorMessage === '')
+                    {
+                       tableMatchBettingPattern.DataTable().clear().rows.add(response.MatchesInfo).draw();
+                       tableMatchBettingPattern.DataTable().columns.adjust();
+
+                       if (response.MatchesInfo.length > 0) {
+                           tableMatchBettingPattern.show();
+                           titleMatchBettingPattern.show();
+                       }
+                   }else {
                         console.log(response.ErrorMessage);
                         common.showError(response.ErrorMessage);
                     }
@@ -707,6 +721,10 @@
             },
             complete: function () {
                 tableMatchBettingPattern.find('tbody').removeClass('loading');
+                isLoadingMatchBettingPattern = true;
+
+                if (isLoadingMatchBettingPattern && isLoadingStakeIPPattern)
+                    assDetailsPopup.removeClass('loading');
             },
             error: function (errMsg) {
                 console.log(errMsg);
@@ -903,6 +921,10 @@
             type: 'POST',
             beforeSend: function () {
                 tableStakeIPPattern.find('tbody').addClass('loading');
+                tableStakeIPPattern.hide();
+                titleStakeIPPattern.hide();
+                isLoadingStakeIPPattern = false;
+                assDetailsPopup.addClass('loading');
             },
             data: {
                 custID1: custId1,
@@ -912,6 +934,11 @@
                 if (response !== undefined) {
                     tableStakeIPPattern.DataTable().rows.add(response).draw();
                     tableStakeIPPattern.DataTable().columns.adjust();
+
+                    if (response.length > 0) {
+                        tableStakeIPPattern.show();
+                        titleStakeIPPattern.show();
+                    }
                 } else {
                     console.log(response.ErrorMessage);
                     common.showError(response.ErrorMessage);
@@ -919,6 +946,10 @@
             },
             complete: function () {
                 tableStakeIPPattern.find('tbody').removeClass('loading');
+                isLoadingStakeIPPattern = true;
+
+                if (isLoadingMatchBettingPattern && isLoadingStakeIPPattern)
+                    assDetailsPopup.removeClass('loading');
             },
             error: function (errMsg) {
                 console.log(errMsg);
