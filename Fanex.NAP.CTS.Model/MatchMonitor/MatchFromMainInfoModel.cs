@@ -4,10 +4,12 @@
 
     public class MatchFromMainInfoModel
     {
-        public int MatchID { get; set; }
+        public int MatchId { get; set; }
 
-        public DateTime EventDate { get; set; }
+        public DateTime EventDate { get; set; }       
 
-        public DateTime KOTime { get; set; }
+        public DateTime KickOffTime { get; set; }
+
+        public int MatchSection { get; set; }
     }
 }

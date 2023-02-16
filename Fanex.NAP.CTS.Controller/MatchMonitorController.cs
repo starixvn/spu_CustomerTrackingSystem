@@ -118,9 +118,9 @@
 
             if (matchFromMainInfos.Any())
             {
-                var json = JsonConvert.SerializeObject(matchFromMainInfos);
+                var matchJson = JsonConvert.SerializeObject(matchFromMainInfos);
 
-                matchFromCTSInfos = _matchMonitorService.GetMatchMonitor(para, json);
+                matchFromCTSInfos = _matchMonitorService.GetMatchMonitor(para, matchJson);
             }
 
             return matchFromCTSInfos;
@@ -128,11 +128,11 @@
 
         private IEnumerable<GetMatchMonitorModel> GetMMByScanDate(MatchMonitorFilterViewModel para)
         {
-            var matchFromCTSInfos = _matchMonitorService.GetMatchMonitor(para, string.Empty);
+            var matchFromCTSInfos = _matchMonitorService.GetMatchMonitor(para, null);
 
             if (matchFromCTSInfos.Any())
             {
-                var matchIDs = JsonConvert.SerializeObject(matchFromCTSInfos.Select(x => x.MatchID).Distinct());
+                var matchIDs = string.Join(",", matchFromCTSInfos.Select(x => x.MatchID).Distinct());
 
                 var matchFromMainInfos = _matchMonitorService.GetMatchFromMainInfos(para, matchIDs);
 
@@ -141,11 +141,12 @@
                     return matchFromCTSInfos.Select(x =>
                     {
                         var match = x;
-                        var infoFMain = matchFromMainInfos.FirstOrDefault(y => y.MatchID == x.MatchID);
+                        var infoFMain = matchFromMainInfos.FirstOrDefault(y => y.MatchId == x.MatchID);
                         if (infoFMain != null)
                         {
-                            match.KickOffTime = infoFMain.KOTime;
+                            match.KickOffTime = infoFMain.KickOffTime;
                             match.EventDate = infoFMain.EventDate;
+                            match.MatchSection = infoFMain.MatchSection;
                         }
                         return match;
                     });

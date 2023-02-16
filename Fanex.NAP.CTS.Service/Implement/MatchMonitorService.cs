@@ -38,12 +38,10 @@
         {
             var criteria = new MatchMonitorGetCriteria
             {
-                DateType = filter.DateType,
                 FromDate = filter?.FromDate ?? DateTime.Now,
                 ToDate = filter?.ToDate ?? DateTime.Now,
                 SportType = filter.Sports,
-                Market = filter.Market,
-                MatchSection = filter.MatchSection,
+                Market = filter.Market,                
                 BetTypes = filter.BetTypes,
                 IsVerified = filter.IsVerified,
                 Reasons = filter.Reasons,

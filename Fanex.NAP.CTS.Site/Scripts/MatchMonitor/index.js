@@ -39,7 +39,7 @@
         toDateValueAllow.setDate(toDateValueAllow.getDate() + 1);
 
         if (toDateValue > toDateValueAllow) {
-            common.showError("Invalid date range, please select not more than 7 days");
+            common.showError("Invalid date range, please select not more than 2 days");
             return false;
         }
 

@@ -6,20 +6,20 @@
 
     public class GetMatchFromMainInfoCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_MatchIDs")]
+        [SpParam(SqlParamName = "MatchIds")]
         public string MatchIDs { get; set; }
 
-        [SpParam(SqlParamName = "ip_FromDate")]
+        [SpParam(SqlParamName = "FromDateTime")]
         public DateTime FromDate { get; set; }
 
-        [SpParam(SqlParamName = "ip_ToDate")]
+        [SpParam(SqlParamName = "ToDateTime")]
         public DateTime ToDate { get; set; }
 
-        [SpParam(SqlParamName = "ip_MatchSection")]
+        [SpParam(SqlParamName = "MatchSection")]
         public string MatchSection { get; set; }
 
         public override string GetSettingKey()
-           => "CTS_Rpt_MatchMonitor_MatchInfos";
+           => "CTS_Rpt_MatchMonitor_MatchInfo";
 
         public override bool IsValid()
             => true;

@@ -6,9 +6,6 @@
 
     public class MatchMonitorGetCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_DateType")]
-        public int DateType { get; set; } /* #1: ScanDate (InsertDate), 2: EventDate */
-
         [SpParam(SqlParamName = "ip_FromDate")]
         public DateTime FromDate { get; set; }
 
@@ -21,9 +18,6 @@
         [SpParam(SqlParamName = "ip_Market")]
         public int? Market { get; set; }
 
-        [SpParam(SqlParamName = "ip_MatchSection")]
-        public string MatchSection { get; set; }
-
         [SpParam(SqlParamName = "ip_IsVerified")]
         public int? IsVerified { get; set; }
 
@@ -31,9 +25,7 @@
         public string BetTypes { get; set; }
 
         [SpParam(SqlParamName = "ip_Reason")]
-        public string Reasons { get; set; }
-
-        /* new param input */
+        public string Reasons { get; set; }   
 
         [SpParam(SqlParamName = "ip_MatchInfos")]
         public string MatchInfosJson { get; set; }
