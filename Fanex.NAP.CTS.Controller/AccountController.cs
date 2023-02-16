@@ -992,7 +992,7 @@
 
             var custId = IsCustId1 ? stakeIpPatternDetail.CustId1 : stakeIpPatternDetail.CustId2;
             var transIds = coupleFraudDetail.FraudTransListSperation.ToArray();
-            var ticketDetailsByCust = stakeIpPatternDetail.TicketDetails.Where(p => coupleFraudDetail.MatchID == p.MatchID && custId == p.CustID && transIds.Contains(p.TransId.ToString())).OrderBy(asc => asc.TransDate);
+            var ticketDetailsByCust = stakeIpPatternDetail.TicketDetails.Where(p => coupleFraudDetail.MatchID == p.MatchID && custId == p.CustID && transIds.Contains(p.TransId.ToString())).OrderBy(asc =>asc.Stake).OrderBy(asc => asc.TransDate);
             int countTicketDetails = ticketDetailsByCust.Count();
             foreach (var ticketDetail in ticketDetailsByCust)
             {
