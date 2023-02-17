@@ -161,4 +161,10 @@
         AtLeast3IPsSameDay = 2,
         IPAlternative = 3
     }
+
+    public enum AccountAssociation_PatternType
+    {
+        Stake = 1,
+        IP = 2
+    }
 }

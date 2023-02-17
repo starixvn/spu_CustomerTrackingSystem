@@ -889,6 +889,14 @@
                         iGroup.removeClass('icon-chevron-right').addClass('icon-chevron-down');
                     else
                         iGroup.removeClass('icon-chevron-down').addClass('icon-chevron-right');
+
+                    $('tr[data-pattern-type="' + colGroupMatch.attr('data-pattern-type') + '"]', tableStakeIPPattern).each(function () {
+                        let trCurrent = $(this);
+                        if (trCurrent.hasClass('hide'))
+                            trCurrent.removeClass('hide');
+                        else
+                            trCurrent.addClass('hide');
+                    });
                 }
             }
         });
@@ -919,7 +927,7 @@
                         tableStakeIPPattern.DataTable().rows.add(response.CoupleInfo).draw();
                         tableStakeIPPattern.DataTable().columns.adjust();
                         tableStakeIPPattern.show();
-                        titleMatchBettingPatternName.text("MATCH - STAKE/IP PATTERN (FIRST ASSOCIATION DATE {" + response.FirstCreatedDateString + "}).");
+                        titleMatchBettingPatternName.text("MATCH - STAKE/IP PATTERN (First Association Date: " + response.FirstCreatedDateString + ")");
                         titleStakeIPPattern.show();
                     }
                 } else {
@@ -1020,7 +1028,7 @@
 
         let userAttribute = GetAttributeWithRowSpan(defaultStyle, isUserNameRowMember, userNameRowSpanNumer);
 
-        let newRow = $('<tr role="row" class="odd detail"' + '>')
+        let newRow = $('<tr role="row" class="odd detail" data-pattern-type=' + response[index]["PatternType"] + '>')
             .append('<td class="text-center" width="15%" ' + descriptionAttribute + '>' + response[index]["Description"] + '</td>')
             .append('<td class="text-center" ' + userAttribute + '>' + response[index]["UserName"] + '</td>')
             .append('<td class="text-center" ' + userAttribute + '>' + response[index]["MatchID"] + '</td>')

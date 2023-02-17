@@ -18,6 +18,8 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 
         public bool IsStakePattern { get; set; }
 
+        public int PatternType { get; set; }
+
         public string Description
         {
             get

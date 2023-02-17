@@ -982,7 +982,7 @@
                 var coupleFraudDetailByStateIds = stakeIpPatternDetailModel.StakeFraudDetail.Where(p => p.StateID == groupStateId.StateId);
                 foreach (var coupleFraudDetail in coupleFraudDetailByStateIds)
                 {
-                    var resultCust1 = GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleFraudDetail, true);
+                    var resultCust1 = GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleFraudDetail, true, AccountAssociation_PatternType.Stake);
                     if (resultCust1.Any())
                     {
                         result.AddRange(resultCust1.Select(s =>
@@ -995,7 +995,7 @@
                         stakeIpPatternDetailModel.LastGroupCustID++;
                     }
 
-                    var resultCust2 = GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleFraudDetail, false);
+                    var resultCust2 = GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleFraudDetail, false, AccountAssociation_PatternType.Stake);
                     if (resultCust2.Any())
                     {
                         result.AddRange(resultCust2.Select(s =>
@@ -1014,13 +1014,14 @@
             return result;
         }
 
-        private IEnumerable<StakeIpPatternDetailViewModel> GetFraudDetailByCustId<T>(StakeIpPatternDetailModel stakeIpPatternDetail, T coupleFraudDetail, bool IsCustId1) where T : FraudDetailModel
+        private IEnumerable<StakeIpPatternDetailViewModel> GetFraudDetailByCustId<T>(StakeIpPatternDetailModel stakeIpPatternDetail, T coupleFraudDetail, bool IsCustId1, AccountAssociation_PatternType patternType) where T : FraudDetailModel
         {
             var result = new List<StakeIpPatternDetailViewModel>();
 
             var custId = IsCustId1 ? stakeIpPatternDetail.CustId1 : stakeIpPatternDetail.CustId2;
             var transIds = coupleFraudDetail.FraudTransListSperation.ToArray();
-            var ticketDetailsByCust = stakeIpPatternDetail.TicketDetails.Where(p => coupleFraudDetail.MatchID == p.MatchID && custId == p.CustID && transIds.Contains(p.TransId.ToString())).OrderBy(asc => asc.Stake).OrderBy(asc => asc.TransDate);
+            var ticketDetailsByCust = stakeIpPatternDetail.TicketDetails.Where(p => coupleFraudDetail.MatchID == p.MatchID && custId == p.CustID && transIds.Contains(p.TransId.ToString()));
+            ticketDetailsByCust = (patternType == AccountAssociation_PatternType.Stake) ? ticketDetailsByCust.OrderBy(asc => asc.Stake).OrderBy(asc => asc.TransDate) : ticketDetailsByCust.OrderBy(asc => asc.TransDate);
             int countTicketDetails = ticketDetailsByCust.Count();
             foreach (var ticketDetail in ticketDetailsByCust)
             {
@@ -1041,6 +1042,7 @@
                     Currency = ticketDetail.CurrencyName == "RM" ? "" : ticketDetail.CurrencyName,
                     LiveScore = ticketDetail.LiveHomeScore != null && ticketDetail.LiveAwayScore != null ? $"{ticketDetail.LiveHomeScore}-{ticketDetail.LiveAwayScore}" : "",
                     TransDateString = ticketDetail.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                    PatternType = (int)patternType
                 });
             }
             return result;
@@ -1059,9 +1061,10 @@
             foreach (var groupTypeIPEntanglement in groupTypeIPEntanglements)
             {
                 var coupleIPFraudDetails = stakeIpPatternDetailModel.IpFraudDetail.Where(p => p.TypeIPEntanglement == groupTypeIPEntanglement);
+
                 foreach (var coupleIPFraudDetail in coupleIPFraudDetails)
                 {
-                    var resultCust1 = GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleIPFraudDetail, true);
+                    var resultCust1 = GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleIPFraudDetail, true, AccountAssociation_PatternType.IP);
                     if (resultCust1.Any())
                     {
                         result.AddRange(resultCust1.Select(s =>
@@ -1071,8 +1074,11 @@
                         }));
                         stakeIpPatternDetailModel.LastGroupCustID++;
                     }
+                }
 
-                    var resultCust2 = GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleIPFraudDetail, false);
+                foreach (var coupleIPFraudDetail in coupleIPFraudDetails)
+                {
+                    var resultCust2 = GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleIPFraudDetail, false, AccountAssociation_PatternType.IP);
                     if (resultCust2.Any())
                     {
                         result.AddRange(resultCust2.Select(s =>
@@ -1083,6 +1089,7 @@
                         stakeIpPatternDetailModel.LastGroupCustID++;
                     }
                 }
+
                 stakeIpPatternDetailModel.LastGroupID++;
             }
             return result;
