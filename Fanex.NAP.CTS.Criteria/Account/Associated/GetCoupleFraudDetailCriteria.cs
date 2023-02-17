@@ -3,16 +3,9 @@ namespace Fanex.NAP.CTS.Criteria.Account.Associated
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using System;
 
     public class GetCoupleFraudDetailCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_CoupleID")]
-        public long CoupleID { get; set; }
-
-        [SpParam(SqlParamName = "ip_CreatedDate")]
-        public DateTime CreatedDate { get; set; }
-
         [SpParam(SqlParamName = "ip_CoupleInfoDetails")]
         public string CoupleInfoDetails { get; set; }
 

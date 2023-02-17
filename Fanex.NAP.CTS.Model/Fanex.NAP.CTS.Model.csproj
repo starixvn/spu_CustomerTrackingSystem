@@ -151,6 +151,8 @@
     <Compile Include="Account\AssociatedAccount\AssociatedAccountDetail\GBAssociationAIModel.cs" />
     <Compile Include="Account\AssociatedAccount\AccountStaticStatusModel.cs" />
     <Compile Include="Account\AssociatedAccount\AssociatedAccountDetail\MatchesInfoModel.cs" />
+    <Compile Include="Account\AssociatedAccount\CoupleDetailParameterViewModel.cs" />
+    <Compile Include="Account\AssociatedAccount\CoupleDetailParameterModel.cs" />
     <Compile Include="Account\AssociatedAccount\CoupleInfoModel.cs" />
     <Compile Include="Account\BettingStatistic\PerformanceBySportModel.cs" />
     <Compile Include="Account\CustomerByGraphDB.cs" />

@@ -731,7 +731,7 @@
             }
         }
 
-        public IEnumerable<CoupleInfoViewModel> GetCoupleInfos(long custID1, long custID2)
+        public CoupleInfoViewModel GetCoupleInfos(long custID1, long custID2)
         {
             var criteria = new GetCoupleInfoCriteria
             {
@@ -739,64 +739,33 @@
                 CustId2 = custID2
             };
 
-            var result = Enumerable.Empty<CoupleInfoViewModel>();
+            var result = new CoupleInfoViewModel();
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                result = db.Query<CoupleInfoViewModel>(criteria);
+                result.CoupleInfo = db.Query<CoupleInfoModel>(criteria);
             }
 
-            var arrayCoupleInfoDetails = result?.Select(s => s.CoupleID.ToString() + seperatorCoupleCoupleInfo + s.CoupleInfoID.ToString() + seperatorCoupleCoupleInfo + s.CreatedDateString).ToArray();
-            
-            var coupleInfoDetails = string.Join(seperatorRowsCoupleCoupleInfo.ToString(), arrayCoupleInfoDetails);
+            result.FirstCreatedDate = criteria.FirstCreatedDate;
 
-            return result?.Select(s => { s.CoupleInfoDetails = coupleInfoDetails; return s; });
+            return result;
         }
 
-        public IEnumerable<CoupleFraudDetailModel> GetCoupleFraudDetails(long coupleID, string coupleInfoDetails, DateTime createdDate)
+        public IEnumerable<CoupleFraudDetailModel> GetCoupleFraudDetails(string coupleInfoJson)
         {
             var criteria = new GetCoupleFraudDetailCriteria
             {
-                CoupleID = coupleID,
-                CreatedDate = createdDate,
-                CoupleInfoDetails = GetJsonCoupleInfoDetails(coupleInfoDetails)
+                CoupleInfoDetails = coupleInfoJson
             };
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<CoupleFraudDetailModel>(criteria);
-            }
+
+            return repository.Fetch<CoupleFraudDetailModel>(criteria);
         }
 
-        private string GetJsonCoupleInfoDetails(string coupleInfoDetails)
-        {
-            if (string.IsNullOrEmpty(coupleInfoDetails))
-            {
-                return "[]";
-            }
-
-            var arrayCoupleInfoDetails = coupleInfoDetails.Split(seperatorRowsCoupleCoupleInfo);
-
-            var objectCoupleInfoDetails = arrayCoupleInfoDetails.Select(s =>
-            {
-                var array = s.Split(seperatorCoupleCoupleInfo);
-
-                long coupleID = long.Parse(array[0]);
-                long coupleInfoID = long.Parse(array[1]);
-                DateTime.TryParseExact(array[2], Consts.FormatDateToString_yyyyMMddHHmmss, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime createdDate);
-
-                return new { CoupleID = coupleID, CoupleInfoID = coupleInfoID, CreatedDate = createdDate };
-            });
-
-            return JsonConvert.SerializeObject(objectCoupleInfoDetails);
-        }
-
-        public IEnumerable<CoupleIPFraudDetailModel> GetCoupleIPFraudDetails(long coupleID, string coupleInfoDetails, DateTime createdDate)
+        public IEnumerable<CoupleIPFraudDetailModel> GetCoupleIPFraudDetails(string coupleInfoJson)
         {
             var criteria = new GetCoupleIPFraudDetailCriteria
             {
-                CoupleID = coupleID,
-                CreatedDate = createdDate,
-                CoupleInfoDetails = GetJsonCoupleInfoDetails(coupleInfoDetails)
+                CoupleInfoDetails = coupleInfoJson
             };
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {

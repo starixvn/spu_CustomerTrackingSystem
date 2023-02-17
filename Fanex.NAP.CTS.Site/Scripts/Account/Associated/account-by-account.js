@@ -31,6 +31,7 @@
     let configdataTableStakeIPPattern = false;
     let isProcessingTableStakeIPPattern = false;
     let titleMatchBettingPattern = $('#titleMatchBettingPattern');
+    let titleMatchBettingPatternName = $('#titleStakeIPPatternName');
     let titleStakeIPPattern = $('#titleStakeIPPattern');
     let assDetailsPopup = $("#assicationDetails");
     let isLoadingMatchBettingPattern;
@@ -849,7 +850,6 @@
                     $(row).addClass('hide');
                 }
             },
-
             drawCallback: function () {
                 let api = this.api();
                 let rows = api.rows({ page: 'current' }).nodes();
@@ -857,14 +857,12 @@
 
                 api.column(0, { page: 'current' }).data().each(function (group, i) {
                     let html = '<tr class="group group-site"><td colspan="13"><span class="column-group-match"';
-                    html += ' data-couple-info-details=' + data[i].CoupleInfoDetails;
-                    html += ' data-couple-id=' + data[i].CoupleID;
-                    html += ' data-created-date-string=' + data[i].CreatedDateString;
-                    html += ' data-custId-1-string=' + data[i].CustID1;
-                    html += ' data-custId-2-string=' + data[i].CustID2;
-                    html += ' ><i class="icon icon-chevron-right icon-open"></i> ' + data[i].Group;
+                    html += ' data-CoupleInfoDetails=' + data[i].CoupleInfoDetails;
+                    html += ' data-custId-1=' + data[i].CustID1;
+                    html += ' data-custId-2=' + data[i].CustID2;
+                    html += ' data-pattern-type=' + data[i].PatternType;
+                    html += ' ><i class="icon icon-chevron-right icon-open"></i> ' + data[i].GroupNamePattern;
                     html += '</span></td></tr>';
-
 
                     $(rows).eq(i).before(html);
                     last = group;
@@ -880,11 +878,10 @@
                 let iGroup = $('i.icon', trGroup);
                 if (!iGroup.hasClass('has-detail')) {
                     let params = {
-                        CoupleId: colGroupMatch.attr('data-couple-id'),
-                        CoupleInfoDetails: colGroupMatch.attr('data-couple-info-details'),
-                        CreatedDateString: colGroupMatch.attr('data-created-date-string'),
-                        CustID1: colGroupMatch.attr('data-custId-1-string'),
-                        CustID2: colGroupMatch.attr('data-custId-2-string'),
+                        CoupleInfoDetails: colGroupMatch.attr('data-CoupleInfoDetails'),
+                        CustID1: colGroupMatch.attr('data-custId-1'),
+                        CustID2: colGroupMatch.attr('data-custId-2'),
+                        PatternType: colGroupMatch.attr('data-pattern-type'),
                     }
 
                     if (!isProcessingTableStakeIPPattern) {
@@ -897,14 +894,6 @@
                         iGroup.removeClass('icon-chevron-right').addClass('icon-chevron-down');
                     else
                         iGroup.removeClass('icon-chevron-down').addClass('icon-chevron-right');
-
-                    $('tr[data-couple-id="' + colGroupMatch.attr('data-couple-id') + '"]', tableStakeIPPattern).each(function () {
-                        let trCurrent = $(this);
-                        if (trCurrent.hasClass('hide'))
-                            trCurrent.removeClass('hide');
-                        else
-                            trCurrent.addClass('hide');
-                    });
                 }
             }
         });
@@ -931,11 +920,11 @@
             },
             success: function (response) {
                 if (response !== undefined) {
-                    tableStakeIPPattern.DataTable().rows.add(response).draw();
-                    tableStakeIPPattern.DataTable().columns.adjust();
-
-                    if (response.length > 0) {
+                    if (response.CoupleInfo.length > 0) {
+                        tableStakeIPPattern.DataTable().rows.add(response.CoupleInfo).draw();
+                        tableStakeIPPattern.DataTable().columns.adjust();
                         tableStakeIPPattern.show();
+                        titleMatchBettingPatternName.text("MATCH - STAKE/IP PATTERN (FIRST ASSOCIATION DATE {" + response.FirstCreatedDateString + "}).");
                         titleStakeIPPattern.show();
                     }
                 } else {
@@ -1037,7 +1026,7 @@
 
         let userAttribute = GetAttributeWithRowSpan(defaultStyle, isUserNameRowMember, userNameRowSpanNumer);
 
-        let newRow = $('<tr role="row" class="odd detail" data-couple-id=' + response[index]["CoupleID"] + '>')
+        let newRow = $('<tr role="row" class="odd detail"' + '>')
             .append('<td class="text-center" width="15%" ' + descriptionAttribute + '>' + response[index]["Description"] + '</td>')
             .append('<td class="text-center" ' + userAttribute + '>' + response[index]["UserName"] + '</td>')
             .append('<td class="text-center" ' + userAttribute + '>' + response[index]["MatchID"] + '</td>')

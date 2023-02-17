@@ -3,6 +3,7 @@ namespace Fanex.NAP.CTS.Criteria.Account.Associated
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
+    using System;
 
     public class GetCoupleInfoCriteria : CriteriaBase
     {
@@ -11,6 +12,9 @@ namespace Fanex.NAP.CTS.Criteria.Account.Associated
 
         [SpParam(SqlParamName = "ip_CustID2")]
         public long CustId2 { get; set; }
+
+        [SpParam(SqlParamName = "op_FirstCreatedDate")]
+        public DateTime FirstCreatedDate { get; set; }
 
         public override string GetSettingKey()
         {

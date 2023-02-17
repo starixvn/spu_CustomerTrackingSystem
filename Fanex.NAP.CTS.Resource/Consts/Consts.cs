@@ -392,5 +392,11 @@
             ConsecutiveTicket = 100,
             UglyStakeTicket = 101
         };
+
+        public enum AccountAssociation_PatternType
+        {
+            Stake = 1,
+            IP = 2
+        }
     }
 }

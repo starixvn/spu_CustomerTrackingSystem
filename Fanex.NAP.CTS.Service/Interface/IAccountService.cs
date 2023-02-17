@@ -151,11 +151,11 @@
 
 		AssociationByIPInfoModel GetAssociationByIPInfo(long custId1, long custId2);
 
-        IEnumerable<CoupleInfoViewModel> GetCoupleInfos(long custID1, long custID2);
+        CoupleInfoViewModel GetCoupleInfos(long custID1, long custID2);
 
-        IEnumerable<CoupleFraudDetailModel> GetCoupleFraudDetails(long coupleID, string coupleInfoDetails, DateTime createdDate);
+        IEnumerable<CoupleFraudDetailModel> GetCoupleFraudDetails(string coupleInfoDetails);
 
-        IEnumerable<CoupleIPFraudDetailModel> GetCoupleIPFraudDetails(long coupleID, string coupleInfoDetails, DateTime createdDate);
+        IEnumerable<CoupleIPFraudDetailModel> GetCoupleIPFraudDetails(string coupleInfoDetails);
 
         IEnumerable<TicketDetailsModel> GetTicketDetailsModel(string transIds);
     }

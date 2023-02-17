@@ -4,8 +4,6 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
     using Fanex.NAP.CTS.Model;
     public class StakeIpPatternDetailViewModel
     {
-        public long CoupleID { get; set; }
-
         public int GroupID { get; set; }
 
         public int GroupCustID { get; set; }
