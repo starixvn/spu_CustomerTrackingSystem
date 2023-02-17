@@ -256,7 +256,6 @@
             function () {
                 RemoveAssociation(fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, !obj.IsLinked);
             });
-
     }
 
     function RemoveAssociation(fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, isLinked) {
@@ -522,7 +521,6 @@
                     return AddBorderTags();
                 }
             }
-
         });
 
         $(document).on('mouseup', function (e) {
@@ -546,7 +544,6 @@
     }
 
     function ShowMatchBettingPattern(custId, groupIDs, originGroupIDs) {
-
         divMatchBettingPattern.dialog({
             modal: true,
             width: '1400px',
@@ -704,16 +701,15 @@
             },
             success: function (response) {
                 if (response !== undefined) {
-                    if (response.ErrorMessage === null || response.ErrorMessage === '')
-                    {
-                       tableMatchBettingPattern.DataTable().clear().rows.add(response.MatchesInfo).draw();
-                       tableMatchBettingPattern.DataTable().columns.adjust();
+                    if (response.ErrorMessage === null || response.ErrorMessage === '') {
+                        tableMatchBettingPattern.DataTable().clear().rows.add(response.MatchesInfo).draw();
+                        tableMatchBettingPattern.DataTable().columns.adjust();
 
                         if (response.MatchesInfo.length > 0 || response.IsExistGGB) {
-                           tableMatchBettingPattern.show();
-                           titleMatchBettingPattern.show();
-                       }
-                   }else {
+                            tableMatchBettingPattern.show();
+                            titleMatchBettingPattern.show();
+                        }
+                    } else {
                         console.log(response.ErrorMessage);
                         common.showError(response.ErrorMessage);
                     }
@@ -866,7 +862,6 @@
 
                     $(rows).eq(i).before(html);
                     last = group;
-
                 });
             }
         });
@@ -978,7 +973,6 @@
 
                 let iGroup = $('i.icon', target);
                 iGroup.addClass('has-detail');
-
             },
             complete: function () {
                 tableStakeIPPattern.find('tbody').removeClass('loading');

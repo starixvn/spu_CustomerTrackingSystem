@@ -164,7 +164,6 @@
             return RedirectToAction("Index", "Home");
         }
 
-
         [HttpPost]
         public ActionResult GetStatusRobotClassification(int custID)
         {
@@ -885,7 +884,6 @@
                     data.FirstCreatedDate = coupleInfo.FirstCreatedDate;
                 }
             }
-
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
@@ -931,7 +929,6 @@
 
                 data.AddRange(GetStakePatternDetail(patternDetail));
                 data.AddRange(GetIpPatternDetail(patternDetail));
-
             }
             catch (Exception ex)
             {
@@ -1010,7 +1007,6 @@
                         }));
                         stakeIpPatternDetailModel.LastGroupCustID++;
                     }
-
                 }
                 stakeIpPatternDetailModel.LastGroupID++;
             }
@@ -1024,7 +1020,7 @@
 
             var custId = IsCustId1 ? stakeIpPatternDetail.CustId1 : stakeIpPatternDetail.CustId2;
             var transIds = coupleFraudDetail.FraudTransListSperation.ToArray();
-            var ticketDetailsByCust = stakeIpPatternDetail.TicketDetails.Where(p => coupleFraudDetail.MatchID == p.MatchID && custId == p.CustID && transIds.Contains(p.TransId.ToString())).OrderBy(asc =>asc.Stake).OrderBy(asc => asc.TransDate);
+            var ticketDetailsByCust = stakeIpPatternDetail.TicketDetails.Where(p => coupleFraudDetail.MatchID == p.MatchID && custId == p.CustID && transIds.Contains(p.TransId.ToString())).OrderBy(asc => asc.Stake).OrderBy(asc => asc.TransDate);
             int countTicketDetails = ticketDetailsByCust.Count();
             foreach (var ticketDetail in ticketDetailsByCust)
             {
@@ -1086,7 +1082,6 @@
                         }));
                         stakeIpPatternDetailModel.LastGroupCustID++;
                     }
-
                 }
                 stakeIpPatternDetailModel.LastGroupID++;
             }
@@ -1541,7 +1536,7 @@
                         IsProblemAccount = x.CategoryType == 2
                     }).ToList();
 
-                isVVip = categoryList.Any(x => x.CategoryId == 210); // VVIP             
+                isVVip = categoryList.Any(x => x.CategoryId == 210); // VVIP
                 isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
 
                 isPAProbation = isProblemAccount && classification.Any(x => x.IsProbation);
@@ -1651,22 +1646,26 @@
                 case (int)ClassificationSourceType.HighRiskPunter73:
                     spanReason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount}";
                     break;
+
                 case (int)ClassificationSourceType.GoodMember:
                 case (int)ClassificationSourceType.GoodMember111:
                 case (int)ClassificationSourceType.GoodMember112:
                 case (int)ClassificationSourceType.GoodMember113:
                     spanReason += $"Turnover: {turnOver} | Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
                     break;
+
                 case (int)ClassificationSourceType.Probation57:
                 case (int)ClassificationSourceType.SmartPunter67:
                 case (int)ClassificationSourceType.HighRiskPunter77:
                     spanReason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Group Betting Percent: {twGroupBettingRate}";
                     break;
+
                 case (int)ClassificationSourceType.Probation58:
                 case (int)ClassificationSourceType.SmartPunter68:
                 case (int)ClassificationSourceType.HighRiskPunter78:
                     spanReason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Desktop Percent: {twDesktopTicket} | Reject Percent: {twTicketRejectRate}";
                     break;
+
                 case (int)ClassificationSourceType.NormalAccountInactive:
                 case (int)ClassificationSourceType.ProPunterInactive:
                     spanReason += $"<span> { cc.SourceTypeName } </span>";
@@ -1734,6 +1733,7 @@
                     }
 
                     break;
+
                 case (int)SourceTypeID.Classification_PAUnmarkDirectly:
                 case (int)SourceTypeID.Classification_UnmarkingPAAffectedDirectly:
                     spanReason += $"<span> { cc.SourceTypeName } </span>";
@@ -1742,6 +1742,7 @@
                         spanReason += $"| {cc.Remark}";
                     }
                     break;
+
                 case (int)SourceTypeID.Classification_ClassifyGBMatchMonitor:
                     if (!string.IsNullOrEmpty(cc.Remark))
                     {
@@ -1753,9 +1754,11 @@
                     }
 
                     break;
+
                 case (int)SourceTypeID.NoShow_Detail:
                     spanReason += $"{cc.CategoryName}";
                     break;
+
                 default:
                     break;
             }
@@ -1805,7 +1808,6 @@
                     errorCode = result.ErrorCode,
                     errorMessage = result.ErrorMsg
                 }, JsonRequestBehavior.AllowGet);
-
             }
             catch (Exception ex)
             {
@@ -2106,6 +2108,7 @@
         #endregion Customer Category
 
         #region Customer Category By Sport
+
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileGetCustomerCategoryBySportRpt)]
         public ActionResult GetCustomerCategoryBySport(long ctsCustID)
@@ -2137,7 +2140,8 @@
 
             return Json(new { data = custs }, JsonRequestBehavior.AllowGet);
         }
-        #endregion
+
+        #endregion Customer Category By Sport
 
         #region Robot Betting
 
@@ -2232,7 +2236,6 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-
         [HttpPost]
         public ActionResult GetRobotBettingReasonDetail(long custID, int robotTypeOrigin)
         {
@@ -2245,7 +2248,6 @@
                 reasonGroups = robotReasonDetail?.ToList().OrderBy(c => c.FirstTransDate) ?? Enumerable.Empty<RobotUserDetailSceModel>()
             }, JsonRequestBehavior.AllowGet); ;
         }
-
 
         public string GetMatchName(RobotBettingTicketDetailModel ticket)
         {
@@ -2451,6 +2453,5 @@
         }
 
         #endregion Betting Statistic
-
     }
 }
