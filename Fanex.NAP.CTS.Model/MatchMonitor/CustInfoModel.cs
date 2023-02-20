@@ -22,6 +22,9 @@
 
         public int CustomerClass { get; set; }
 
-        public bool IsNormalLinkedPA { get; set; }
+        public int ParentID { get; set; }
+
+        public int TaggingType { get; set; }
+
     }
 }

@@ -47,7 +47,7 @@
     };   
 
     let isFilterOption = false;
-    let MaxCustGroupCal = 5000;
+    let MaxCustGroupCal = 10;
 
     function InitialDetailGird(element) {
         element.DataTable({
@@ -110,7 +110,7 @@
                     data: obj => () => {
                         let url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustID);
                         let classColRed = '';
-                        if (obj.IsNormalLinkedPA || obj.IsRobot) {
+                        if (obj.IsPA || obj.IsNormalLinkedPA || obj.IsRobot) {
                             classColRed = 'col-red';
                         }
                         return `<a class='click-view-name ${classColRed}' href=${url}> ${obj.Username} </a>`;

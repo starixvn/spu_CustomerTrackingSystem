@@ -144,31 +144,9 @@
 
         public int BetTypeID { get; set; }
 
+        public bool IsPA { get; set; }
+
         public bool IsNormalLinkedPA { get; set; }
-
-        public string BetChoice
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(BetTeam))
-                {
-                    return BetTeam;
-                }
-
-                if (BetTypeID == (int)MatchMonitorBetType.FirsttOU || BetTypeID == (int)MatchMonitorBetType.OU || BetTypeID == (int)MatchMonitorBetType.QuarterXOU)
-                {
-                    if (string.Equals(BetTeam, "h", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return nameof(MatchMonitorBetChoiceId.O);
-                    }
-                    else if (string.Equals(BetTeam, "a", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return nameof(MatchMonitorBetChoiceId.U);
-                    }
-                }
-
-                return BetTeam.ToUpper();
-            }
-        }
+      
     }
 }

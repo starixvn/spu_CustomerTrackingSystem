@@ -549,7 +549,8 @@
                                                                     TransId = c.ticket.TransId,
                                                                     RobotType = null,
                                                                     IsRobot = false,
-                                                                    IsNormalLinkedPA = c.cust.IsNormalLinkedPA
+                                                                    IsPA = c.cust.ParentID == 50,
+                                                                    IsNormalLinkedPA = (c.cust.ParentID == 200 && c.cust.TaggingType == 1)
                                                                 };
                                                             })?.OrderByDescending(c => c.TransTime)?.Distinct()?.ToList();
 
@@ -606,6 +607,7 @@
                                         TransId = group.m.TransId,
                                         RobotType = (temp != null) ? temp?.RobotType : null,
                                         IsRobot = (temp != null) && temp.IsRobot,
+                                        IsPA = group.m.IsPA,
                                         IsNormalLinkedPA = group.m.IsNormalLinkedPA
                                     })?.OrderByDescending(c => c.TransTime)?.Distinct()?.ToList();
 
