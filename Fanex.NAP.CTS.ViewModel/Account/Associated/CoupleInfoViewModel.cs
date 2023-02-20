@@ -16,8 +16,6 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 
         public IEnumerable<CoupleInfoModel> CoupleInfo { get; set; }
 
-        public DateTime FirstCreatedDate { get; set; }
-
         public string CoupleInfoDetails { get { return JsonConvert.SerializeObject(CoupleInfo); } }
     }
 }

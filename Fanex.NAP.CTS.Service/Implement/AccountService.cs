@@ -746,9 +746,19 @@
                 result.CoupleInfo = db.Query<CoupleInfoModel>(criteria);
             }
 
-            result.FirstCreatedDate = criteria.FirstCreatedDate;
-
             return result;
+        }
+
+        public IEnumerable<DateTime> GetAIFristAssociationDate(long custID1, long custID2, AccountAssociation_ByAIPattern pattern)
+        {
+            var criteria = new GetAI5G3SFirstAssociationCriteria
+            {
+                CustId1 = custID1,
+                CustId2 = custID2,
+                AssType = (int) pattern
+            };
+
+            return repository.Fetch<DateTime>(criteria);
         }
 
         public IEnumerable<CoupleFraudDetailModel> GetCoupleFraudDetails(string coupleInfoJson)

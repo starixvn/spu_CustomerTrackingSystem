@@ -63,11 +63,11 @@
         NewMember31 = 231,
         NewMember32 = 232,
         NewMember33 = 233,
-        NormalAccount = 202, 
+        NormalAccount = 202,
         NormalAccount121 = 221,
         NormalAccount122 = 222,
         NormalAccount123 = 223,
-        NormalAccountInactive = 1001,        
+        NormalAccountInactive = 1001,
         SmartPunter = 203,
         SmartPunter61 = 261,
         SmartPunter62 = 262,
@@ -102,8 +102,8 @@
     {
         Classification_PAMarkDirectly = 31,
         Classification_PAAffectedByUplines = 32,
-        Classification_PAUnmarkDirectly = 33,       
-        Classification_UnmarkingPAAffectedDirectly = 34, 
+        Classification_PAUnmarkDirectly = 33,
+        Classification_UnmarkingPAAffectedDirectly = 34,
         Classification_ClassifyGBMatchMonitor = 35,
         Classification_Rescan = 36,
         Classification_InsertRobot = 37,
@@ -119,10 +119,10 @@
 
     public enum ProblemAccountAction
     {
-        Mark = 1,      
+        Mark = 1,
         Unmark = 2
     }
-   
+
     public enum ActionTypeQueueCustCategory
     {
         Insert = 1,
@@ -162,9 +162,14 @@
         IPAlternative = 3
     }
 
-    public enum AccountAssociation_PatternType
+    public enum AccountAssociationByAI_3G5SPattern
     {
         Stake = 1,
         IP = 2
+    }
+
+    public enum AccountAssociation_ByAIPattern
+    {
+        Pattern_3G5S = 2
     }
 }

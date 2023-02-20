@@ -153,6 +153,8 @@
 
         CoupleInfoViewModel GetCoupleInfos(long custID1, long custID2);
 
+        IEnumerable<DateTime> GetAIFristAssociationDate(long custID1, long custID2, AccountAssociation_ByAIPattern pattern);
+
         IEnumerable<CoupleFraudDetailModel> GetCoupleFraudDetails(string coupleInfoDetails);
 
         IEnumerable<CoupleIPFraudDetailModel> GetCoupleIPFraudDetails(string coupleInfoDetails);
