@@ -982,7 +982,7 @@
                 var coupleFraudDetailByStateIds = stakeIpPatternDetailModel.StakeFraudDetail.Where(p => p.StateID == groupStateId.StateId);
                 foreach (var coupleFraudDetail in coupleFraudDetailByStateIds)
                 {
-                    var resultCust1 = GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleFraudDetail, true, AccountAssociation_PatternType.Stake);
+                    var resultCust1 = GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleFraudDetail, true, AccountAssociation_PatternType.Stake).OrderBy(asc => asc.Stake).OrderBy(asc => asc.TransDate);
                     if (resultCust1.Any())
                     {
                         result.AddRange(resultCust1.Select(s =>
@@ -995,7 +995,7 @@
                         stakeIpPatternDetailModel.LastGroupCustID++;
                     }
 
-                    var resultCust2 = GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleFraudDetail, false, AccountAssociation_PatternType.Stake);
+                    var resultCust2 = GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleFraudDetail, false, AccountAssociation_PatternType.Stake).OrderBy(asc => asc.Stake).OrderBy(asc => asc.TransDate);
                     if (resultCust2.Any())
                     {
                         result.AddRange(resultCust2.Select(s =>
@@ -1014,37 +1014,41 @@
             return result;
         }
 
-        private IEnumerable<StakeIpPatternDetailViewModel> GetFraudDetailByCustId<T>(StakeIpPatternDetailModel stakeIpPatternDetail, T coupleFraudDetail, bool IsCustId1, AccountAssociation_PatternType patternType) where T : FraudDetailModel
+        private IEnumerable<StakeIpPatternDetailViewModel> GetFraudDetailByCustId<T>(StakeIpPatternDetailModel stakeIpPatternDetail, T coupleFraudDetail, bool isCustId1, AccountAssociation_PatternType patternType, IPPatternType3S? ipType = null) where T : FraudDetailModel
         {
             var result = new List<StakeIpPatternDetailViewModel>();
 
-            var custId = IsCustId1 ? stakeIpPatternDetail.CustId1 : stakeIpPatternDetail.CustId2;
+            var custId = isCustId1 ? stakeIpPatternDetail.CustId1 : stakeIpPatternDetail.CustId2;
             var transIds = coupleFraudDetail.FraudTransListSperation.ToArray();
             var ticketDetailsByCust = stakeIpPatternDetail.TicketDetails.Where(p => coupleFraudDetail.MatchID == p.MatchID && custId == p.CustID && transIds.Contains(p.TransId.ToString()));
-            ticketDetailsByCust = (patternType == AccountAssociation_PatternType.Stake) ? ticketDetailsByCust.OrderBy(asc => asc.Stake).OrderBy(asc => asc.TransDate) : ticketDetailsByCust.OrderBy(asc => asc.TransDate);
             int countTicketDetails = ticketDetailsByCust.Count();
+
             foreach (var ticketDetail in ticketDetailsByCust)
             {
                 result.Add(new StakeIpPatternDetailViewModel()
                 {
                     GroupCustID = stakeIpPatternDetail.LastGroupCustID,
                     GroupID = stakeIpPatternDetail.LastGroupID,
-                    CountGroupCustID = countTicketDetails,
+                    CountGroupCustID = patternType == AccountAssociation_PatternType.Stake ? countTicketDetails : 0,
                     MatchID = coupleFraudDetail.MatchID.ToString(),
                     UserName = ticketDetail.UserName,
                     TransId = ticketDetail.TransId.ToString(),
                     IP = ticketDetail.IP,
                     Odds = ticketDetail.Odds,
-                    Stake = ticketDetail.CurrencyName == "RM" ? "" : String.Format("{0:#.##}", ticketDetail.Stake),
+                    Stake = ticketDetail.Stake,
+                    StakeString = ticketDetail.CurrencyName == "RM" ? "" : String.Format("{0:#.##}", ticketDetail.Stake),
                     //StakeRM = String.Format("{0:#.##}", Math.Truncate(ticketDetail.StakeRM)),
                     BetTeam = ticketDetail.BetTeam,
                     BetType = ticketDetail.TypeName,
                     Currency = ticketDetail.CurrencyName == "RM" ? "" : ticketDetail.CurrencyName,
                     LiveScore = ticketDetail.LiveHomeScore != null && ticketDetail.LiveAwayScore != null ? $"{ticketDetail.LiveHomeScore}-{ticketDetail.LiveAwayScore}" : "",
                     TransDateString = ticketDetail.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    PatternType = (int)patternType
+                    TransDate = ticketDetail.TransDate,
+                    PatternType = (int)patternType,
+                    IPPatternType = patternType == AccountAssociation_PatternType.IP ? ipType : null
                 });
             }
+
             return result;
         }
 
@@ -1058,40 +1062,45 @@
             }
 
             var groupTypeIPEntanglements = stakeIpPatternDetailModel.IpFraudDetail.GroupBy(g => g.TypeIPEntanglement).Select(s => s.Key);
+           
             foreach (var groupTypeIPEntanglement in groupTypeIPEntanglements)
             {
                 var coupleIPFraudDetails = stakeIpPatternDetailModel.IpFraudDetail.Where(p => p.TypeIPEntanglement == groupTypeIPEntanglement);
 
+                IPPatternType3S ipType = coupleIPFraudDetails.FirstOrDefault().IPPatternType;
+
+                var resultCust1 = new List<StakeIpPatternDetailViewModel>();
+                var resultCust2 = new List<StakeIpPatternDetailViewModel>();
+
                 foreach (var coupleIPFraudDetail in coupleIPFraudDetails)
                 {
-                    var resultCust1 = GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleIPFraudDetail, true, AccountAssociation_PatternType.IP);
-                    if (resultCust1.Any())
-                    {
-                        result.AddRange(resultCust1.Select(s =>
-                        {
-                            s.IPPatternType = coupleIPFraudDetail.IPPatternType;
-                            return s;
-                        }));
-                        stakeIpPatternDetailModel.LastGroupCustID++;
-                    }
+                    resultCust1.AddRange(GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleIPFraudDetail, true, AccountAssociation_PatternType.IP, ipType));
+                }
+
+                if (resultCust1.Any())
+                {
+                    int sumGroupCust = resultCust1.Count();
+                    resultCust1.ForEach(c => { c.CountGroupCustID = sumGroupCust; });
+                    result.AddRange(resultCust1.OrderBy(asc => asc.TransDate));
+                    stakeIpPatternDetailModel.LastGroupCustID++;
                 }
 
                 foreach (var coupleIPFraudDetail in coupleIPFraudDetails)
                 {
-                    var resultCust2 = GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleIPFraudDetail, false, AccountAssociation_PatternType.IP);
-                    if (resultCust2.Any())
-                    {
-                        result.AddRange(resultCust2.Select(s =>
-                        {
-                            s.IPPatternType = coupleIPFraudDetail.IPPatternType;
-                            return s;
-                        }));
-                        stakeIpPatternDetailModel.LastGroupCustID++;
-                    }
+                    resultCust2.AddRange(GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleIPFraudDetail, false, AccountAssociation_PatternType.IP, ipType));
+                }
+
+                if (resultCust2.Any())
+                {
+                    int sumGroupCust = resultCust1.Count();
+                    resultCust2.ForEach(c => { c.CountGroupCustID = sumGroupCust; });
+                    result.AddRange(resultCust2.OrderBy(asc => asc.TransDate));
+                    stakeIpPatternDetailModel.LastGroupCustID++;
                 }
 
                 stakeIpPatternDetailModel.LastGroupID++;
             }
+
             return result;
         }
 

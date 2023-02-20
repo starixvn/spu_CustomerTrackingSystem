@@ -2,6 +2,8 @@
 namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 {
     using Fanex.NAP.CTS.Model;
+    using System;
+
     public class StakeIpPatternDetailViewModel
     {
         public int GroupID { get; set; }
@@ -14,7 +16,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
         
         public int TicketsPerMatch { get; set; }
 
-        public IPPatternType3S IPPatternType { get; set; }
+        public IPPatternType3S? IPPatternType { get; set; }
 
         public bool IsStakePattern { get; set; }
 
@@ -57,6 +59,8 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 
         public string MatchID { get; set; }
 
+        public  DateTime TransDate { get; set; }
+
         private string _transDateString { get; set; }
         public string TransDateString
         {
@@ -98,7 +102,9 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
             }
         }
 
-        public string Stake { get; set; }
+        public string StakeString { get; set; }
+
+        public decimal Stake { get; set; }
 
         public decimal Odds { get; set; }
 
