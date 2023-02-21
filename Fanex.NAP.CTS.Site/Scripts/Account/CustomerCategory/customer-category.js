@@ -565,43 +565,21 @@
             },
             success: function (response) {
                 switch (response.RobotType) {
-                    case -2:
-                        $('span.icon-base-robot').addClass('hide');
-                        $('span.icon-ob-robot').addClass('hide');
-                        $('span.icon-good-robot').addClass('hide');
-                        $('span.icon-bad-robot').addClass('hide');
-                        break;
-                        break;
-                    case -1:
-                        $('span.icon-base-robot').removeClass('hide');
-                        $('span.icon-ob-robot').addClass('hide');
-                        $('span.icon-good-robot').addClass('hide');
-                        $('span.icon-bad-robot').addClass('hide');
-                        break;
                     case 0:
-                        $('span.icon-base-robot').addClass('hide');
-                        $('span.icon-ob-robot').removeClass('hide');
-                        $('span.icon-good-robot').addClass('hide');
-                        $('span.icon-bad-robot').addClass('hide');
+                        $('span.icon-big-good-robot').addClass('hide');
+                        $('span.icon-big-bad-robot').addClass('hide');
                         break;
                     case 1:
-                        $('span.icon-base-robot').addClass('hide');
-                        $('span.icon-ob-robot').addClass('hide');
-                        $('span.icon-good-robot').removeClass('hide');
-                        $('span.icon-bad-robot').addClass('hide');
+                        $('span.icon-big-good-robot').removeClass('hide');
+                        $('span.icon-big-bad-robot').addClass('hide');
                         break;
                     case 2:
-                        $('span.icon-base-robot').addClass('hide');
-                        $('span.icon-ob-robot').addClass('hide');
-                        $('span.icon-good-robot').addClass('hide');
-                        $('span.icon-bad-robot').removeClass('hide');
+                        $('span.icon-big-good-robot').addClass('hide');
+                        $('span.icon-big-bad-robot').removeClass('hide'); 
                         break;
-                }              
-            },
-            beforeSend: function () {                
-            },
-            complete: function () {                
-            },
+                    default: break;
+                }                         
+            },         
             error: function (error) {
                 console.log(error);                
             }
