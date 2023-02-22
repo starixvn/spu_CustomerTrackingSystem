@@ -17,8 +17,6 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
         
         public int TicketsPerMatch { get; set; }
 
-        public IPPatternType3S? IPPatternType { get; set; }
-
         public bool IsStakePattern { get; set; }
 
         public int PatternType { get; set; }
@@ -31,16 +29,9 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
                 {
                     return $" Total Stake / Tickets per Match: ~{TotalStake} RM / {TicketsPerMatch}";
                 }
-                switch (this.IPPatternType)
+                else
                 {
-                    case IPPatternType3S.IPShared3Days:
-                        return "IP is shared on exact 3 days";
-                    case IPPatternType3S.AtLeast3IPsSameDay:
-                        return "At least 3 IPs are on same day";
-                    case IPPatternType3S.IPAlternative:
-                        return "IP Alternative";
-                    default:
-                        return "";
+                    return _iP;
                 }
             }
         }

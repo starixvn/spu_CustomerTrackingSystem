@@ -989,7 +989,7 @@
 
                 foreach (var coupleFraudDetail in coupleFraudDetailByStateIds)
                 {
-                    var resultCust1 = GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleFraudDetail, true, AccountAssociationByAI_3G5SPattern.Stake).OrderByDescending(desc => desc.EventDate).OrderByDescending(desc => desc.MatchID).OrderBy(asc => asc.Stake).OrderBy(asc => asc.TransDate);
+                    var resultCust1 = GetAI5g3sStakeAssDetail(stakeIpPatternDetailModel, coupleFraudDetail, true).OrderByDescending(desc => desc.EventDate).OrderByDescending(desc => desc.MatchID).OrderBy(asc => asc.Stake).OrderBy(asc => asc.TransDate);
                     if (resultCust1.Any())
                     {
                         result.AddRange(resultCust1.Select(s =>
@@ -1002,7 +1002,7 @@
                         stakeIpPatternDetailModel.LastGroupCustID++;
                     }
 
-                    var resultCust2 = GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleFraudDetail, false, AccountAssociationByAI_3G5SPattern.Stake).OrderByDescending(desc => desc.EventDate).OrderByDescending(desc => desc.MatchID).OrderBy(asc => asc.Stake).OrderBy(asc => asc.TransDate);
+                    var resultCust2 = GetAI5g3sStakeAssDetail(stakeIpPatternDetailModel, coupleFraudDetail, false).OrderByDescending(desc => desc.EventDate).OrderByDescending(desc => desc.MatchID).OrderBy(asc => asc.Stake).OrderBy(asc => asc.TransDate);
                     if (resultCust2.Any())
                     {
                         result.AddRange(resultCust2.Select(s =>
@@ -1022,40 +1022,51 @@
             return result;
         }
 
-        private IEnumerable<StakeIpPatternDetailViewModel> GetFraudDetailByCustId<T>(StakeIpPatternDetailModel stakeIpPatternDetail, T coupleFraudDetail, bool isCustId1, AccountAssociationByAI_3G5SPattern patternType, IPPatternType3S? ipType = null) where T : FraudDetailModel
+
+        private IEnumerable<StakeIpPatternDetailViewModel> GetAI5g3sStakeAssDetail<T>(StakeIpPatternDetailModel stakeIpPatternDetail, T coupleFraudDetail, bool isCustId1) where T : FraudDetailModel
+        {
+            var custId = isCustId1 ? stakeIpPatternDetail.CustId1 : stakeIpPatternDetail.CustId2;
+            var transIds = coupleFraudDetail.FraudTransListSperation.ToArray();
+            var ticketDetails = stakeIpPatternDetail.TicketDetails.Where(p => coupleFraudDetail.MatchID == p.MatchID && custId == p.CustID && transIds.Contains(p.TransId.ToString()));
+
+            var result = GetAI5G3SAssDetail(stakeIpPatternDetail, ticketDetails, AccountAssociationByAI_3G5SPattern.Stake);
+
+            return result ?? Enumerable.Empty<StakeIpPatternDetailViewModel>();
+        }
+
+        private IEnumerable<StakeIpPatternDetailViewModel> GetAI5G3SAssDetail(StakeIpPatternDetailModel stakeIpPatternDetail, IEnumerable<TicketDetailsModel> ticketDetails, AccountAssociationByAI_3G5SPattern patternType)
         {
             var result = new List<StakeIpPatternDetailViewModel>();
 
-            var custId = isCustId1 ? stakeIpPatternDetail.CustId1 : stakeIpPatternDetail.CustId2;
-            var transIds = coupleFraudDetail.FraudTransListSperation.ToArray();
-            var ticketDetailsByCust = stakeIpPatternDetail.TicketDetails.Where(p => coupleFraudDetail.MatchID == p.MatchID && custId == p.CustID && transIds.Contains(p.TransId.ToString()));
-            int countTicketDetails = ticketDetailsByCust.Count();
-
-            foreach (var ticketDetail in ticketDetailsByCust)
+            if (ticketDetails.Any())
             {
-                result.Add(new StakeIpPatternDetailViewModel()
+                var countTicketDetails = ticketDetails.Count();
+
+                foreach (var ticketDetail in ticketDetails)
                 {
-                    GroupCustID = stakeIpPatternDetail.LastGroupCustID,
-                    GroupID = stakeIpPatternDetail.LastGroupID,
-                    CountGroupCustID = patternType == AccountAssociationByAI_3G5SPattern.Stake ? countTicketDetails : 0,
-                    MatchID = coupleFraudDetail.MatchID,
-                    UserName = ticketDetail.UserName,
-                    TransId = ticketDetail.TransId.ToString(),
-                    IP = ticketDetail.IP,
-                    Odds = ticketDetail.Odds,
-                    Stake = ticketDetail.Stake,
-                    StakeString = String.Format("{0:#.##}", ticketDetail.Stake),
-                    //StakeRM = String.Format("{0:#.##}", Math.Truncate(ticketDetail.StakeRM)),
-                    BetTeam = ticketDetail.BetTeam,
-                    BetType = ticketDetail.TypeName,
-                    Currency = ticketDetail.CurrencyName,
-                    LiveScore = ticketDetail.LiveHomeScore != null && ticketDetail.LiveAwayScore != null ? $"{ticketDetail.LiveHomeScore}-{ticketDetail.LiveAwayScore}" : "",
-                    TransDateString = ticketDetail.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    TransDate = ticketDetail.TransDate,
-                    PatternType = (int)patternType,
-                    IPPatternType = patternType == AccountAssociationByAI_3G5SPattern.IP ? ipType : null,
-                    EventDate = ticketDetail.EventDate
-                });
+                    result.Add(new StakeIpPatternDetailViewModel()
+                    {
+                        GroupCustID = stakeIpPatternDetail.LastGroupCustID,
+                        GroupID = stakeIpPatternDetail.LastGroupID,
+                        CountGroupCustID = countTicketDetails,
+                        MatchID = ticketDetail.MatchID,
+                        UserName = ticketDetail.UserName,
+                        TransId = ticketDetail.TransId.ToString(),
+                        IP = ticketDetail.IP,
+                        Odds = ticketDetail.Odds,
+                        Stake = ticketDetail.Stake,
+                        StakeString = String.Format("{0:#.##}", ticketDetail.Stake),
+                        //StakeRM = String.Format("{0:#.##}", Math.Truncate(ticketDetail.StakeRM)),
+                        BetTeam = ticketDetail.BetTeam,
+                        BetType = ticketDetail.TypeName,
+                        Currency = ticketDetail.CurrencyName,
+                        LiveScore = ticketDetail.LiveHomeScore != null && ticketDetail.LiveAwayScore != null ? $"{ticketDetail.LiveHomeScore}-{ticketDetail.LiveAwayScore}" : "",
+                        TransDateString = ticketDetail.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                        TransDate = ticketDetail.TransDate,
+                        PatternType = (int)patternType,
+                        EventDate = ticketDetail.EventDate
+                    });
+                }
             }
 
             return result;
@@ -1065,45 +1076,30 @@
         {
             var result = new List<StakeIpPatternDetailViewModel>();
 
-            if (!stakeIpPatternDetailModel.IpFraudDetail.Any())
+            if (!stakeIpPatternDetailModel.IpFraudDetail.Any() || !stakeIpPatternDetailModel.TicketDetails.Any())
             {
                 return result;
             }
 
-            var groupTypeIPEntanglements = stakeIpPatternDetailModel.IpFraudDetail.GroupBy(g => g.TypeIPEntanglement).Select(s => s.Key);
+            var groupIPs = stakeIpPatternDetailModel.TicketDetails.GroupBy(g => g.IP, (key, group) => new { IP = key, Tickets = group });
 
-            foreach (var groupTypeIPEntanglement in groupTypeIPEntanglements)
+            foreach (var groupIP in groupIPs)
             {
-                var coupleIPFraudDetails = stakeIpPatternDetailModel.IpFraudDetail.Where(p => p.TypeIPEntanglement == groupTypeIPEntanglement);
-
-                IPPatternType3S ipType = coupleIPFraudDetails.FirstOrDefault().IPPatternType;
-
-                var resultCust1 = new List<StakeIpPatternDetailViewModel>();
-                var resultCust2 = new List<StakeIpPatternDetailViewModel>();
-
-                foreach (var coupleIPFraudDetail in coupleIPFraudDetails)
-                {
-                    resultCust1.AddRange(GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleIPFraudDetail, true, AccountAssociationByAI_3G5SPattern.IP, ipType));
-                }
+                var ticketCustId1 = groupIP.Tickets.Where(c => c.CustID == stakeIpPatternDetailModel.CustId1);
+                var resultCust1 = GetAI5G3SAssDetail(stakeIpPatternDetailModel, ticketCustId1, AccountAssociationByAI_3G5SPattern.IP);
 
                 if (resultCust1.Any())
                 {
-                    int sumGroupCust = resultCust1.Count();
-                    resultCust1.ForEach(c => { c.CountGroupCustID = sumGroupCust; });
-                    result.AddRange(resultCust1.OrderBy(asc => asc.TransDate));
+                    result.AddRange(resultCust1.OrderByDescending(desc => desc.EventDate).OrderByDescending(desc => desc.MatchID).OrderByDescending(desc => desc.TransDate));
                     stakeIpPatternDetailModel.LastGroupCustID++;
                 }
 
-                foreach (var coupleIPFraudDetail in coupleIPFraudDetails)
-                {
-                    resultCust2.AddRange(GetFraudDetailByCustId(stakeIpPatternDetailModel, coupleIPFraudDetail, false, AccountAssociationByAI_3G5SPattern.IP, ipType));
-                }
+                var ticketCustId2 = groupIP.Tickets.Where(c => c.CustID == stakeIpPatternDetailModel.CustId2);
+                var resultCust2 = GetAI5G3SAssDetail(stakeIpPatternDetailModel, ticketCustId2, AccountAssociationByAI_3G5SPattern.IP);
 
-                if (resultCust2.Any())
+                if (resultCust1.Any())
                 {
-                    int sumGroupCust = resultCust1.Count();
-                    resultCust2.ForEach(c => { c.CountGroupCustID = sumGroupCust; });
-                    result.AddRange(resultCust2.OrderBy(asc => asc.TransDate));
+                    result.AddRange(resultCust2.OrderByDescending(desc => desc.EventDate).OrderByDescending(desc => desc.MatchID).OrderByDescending(desc => desc.TransDate));
                     stakeIpPatternDetailModel.LastGroupCustID++;
                 }
 
