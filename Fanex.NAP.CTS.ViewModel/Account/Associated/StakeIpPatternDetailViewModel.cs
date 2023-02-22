@@ -2,6 +2,7 @@
 namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 {
     using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Resource.Consts;
     using System;
 
     public class StakeIpPatternDetailViewModel
@@ -57,7 +58,15 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
             }
         }
 
-        public string MatchID { get; set; }
+        public long MatchID { get; set; }
+
+        public string MatchIDToString 
+        { 
+            get
+            {
+                return MatchID.ToString();
+            }
+        }
 
         public  DateTime TransDate { get; set; }
 
@@ -146,6 +155,16 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
             set
             {
                 _iP = value ?? "";
+            }
+        }
+
+        public DateTime EventDate { get; set; }
+
+        public string EventDateToString
+        {
+            get
+            {
+                return EventDate.ToString(Consts.FormatDateToString_MMMddyyyy);
             }
         }
     }
