@@ -546,7 +546,7 @@
     function ShowMatchBettingPattern(custId, groupIDs, originGroupIDs) {
         divMatchBettingPattern.dialog({
             modal: true,
-            width: '1400px',
+            width: '1500px',
             title: 'ASSOCIATION DETAILS',
             resizable: false,
             draggable: true,
