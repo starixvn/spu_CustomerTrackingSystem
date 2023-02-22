@@ -989,7 +989,7 @@
 
                 foreach (var coupleFraudDetail in coupleFraudDetailByStateIds)
                 {
-                    var resultCust1 = GetAI5g3sStakeAssDetail(stakeIpPatternDetailModel, coupleFraudDetail, true).OrderByDescending(desc => desc.EventDate).OrderByDescending(desc => desc.MatchID).OrderBy(asc => asc.Stake).OrderBy(asc => asc.TransDate);
+                    var resultCust1 = GetAI5g3sStakeAssDetail(stakeIpPatternDetailModel, coupleFraudDetail, true).OrderByDescending(desc => desc.EventDate).ThenByDescending(desc => desc.MatchID).ThenBy(asc => asc.Stake).ThenBy(asc => asc.TransDate);
                     if (resultCust1.Any())
                     {
                         result.AddRange(resultCust1.Select(s =>
@@ -1002,7 +1002,7 @@
                         stakeIpPatternDetailModel.LastGroupCustID++;
                     }
 
-                    var resultCust2 = GetAI5g3sStakeAssDetail(stakeIpPatternDetailModel, coupleFraudDetail, false).OrderByDescending(desc => desc.EventDate).OrderByDescending(desc => desc.MatchID).OrderBy(asc => asc.Stake).OrderBy(asc => asc.TransDate);
+                    var resultCust2 = GetAI5g3sStakeAssDetail(stakeIpPatternDetailModel, coupleFraudDetail, false).OrderByDescending(desc => desc.EventDate).ThenByDescending(desc => desc.MatchID).ThenBy(asc => asc.Stake).ThenBy(asc => asc.TransDate);
                     if (resultCust2.Any())
                     {
                         result.AddRange(resultCust2.Select(s =>
@@ -1090,7 +1090,7 @@
 
                 if (resultCust1.Any())
                 {
-                    result.AddRange(resultCust1.OrderByDescending(desc => desc.EventDate).OrderByDescending(desc => desc.MatchID).OrderByDescending(desc => desc.TransDate));
+                    result.AddRange(resultCust1.OrderByDescending(desc => desc.EventDate).ThenByDescending(desc => desc.MatchID).ThenByDescending(desc => desc.TransDate));
                     stakeIpPatternDetailModel.LastGroupCustID++;
                 }
 
@@ -1099,7 +1099,7 @@
 
                 if (resultCust2.Any())
                 {
-                    result.AddRange(resultCust2.OrderByDescending(desc => desc.EventDate).OrderByDescending(desc => desc.MatchID).OrderByDescending(desc => desc.TransDate));
+                    result.AddRange(resultCust2.OrderByDescending(desc => desc.EventDate).ThenByDescending(desc => desc.MatchID).ThenByDescending(desc => desc.TransDate));
                     stakeIpPatternDetailModel.LastGroupCustID++;
                 }
 
