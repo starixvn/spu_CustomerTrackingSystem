@@ -1033,7 +1033,7 @@
         let newRow = $('<tr role="row" class="odd detail" data-pattern-type=' + response[index]["PatternType"] + '>')
             .append('<td class="text-center" width="15%" ' + descriptionAttribute + '>' + response[index]["Description"] + '</td>')
             .append('<td class="text-center" ' + userAttribute + '>' + response[index]["UserName"] + '</td>')
-            .append('<td class="text-center" >' + response[index]["EventDateToString"] + '</td>')
+            .append('<td class="text-center" >' + (IsStakePattern ? userAttribute : '') + '>' + response[index]["EventDateToString"] + '</td>')
             .append('<td class="text-center" ' + (IsStakePattern ? userAttribute : '') + '>' + response[index]["MatchIDToString"] + '</td>')
             .append('<td class="text-center" style = "' + styleRedFontInIpPattern + '">' + response[index]["IP"] + '</td>')
             //.append('<td class="text-center" style = "' + styleRedFontInStake + '">' + response[index]["StakeRM"] + '</td>')
