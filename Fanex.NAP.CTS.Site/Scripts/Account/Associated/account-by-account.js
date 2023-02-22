@@ -1033,18 +1033,18 @@
         let newRow = $('<tr role="row" class="odd detail" data-pattern-type=' + response[index]["PatternType"] + '>')
             .append('<td class="text-center" width="15%" ' + descriptionAttribute + '>' + response[index]["Description"] + '</td>')
             .append('<td class="text-center" ' + userAttribute + '>' + response[index]["UserName"] + '</td>')
-            .append('<td class="text-center" width=82px>' + response[index]["EventDateToString"] + '</td>')
+            .append('<td class="text-center" >' + response[index]["EventDateToString"] + '</td>')
             .append('<td class="text-center" ' + (IsStakePattern ? userAttribute : '') + '>' + response[index]["MatchIDToString"] + '</td>')
             .append('<td class="text-center" style = "' + styleRedFontInIpPattern + '">' + response[index]["IP"] + '</td>')
             //.append('<td class="text-center" style = "' + styleRedFontInStake + '">' + response[index]["StakeRM"] + '</td>')
             .append('<td class="text-center" style = "' + styleRedFontInStake + '">' + response[index]["StakeString"] + '</td>')
             .append('<td class="text-center" style = "' + styleRedFontInStake + '">' + response[index]["Currency"] + '</td>')
-            .append('<td class="text-center" width=142px>' + response[index]["TransDateString"] + '</td>')
+            .append('<td class="text-center" >' + response[index]["TransDateString"] + '</td>')
             .append('<td class="text-center" >' + response[index]["TransId"] + '</td>')
             .append('<td class="text-center" >' + response[index]["BetType"] + '</td>')
-            .append('<td class="text-center" width=60px>' + response[index]["BetTeam"] + '</td>')
-            .append('<td class="text-center" width=30px style = "' + (response[index]["Odds"] < 0 ? styleRedFont : '') + '">' + response[index]["Odds"] + '</td>')
-            .append('<td class="text-center" width=65px>' + response[index]["LiveScore"] + '</td>')
+            .append('<td class="text-center" >' + response[index]["BetTeam"] + '</td>')
+            .append('<td class="text-center" style = "' + (response[index]["Odds"] < 0 ? styleRedFont : '') + '">' + response[index]["Odds"] + '</td>')
+            .append('<td class="text-center" >' + response[index]["LiveScore"] + '</td>')
             .append('</tr>');
         return newRow;
     }

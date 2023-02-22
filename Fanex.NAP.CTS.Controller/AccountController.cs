@@ -1097,7 +1097,7 @@
                 var ticketCustId2 = groupIP.Tickets.Where(c => c.CustID == stakeIpPatternDetailModel.CustId2);
                 var resultCust2 = GetAI5G3SAssDetail(stakeIpPatternDetailModel, ticketCustId2, AccountAssociationByAI_3G5SPattern.IP);
 
-                if (resultCust1.Any())
+                if (resultCust2.Any())
                 {
                     result.AddRange(resultCust2.OrderByDescending(desc => desc.EventDate).OrderByDescending(desc => desc.MatchID).OrderByDescending(desc => desc.TransDate));
                     stakeIpPatternDetailModel.LastGroupCustID++;
