@@ -151,6 +151,9 @@
     <Compile Include="Account\AssociatedAccount\AssociatedAccountDetail\GBAssociationAIModel.cs" />
     <Compile Include="Account\AssociatedAccount\AccountStaticStatusModel.cs" />
     <Compile Include="Account\AssociatedAccount\AssociatedAccountDetail\MatchesInfoModel.cs" />
+    <Compile Include="Account\AssociatedAccount\CoupleDetailParameterViewModel.cs" />
+    <Compile Include="Account\AssociatedAccount\CoupleDetailParameterModel.cs" />
+    <Compile Include="Account\AssociatedAccount\CoupleInfoModel.cs" />
     <Compile Include="Account\BettingStatistic\PerformanceBySportModel.cs" />
     <Compile Include="Account\CustomerByGraphDB.cs" />
     <Compile Include="Account\CustomerCategoryBySport\GetCustomerCategoryBySportModel.cs" />
@@ -231,6 +234,10 @@
     <Compile Include="AssociationDetection\SharedIPMatchesInfoModel.cs" />
     <Compile Include="AssociationReport\AssociationDetailFromMySqlModel.cs" />
     <Compile Include="AssociationReport\AssociationFromMySqlModel.cs" />
+    <Compile Include="Association\CoupleFraudDetailModel.cs" />
+    <Compile Include="Association\CoupleIPFraudDetailModel.cs" />
+    <Compile Include="Association\FraudDetailModel.cs" />
+    <Compile Include="Association\StakeIpPatternDetailModel.cs" />
     <Compile Include="Common\SiteModel.cs" />
     <Compile Include="Common\SubscriberGroupModel.cs" />
     <Compile Include="Association\AssociationWithCategory.cs" />
@@ -410,6 +417,7 @@
     <Compile Include="Transaction\DataTableAjaxPostModel.cs" />
     <Compile Include="Transaction\Transaction.cs" />
     <Compile Include="Transaction\HistoryTransactionModel.cs" />
+    <Compile Include="Transaction\TicketDetailsModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

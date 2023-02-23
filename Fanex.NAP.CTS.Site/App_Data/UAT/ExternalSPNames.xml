@@ -32,7 +32,7 @@
 		<Setting Key="TicketVoiding_TicketsInRequest_Select" SpName="TicketVoiding_TicketsInRequest_Select_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get_xtest" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />		
 		<Setting Key="CTS_Customer_RobotCheckExist" SpName="CTS_Customer_RobotCheckExist_xtest" DbName="DBONUSER.ON_USER.bodbSPUNet" />
-		<Setting Key="CTS_MatchInfo_Get" SpName="CTS_MatchInfo_Get_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_MatchInfo_Get" SpName="CTS_MatchInfo_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 
 	<Function name="ProbationManagement">
@@ -45,12 +45,7 @@
 		
 		<Setting Key="CTS_CustomerUpdDanger" SpName="CTS_CustomerUpdDanger" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />-->
 	</Function>
-
-	<Function Name="FraudSensor">
-		<Setting Key="CTS_Rpt_BettingPattern_MatchInfo" SpName="CTS_Rpt_BettingPattern_MatchInfo_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_Rpt_BettingPattern_TicketDetails" SpName="CTS_Rpt_BettingPattern_TicketDetails_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
-	</Function>
-
+	
 	<Function name="MatchMonitor">
 		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
@@ -61,6 +56,9 @@
 
 	<Function name="CustomerProfile">
 		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_Rpt_BettingPattern_MatchInfo" SpName="CTS_Rpt_BettingPattern_MatchInfo" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_Rpt_BettingPattern_TicketDetails" SpName="CTS_Rpt_BettingPattern_TicketDetails_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_TicketDetails_Get" SpName="CTS_TicketDetails_Get_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 	
 	<Function Name="DailyProblemClassification">

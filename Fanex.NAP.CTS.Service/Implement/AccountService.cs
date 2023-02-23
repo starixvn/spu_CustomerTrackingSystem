@@ -15,8 +15,9 @@
     using Fanex.NAP.CTS.Criteria.Account.ChainToEvidence;
     using Fanex.NAP.CTS.Criteria.Account.CustomerCategory;
     using Fanex.NAP.CTS.Criteria.Account.CustomerCategoryBySport;
-    using Fanex.NAP.CTS.Criteria.Account.CustomerInfo; 
+    using Fanex.NAP.CTS.Criteria.Account.CustomerInfo;
     using Fanex.NAP.CTS.Criteria.Home;
+    using Fanex.NAP.CTS.Criteria.Transaction;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Account.AssociatedAccount;
@@ -25,17 +26,17 @@
     using Fanex.NAP.CTS.Model.Account.CustomerInfo;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassification;
-    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
-    using Fanex.NAP.CTS.Model.Home;    
-    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
-    using Fanex.NAP.CTS.Resource.Consts;    
+    using Fanex.NAP.CTS.Model.Home;
+    using Fanex.NAP.CTS.Model.Transaction;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using Newtonsoft.Json;
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -43,6 +44,8 @@
     public class AccountService : IAccountService
     {
         private readonly IDynamicRepository repository;
+        private readonly char seperatorCoupleCoupleInfo = '_';
+        private readonly char seperatorRowsCoupleCoupleInfo = ';';
 
         public AccountService()
         {
@@ -80,7 +83,7 @@
         {
             var criteria = new GetCustomerInfoDangerousCriteria
             {
-                CustIdList = custId.ToString(),               
+                CustIdList = custId.ToString(),
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -134,9 +137,9 @@
         {
             var criteria = new GetCustomerInfoLoginStatsCriteria
             {
-                 CTSCustID = ctsCustId,
-                 FromDate = fromDate,
-                 ToDate = toDate
+                CTSCustID = ctsCustId,
+                FromDate = fromDate,
+                ToDate = toDate
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -183,7 +186,7 @@
 
                 return result;
             }
-        }    
+        }
 
         public List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(long ctsCustId)
         {
@@ -232,7 +235,7 @@
                     FraudCaseList = fraudCaseList
                 };
             }
-        }     
+        }
 
         public List<TagModel> GetDirectAssociatedAccountTagFlagged(string custIdsAssInfo)
         {
@@ -263,7 +266,7 @@
                 return result;
             }
         }
-        
+
         public CustomerRobotUserStatusModel GetCustomerRobotUserStatus(long custId)
         {
             var criteria = new CustomerRobotUserStatusCriteria
@@ -556,7 +559,6 @@
                 CustID2 = custID2,
                 GroupList = groupList
             };
-
             result.MatchesInfo = repository.Fetch<GBAssociationAIModel>(criteria) ?? Enumerable.Empty<GBAssociationAIModel>();
             result.ErrorMessage = criteria.ErrorMessage;
             result.ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1;
@@ -618,7 +620,6 @@
                     CustIds = custIds,
                     MatchId = macthInfo.MatchId
                 };
-
                 return repository.Fetch<MatchesDetailInfoModel>(criteria) ?? Enumerable.Empty<MatchesDetailInfoModel>();
             }
 
@@ -647,8 +648,11 @@
                                         BetTeam = t.BetTeam,
                                         Stake = t.Stake,
                                         Odds = t.Odds,
-                                        LiveScore = t.LiveHomeScore + "-" + t.LiveAwayScore
-                                    })?.OrderBy(c=>c.GroupID).ThenByDescending(c=>c.TransDate).ToList();
+                                        LiveScore = t.LiveHomeScore + "-" + t.LiveAwayScore,
+                                        Currency = t.CurrencyName,
+                                        StakeRM = Math.Truncate(t.StakeRM),
+                                        IP = t.IP
+                                    })?.OrderBy(c => c.GroupID).ThenByDescending(c => c.TransDate).ToList();
             }
             else if (!isGGB && ticketDetails != null && ticketDetails.Any())
             {
@@ -666,7 +670,10 @@
                         BetTeam = c.BetTeam,
                         Stake = c.Stake,
                         Odds = c.Odds,
-                        LiveScore = c.LiveHomeScore + "-" + c.LiveAwayScore
+                        LiveScore = c.LiveHomeScore + "-" + c.LiveAwayScore,
+                        Currency = c.CurrencyName,
+                        StakeRM = Math.Truncate(c.StakeRM),
+                        IP = c.IP
                     });
                 });
 
@@ -683,7 +690,7 @@
                 return matchInfo.Join(groupInfo,
                                     m => m.GroupID,
                                     g => g.OriginGroupID,
-                                    (m,g) => new MatchCustomerGGBViewModel
+                                    (m, g) => new MatchCustomerGGBViewModel
                                     {
                                         CustID = g.CustID,
                                         GroupID = g.GroupID,
@@ -724,6 +731,71 @@
             }
         }
 
+        public CoupleInfoViewModel GetCoupleInfos(long custID1, long custID2)
+        {
+            var criteria = new GetCoupleInfoCriteria
+            {
+                CustId1 = custID1,
+                CustId2 = custID2
+            };
+
+            var result = new CoupleInfoViewModel();
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                result.CoupleInfo = db.Query<CoupleInfoModel>(criteria);
+            }
+
+            return result;
+        }
+
+        public IEnumerable<DateTime> GetAIFristAssociationDate(long custID1, long custID2, AccountAssociation_ByAIPattern pattern)
+        {
+            var criteria = new GetAI5G3SFirstAssociationCriteria
+            {
+                CustId1 = custID1,
+                CustId2 = custID2,
+                AssType = (int) pattern
+            };
+
+            return repository.Fetch<DateTime>(criteria);
+        }
+
+        public IEnumerable<CoupleFraudDetailModel> GetCoupleFraudDetails(string coupleInfoJson)
+        {
+            var criteria = new GetCoupleFraudDetailCriteria
+            {
+                CoupleInfoDetails = coupleInfoJson
+            };
+
+            return repository.Fetch<CoupleFraudDetailModel>(criteria);
+        }
+
+        public IEnumerable<CoupleIPFraudDetailModel> GetCoupleIPFraudDetails(string coupleInfoJson)
+        {
+            var criteria = new GetCoupleIPFraudDetailCriteria
+            {
+                CoupleInfoDetails = coupleInfoJson
+            };
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<CoupleIPFraudDetailModel>(criteria);
+            }
+        }
+
+        public IEnumerable<TicketDetailsModel> GetTicketDetailsModel(string transIds)
+        {
+            var result = new List<TicketDetailsModel>();
+
+            var criteria = new GetTicketDetailsCriteria()
+            {
+                ListTransId = transIds
+            };
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<TicketDetailsModel>(criteria);
+            }
+        }
         #endregion
 
         #region Chain To Evidence
@@ -908,7 +980,7 @@
             }
         }
 
-         #endregion
+        #endregion
 
         #region Customer Category
         public IEnumerable<SportGroup> GetAllSportGroup()
@@ -941,7 +1013,7 @@
 
             var criteria = new GetCTSCustomerClassificationCriteria
             {
-                 CTSCustID = ctsCustId
+                CTSCustID = ctsCustId
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -1051,7 +1123,7 @@
             };
 
             var criteria = new MarkVVIPCategoryCriteria
-            {              
+            {
                 FromAction = (int)FromAction.WebSite,
                 AffectDownline = categoryModel.IsAffectToAllDownlines,
                 CustJson = JsonConvert.SerializeObject(custList)
@@ -1059,7 +1131,7 @@
 
             var repository = new DynamicRepository();
 
-            return repository.Fetch<LatestClassificationModel>(criteria) ?? Enumerable.Empty<LatestClassificationModel>();            
+            return repository.Fetch<LatestClassificationModel>(criteria) ?? Enumerable.Empty<LatestClassificationModel>();
         }
 
         public DBResult AddQueueAffectDownlinesCustomerCategory(CustomerCategoryModel categoryModel)
@@ -1094,14 +1166,14 @@
 
         public IEnumerable<long> RemoveVVIPCategory(CustomerCategoryModel categoryModel)
         {
-            var custList = new List<RemoveCustomerCategoryInfoModel>() 
+            var custList = new List<RemoveCustomerCategoryInfoModel>()
             {
                 new RemoveCustomerCategoryInfoModel
                 {
                     CustID = categoryModel.CustId,
                     CTSCustID = categoryModel.CTSCustId,
                     RoleID = categoryModel.RoleId,
-                    CreatedBy = categoryModel.CreatedBy                    
+                    CreatedBy = categoryModel.CreatedBy
                 }
             };
 
@@ -1278,6 +1350,6 @@
 
             return repository.Fetch<CTSCustomer>(criteria);
         }
-        
+
     }
 }

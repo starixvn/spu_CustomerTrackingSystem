@@ -62,5 +62,11 @@
         public bool IsGGB { get; set; }
 
         public string AdditionalInfo { get; set; }
+
+        public decimal StakeRM { get; set; }
+
+        public string Currency { get; set; }
+
+        public string IP { get; set; }
     }
 }

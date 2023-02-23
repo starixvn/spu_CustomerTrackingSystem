@@ -47,11 +47,6 @@
 		<Setting Key="CTS_CustomerUpdDanger" SpName="CTS_CustomerUpdDanger" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
 	</Function>
 
-	<Function Name="FraudSensor">
-		<Setting Key="CTS_Rpt_BettingPattern_MatchInfo" SpName="CTS_Rpt_BettingPattern_MatchInfo" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_Rpt_BettingPattern_TicketDetails" SpName="CTS_Rpt_BettingPattern_TicketDetails" DbName="DBCTS.bodb02.bodbSPUNet" />
-	</Function>
-
 	<Function Name="Association">
 		<Setting Key="SPU_AIML_GetAssociationInfo" SpName="SPU_AIML_GetAssociationInfo" DbName="MySQL.SPU_AIML.Reporter" />
 		<Setting Key="SPU_AIML_GetAssociationByIPInfo" SpName="SPU_AIML_GetAssociationByIPInfo" DbName="MySQL.SPU_AIML.Reporter" />
@@ -67,6 +62,9 @@
 
 	<Function name="CustomerProfile">
 		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_Rpt_BettingPattern_MatchInfo" SpName="CTS_Rpt_BettingPattern_MatchInfo" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_Rpt_BettingPattern_TicketDetails" SpName="CTS_Rpt_BettingPattern_TicketDetails" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_TicketDetails_Get" SpName="CTS_TicketDetails_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 
 	<Function Name="DailyProblemClassification">

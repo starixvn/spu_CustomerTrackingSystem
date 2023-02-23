@@ -71,7 +71,11 @@
 		<Setting Key="CTS_DC_Association_Profile_GetStats" SpName="CTS_DC_Association_Profile_GetStats_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Association_Profile_Get" SpName="CTS_DC_Association_Profile_Get_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" SpName="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_Category_Get" SpName="CTS_DC_Category_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />		
+		<Setting Key="CTS_DC_Category_Get" SpName="CTS_DC_Category_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="SPU_AIML_GB_3S_GetCoupleInfo" SpName="SPU_AIML_GB_3S_GetCoupleInfo" DbName="MySQL.SPU_AIML.Reporter" />
+		<Setting Key="SPU_AIML_GB_3S_GetCouple_FraudDetails" SpName="SPU_AIML_GB_3S_GetCouple_FraudDetails" DbName="MySQL.SPU_AIML.Reporter" />
+		<Setting Key="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" SpName="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" DbName="MySQL.SPU_AIML.Reporter" />
+		<Setting Key="CTS_DC_AssociationByAI_GetFirstAssociationDate" SpName="CTS_DC_AssociationByAI_GetFirstAssociationDate_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function Name="AssociationDetection">
@@ -146,7 +150,7 @@
 	</Function>
 
 	<Function name="MatchMonitor">
-		<Setting Key="CTS_DC_MatchMonitor_Get" SpName="CTS_DC_MatchMonitor_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_MatchMonitor_Get" SpName="CTS_DC_MatchMonitor_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_MatchMonitor_Details_Verify" SpName="CTS_DC_MatchMonitor_Details_Verify_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_MatchMonitor_Details_GetReasonGroup" SpName="CTS_DC_MatchMonitor_Details_GetReasonGroup_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_MatchMonitor_Details_GetScore" SpName="CTS_DC_MatchMonitor_Details_GetScore_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
