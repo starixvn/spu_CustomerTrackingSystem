@@ -894,7 +894,9 @@
                     else
                         iGroup.removeClass('icon-chevron-down').addClass('icon-chevron-right');
 
-                    var data = $('tr[data-pattern-type="' + colGroupMatch.attr('data-pattern-type') + '"]', tableStakeIPPattern);
+                    var data = $('tr[data-pattern-type="' + colGroupMatch.attr('data-pattern-type') + '"]', tableStakeIPPattern.find('tbody'));
+
+                    trGroup.addClass('loading');
 
                     for (var i = 0, length = data.length; i < length; i++) {
                         let trCurrent = $(data[i]);
@@ -903,6 +905,8 @@
                         else
                             trCurrent.addClass('hide');
                     }
+
+                    trGroup.removeClass('loading');
                 }
             }
         });
