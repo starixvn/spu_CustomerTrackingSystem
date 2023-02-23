@@ -249,8 +249,18 @@
                             }),
                             Task.Run(() =>
                             {
-                                var tranIdsOfTotalMatch =  matchDetailInfo.MatchDetails.Select(c => c.TransID).Distinct();
-                                ticketDetail = _matchMonitorService.GetTicketDetail(para.EventDate, string.Join(",",tranIdsOfTotalMatch));                                
+                                var tranIds =  matchDetailInfo.MatchDetails.Select(c => c.TransID).Distinct();
+#if DEBUG
+                                var eventDateTest = new DateTime(2023, 02, 19);
+                                var tranIdsDistinct = new List<long>() { 87697562827489280 };
+#endif
+                                //ticketDetail = _matchMonitorService.GetTicketDetail(para.EventDate, string.Join(",",tranIdsOfTotalMatch)); 
+                                ticketDetail = _matchMonitorService.GetTicketDetail(eventDateTest, string.Join(",", tranIdsDistinct));
+
+                                //MMDetailBetTeamModel
+                               var aa =  matchDetailInfo.MatchDetails.Select(x=> new MMDetailBetTeamModel{
+
+                               });
                             })
                         };
 

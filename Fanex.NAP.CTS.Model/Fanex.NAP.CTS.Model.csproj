@@ -320,6 +320,7 @@
     <Compile Include="MatchMonitor\MatchMonitorReasonModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorSportModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorStaticListModel.cs" />
+    <Compile Include="MatchMonitor\MMDetailBetTeamModel.cs" />
     <Compile Include="MatchMonitor\MMDetailCustModel.cs" />
     <Compile Include="MatchMonitor\RobotStatusModel.cs" />
     <Compile Include="MatchMonitor\TransGroupModel.cs" />

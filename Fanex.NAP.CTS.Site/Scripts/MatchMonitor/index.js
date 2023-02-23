@@ -34,16 +34,23 @@
     }
 
     function ValidateRangeDate() {
+        let isValid = true;
         let toDateValue = domElements.dpkToDate.datepicker("getDate");
         let toDateValueAllow = domElements.dpkFromDate.datepicker("getDate");
         toDateValueAllow.setDate(toDateValueAllow.getDate() + 1);
 
-        if (toDateValue > toDateValueAllow) {
-            common.showError("Invalid date range, please select not more than 2 days");
-            return false;
-        }
+        if (toDateValueAllow > toDateValue)
+            isValid = false;
 
-        return true;
+
+        if (toDateValue > toDateValueAllow)
+            isValid = false;
+
+        if (!isValid) {         
+            common.showError("Invalid date range, please select not more than 2 days");
+        }
+      
+        return isValid;
     }
 
     function GenerateGrid() {       
@@ -246,8 +253,8 @@
                 changeMonth: true,
                 changeYear: true
             })
-            .datepicker("setDate", new Date())
-            .change(SetRestrictToDate);
+            .datepicker("setDate", new Date());
+            //.change(SetRestrictToDate);
 
         domElements.dpkToDate
             .datepicker({
@@ -255,8 +262,8 @@
                 changeMonth: true,
                 changeYear: true
             })
-            .datepicker("setDate", new Date())
-            .change(SetRestrictFromDate);
+            .datepicker("setDate", new Date());
+            //.change(SetRestrictFromDate);
 
         domElements.cbbSport.multiselect({
             menuWidth: 260,
