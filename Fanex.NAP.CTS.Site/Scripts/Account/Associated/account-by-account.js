@@ -668,13 +668,15 @@
                     else
                         iGroup.removeClass('icon-chevron-down').addClass('icon-chevron-right');
 
-                    $('tr[data-match-id="' + colGroupMatch.attr('data-match-id') + '"]', tableMatchBettingPattern).each(function () {
-                        let trCurrent = $(this);
+                    var data = $('tr[data-match-id="' + colGroupMatch.attr('data-match-id') + '"]', tableMatchBettingPattern);
+
+                    for (var i = 0, length = data.length; i < length; i++) {
+                        let trCurrent = $(data[i]);
                         if (trCurrent.hasClass('hide'))
                             trCurrent.removeClass('hide');
                         else
                             trCurrent.addClass('hide');
-                    });
+                    }
                 }
             }
         });
@@ -892,13 +894,15 @@
                     else
                         iGroup.removeClass('icon-chevron-down').addClass('icon-chevron-right');
 
-                    $('tr[data-pattern-type="' + colGroupMatch.attr('data-pattern-type') + '"]', tableStakeIPPattern).each(function () {
-                        let trCurrent = $(this);
+                    var data = $('tr[data-pattern-type="' + colGroupMatch.attr('data-pattern-type') + '"]', tableStakeIPPattern);
+
+                    for (var i = 0, length = data.length; i < length; i++) {
+                        let trCurrent = $(data[i]);
                         if (trCurrent.hasClass('hide'))
                             trCurrent.removeClass('hide');
                         else
                             trCurrent.addClass('hide');
-                    });
+                    }
                 }
             }
         });
