@@ -981,15 +981,15 @@
                 return result;
             }
 
-            var groupStateIds = stakeIpPatternDetailModel.StakeFraudDetail.GroupBy(g => g.StateID).Select(s => new { StateId = s.Key, BetCount = s.Max(m => m.BetCount) });
+            var groupStateIds = stakeIpPatternDetailModel.StakeFraudDetail.GroupBy(g => g.StateID).Select(s => new { StateId = s.Key, BetCount = s.Max(m => m.BetCount)});
 
             foreach (var groupStateId in groupStateIds.OrderByDescending(desc => desc.BetCount))
             {
-                var coupleFraudDetailByStateIds = stakeIpPatternDetailModel.StakeFraudDetail.Where(p => p.StateID == groupStateId.StateId);
+                var coupleFraudDetailByStateIds = stakeIpPatternDetailModel.StakeFraudDetail.Where(p => p.StateID == groupStateId.StateId).OrderByDescending(desc => desc.EventDate).ThenByDescending(desc => desc.MatchID);
 
                 foreach (var coupleFraudDetail in coupleFraudDetailByStateIds)
                 {
-                    var resultCust1 = GetAI5g3sStakeAssDetail(stakeIpPatternDetailModel, coupleFraudDetail, true).OrderByDescending(desc => desc.EventDate).ThenByDescending(desc => desc.MatchID).ThenBy(asc => asc.Stake).ThenBy(asc => asc.TransDate);              
+                    var resultCust1 = GetAI5g3sStakeAssDetail(stakeIpPatternDetailModel, coupleFraudDetail, true).OrderBy(asc => asc.Stake).ThenBy(asc => asc.TransDate);              
                     if (resultCust1.Any())
                     {
                         result.AddRange(resultCust1.Select(s =>
@@ -1005,7 +1005,7 @@
 
                 foreach (var coupleFraudDetail in coupleFraudDetailByStateIds)
                 {
-                    var resultCust2 = GetAI5g3sStakeAssDetail(stakeIpPatternDetailModel, coupleFraudDetail, false).OrderByDescending(desc => desc.EventDate).ThenByDescending(desc => desc.MatchID).ThenBy(asc => asc.Stake).ThenBy(asc => asc.TransDate);
+                    var resultCust2 = GetAI5g3sStakeAssDetail(stakeIpPatternDetailModel, coupleFraudDetail, false).OrderBy(asc => asc.Stake).ThenBy(asc => asc.TransDate);
                     if (resultCust2.Any())
                     {
                         result.AddRange(resultCust2.Select(s =>
