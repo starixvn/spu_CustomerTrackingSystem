@@ -989,7 +989,7 @@
 
                 foreach (var coupleFraudDetail in coupleFraudDetailByStateIds)
                 {
-                    var resultCust1 = GetAI5g3sStakeAssDetail(stakeIpPatternDetailModel, coupleFraudDetail, true).OrderBy(asc => asc.Stake).ThenBy(asc => asc.TransDate);              
+                    var resultCust1 = GetAI5g3sStakeAssDetail(stakeIpPatternDetailModel, coupleFraudDetail, true).OrderBy(asc => asc.Stake).ThenByDescending(asc => asc.TransDate);              
                     if (resultCust1.Any())
                     {
                         result.AddRange(resultCust1.Select(s =>
@@ -1005,7 +1005,7 @@
 
                 foreach (var coupleFraudDetail in coupleFraudDetailByStateIds)
                 {
-                    var resultCust2 = GetAI5g3sStakeAssDetail(stakeIpPatternDetailModel, coupleFraudDetail, false).OrderBy(asc => asc.Stake).ThenBy(asc => asc.TransDate);
+                    var resultCust2 = GetAI5g3sStakeAssDetail(stakeIpPatternDetailModel, coupleFraudDetail, false).OrderBy(asc => asc.Stake).ThenByDescending(asc => asc.TransDate);
                     if (resultCust2.Any())
                     {
                         result.AddRange(resultCust2.Select(s =>

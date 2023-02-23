@@ -682,7 +682,6 @@
 
     function GetMatchBettingPattern(custId1, custId2, groupIDs, originGroupIDs) {
         var url = common.modifyRelativeUrl('Account/GetMatchesAssociationByAI');
-        tableMatchBettingPattern.DataTable().rows().remove().draw();
 
         $.ajax(url, {
             type: 'POST',
@@ -702,6 +701,7 @@
             success: function (response) {
                 if (response !== undefined) {
                     if (response.ErrorMessage === null || response.ErrorMessage === '') {
+                        tableMatchBettingPattern.DataTable().rows().remove().draw();
                         tableMatchBettingPattern.DataTable().clear().rows.add(response.MatchesInfo).draw();
                         tableMatchBettingPattern.DataTable().columns.adjust();
 
@@ -908,7 +908,6 @@
 
     function GetCoupleInformations(custId1, custId2) {
         var url = common.modifyRelativeUrl('Account/GetCoupleInformationsByAI');
-        tableStakeIPPattern.DataTable().rows().remove().draw();
 
         $.ajax(url, {
             type: 'POST',
@@ -926,7 +925,7 @@
             success: function (response) {
                 if (response !== undefined) {
                     if (response.CoupleInfo.length > 0) {
-                        tableStakeIPPattern.DataTable().rows.add(response.CoupleInfo).draw();
+                        tableStakeIPPattern.DataTable().clear().rows.add(response.CoupleInfo).draw();
                         tableStakeIPPattern.DataTable().columns.adjust();
                         tableStakeIPPattern.show();
                         titleMatchBettingPatternName.text("MATCH - STAKE/IP PATTERN (First Association Date: " + response.FirstCreatedDateString + ")");
@@ -1059,6 +1058,11 @@
         else {
             return 'style="" rowspan = "' + rowSpan + '"';
         }
+    }
+
+    function ClearAIAssociationData() {
+        tableMatchBettingPattern.DataTable().rows().remove().draw();
+        tableStakeIPPattern.DataTable().rows().remove().draw();
     }
 
     function ShowIPAssociation(custId) {
@@ -1263,5 +1267,7 @@
         btnCancelAssociation.on('click', () => {
             divAddAssociation.dialog('close');
         });
+
+        divMatchBettingPattern.on('dialogclose', () => ClearAIAssociationData());
     };
 }
