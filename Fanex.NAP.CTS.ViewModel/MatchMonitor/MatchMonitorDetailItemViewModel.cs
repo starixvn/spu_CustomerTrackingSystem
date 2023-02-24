@@ -35,7 +35,7 @@
             this.TicketStatus = ticket.TicketStatus;
             this.TransTime = ticket.TransDate;
             this.TransTimeToString = ticket.TransDate.ToString(Consts.FormatDateToString_ddMMhhmmss);
-            this.ADetectGroup = mergeGroupID.ToString(); // rearrange GroupID
+            this.ADetectGroup = mergeGroupID.ToString();
             this.ADetectGroupID = mergeGroupID;
             this.MDetectGroup = "-";
             this.MDetectGroupID = -2;

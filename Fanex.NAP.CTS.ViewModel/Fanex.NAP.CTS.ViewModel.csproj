@@ -172,6 +172,7 @@
     <Compile Include="MatchMonitor\MatchMonitorDetailViewModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorFilterViewModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorViewModel.cs" />
+    <Compile Include="MatchMonitor\MMDetailMergeGroupViewModel.cs" />
     <Compile Include="Notification\NotificationMessagesViewModel.cs" />
     <Compile Include="Notification\NotificationSettingStatusViewModel.cs" />
     <Compile Include="Notification\NotificationSettingViewModel.cs" />

@@ -233,7 +233,7 @@
                     {
                         var mmStatic = new MatchMonitorStaticListModel();
                         var custInfo = Enumerable.Empty<CustInfoModel>();
-                        //var mappingTransInfo = Enumerable.Empty<TransGroupModel>();
+                        var mergeGroup = new MMDetailMergeGroupViewModel();
                         var ticketDetail = Enumerable.Empty<TicketDetailModel>();
                         var ticketMergeGroups = Enumerable.Empty<MMDetailMergeGroupModel>();
 
@@ -241,8 +241,7 @@
                         {
                             Task.Run(() =>
                             {
-                                mmStatic = _matchMonitorService.GetMMStaticList();
-                               // mappingTransInfo = MappingTransInfo(matchDetailInfo, mmStatic.Reasons);
+                                mmStatic = _matchMonitorService.GetMMStaticList();         
                             }),
                             Task.Run(() =>
                             {
@@ -252,13 +251,9 @@
                             Task.Run(() =>
                             {
                                 var tranIdsDistinct =  matchDetailInfo.MatchDetails.Select(c => c.TransID).Distinct();
-#if DEBUG
-                                //var eventDateTest = new DateTime(2023, 02, 19);
-                                //var tranIdsDistinct = new List<long>() { 87697562827489280 };
-#endif
-                                ticketDetail = _matchMonitorService.GetTicketDetail(para.EventDate, string.Join(",", tranIdsDistinct)); 
-                                //ticketDetail = _matchMonitorService.GetTicketDetail(eventDateTest, string.Join(",", tranIdsDistinct));
 
+                                ticketDetail = _matchMonitorService.GetTicketDetail(para.EventDate, string.Join(",", tranIdsDistinct)); 
+                              
                                var mMDetailBetTeams = matchDetailInfo.MatchDetails.Join(ticketDetail,
                                    m => m.TransID,
                                    t => t.TransId, (m, t) => new MMDetailBetTeamModel (m, t));
@@ -266,13 +261,15 @@
                                 if (mMDetailBetTeams.Any())
                                 {
                                     ticketMergeGroups = _matchMonitorService.GetMMDetailMergeGroup(mMDetailBetTeams);
+                                    mergeGroup.TicketMergeGroups = ticketMergeGroups;
+                                    mergeGroup.Groups = mergeGroup.GroupByGroupID();
                                 }
                             })
                         };
 
                         Task.WhenAll(tasks.ToArray()).Wait();
 
-                        var mergeInfo = MergeMMDetail(matchDetailInfo.VerifiedTrans, custInfo, ticketDetail, ticketMergeGroups, mmStatic.Reasons);
+                        var mergeInfo = MergeMMDetail(matchDetailInfo.VerifiedTrans, custInfo, ticketDetail, mergeGroup, mmStatic.Reasons);
 
                         mdItemList = MappingRobotStatus(mergeInfo, para.BetTypeID);
                        
@@ -285,7 +282,8 @@
                             CTSCustIDList = string.Join(",", custs),
                             HomeMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)),
                             AwayMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)),                           
-                            ScoreList = mdItemList.Select(x => x.Score).Distinct().OrderBy(x => x)
+                            ScoreList = mdItemList.Select(x => x.Score).Distinct().OrderBy(x => x),
+                            GroupList = mergeGroup.Groups
                         };
                         mdResult.BindReasons(mdItemList.Select(x => x.ReasonList));
                     }
@@ -455,59 +453,56 @@
             return false;
         }
                       
-        private IEnumerable<TransGroupModel> MappingTransInfo(MatchMonitorDetailResultModel matchDetail, IEnumerable<MatchMonitorReasonModel> reasons)
-        {
-            var transGroupBetting = new List<TransGroupModel>();
+        //private IEnumerable<TransGroupModel> MappingTransInfo(MatchMonitorDetailResultModel matchDetail, IEnumerable<MatchMonitorReasonModel> reasons)
+        //{
+        //    var transGroupBetting = new List<TransGroupModel>();
 
-            if (matchDetail != null && matchDetail.MatchDetails.Any())
-            {
-                matchDetail.MatchDetails.ToList().ForEach(i =>
-                {
-                    var verifyTranInfo = matchDetail.VerifiedTrans?.FirstOrDefault(c => c.VerifiedTransID == i.TransID);
-                    var reasonName = reasons.FirstOrDefault(x => x.ReasonID == i.Reason)?.ReasonName;
-                    var transGroup = new TransGroupModel
-                    {
-                        TransID = i.TransID,               
-                        VerifiedTransID = verifyTranInfo?.VerifiedTransID.ToString() ?? string.Empty,
-                        VerifiedDate = verifyTranInfo?.VerifiedDate.ToString(FormatDateToString_MMMddhhmmss) ?? string.Empty,
-                        ReasonNameList = reasonName
-                    };
+        //    if (matchDetail != null && matchDetail.MatchDetails.Any())
+        //    {
+        //        matchDetail.MatchDetails.ToList().ForEach(i =>
+        //        {
+        //            var verifyTranInfo = matchDetail.VerifiedTrans?.FirstOrDefault(c => c.VerifiedTransID == i.TransID);
+        //            var reasonName = reasons.FirstOrDefault(x => x.ReasonID == i.Reason)?.ReasonName;
+        //            var transGroup = new TransGroupModel
+        //            {
+        //                TransID = i.TransID,               
+        //                VerifiedTransID = verifyTranInfo?.VerifiedTransID.ToString() ?? string.Empty,
+        //                VerifiedDate = verifyTranInfo?.VerifiedDate.ToString(FormatDateToString_MMMddhhmmss) ?? string.Empty,
+        //                ReasonNameList = reasonName
+        //            };
 
-                    transGroupBetting.Add(transGroup);
-                });
-            }
+        //            transGroupBetting.Add(transGroup);
+        //        });
+        //    }
 
-            return transGroupBetting;
-        }
+        //    return transGroupBetting;
+        //}
 
         private IEnumerable<MatchMonitorDetailItemViewModel> MergeMMDetail(IEnumerable<MatchMonitorDetailVerifyTransResultModel> verifiedTrans,
             IEnumerable<CustInfoModel> custInfo,
             IEnumerable<TicketDetailModel> ticket,
-            IEnumerable<MMDetailMergeGroupModel> ticketMergeGroups,
+            MMDetailMergeGroupViewModel mergeGroup,
             IEnumerable<MatchMonitorReasonModel> reasons)
         {
             var ticketResult = Enumerable.Empty<MatchMonitorDetailItemViewModel>();
 
-            if (custInfo == null || ticket == null || ticketMergeGroups == null)
-                return ticketResult;
-           
-            ticketResult = ticketMergeGroups.Join(ticket,
-                tg => tg.TransID,
-                t => t.TransId,
+            if (custInfo == null || ticket == null || mergeGroup.TicketMergeGroups == null)
+                return ticketResult;                        
+
+            ticketResult = mergeGroup.TicketMergeGroups.Join(ticket, tg => tg.TransID, t => t.TransId,
                 (tg, t) => new { tg = tg, t = t })
-                .Join(custInfo,
-                ttg => ttg.t.CustId,
-                c => c.CustID,
+                .Join(custInfo, ttg => ttg.t.CustId, c => c.CustID,
                 (ttg, c) => new { ttg = ttg, c = c }).Select(x =>
                 {
                     var nTicket = new MatchMonitorDetailItemViewModel(x.ttg.tg.MergeGroupID, x.ttg.t, x.c);
-                    var verifiedTransID = verifiedTrans.FirstOrDefault(y => y.VerifiedTransID == x.ttg.t.TransId)?.VerifiedTransID.ToString() ?? string.Empty;                    
-                   
+                    var verifiedTransID = verifiedTrans.FirstOrDefault(y => y.VerifiedTransID == x.ttg.t.TransId)?.VerifiedTransID.ToString() ?? string.Empty;
+                    var group = mergeGroup.Groups.FirstOrDefault(y => y.GroupID == x.ttg.tg.MergeGroupID);
+
                     nTicket.PICVerified = verifiedTransID;
                     nTicket.ReasonList = GetReasonName(reasons, x.ttg.tg.ReasonList);
-                    //nTicket.ADetectGroup = mergeGroupID.ToString(); // rearrange GroupID
-                    //nTicket.ADetectGroupID = mergeGroupID;
-
+                    nTicket.ADetectGroupID = group?.GroupID ?? 0;
+                    nTicket.ADetectGroup = group?.GroupName ?? "-";
+                    
                     return nTicket;
                 });
 
@@ -524,7 +519,7 @@
 
                 if (robotStatus.Any())
                 {
-                    var result = ticket.GroupJoin(robotStatus,
+                    return ticket.GroupJoin(robotStatus,
                                t => t.TransId,
                                r => r.TransID,
                                (t, r) => new { t, r })
@@ -532,144 +527,140 @@
                                     group => group.r.DefaultIfEmpty(),
                                     (g, r) => {
                                         var nt = g.t;
-                                        //nt.RobotType = (r != null) ? r?.RobotType : null;
-                                        //nt.IsRobot = (r != null) && r.IsRobot;
-                                        nt.RobotType = 1;
-                                        nt.IsRobot = true;
+                                        nt.RobotType = (r != null) ? r?.RobotType : null;
+                                        nt.IsRobot = (r != null) && r.IsRobot;
                                         nt.BetTypeID = betTypeID;
                                         return nt;
                                     });
-
-                    return result;
                 }
             }
 
             return ticket;
         }
 
-        private IEnumerable<MatchMonitorDetailItemViewModel> MergeMatchMonitorDetail(IEnumerable<MatchMonitorDetailVerifyTransResultModel> verifiedTrans, 
-            IEnumerable<CustInfoModel> custInfo,
-            IEnumerable<TicketDetailModel> ticketDetail,
-            IEnumerable<MatchMonitorReasonModel> reasons)
-        {
-            var matchDetailResult = new List<MatchMonitorDetailItemViewModel>();
+        //private IEnumerable<MatchMonitorDetailItemViewModel> MergeMatchMonitorDetail(IEnumerable<MatchMonitorDetailVerifyTransResultModel> verifiedTrans, 
+        //    IEnumerable<CustInfoModel> custInfo,
+        //    IEnumerable<TicketDetailModel> ticketDetail,
+        //    IEnumerable<MatchMonitorReasonModel> reasons)
+        //{
+        //    var matchDetailResult = new List<MatchMonitorDetailItemViewModel>();
 
-            if (custInfo == null || ticketDetail == null)
-            {
-                return matchDetailResult;
-            }
+        //    if (custInfo == null || ticketDetail == null)
+        //    {
+        //        return matchDetailResult;
+        //    }
 
-            matchDetailResult = ticketDetail.Join(custInfo, ticket => ticket.CustId,
-                                                            cust => cust.CustID,
-                                                            (ticket, cust) => new { ticket, cust })
-                                                            .Select(c => {
-                                                                var verifiedTransID = verifiedTrans.FirstOrDefault(x => x.VerifiedTransID == c.ticket.TransId)
-                                                                            ?.VerifiedTransID.ToString() ?? string.Empty;
-                                                                //var reasonName = reasons.FirstOrDefault(x=>x.ReasonID == c.ticket.)
-                                                                var reasonName = "test";
+        //    matchDetailResult = ticketDetail.Join(custInfo, ticket => ticket.CustId,
+        //                                                    cust => cust.CustID,
+        //                                                    (ticket, cust) => new { ticket, cust })
+        //                                                    .Select(c => {
+        //                                                        var verifiedTransID = verifiedTrans.FirstOrDefault(x => x.VerifiedTransID == c.ticket.TransId)
+        //                                                                    ?.VerifiedTransID.ToString() ?? string.Empty;
+        //                                                        //var reasonName = reasons.FirstOrDefault(x=>x.ReasonID == c.ticket.)
+        //                                                        var reasonName = "test";
 
-                                                                return new MatchMonitorDetailItemViewModel
-                                                                {
-                                                                    CTSCustID = c.cust.CTSCustID,
-                                                                    CustID = c.cust.CustID,
-                                                                    SubscriberType = c.cust.SubscriberType,
-                                                                    Username = c.cust.UserName,
-                                                                    CustomerClass = c.cust.CustomerClass,
-                                                                    PICVerified = verifiedTransID,
-                                                                    Danger1 = c.ticket.Danger1,
-                                                                    Danger2 = c.ticket.Danger2,
-                                                                    Danger3 = c.ticket.Danger3,
-                                                                    Danger4 = c.ticket.Danger4,
-                                                                    Danger5 = c.ticket.Danger5,
-                                                                    Odds = c.ticket.Odds,
-                                                                    BetID = c.ticket.TransId.ToString(),
-                                                                    BetTeam = c.ticket.BetTeam,
+        //                                                        return new MatchMonitorDetailItemViewModel
+        //                                                        {
+        //                                                            CTSCustID = c.cust.CTSCustID,
+        //                                                            CustID = c.cust.CustID,
+        //                                                            SubscriberType = c.cust.SubscriberType,
+        //                                                            Username = c.cust.UserName,
+        //                                                            CustomerClass = c.cust.CustomerClass,
+        //                                                            PICVerified = verifiedTransID,
+        //                                                            Danger1 = c.ticket.Danger1,
+        //                                                            Danger2 = c.ticket.Danger2,
+        //                                                            Danger3 = c.ticket.Danger3,
+        //                                                            Danger4 = c.ticket.Danger4,
+        //                                                            Danger5 = c.ticket.Danger5,
+        //                                                            Odds = c.ticket.Odds,
+        //                                                            BetID = c.ticket.TransId.ToString(),
+        //                                                            BetTeam = c.ticket.BetTeam,
 
-                                                                    Currency = c.cust.Currency,
-                                                                    Stake = c.ticket.Stake,
-                                                                    Amount = c.ticket.OrgStake,
-                                                                    HDP1 = c.ticket.Hdp1,
-                                                                    HDP2 = c.ticket.Hdp2,
-                                                                    Score = c.ticket.LiveIndicator ? (c.ticket.LiveHomeScore + " - " + c.ticket.LiveAwayScore) : "-",
-                                                                    TicketStatus = c.ticket.TicketStatus,
-                                                                    TransTime = c.ticket.TransDate,
-                                                                    TransTimeToString = c.ticket.TransDate.ToString(Consts.FormatDateToString_ddMMhhmmss),
-                                                                    ADetectGroup = "",
-                                                                    ADetectGroupID = -2,
-                                                                    MDetectGroup = "-",
-                                                                    MDetectGroupID = -2,
-                                                                    ReasonList = reasonName,
-                                                                    TransId = c.ticket.TransId,
-                                                                    RobotType = null,
-                                                                    IsRobot = false,
-                                                                    IsPA = c.cust.ParentID == 50,
-                                                                    IsNormalLinkedPA = (c.cust.ParentID == 200 && c.cust.TaggingType == 1)
-                                                                };
-                                                            })?.OrderByDescending(c => c.TransTime)?.Distinct()?.ToList();
+        //                                                            Currency = c.cust.Currency,
+        //                                                            Stake = c.ticket.Stake,
+        //                                                            Amount = c.ticket.OrgStake,
+        //                                                            HDP1 = c.ticket.Hdp1,
+        //                                                            HDP2 = c.ticket.Hdp2,
+        //                                                            Score = c.ticket.LiveIndicator ? (c.ticket.LiveHomeScore + " - " + c.ticket.LiveAwayScore) : "-",
+        //                                                            TicketStatus = c.ticket.TicketStatus,
+        //                                                            TransTime = c.ticket.TransDate,
+        //                                                            TransTimeToString = c.ticket.TransDate.ToString(Consts.FormatDateToString_ddMMhhmmss),
+        //                                                            ADetectGroup = "",
+        //                                                            ADetectGroupID = -2,
+        //                                                            MDetectGroup = "-",
+        //                                                            MDetectGroupID = -2,
+        //                                                            ReasonList = reasonName,
+        //                                                            TransId = c.ticket.TransId,
+        //                                                            RobotType = null,
+        //                                                            IsRobot = false,
+        //                                                            IsPA = c.cust.ParentID == 50,
+        //                                                            IsNormalLinkedPA = (c.cust.ParentID == 200 && c.cust.TaggingType == 1)
+        //                                                        };
+        //                                                    })?.OrderByDescending(c => c.TransTime)?.Distinct()?.ToList();
 
-            return matchDetailResult;
-        }
+        //    return matchDetailResult;
+        //}
 
-        private IEnumerable<MatchMonitorDetailItemViewModel> GetRobotStatus(IEnumerable<MatchMonitorDetailItemViewModel> matchDetailInfo, int betTypeID)
-        {
-            if (matchDetailInfo != null && matchDetailInfo.Any())
-            {
-                var para = matchDetailInfo.Select(c => new { TransID = c.TransId, TransDate = c.TransTime, CustID = c.CustID });
+        //private IEnumerable<MatchMonitorDetailItemViewModel> GetRobotStatus(IEnumerable<MatchMonitorDetailItemViewModel> matchDetailInfo, int betTypeID)
+        //{
+        //    if (matchDetailInfo != null && matchDetailInfo.Any())
+        //    {
+        //        var para = matchDetailInfo.Select(c => new { TransID = c.TransId, TransDate = c.TransTime, CustID = c.CustID });
 
-                var robotStatus = _matchMonitorService.GetRobotStatus(JsonConvert.SerializeObject(para));
+        //        var robotStatus = _matchMonitorService.GetRobotStatus(JsonConvert.SerializeObject(para));
 
-                if (robotStatus != null && robotStatus.Any())
-                {
-                    var result = matchDetailInfo.GroupJoin(robotStatus,
-                               m => m.TransId,
-                               r => r.TransID,
-                               (m, r) => new { m, r })
-                               .SelectMany(
-                                    group => group.r.DefaultIfEmpty(),
-                                    (group, temp) => new MatchMonitorDetailItemViewModel
-                                    {
-                                        CTSCustID = group.m.CTSCustID,
-                                        CustID = group.m.CustID,                                        
-                                        SubscriberType = group.m.SubscriberType,
-                                        Username = group.m.Username,
-                                        CustomerClass = group.m.CustomerClass,
-                                        PICVerified = group.m.PICVerified,
-                                        Danger1 = group.m.Danger1,
-                                        Danger2 = group.m.Danger2,
-                                        Danger3 = group.m.Danger3,
-                                        Danger4 = group.m.Danger4,
-                                        Danger5 = group.m.Danger5,
-                                        Odds = group.m.Odds,
-                                        BetID = group.m.TransId.ToString(),
-                                        BetTeam = group.m.BetTeam,
-                                        BetTypeID = betTypeID,
-                                        Currency = group.m.Currency,
-                                        Stake = group.m.Stake,
-                                        Amount = group.m.Amount,
-                                        HDP1 = group.m.HDP1,
-                                        HDP2 = group.m.HDP2,
-                                        Score = group.m.Score,
-                                        TicketStatus = group.m.TicketStatus,
-                                        TransTime = group.m.TransTime,
-                                        TransTimeToString = group.m.TransTimeToString,
-                                        ADetectGroup = group.m.ADetectGroup,
-                                        ADetectGroupID = group.m.ADetectGroupID,
-                                        MDetectGroup = group.m.MDetectGroup,
-                                        MDetectGroupID = group.m.MDetectGroupID,
-                                        ReasonList = group.m.ReasonList,
-                                        TransId = group.m.TransId,
-                                        RobotType = (temp != null) ? temp?.RobotType : null,
-                                        IsRobot = (temp != null) && temp.IsRobot,
-                                        IsPA = group.m.IsPA,
-                                        IsNormalLinkedPA = group.m.IsNormalLinkedPA
-                                    })?.OrderByDescending(c => c.TransTime)?.Distinct()?.ToList();
+        //        if (robotStatus != null && robotStatus.Any())
+        //        {
+        //            var result = matchDetailInfo.GroupJoin(robotStatus,
+        //                       m => m.TransId,
+        //                       r => r.TransID,
+        //                       (m, r) => new { m, r })
+        //                       .SelectMany(
+        //                            group => group.r.DefaultIfEmpty(),
+        //                            (group, temp) => new MatchMonitorDetailItemViewModel
+        //                            {
+        //                                CTSCustID = group.m.CTSCustID,
+        //                                CustID = group.m.CustID,                                        
+        //                                SubscriberType = group.m.SubscriberType,
+        //                                Username = group.m.Username,
+        //                                CustomerClass = group.m.CustomerClass,
+        //                                PICVerified = group.m.PICVerified,
+        //                                Danger1 = group.m.Danger1,
+        //                                Danger2 = group.m.Danger2,
+        //                                Danger3 = group.m.Danger3,
+        //                                Danger4 = group.m.Danger4,
+        //                                Danger5 = group.m.Danger5,
+        //                                Odds = group.m.Odds,
+        //                                BetID = group.m.TransId.ToString(),
+        //                                BetTeam = group.m.BetTeam,
+        //                                BetTypeID = betTypeID,
+        //                                Currency = group.m.Currency,
+        //                                Stake = group.m.Stake,
+        //                                Amount = group.m.Amount,
+        //                                HDP1 = group.m.HDP1,
+        //                                HDP2 = group.m.HDP2,
+        //                                Score = group.m.Score,
+        //                                TicketStatus = group.m.TicketStatus,
+        //                                TransTime = group.m.TransTime,
+        //                                TransTimeToString = group.m.TransTimeToString,
+        //                                ADetectGroup = group.m.ADetectGroup,
+        //                                ADetectGroupID = group.m.ADetectGroupID,
+        //                                MDetectGroup = group.m.MDetectGroup,
+        //                                MDetectGroupID = group.m.MDetectGroupID,
+        //                                ReasonList = group.m.ReasonList,
+        //                                TransId = group.m.TransId,
+        //                                RobotType = (temp != null) ? temp?.RobotType : null,
+        //                                IsRobot = (temp != null) && temp.IsRobot,
+        //                                IsPA = group.m.IsPA,
+        //                                IsNormalLinkedPA = group.m.IsNormalLinkedPA
+        //                            })?.OrderByDescending(c => c.TransTime)?.Distinct()?.ToList();
 
-                    return result;
-                }
-            }
+        //            return result;
+        //        }
+        //    }
 
-            return matchDetailInfo;
-        }
+        //    return matchDetailInfo;
+        //}
         
         private IEnumerable<MatchMonitorDetailItemViewModel> FilterSite(IEnumerable<MatchMonitorDetailItemViewModel> matchDetails, string site)
         {

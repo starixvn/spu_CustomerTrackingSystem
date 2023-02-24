@@ -20,9 +20,7 @@
         divHomeMonitor: $('#first-monitor-datatable'),
         divAwayMonitor: $('#second-monitor-datatable'),
         tblHomeHeaderFixed: $('#tblHomeHeaderFixed'),
-        tblAwayHeaderFixed: $('#tblAwayHeaderFixed'),
-        subHome: $('#subHome'),
-        subAway: $('#subAway'),
+        tblAwayHeaderFixed: $('#tblAwayHeaderFixed'),     
         spanReasonInfo: $('#spanReasonInfo'),
         inputHomeSelectAll: $('#inputHomeSelectAll'),
         inputAwaySelectAll: $('#inputAwaySelectAll'),
@@ -98,7 +96,8 @@
                 { targets: [13], width: "5%", className: "text-center" },
                 { targets: [14], width: "8%", className: "text-center col-reason" },
                 { targets: [15], width: "3%" },
-                { targets: [16], visible: false }
+                { targets: [16], visible: false },
+                { targets: [17], visible: false }
             ],            
             columns: [
                 {
@@ -132,13 +131,7 @@
                 { data: obj => obj.HDP },
                 { data: obj => obj.Score },
                 { data: obj => obj.TransTimeToString },
-                {
-                    data: obj => {
-                        if (obj.ADetectGroupID == -2)
-                            return `<span class="has-icon icon-loading-group"></span>`;              
-                        else return obj.ADetectGroup;
-                    }
-                },
+                { data: obj => obj.ADetectGroup },
                 { data: obj => obj.MDetectGroup },
                 {
                     data: obj => () => {
@@ -154,7 +147,8 @@
                         return "-";                       
                     }
                 },
-                { data: obj => obj.TransIdToString }
+                { data: obj => obj.TransIdToString },
+                { data: obj => obj.ADetectGroupID}
             ],
             createdRow: function (row, data, index) {
                 if (data.TicketStatus == 102)
@@ -193,19 +187,8 @@
                 domElements.tblMMAwayTeam.DataTable().clear().rows.add(response.data.AwayMatchItemList).draw();
 
                 domElements.spanReasonInfo.text(response.data.ReasonInfos);
-                
-                //if (response.data.TotalCust <= MaxCustGroupCal) {
-                //    $.post(common.modifyRelativeUrl('MatchMonitor/DetectGroupAssDefault'), { ctsCustIDList: response.data.CTSCustIDList },
-                //        function (xResponse) {                            
-                //            RenderAssociationGroup(domElements.tblMMHomeTeam, xResponse.ItemList);
-                //            RenderAssociationGroup(domElements.tblMMAwayTeam, xResponse.ItemList);
-                //            RefreshGroupFilter(xResponse.GroupList, false);
-                //        });
-                //} else {
-                //    RenderNoneAssociationGroup(domElements.tblMMHomeTeam);
-                //    RenderNoneAssociationGroup(domElements.tblMMAwayTeam);
-                //    RefreshGroupFilter([], true);
-                //}
+
+                RefreshGroupFilter(response.data.GroupList);              
             },
             complete: function (response) {
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');   
@@ -229,13 +212,11 @@
         element.multiselect("refresh");
     }
 
-    function RefreshGroupFilter(data, isExceedCust) {
+    function RefreshGroupFilter(data) {
         domElements.cbbGroup.multiselect().empty();
-
-        if (isExceedCust)
-            domElements.cbbGroup.append(`<option selected value='-1'>-</option>`);
-        else if (data.length == 0)
-            domElements.cbbGroup.append(`<option selected value='-1'>None</option>`);
+        
+        if (data.length == 0)
+            domElements.cbbGroup.append(`<option selected value='0'>-</option>`);
         
         for (var i = 0; i < data.length; i++) {
             domElements.cbbGroup.append(`<option selected value='${data[i].GroupID}'>${data[i].GroupName}</option>`);
