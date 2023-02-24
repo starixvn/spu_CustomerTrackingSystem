@@ -47,7 +47,7 @@
     };   
 
     let isFilterOption = false;
-    let MaxCustGroupCal = 10;
+    //let MaxCustGroupCal = 10;
 
     function InitialDetailGird(element) {
         element.DataTable({
@@ -194,18 +194,18 @@
 
                 domElements.spanReasonInfo.text(response.data.ReasonInfos);
                 
-                if (response.data.TotalCust <= MaxCustGroupCal) {
-                    $.post(common.modifyRelativeUrl('MatchMonitor/DetectGroupAssDefault'), { ctsCustIDList: response.data.CTSCustIDList },
-                        function (xResponse) {                            
-                            RenderAssociationGroup(domElements.tblMMHomeTeam, xResponse.ItemList);
-                            RenderAssociationGroup(domElements.tblMMAwayTeam, xResponse.ItemList);
-                            RefreshGroupFilter(xResponse.GroupList, false);
-                        });                   
-                } else {
-                    RenderNoneAssociationGroup(domElements.tblMMHomeTeam);
-                    RenderNoneAssociationGroup(domElements.tblMMAwayTeam);
-                    RefreshGroupFilter([], true);
-                }
+                //if (response.data.TotalCust <= MaxCustGroupCal) {
+                //    $.post(common.modifyRelativeUrl('MatchMonitor/DetectGroupAssDefault'), { ctsCustIDList: response.data.CTSCustIDList },
+                //        function (xResponse) {                            
+                //            RenderAssociationGroup(domElements.tblMMHomeTeam, xResponse.ItemList);
+                //            RenderAssociationGroup(domElements.tblMMAwayTeam, xResponse.ItemList);
+                //            RefreshGroupFilter(xResponse.GroupList, false);
+                //        });
+                //} else {
+                //    RenderNoneAssociationGroup(domElements.tblMMHomeTeam);
+                //    RenderNoneAssociationGroup(domElements.tblMMAwayTeam);
+                //    RefreshGroupFilter([], true);
+                //}
             },
             complete: function (response) {
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');   

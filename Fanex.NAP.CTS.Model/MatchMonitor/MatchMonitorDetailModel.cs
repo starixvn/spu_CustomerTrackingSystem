@@ -6,6 +6,9 @@
 
         public int ScoreDiff { get; set; }
 
-        public string ReasonList { get; set; }
+        public int Reason { get; set; }
+
+        public int GroupID { get; set; }
+
     }
 }

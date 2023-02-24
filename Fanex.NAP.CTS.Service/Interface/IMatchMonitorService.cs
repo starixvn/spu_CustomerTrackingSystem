@@ -24,6 +24,8 @@
 
         IEnumerable<TicketDetailModel> GetTicketDetail(DateTime eventDate, string transIds);
 
+        IEnumerable<MMDetailMergeGroupModel> GetMMDetailMergeGroup(IEnumerable<MMDetailBetTeamModel> mmDetailBetTeams);
+
         IEnumerable<RobotStatusModel> GetRobotStatus(string transJson);
      
         MatchMonitorStaticListModel GetMMStaticList();

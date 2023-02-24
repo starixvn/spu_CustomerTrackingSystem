@@ -8,6 +8,7 @@
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using Fanex.NAP.TGRS.Core.ExcelUtility;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -139,6 +140,18 @@
             };
 
             return repository.Fetch<TicketDetailModel>(criteria);
+        }
+
+        public IEnumerable<MMDetailMergeGroupModel> GetMMDetailMergeGroup(IEnumerable<MMDetailBetTeamModel> mmDetailBetTeams)
+        {
+            var transList = JsonConvert.SerializeObject(mmDetailBetTeams);
+
+            var criteria = new MMDetailMergeGroupCriteria
+            {
+                TransList = transList
+            };
+
+            return repository.Fetch<MMDetailMergeGroupModel>(criteria);
         }
 
         public IEnumerable<RobotStatusModel> GetRobotStatus(string transJson)

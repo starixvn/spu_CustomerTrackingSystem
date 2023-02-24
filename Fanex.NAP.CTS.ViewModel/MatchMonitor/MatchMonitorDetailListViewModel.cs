@@ -13,14 +13,11 @@
             this.AwayMatchItemList = Enumerable.Empty<MatchMonitorDetailItemViewModel>();
             this.ScoreList = Enumerable.Empty<string>();
             this.ReasonList = Enumerable.Empty<string>();
-            this.ReasonInfos = string.Empty;
-            this.TotalCust = 0;
+            this.ReasonInfos = string.Empty;            
         }        
 
         public string CTSCustIDList { get; set; }
-
-        public int TotalCust { get; set; }
-
+    
         public IEnumerable<MatchMonitorDetailItemViewModel> HomeMatchItemList { get; set; }
 
         public IEnumerable<MatchMonitorDetailItemViewModel> AwayMatchItemList { get; set; }
