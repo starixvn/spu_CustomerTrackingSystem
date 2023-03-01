@@ -44,8 +44,7 @@
         btnVerifyAndClose: $('#btnVerifyAndClose')
     };   
 
-    let isFilterOption = false;
-    //let MaxCustGroupCal = 10;
+    let isFilterOption = false;   
 
     function InitialDetailGird(element) {
         element.DataTable({

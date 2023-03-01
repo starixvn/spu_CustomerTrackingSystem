@@ -37,11 +37,11 @@
         let isValid = true;
         let toDateValue = domElements.dpkToDate.datepicker("getDate");
         let toDateValueAllow = domElements.dpkFromDate.datepicker("getDate");
-        toDateValueAllow.setDate(toDateValueAllow.getDate() + 1);
-
+        
         if (toDateValueAllow > toDateValue)
             isValid = false;
 
+        toDateValueAllow.setDate(toDateValueAllow.getDate() + 1);
 
         if (toDateValue > toDateValueAllow)
             isValid = false;
