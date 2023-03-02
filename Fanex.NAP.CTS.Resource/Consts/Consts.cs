@@ -36,6 +36,7 @@
         public const string FormatTimeToString_hhmmss = "HHmmss";
         public const string FormatTimeToString_hhmmss_2 = "HH:mm:ss";
         public const string FormatDecimalToString_2Places = "0.00";
+        public const string FormatDecimalToString_Thousands = "#,##0";
         public const string FormatDecimalToString_Thousands2Places = "#,##0.00";
         public const string FormatDateToString_MMMddhhmmss = "MMM dd HH:mm:ss";
 
