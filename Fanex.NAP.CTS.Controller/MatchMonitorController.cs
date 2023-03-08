@@ -136,21 +136,29 @@
 
                 var matchFromMainInfos = _matchMonitorService.GetMatchFromMainInfos(para, matchIDs);
 
-                if (matchFromMainInfos.Any())
-                {
-                    return matchFromCTSInfos.Select(x =>
+                var newMatches = matchFromCTSInfos.Join(matchFromMainInfos,
+                    m1 => m1.MatchID,
+                    m2 => m2.MatchId, (m1, m2) => new GetMatchMonitorModel
                     {
-                        var match = x;
-                        var infoFMain = matchFromMainInfos.FirstOrDefault(y => y.MatchId == x.MatchID);
-                        if (infoFMain != null)
-                        {
-                            match.KickOffTime = infoFMain.KickOffTime;
-                            match.EventDate = infoFMain.EventDate;
-                            match.MatchSection = infoFMain.MatchSection;
-                        }
-                        return match;
+                        ID = m1.ID,
+                        MatchID = m1.MatchID,
+                        Market = m1.Market,
+                        HomeID = m1.HomeID,
+                        AwayID = m1.HomeID,
+                        LeagueID = m1.LeagueID,
+                        LeagueName = m1.LeagueName,
+                        Sporttype = m1.Sporttype,
+                        BettypeID = m1.BettypeID,
+                        BetID = m1.BetID,
+                        Reason = m1.Reason,
+                        IsVerified = m1.IsVerified,
+                        VerifiedBy = m1.VerifiedBy,
+                        KickOffTime = m2.KickOffTime,
+                        EventDate = m2.EventDate,
+                        MatchSection = m2.MatchSection
                     });
-                }                
+
+                return newMatches;
             }
 
             return matchFromCTSInfos;
