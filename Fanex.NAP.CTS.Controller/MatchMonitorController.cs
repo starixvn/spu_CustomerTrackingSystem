@@ -144,7 +144,7 @@
                         MatchID = m1.MatchID,
                         Market = m1.Market,
                         HomeID = m1.HomeID,
-                        AwayID = m1.HomeID,
+                        AwayID = m1.AwayID,
                         LeagueID = m1.LeagueID,
                         LeagueName = m1.LeagueName,
                         Sporttype = m1.Sporttype,
@@ -271,14 +271,11 @@
                         mdItemList = MappingRobotStatus(mergeInfo, para.BetTypeID);
                        
                         mdItemList = FilterSite(mdItemList, para.Sites);
-
-                        var custs = mdItemList.Select(x => x.CTSCustID).Distinct();
-
+                        
                         mdResult = new MatchMonitorDetailListViewModel
-                        {
-                            CTSCustIDList = string.Join(",", custs),
-                            HomeMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)),
-                            AwayMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)),                           
+                        {                            
+                            HomeMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)).OrderByDescending(x=>x.TransTime),
+                            AwayMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)).OrderByDescending(x => x.TransTime),                           
                             ScoreList = mdItemList.Select(x => x.Score).Distinct().OrderBy(x => x),
                             GroupList = mergeGroup.Groups
                         };

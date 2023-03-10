@@ -23,7 +23,7 @@
             this.LeagueID = data.LeagueID;
             this.LeagueName = CachedRef.GetLeagueName(data.LeagueID);     
             this.BettypeID = data.BettypeID;
-            this.BettypeName = this.GetBettypeName(mmStatic.BetTypes, data.BettypeID);
+            this.BettypeName = this.GetBettypeName(mmStatic.BetTypes, data.BettypeID, data.BetID);
             this.BetID = data.BetID;
             this.Reason = data.Reason;
             this.ReasonName = this.GetReasonName(mmStatic.Reasons, data.Reason);
@@ -219,9 +219,9 @@
             }
         }
 
-        private string GetBettypeName(IEnumerable<MatchMonitorBetTypeModel> betTypes, int betTypeID)
+        private string GetBettypeName(IEnumerable<MatchMonitorBetTypeModel> betTypes, int betTypeID, int? betID)
         {
-            return betTypes.FirstOrDefault(x => x.BetTypeID == betTypeID)?.BetTypeName;
+            return betTypes.FirstOrDefault(x => x.BetTypeID == betTypeID && x.BetID == betID)?.BetTypeName;
         }
 
         private string GetReasonName(IEnumerable<MatchMonitorReasonModel> Reasons, string reason)

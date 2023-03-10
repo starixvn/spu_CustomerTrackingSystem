@@ -130,6 +130,26 @@
                             width: auto;
                             padding: 0 1rem;
                         }
+
+                        .input-event {
+                            font-size: 13px;
+
+                            &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+                                color: #9f9f9f;
+                                font-style: italic;
+                                opacity: 1; /* Firefox */
+                            }
+
+                            &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+                                color: #9f9f9f;
+                                font-style: italic;
+                            }
+
+                            &::-ms-input-placeholder { /* Microsoft Edge */
+                                color: #9f9f9f;
+                                font-style: italic;
+                            }
+                        }
                     }
 
                     .button-generate {
@@ -205,7 +225,8 @@
                 background: #fff;
                 width: 100%;
                 z-index: 99999;
-            }            
+            }
+
             #monitor-datatable, #first-monitor-datatable, #second-monitor-datatable {
                 .table-report {
                     font-family: $font-family;
