@@ -223,13 +223,9 @@
             try
             {
                 if (para != null)
-                {
-                    LogService.Info($"GetMatchMonitorDetail para {JsonConvert.SerializeObject(para)}");
-
+                {                    
                     var matchDetailInfo = _matchMonitorService.GetMatchMonitorDetail(para);
-
-                    LogService.Info($"GetMatchMonitorDetail matchDetailInfo {JsonConvert.SerializeObject(matchDetailInfo)}");
-
+                    
                     if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
                     {
                         var mmStatic = new MatchMonitorStaticListModel();
@@ -247,9 +243,7 @@
                             Task.Run(() =>
                             {
                                 var custIdsOfTotalMatch  =  matchDetailInfo.Custs.Select(c => c.CustID).Distinct();
-                                custInfo = _matchMonitorService.GetCustInfoByCustID(string.Join(",", custIdsOfTotalMatch));
-
-                                LogService.Info($"GetMatchMonitorDetail custInfo {JsonConvert.SerializeObject(custInfo)}");
+                                custInfo = _matchMonitorService.GetCustInfoByCustID(string.Join(",", custIdsOfTotalMatch));                                
                             }),
                             Task.Run(() =>
                             {
@@ -266,9 +260,7 @@
                                     ticketMergeGroups = _matchMonitorService.GetMMDetailMergeGroup(mMDetailBetTeams);
                                     mergeGroup.TicketMergeGroups = ticketMergeGroups;
                                     mergeGroup.Groups = mergeGroup.GroupByGroupID();
-                                }
-
-                                LogService.Info($"GetMatchMonitorDetail ticketDetail {JsonConvert.SerializeObject(ticketDetail)}");
+                                }                               
                             })
                         };
 
@@ -279,17 +271,19 @@
                         mdItemList = MappingRobotStatus(mergeInfo, para.BetTypeID);
                        
                         mdItemList = FilterSite(mdItemList, para.Sites);
-
-                        LogService.Info($"GetMatchMonitorDetail mergeInfo {JsonConvert.SerializeObject(mergeInfo)}");
-
+                       
                         mdResult = new MatchMonitorDetailListViewModel
                         {                            
-                            HomeMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)).OrderByDescending(x=>x.TransTime),
-                            AwayMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)).OrderByDescending(x => x.TransTime),                           
+                            HomeMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)
+                                || string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.O), StringComparison.OrdinalIgnoreCase))
+                                    .OrderByDescending(x=>x.TransTime),
+                            AwayMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)
+                                || string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.U), StringComparison.OrdinalIgnoreCase))
+                                    .OrderByDescending(x => x.TransTime),                           
                             ScoreList = mdItemList.Select(x => x.Score).Distinct().OrderBy(x => x),
                             GroupList = mergeGroup.Groups
                         };
-                        mdResult.BindReasons(mdItemList.Select(x => x.ReasonList));
+                        mdResult.BindReasons(mdItemList.Select(x => x.ReasonList));                        
                     }
                 }
             }
