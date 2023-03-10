@@ -2222,6 +2222,10 @@
             {
                 var listTrans = _robotBettingService.GetTranIds(custID, robotTypeOrigin, robotTypeDisplay, clusterId, createdTime);
 
+#if DEBUG
+                listTrans = GenerateTranId_Test();
+#endif
+
                 if (listTrans != null && listTrans.Any())
                 {
                     var transToString = _robotBettingService.GetTransFromList(listTrans);
@@ -2260,18 +2264,58 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+
+#if DEBUG
+        private IEnumerable<string> GenerateTranId_Test()
+        {
+            var listTranIDs = new List<string>() { "23373306514112672,67271230952046593,49084720213917706,87530806431449114,87533379116859408" };
+
+            return listTranIDs;
+        }
+#endif
+
         [HttpPost]
         public ActionResult GetRobotBettingReasonDetail(long custID, int robotTypeOrigin)
         {
             var inputParas = new RobotBettingSceDetailParaModel { CustId = custID, RobotTypeOrigin = robotTypeOrigin, QueryType = RobotDetectionQueryType.RobotReasonDetail };
             var robotReasonDetail = _robotBettingService.GetRobotDetectionSCEDetails(inputParas);
 
+#if DEBUG
+            if (!robotReasonDetail.Any())
+            {
+                robotReasonDetail = GetRobotDetectionSCEDetails_Test();
+            }
+#endif
+
             return Json(new
             {
                 childTableId = new Random().Next(),
                 reasonGroups = robotReasonDetail?.ToList().OrderBy(c => c.FirstTransDate) ?? Enumerable.Empty<RobotUserDetailSceModel>()
-            }, JsonRequestBehavior.AllowGet); ;
+            }, JsonRequestBehavior.AllowGet);
         }
+
+#if DEBUG
+        public IEnumerable<RobotUserDetailSceModel> GetRobotDetectionSCEDetails_Test()
+        {
+            var data = new List<RobotUserDetailSceModel>();
+
+            for (int i = 0; i < 3; i++)
+            {
+                data.Add(new RobotUserDetailSceModel
+                {
+                    CustID = 32457292,
+                    BetCount = 10,
+                    BetDuration = new decimal(26.11),
+                    FirstTransDate = DateTime.Now,
+                    LastTransDate = DateTime.Now,
+                    TransList = "1,2,3",
+                    RobotTypeDisplay = 100
+                });
+            }
+
+            return data;
+        }
+#endif
 
         public string GetMatchName(RobotBettingTicketDetailModel ticket)
         {
