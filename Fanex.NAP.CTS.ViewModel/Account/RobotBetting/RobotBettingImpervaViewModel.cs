@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.Account.RobotBetting
 {
-    public class ImpervaRobotBettingViewModel
+    public class RobotBettingImpervaViewModel
     {
         public long CustID { get; set; }
 

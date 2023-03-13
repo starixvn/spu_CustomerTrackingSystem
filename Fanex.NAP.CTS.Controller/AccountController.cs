@@ -1720,6 +1720,10 @@
                         spanReason += $" | Win lost: {winlost}";
                         if (!string.IsNullOrEmpty(cc.Remark))
                             spanReason += $" | {cc.Remark}";
+                    } 
+                    else if(cc.IsFromImperva)
+                    {
+                        spanReason += $"Imperva Win lost: {winlost}";
                     }
 
                     break;
@@ -2186,30 +2190,44 @@
             var firstRobotDate = string.Empty;
             var lastRobotDate = string.Empty;
             var robotTypeClassify = -2;
-            var robotBettingList = Enumerable.Empty<RobotBettingViewModel>();
+            var rbList = new List<RobotBettingViewModel>();
 
-            var robotBettings = _robotBettingService.GetRobotBetting(custID, out RobotDateAndTypeModel robotDateAndType);
+            var rbs = _robotBettingService.GetRobotBetting(custID);
 
-            if (robotBettings != null && robotBettings.Any())
+            if (rbs.RobotBettingAI != null && rbs.RobotBettingAI.Any())
             {
-                robotBettingList = robotBettings.Select(x => new RobotBettingViewModel
+                rbList = rbs.RobotBettingAI.Select(x => new RobotBettingViewModel
                 {
                     CustID = x.CustID,
-                    PeriodRangeType = x.PeriodRangeType,
-                    PeriodRangeName = x.PeriodRangeName
-                });
-
-                firstRobotDate = robotDateAndType.FirstRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
-                lastRobotDate = robotDateAndType.LastRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
-                robotTypeClassify = robotDateAndType.RobotTypeClassify;
+                    RangeType = x.PeriodRangeType,
+                    RangeName = x.PeriodRangeName
+                }).ToList();
             }
+
+            if (rbs.RobotBettingImperva != null && rbs.RobotBettingImperva.Any())
+            {
+                rbList.Add(new RobotBettingViewModel
+                {
+                    IsRobotImperva = true,
+                    RobotImpervas = rbs.RobotBettingImperva.Select(x => new RobotBettingImpervaViewModel
+                    {
+                        CustID = x.CustID,
+                        CreatedDate = x.CreatedDate.ToString(Consts.FormatDateToString_ddMMMyyyy),
+                        PlatformName = x.Platform == 1 ? "Mobile" : "Desktop"
+                    })
+                });               
+            }
+
+            robotTypeClassify = rbs.TypeModel.RobotTypeClassify;
+            firstRobotDate = rbs.TypeModel.FirstRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
+            lastRobotDate = rbs.TypeModel.LastRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
 
             return Json(new
             {
                 firstRobotDate = firstRobotDate,
                 lastRobotDate = lastRobotDate,
                 robotTypeClassify = robotTypeClassify,
-                data = robotBettingList,
+                data = rbList,
             }, JsonRequestBehavior.AllowGet);
         }
 

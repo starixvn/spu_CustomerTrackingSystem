@@ -59,8 +59,24 @@
             ],
             createdRow: function (row, obj) {
                 if (obj.Detail.length == 0) {
-                    let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-robotTypeOrigin=${obj.PeriodRangeType}><span class="icon-chevron-right"><i class="title-robot">${obj.PeriodRangeName}</span></td>`;
-                    $(row).empty().html(td);
+                    if (obj.IsRobotImperva) {
+                        let td = `<td class="robot-betting" colspan="8">`;
+                        td += `<span>Imperva -`;
+
+                        $.each(obj.RobotImpervas, function (index, value) {
+                            let cssClass = index == 0 ? 'title-robot' : 'title-robot imperva-line';
+                            td += `<i class="${cssClass}"> CreatedDate: ${value.CreatedDate} - Platform: ${value.PlatformName}</i><br/>`;                            
+                        }); 
+
+                        td += `</span></td>`;
+                       
+                        $(row).empty().html(td);
+                    } else {
+                        let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-robotTypeOrigin=${obj.RangeType}>
+                                    <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</span>
+                                  </td>`;
+                        $(row).empty().html(td);
+                    }
                 }
             }
         });

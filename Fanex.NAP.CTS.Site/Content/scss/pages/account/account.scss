@@ -1295,6 +1295,10 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         &[disabled] {
             cursor: not-allowed;
         }
+
+        .imperva-line {
+            padding-left: 64px;
+        }
     }
 
     .robot-betting-reason {

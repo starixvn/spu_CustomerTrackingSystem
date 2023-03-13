@@ -3,11 +3,10 @@
     using Fanex.NAP.CTS.Model.Account.RobotBetting;
     using System;
     using System.Collections.Generic;
-    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public interface IRobotBettingService
     {
-        IEnumerable<RobotBettingModel> GetRobotBetting(long custID, out RobotDateAndTypeModel robotDateAndType);
+        RobotBettingModel GetRobotBetting(long custID);      
 
         IEnumerable<RobotUserDetailModel> GetRobotDetectionDetails(long custID, int periodRangeType);
 

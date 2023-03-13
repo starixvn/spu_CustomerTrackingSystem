@@ -19,23 +19,30 @@
             repository = new DynamicRepository();
         }
 
-        public IEnumerable<RobotBettingModel> GetRobotBetting(long custID, out RobotDateAndTypeModel robotDateAndType)
+        public RobotBettingModel GetRobotBetting(long custID)
         {
             var criteria = new GetRobotDetectionCriteria()
             {
                 CustID = custID
             };
 
-            var result = repository.Fetch<RobotBettingModel>(criteria);
+            var robotAIs = repository.Fetch<RobotBettingAIModel>(criteria);
 
-            robotDateAndType = new RobotDateAndTypeModel
+            var typeModel = new RobotDateAndTypeModel
             {
                 FirstRobotDate = criteria.FirstRobotDate,
                 LastRobotDate = criteria.LastRobotDate,
                 RobotTypeClassify = criteria.RobotTypeClassify
             };
 
-            return result;
+            return new RobotBettingModel {
+                 TypeModel = typeModel,
+                 RobotBettingAI = robotAIs,
+                 RobotBettingImperva = new List<RobotBettingImpervaModel>() { 
+                    new RobotBettingImpervaModel { CustID = 123, CreatedDate = DateTime.Now, Platform = 1 },
+                    new RobotBettingImpervaModel { CustID = 456, CreatedDate = DateTime.Now, Platform = 2 }
+                 }
+            };
         }
 
         public IEnumerable<RobotUserDetailModel> GetRobotDetectionDetails(long custID, int periodRangeType)
