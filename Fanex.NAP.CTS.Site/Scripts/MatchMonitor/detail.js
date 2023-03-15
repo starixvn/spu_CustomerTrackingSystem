@@ -46,6 +46,8 @@
 
     let isFilterOption = false;   
 
+    let cacheReasonGroupIDDic = {};
+
     function InitialDetailGird(element) {
         element.DataTable({
             serverSide: false,
@@ -179,8 +181,10 @@
                 domElements.tblMMAwayTeam.find('tbody').addClass('loading');
             },
             success: function (response) {
+                cacheReasonGroupIDDic = response.data.ReasonGroupIDDic;
+
                 RefreshFilter(domElements.cbbMatchScore, response.data.ScoreList);
-                RefreshFilter(domElements.cbbReason, response.data.ReasonList);              
+                RefreshFilter(domElements.cbbReason, response.data.ReasonList);                    
 
                 domElements.tblMMHomeTeam.DataTable().clear().rows.add(response.data.HomeMatchItemList).draw();
                 domElements.tblMMAwayTeam.DataTable().clear().rows.add(response.data.AwayMatchItemList).draw();
@@ -223,47 +227,6 @@
 
         domElements.cbbGroup.multiselect("refresh");
     }
-
-    function RenderAssociationGroup(elements, associations) {
-        elements.DataTable().rows().every(function () {
-            let rowData = this.data();
-
-            let group = GetAssociationGroup(rowData.CustID, associations);
-            if (group != undefined) {
-                rowData.ADetectGroup = group.GroupName;
-                rowData.ADetectGroupID = group.GroupID;
-            } else {
-                rowData.ADetectGroup = 'None';
-                rowData.ADetectGroupID = -1;
-            }
-
-            this.invalidate();
-        });
-        
-        elements.DataTable().draw();        
-    }
-
-    function RenderNoneAssociationGroup(elements) {
-        elements.DataTable().rows().every(function () {
-            let rowData = this.data();
-
-            rowData.ADetectGroup = '-';
-            rowData.ADetectGroupID = -1;
-
-            this.invalidate();
-        });
-
-        elements.DataTable().draw();
-    }
-
-    function GetAssociationGroup(custID, associations) {
-        for (var i = 0; i < associations.length; i++) {
-            if (associations[i].CustID == custID) {
-                return associations[i];
-            }
-        }
-        return undefined;
-    }
     
     function RenderBotIcon(robotType, isRobot) {        
         let html = '-';
@@ -273,7 +236,7 @@
             if (robotType == 1) 
                 html = `<span class="icon-big-Robot icon-big-good-robot">${spanHtml}</span>`;
             else if (robotType == 2)
-                html = `<span class="icon-big-Robot icon-big-bad-robot">${spanHtml}</span>`;                 
+                html = `<span class="icon-big-Robot icon-big-bad-robot">${spanHtml}</span>`;
         }
 
         return html;
@@ -446,6 +409,48 @@
         domElements.tblMMAwayTeam.DataTable().draw();
     }
 
+    function ReasonOnChange() {
+        let filterGroupIDs = [];   
+        var reasonKeys = Object.keys(cacheReasonGroupIDDic);
+
+        $("option:selected", domElements.cbbReason).each(function () {       
+            let groups = FindByReason($(this).text(), reasonKeys)
+
+            $(groups).each(function (index, element) {
+                filterGroupIDs.push(element);
+            })
+        });
+
+        filterGroupIDs = filterGroupIDs.filter(OnlyUnique);        
+        filterGroupIDs = filterGroupIDs.sort(function (a, b) {
+            return a - b;
+        })
+
+        if (filterGroupIDs.indexOf(0) !== -1) {
+            filterGroupIDs = $.grep(filterGroupIDs, function (value) {
+                return value != 0;
+            });
+            filterGroupIDs.unshift('-');
+        }
+
+        RefreshFilter(domElements.cbbGroup, filterGroupIDs);
+    }
+
+    function FindByReason(reason, reasonKeys) {      
+        let groupIDs = [];
+        $.grep(reasonKeys, function (key) {            
+            if (reason == key) {                
+                let groups = cacheReasonGroupIDDic[key];
+                $(groups).each(function (index, element) {
+                    groupIDs.push(element);
+                })
+            }
+            return true;
+        });
+
+        return groupIDs;
+    }
+
     function FilterGrid() {
         $.fn.dataTable.ext.search.push(
             function (settings, searchData, index, rowData, counter) {
@@ -463,8 +468,12 @@
 
                 let reason = arrReasons.find(e => rowData['ReasonList'].includes(e));
                 if (reason == false || reason == undefined) { isEqualReason = false; }
-                
-                if (arrGroupIDs.find(e => e == rowData['ADetectGroupID']) == undefined) { isEqualGroupID = false; }
+
+                if (arrGroupIDs.indexOf('-') !== -1 && rowData['ADetectGroupID'] == 0) {
+                    isEqualGroupID = true;
+                } else if (arrGroupIDs.find(e => e == rowData['ADetectGroupID']) == undefined) {
+                    isEqualGroupID = false;
+                } 
 
                 if (isEqualScore && isEqualReason && isEqualGroupID)               
                     return true;               
@@ -607,6 +616,8 @@
             selectedText: "# of # selected",
             noneSelectedText: "Select Reason "
         });
+
+        domElements.cbbReason.change(function () { ReasonOnChange(); });
 
         InitialDetailGird(domElements.tblMMHomeTeam);
 

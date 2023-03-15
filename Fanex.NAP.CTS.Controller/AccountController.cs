@@ -420,15 +420,7 @@
             }
 
             var getAssociationFromMySql = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
-            var graphAssociationPage = _accountService.GetAssociatedAccount(model, getAssociationFromMySql);
-
-            var log = graphAssociationPage.AssociationList.Where(c => c.CustId == 77229548);
-
-
-            var logDataJson = JsonConvert.SerializeObject(log);
-            LogService.Info("log tracking data:" + logDataJson);
-
-
+            var graphAssociationPage = _accountService.GetAssociatedAccount(model, getAssociationFromMySql);            
 
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
             {
