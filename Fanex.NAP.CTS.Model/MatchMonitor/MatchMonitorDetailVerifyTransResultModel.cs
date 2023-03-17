@@ -4,7 +4,7 @@ namespace Fanex.NAP.CTS.Model.MatchMonitor
 {
     public class MatchMonitorDetailVerifyTransResultModel
     {
-        public Int64 TransID { get; set; }
+        public long VerifiedTransID { get; set; }
 
         public DateTime VerifiedDate { get; set; }
 

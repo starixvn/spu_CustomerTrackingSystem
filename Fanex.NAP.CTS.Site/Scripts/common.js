@@ -145,13 +145,13 @@
             $('body').append('<iframe  name="output_frame" width="0" height="0" class="display-none"></iframe>');
             $('#postToIframe').submit().remove();
         }
-    };
+    };   
 
-    this.downloadFileExcel = function (url, parameters) {
+    this.downloadFileExcel = function (url, parameters) {        
         $this.showLoading();
         let request = new XMLHttpRequest();
         request.open('POST', url, true);
-        request.setRequestHeader('Content-type', 'application/json');
+        request.setRequestHeader('Content-type', 'application/json');              
         request.responseType = 'blob';
         request.timeout = 600000;
         request.addEventListener("timeout", function (e) {
@@ -193,7 +193,7 @@
             }
 
             $this.closeLoading();
-        }
+        }       
 
         request.send(JSON.stringify(parameters)); 
     }

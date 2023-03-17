@@ -34,6 +34,8 @@
 
         public Decimal Stake { get; set; }
 
+        public Decimal OrgStake { get; set; }
+
         public Decimal Odds { get; set; }
 
         public Decimal Hdp1 { get; set; }

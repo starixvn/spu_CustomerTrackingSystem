@@ -8,7 +8,9 @@
 
     public interface IMatchMonitorService
     {
-        IEnumerable<MatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter);
+        IEnumerable<MatchFromMainInfoModel> GetMatchFromMainInfos(MatchMonitorFilterViewModel filter, string matchIDs);
+
+        IEnumerable<GetMatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter, string matchInfoFromMainJson);
 
         IEnumerable<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, Int64 betId, int reason);
 
@@ -22,10 +24,13 @@
 
         IEnumerable<TicketDetailModel> GetTicketDetail(DateTime eventDate, string transIds);
 
+        IEnumerable<MMDetailMergeGroupModel> GetMMDetailMergeGroup(IEnumerable<MMDetailBetTeamModel> mmDetailBetTeams);
+
         IEnumerable<RobotStatusModel> GetRobotStatus(string transJson);
-
-        IEnumerable<AssociationIrrigationModel> GetAssociationIrrigation(string custIDList, string categoryIDList);
-
+     
         MatchMonitorStaticListModel GetMMStaticList();
+
+        byte[] ExportExcelMMDetail(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems
+            , string fileName, string templatePath);
     }
 }

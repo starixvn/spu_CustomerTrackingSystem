@@ -420,7 +420,7 @@
             }
 
             var getAssociationFromMySql = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
-            var graphAssociationPage = _accountService.GetAssociatedAccount(model, getAssociationFromMySql);
+            var graphAssociationPage = _accountService.GetAssociatedAccount(model, getAssociationFromMySql);            
 
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
             {

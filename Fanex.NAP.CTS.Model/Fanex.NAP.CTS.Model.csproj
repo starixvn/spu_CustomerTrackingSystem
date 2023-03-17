@@ -311,8 +311,8 @@
     <Compile Include="ManageSubscriber\ReUpdateSubscribeBySiteIDModel.cs" />
     <Compile Include="ManageSubscriber\DetailedSiteModel.cs" />
     <Compile Include="ManageSubscriber\UpdateSubsciberResultModel.cs" />
-    <Compile Include="MatchMonitor\AssociationIrrigationModel.cs" />
     <Compile Include="MatchMonitor\MatchGroupKeyModel.cs" />
+    <Compile Include="MatchMonitor\MatchFromMainInfoModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorBetTypeModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailResultModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailVerifyTransResultModel.cs" />
@@ -320,6 +320,9 @@
     <Compile Include="MatchMonitor\MatchMonitorReasonModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorSportModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorStaticListModel.cs" />
+    <Compile Include="MatchMonitor\MMDetailBetTeamModel.cs" />
+    <Compile Include="MatchMonitor\MMDetailCustModel.cs" />
+    <Compile Include="MatchMonitor\MMDetailMergeGroupModel.cs" />
     <Compile Include="MatchMonitor\RobotStatusModel.cs" />
     <Compile Include="MatchMonitor\TransGroupModel.cs" />
     <Compile Include="MatchMonitor\CustInfoModel.cs" />
@@ -328,7 +331,7 @@
     <Compile Include="MatchMonitor\TicketDetailModel.cs" />
     <Compile Include="MatchMonitor\MatchScoreModel.cs" />
     <Compile Include="MatchMonitor\MatchGroupModel.cs" />
-    <Compile Include="MatchMonitor\MatchMonitorModel.cs" />
+    <Compile Include="MatchMonitor\GetMatchMonitorModel.cs" />
     <Compile Include="Notification\UpdateNotifiedSettingStatusModel.cs" />
     <Compile Include="Notification\NotifiedSettingStatusModel.cs" />
     <Compile Include="Notification\ProbationMessageModel.cs" />

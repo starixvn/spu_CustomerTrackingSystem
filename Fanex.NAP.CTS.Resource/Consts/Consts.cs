@@ -5,6 +5,7 @@
         public const string BaseController = "BaseController";
         public const string MenuItemHome = "Home";
         public const string MenuItemController = "Controller";
+        public const string MenuItemMonitor = "Monitor";
         public const string MenuItemSearch = "Account & Device Search";
         public const string MenuItemSuspiciousBets = "Suspicious Bets";
         public const string MenuItemReport = "Report";
@@ -19,9 +20,10 @@
         public const string GraphDBGetAssociationNLevel = "GraphDB_GetAssociationNLevel";
         public const string GraphDBGetShortestPath = "GraphDB_GetShortestPath";
 
+        public const string FormatDateToString_ddMMhhmmss = "dd/MM HH:mm:ss";
         public const string FormatDateToString_MMMddyyyy = "MMM dd, yyyy";
         public const string FormatDateToString_MMMddyyyy2 = "MMM-dd-yyyy";
-        public const string FormatDateToString_MMMddyyyyhhmmss = "MMM dd, yyyy HH:mm:ss";
+        public const string FormatDateToString_MMMddyyyyhhmmss = "MMM dd, yyyy HH:mm:ss"; 
         public const string FormatDateToString_MMMddyyyyhhmmss2 = "MMM dd, yyyy - HH:mm:ss";
         public const string FormatDateToString_MMMddyyyyhhmmsstt = "MMM dd, yyyy HH:mm:ss tt";
         public const string FormatDateToString_MMMddyyyyhhmm = "MMM dd, yyyy HH:mm";
@@ -32,7 +34,9 @@
         public const string FormatDatetimeToString_ddMMMHHmmssfff = "dd MMM HH:mm:ss.fff";
         public const string FormatDatetimeToString_ddMMM = "dd MMM";
         public const string FormatTimeToString_hhmmss = "HHmmss";
+        public const string FormatTimeToString_hhmmss_2 = "HH:mm:ss";
         public const string FormatDecimalToString_2Places = "0.00";
+        public const string FormatDecimalToString_Thousands = "#,##0";
         public const string FormatDecimalToString_Thousands2Places = "#,##0.00";
         public const string FormatDateToString_MMMddhhmmss = "MMM dd HH:mm:ss";
 
@@ -322,7 +326,11 @@
             AssociatedGroupMonitorAddAccountRpt = 58, 
             AssociatedGroupMonitorTransferAccountRpt = 59,
             AssociatedGroupMonitorSetPARpt = 60,
-            AssociatedGroupMonitorExportToExcelRpt = 61,            //PlaceEvidenceForMultipleCustAPI = 200,
+            AssociatedGroupMonitorExportToExcelRpt = 61,
+            MatchMonitorDetailManualDetectRpt = 62,
+            MatchMonitorDetailExportToExcelRpt = 63,
+            MatchMonitorDetailVerifyTransRpt = 64,
+            //PlaceEvidenceForMultipleCustAPI = 200,
             GetFlaggedCustomersByLevelAPI = 201,
             GetFlaggedCustByLvAndEvidenceAPI = 202,
             //AddCustomersEvidencesAPI = 203,

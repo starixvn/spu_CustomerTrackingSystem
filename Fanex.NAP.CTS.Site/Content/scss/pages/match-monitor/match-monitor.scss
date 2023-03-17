@@ -24,6 +24,58 @@
 
                 .title-association {
                     margin-bottom: -1.3rem;
+
+                    .radio-button {
+                        input[type="radio"] {
+                            display: none;
+                        }
+
+                        label {
+                            position: relative;
+                            padding: 1rem 4rem 0 2.5rem;
+                            cursor: pointer;
+
+                            &:before, &:after {
+                                position: absolute;
+                                content: '';
+                                top: 50%;
+                                border-radius: 100%;
+                                -webkit-transition: all .2s;
+                                transition: all .2s;
+                            }
+
+                            &:before {
+                                left: 0;
+                                width: 16px;
+                                height: 16px;
+                                margin-top: -0.4rem;
+                                background: #f3f3f3;
+                                border: 1px solid #ccc;
+                            }
+
+                            &:after {
+                                opacity: 0;
+                                left: .4rem;
+                                width: 8px;
+                                height: 8px;
+                                margin-top: 0;
+                                background: #458A00;
+                                -webkit-transform: scale(2);
+                                transform: scale(2);
+                            }
+                        }
+
+                        input[type="radio"]:checked + label::before {
+                            background: #fff;
+                            border: 1px solid #458A00;
+                        }
+
+                        input[type="radio"]:checked + label::after {
+                            opacity: 1;
+                            -webkit-transform: scale(1);
+                            transform: scale(1);
+                        }
+                    }
                 }
 
                 .form-filter {
@@ -41,6 +93,28 @@
                             margin-right: .7rem;
                             margin-bottom: 0;
                         }
+
+                        .input {
+                            margin: 0;
+
+                            &::-webkit-input-placeholder { /* Edge */
+                                color: #868686;
+                                font-style: italic;
+                                font-size: 1.4rem;
+                            }
+
+                            &::-moz-placeholder { /* Internet Explorer */
+                                color: #868686;
+                                font-style: italic;
+                                font-size: 1.4rem;
+                            }
+
+                            &:-ms-input-placeholder {
+                                color: #868686;
+                                font-style: italic;
+                                font-size: 1.4rem;
+                            }
+                        }
                     }
 
                     .group {
@@ -55,6 +129,26 @@
                             justify-content: center;
                             width: auto;
                             padding: 0 1rem;
+                        }
+
+                        .input-event {
+                            font-size: 13px;
+
+                            &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+                                color: #9f9f9f;
+                                font-style: italic;
+                                opacity: 1; /* Firefox */
+                            }
+
+                            &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+                                color: #9f9f9f;
+                                font-style: italic;
+                            }
+
+                            &::-ms-input-placeholder { /* Microsoft Edge */
+                                color: #9f9f9f;
+                                font-style: italic;
+                            }
                         }
                     }
 
@@ -113,10 +207,6 @@
                                     margin-bottom: 0;
                                     padding-bottom: 0;
                                 }
-                                /*     a {
-                                    color: #474747;
-                                    cursor: pointer;
-                                }*/
                             }
                         }
 
@@ -256,7 +346,7 @@
                                     .container-checkbox {
                                         .checkmark {
                                             top: 50%;
-                                            left: 30%;
+                                            left: 20%;
                                             z-index: 1;
                                             transform: translate(50%,-50%);
                                         }

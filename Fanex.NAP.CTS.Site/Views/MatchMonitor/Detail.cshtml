@@ -7,35 +7,34 @@
 
 <section class="detailpage" id="detailpage">
     <div class="content">
-        <h2 class="page-title">MATCH MONITOR DETAIL</h2>
+        <div class="page-title-match">
+            <span class="title-description">MATCH MONITOR DETAIL</span>
+            <span class="title-match-name"> - @ViewBag.MatchName</span>
+            <span class="title-league-name"> - @ViewBag.LeagueName</span>
+        </div>
     </div>
 
     <div class="monitor-container">
         <div class="monitor-table">
             <div class="group-control">
-                <div class="group-table filter-group">
+                <div class="group-info filter-group">
                     <div class="form-filter">
                         <div class="group width-120">
                             <label class="text">Site</label>
-                            <select class="control width-select" id="cbbSites">
+                            <select class="control width-select-sites" id="cbbSites">
                                 <option value="A">All</option>
                                 <option value="C">Credit</option>
                                 <option value="L">Licensee</option>
                             </select>
                         </div>
-                        <div class="group width-180">
-                            <label class="text">Bet choice</label>
-                            <select class="control width-select" id="cbbBetChoice">
-                                @if (ViewBag.BetChoice != null)
-                                {
-                                    foreach (var item in ViewBag.BetChoice)
-                                    {
-                                        <option value="@item">@item</option>
-                                    }
-                                }
-                            </select>
+
+                        <div class="group-button">
+                            <button class="button button-generate" id="btnRefresh">Refresh</button>
                         </div>
-                        <div class="group width-180" @(ViewBag.IsDisableScoreFilter ? "hidden" : "")   >
+
+                        <div class="blank"></div>                                             
+
+                        <div class="group width-160" @(ViewBag.IsDisableScoreFilter ? "hidden" : "")   >
                             <label class="text">Score</label>
                             <select class="control width-select" id="cbbMatchScore" multiple="multiple">
                                 @if (ViewBag.MatchScore != null)
@@ -47,78 +46,205 @@
                                 }
                             </select>
                         </div>
-                        <div class="group width-180" @(ViewBag.IsDisableGroup ? "hidden" : "")>
-                            <label class="text">Group</label>
-                            <select class="control width-select" id="cbbGroup" multiple="multiple">
-                                @if (ViewBag.Group != null)
-                                {
-                                    foreach (var item in ViewBag.Group)
-                                    {
-                                        <option value="@item.Key" selected> @item.GroupName </option>
-                                    }
-                                }
+
+                        <div class="group width-160">
+                            <label class="text">Reason</label>
+                            <select class="control width-select" id="cbbReason" multiple="multiple">                              
                             </select>
                         </div>
-                        <button class="button button-generate" id="btnGenerate-detail">Generate</button>
+
+                        <div class="group width-180">
+                            <label class="text">A.Gr.</label>
+                            <select class="control width-select" id="cbbGroup" multiple="multiple">                               
+                            </select>
+                        </div>
+
+                        <div class="group-button">
+                            <button class="button button-generate" id="btnGenerate-detail">Generate</button>
+                        </div>                        
                     </div>
-                    <div class="detail-area">
-                        <span>@ViewBag.MatchName <br /></span>
-                        <span class="league-highlight">@ViewBag.LeagueName<br /></span>
-                        <span>@ViewBag.SportName - @ViewBag.ReasonGroup - <span class="market-highlight">@ViewBag.MarketName</span><br /></span>
+                    <div class="detail-area">                        
+                        <span>@ViewBag.SportName - @ViewBag.BettypeName - <span class="market-highlight">@ViewBag.MarketName</span><br /></span>
+                        <span id="spanKOTime">KO Time: @ViewBag.KOTime<br /></span>
+                        <span class="reason-highlight" id="spanReasonInfo"></span>
                     </div>
                 </div>
-                <div class="group-table " id="groupTable">
-                    <div id="first-monitor-datatable">
-                        <div class="table-report" style="width: max-content;">
-                            
-                            <div class="fixed-header">
-                                <div class="top-header">
-                                    <div class="">
-                                        <button class="button button-primary-outline" id="btnVerify">Verify & Close</button>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <table id="first-tblMonitor" class="table table-striped table-monitor-detail">
+                <div class="breadcrumb-button">
+                    <div class="">
+                        <button class="button button-primary-outline" id="btnShowAll">Show All</button>
+                        <button class="button button-primary-outline" id="btnShowPopupAssDetection">Association Detection</button>
+                        <button class="button button-primary-outline" id="btnExportExcel">Export Excel</button>
+                        <button class="button button-primary-outline" id="btnVerifyAndClose">Verify and Close</button>
+                    </div>
+                </div>
+                <div class="group-table" id="groupTable">                   
+                    <div id="first-monitor-datatable">
+                        <div class="table-report" style="width: 100%">
+                            <table id="tblMMHomeTeam" class="table table-striped table-monitor-detail">
                                 <thead>
                                     <tr>
-                                        <th>Site</th>
+                                        <th><input name="select_all" value="1" id="inputHomeSelectAll" type="checkbox" class="col-checkbox" /></th>
                                         <th>Username</th>
-                                        <th>Class</th>
+                                        <th>CC</th>
                                         <th>Bot</th>
                                         <th>Dgr</th>
-                                        <th>Irrigation</th>
-                                        <th>ODDS</th>
+                                        <th>Odds</th>
                                         <th>BetID</th>
-                                        <th>CUR</th>
-                                        <th>AMOUNT</th>
+                                        <th>Cur</th>
+                                        <th>Amount</th>
                                         <th>HDP</th>
-                                        <th>Bet choice</th>
                                         <th>Score</th>
-                                        <th>TRANSTIME</th>
-                                        <th>Group</th>
-                                        <th>PIC & Last Verified</th>
-                                        <th>TranID</th>
+                                        <th>Transtime</th>
+                                        <th title="Auto-detected Association Group">
+                                            A.Gr.
+                                        </th>
+                                        <th title="Manual-detected Association Group: max. 1001 Usernames">
+                                            M.Gr.<sup style="vertical-align: super; font-size: smaller;">i</sup>
+                                        </th>
+                                        <th>Reason</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
                             </table>
-                        </div>
+                        </div>     
+                        <table id="tblHomeHeaderFixed"></table>
+                    </div>
+
+                    <div id="second-monitor-datatable">
+                        <div class="table-report" style="width: 100%">
+                            <table id="tblMMAwayTeam" class="table table-striped table-monitor-detail">
+                                <thead>
+                                    <tr>
+                                        <th><input name="select_all" value="1" id="inputAwaySelectAll" type="checkbox" class="col-checkbox" /></th>
+                                        <th>Username</th>
+                                        <th>CC</th>
+                                        <th>Bot</th>
+                                        <th>Dgr</th>
+                                        <th>Odds</th>
+                                        <th>BetID</th>
+                                        <th>Cur</th>
+                                        <th>Amount</th>
+                                        <th>HDP</th>
+                                        <th>Score</th>
+                                        <th>Transtime</th>
+                                        <th title="Auto-detected Association Group">
+                                            A.Gr.
+                                        </th>
+                                        <th title="Manual-detected Association Group: max. 1001 Usernames">
+                                            M.Gr.<sup style="vertical-align: super; font-size: smaller;">i</sup>
+                                        </th>
+                                        <th>Reason</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div> 
+                        <table id="tblAwayHeaderFixed"></table>
                     </div>
                 </div>
             </div>
-        </div>
+        </div>               
+
         <div class="hide">
             <input id="hdEventDataToString" type="hidden" value="@ViewBag.EventDateToString" />
             <input id="hdMatchID" type="hidden" value="@ViewBag.MatchID" />
+            <input id="hdMatchName" type="hidden" value="@ViewBag.MatchName" />
             <input id="hdBetTypeID" type="hidden" value="@ViewBag.BetTypeID" />
+            <input id="hdBetTypeName" type="hidden" value="@ViewBag.BettypeName" />
             <input id="hdBetIDToString" type="hidden" value="@ViewBag.BetIDToString" />
             <input id="hdLiveIndicator" type="hidden" value="@ViewBag.LiveIndicator.ToString()" />
             <input id="hdreason" type="hidden" value="@ViewBag.Reason" />
-            <input id="hdIsDisableGroup" type="hidden" value="@ViewBag.IsDisableGroup.ToString()" />
             <input id="hdIsHostPermission" type="hidden" IsHostPermission="@ViewBag.IsHostPermission.ToString()" />
         </div>
+    </div>    
 </section>
+
+<div id="divPopupAssDetect" class="popup-add" style="display: none">
+    <div class="flex-container">
+        <div class="box-left">
+            <div class="flex-container" style="border-bottom: 1px solid #C0C0C0;">
+                <div style="margin-top: 1px; margin-bottom: 1px;">
+                    <span class='icon-Check'></span>
+                    <span class="checkbox-filter checkbox-all">
+                        <span class="checkbox-filter" id="tickCheckAll">Check all</span>
+                    </span>
+
+                    <span class='icon-Close'></span>
+                    <span class="checkbox-filter checkbox-all">
+                        <span class="checkbox-filter" id="tickUncheckAll">Uncheck all</span>
+                    </span>
+                </div>
+
+            </div> <!--div end - flex-container-->
+
+            <div class="flex-container">
+                <div>
+                    <span class="checkbox-filter">
+                        <label class="checkbox-container" id="ckbOptBPContainer">
+                            <input id="inputOptBP" type="checkbox">
+                            <span class="checkmark"></span>
+                            Betting Pattern
+                        </label>
+                    </span>
+
+                    <span class="checkbox-filter">
+                        <label class="checkbox-container" id="ckbOptDeviceContainer">
+                            <input id="inputOptDevice" type="checkbox">
+                            <span class="checkmark"></span>
+                            Device
+                        </label>
+                    </span>
+
+                    <span class="checkbox-filter">
+                        <label class="checkbox-container" id="ckbOptIPContainer">
+                            <input id="inputOptIP" type="checkbox">
+                            <span class="checkmark"></span>
+                            IP
+                        </label>
+                    </span>
+
+                    <span class="checkbox-filter">
+                        <label class="checkbox-container" id="ckbOptAgentContainer">
+                            <input id="inputOptAgent" type="checkbox" checked>
+                            <span class="checkmark"></span>
+                            Agent
+                        </label>
+                    </span>
+
+                    <span class="checkbox-filter">
+                        <label class="checkbox-container" id="ckbOpt3MatchesLast7DaysContainer">
+                            <input id="inputOpt3MatchesLast7Days" type="checkbox" checked>
+                            <span class="checkmark"></span>
+                            3 Matches(last 7 days)
+                        </label>
+                    </span>
+
+                    <span class="checkbox-filter">
+                        <label class="checkbox-container" id="ckbOptIPLast3DaysContainer">
+                            <input id="inputOptIPLast3Days" type="checkbox" checked>
+                            <span class="checkmark"></span>
+                            IP(last 3 days)
+                        </label>
+
+                    </span>
+                </div>
+            </div> <!--div end - flex-container margin-top-10-->
+        </div>
+
+        <div class="box-right">
+            <button id="btnAssDetection" class="button button-primary-outline" title="Association Detection">Detect</button>
+        </div>
+
+        <div class="hide">
+            <input id="hdSelectedCTSCustIDs" type="hidden" />
+            <input id="hdSelectedCustIDs" type="hidden" />
+        </div>
+    </div>
+</div>
+
 @section scripts{
     @Scripts.Render("~/match-monitor-detail-scripts")
 }

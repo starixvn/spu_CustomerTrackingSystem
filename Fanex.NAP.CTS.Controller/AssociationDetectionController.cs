@@ -308,7 +308,7 @@
                         mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);
                     });
                    
-                    var assMergeGroup = _associationDetectionService.MergeGroupDetectAssociation(mergeGroupInfo);
+                    var assMergeGroup = _associationDetectionService.DetectGroupDetectAssociation(mergeGroupInfo);
 
                     var assRearrangeGroup = RearrangeAssGroup(assMergeGroup, isExportExcel);
 

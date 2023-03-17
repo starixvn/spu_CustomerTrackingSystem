@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
     using Fanex.NAP.CTS.Core.BaseClasses;
-    using Fanex.NAP.CTS.Model.MatchMonitor;
     using System;
     using System.Collections.Generic;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -18,6 +17,8 @@
 
         public int BetTypeID { get; set; }
 
+        public string BettypeName { get; set; }
+
         public Int64 BetID { get; set; }
 
         public int MatchSection { get; set; }
@@ -26,9 +27,13 @@
 
         public int Reason { get; set; }
 
+        public string ReasonName { get; set; }
+
         public int LeagueID { get; set; }
         
         public int SportType { get; set; }
+
+        public string KOTime { get; set; }
 
         public bool LiveIndicator
         {
@@ -70,29 +75,7 @@
                 return Market == 1 ? "Live" : "Non Live";
             }
         }
-
-        public string ReasonName
-        {
-            get
-            {
-                switch (Reason)
-                {
-                    case 0:
-                        return "Group Betting";
-                    case 1:
-                        return "Hedging";
-                    case 2:
-                        return "Arbitrage";
-                    case 3:
-                        return "Fixed Game";
-                    case 58:
-                        return "Irrigation";
-                }
-
-                return string.Empty;
-            }
-        }
-
+        
         public string ReasonGroup
         {
             get

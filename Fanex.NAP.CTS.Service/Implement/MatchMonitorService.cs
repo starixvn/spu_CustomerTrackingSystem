@@ -7,8 +7,11 @@
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
+    using Fanex.NAP.TGRS.Core.ExcelUtility;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class MatchMonitorService : IMatchMonitorService
     {
@@ -19,35 +22,46 @@
             repository = new DynamicRepository();
         }
 
-        public IEnumerable<MatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter)
+        public IEnumerable<MatchFromMainInfoModel> GetMatchFromMainInfos(MatchMonitorFilterViewModel filter, string matchIDs)
         {
-            var criteria = new MatchMonitorGetCriteria()
+            var criteria = new GetMatchFromMainInfoCriteria
+            {
+                MatchIDs = matchIDs,
+                FromDate = filter?.FromDate ?? DateTime.Now,
+                ToDate = filter?.ToDate ?? DateTime.Now,
+                MatchSection = filter.MatchSection
+            };
+
+            return repository.Fetch<MatchFromMainInfoModel>(criteria);
+        }
+
+        public IEnumerable<GetMatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter, string matchInfoFromMainJson)
+        {
+            var criteria = new MatchMonitorGetCriteria
             {
                 FromDate = filter?.FromDate ?? DateTime.Now,
                 ToDate = filter?.ToDate ?? DateTime.Now,
-                LeagueName = string.IsNullOrWhiteSpace(filter?.LeagueName) ? null : filter.LeagueName,                
                 SportType = filter.Sports,
-                Market = filter.Market,
-                MatchSection = filter.MatchSection,
-                BetType = filter.BetTypes,
+                Market = filter.Market,                
+                BetTypes = filter.BetTypes,
                 IsVerified = filter.IsVerified,
-                Reasons = filter.Reasons
+                Reasons = filter.Reasons,
+                MatchInfosJson = matchInfoFromMainJson
             };
 
-            return repository.Fetch<MatchMonitorModel>(criteria);
+            return repository.Fetch<GetMatchMonitorModel>(criteria);
         }
 
         public DBResult VerifyTransMatchMonitorDetail(MatchMonitorDetailVerifyTransParaModel para)
         {
-            var criteria = new MatchMonitorDetailVerifyCriteria()
+            var criteria = new MatchMonitorDetailVerifyCriteria
             {
                 MatchID = para.MatchId,
                 LiveIndicator = para.LiveIndicator,
                 BettypeID = para.BettypeID,
                 BetID = para.BetID,
                 TranIds = para.TranIds,
-                VerifiedBy = para.VerifiedBy,
-                Reason = para.Reason
+                VerifiedBy = para.VerifiedBy                
             };
 
             repository.Fetch<DBResult>(criteria);
@@ -85,15 +99,12 @@
 
         public MatchMonitorDetailResultModel GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter)
         {
-            var criteria = new MatchDetailMonitorGetCriteria()
+            var criteria = new MatchDetailMonitorGetCriteria
             {
-                BettypeID = filter.BetTypeID,
-                BetID = filter.BetID,
-                ListGroup = filter.ListGroup,
-                ListScore = filter.ListScore,
                 MatchID = filter.MatchID,
                 LiveIndicator = filter.LiveIndicator,
-                Reason = filter.Reason,
+                BettypeID = filter.BetTypeID,
+                BetID = filter.BetID
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -102,6 +113,7 @@
 
                 return new MatchMonitorDetailResultModel
                 {
+                    Custs = result?.Read<MMDetailCustModel>() ?? new List<MMDetailCustModel>(),
                     MatchDetails = result?.Read<MatchMonitorDetailModel>() ?? new List<MatchMonitorDetailModel>(),
                     VerifiedTrans = result?.Read<MatchMonitorDetailVerifyTransResultModel>() ?? new List<MatchMonitorDetailVerifyTransResultModel>()
                 };
@@ -130,6 +142,18 @@
             return repository.Fetch<TicketDetailModel>(criteria);
         }
 
+        public IEnumerable<MMDetailMergeGroupModel> GetMMDetailMergeGroup(IEnumerable<MMDetailBetTeamModel> mmDetailBetTeams)
+        {
+            var transList = JsonConvert.SerializeObject(mmDetailBetTeams);
+
+            var criteria = new MMDetailMergeGroupCriteria
+            {
+                TransList = transList
+            };
+
+            return repository.Fetch<MMDetailMergeGroupModel>(criteria);
+        }
+
         public IEnumerable<RobotStatusModel> GetRobotStatus(string transJson)
         {
             var criteria = new RobotStatusByTransGetCriteria()
@@ -139,18 +163,7 @@
 
             return repository.Fetch<RobotStatusModel>(criteria);
         }
-
-        public IEnumerable<AssociationIrrigationModel> GetAssociationIrrigation(string custIDList, string categoryIDList)
-        {
-            var criteria = new GetCountAssociationByCategoryCriteria
-            {
-                CustIDList = custIDList,
-                CategoryIDList = categoryIDList
-            };
-
-            return repository.Fetch<AssociationIrrigationModel>(criteria);
-        }
-
+       
         public MatchMonitorStaticListModel GetMMStaticList()
         {
             var criteria = new GetMatchMonitorStaticListCriteria();
@@ -164,5 +177,144 @@
                 BetTypes = result.thirdResultSet
             };
         }
+
+        public byte[] ExportExcelMMDetail(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems
+            , string fileName, string templatePath)
+        {
+            var writer = new ExcelTemplateWriter(templatePath, fileName, "Sheet1");
+            writer.CopyRows(0, 1);
+
+            FillRowData(homeMItems, awayMItems, ref writer);
+
+            writer.SyncColumnsWidth(33);
+
+            return writer.ToBytes();
+        }
+
+        private void FillRowData(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems, ref ExcelTemplateWriter writer)
+        {
+            var tblHome = homeMItems != null ? homeMItems.ToArray() : new ExExcelTicketInfoViewModel[0];
+            var tblAway = awayMItems != null ? awayMItems.ToArray() : new ExExcelTicketInfoViewModel[0];
+            var lengthH = tblHome.Length;
+            var lengthA = tblAway.Length;
+
+            if (lengthH > lengthA)
+            {
+                for (int i = 0; i < lengthH; i++)
+                {                   
+                    if (i < lengthA)
+                        writer.WriteRow(1, NewRecordTblHomeAway(tblHome[i], tblAway[i]));
+                    else
+                        writer.WriteRow(1, NewRecordTblHome(tblHome[i]));
+                }
+            }
+            else
+            {
+                for (int i = 0; i < lengthA; i++)
+                {
+                    if (i < lengthH)
+                        writer.WriteRow(1, NewRecordTblHomeAway(tblHome[i], tblAway[i]));
+                    else
+                        writer.WriteRow(1, NewRecordTblAway(tblAway[i]));
+                }
+            }
+        }
+
+        private object[] NewRecordTblHome(ExExcelTicketInfoViewModel itemH)
+        {
+            return new object[]
+                {
+                    itemH.SubscriberType,
+                    itemH.Username,
+                    itemH.CustomerClass == -1 ? "-" : itemH.CustomerClass.ToString(),
+                    (itemH.IsRobot ? "x" : "-"),
+                    itemH.DangerToString,
+                    itemH.Odds,
+                    itemH.BetID.ToString(),
+                    itemH.Currency,
+                    (itemH.Amount % 1 == 0 ? itemH.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemH.Amount.ToString()),
+                    itemH.HDP,
+                    itemH.Score,
+                    itemH.TransTimeToString,
+                    itemH.ADetectGroup,
+                    itemH.MDetectGroup,
+                    itemH.ReasonList,
+                    (!string.IsNullOrEmpty(itemH.PICVerified) ? "x" : "-"),
+                    null, null, null, null,
+                    null, null, null,
+                    null, null, null,
+                    null, null, null,
+                    null, null, null, null
+                };
+        }
+
+        private object[] NewRecordTblAway(ExExcelTicketInfoViewModel itemA)
+        {
+            return new object[]
+                {
+                    null, null, null, null,
+                    null, null, null,
+                    null, null, null,
+                    null, null, null,
+                    null, null, null, null,
+                    itemA.SubscriberType,
+                    itemA.Username,
+                    itemA.CustomerClass == -1 ? "-" : itemA.CustomerClass.ToString(),
+                    (itemA.IsRobot ? "x" : "-"),
+                    itemA.DangerToString,
+                    itemA.Odds,
+                    itemA.BetID.ToString(),
+                    itemA.Currency,                  
+                    (itemA.Amount % 1 == 0 ? itemA.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemA.Amount.ToString()),
+                    itemA.HDP,
+                    itemA.Score,
+                    itemA.TransTimeToString,
+                    itemA.ADetectGroup,
+                    itemA.MDetectGroup,
+                    itemA.ReasonList,
+                    (!string.IsNullOrEmpty(itemA.PICVerified) ? "x" : "-")
+                };
+        }
+
+        private object[] NewRecordTblHomeAway(ExExcelTicketInfoViewModel itemH, ExExcelTicketInfoViewModel itemA)
+        {
+            return new object[]
+                {
+                    itemH.SubscriberType,                    
+                    itemH.Username,
+                    itemH.CustomerClass == -1 ? "-" : itemH.CustomerClass.ToString(),
+                    (itemH.IsRobot ? "x" : "-"),
+                    itemH.DangerToString,
+                    itemH.Odds,
+                    itemH.BetID.ToString(),
+                    itemH.Currency,                   
+                    (itemH.Amount % 1 == 0 ? itemH.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemH.Amount.ToString()),
+                    itemH.HDP,
+                    itemH.Score,
+                    itemH.TransTimeToString,
+                    itemH.ADetectGroup,
+                    itemH.MDetectGroup,
+                    itemH.ReasonList,                    
+                    (!string.IsNullOrEmpty(itemH.PICVerified) ? "x" : "-"),
+                    "",
+                    itemA.SubscriberType,
+                    itemA.Username,
+                    itemA.CustomerClass == -1 ? "-" : itemA.CustomerClass.ToString(),
+                    (itemA.IsRobot ? "x" : "-"),
+                    itemA.DangerToString,
+                    itemA.Odds,
+                    itemA.BetID.ToString(),
+                    itemA.Currency,                   
+                    (itemA.Amount % 1 == 0 ? itemA.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemA.Amount.ToString()),
+                    itemA.HDP,
+                    itemA.Score,
+                    itemA.TransTimeToString,
+                    itemA.ADetectGroup,
+                    itemA.MDetectGroup,
+                    itemA.ReasonList,
+                    (!string.IsNullOrEmpty(itemA.PICVerified) ? "x" : "-")
+                };
+        }
+
     }
 }

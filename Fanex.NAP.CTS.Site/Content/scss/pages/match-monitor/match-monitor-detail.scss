@@ -17,7 +17,36 @@
         width: 100%;
         position: sticky;
         top: 6rem;
-        z-index: 999999;
+        z-index: 999;
+        margin-top: 0;
+    }
+
+    .page-title-match {
+        padding: 8px 16px;
+        text-transform: uppercase;
+        color: #DF5615;
+        background: #DDE2E6;
+        font-size: 1.6rem;
+        line-height: 18px;
+        display: block;
+
+        .title-description {
+            font-weight: bold;
+        }
+
+        .title-match-name {
+            color: #516792;
+            font-weight: 600;
+            font-size: 13px;
+            line-height: 20px;
+        }
+
+        .title-league-name {
+            color: #70809e;
+            font-weight: 600;
+            font-size: 13px;
+            line-height: 20px;
+        }
     }
 
     .monitor-container {
@@ -56,6 +85,10 @@
                             width: 18.5rem;
                         }
 
+                        .width-select-sites {
+                            width: 11.5rem;
+                        }
+
                         .text-box {
                             height: 2.8rem;
                             display: flex;
@@ -66,12 +99,32 @@
                         }
                     }
 
-                    .button-generate {
-                        background-color: #396ef8;
-                        border-radius: 2px;
-                        color: $page-bg;
-                        height: auto !important;
-                        padding: .7rem 2rem;
+                    .width-160 {
+                        min-width: 120px;
+                    }
+
+                    .width-180 {
+                        min-width: 180px;
+                    }
+
+                    .width-240 {
+                        min-width: 240px;
+                    }
+
+                    .group-button {
+                        margin-left: 10px;
+
+                        .button-generate {
+                            background-color: #396ef8;
+                            border-radius: 2px;
+                            color: $page-bg;
+                            height: auto !important;
+                            padding: .7rem 2rem;
+                        }
+                    }
+
+                    .blank {
+                        width: 60px;
                     }
 
                     .btn-refresh {
@@ -134,12 +187,26 @@
                 }
             }
 
-            .group-table {
+            .breadcrumb-button {
+                width: 100%;
                 display: flex;
-                padding: 2rem 0;
+                justify-content: flex-end;
+                align-items: center;
+                padding: 1rem;
+                background-color: #E3E9F6;
+                border-radius: 1px;
                 position: sticky;
-                top: 9rem;
-                background: #fff;
+                position: -webkit-sticky;
+                top: 17.8rem;
+                z-index: 9;
+            }
+
+            .group-info {
+                display: flex;
+                padding: 1rem 0 1.1rem 0;
+                position: sticky;
+                top: 9.6rem;
+                background: #FFFFFF;
                 width: 100%;
             }
 
@@ -147,35 +214,26 @@
                 z-index: 11;
             }
 
+            .group-table {
+                display: flex;
+                /*padding: 0;*/
+                background: #FFFFFF;
+                width: 100%;
+            }
+
             #monitor-datatable, #first-monitor-datatable, #second-monitor-datatable {
+                flex: 50%;
+
                 .table-report {
                     font-family: $font-family;
 
                     .wrapper-info-table {
                         padding: 0 1rem;
-                        position: sticky;
+                        /* position: sticky;
                         position: -webkit-sticky;
-                        top: 22.7rem;
-                        z-index: 11;
+                        top: 21rem;*/
+                        z-index: 7;
                         transition: top 0.01s linear;
-                        /*    .dataTables_length {
-                           position: absolute;
-                            top: .5rem;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
-                            left: 0;
-                        }
-
-                        .dataTables_paginate {
-                            position: absolute !important;
-                            padding-top: 0 !important;
-                            top: .6rem !important;
-                            right: 50%;
-                            transform: translate(50%,-50%);
-                            text-align: center;
-                        }
-
-                        .dataTables_info {
-                            top: 0
-                        }*/
                     }
 
                     .table-monitor, .table-monitor-detail {
@@ -205,14 +263,19 @@
 
                         thead {
                             tr {
+                                position: sticky;
+                                top: 22.4rem;
+                                z-index: 7;
+
                                 th {
-                                    position: sticky;
+                                    /* position: sticky;
                                     top: 22.4rem;
+                                    z-index: 30;*/
+                                    /*padding-left: 1.5rem;
+                                    padding-right: 1.5rem;*/
                                     font-weight: 300;
-                                    z-index: 9;
-                                    padding-left: 1.5rem;
-                                    padding-right: 1.5rem;
                                     border-right: none;
+                                    font-size: 13px;
                                 }
                             }
                         }
@@ -220,24 +283,51 @@
                         tbody {
                             tr {
                                 td {
-                                    padding-left: 1.5rem;
-                                    padding-right: 1.5rem;
+                                    padding-left: 0.1rem;
+                                    padding-right: 0.1rem;
                                     border-right: none;
                                     border-bottom: none;
+                                    font-size: 12px;
+                                    padding-top: 5px;
+                                    padding-bottom: 5px;
+                                    line-height: 10px !important;
 
                                     .click-view-details, .click-view-name {
                                         cursor: pointer;
                                     }
 
                                     .container-checkbox {
+                                        padding-left: 19px;
+
                                         .checkmark {
                                             top: 50%;
-                                            left: 30%;
+                                            /*left: 5%;*/
                                             z-index: 1;
                                             transform: translate(50%,-50%);
+                                            /*height: 8px;*/
+                                            width: 6px;
                                         }
 
                                         pointer-events: none;
+                                    }
+                                }
+
+                                .col-red {
+                                    /*color: $account-formular;*/
+                                    color: #FF0000;
+                                }
+
+                                .col-transtime {
+                                    font-size: 11px !important;
+                                }
+
+                                .col-betid, .col-dgr, .col-reason {
+                                    font-size: 10px !important;
+                                }
+
+                                .icon-Check {
+                                    &::before {
+                                        color: #209005;
                                     }
                                 }
                             }
@@ -266,9 +356,38 @@
                                     -webkit-animation: spin 1s infinite linear;
                                     animation: spin 1s infinite linear;
                                 }
-                            
+                            }
+
+                            .icon-loading-group {
+                                position: relative;
+
+                                &:after {
+                                    content: '';
+                                    position: absolute;
+                                    left: -0.8rem;
+                                    top: -1rem;
+                                    border-radius: 50%;
+                                    width: 1.8rem;
+                                    height: 1.8rem;
+                                    border: 0.25rem solid rgba(57, 110, 248, 0.2);
+                                    border-top-color: rgba(57, 110, 248, 1);
+                                    -webkit-animation: spin 1s infinite linear;
+                                    animation: spin 1s infinite linear;
+                                }
+                            }
+
+                            .row-blank {
+                                padding-left: 1.5rem !important;
+                                padding-right: 1.5rem !important;
                             }
                         }
+                    }
+
+                    .col-checkbox {
+                        display: inline;
+                        transition: all ease-in-out 0.3s;
+                        cursor: pointer;
+                        margin: 0.1px;
                     }
 
                     .table-monitor-detail {
@@ -277,10 +396,10 @@
                         }
 
                         .rejected-ticket {
-                            background-color: #FF8989;
+                            background-color: #F1A0A0;
 
                             &:hover {
-                                background-color: #FF8989 !important;
+                                background-color: #F1A0A0 !important;
                             }
                         }
 
@@ -312,9 +431,78 @@
             }
 
             #first-monitor-datatable {
-                padding-right: 2rem;
+                padding-right: 1rem;
+            }
+
+            #tblHomeHeaderFixed, #tblAwayHeaderFixed {
+                position: sticky;
+                top: 22.4rem;
+                display: none;
+                background-color: white;
+
+                thead {
+                    tr {
+                        th {
+                            background: #1D2E4F;
+                            border: 1px solid #C4C4C4;
+                            line-height: 1;
+                            padding: 7px;
+                            vertical-align: middle;
+                            color: #fff;
+                            font-weight: 400;
+
+                            input {
+                                margin: 0;
+                                padding: 0;
+                                display: unset;
+                            }
+                        }
+                    }
+                }
             }
         }
+    }
+
+    .checkbox-container {
+        margin-top: 12px;
+
+        span {
+            &:before {
+                top: 1px;
+                height: 16px;
+                width: 16px;
+            }
+
+            &:after {
+                top: 5px;
+                left: 3px;
+            }
+        }
+    }
+}
+
+.flex-container {
+    display: flex;
+    margin-bottom: 10px;
+
+    .checkbox-filter {
+        margin-right: 10px;
+    }
+
+    .checkbox-all {
+        cursor: pointer;
+        color: #2097fd;
+        font-size: 12px;
+    }
+
+    .box-left {
+        background: #E7EDFF;
+        padding-left: 10px;
+    }
+
+    .box-right {
+        margin-top: 17px;
+        margin-left: 15px;
     }
 }
 
@@ -348,9 +536,10 @@
 .detail-area {
     position: absolute;
     right: 0;
-    padding: 0.5rem;
+    padding: 0.2rem;
     border: 1px solid #E5E5E5;
     border-radius: 5px;
+    text-align: right;
 
     span {
         width: 100%;
@@ -366,6 +555,10 @@
 
     .market-highlight {
         color: #ff2020;
+    }
+
+    .reason-highlight {
+        color: #ff0000;
     }
 }
 
@@ -388,6 +581,7 @@
 
 .detailpage {
     width: 100%;
+    display : inline-grid;
 }
 
 .page-content-monitor{
