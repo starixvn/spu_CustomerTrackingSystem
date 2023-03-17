@@ -9,6 +9,7 @@
             IsFromTW = false;
             IsFromCTS = false;
             IsFromAI = false;
+            IsFromImperva = false;
             IsFromTVS = false;
         }
 
@@ -22,6 +23,8 @@
         public bool IsFromCTS { get; set; }
 
         public bool IsFromAI { get; set; }
+
+        public bool IsFromImperva { get; set; }
 
         public bool IsFromTVS { get; set; }
 

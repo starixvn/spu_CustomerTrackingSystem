@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
+    using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Criteria.Account.RobotSetting;
     using Fanex.NAP.CTS.Model.Account.RobotBetting;
@@ -21,28 +22,31 @@
 
         public RobotBettingModel GetRobotBetting(long custID)
         {
-            var criteria = new GetRobotDetectionCriteria()
+            var criteria = new GetRobotDetectionCriteria
             {
                 CustID = custID
             };
-
-            var robotAIs = repository.Fetch<RobotBettingAIModel>(criteria);
-
-            var typeModel = new RobotDateAndTypeModel
+           
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                FirstRobotDate = criteria.FirstRobotDate,
-                LastRobotDate = criteria.LastRobotDate,
-                RobotTypeClassify = criteria.RobotTypeClassify
-            };
+                using (var result = db.QueryMultiple(criteria))
+                {
+                    var robotAIs = result.Read<RobotBettingAIModel>();
+                    var robotImpervas = result.Read<RobotBettingImpervaModel>();
+                    var typeModel = new RobotDateAndTypeModel
+                    {
+                        FirstRobotDate = criteria.FirstRobotDate,
+                        LastRobotDate = criteria.LastRobotDate,
+                    };
 
-            return new RobotBettingModel {
-                 TypeModel = typeModel,
-                 RobotBettingAI = robotAIs,
-                 RobotBettingImperva = new List<RobotBettingImpervaModel>() { 
-                    new RobotBettingImpervaModel { CustID = 123, CreatedDate = DateTime.Now, Platform = 1 },
-                    new RobotBettingImpervaModel { CustID = 456, CreatedDate = DateTime.Now, Platform = 2 }
-                 }
-            };
+                    return new RobotBettingModel
+                    {
+                        TypeModel = typeModel,
+                        RobotBettingAI = robotAIs,
+                        RobotBettingImperva = robotImpervas
+                    };                   
+                }
+            }
         }
 
         public IEnumerable<RobotUserDetailModel> GetRobotDetectionDetails(long custID, int periodRangeType)

@@ -6,7 +6,7 @@
     {
         public long CustID { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreateTime { get; set; }
 
         public int Platform { get; set; }
        

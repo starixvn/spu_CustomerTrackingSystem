@@ -2188,8 +2188,7 @@
         public ActionResult GetRobotBetting(long custID)
         {
             var firstRobotDate = string.Empty;
-            var lastRobotDate = string.Empty;
-            var robotTypeClassify = -2;
+            var lastRobotDate = string.Empty;           
             var rbList = new List<RobotBettingViewModel>();
 
             var rbs = _robotBettingService.GetRobotBetting(custID);
@@ -2212,21 +2211,19 @@
                     RobotImpervas = rbs.RobotBettingImperva.Select(x => new RobotBettingImpervaViewModel
                     {
                         CustID = x.CustID,
-                        CreatedDate = x.CreatedDate.ToString(Consts.FormatDateToString_ddMMMyyyy),
-                        PlatformName = x.Platform == 1 ? "Mobile" : "Desktop"
+                        CreatedDate = x.CreateTime.ToString(Consts.FormatDateToString_ddMMMyyyy),
+                        PlatformName = x.Platform == 1 ? "Desktop" : "Mobile"
                     })
                 });               
             }
-
-            robotTypeClassify = rbs.TypeModel.RobotTypeClassify;
+          
             firstRobotDate = rbs.TypeModel.FirstRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
             lastRobotDate = rbs.TypeModel.LastRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
 
             return Json(new
             {
                 firstRobotDate = firstRobotDate,
-                lastRobotDate = lastRobotDate,
-                robotTypeClassify = robotTypeClassify,
+                lastRobotDate = lastRobotDate,                
                 data = rbList,
             }, JsonRequestBehavior.AllowGet);
         }
@@ -2239,10 +2236,6 @@
             try
             {
                 var listTrans = _robotBettingService.GetTranIds(custID, robotTypeOrigin, robotTypeDisplay, clusterId, createdTime);
-
-#if DEBUG
-                listTrans = GenerateTranId_Test();
-#endif
 
                 if (listTrans != null && listTrans.Any())
                 {
@@ -2282,28 +2275,11 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-
-#if DEBUG
-        private IEnumerable<string> GenerateTranId_Test()
-        {
-            var listTranIDs = new List<string>() { "23373306514112672,67271230952046593,49084720213917706,87530806431449114,87533379116859408" };
-
-            return listTranIDs;
-        }
-#endif
-
         [HttpPost]
         public ActionResult GetRobotBettingReasonDetail(long custID, int robotTypeOrigin)
         {
             var inputParas = new RobotBettingSceDetailParaModel { CustId = custID, RobotTypeOrigin = robotTypeOrigin, QueryType = RobotDetectionQueryType.RobotReasonDetail };
             var robotReasonDetail = _robotBettingService.GetRobotDetectionSCEDetails(inputParas);
-
-#if DEBUG
-            if (!robotReasonDetail.Any())
-            {
-                robotReasonDetail = GetRobotDetectionSCEDetails_Test();
-            }
-#endif
 
             return Json(new
             {
@@ -2311,29 +2287,6 @@
                 reasonGroups = robotReasonDetail?.ToList().OrderBy(c => c.FirstTransDate) ?? Enumerable.Empty<RobotUserDetailSceModel>()
             }, JsonRequestBehavior.AllowGet);
         }
-
-#if DEBUG
-        public IEnumerable<RobotUserDetailSceModel> GetRobotDetectionSCEDetails_Test()
-        {
-            var data = new List<RobotUserDetailSceModel>();
-
-            for (int i = 0; i < 3; i++)
-            {
-                data.Add(new RobotUserDetailSceModel
-                {
-                    CustID = 32457292,
-                    BetCount = 10,
-                    BetDuration = new decimal(26.11),
-                    FirstTransDate = DateTime.Now,
-                    LastTransDate = DateTime.Now,
-                    TransList = "1,2,3",
-                    RobotTypeDisplay = 100
-                });
-            }
-
-            return data;
-        }
-#endif
 
         public string GetMatchName(RobotBettingTicketDetailModel ticket)
         {
