@@ -186,7 +186,7 @@
                         createdCell: (cell, _, row) => {
                             $('.association-detect-detail-ip', cell).click(() => {
                                 let span = $(cell).find('.association-detect-detail-ip');
-                                ShowAssociationDetectDetailIP(span.attr('data-fromusername'), row.UserName);
+                                ShowAssociationDetectDetailIP(span.attr('data-fromusername'), row.UserName, span.attr('data-ips'));
                             });
 
                             $('.association-detect-detail-match', cell).click(() => {
@@ -270,7 +270,7 @@
         })
     }
 
-    function ShowAssociationDetectDetailIP(userName1, userName2) {                 
+    function ShowAssociationDetectDetailIP(userName1, userName2, ips) {                 
         if (tableAssociationDetectDetailIP == null) {
             tableAssociationDetectDetailIP = domElements.tblAssociationDetectDetailIP.DataTable({
                 language: {
@@ -300,7 +300,7 @@
 
         domElements.tblAssociationDetectDetailIP.DataTable().clear();
 
-        GetAssociationDetectDetailIP(userName1, userName2);
+        GetAssociationDetectDetailIP(ips);
 
         domElements.divAssociationDetectDetailIP.dialog({
             modal: true,
@@ -319,14 +319,14 @@
         domElements.divAssociationDetectDetailIP.parent().find('.ui-dialog-title').html("<div>ASSOCIATION DETAIL - IP LIST (in the last 3 days): <br/>" + userName1 + " - " + userName2 + "</div>");      
     }
 
-    function GetAssociationDetectDetailIP(userName1, userName2) {
+    function GetAssociationDetectDetailIP(ips) {
         $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetailIP'), {
             type: 'POST',
             beforeSend: function () {
                 domElements.tblAssociationDetectDetailIP.find('tbody').addClass('loading');                
             },
-            data: {
-                userNameList: userName1 + ',' + userName2,              
+            data: {                  
+                ips: ips
             },
             success: function (response) {
                 if (response !== undefined) {
