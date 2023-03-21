@@ -308,13 +308,13 @@
 
             Parallel.Invoke(() =>
             {
-                var detectAssByIP = model.IsOptIPLast3Days ? _associationDetectionService.DetectAssociationByIP(model.CustIDs) : Enumerable.Empty<DetectAssociationBySharedIPMatchesModel>();
+                var detectAssByIP = model.IsOptIPLast3Days ? _associationDetectionService.DetectAssociationByIP(model.CustIDs) : Enumerable.Empty<DetectAssociationBySharedIPModel>();
 
-                mergeGroupInfo.AssociationByIPJson = this.GetAssociationCust(detectAssByIP, custInfo);
+                mergeGroupInfo.AssociationByIPJson = this.GetAssociationCustByIP(detectAssByIP, custInfo);
             }, () => {
                 var detectAssByAssMatches = model.IsOpt3MatchesLast7Days ? _associationDetectionService.DetectAssociationBySharedMatches(model.CustIDs) : Enumerable.Empty<DetectAssociationBySharedIPMatchesModel>();
 
-                mergeGroupInfo.AssociationByMatchesJson = this.GetAssociationCust(detectAssByAssMatches, custInfo);
+                mergeGroupInfo.AssociationByMatchesJson = this.GetAssociationCustByMatch(detectAssByAssMatches, custInfo);
             },
             () => {
                 if (model.IsOptBP || model.IsOptDevice || model.IsOptIP)
@@ -537,7 +537,26 @@
             return string.Empty;
         }
 
-        private string GetAssociationCust(IEnumerable<DetectAssociationBySharedIPMatchesModel> detectAss, IEnumerable<CustInfoModel> custInfos)
+        private string GetAssociationCustByIP(IEnumerable<DetectAssociationBySharedIPModel> detectAss, IEnumerable<CustInfoModel> custInfos)
+        {
+            var assCustBySharedIP = detectAss.Select(x =>
+            {
+                var fromCTSCust = custInfos.FirstOrDefault(y => y.CustID.Equals(x.CustID1)) ?? new CustInfoModel();
+                var toCTSCust = custInfos.FirstOrDefault(y => y.CustID.Equals(x.CustID2)) ?? new CustInfoModel();
+
+                return new AssociationCustModel
+                {
+                    FromCustID = x.CustID1,
+                    FromCTSCustID = fromCTSCust.CTSCustID,
+                    ToCustID = x.CustID2,
+                    ToCTSCustID = toCTSCust.CTSCustID
+                };
+            }).Where(x => x.FromCTSCustID != 0 && x.ToCTSCustID != 0);
+
+            return JsonConvert.SerializeObject(assCustBySharedIP);
+        }
+
+        private string GetAssociationCustByMatch(IEnumerable<DetectAssociationBySharedIPMatchesModel> detectAss, IEnumerable<CustInfoModel> custInfos)
         {
             var assCustBySharedIP = detectAss.Select(x =>
             {

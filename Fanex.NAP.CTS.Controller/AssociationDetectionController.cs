@@ -345,21 +345,10 @@
         private IEnumerable<SharedIPMatchesInfoModel> DetectAssociationByIP(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds)
         {           
             var detectAssByIP = _associationDetectionService.DetectAssociationByIP(custIds);
-            
-            return DetectAssociationBySharedIPMatches(detectAssByIP, validateUserNames);
-        }
 
-        private IEnumerable<SharedIPMatchesInfoModel> DetectAssociationBySharedMatches(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds)
-        {
-            var detectAssByAssMatches = _associationDetectionService.DetectAssociationBySharedMatches(custIds);           
+            //return DetectAssociationBySharedIPMatches(detectAssByIP, validateUserNames);
 
-            return DetectAssociationBySharedIPMatches(detectAssByAssMatches, validateUserNames);
-        }
-      
-        private IEnumerable<SharedIPMatchesInfoModel> DetectAssociationBySharedIPMatches(IEnumerable<DetectAssociationBySharedIPMatchesModel> detectAss
-           , IEnumerable<ValidateUserNameModel> validateUserNames)
-        {
-            return detectAss.Select(x =>
+            return detectAssByIP.Select(x =>
             {
                 var fromCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID1)) ?? new ValidateUserNameModel();
                 var toCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID2)) ?? new ValidateUserNameModel();
@@ -375,6 +364,27 @@
                 };
             }).Where(x => x.FromCTSCustID != 0 && x.ToCTSCustID != 0);
         }
+
+        private IEnumerable<SharedIPMatchesInfoModel> DetectAssociationBySharedMatches(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds)
+        {
+            var detectAssByAssMatches = _associationDetectionService.DetectAssociationBySharedMatches(custIds);
+
+            return detectAssByAssMatches.Select(x =>
+            {
+                var fromCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID1)) ?? new ValidateUserNameModel();
+                var toCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID2)) ?? new ValidateUserNameModel();
+
+                return new SharedIPMatchesInfoModel
+                {
+                    FromCustID = x.CustID1,
+                    FromCTSCustID = fromCTSCust.CTSCustID,
+                    FromUserName = fromCTSCust.UserName,
+                    ToCustID = x.CustID2,
+                    ToCTSCustID = toCTSCust.CTSCustID,
+                    ToUserName = toCTSCust.UserName
+                };
+            }).Where(x => x.FromCTSCustID != 0 && x.ToCTSCustID != 0);
+        }            
 
         private string GetAssociationCust(IEnumerable<SharedIPMatchesInfoModel> ass)
         {

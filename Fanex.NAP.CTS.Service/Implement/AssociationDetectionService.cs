@@ -31,7 +31,7 @@
 
         IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel assDetectionDetailModel, bool fromMySQL = true);
 
-        IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationByIP(string custIDList);
+        IEnumerable<DetectAssociationBySharedIPModel> DetectAssociationByIP(string custIDList);
 
         IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList);
 
@@ -153,16 +153,16 @@
             }
         }
 
-        public IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationByIP(string custIDList)
+        public IEnumerable<DetectAssociationBySharedIPModel> DetectAssociationByIP(string custIDList)
         {
             var criteria = new DetectAssociationByIPCriteria
             {
-                CustIDs = custIDList
+                ListCustId = custIDList
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<DetectAssociationBySharedIPMatchesModel>(criteria);
+                return db.Query<DetectAssociationBySharedIPModel>(criteria);
             }
         }
 

@@ -222,6 +222,7 @@
     <Compile Include="AssociationDetection\DetectAssociationByPrimaryFilterModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByPrimaryModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationBySharedIPMatchesModel.cs" />
+    <Compile Include="AssociationDetection\DetectAssociationBySharedIPModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationMergeGroupModel.cs" />
     <Compile Include="AssociationDetection\ExportAssociationDetectModel.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectDetailAgentModel.cs" />
