@@ -76,6 +76,7 @@
 		<Setting Key="SPU_AIML_GB_3S_GetCouple_FraudDetails" SpName="SPU_AIML_GB_3S_GetCouple_FraudDetails" DbName="MySQL.SPU_AIML.Reporter" />
 		<Setting Key="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" SpName="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" DbName="MySQL.SPU_AIML.Reporter" />
 		<Setting Key="CTS_DC_AssociationByAI_GetFirstAssociationDate" SpName="CTS_DC_AssociationByAI_GetFirstAssociationDate_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="SPU_AIML_OTGB_GetCouple_FraudDetails" SpName="SPU_AIML_OTGB_GetCouple_FraudDetails_xtest" DbName="MySQL.SPU_AIML.Reporter" />
 	</Function>
 
 	<Function Name="AssociationDetection">
