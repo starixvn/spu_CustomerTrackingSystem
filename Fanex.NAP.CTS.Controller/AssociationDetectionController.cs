@@ -254,7 +254,7 @@
 
                     var validatedList = _commonService.ValidateUsernames(userNameList, out isException);
 
-                    orgUserList = orgUserList.Join(validatedList, c1 => c1.UserName, c2 => c2.UserName,
+                    orgUserList = orgUserList.Join(validatedList, c1 => c1.UserName.ToLower(), c2 => c2.UserName.ToLower(),
                         (c1, c2) => new ValidateUserNameModel
                         {
                             UserName = c1.UserName,
