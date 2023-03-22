@@ -1709,6 +1709,10 @@
                     {
                         spanReason += $"Counter: {cc.RobotCounter} | Win lost: {winlost}";
                     }
+                    else if (cc.IsFromImperva)
+                    {
+                        spanReason += $"{cc.Remark } Win lost: {winlost}";
+                    }
                     else if (cc.IsFromAI)
                     {
                         spanReason += $"Win lost: {winlost}";
@@ -1721,11 +1725,7 @@
                         if (!string.IsNullOrEmpty(cc.Remark))
                             spanReason += $" | {cc.Remark}";
                     } 
-                    else if(cc.IsFromImperva)
-                    {
-                        spanReason += $"Imperva Win lost: {winlost}";
-                    }
-
+                    
                     break;
 
                 default:
@@ -2208,7 +2208,7 @@
                 rbList.Add(new RobotBettingViewModel
                 {
                     IsRobotImperva = true,
-                    RobotImpervas = rbs.RobotBettingImperva.Select(x => new RobotBettingImpervaViewModel
+                    RobotImpervas = rbs.RobotBettingImperva.OrderBy(x=>x.CreateTime).Select(x => new RobotBettingImpervaViewModel
                     {
                         CustID = x.CustID,
                         CreatedDate = x.CreateTime.ToString(Consts.FormatDateToString_ddMMMyyyy),
