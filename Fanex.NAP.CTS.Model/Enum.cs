@@ -172,4 +172,13 @@
     {
         Pattern_3G5S = 2
     }
+
+    public enum AccountAssociationByOTGB
+    {
+        All = 0,
+        Round1 = 1,
+        Round2 = 2,
+        Round3 = 3
+    }
+
 }

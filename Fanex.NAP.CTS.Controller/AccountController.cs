@@ -1114,6 +1114,98 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
+        public ActionResult GetAssociationByOTGB(long custID1, long custID2)
+        {
+            var data = new AssociationOTGBViewModel();
+
+            try
+            {
+                data = _accountService.GetAssociationByOTGB(custID1, custID2, AccountAssociationByOTGB.All);
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+            }
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetAssociationDetailByOTGB(long custID1, long custID2, AccountAssociationByOTGB fraudType)
+        {
+            var data = Enumerable.Empty<AssByOTGBDetailViewModel>();
+
+            try
+            {
+                var association = _accountService.GetAssociationByOTGB(custID1, custID2, fraudType);
+
+                var tranList = string.Join(",", association.AssociationOTGBRoun1.Select(c => c.TransID).Distinct());
+
+                if (!string.IsNullOrEmpty(tranList))
+                {
+                    var ticketDetails = _accountService.GetTicketDetailsModel(tranList);
+
+                    data = GetTicketDetailOTGB(ticketDetails);
+                }
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+            }
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<AssByOTGBDetailViewModel> GetTicketDetailOTGB(IEnumerable<TicketDetailsModel> tickets)
+        {
+            var result = new List<AssByOTGBDetailViewModel>();
+
+            if (tickets.Any())
+            {
+                var groupTickets = tickets.GroupBy(c => new { c.MatchID, c.EventDate })
+                                          .OrderByDescending(c => c.Key.EventDate).ThenByDescending(c => c.Key.MatchID);
+                int groupId = 0; 
+
+                groupTickets.ToList().ForEach(group =>
+                {
+                    group.OrderByDescending(c => c.TransDate).ThenByDescending(c => c.TransId).ToList().ForEach(c =>
+                    {
+                        result.Add(new AssByOTGBDetailViewModel 
+                        {
+                            UserName = c.UserName,
+                            Currency = c.CurrencyName,
+                            BetTeam = c.BetTeam,
+                            BetType = c.BetType,
+                            EventDate = c.EventDate,
+                            IP = c.IP,
+                            LiveAwayScore = c.LiveAwayScore ?? 0,
+                            LiveHomeScore = c.LiveHomeScore ?? 0,
+                            Stake = c.Stake,
+                            Odds = c.Odds,
+                            MatchID = c.MatchID,
+                            TransDate = c.TransDate,
+                            TransId = c.TransId.ToString(),
+                            GroupID = groupId
+                        });
+                    });
+
+                    groupId++;
+                });
+            }
+
+            return result;
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
         public ActionResult GetIPAssociation(long custId1, long custId2)
         {
             var data = new AssociationByIPInfoViewModel();

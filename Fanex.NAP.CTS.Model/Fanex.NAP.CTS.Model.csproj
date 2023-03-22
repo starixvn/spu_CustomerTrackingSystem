@@ -239,6 +239,7 @@
     <Compile Include="AssociationDetection\SharedIPMatchesInfoModel.cs" />
     <Compile Include="AssociationReport\AssociationDetailFromMySqlModel.cs" />
     <Compile Include="AssociationReport\AssociationFromMySqlModel.cs" />
+    <Compile Include="Association\AssociationOTGBModel.cs" />
     <Compile Include="Association\CoupleFraudDetailModel.cs" />
     <Compile Include="Association\CoupleIPFraudDetailModel.cs" />
     <Compile Include="Association\FraudDetailModel.cs" />

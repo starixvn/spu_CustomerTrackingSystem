@@ -796,6 +796,29 @@
                 return db.Query<TicketDetailsModel>(criteria);
             }
         }
+
+        public AssociationOTGBViewModel GetAssociationByOTGB(long custID1, long custID2, AccountAssociationByOTGB fraudType)
+        {
+            var criteria = new GetAssociationByOTGBCriteria
+            {
+                CustId1 = custID1,
+                CustId2 = custID2,
+                FraudType = (int) fraudType
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.QueryMultiple(criteria);
+
+                return new AssociationOTGBViewModel
+                {
+                    AssociationOTGBRoun1 = result?.Read<AssociationOTGBModel>() ?? Enumerable.Empty<AssociationOTGBModel>(),
+                    AssociationOTGBRoun2 = result?.Read<AssociationOTGBModel>() ?? Enumerable.Empty<AssociationOTGBModel>(),
+                    AssociationOTGBRoun3 = result?.Read<AssociationOTGBModel>() ?? Enumerable.Empty<AssociationOTGBModel>()
+                };
+            }
+        }
+
         #endregion
 
         #region Chain To Evidence
