@@ -1397,16 +1397,13 @@
                 if (response[i]["GroupID"] == response[i - 1]["GroupID"]) {
                     tableRow.last().after(RenderOTGBDetailRowHTML(response, i, true, 0, fraudType));
                     groupMemberCounter++;
-                    tblOTGBRound1.DataTable().columns.adjust();
                 }
                 else {
                     tableRow.last().after(RenderOTGBDetailRowHTML(response, i, false, groupMemberCounter, fraudType));
                     groupMemberCounter = 1;
-                    tblOTGBRound1.DataTable().columns.adjust();
                 }
             } else {
                 tableRow.last().after(RenderOTGBDetailRowHTML(response, i, false, groupMemberCounter, fraudType));
-                tblOTGBRound1.DataTable().columns.adjust();
             }
         }
     }
