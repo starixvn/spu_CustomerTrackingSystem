@@ -1,4 +1,5 @@
 ﻿function account_by_account() {
+    var custIdAss = null;
     var divAddAssociation = $('#divAddAssociation');
     var btnAddAssociation = $('#btnAddAssociation');
     var btnSearch = $('#account-by-account-btn-search');
@@ -46,9 +47,6 @@
     let tblOTGBRound2 = $("#tblOTGBRound2");
     let tblOTGBRound3 = $("#tblOTGBRound3");
     let configTableOTGB = false;
-    let isRetrievedDataOTGBRound1 = false; 
-    let isRetrievedDataOTGBRound2 = false; 
-    let isRetrievedDataOTGBRound3 = false;
     
     function RenderTag(obj) {
         let html = "";
@@ -574,6 +572,7 @@
         if (dataTableMatchBettingPattern === null) {
             ConfigDataTableMatchBettingPattern();
         }
+
         GetMatchBettingPattern($('#hdCustId').val(), custId, groupIDs, originGroupIDs);
 
         // Association Stake & IP Pattern
@@ -581,7 +580,8 @@
         GetCoupleInformations($('#hdCustId').val(), custId);
 
         // Association OTGB
-        ConfigOTGBTable($('#hdCustId').val(), custId);
+        custIdAss = custId;
+        ConfigOTGBTable($('#hdCustId').val());
         GetAssociationOTGB($('#hdCustId').val(), custId);
 
         $('.ui-dialog .ui-dialog-content').css('padding', '0');
@@ -1193,55 +1193,21 @@
 
     // Assosication OTGB
 
-    function ConfigOTGBTable(custId1, custId2) {
+    function ConfigOTGBTable(custId1) {
         if (configTableOTGB) {
-            return
+            return;
         }
 
         RegisterTableOTGB(tblOTGBRound1);
         RegisterTableOTGB(tblOTGBRound2);
         RegisterTableOTGB(tblOTGBRound3);
 
+        RegisterEventForOTGBDetail(custId1, 1, titleOTGBRound1, tblOTGBRound1);
+        RegisterEventForOTGBDetail(custId1, 2, titleOTGBRound2, tblOTGBRound2);
+        RegisterEventForOTGBDetail(custId1, 3, titleOTGBRound3, tblOTGBRound3);
+
         configTableOTGB = true;
-
-        RegisterEventForOTGBDetail(custId1, custId2, 1, titleOTGBRound1, tblOTGBRound1);
-        RegisterEventForOTGBDetail(custId1, custId2, 2, titleOTGBRound2, tblOTGBRound2);
-        RegisterEventForOTGBDetail(custId1, custId2, 3, titleOTGBRound3, tblOTGBRound3);
     };
-
-    function RegisterEventForOTGBDetail(custId1, custId2, roundId, titleOTGB, tblOTGB) {
-        titleOTGB.on('click', function () {
-            if (!titleOTGB.hasClass('has-detail')) {
-                switch (roundId) {
-                    case 1:
-                        if (!isRetrievedDataOTGBRound1) {
-                            GetAssociationDetailOTGB(custId1, custId2, roundId);
-                        }
-                        break;
-                    case 2:
-                        if (!isRetrievedDataOTGBRound2) {
-                            GetAssociationDetailOTGB(custId1, custId2, roundId);
-                        }
-                        break;
-                    case 3:
-                        if (!isRetrievedDataOTGBRound3) {
-                            GetAssociationDetailOTGB(custId1, custId2, roundId);
-                        };
-                        break;
-                }
-            } else {
-                //var data = $('tr', tblOTGBRound1.find('tbody'));
-                for (var i = 0, length = tblOTGB.length; i < length; i++) {
-                    let trCurrent = $(tblOTGB[i]);
-                    if (trCurrent.hasClass('hide'))
-                        trCurrent.removeClass('hide');
-                    else
-                        trCurrent.addClass('hide');
-                }
-                
-            }
-        });
-    }
 
     function RegisterTableOTGB(tbl) {
         tbl.DataTable({
@@ -1283,6 +1249,24 @@
                 { data: obj => obj.Odds },
                 { data: obj => obj.LiveScore }
             ]
+        });
+    }
+
+    function RegisterEventForOTGBDetail(custId1, roundId, titleOTGB, tblOTGB) {
+        titleOTGB.on('click', function () {
+            if (!titleOTGB.hasClass('has-detail')) {
+                GetAssociationDetailOTGB(custId1, custIdAss, roundId);
+            } else {
+                //var data = $('tr', tblOTGBRound1.find('tbody'));
+                for (var i = 0, length = tblOTGB.length; i < length; i++) {
+                    let trCurrent = $(tblOTGB[i]);
+                    if (trCurrent.hasClass('hide'))
+                        trCurrent.removeClass('hide');
+                    else
+                        trCurrent.addClass('hide');
+                }
+
+            }
         });
     }
 
@@ -1344,17 +1328,14 @@
                     case 1:
                         tblOTGBRound1.find('tbody').addClass('loading');
                         tblOTGBRound1.show();
-                        isRetrievedDataOTGBRound1 = true;
                         break;
                     case 2:
                         tblOTGBRound2.find('tbody').addClass('loading');
                         tblOTGBRound2.show();
-                        isRetrievedDataOTGBRound2 = true;
                         break;
                     case 3:
                         tblOTGBRound3.find('tbody').addClass('loading');
                         tblOTGBRound3.show();
-                        isRetrievedDataOTGBRound3 = true;
                         break;
                 }
             },
@@ -1394,22 +1375,16 @@
                 switch (roundId) {
                     case 1:
                         tblOTGBRound1.find('tbody').removeClass('loading');
-                        isRetrievedDataOTGBRound1 = false;
                         break;
                     case 2:
                         tblOTGBRound2.find('tbody').removeClass('loading');
-                        isRetrievedDataOTGBRound2 = false;
                         break;
                     case 3:
                         tblOTGBRound3.find('tbody').removeClass('loading');
-                        isRetrievedDataOTGBRound3 = false;
                         break;
                 }
             },
             error: function (errMsg) {
-                isRetrievedDataOTGBRound1 = false;
-                isRetrievedDataOTGBRound2 = false;
-                isRetrievedDataOTGBRound3 = false;
                 console.log(errMsg);
             }
         });
