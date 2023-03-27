@@ -596,6 +596,8 @@
                 {
                     result.Add(new GetAssociationDetectDetailIPViewModel { IP = ip });
                 }
+
+                result = result.OrderBy(x => x.IP).ToList();
             }
 
             return Json(new

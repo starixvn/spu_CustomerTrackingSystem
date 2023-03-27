@@ -225,12 +225,11 @@
             resizable: false,
             draggable: true,
             close: function () {
-                $(this).dialog('close');
-                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
-                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
-                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
+                $(this).dialog('close');                                
             }
         });             
+        $('.ui-dialog .ui-dialog-content').css('padding', '12px');
+        $('.ui-dialog .ui-dialog-content').css('margin-bottom', '0');
     }
 
     function GetAssociationDetectDetail(userName, custID, ctsCustID, ctsCustIDList, userNames) {
@@ -283,7 +282,7 @@
                 info: false,
                 ordering: false,
                 searching: false,
-                scrollX: false,                            
+                scrollX: false,                 
                 scrollCollapse: false,
                 paging: false,
                 searching: false,
@@ -309,13 +308,13 @@
             resizable: false,
             draggable: true,
             close: function () {
-                $(this).dialog('close');
-                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
-                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
-                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
+                $(this).dialog('close');               
             }
         });
 
+        $('.ui-dialog .ui-dialog-content').css('padding', '12px');
+        $('.ui-dialog .ui-dialog-content').css('margin-bottom', '12px');
+        
         domElements.divAssociationDetectDetailIP.parent().find('.ui-dialog-title').html("<div>ASSOCIATION DETAIL - IP LIST (in the last 3 days): <br/>" + userName1 + " - " + userName2 + "</div>");      
     }
 
@@ -447,12 +446,12 @@
             resizable: false,
             draggable: true,
             close: function () {
-                $(this).dialog('close');
-                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
-                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
-                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
+                $(this).dialog('close');                              
             }
         });
+
+        $('.ui-dialog .ui-dialog-content').css('padding', '12px');
+        $('.ui-dialog .ui-dialog-content').css('margin-bottom', '12px');
     }
 
     function GetAssociationDetectDetailMatch(custID1, custID2, custIDList) {
@@ -527,12 +526,12 @@
             resizable: false,
             draggable: true,
             close: function () {
-                $(this).dialog('close');
-                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
-                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
-                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
+                $(this).dialog('close');                
             }
         });      
+
+        $('.ui-dialog .ui-dialog-content').css('padding', '12px');
+        $('.ui-dialog .ui-dialog-content').css('margin-bottom', '12px');
     }
 
     function GetAssociationDetectDetailAgent(agentInfoJson) {
