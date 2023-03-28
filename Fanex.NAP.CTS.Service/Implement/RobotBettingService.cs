@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
+    using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Criteria.Account.RobotSetting;
     using Fanex.NAP.CTS.Model.Account.RobotBetting;
@@ -19,23 +20,33 @@
             repository = new DynamicRepository();
         }
 
-        public IEnumerable<RobotBettingModel> GetRobotBetting(long custID, out RobotDateAndTypeModel robotDateAndType)
+        public RobotBettingModel GetRobotBetting(long custID)
         {
-            var criteria = new GetRobotDetectionCriteria()
+            var criteria = new GetRobotDetectionCriteria
             {
                 CustID = custID
             };
-
-            var result = repository.Fetch<RobotBettingModel>(criteria);
-
-            robotDateAndType = new RobotDateAndTypeModel
+           
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                FirstRobotDate = criteria.FirstRobotDate,
-                LastRobotDate = criteria.LastRobotDate,
-                RobotTypeClassify = criteria.RobotTypeClassify
-            };
+                using (var result = db.QueryMultiple(criteria))
+                {
+                    var robotAIs = result.Read<RobotBettingAIModel>();
+                    var robotImpervas = result.Read<RobotBettingImpervaModel>();
+                    var typeModel = new RobotDateAndTypeModel
+                    {
+                        FirstRobotDate = criteria.FirstRobotDate,
+                        LastRobotDate = criteria.LastRobotDate,
+                    };
 
-            return result;
+                    return new RobotBettingModel
+                    {
+                        TypeModel = typeModel,
+                        RobotBettingAI = robotAIs,
+                        RobotBettingImperva = robotImpervas
+                    };                   
+                }
+            }
         }
 
         public IEnumerable<RobotUserDetailModel> GetRobotDetectionDetails(long custID, int periodRangeType)

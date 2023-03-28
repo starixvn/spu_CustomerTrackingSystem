@@ -1622,6 +1622,8 @@
         font-weight: 500; }
     .dataTable .robot-betting[disabled] {
       cursor: not-allowed; }
+    .dataTable .robot-betting .imperva-line {
+      padding-left: 64px; }
   .dataTable .robot-betting-reason {
     background: #8cb5f9;
     cursor: pointer; }

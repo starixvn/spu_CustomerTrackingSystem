@@ -1,13 +1,13 @@
 ﻿namespace Fanex.NAP.CTS.Model.Account.RobotBetting
 {
-    using System;
+    using System.Collections.Generic;
 
     public class RobotBettingModel
     {
-        public long CustID { get; set; }
+        public RobotDateAndTypeModel TypeModel { get; set; }
 
-        public int PeriodRangeType { get; set; }
+        public IEnumerable<RobotBettingAIModel> RobotBettingAI { get; set; }
 
-        public string PeriodRangeName { get; set; }
+        public IEnumerable<RobotBettingImpervaModel> RobotBettingImperva { get; set; }
     }
 }

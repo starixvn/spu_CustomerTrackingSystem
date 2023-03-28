@@ -242,6 +242,7 @@
                                                                 IsFromTW = group.ro.IsFromTW,
                                                                 IsFromCTS = group.ro.IsFromCTS,
                                                                 IsFromAI = group.ro.IsFromAI,
+                                                                IsFromImperva = group.ro.IsFromImperva,
                                                                 IsFromTVS = group.ro.IsFromTVS,
                                                                 TVSRequestID = group.ro.TVSRequestID,
                                                                 IsDirect = group.ro.IsDirect,

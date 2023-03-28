@@ -7,10 +7,7 @@
     public class GetRobotDetectionCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_CustID")]
-        public long CustID { get; set; }
-
-        [SpParam(SqlParamName = "op_RobotType")]
-        public int RobotTypeClassify { get; set; }
+        public long CustID { get; set; }       
 
         [SpParam(SqlParamName = "op_FirstRobotDate")]
         public DateTime FirstRobotDate { get; set; }

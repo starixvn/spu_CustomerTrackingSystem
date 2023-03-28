@@ -21,9 +21,7 @@
 
                     firstRobotDate.text("First Robot Date: " + json.firstRobotDate);
                     lastRobotDate.text("Last Robot Date: " + json.lastRobotDate);
-
-                    //HandleRobotBettingDetection(json.robotTypeClassify);
-
+                   
                     return response;
                 },
                 complete: function () {
@@ -59,8 +57,24 @@
             ],
             createdRow: function (row, obj) {
                 if (obj.Detail.length == 0) {
-                    let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-robotTypeOrigin=${obj.PeriodRangeType}><span class="icon-chevron-right"><i class="title-robot">${obj.PeriodRangeName}</span></td>`;
-                    $(row).empty().html(td);
+                    if (obj.IsRobotImperva) {
+                        let td = `<td class="robot-betting imperva" colspan="8">`;
+                        td += `<span>Imperva -`;
+
+                        $.each(obj.RobotImpervas, function (index, value) {
+                            let cssClass = index == 0 ? 'title-robot' : 'title-robot imperva-line';
+                            td += `<i class="${cssClass}"> CreatedDate: ${value.CreatedDate} - Platform: ${value.PlatformName}</i><br/>`;                            
+                        }); 
+
+                        td += `</span></td>`;
+                       
+                        $(row).empty().html(td);
+                    } else {
+                        let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-robotTypeOrigin=${obj.RangeType}>
+                                    <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</span>
+                                  </td>`;
+                        $(row).empty().html(td);
+                    }
                 }
             }
         });
@@ -69,43 +83,15 @@
             var tr = $(this).closest('tr');
             var row = robotBettingTable.DataTable().row(tr);
 
+            let tdImperva = $('.imperva', tr);
             let tdTicket = $('.robot-betting', tr);
 
-            if (tdTicket.length > 0) {
+            if (tdTicket.length > 0 && tdImperva.length == 0) {
                 LoadRobotDetail(tr, row);
             }          
         });
     }
-
-    function HandleRobotBettingDetection(robotTypeClassify) {
-        switch (robotTypeClassify) {
-            case -1:
-                $('span.icon-big-robot').removeClass('hide');
-                $('span.icon-big-observation-robot').addClass('hide');
-                $('span.icon-big-good-robot').addClass('hide');
-                $('span.icon-big-bad-robot').addClass('hide');
-                break;
-            case 0:
-                $('span.icon-big-robot').addClass('hide');
-                $('span.icon-big-observation-robot').removeClass('hide');
-                $('span.icon-big-good-robot').addClass('hide');
-                $('span.icon-big-bad-robot').addClass('hide');
-                break;
-            case 1:
-                $('span.icon-big-robot').addClass('hide');
-                $('span.icon-big-observation-robot').addClass('hide');
-                $('span.icon-big-good-robot').removeClass('hide');
-                $('span.icon-big-bad-robot').addClass('hide');
-                break;
-            case 2:
-                $('span.icon-big-robot').addClass('hide');
-                $('span.icon-big-observation-robot').addClass('hide');
-                $('span.icon-big-good-robot').addClass('hide');
-                $('span.icon-big-bad-robot').removeClass('hide');
-                break;
-        }
-    }
-
+  
     function LoadRobotDetail(tr, row) {
         let span = $('span', tr);
 

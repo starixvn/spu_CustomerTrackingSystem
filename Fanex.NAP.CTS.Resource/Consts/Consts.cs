@@ -23,7 +23,8 @@
         public const string FormatDateToString_ddMMhhmmss = "dd/MM HH:mm:ss";
         public const string FormatDateToString_MMMddyyyy = "MMM dd, yyyy";
         public const string FormatDateToString_MMMddyyyy2 = "MMM-dd-yyyy";
-        public const string FormatDateToString_MMMddyyyyhhmmss = "MMM dd, yyyy HH:mm:ss"; 
+        public const string FormatDateToString_ddMMMyyyy = "dd MMM, yyyy";
+        public const string FormatDateToString_MMMddyyyyhhmmss = "MMM dd, yyyy HH:mm:ss";        
         public const string FormatDateToString_MMMddyyyyhhmmss2 = "MMM dd, yyyy - HH:mm:ss";
         public const string FormatDateToString_MMMddyyyyhhmmsstt = "MMM dd, yyyy HH:mm:ss tt";
         public const string FormatDateToString_MMMddyyyyhhmm = "MMM dd, yyyy HH:mm";

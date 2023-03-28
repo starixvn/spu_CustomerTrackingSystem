@@ -174,12 +174,14 @@
     <Compile Include="Account\CustomerInfo\CustomerInfoDateModel.cs" />
     <Compile Include="Account\CustomerInfo\CustomerInfoEvidenceModel.cs" />
     <Compile Include="Account\CustomerInfo\CustomerInfoLoginStatsModel.cs" />
+    <Compile Include="Account\RobotBetting\RobotBettingImpervaModel.cs" />
+    <Compile Include="Account\RobotBetting\RobotBettingModel.cs" />
     <Compile Include="Account\RobotBetting\RobotBettingTicketDetailModel.cs" />
     <Compile Include="Account\RobotBetting\RobotBettingSceDetailParaModel.cs" />
     <Compile Include="Account\RobotBetting\RobotDateModel.cs" />
     <Compile Include="Account\RobotBetting\RobotUserSCEDetailModel.cs" />
     <Compile Include="Account\RobotBetting\RobotUserDetailModel.cs" />
-    <Compile Include="Account\RobotBetting\RobotBettingModel.cs" />
+    <Compile Include="Account\RobotBetting\RobotBettingAIModel.cs" />
     <Compile Include="Account\RobotClassification.cs" />
     <Compile Include="API\ApiIResultModel.cs" />
     <Compile Include="API\CategoryCustomerClassModel.cs" />

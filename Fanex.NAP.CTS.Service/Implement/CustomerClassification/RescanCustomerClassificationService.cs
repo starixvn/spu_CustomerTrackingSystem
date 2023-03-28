@@ -213,6 +213,7 @@
                         IsFromTW = c.IsFromTW,
                         IsFromCTS = c.IsFromCTS,
                         IsFromAI = c.IsFromAI,
+                        IsFromImperva = c.IsFromImperva,
                         IsFromTVS = c.IsFromTVS,
                         TVSRequestID = c.TVSRequestID,
                         IsDirect = c.IsDirect,

@@ -56,6 +56,8 @@
 
         public bool IsFromAI { get; set; }
 
+        public bool IsFromImperva { get; set; }
+
         public string LicVIP { get; set; }
         
         public string LicBA { get; set; }
