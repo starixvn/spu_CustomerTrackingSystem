@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
     using Fanex.Data;
+    using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.AssociationDetection;
@@ -11,6 +12,7 @@
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
     using Fanex.NAP.SPU.Graph.Core;
     using Fanex.NAP.TGRS.Core.ExcelUtility;
+    using Newtonsoft.Json;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -73,7 +75,7 @@
         public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimary(DetectAssociationByPrimaryFilterModel filter, bool fromMySQL = true)
         {
             if (fromMySQL)
-            {
+            {                
                 var criteria = new DetectAssociationByPrimaryCriteria
                 {
                     CTSCustIDs = filter.CTSCustIDs,
@@ -110,7 +112,7 @@
         }
 
         public IEnumerable<DetectAssociationMergeGroupModel> DetectGroupDetectAssociation(MergeGroupInfoModel model)
-        {
+        {           
             var criteria = new DetectAssociationMergeGroupCriteria
             {
                 CTSCustIDs = model.CTSCustIDs,

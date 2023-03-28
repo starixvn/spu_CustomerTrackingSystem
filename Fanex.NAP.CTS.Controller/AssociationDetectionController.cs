@@ -22,6 +22,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Mvc;
+    using System.Web.Script.Serialization;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
@@ -281,7 +282,7 @@
 
                         mergeGroupInfo.AssociationByMatchesJson = GetAssociationCustByMatch(assBySharedMatches);                       
                     }, () => {
-                        var assByPrimary = Enumerable.Empty<DetectAssociationByPrimaryModel>();
+                        var assByPrimary = Enumerable.Empty<DetectAssociationByPrimaryViewModel>();
 
                     if (model.IsBP || model.IsDevice || model.IsIP)
                     {
@@ -294,9 +295,16 @@
                                     IsBP = model.IsBP,
                                     IsDevice = model.IsDevice,
                                     IsIP = model.IsIP
-                                }, isGetAssDetectionFromMySQL);
-
-                                mergeGroupInfo.AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary);
+                                }, isGetAssDetectionFromMySQL).Select(x => new DetectAssociationByPrimaryViewModel
+                                {
+                                    O = x.OrigID,
+                                    D = x.DestID,
+                                    A = x.AssociationType
+                                });
+                               
+                                var serializer = new JavaScriptSerializer();
+                                serializer.MaxJsonLength = Int32.MaxValue;
+                                mergeGroupInfo.AssociationByPrimaryJson = serializer.Serialize(assByPrimary);
                             }
                             catch (Exception e)
                             {
@@ -318,9 +326,9 @@
 
                         mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);
                     });
-                   
+                    
                     var assMergeGroup = _associationDetectionService.DetectGroupDetectAssociation(mergeGroupInfo);
-
+                    
                     var assRearrangeGroup = RearrangeAssGroup(assMergeGroup, isExportExcel);
 
                     if (isExportExcel)
@@ -334,7 +342,7 @@
                         result.ItemList = assRearrangeGroup.Select(x =>
                         {
                             return new DetectAssociationItemViewModel(x);
-                        });
+                        });                       
                     }
                 }
                 catch (Exception ex)
