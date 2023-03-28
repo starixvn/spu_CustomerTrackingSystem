@@ -930,7 +930,7 @@
                     patternDetail.IpFraudDetail = _accountService.GetCoupleIPFraudDetails(para.CoupleInfoDetails);
                 }
 
-                patternDetail.TicketDetails = GetTicketDetailsModel(patternDetail.StakeFraudDetail, patternDetail.IpFraudDetail);
+                patternDetail.TicketDetails = Get5G3STicketDetail(patternDetail.StakeFraudDetail, patternDetail.IpFraudDetail);
 
                 data.AddRange(GetStakePatternDetail(patternDetail));
                 data.AddRange(GetIpPatternDetail(patternDetail));
@@ -947,7 +947,7 @@
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<TicketDetailsModel> GetTicketDetailsModel(IEnumerable<CoupleFraudDetailModel> coupleFraudDetails, IEnumerable<CoupleIPFraudDetailModel> coupleIPFraudDetails)
+        private IEnumerable<TicketDetailsModel> Get5G3STicketDetail(IEnumerable<CoupleFraudDetailModel> coupleFraudDetails, IEnumerable<CoupleIPFraudDetailModel> coupleIPFraudDetails)
         {
             var unionAllFraudTransList = new List<string>();
 
@@ -969,7 +969,7 @@
 
             var fraudTransList = unionAllFraudTransList.Any() ? string.Join(",", unionAllFraudTransList.Distinct()) : string.Empty;
 
-            return string.IsNullOrEmpty(fraudTransList) ? Enumerable.Empty<TicketDetailsModel>() : _accountService.GetTicketDetailsModel(fraudTransList);
+            return string.IsNullOrEmpty(fraudTransList) ? Enumerable.Empty<TicketDetailsModel>() : _accountService.GetAIAssociationTicketDetails(fraudTransList, null, null);
         }
 
         private IEnumerable<StakeIpPatternDetailViewModel> GetStakePatternDetail(StakeIpPatternDetailModel stakeIpPatternDetailModel)
@@ -1143,13 +1143,13 @@
             {
                 var association = _accountService.GetAssociationByOTGB(custID1, custID2, fraudType);
 
-                var tranList = string.Join(",", association.AssociationOTGBRoun1.Select(c => c.TransID).Distinct());
-
-                if (!string.IsNullOrEmpty(tranList))
+                if (association != null && association.AssociationOTGBRoun1.Any())
                 {
-                    var ticketDetails = _accountService.GetTicketDetailsModel(tranList);
+                    var tranInfo = association.AssociationOTGBRoun1.Distinct();
 
-                    data = GetTicketDetailOTGB(ticketDetails);
+                    var ticketDetails = _accountService.GetAIAssociationTicketDetails(JsonConvert.SerializeObject(tranInfo), 1000, 50);
+
+                    data = ProcessTicketDetailOTGB(ticketDetails);
                 }
             }
             catch (Exception ex)
@@ -1164,7 +1164,7 @@
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<AssByOTGBDetailViewModel> GetTicketDetailOTGB(IEnumerable<TicketDetailsModel> tickets)
+        private IEnumerable<AssByOTGBDetailViewModel> ProcessTicketDetailOTGB(IEnumerable<TicketDetailsModel> tickets)
         {
             var result = new List<AssByOTGBDetailViewModel>();
 

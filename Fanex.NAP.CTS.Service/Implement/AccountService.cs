@@ -783,13 +783,15 @@
             }
         }
 
-        public IEnumerable<TicketDetailsModel> GetTicketDetailsModel(string transIds)
+        public IEnumerable<TicketDetailsModel> GetAIAssociationTicketDetails(string transIds, int? transSize, int? matchSize)
         {
             var result = new List<TicketDetailsModel>();
 
             var criteria = new GetTicketDetailsCriteria()
             {
-                ListTransId = transIds
+                ListTransId = transIds,
+                TransSize = transSize,
+                MatchSize = matchSize
             };
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
