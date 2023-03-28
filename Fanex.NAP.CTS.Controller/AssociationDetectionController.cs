@@ -286,16 +286,27 @@
                     if (model.IsBP || model.IsDevice || model.IsIP)
                     {
                         var isGetAssDetectionFromMySQL = AppSettings.Get("GetAssDetectionFromMySQL") == "1";
-                            assByPrimary = _associationDetectionService.DetectAssociationByPrimary(new DetectAssociationByPrimaryFilterModel 
+                            try
                             {
-                                CTSCustIDs = ctsCustIDs,
-                                IsBP = model.IsBP,
-                                IsDevice = model.IsDevice,
-                                IsIP = model.IsIP
-                            }, isGetAssDetectionFromMySQL);
-                        }
-                      
-                        mergeGroupInfo.AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary);                       
+                                assByPrimary = _associationDetectionService.DetectAssociationByPrimary(new DetectAssociationByPrimaryFilterModel
+                                {
+                                    CTSCustIDs = ctsCustIDs,
+                                    IsBP = model.IsBP,
+                                    IsDevice = model.IsDevice,
+                                    IsIP = model.IsIP
+                                }, isGetAssDetectionFromMySQL);
+
+                                mergeGroupInfo.AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary);
+                            }
+                            catch (Exception e)
+                            {
+                                var logMessage = new LogMessage(e.Message)
+                                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(e))
+                                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(e)).ToString();
+
+                                LogService.Error(logMessage);                               
+                            }                            
+                        }                                            
                     }, () => {
                         var assByAgent = Enumerable.Empty<DetectAssociationByPrimaryModel>();
 
