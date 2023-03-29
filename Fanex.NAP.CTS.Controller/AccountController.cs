@@ -1176,7 +1176,7 @@
 
                 foreach(var group in groupTickets)
                 {
-                    if (fraudType == AccountAssociationByOTGB.Round1 && group.Count() < 2)
+                    if ((fraudType == AccountAssociationByOTGB.Round1 || fraudType == AccountAssociationByOTGB.Round3) && group.Count() < 2)
                     {
                         continue;
                     }
