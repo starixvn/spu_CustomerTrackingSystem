@@ -114,6 +114,7 @@
     <Compile Include="AssociatedGroupMonitor\ResultSaveAssociatedAccountViewModel.cs" />
     <Compile Include="AssociatedGroupMonitor\ResultValidatedViewModel.cs" />
     <Compile Include="AssociatedGroupMonitor\ValidateUserAssociatedAccountViewModel.cs" />
+    <Compile Include="AssociationDetection\AssociationCustByIPViewModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByPrimaryViewModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationItemViewModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByUserNamesViewModel.cs" />

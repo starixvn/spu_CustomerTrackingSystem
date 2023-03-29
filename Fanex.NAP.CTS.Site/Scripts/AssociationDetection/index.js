@@ -43,8 +43,7 @@
         IsIP: false,
         IsAgent: false,
         IsIPLast3Days: false,
-        Is3MatchesLast7Days: false,
-        AssociationByIPJson: ""
+        Is3MatchesLast7Days: false,      
     }
 
     function GenerateGrid(data) {
@@ -205,18 +204,20 @@
         }
 
         domElements.tblAssociationDetectDetail.DataTable().clear();
-        
+
+        let custIDs = [];
         let ctsCustIDs = [];
         let userNames = [];
 
         domElements.tblAssociationDetection.find('.view-detail').each(function () {
             if ($(this).attr("data-groupid") == fromObj.GroupID) {
+                custIDs.push($(this).attr('data-custid'));
                 ctsCustIDs.push($(this).attr('data-ctscustid'));
                 userNames.push($(this).attr('data-username'));
             }
         });
-       
-        GetAssociationDetectDetail(fromObj.UserName, fromObj.CustID, fromObj.CTSCustID, ctsCustIDs.join(), userNames.join());
+
+        GetAssociationDetectDetail(fromObj.UserName, fromObj.CustID, fromObj.CTSCustID, custIDs.join(), ctsCustIDs.join(), userNames.join());
 
         domElements.divAssociationDetectDetail.dialog({
             modal: true,
@@ -232,7 +233,7 @@
         $('.ui-dialog .ui-dialog-content').css('margin-bottom', '0');
     }
 
-    function GetAssociationDetectDetail(userName, custID, ctsCustID, ctsCustIDList, userNames) {
+    function GetAssociationDetectDetail(userName, custID, ctsCustID, custIDList, ctsCustIDList, userNames) {
         $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetail'), {
             type: 'POST',
             beforeSend: function () {
@@ -243,14 +244,14 @@
                 UserNameList: userNames,
                 CustID: custID,
                 CTSCustID: ctsCustID,
+                CustIDList: custIDList,
                 CTSCustIDList: ctsCustIDList,                               
                 IsBP: parameters.IsBP,
                 IsDevice: parameters.IsDevice,
                 IsIP: parameters.IsIP,
                 IsAgent: parameters.IsAgent,
                 IsIPLast3Days: parameters.IsIPLast3Days,
-                Is3MatchesLast7Days: parameters.Is3MatchesLast7Days,
-                AssociationByIPJson: parameters.AssociationByIPJson     
+                Is3MatchesLast7Days: parameters.Is3MatchesLast7Days              
             },
             success: function (response) {
                 if (response !== undefined) {                   
@@ -786,9 +787,7 @@
                         domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
                         domElements.spanAddUserNameMaxTag.text(maxTags);
                         domElements.spanAddChangeHidden.text("0");
-                        domElements.btnDetect.prop('disabled', true);
-
-                        parameters.AssociationByIPJson = response.associationByIPJson;
+                        domElements.btnDetect.prop('disabled', true);                       
                     } else {
                         common.showError(response.data.ErrorMessage);
 

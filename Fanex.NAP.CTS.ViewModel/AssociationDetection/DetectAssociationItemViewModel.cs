@@ -89,7 +89,7 @@
                 newAssType = assType.Replace("Match", $"<span class='association-detect-match' data-groupid={this.GroupID} data-custid={this.CustID} data-ctscustid={this.CTSCustID}>Match</span>");
             }
            
-            newAssType += $"<div class='association-type-detail sub-icon - view-detail' id='sub-icon ' title='View Detail' data-groupid={this.GroupID} data-ctscustid={this.CTSCustID} data-username={this.UserName}><i class='icon-Detail'></i ></div>";
+            newAssType += $"<div class='association-type-detail sub-icon - view-detail' id='sub-icon ' title='View Detail' data-groupid={this.GroupID} data-custid={this.CustID} data-ctscustid={this.CTSCustID} data-username={this.UserName}><i class='icon-Detail'></i ></div>";
             newAssType += "</div>";
             return newAssType;
         }

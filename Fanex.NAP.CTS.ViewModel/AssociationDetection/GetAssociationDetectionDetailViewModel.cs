@@ -10,6 +10,8 @@
 
         public long CTSCustID { get; set; }
 
+        public string CustIDList { get; set; }
+
         public string CTSCustIDList { get; set; }
 
         public bool IsBP { get; set; }
@@ -22,9 +24,7 @@
 
         public bool IsIPLast3Days { get; set; }
 
-        public bool Is3MatchesLast7Days { get; set; }
-
-        public string AssociationByIPJson { get; set; }
+        public bool Is3MatchesLast7Days { get; set; }     
        
     }
 }
