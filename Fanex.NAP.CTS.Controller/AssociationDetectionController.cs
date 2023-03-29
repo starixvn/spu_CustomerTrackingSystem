@@ -276,7 +276,7 @@
                         assBySharedIP = model.IsIPLast3Days ? DetectAssociationByIP(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPInfoModel>();
                        
                         mergeGroupInfo.AssociationByIPJson = GetAssociationCustByIP(assBySharedIP);
-                        model.AssociationByIPJson = mergeGroupInfo.AssociationByIPJson;
+                        model.AssociationByIPJson = mergeGroupInfo.AssociationByIPJson;                        
                     }, () => {                        
                         var assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
 
@@ -425,6 +425,9 @@
                 IP = x.IP
             });
 
+            // hard code for test 
+            assCustBySharedIP = assCustBySharedIP.Take(50);
+
             return JsonConvert.SerializeObject(assCustBySharedIP);
         }
 
@@ -487,6 +490,8 @@
         {
             var result = Enumerable.Empty<GetAssociationDetectDetailViewModel>();
             var viewModel = new List<GetAssociationDetectDetailViewModel>();
+
+            LogService.Info($"GetDetectAssociationDetail info {model.AssociationByIPJson}");
 
             if (model.IsIPLast3Days)
                 viewModel.AddRange(GetAssociationDetectSharedIP(model.UserName, model.CustID, model.CTSCustID, model.AssociationByIPJson));            
