@@ -1149,7 +1149,7 @@
 
                     var ticketDetails = _accountService.GetAIAssociationTicketDetails(JsonConvert.SerializeObject(tranInfo), 1000, 50);
 
-                    data = ProcessTicketDetailOTGB(ticketDetails);
+                    data = ProcessTicketDetailOTGB(ticketDetails, fraudType);
                 }
             }
             catch (Exception ex)
@@ -1164,7 +1164,7 @@
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<AssByOTGBDetailViewModel> ProcessTicketDetailOTGB(IEnumerable<TicketDetailsModel> tickets)
+        private IEnumerable<AssByOTGBDetailViewModel> ProcessTicketDetailOTGB(IEnumerable<TicketDetailsModel> tickets, AccountAssociationByOTGB fraudType)
         {
             var result = new List<AssByOTGBDetailViewModel>();
 
@@ -1172,13 +1172,18 @@
             {
                 var groupTickets = tickets.GroupBy(c => new { c.MatchID, c.EventDate })
                                           .OrderByDescending(c => c.Key.EventDate).ThenByDescending(c => c.Key.MatchID);
-                int groupId = 0; 
+                int groupId = 0;
 
-                groupTickets.ToList().ForEach(group =>
+                foreach(var group in groupTickets)
                 {
+                    if (fraudType == AccountAssociationByOTGB.Round1 && group.Count() < 2)
+                    {
+                        continue;
+                    }
+
                     group.OrderByDescending(c => c.TransDate).ThenByDescending(c => c.TransId).ToList().ForEach(c =>
                     {
-                        result.Add(new AssByOTGBDetailViewModel 
+                        result.Add(new AssByOTGBDetailViewModel
                         {
                             UserName = c.UserName,
                             Currency = c.CurrencyName,
@@ -1198,7 +1203,7 @@
                     });
 
                     groupId++;
-                });
+                };
             }
 
             return result;
