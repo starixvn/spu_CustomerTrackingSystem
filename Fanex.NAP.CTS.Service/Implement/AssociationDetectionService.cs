@@ -41,8 +41,6 @@
 
         IEnumerable<GetCustStatisticsInfoRealtimeModel> GetCustStatisticsInfoRealtime(string custIDList);
 
-        IEnumerable<GetAssociationDetectDetailIPModel> GetCoupleSharedIP(int custID1, int custID2);
-
         IEnumerable<GetAssociationDetectDetailMatchModel> GetDetectAssociationDetailMatch(long rootCustID, string custIDList, int queryType);
 
         byte[] ExportToExcelAssociationDetect(IEnumerable<ExportAssociationDetectModel> AssociationDetect, string fileName, string templatePath);
@@ -207,21 +205,7 @@
             }
 
             return GetAssociationDetectionDetailFromGraphDB(model.CTSCustID, ctsCustIDList, model.IsDevice, model.IsAgent);
-        }
-
-        public IEnumerable<GetAssociationDetectDetailIPModel> GetCoupleSharedIP(int custID1, int custID2)
-        {
-            var criteria = new GetCoupleSharedIPCriteria
-            {
-                CustID1 = custID1,
-                CustID2 = custID2
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<GetAssociationDetectDetailIPModel>(criteria);
-            }
-        }
+        }        
 
         public IEnumerable<GetAssociationDetectDetailMatchModel> GetDetectAssociationDetailMatch(long rootCustID, string custIDList, int queryType)
         {

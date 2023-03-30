@@ -79,8 +79,7 @@
 	</Function>
 
 	<Function Name="AssociationDetection">
-		<Setting Key="CTS_DC_RPT_AssociationDetection" SpName="CTS_DC_RPT_AssociationDetection_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />				
-		<Setting Key="SPU_AIML_GB_GetCoupleSharedIP" SpName="SPU_AIML_GB_GetCoupleSharedIP_xtest" DbName="MySQL.SPU_AIML.Reporter" TimeOut="300" />
+		<Setting Key="CTS_DC_RPT_AssociationDetection" SpName="CTS_DC_RPT_AssociationDetection_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />						
 		<Setting Key="CTS_DC_AssociationDetection_Primary_GetEdge" SpName="CTS_DC_AssociationDetection_Primary_GetEdge_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_AssociationDetection_Agent_DetectGroup" SpName="CTS_DC_AssociationDetection_Agent_DetectGroup_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_AssociationDetection_DetectGroup" SpName="CTS_DC_AssociationDetection_DetectGroup_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
