@@ -801,6 +801,8 @@
 
         public AssociationOTGBViewModel GetAssociationByOTGB(long custID1, long custID2, AccountAssociationByOTGB fraudType)
         {
+            var result = new AssociationOTGBViewModel();
+
             var criteria = new GetAssociationByOTGBCriteria
             {
                 CustId1 = custID1,
@@ -808,17 +810,24 @@
                 FraudType = (int) fraudType
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.QueryMultiple(criteria);
+            var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+            
+            var data = db.QueryMultiple(criteria);
 
-                return new AssociationOTGBViewModel
-                {
-                    AssociationOTGBRoun1 = result?.Read<AssociationOTGBModel>() ?? Enumerable.Empty<AssociationOTGBModel>(),
-                    AssociationOTGBRoun2 = result?.Read<AssociationOTGBModel>() ?? Enumerable.Empty<AssociationOTGBModel>(),
-                    AssociationOTGBRoun3 = result?.Read<AssociationOTGBModel>() ?? Enumerable.Empty<AssociationOTGBModel>()
-                };
+            if (fraudType != AccountAssociationByOTGB.CheckExist)
+            {
+                result.AssociationOTGBRoun1 = data?.Read<AssociationOTGBModel>() ?? Enumerable.Empty<AssociationOTGBModel>();
+                result.AssociationOTGBRoun2 = data?.Read<AssociationOTGBModel>() ?? Enumerable.Empty<AssociationOTGBModel>();
+                result.AssociationOTGBRoun3 = data?.Read<AssociationOTGBModel>() ?? Enumerable.Empty<AssociationOTGBModel>();
             }
+            else
+            {
+                result.ScoreRound1 = data?.Read<bool>().FirstOrDefault() ?? false;
+                result.ScoreRound2 = data?.Read<bool>().FirstOrDefault() ?? false;
+                result.ScoreRound3 = data?.Read<bool>().FirstOrDefault() ?? false;
+            }
+
+            return result;
         }
 
         #endregion

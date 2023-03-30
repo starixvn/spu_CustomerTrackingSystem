@@ -2,7 +2,6 @@
 namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 {
     using Fanex.NAP.CTS.Model.Association;
-    using Newtonsoft.Json;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -13,6 +12,9 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
             AssociationOTGBRoun1 = Enumerable.Empty<AssociationOTGBModel>();
             AssociationOTGBRoun2 = Enumerable.Empty<AssociationOTGBModel>();
             AssociationOTGBRoun3 = Enumerable.Empty<AssociationOTGBModel>();
+            ScoreRound1 = false;
+            ScoreRound2 = false;
+            ScoreRound3 = false;
         }
 
         public IEnumerable<AssociationOTGBModel> AssociationOTGBRoun1 { get; set; }
@@ -21,5 +23,10 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 
         public IEnumerable<AssociationOTGBModel> AssociationOTGBRoun3 { get; set; }
 
+        public bool ScoreRound1 { get; set; }
+
+        public bool ScoreRound2 { get; set; }
+
+        public bool ScoreRound3 { get; set; }
     }
 }

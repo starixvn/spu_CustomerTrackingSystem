@@ -1291,15 +1291,15 @@
             },
             success: function (response) {
                 if (response !== undefined) {
-                    if (response.AssociationOTGBRoun1.length > 0) {
+                    if (response.ScoreRound1 == true) {
                         titleOTGBRound1.show();
                     }
 
-                    if (response.AssociationOTGBRoun2.length > 0) {
+                    if (response.ScoreRound2 == true) {
                         titleOTGBRound2.show();
                     }
 
-                    if (response.AssociationOTGBRoun3.length > 0) {
+                    if (response.ScoreRound3 == true) {
                         titleOTGBRound3.show();
                     }
                 } else {

@@ -1120,7 +1120,7 @@
 
             try
             {
-                data = _accountService.GetAssociationByOTGB(custID1, custID2, AccountAssociationByOTGB.All);
+                data = _accountService.GetAssociationByOTGB(custID1, custID2, AccountAssociationByOTGB.CheckExist);
             }
             catch (Exception ex)
             {
