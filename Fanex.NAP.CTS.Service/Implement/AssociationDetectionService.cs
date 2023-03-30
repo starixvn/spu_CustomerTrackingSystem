@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
     using Fanex.Data;
+    using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.AssociationDetection;
@@ -11,6 +12,7 @@
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
     using Fanex.NAP.SPU.Graph.Core;
     using Fanex.NAP.TGRS.Core.ExcelUtility;
+    using Newtonsoft.Json;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -31,15 +33,13 @@
 
         IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel assDetectionDetailModel, bool fromMySQL = true);
 
-        IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationByIP(string custIDList);
+        IEnumerable<DetectAssociationBySharedIPModel> DetectAssociationByIP(string custIDList);
 
         IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList);
 
         IEnumerable<DetectAssociationMergeGroupModel> DetectGroupDetectAssociation(MergeGroupInfoModel model);
 
         IEnumerable<GetCustStatisticsInfoRealtimeModel> GetCustStatisticsInfoRealtime(string custIDList);
-
-        IEnumerable<GetAssociationDetectDetailIPModel> GetCoupleSharedIP(int custID1, int custID2);
 
         IEnumerable<GetAssociationDetectDetailMatchModel> GetDetectAssociationDetailMatch(long rootCustID, string custIDList, int queryType);
 
@@ -73,7 +73,7 @@
         public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimary(DetectAssociationByPrimaryFilterModel filter, bool fromMySQL = true)
         {
             if (fromMySQL)
-            {
+            {                
                 var criteria = new DetectAssociationByPrimaryCriteria
                 {
                     CTSCustIDs = filter.CTSCustIDs,
@@ -110,7 +110,7 @@
         }
 
         public IEnumerable<DetectAssociationMergeGroupModel> DetectGroupDetectAssociation(MergeGroupInfoModel model)
-        {
+        {           
             var criteria = new DetectAssociationMergeGroupCriteria
             {
                 CTSCustIDs = model.CTSCustIDs,
@@ -153,16 +153,16 @@
             }
         }
 
-        public IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationByIP(string custIDList)
+        public IEnumerable<DetectAssociationBySharedIPModel> DetectAssociationByIP(string custIDList)
         {
             var criteria = new DetectAssociationByIPCriteria
             {
-                CustIDs = custIDList
+                ListCustId = custIDList
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<DetectAssociationBySharedIPMatchesModel>(criteria);
+                return db.Query<DetectAssociationBySharedIPModel>(criteria);
             }
         }
 
@@ -205,21 +205,7 @@
             }
 
             return GetAssociationDetectionDetailFromGraphDB(model.CTSCustID, ctsCustIDList, model.IsDevice, model.IsAgent);
-        }
-
-        public IEnumerable<GetAssociationDetectDetailIPModel> GetCoupleSharedIP(int custID1, int custID2)
-        {
-            var criteria = new GetCoupleSharedIPCriteria
-            {
-                CustID1 = custID1,
-                CustID2 = custID2
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<GetAssociationDetectDetailIPModel>(criteria);
-            }
-        }
+        }        
 
         public IEnumerable<GetAssociationDetectDetailMatchModel> GetDetectAssociationDetailMatch(long rootCustID, string custIDList, int queryType)
         {

@@ -216,12 +216,14 @@
     <Compile Include="AssociatedGroupMonitor\GetGroupTransferAccountGroupModel.cs" />
     <Compile Include="AssociatedGroupMonitor\UpdateAssociatedGroupMonitorModel.cs" />
     <Compile Include="AssociatedGroupMonitor\ValidateUserAssociatedAccountModel.cs" />
+    <Compile Include="AssociationDetection\AssociationCustByIPModel.cs" />
     <Compile Include="AssociationDetection\AssociationCustModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByAgentModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByBPDeviceIPAgentModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByPrimaryFilterModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByPrimaryModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationBySharedIPMatchesModel.cs" />
+    <Compile Include="AssociationDetection\DetectAssociationBySharedIPModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationMergeGroupModel.cs" />
     <Compile Include="AssociationDetection\ExportAssociationDetectModel.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectDetailAgentModel.cs" />
@@ -233,6 +235,7 @@
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorParamsModel.cs" />
     <Compile Include="AssociationDetection\GetCustStatisticsInfoRealtimeModel.cs" />
     <Compile Include="AssociationDetection\MergeGroupInfoModel.cs" />
+    <Compile Include="AssociationDetection\SharedIPInfoModel.cs" />
     <Compile Include="AssociationDetection\SharedIPMatchesInfoModel.cs" />
     <Compile Include="AssociationReport\AssociationDetailFromMySqlModel.cs" />
     <Compile Include="AssociationReport\AssociationFromMySqlModel.cs" />

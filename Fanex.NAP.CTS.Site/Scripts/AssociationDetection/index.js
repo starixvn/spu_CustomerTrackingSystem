@@ -43,8 +43,7 @@
         IsIP: false,
         IsAgent: false,
         IsIPLast3Days: false,
-        Is3MatchesLast7Days: false,
-        AssociationByIPJson: ""
+        Is3MatchesLast7Days: false,      
     }
 
     function GenerateGrid(data) {
@@ -186,7 +185,7 @@
                         createdCell: (cell, _, row) => {
                             $('.association-detect-detail-ip', cell).click(() => {
                                 let span = $(cell).find('.association-detect-detail-ip');
-                                ShowAssociationDetectDetailIP(span.attr('data-fromusername'), row.UserName);
+                                ShowAssociationDetectDetailIP(span.attr('data-fromusername'), row.UserName, span.attr('data-ips'));
                             });
 
                             $('.association-detect-detail-match', cell).click(() => {
@@ -205,18 +204,20 @@
         }
 
         domElements.tblAssociationDetectDetail.DataTable().clear();
-        
+
+        let custIDs = [];
         let ctsCustIDs = [];
         let userNames = [];
 
         domElements.tblAssociationDetection.find('.view-detail').each(function () {
             if ($(this).attr("data-groupid") == fromObj.GroupID) {
+                custIDs.push($(this).attr('data-custid'));
                 ctsCustIDs.push($(this).attr('data-ctscustid'));
                 userNames.push($(this).attr('data-username'));
             }
         });
-       
-        GetAssociationDetectDetail(fromObj.UserName, fromObj.CustID, fromObj.CTSCustID, ctsCustIDs.join(), userNames.join());
+
+        GetAssociationDetectDetail(fromObj.UserName, fromObj.CustID, fromObj.CTSCustID, custIDs.join(), ctsCustIDs.join(), userNames.join());
 
         domElements.divAssociationDetectDetail.dialog({
             modal: true,
@@ -225,15 +226,14 @@
             resizable: false,
             draggable: true,
             close: function () {
-                $(this).dialog('close');
-                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
-                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
-                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
+                $(this).dialog('close');                                
             }
         });             
+        $('.ui-dialog .ui-dialog-content').css('padding', '12px');
+        $('.ui-dialog .ui-dialog-content').css('margin-bottom', '0');
     }
 
-    function GetAssociationDetectDetail(userName, custID, ctsCustID, ctsCustIDList, userNames) {
+    function GetAssociationDetectDetail(userName, custID, ctsCustID, custIDList, ctsCustIDList, userNames) {
         $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetail'), {
             type: 'POST',
             beforeSend: function () {
@@ -244,14 +244,14 @@
                 UserNameList: userNames,
                 CustID: custID,
                 CTSCustID: ctsCustID,
+                CustIDList: custIDList,
                 CTSCustIDList: ctsCustIDList,                               
                 IsBP: parameters.IsBP,
                 IsDevice: parameters.IsDevice,
                 IsIP: parameters.IsIP,
                 IsAgent: parameters.IsAgent,
                 IsIPLast3Days: parameters.IsIPLast3Days,
-                Is3MatchesLast7Days: parameters.Is3MatchesLast7Days,
-                AssociationByIPJson: parameters.AssociationByIPJson     
+                Is3MatchesLast7Days: parameters.Is3MatchesLast7Days              
             },
             success: function (response) {
                 if (response !== undefined) {                   
@@ -270,7 +270,7 @@
         })
     }
 
-    function ShowAssociationDetectDetailIP(userName1, userName2) {                 
+    function ShowAssociationDetectDetailIP(userName1, userName2, ips) {                 
         if (tableAssociationDetectDetailIP == null) {
             tableAssociationDetectDetailIP = domElements.tblAssociationDetectDetailIP.DataTable({
                 language: {
@@ -283,7 +283,7 @@
                 info: false,
                 ordering: false,
                 searching: false,
-                scrollX: false,                            
+                scrollX: false,                 
                 scrollCollapse: false,
                 paging: false,
                 searching: false,
@@ -300,7 +300,7 @@
 
         domElements.tblAssociationDetectDetailIP.DataTable().clear();
 
-        GetAssociationDetectDetailIP(userName1, userName2);
+        GetAssociationDetectDetailIP(ips);
 
         domElements.divAssociationDetectDetailIP.dialog({
             modal: true,
@@ -309,24 +309,24 @@
             resizable: false,
             draggable: true,
             close: function () {
-                $(this).dialog('close');
-                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
-                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
-                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
+                $(this).dialog('close');               
             }
         });
 
+        $('.ui-dialog .ui-dialog-content').css('padding', '12px');
+        $('.ui-dialog .ui-dialog-content').css('margin-bottom', '12px');
+        
         domElements.divAssociationDetectDetailIP.parent().find('.ui-dialog-title').html("<div>ASSOCIATION DETAIL - IP LIST (in the last 3 days): <br/>" + userName1 + " - " + userName2 + "</div>");      
     }
 
-    function GetAssociationDetectDetailIP(userName1, userName2) {
+    function GetAssociationDetectDetailIP(ips) {
         $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetailIP'), {
             type: 'POST',
             beforeSend: function () {
                 domElements.tblAssociationDetectDetailIP.find('tbody').addClass('loading');                
             },
-            data: {
-                userNameList: userName1 + ',' + userName2,              
+            data: {                  
+                ips: ips
             },
             success: function (response) {
                 if (response !== undefined) {
@@ -447,12 +447,12 @@
             resizable: false,
             draggable: true,
             close: function () {
-                $(this).dialog('close');
-                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
-                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
-                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
+                $(this).dialog('close');                              
             }
         });
+
+        $('.ui-dialog .ui-dialog-content').css('padding', '12px');
+        $('.ui-dialog .ui-dialog-content').css('margin-bottom', '12px');
     }
 
     function GetAssociationDetectDetailMatch(custID1, custID2, custIDList) {
@@ -527,12 +527,12 @@
             resizable: false,
             draggable: true,
             close: function () {
-                $(this).dialog('close');
-                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
-                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
-                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
+                $(this).dialog('close');                
             }
         });      
+
+        $('.ui-dialog .ui-dialog-content').css('padding', '12px');
+        $('.ui-dialog .ui-dialog-content').css('margin-bottom', '12px');
     }
 
     function GetAssociationDetectDetailAgent(agentInfoJson) {
@@ -787,9 +787,7 @@
                         domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
                         domElements.spanAddUserNameMaxTag.text(maxTags);
                         domElements.spanAddChangeHidden.text("0");
-                        domElements.btnDetect.prop('disabled', true);
-
-                        parameters.AssociationByIPJson = response.associationByIPJson;
+                        domElements.btnDetect.prop('disabled', true);                       
                     } else {
                         common.showError(response.data.ErrorMessage);
 

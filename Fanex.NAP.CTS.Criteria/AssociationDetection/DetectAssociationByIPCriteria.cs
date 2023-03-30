@@ -5,12 +5,12 @@
 
     public class DetectAssociationByIPCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_CustIDList")]
-        public string CustIDs { get; set; }
+        [SpParam(SqlParamName = "ListCustId")]
+        public string ListCustId { get; set; }
 
         public override string GetSettingKey()
         {
-            return "SPU_AIML_GB_DetectAssociationByIP";
+            return "CTS_Association_IpSharedLast3Days";
         }
 
         public override bool IsValid()
