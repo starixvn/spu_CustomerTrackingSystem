@@ -202,6 +202,9 @@
                         IsFromCTS = c.IsFromCTS,
                         IsFromTVS = c.IsFromTVS,
                         TVSRequestID = c.TVSRequestID,
+                        IsParlay = c.IsParlay,
+                        SportType = c.SportType,
+                        IssueTypeID = c.IssueTypeID,
                         IsFromTW = c.IsFromTW,
                         IsDataChanged = isDataChanged,
                         CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"])
@@ -216,6 +219,9 @@
                         IsFromImperva = c.IsFromImperva,
                         IsFromTVS = c.IsFromTVS,
                         TVSRequestID = c.TVSRequestID,
+                        IsParlay = c.IsParlay,
+                        SportType = c.SportType,
+                        IssueTypeID = c.IssueTypeID,
                         IsDirect = c.IsDirect,
                         Remark = c.Remark,
                         CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"])
