@@ -159,6 +159,8 @@
 
         IEnumerable<CoupleIPFraudDetailModel> GetCoupleIPFraudDetails(string coupleInfoDetails);
 
-        IEnumerable<TicketDetailsModel> GetTicketDetailsModel(string transIds);
+        IEnumerable<TicketDetailsModel> GetAIAssociationTicketDetails(string transIds, int? transSize, int? matchSize);
+
+        AssociationOTGBViewModel GetAssociationByOTGB(long custID1, long custID2, AccountAssociationByOTGB fraudType);
     }
 }

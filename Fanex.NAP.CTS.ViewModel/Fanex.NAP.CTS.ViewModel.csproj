@@ -46,7 +46,9 @@
     <Compile Include="Account\Associated\CategoryViewModel.cs" />
     <Compile Include="Account\Associated\AssociationByIPInfoViewModel.cs" />
     <Compile Include="Account\Associated\AssociationByIPItemViewModel.cs" />
+    <Compile Include="Account\Associated\AssociationOTGBViewModel.cs" />
     <Compile Include="Account\Associated\CoupleInfoViewModel.cs" />
+    <Compile Include="Account\Associated\AssByOTGBDetailViewModel.cs" />
     <Compile Include="Account\Associated\StakeIpPatternDetailViewModel.cs" />
     <Compile Include="Account\Associated\MatchesAssociationDetailViewModel.cs" />
     <Compile Include="Account\Associated\AssociatedDeviceByAccountFilter.cs" />

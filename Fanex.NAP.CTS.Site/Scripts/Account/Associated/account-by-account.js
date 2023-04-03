@@ -1,4 +1,5 @@
 ﻿function account_by_account() {
+    var custIdAss = null;
     var divAddAssociation = $('#divAddAssociation');
     var btnAddAssociation = $('#btnAddAssociation');
     var btnSearch = $('#account-by-account-btn-search');
@@ -34,9 +35,19 @@
     let titleMatchBettingPatternName = $('#titleStakeIPPatternName');
     let titleStakeIPPattern = $('#titleStakeIPPattern');
     let assDetailsPopup = $("#assicationDetails");
+
     let isLoadingMatchBettingPattern;
     let isLoadingStakeIPPattern;
+    let isLoadingOTGB = false;
 
+    let titleOTGBRound1 = $('#titleOTGBRound1');
+    let titleOTGBRound2 = $('#titleOTGBRound2');
+    let titleOTGBRound3 = $('#titleOTGBRound3');
+    let tblOTGBRound1 = $("#tblOTGBRound1");
+    let tblOTGBRound2 = $("#tblOTGBRound2");
+    let tblOTGBRound3 = $("#tblOTGBRound3");
+    let configTableOTGB = false;
+    
     function RenderTag(obj) {
         let html = "";
 
@@ -561,9 +572,17 @@
         if (dataTableMatchBettingPattern === null) {
             ConfigDataTableMatchBettingPattern();
         }
+
         GetMatchBettingPattern($('#hdCustId').val(), custId, groupIDs, originGroupIDs);
+
+        // Association Stake & IP Pattern
         ConfigDataTableStakeIPPattern();
-        GetCoupleInformations($('#hdCustId').val(), custId)
+        GetCoupleInformations($('#hdCustId').val(), custId);
+
+        // Association OTGB
+        custIdAss = custId;
+        ConfigOTGBTable($('#hdCustId').val());
+        GetAssociationOTGB($('#hdCustId').val(), custId);
 
         $('.ui-dialog .ui-dialog-content').css('padding', '0');
     }
@@ -721,7 +740,7 @@
                 tableMatchBettingPattern.find('tbody').removeClass('loading');
                 isLoadingMatchBettingPattern = true;
 
-                if (isLoadingMatchBettingPattern && isLoadingStakeIPPattern)
+                if (isLoadingMatchBettingPattern && isLoadingStakeIPPattern && isLoadingOTGB)
                     assDetailsPopup.removeClass('loading');
             },
             error: function (errMsg) {
@@ -948,7 +967,7 @@
                 tableStakeIPPattern.find('tbody').removeClass('loading');
                 isLoadingStakeIPPattern = true;
 
-                if (isLoadingMatchBettingPattern && isLoadingStakeIPPattern)
+                if (isLoadingMatchBettingPattern && isLoadingStakeIPPattern && isLoadingOTGB)
                     assDetailsPopup.removeClass('loading');
             },
             error: function (errMsg) {
@@ -1071,6 +1090,17 @@
     function ClearAIAssociationData() {
         tableMatchBettingPattern.DataTable().rows().remove().draw();
         tableStakeIPPattern.DataTable().rows().remove().draw();
+
+        //OTGB
+        tblOTGBRound1.DataTable().rows().remove().draw();
+        tblOTGBRound2.DataTable().rows().remove().draw();
+        tblOTGBRound3.DataTable().rows().remove().draw();
+        titleOTGBRound1.removeClass('has-detail');
+        titleOTGBRound2.removeClass('has-detail');
+        titleOTGBRound3.removeClass('has-detail');
+        tblOTGBRound1.removeClass('hide');
+        tblOTGBRound2.removeClass('hide');
+        tblOTGBRound3.removeClass('hide');
     }
 
     function ShowIPAssociation(custId) {
@@ -1160,6 +1190,245 @@
             }
         });
     }
+
+    // Assosication OTGB
+
+    function ConfigOTGBTable(custId1) {
+        if (configTableOTGB) {
+            return;
+        }
+
+        RegisterTableOTGB(tblOTGBRound1);
+        RegisterTableOTGB(tblOTGBRound2);
+        RegisterTableOTGB(tblOTGBRound3);
+
+        RegisterEventForOTGBDetail(custId1, 1, titleOTGBRound1, tblOTGBRound1);
+        RegisterEventForOTGBDetail(custId1, 2, titleOTGBRound2, tblOTGBRound2);
+        RegisterEventForOTGBDetail(custId1, 3, titleOTGBRound3, tblOTGBRound3);
+
+        configTableOTGB = true;
+    };
+
+    function RegisterTableOTGB(tbl) {
+        tbl.DataTable({
+            language: {
+                zeroRecords: "There's no data"
+            },
+            info: false,
+            ordering: false,
+            searching: false,
+            scrollX: false,
+            paging: false,
+            columnDefs: [
+                { targets: "_all", defaultContent: "-" },
+                { targets: [-1, -2], className: "text-center" },
+                { targets: [0], width: "15%", className: "text-center" },
+                { targets: [1], width: "15%", className: "text-center" },
+                { targets: [2], width: "10%", className: "text-center" },
+                { targets: [3], width: "10%", className: "text-center" },
+                { targets: [4], width: "10%", className: "text-center" },
+                { targets: [5], width: "5%", className: "text-center" },
+                { targets: [6], width: "5%", className: "text-center" },
+                { targets: [7], width: "15%", className: "text-center" },
+                { targets: [8], width: "15%", className: "text-center" },
+                { targets: [9], width: "10%", className: "text-center" },
+                { targets: [10], width: "5%", className: "text-center" },
+                { targets: [11], width: "5%", className: "text-center" },
+            ],
+            columns: [
+                { data: obj => obj.MatchID },
+                { data: obj => obj.EventDateToString },
+                { data: obj => obj.UserName },
+                { data: obj => obj.IP },
+                { data: obj => obj.Stake },
+                { data: obj => obj.Currency },
+                { data: obj => obj.TransDateString },
+                { data: obj => obj.TransId },
+                { data: obj => obj.BetType },
+                { data: obj => obj.BetTeam },
+                { data: obj => obj.Odds },
+                { data: obj => obj.LiveScore }
+            ]
+        });
+    }
+
+    function RegisterEventForOTGBDetail(custId1, roundId, titleOTGB, tblOTGB) {
+        titleOTGB.on('click', function () {
+            if (!titleOTGB.hasClass('has-detail')) {
+                GetAssociationDetailOTGB(custId1, custIdAss, roundId);
+            } else {
+                //var data = $('tr', tblOTGBRound1.find('tbody'));
+                for (var i = 0, length = tblOTGB.length; i < length; i++) {
+                    let trCurrent = $(tblOTGB[i]);
+                    if (trCurrent.hasClass('hide'))
+                        trCurrent.removeClass('hide');
+                    else
+                        trCurrent.addClass('hide');
+                }
+
+            }
+        });
+    }
+
+    function GetAssociationOTGB(custId1, custId2) {
+        var url = common.modifyRelativeUrl('Account/GetAssociationByOTGB');
+
+        $.ajax(url, {
+            type: 'POST',
+            beforeSend: function () {
+                tblOTGBRound1.hide();
+                tblOTGBRound2.hide();
+                tblOTGBRound3.hide();
+                titleOTGBRound1.hide();
+                titleOTGBRound2.hide();
+                titleOTGBRound3.hide();
+
+                assDetailsPopup.addClass('loading');
+            },
+            data: {
+                custID1: custId1,
+                custID2: custId2
+            },
+            success: function (response) {
+                if (response !== undefined) {
+                    if (response.ScoreRound1 == true) {
+                        titleOTGBRound1.show();
+                    }
+
+                    if (response.ScoreRound2 == true) {
+                        titleOTGBRound2.show();
+                    }
+
+                    if (response.ScoreRound3 == true) {
+                        titleOTGBRound3.show();
+                    }
+                } else {
+                    console.log(response.ErrorMessage);
+                    common.showError(response.ErrorMessage);
+                }
+            },
+            complete: function () {
+                isLoadingOTGB = true;
+                if (isLoadingMatchBettingPattern && isLoadingStakeIPPattern && isLoadingOTGB)
+                    assDetailsPopup.removeClass('loading');
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function GetAssociationDetailOTGB(custId1, custId2, roundId) {
+        var url = common.modifyRelativeUrl('Account/GetAssociationDetailByOTGB');
+
+        $.ajax(url, {
+            type: 'POST',
+            beforeSend: function () {
+                switch (roundId) {
+                    case 1:
+                        tblOTGBRound1.find('tbody').addClass('loading');
+                        tblOTGBRound1.show();
+                        break;
+                    case 2:
+                        tblOTGBRound2.find('tbody').addClass('loading');
+                        tblOTGBRound2.show();
+                        break;
+                    case 3:
+                        tblOTGBRound3.find('tbody').addClass('loading');
+                        tblOTGBRound3.show();
+                        break;
+                }
+            },
+            data: {
+                custID1: custId1,
+                custID2: custId2,
+                fraudType: roundId
+            },
+            success: function (response) {
+                if (response !== undefined && response.length > 0) {
+                    switch (roundId) {
+                        case 1:
+                            tblOTGBRound1.DataTable().clear().rows().remove().draw();
+                            tblOTGBRound1.find('td').remove()
+                            GroupingOTGBDetail(response, 1, tblOTGBRound1.find('tr'));
+                            tblOTGBRound1.DataTable().columns.adjust();
+                            titleOTGBRound1.addClass('has-detail');
+                            break;
+                        case 2:
+                            tblOTGBRound2.DataTable().clear().rows().remove().draw();
+                            tblOTGBRound2.find('td').remove()
+                            GroupingOTGBDetail(response, 2, tblOTGBRound2.find('tr'));
+                            tblOTGBRound2.DataTable().columns.adjust();
+                            titleOTGBRound2.addClass('has-detail')
+                            break;
+                        case 3:
+                            tblOTGBRound3.DataTable().clear().rows().remove().draw();
+                            tblOTGBRound3.find('td').remove()
+                            GroupingOTGBDetail(response, 3, tblOTGBRound3.find('tr'));
+                            tblOTGBRound3.DataTable().columns.adjust();
+                            titleOTGBRound3.addClass('has-detail')
+                            break;
+                    }
+                }
+            },
+            complete: function () {
+                switch (roundId) {
+                    case 1:
+                        tblOTGBRound1.find('tbody').removeClass('loading');
+                        break;
+                    case 2:
+                        tblOTGBRound2.find('tbody').removeClass('loading');
+                        break;
+                    case 3:
+                        tblOTGBRound3.find('tbody').removeClass('loading');
+                        break;
+                }
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function GroupingOTGBDetail(response, fraudType, tableRow) {
+        var groupMemberCounter = 1;
+        for (var i = response.length - 1; i >= 0; i--) {
+            if (i - 1 >= 0) {
+                if (response[i]["GroupID"] == response[i - 1]["GroupID"]) {
+                    tableRow.last().after(RenderOTGBDetailRowHTML(response, i, true, 0, fraudType));
+                    groupMemberCounter++;
+                }
+                else {
+                    tableRow.last().after(RenderOTGBDetailRowHTML(response, i, false, groupMemberCounter, fraudType));
+                    groupMemberCounter = 1;
+                }
+            } else {
+                tableRow.last().after(RenderOTGBDetailRowHTML(response, i, false, groupMemberCounter, fraudType));
+            }
+        }
+    }
+
+    function RenderOTGBDetailRowHTML(response, index, isRowMember, rowspanNumer, fraudType) {
+        let newRow = $('<tr role="row" class="odd detail">')
+            .append('<td class="text-center" ' + (isRowMember ? 'style="display: none;' : ('rowspan = "' + rowspanNumer)) + '" >' + response[index]["MatchID"] + '</td>')
+            .append('<td class="text-center" ' + (isRowMember ? 'style="display: none;' : ('rowspan = "' + rowspanNumer)) + '" >' + response[index]["EventDateToString"] + '</td>')
+            .append('<td class="text-center">' + response[index]["UserName"] + '</td>')
+            .append('<td class="text-center" ' + (fraudType == 2 ? 'style="Color: red"' : '') + '>' + response[index]["IP"] + '</td>')
+            .append('<td class="text-center">' + response[index]["Stake"] + '</td>')
+            .append('<td class="text-center">' + response[index]["Currency"] + '</td>')
+            .append('<td class="text-center" ' + ((fraudType == 1 || fraudType == 3) ? 'style="Color: red"' : '') + '>' + response[index]["TransDateString"] + '</td>')
+            .append('<td class="text-center">' + response[index]["TransId"] + '</td>')
+            .append('<td class="text-center">' + response[index]["BetType"] + '</td>')
+            .append('<td class="text-center">' + response[index]["BetTeam"] + '</td>')
+            .append('<td class="text-center">' + response[index]["Odds"] + '</td>')
+            .append('<td class="text-center">' + response[index]["LiveScore"] + '</td>')
+            .append('</tr>');
+
+        return newRow;
+    }
+
+
+    // END Assosication OTGB
 
     function DisableButton(hostPermission) {
         isHostPermission = hostPermission === "True";

@@ -930,7 +930,7 @@
                     patternDetail.IpFraudDetail = _accountService.GetCoupleIPFraudDetails(para.CoupleInfoDetails);
                 }
 
-                patternDetail.TicketDetails = GetTicketDetailsModel(patternDetail.StakeFraudDetail, patternDetail.IpFraudDetail);
+                patternDetail.TicketDetails = Get5G3STicketDetail(patternDetail.StakeFraudDetail, patternDetail.IpFraudDetail);
 
                 data.AddRange(GetStakePatternDetail(patternDetail));
                 data.AddRange(GetIpPatternDetail(patternDetail));
@@ -947,7 +947,7 @@
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<TicketDetailsModel> GetTicketDetailsModel(IEnumerable<CoupleFraudDetailModel> coupleFraudDetails, IEnumerable<CoupleIPFraudDetailModel> coupleIPFraudDetails)
+        private IEnumerable<TicketDetailsModel> Get5G3STicketDetail(IEnumerable<CoupleFraudDetailModel> coupleFraudDetails, IEnumerable<CoupleIPFraudDetailModel> coupleIPFraudDetails)
         {
             var unionAllFraudTransList = new List<string>();
 
@@ -969,7 +969,7 @@
 
             var fraudTransList = unionAllFraudTransList.Any() ? string.Join(",", unionAllFraudTransList.Distinct()) : string.Empty;
 
-            return string.IsNullOrEmpty(fraudTransList) ? Enumerable.Empty<TicketDetailsModel>() : _accountService.GetTicketDetailsModel(fraudTransList);
+            return string.IsNullOrEmpty(fraudTransList) ? Enumerable.Empty<TicketDetailsModel>() : _accountService.GetAIAssociationTicketDetails(fraudTransList, null, null);
         }
 
         private IEnumerable<StakeIpPatternDetailViewModel> GetStakePatternDetail(StakeIpPatternDetailModel stakeIpPatternDetailModel)
@@ -1107,6 +1107,103 @@
                 }
 
                 stakeIpPatternDetailModel.LastGroupID++;
+            }
+
+            return result;
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
+        public ActionResult GetAssociationByOTGB(long custID1, long custID2)
+        {
+            var data = new AssociationOTGBViewModel();
+
+            try
+            {
+                data = _accountService.GetAssociationByOTGB(custID1, custID2, AccountAssociationByOTGB.CheckExist);
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+            }
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetAssociationDetailByOTGB(long custID1, long custID2, AccountAssociationByOTGB fraudType)
+        {
+            var data = Enumerable.Empty<AssByOTGBDetailViewModel>();
+
+            try
+            {
+                var association = _accountService.GetAssociationByOTGB(custID1, custID2, fraudType);
+
+                if (association != null && association.AssociationOTGBRoun1.Any())
+                {
+                    var tranInfo = association.AssociationOTGBRoun1.Distinct();
+
+                    var ticketDetails = _accountService.GetAIAssociationTicketDetails(JsonConvert.SerializeObject(tranInfo), 1000, 50);
+
+                    data = ProcessTicketDetailOTGB(ticketDetails, fraudType);
+                }
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+            }
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<AssByOTGBDetailViewModel> ProcessTicketDetailOTGB(IEnumerable<TicketDetailsModel> tickets, AccountAssociationByOTGB fraudType)
+        {
+            var result = new List<AssByOTGBDetailViewModel>();
+
+            if (tickets.Any())
+            {
+                var groupTickets = tickets.GroupBy(c => new { c.MatchID, c.EventDate })
+                                          .OrderByDescending(c => c.Key.EventDate).ThenByDescending(c => c.Key.MatchID);
+                int groupId = 0;
+
+                foreach(var group in groupTickets)
+                {
+                    if ((fraudType == AccountAssociationByOTGB.Round1 || fraudType == AccountAssociationByOTGB.Round3) && group.Count() < 2)
+                    {
+                        continue;
+                    }
+
+                    group.OrderByDescending(c => c.TransDate).ThenByDescending(c => c.TransId).ToList().ForEach(c =>
+                    {
+                        result.Add(new AssByOTGBDetailViewModel
+                        {
+                            UserName = c.UserName,
+                            Currency = c.CurrencyName,
+                            BetTeam = c.BetTeam,
+                            BetType = c.BetType,
+                            EventDate = c.EventDate,
+                            IP = c.IP,
+                            LiveAwayScore = c.LiveAwayScore ?? 0,
+                            LiveHomeScore = c.LiveHomeScore ?? 0,
+                            Stake = c.Stake,
+                            Odds = c.Odds,
+                            MatchID = c.MatchID,
+                            TransDate = c.TransDate,
+                            TransId = c.TransId.ToString(),
+                            GroupID = groupId
+                        });
+                    });
+
+                    groupId++;
+                };
             }
 
             return result;

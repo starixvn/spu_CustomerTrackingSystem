@@ -69,7 +69,6 @@
 		<Setting Key="CTS_DC_Association_InsertManualMultiple" SpName="CTS_DC_Association_InsertManualMultiple" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_Association_UpdateAssociationRemove" SpName="CTS_DC_Association_UpdateAssociationRemove" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_GetForSoon88" SpName="CTS_DC_CustClassification_GetForSoon88" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_Association_Profile_GetStats" SpName="CTS_DC_Association_Profile_GetStats" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="1200" />
 		<Setting Key="CTS_DC_Association_Profile_Get" SpName="CTS_DC_Association_Profile_Get" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="1200" />
 		<Setting Key="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" SpName="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_Category_Get" SpName="CTS_DC_Category_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
@@ -77,6 +76,7 @@
 		<Setting Key="SPU_AIML_GB_3S_GetCouple_FraudDetails" SpName="SPU_AIML_GB_3S_GetCouple_FraudDetails" DbName="MySQL.SPU_AIML.Reporter" />
 		<Setting Key="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" SpName="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" DbName="MySQL.SPU_AIML.Reporter" />
 		<Setting Key="CTS_DC_AssociationByAI_GetFirstAssociationDate" SpName="CTS_DC_AssociationByAI_GetFirstAssociationDate" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="SPU_AIML_OTGB_GetCouple_FraudDetails" SpName="SPU_AIML_OTGB_GetCouple_FraudDetails" DbName="MySQL.SPU_AIML.Reporter" />
 	</Function>
 
 	<Function Name="AssociationDetection">
@@ -147,7 +147,7 @@
 	</Function>
 
 	<Function name="LatestTransaction">
-		<Setting Key="DCS_DC_Transaction_GetLatest" SpName="DCS_DC_Transaction_GetLatest" DbName="MySQL.DCS_DataCenter.Reporter" />
+		<Setting Key="DCS_DC_Transaction_GetLatest" SpName="DCS_DC_Transaction_GetLatest" DbName="MySQL.DCS_DataCenter.Reporter" Timeout="600"/>
 	</Function>
 
 	<Function name="MatchMonitor">

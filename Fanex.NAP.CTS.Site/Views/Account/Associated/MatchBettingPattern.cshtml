@@ -2,13 +2,24 @@
     <div class="report-cont" style="max-height:650px">
         <div class="table-report" style="width:100%;background:#fff">
             <div class="graph-heading" id="assicationDetails">
-                <div class="bold" style="text-align:center; width:100%">Top Latest Matches</div>
+                <div class="bold" style="text-align:center; width:100%">The Latest Matches</div>
             </div>
             <div height="22" style="height:16.5pt" id="titleMatchBettingPattern">
-                <div class="xl136" height="22" style="border: none; border-bottom: 1pt solid #c4c4c4; background: #70809e; height: 16.5pt; width: 100%; vertical-align: middle; border-top: 1pt solid #c4c4c4; border-right: none; border-left: none; white-space: normal; padding-top: 1px; padding-right: 1px; padding-left: 1px" width="1313"><span style="font-size:12px;"><span style="font-family:Tahoma,Geneva,sans-serif;"><span style="color:white"><span style="font-weight:700"><span style="font-style:normal">
-                    <span style="text-decoration:none">MATCH - TIME INTERVAL/ APPEARANCE ORDER PATTERN</span></span></span></span></span></span></div>
+                <div class="xl136" height="22" style="border: none; border-bottom: 1pt solid #c4c4c4; background: #70809e; height: 16.5pt; width: 100%; vertical-align: middle; border-top: 1pt solid #c4c4c4; border-right: none; border-left: none; white-space: normal; padding-top: 1px; padding-right: 1px; padding-left: 1px" width="1313">
+                    <span style="font-size:12px;">
+                        <span style="font-family:Tahoma,Geneva,sans-serif;">
+                            <span style="color:white">
+                                <span style="font-weight:700">
+                                    <span style="font-style:normal">
+                                        <span style="text-decoration:none">MATCH - TIME INTERVAL/ APPEARANCE ORDER PATTERN</span>
+                                    </span>
+                                </span>
+                            </span>
+                        </span>
+                    </span>
+                </div>
             </div>
-            <table id="tblMatchBettingPattern" class="table table-striped" style="width:100%">
+            <table id="tblMatchBettingPattern" class="table table-striped" style="width: 100%">
                 <thead>
                     <tr>
                         <th>MatchDesc</th>
@@ -30,8 +41,19 @@
             </table>
 
             <div height="22" style="height:16.5pt" id="titleStakeIPPattern">
-                <div class="xl136" height="22" style="border:none; border-bottom:1pt solid #c4c4c4; background:#70809e; height:16.5pt; width:100%; vertical-align:middle; border-top:1pt solid #c4c4c4; border-right:none; border-left:none; white-space:normal; padding-top:1px; padding-right:1px; padding-left:1px" width="1313"><span style="font-size:12px;"><span style="font-family:Tahoma,Geneva,sans-serif;"><span style="color:white"><span style="font-weight:700"><span style="font-style:normal">
-                    <span id="titleStakeIPPatternName" style="text-decoration:none">MATCH - STAKE/IP PATTERN</span></span></span></span></span></span></div>
+                <div class="xl136" height="22" style="border:none; border-bottom:1pt solid #c4c4c4; background:#70809e; height:16.5pt; width:100%; vertical-align:middle; border-top:1pt solid #c4c4c4; border-right:none; border-left:none; white-space:normal; padding-top:1px; padding-right:1px; padding-left:1px" width="1313">
+                    <span style="font-size:12px;">
+                        <span style="font-family:Tahoma,Geneva,sans-serif;">
+                            <span style="color:white">
+                                <span style="font-weight:700">
+                                    <span style="font-style:normal">
+                                        <span id="titleStakeIPPatternName" style="text-decoration:none">MATCH - STAKE/IP PATTERN</span>
+                                    </span>
+                                </span>
+                            </span>
+                        </span>
+                    </span>
+                </div>
             </div>
             <table id="tblStakeIPPattern" class="table table-striped" style="width:100%">
                 <thead>
@@ -40,6 +62,111 @@
                         <th>Username</th>
                         <th>Event Date</th>
                         <th>MatchID</th>
+                        <th>IP</th>
+                        <th>Stake</th>
+                        <th>Currency</th>
+                        <th>Trans Date</th>
+                        <th>Trans Id</th>
+                        <th>Bet Type</th>
+                        <th>Bet Team</th>
+                        <th>Odds</th>
+                        <th>Live Score</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <div height="22" style="height:16.5pt; cursor: pointer;" id="titleOTGBRound1">
+                <div class="xl136" height="22" style="border:none; border-bottom:1pt solid #c4c4c4; background:#70809e; height:16.5pt; width:100%; vertical-align:middle; border-top:1pt solid #c4c4c4; border-right:none; border-left:none; white-space:normal; padding-top:1px; padding-right:1px; padding-left:1px" width="1313">
+                    <span style="font-size:12px;">
+                        <span style="font-family:Tahoma,Geneva,sans-serif;">
+                            <span style="color:white">
+                                <span style="font-weight:700">
+                                    <span style="font-style:normal">
+                                        <span id="titleOTGBRound1Name" style="text-decoration:none">MATCH - MORE THAN 60% TICKETS WITH TIME INTERVAL < 3 MINUTES</span>
+                                    </span>
+                                </span>
+                            </span>
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <table id="tblOTGBRound1" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>MatchID</th>
+                        <th>Event Date</th>
+                        <th>Username</th>
+                        <th>IP</th>
+                        <th>Stake</th>
+                        <th>Currency</th>
+                        <th>Trans Date</th>
+                        <th>Trans Id</th>
+                        <th>Bet Type</th>
+                        <th>Bet Team</th>
+                        <th>Odds</th>
+                        <th>Live Score</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <div height="22" style="height:16.5pt; cursor: pointer;" id="titleOTGBRound2">
+                <div class="xl136" height="22" style="border:none; border-bottom:1pt solid #c4c4c4; background:#70809e; height:16.5pt; width:100%; vertical-align:middle; border-top:1pt solid #c4c4c4; border-right:none; border-left:none; white-space:normal; padding-top:1px; padding-right:1px; padding-left:1px" width="1313">
+                    <span style="font-size:12px;">
+                        <span style="font-family:Tahoma,Geneva,sans-serif;">
+                            <span style="color:white">
+                                <span style="font-weight:700">
+                                    <span style="font-style:normal">
+                                        <span id="titleOTGBRound2Name" style="text-decoration:none">MATCH - MORE THAN 70% TICKETS SHARED IP</span>
+                                    </span>
+                                </span>
+                            </span>
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <table id="tblOTGBRound2" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>MatchID</th>
+                        <th>Event Date</th>
+                        <th>Username</th>
+                        <th>IP</th>
+                        <th>Stake</th>
+                        <th>Currency</th>
+                        <th>Trans Date</th>
+                        <th>Trans Id</th>
+                        <th>Bet Type</th>
+                        <th>Bet Team</th>
+                        <th>Odds</th>
+                        <th>Live Score</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <div height="22" style="height: 16.5pt; cursor: pointer;" id="titleOTGBRound3">
+                <div class="xl136" height="22" style="border:none; border-bottom:1pt solid #c4c4c4; background:#70809e; height:16.5pt; width:100%; vertical-align:middle; border-top:1pt solid #c4c4c4; border-right:none; border-left:none; white-space:normal; padding-top:1px; padding-right:1px; padding-left:1px" width="1313">
+                    <span style="font-size:12px;">
+                        <span style="font-family:Tahoma,Geneva,sans-serif;">
+                            <span style="color:white">
+                                <span style="font-weight:700">
+                                    <span style="font-style:normal">
+                                        <span id="titleOTGBRound3Name" style="text-decoration:none">MATCH - TICKETS WITH TIME INTERVAL < 10 SECONDS</span>
+                                    </span>
+                                </span>
+                            </span>
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <table id="tblOTGBRound3" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>MatchID</th>
+                        <th>Event Date</th>
+                        <th>Username</th>
                         <th>IP</th>
                         <th>Stake</th>
                         <th>Currency</th>
