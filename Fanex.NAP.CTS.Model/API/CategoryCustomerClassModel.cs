@@ -8,5 +8,6 @@
 
         public int CustomerClass { get; set; }
 
+        public string CustomerClassName { get; set; }
     }
 }

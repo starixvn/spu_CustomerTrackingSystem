@@ -398,9 +398,9 @@
         }
 
         /// <summary>
-        /// Get customer class's categories
+        /// Get customer class's categories, class name
         /// </summary>
-        /// <returns>A list of customer class's categories in JSON format</returns>
+        /// <returns>A list of customer class's categories in JSON, API for LAP's website</returns>
         [HttpGet]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetCustomerClassCategoryAPI)]
         public JsonResult<IEnumerable<CategoryCustomerClassModel>> GetCustomerClassCategory()
