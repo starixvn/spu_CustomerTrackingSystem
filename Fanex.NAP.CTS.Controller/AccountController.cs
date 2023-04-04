@@ -2282,46 +2282,108 @@
 
         [HttpPost]
         public ActionResult GetRobotBetting(long custID)
-        {
-            var firstRobotDate = string.Empty;
-            var lastRobotDate = string.Empty;           
-            var rbList = new List<RobotBettingViewModel>();
+        {           
+            var rbBetting = new RobotBettingViewModel();           
+            var rbData = _robotBettingService.GetRobotBetting(custID);
 
-            var rbs = _robotBettingService.GetRobotBetting(custID);
+#if DEBUG
+            rbData = GetRobotBetting_DataTest();            
+#endif
 
-            if (rbs.RobotBettingAI != null && rbs.RobotBettingAI.Any())
+            if (rbData.RobotBettingAI != null && rbData.RobotBettingAI.Any())
             {
-                rbList = rbs.RobotBettingAI.Select(x => new RobotBettingViewModel
+                rbBetting.RobotSCE = rbData.RobotBettingAI.Where(x => x.PeriodRangeType != 200).Select(x => new RobotSceViewModel
                 {
                     CustID = x.CustID,
                     RangeType = x.PeriodRangeType,
                     RangeName = x.PeriodRangeName
-                }).ToList();
+                });
+
+                rbBetting.RobotOCRD = rbData.RobotBettingAI.Where(x => x.PeriodRangeType == 200).Select(x => new RobotOcrdViewModel
+                {
+                    CustID = x.CustID,
+                    RangeType = x.PeriodRangeType,
+                    RangeName = x.PeriodRangeName
+                });
             }
 
-            if (rbs.RobotBettingImperva != null && rbs.RobotBettingImperva.Any())
+            if (rbData.RobotBettingImperva != null && rbData.RobotBettingImperva.Any())
             {
-                rbList.Add(new RobotBettingViewModel
+                rbBetting.RobotImpervas = rbData.RobotBettingImperva.OrderBy(x => x.CreateTime).Select(x => new RobotImpervaViewModel
                 {
-                    IsRobotImperva = true,
-                    RobotImpervas = rbs.RobotBettingImperva.OrderBy(x=>x.CreateTime).Select(x => new RobotBettingImpervaViewModel
-                    {
-                        CustID = x.CustID,
-                        CreatedDate = x.CreateTime.ToString(Consts.FormatDateToString_ddMMMyyyy),
-                        PlatformName = x.Platform == 1 ? "Desktop" : "Mobile"
-                    })
+                    CustID = x.CustID,
+                    CreatedDate = x.CreateTime.ToString(Consts.FormatDateToString_ddMMMyyyy),
+                    PlatformName = x.Platform == 1 ? "Desktop" : "Mobile"
                 });               
             }
-          
-            firstRobotDate = rbs.TypeModel.FirstRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
-            lastRobotDate = rbs.TypeModel.LastRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
 
+            if (rbData.FirstLastRobotDate.FirstRobotDate != DateTime.MinValue
+                && rbData.FirstLastRobotDate.LastRobotDate != DateTime.MinValue)
+            {
+                rbBetting.FirstRobotDate = rbData.FirstLastRobotDate.FirstRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
+                rbBetting.LastRobotDate = rbData.FirstLastRobotDate.LastRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
+            }
+            
             return Json(new
             {
-                firstRobotDate = firstRobotDate,
-                lastRobotDate = lastRobotDate,                
-                data = rbList,
+                data = rbBetting,
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        private RobotBettingModel GetRobotBetting_DataTest()
+        {
+            var rbs = new RobotBettingModel
+            {
+                FirstLastRobotDate = new RobotDateAndTypeModel
+                {
+                    FirstRobotDate = DateTime.Now,
+                    LastRobotDate = DateTime.Now
+                }
+            };
+
+            rbs.RobotBettingAI = new List<RobotBettingAIModel>()
+            {
+                new RobotBettingAIModel {
+                     CustID = 14436694,
+                     PeriodRangeType = 1,
+                     PeriodRangeName = "Tickets with Time Interval <= 1s"
+                },
+                new RobotBettingAIModel {
+                     CustID = 14436694,
+                     PeriodRangeType = 3,
+                     PeriodRangeName = "Tickets with 1s < Time Interval < 10s"
+                },
+                new RobotBettingAIModel {
+                     CustID = 14436694,
+                     PeriodRangeType = 101,
+                     PeriodRangeName = "Consecutive Tickets > 24 Hours and High Ugly Stake Tickets"
+                }
+            };
+
+            rbs.RobotBettingImperva = new List<RobotBettingImpervaModel>()
+            {
+                new RobotBettingImpervaModel {
+                    CustID = 14436694,
+                    CreateTime = DateTime.Now,
+                    Platform = 1
+                },
+                new RobotBettingImpervaModel {
+                    CustID = 14436694,
+                    CreateTime = DateTime.Now,
+                    Platform = 2
+                }
+            };
+
+            rbs.RobotBettingOCRD = new List<RobotBettingAIModel>()
+            {
+                 new RobotBettingAIModel {
+                    CustID = 14436694,
+                     PeriodRangeType = 300,
+                     PeriodRangeName = "Consecutive Tickets per Match <= 2 mins and Stake per Ticket < 30 RM"
+                }
+            };
+
+            return rbs;
         }
 
         [HttpPost]
@@ -2397,6 +2459,53 @@
             }
 
             return rs;
+        }
+
+        [HttpPost]
+        public ActionResult GetRobotOCRDMatchByCust(long custID)
+        {
+            var ocrdMatches = Enumerable.Empty<RobotOcrdMatchViewModel>();
+
+            var robotMatches = _robotBettingService.GetRobotOCRDMatches(custID);
+
+            if (robotMatches.Any())
+            {
+                var matchIDs = string.Join(",", robotMatches.Select(x => x.MatchID).Distinct());
+
+                var matchInfos = _commonService.GetMatchInfosByIDs(matchIDs);
+                var totalTicket = 1;
+
+                ocrdMatches = matchInfos.OrderByDescending(x => x.KickOffTime)
+                    .Take(50)
+                    .Select(x => new RobotOcrdMatchViewModel(x, totalTicket));
+            }
+
+            return Json(new { data = ocrdMatches }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetRobotOCRDTicketDetail(long custID, long matchID)
+        {
+            var ocrdTickets = Enumerable.Empty<RobotOcrdTicketViewModel>();
+            var matchSize = 1;
+            var tranSize = 1000;
+            
+            var robotTrans = _robotBettingService.GetRobotOCRDTrans(custID, matchID);
+
+            if (robotTrans.Any())
+            {
+                var tranInfos = string.Join(",", robotTrans.Select(x => new RobotOcrdTranInfosViewModel
+                {
+                    TransID = x.TransID,
+                    MatchID = x.MatchID
+                }).Distinct(x => x.TransID));
+
+                var tickets = _commonService.GetTicketDetails(JsonConvert.SerializeObject(tranInfos), matchSize, tranSize);
+
+                ocrdTickets = tickets.Select(x => new RobotOcrdTicketViewModel(x));
+            }
+            
+            return Json(new { data = ocrdTickets }, JsonRequestBehavior.AllowGet);
         }
 
         #endregion Robot Betting

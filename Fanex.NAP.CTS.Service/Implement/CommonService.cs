@@ -81,5 +81,35 @@
                 return db.Query<SiteModel>(criteria);
             }
         }
+
+        public IEnumerable<MatchesModel> GetMatchInfosByIDs(string matchIDs)
+        {
+            var criteria = new GetMatchesInfoCriteria
+            {
+                MatchIds = matchIDs
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<MatchesModel>(criteria);
+            }
+        }
+
+        public IEnumerable<TicketDetailsModel> GetTicketDetails(string transIds, int? transSize, int? matchSize)
+        {
+            var result = new List<TicketDetailsModel>();
+
+            var criteria = new GetTicketDetailsCriteria
+            {
+                ListTransId = transIds,
+                TransSize = transSize,
+                MatchSize = matchSize
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<TicketDetailsModel>(criteria);
+            }
+        }
     }
 }

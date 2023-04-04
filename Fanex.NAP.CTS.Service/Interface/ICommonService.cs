@@ -13,5 +13,9 @@
         IEnumerable<ValidateUserNameModel> ValidateUsernames(string userNames, out bool isException);
 
         IEnumerable<SiteModel> GetSites(bool isNestedCalled);
+
+        IEnumerable<MatchesModel> GetMatchInfosByIDs(string matchIDs);
+
+        IEnumerable<TicketDetailsModel> GetTicketDetails(string transIds, int? transSize, int? matchSize);
     }
 }

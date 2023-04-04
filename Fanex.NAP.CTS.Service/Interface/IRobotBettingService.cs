@@ -17,5 +17,9 @@
         IEnumerable<string> GetTranIds(long custID, int robotTypeOrigin, int? robotTypeDisplay, int? clusterId, string createdTime);
 
         string GetTransFromList(IEnumerable<string> suspiciousTransList);
+
+        IEnumerable<RobotOcrdMatchModel> GetRobotOCRDMatches(long custID);
+
+        IEnumerable<RobotOcrdTranModel> GetRobotOCRDTrans(long custID, long matchID);
     }
 }

@@ -172,7 +172,8 @@
 		<Setting Key="CTS_DC_RobotDetection_Get" SpName="CTS_DC_RobotDetection_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="SPU_AIML_RD_GetRobotUsersDetails" SpName="SPU_AIML_RD_GetRobotUsersDetails_xtest" DbName="MySQL.SPU_AIML.Reporter" />
 		<Setting Key="SPU_AIML_RD_SCE_GetRobotUsersDetails" SpName="SPU_AIML_RD_SCE_GetRobotUsersDetails_xtest" DbName="MySQL.SPU_AIML.Reporter" />
-
+		<Setting Key="SPU_AIML_OCRD_GetMatchByCust" SpName="SPU_AIML_OCRD_GetMatchByCust_xtest" DbName="MySQL.SPU_AIML.Reporter" />
+		<Setting Key="SPU_AIML_OCRD_GetDetails" SpName="SPU_AIML_OCRD_GetDetails_xtest" DbName="MySQL.SPU_AIML.Reporter" />
 	</Function>
 
 	<Function name="CustomerProfile">

@@ -1,10 +1,12 @@
 ﻿function robot_betting() {
     let firstRobotDate = $('#spanFirstRobotDate');
-    let lastRobotDate = $('#spanLastRobotDate');
-    let robotBettingTable = $('#tableRobotBetting');
+    let lastRobotDate = $('#spanLastRobotDate');   
+    let robotSCETable = $('#tableRobotBetting');
+    let robotOCRDTable = $('#tblRobotOCRD');
+    let robotImpervaTable = $('#tblImperva');
 
     function RenderGrid(custID) {
-        robotBettingTable.DataTable({
+        robotSCETable.DataTable({
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             serverSide: false,
             ajax: {
@@ -14,7 +16,7 @@
                 },
                 type: "POST",
                 beforeSend: function () {
-                    robotBettingTable.find('tbody').addClass('loading');
+                    robotSCETable.find('tbody').addClass('loading');
                 },
                 dataFilter: function (response) {
                     var json = jQuery.parseJSON(response);
@@ -25,10 +27,10 @@
                     return response;
                 },
                 complete: function () {
-                    robotBettingTable.find('tbody').removeClass('loading');
+                    robotSCETable.find('tbody').removeClass('loading');
                 },
                 error: function (error) {
-                    robotBettingTable.find('tbody').removeClass('loading');
+                    robotSCETable.find('tbody').removeClass('loading');
                     console.log(error);
                 }
             },
@@ -57,31 +59,17 @@
             ],
             createdRow: function (row, obj) {
                 if (obj.Detail.length == 0) {
-                    if (obj.IsRobotImperva) {
-                        let td = `<td class="robot-betting imperva" colspan="8">`;
-                        td += `<span>Imperva -`;
-
-                        $.each(obj.RobotImpervas, function (index, value) {
-                            let cssClass = index == 0 ? 'title-robot' : 'title-robot imperva-line';
-                            td += `<i class="${cssClass}"> CreatedDate: ${value.CreatedDate} - Platform: ${value.PlatformName}</i><br/>`;                            
-                        }); 
-
-                        td += `</span></td>`;
-                       
-                        $(row).empty().html(td);
-                    } else {
-                        let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-robotTypeOrigin=${obj.RangeType}>
+                    let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-robotTypeOrigin=${obj.RangeType}>
                                     <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</span>
                                   </td>`;
-                        $(row).empty().html(td);
-                    }
+                    $(row).empty().html(td);
                 }
             }
         });
 
-        $('tbody', robotBettingTable).on('click', 'tr', function () {
+        $('tbody', robotSCETable).on('click', 'tr', function () {
             var tr = $(this).closest('tr');
-            var row = robotBettingTable.DataTable().row(tr);
+            var row = robotSCETable.DataTable().row(tr);
 
             let tdImperva = $('.imperva', tr);
             let tdTicket = $('.robot-betting', tr);
@@ -138,16 +126,16 @@
             },
             beforeSend: function () {
                 td.prop('disabled', true);
-                robotBettingTable.find('tbody').addClass('loading');
+                robotSCETable.find('tbody').addClass('loading');
             },
             complete: function () {
                 td.prop('disabled', false);
-                robotBettingTable.find('tbody').removeClass('loading');
+                robotSCETable.find('tbody').removeClass('loading');
             },
             error: function (errMsg) {
                 console.log(errMsg);
                 td.prop('disabled', false);
-                robotBettingTable.find('tbody').removeClass('loading');
+                robotSCETable.find('tbody').removeClass('loading');
             }
         });
     }
@@ -184,16 +172,16 @@
                     },
                     beforeSend: function () {
                         td.prop('disabled', true);
-                        robotBettingTable.find('tbody').addClass('loading');
+                        robotSCETable.find('tbody').addClass('loading');
                     },
                     complete: function () {
                         td.prop('disabled', false);
-                        robotBettingTable.find('tbody').removeClass('loading');
+                        robotSCETable.find('tbody').removeClass('loading');
                     },
                     error: function (errMsg) {
                         console.log(errMsg);
                         td.prop('disabled', false);
-                        robotBettingTable.find('tbody').removeClass('loading');
+                        robotSCETable.find('tbody').removeClass('loading');
                     }
                 });
             }
@@ -307,16 +295,16 @@
                     },
                     beforeSend: function () {
                         td.prop('disabled', true);
-                        robotBettingTable.find('tbody').first().addClass('loading');
+                        robotSCETable.find('tbody').first().addClass('loading');
                     },
                     complete: function () {
                         td.prop('disabled', false);
-                        robotBettingTable.find('tbody').first().removeClass('loading');
+                        robotSCETable.find('tbody').first().removeClass('loading');
                     },
                     error: function (errMsg) {
                         console.log(errMsg);
                         td.prop('disabled', false);
-                        robotBettingTable.find('tbody').first().removeClass('loading');
+                        robotSCETable.find('tbody').first().removeClass('loading');
                     }
                 });
             }
@@ -344,7 +332,178 @@
         return $(html);
     }
 
+    function GenerateGridRobotSCE() {
+        let table = robotSCETable.DataTable({
+            dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
+            serverSide: false,
+            language: {
+                lengthMenu: "",
+                info: "",
+                infoEmpty: "",
+                zeroRecords: "",
+                emptyTable: "There's no data"
+            },
+            info: false,
+            ordering: false,
+            paging: false,
+            searching: false,
+            scrollX: false,
+            scrollCollapse: false,
+            columnDefs: [
+                { targets: "_all", defaultContent: "-", className: "text-center" },
+            ],
+            columns: [
+                { data: obj => obj.TransDate },
+                { data: obj => obj.Match },
+                { data: obj => obj.TransID },
+                { data: obj => obj.BetType },
+                { data: obj => obj.BetTeam },
+                { data: obj => obj.Stake },
+                { data: obj => obj.Odds },
+                { data: obj => obj.LiveScore }
+            ],
+            createdRow: function (row, obj) {
+                if (obj.Detail.length == 0) {
+                    let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-robotTypeOrigin=${obj.RangeType}>
+                                    <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</span>
+                                  </td>`;
+                    $(row).empty().html(td);
+                }
+            }
+        });
+
+        $('tbody', robotSCETable).on('click', 'tr', function () {
+            var tr = $(this).closest('tr');
+            var row = robotSCETable.DataTable().row(tr);
+
+            let tdImperva = $('.imperva', tr);
+            let tdTicket = $('.robot-betting', tr);
+
+            if (tdTicket.length > 0 && tdImperva.length == 0) {
+                LoadRobotDetail(tr, row);
+            }
+        });
+        return table;
+    }
+
+    function GenerateGridRobotOCRD() {
+        let table = robotOCRDTable.DataTable({
+            language: {
+                lengthMenu: "",
+                info: "",
+                infoEmpty: "",
+                zeroRecords: "",
+                emptyTable: "There's no data"
+            },
+            info: false,
+            ordering: false,
+            searching: false,
+            scrollX: false,
+            scrollCollapse: true,
+            paging: false,
+            searching: false,
+            columnDefs: [
+                { "visible": false, "targets": 0 },
+                { targets: "_all", defaultContent: "-" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7], className: "text-center" },
+                { targets: [0], width: "5%" },
+                { targets: [1], width: "13%" },
+                { targets: [2], width: "34%" },
+                { targets: [3], width: "10%" },
+                { targets: [4], width: "15%" },
+                { targets: [5], width: "7%" },
+                { targets: [6], width: "7%" },
+                { targets: [7], width: "9%" }
+            ],
+            columns: [
+                { data: obj => obj.TransDate },                
+                { data: obj => obj.TransID },
+                { data: obj => obj.IP },
+                { data: obj => obj.BetType },
+                { data: obj => obj.BetTeam },
+                { data: obj => obj.Stake },
+                { data: obj => obj.Odds },
+                { data: obj => obj.LiveScore }
+            ],
+            createdRow: function (row, obj) {
+                if (obj.Detail.length == 0) {
+                    if (obj.IsRobotImperva) {
+                        let td = `<td class="robot-betting imperva" colspan="8">`;
+                        td += `<span>Imperva -`;
+
+                        $.each(obj.RobotImpervas, function (index, value) {
+                            let cssClass = index == 0 ? 'title-robot' : 'title-robot imperva-line';
+                            td += `<i class="${cssClass}"> CreatedDate: ${value.CreatedDate} - Platform: ${value.PlatformName}</i><br/>`;
+                        });
+
+                        td += `</span></td>`;
+
+                        $(row).empty().html(td);
+                    } else {
+                        let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-robotTypeOrigin=${obj.RangeType}>
+                                    <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</span>
+                                  </td>`;
+                        $(row).empty().html(td);
+                    }
+                }
+            },
+            drawCallback: function (settings) { }
+        });
+
+        return table;
+    }
+
+    function GenerateRobotImperva(rbImpervas) {
+        if (rbImpervas.length > 0) {
+            let td = `<td class="robot-betting imperva" colspan="8">`;
+            td += `<span>Imperva -`;
+
+            $.each(rbImpervas, function (index, value) {
+                let cssClass = index == 0 ? 'title-robot' : 'title-robot imperva-line';
+                td += `<i class="${cssClass}"> CreatedDate: ${value.CreatedDate} - Platform: ${value.PlatformName}</i><br/>`;
+            })
+            td += `</span></td>`;
+
+            let tr = `<tr>${td}</tr>`;
+          
+            $('tbody', robotImpervaTable).append(tr);  
+        }        
+    }
+
+    function GetRobotBetting(custID) {
+        $.ajax(common.modifyRelativeUrl('Account/GetRobotBetting'), {
+            type: "POST",
+            data: {
+                custID: custID
+            },
+            beforeSend: function () {
+                robotSCETable.find('tbody').addClass('loading');
+            },
+            success: function (response) {
+                if (response.data.FirstRobotDate != '' && response.data.LastRobotDate != '') {
+                    firstRobotDate.text("First Robot Date: " + response.data.FirstRobotDate);
+                    lastRobotDate.text("Last Robot Date: " + response.data.LastRobotDate);
+                }
+
+                robotSCETable.DataTable().clear().rows.add(response.data.RobotSCE).draw();
+                robotOCRDTable.DataTable().clear().rows.add(response.data.RobotOCRD).draw();       
+
+                GenerateRobotImperva(response.data.RobotImpervas);
+            },
+            complete: function () {
+                robotSCETable.find('tbody').removeClass('loading');
+            },
+            error: function (error) {
+                robotSCETable.find('tbody').removeClass('loading');
+                console.log(error);
+            }
+        });
+    }
+
     this.Initial = function (custID) {
-        RenderGrid(custID);
+        GenerateGridRobotSCE();
+        GenerateGridRobotOCRD();
+        
+        GetRobotBetting(custID);
     }
 }

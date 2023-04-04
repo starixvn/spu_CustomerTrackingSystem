@@ -33,7 +33,7 @@
                 {
                     var robotAIs = result.Read<RobotBettingAIModel>();
                     var robotImpervas = result.Read<RobotBettingImpervaModel>();
-                    var typeModel = new RobotDateAndTypeModel
+                    var firstLastRobotDate = new RobotDateAndTypeModel
                     {
                         FirstRobotDate = criteria.FirstRobotDate,
                         LastRobotDate = criteria.LastRobotDate,
@@ -41,7 +41,7 @@
 
                     return new RobotBettingModel
                     {
-                        TypeModel = typeModel,
+                        FirstLastRobotDate = firstLastRobotDate,
                         RobotBettingAI = robotAIs,
                         RobotBettingImperva = robotImpervas
                     };                   
@@ -129,7 +129,6 @@
             return Enumerable.Empty<string>();
         }
 
-
         public string GetTransFromList(IEnumerable<string> suspiciousTransList)
         {
             var tranIdList = new List<string>();
@@ -157,5 +156,27 @@
 
             return tranIds.Replace(@".0", "");
         }
+
+        public IEnumerable<RobotOcrdMatchModel> GetRobotOCRDMatches(long custID)
+        {
+            var criteria = new GetOCRDMatchByCustCriteria
+            {
+                CustID = custID
+            };
+
+            return repository.Fetch<RobotOcrdMatchModel>(criteria);
+        }
+
+        public IEnumerable<RobotOcrdTranModel> GetRobotOCRDTrans(long custID, long matchID)
+        {
+            var criteria = new GetOCRDTransCriteria
+            {
+                CustID = custID,
+                MatchID = matchID
+            };
+
+            return repository.Fetch<RobotOcrdTranModel>(criteria);
+        }
+
     }
 }
