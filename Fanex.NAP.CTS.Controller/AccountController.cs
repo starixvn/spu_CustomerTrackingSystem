@@ -2459,11 +2459,11 @@
         }
 
         [HttpPost]
-        public ActionResult GetRobotOCRDMatch(long custID)
+        public ActionResult GetRobotOcrdMatch(long custID)
         {
             var ocrdMatches = Enumerable.Empty<RobotOcrdMatchViewModel>();
 
-            var robotMatches = _robotBettingService.GetRobotOCRDMatches(custID);
+            var robotMatches = _robotBettingService.GetRobotOcrdMatches(custID);
 
 #if DEBUG
             robotMatches = GetRobotOCRDMatches_DataTest();
@@ -2530,28 +2530,82 @@
         }
 
         [HttpPost]
-        public ActionResult GetRobotOCRDTicketDetail(long custID, long matchID)
+        public ActionResult GetRobotOcrdTicketDetail(long custID, long matchID)
         {
             var ocrdTickets = Enumerable.Empty<RobotOcrdTicketViewModel>();
             var matchSize = 1;
             var tranSize = 1000;
             
-            var robotTrans = _robotBettingService.GetRobotOCRDTrans(custID, matchID);
+            var ocrdTrans = _robotBettingService.GetRobotOcrdTrans(custID, matchID);
 
-            if (robotTrans.Any())
+#if DEBUG
+            ocrdTrans = GetRobotOcrdTrans_DataTest();
+#endif
+
+            if (ocrdTrans.Any())
             {
-                var tranInfos = string.Join(",", robotTrans.Select(x => new RobotOcrdTranInfosViewModel
+                var tranInfos = JsonConvert.SerializeObject(ocrdTrans.Select(x => new RobotOcrdTranInfosViewModel
                 {
                     TransID = x.TransID,
                     MatchID = x.MatchID
                 }).Distinct(x => x.TransID));
 
-                var tickets = _commonService.GetMainTicketDetails(JsonConvert.SerializeObject(tranInfos), matchSize, tranSize);
+                var tickets = _commonService.GetMainTicketDetails(tranInfos, matchSize, tranSize);
 
-                ocrdTickets = tickets.Select(x => new RobotOcrdTicketViewModel(x));
+#if DEBUG
+                tickets = GetMainTicketDetails_DataTest();
+#endif
+
+                ocrdTickets = tickets.OrderByDescending(x=>x.TransDate).Select(x => new RobotOcrdTicketViewModel(x));
             }
             
             return Json(new { data = ocrdTickets }, JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<RobotOcrdTranModel> GetRobotOcrdTrans_DataTest()
+        {
+            var trans = new List<RobotOcrdTranModel>();
+
+            for (int i = 0; i < 5; i++)
+            {
+                trans.Add(new RobotOcrdTranModel
+                {
+                    TransID = 1 + i,
+                    MatchID = 1 + i
+                });
+            }
+
+            return trans;
+        }
+
+        private IEnumerable<MainTicketDetailModel> GetMainTicketDetails_DataTest()
+        {
+            var ticket = new List<MainTicketDetailModel>();
+
+            for (int i = 0; i < 5; i++)
+            {
+                ticket.Add(new MainTicketDetailModel
+                {
+                    TransDate = DateTime.Now,
+                    TransId = 101061018561544213,
+                    IP = "192.168.1.1",
+                    BetType = 1,
+                    BetTeam = "h",
+                    Stake = 1,
+                    StakeRM =1,
+                    Odds = 1,
+                    LiveIndicator = true,
+                    LiveAwayScore = 1,
+                    LiveHomeScore = 0,
+                    AwayId = 1,
+                    HomeId = 2,
+                    CustId = 1,
+                    LeagueId = 1,        
+                    EventDate = DateTime.Now
+                });
+            }
+
+            return ticket;
         }
 
 #endregion Robot Betting

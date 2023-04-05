@@ -157,7 +157,7 @@
             return tranIds.Replace(@".0", "");
         }
 
-        public IEnumerable<RobotOcrdMatchModel> GetRobotOCRDMatches(long custID)
+        public IEnumerable<RobotOcrdMatchModel> GetRobotOcrdMatches(long custID)
         {
             var criteria = new GetOCRDMatchByCustCriteria
             {
@@ -167,7 +167,7 @@
             return repository.Fetch<RobotOcrdMatchModel>(criteria);
         }
 
-        public IEnumerable<RobotOcrdTranModel> GetRobotOCRDTrans(long custID, long matchID)
+        public IEnumerable<RobotOcrdTranModel> GetRobotOcrdTrans(long custID, long matchID)
         {
             var criteria = new GetOCRDTransCriteria
             {

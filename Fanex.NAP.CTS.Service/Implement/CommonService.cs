@@ -96,9 +96,7 @@
         }
 
         public IEnumerable<MainTicketDetailModel> GetMainTicketDetails(string transIds, int? transSize, int? matchSize)
-        {
-            var result = new List<MainTicketDetailModel>();
-
+        {           
             var criteria = new GetTicketDetailsCriteria
             {
                 ListTransId = transIds,
