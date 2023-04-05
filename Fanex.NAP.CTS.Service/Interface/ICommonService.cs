@@ -14,8 +14,8 @@
 
         IEnumerable<SiteModel> GetSites(bool isNestedCalled);
 
-        IEnumerable<MatchesModel> GetMatchInfosByIDs(string matchIDs);
+        IEnumerable<MainMatchModel> GetMainMatchInfosByIDs(string matchIDs);
 
-        IEnumerable<TicketDetailsModel> GetTicketDetails(string transIds, int? transSize, int? matchSize);
+        IEnumerable<MainTicketDetailModel> GetMainTicketDetails(string transIds, int? transSize, int? matchSize);
     }
 }

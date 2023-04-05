@@ -6,9 +6,7 @@
     {
         public RobotOcrdViewModel()
         {
-            Detail = new List<RobotOcrdDetailViewModel>();            
-            RobotImpervas = new List<RobotImpervaViewModel>();
-            IsRobotImperva = false;
+            Detail = new List<RobotOcrdTicketViewModel>();
         }
 
         public long CustID { get; set; }
@@ -17,10 +15,6 @@
 
         public string RangeName { get; set; }
 
-        public bool IsRobotImperva { get; set; }
-
-        public IEnumerable<RobotImpervaViewModel> RobotImpervas { get; set; }
-
-        public List<RobotOcrdDetailViewModel> Detail { get; set; }
+        public List<RobotOcrdTicketViewModel> Detail { get; set; }
     }
 }

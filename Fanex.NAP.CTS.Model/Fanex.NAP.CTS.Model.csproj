@@ -179,6 +179,8 @@
     <Compile Include="Account\RobotBetting\RobotBettingTicketDetailModel.cs" />
     <Compile Include="Account\RobotBetting\RobotBettingSceDetailParaModel.cs" />
     <Compile Include="Account\RobotBetting\RobotDateModel.cs" />
+    <Compile Include="Account\RobotBetting\RobotOcrdMatchModel.cs" />
+    <Compile Include="Account\RobotBetting\RobotOcrdTranModel.cs" />
     <Compile Include="Account\RobotBetting\RobotUserSCEDetailModel.cs" />
     <Compile Include="Account\RobotBetting\RobotUserDetailModel.cs" />
     <Compile Include="Account\RobotBetting\RobotBettingAIModel.cs" />
@@ -244,6 +246,7 @@
     <Compile Include="Association\CoupleIPFraudDetailModel.cs" />
     <Compile Include="Association\FraudDetailModel.cs" />
     <Compile Include="Association\StakeIpPatternDetailModel.cs" />
+    <Compile Include="Common\MainMatchModel.cs" />
     <Compile Include="Common\SiteModel.cs" />
     <Compile Include="Common\SubscriberGroupModel.cs" />
     <Compile Include="Association\AssociationWithCategory.cs" />
@@ -252,6 +255,7 @@
     <Compile Include="AssociationReport\CategoriesModel.cs" />
     <Compile Include="AssociationReport\GraphAssociationDetailModel.cs" />
     <Compile Include="AssociationReport\GraphAssociationModel.cs" />
+    <Compile Include="Common\MainTicketDetailModel.cs" />
     <Compile Include="Common\ValidateUserNameModel.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="CustomerAssociationModel.cs" />

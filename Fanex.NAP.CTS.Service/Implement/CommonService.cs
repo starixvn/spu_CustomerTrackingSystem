@@ -82,7 +82,7 @@
             }
         }
 
-        public IEnumerable<MatchesModel> GetMatchInfosByIDs(string matchIDs)
+        public IEnumerable<MainMatchModel> GetMainMatchInfosByIDs(string matchIDs)
         {
             var criteria = new GetMatchesInfoCriteria
             {
@@ -91,13 +91,13 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<MatchesModel>(criteria);
+                return db.Query<MainMatchModel>(criteria);
             }
         }
 
-        public IEnumerable<TicketDetailsModel> GetTicketDetails(string transIds, int? transSize, int? matchSize)
+        public IEnumerable<MainTicketDetailModel> GetMainTicketDetails(string transIds, int? transSize, int? matchSize)
         {
-            var result = new List<TicketDetailsModel>();
+            var result = new List<MainTicketDetailModel>();
 
             var criteria = new GetTicketDetailsCriteria
             {
@@ -108,7 +108,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<TicketDetailsModel>(criteria);
+                return db.Query<MainTicketDetailModel>(criteria);
             }
         }
     }

@@ -73,6 +73,8 @@
     <Compile Include="Account\CustomerCategoryBySport\GetCustomerClassificationHistoryBySportCriteria.cs" />
     <Compile Include="Account\CustomerInfo\GetCustomerInfoByCustIdsCriteria.cs" />
     <Compile Include="Account\CustomerInfo\GetCustomerInfoDangerousCriteria.cs" />
+    <Compile Include="Account\RobotSetting\GetOCRDMatchByCustCriteria.cs" />
+    <Compile Include="Account\RobotSetting\GetOCRDTransCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRobotUsersSCEDetailsCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedAccountCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedGroupMonitorCriteria.cs" />
@@ -101,7 +103,9 @@
     <Compile Include="Api\LicenseeVIPBA\LicenseeVIPRemoveCriteria.cs" />
     <Compile Include="Api\LicenseeVIPBA\LicenseeVIPInsertCriteria.cs" />
     <Compile Include="AssociationDetection\GetCustStatisticsInfoRealtimeCriteria.cs" />
+    <Compile Include="Common\GetMatchesInfoCriteria.cs" />
     <Compile Include="Common\GetSitesCriteria.cs" />
+    <Compile Include="Common\GetTicketDetailsCriteria.cs" />
     <Compile Include="CustomerClassification\GetExistingCustClassificationNormalCriteria.cs" />
     <Compile Include="CustomerClassification\GetLastestCCDangerLevelCriteria.cs" />
     <Compile Include="CustomerClassification\InputErrorLogInsertCriteria.cs" />

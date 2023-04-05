@@ -375,14 +375,14 @@
         $('tbody', robotSCETable).on('click', 'tr', function () {
             var tr = $(this).closest('tr');
             var row = robotSCETable.DataTable().row(tr);
-
-            let tdImperva = $('.imperva', tr);
+          
             let tdTicket = $('.robot-betting', tr);
 
-            if (tdTicket.length > 0 && tdImperva.length == 0) {
+            if (tdTicket.length > 0) {
                 LoadRobotDetail(tr, row);
             }
         });
+
         return table;
     }
 
@@ -427,30 +427,161 @@
             ],
             createdRow: function (row, obj) {
                 if (obj.Detail.length == 0) {
-                    if (obj.IsRobotImperva) {
-                        let td = `<td class="robot-betting imperva" colspan="8">`;
-                        td += `<span>Imperva -`;
+                    //if (obj.IsRobotImperva) {
+                    //    let td = `<td class="robot-betting imperva" colspan="8">`;
+                    //    td += `<span>Imperva -`;
 
-                        $.each(obj.RobotImpervas, function (index, value) {
-                            let cssClass = index == 0 ? 'title-robot' : 'title-robot imperva-line';
-                            td += `<i class="${cssClass}"> CreatedDate: ${value.CreatedDate} - Platform: ${value.PlatformName}</i><br/>`;
-                        });
+                    //    $.each(obj.RobotImpervas, function (index, value) {
+                    //        let cssClass = index == 0 ? 'title-robot' : 'title-robot imperva-line';
+                    //        td += `<i class="${cssClass}"> CreatedDate: ${value.CreatedDate} - Platform: ${value.PlatformName}</i><br/>`;
+                    //    });
 
-                        td += `</span></td>`;
+                    //    td += `</span></td>`;
 
-                        $(row).empty().html(td);
-                    } else {
-                        let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-robotTypeOrigin=${obj.RangeType}>
+                    //    $(row).empty().html(td);
+                    //} else {
+                    //    let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-robotTypeOrigin=${obj.RangeType}>
+                    //                <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</span>
+                    //              </td>`;
+                    //    $(row).empty().html(td);
+                    //}
+
+                    let td = `<td class="robot-betting robot-ocrd" colspan="8" data-custid=${obj.CustID} data-rangetype=${obj.RangeType}>
                                     <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</span>
                                   </td>`;
                         $(row).empty().html(td);
-                    }
                 }
             },
             drawCallback: function (settings) { }
         });
 
+        $('tbody', robotOCRDTable).on('click', 'tr', function () {
+            var tr = $(this).closest('tr');
+            var row = robotOCRDTable.DataTable().row(tr);
+            
+            let tdTicket = $('.robot-ocrd', tr);
+
+            if (tdTicket.length > 0) {
+                GetRobotOcrdMatch(tr, row);
+            }
+        });
+
         return table;
+    }
+
+    function GetRobotOcrdMatch(tr, row) {
+        let span = $('span', tr);
+
+        if (row.child.isShown()) {
+            row.child.hide();
+            tr.removeClass('shown');
+
+            span.removeClass('icon-chevron-down')
+                .addClass('icon-chevron-right');
+        } else {
+            span.removeClass('icon-chevron-right')
+                .addClass('icon-chevron-down');
+
+            if (tr.hasClass('detail-loaded')) {
+                row.child.show();
+            } else {
+                let td = $('.robot-betting', tr);
+                let custID = td.attr('data-custid');
+
+                $.ajax(common.modifyRelativeUrl('Account/GetRobotOCRDMatch'), {
+                    type: 'POST',
+                    data: {
+                        custID: custID
+                    },
+                    success: function (response) {
+                        let childRow = NewRowOrcdMatch(response.data);
+                        row.child(childRow).show();
+                        tr.addClass('match-loaded');
+
+                        $('.robot-ocrd-match-td', robotOCRDTable).on('click', function () {
+                            console.log(this);
+                        });
+                    },
+                    beforeSend: function () {
+                        td.prop('disabled', true);
+                        robotOCRDTable.find('tbody').addClass('loading');
+                    },
+                    complete: function () {
+                        td.prop('disabled', false);
+                        robotOCRDTable.find('tbody').removeClass('loading');
+                    },
+                    error: function (errMsg) {
+                        console.log(errMsg);
+                        td.prop('disabled', false);
+                        robotOCRDTable.find('tbody').removeClass('loading');
+                    }
+                });
+            }
+        }        
+    }
+
+    function GetRobotOcrdMatch_backup(tr, row) {
+        let span = $('span', tr);
+
+        if (row.child.isShown()) {
+            row.child.hide();
+            tr.removeClass('shown');
+
+            span.removeClass('icon-chevron-down')
+                .addClass('icon-chevron-right');
+        }
+        else {
+            span.removeClass('icon-chevron-right')
+                .addClass('icon-chevron-down');
+
+            if (tr.hasClass('detail-loaded')) {
+                row.child.show();
+            } else {                
+                let td = $('.robot-betting', tr);
+                let custID = td.attr('data-custid');                
+
+                $.ajax(common.modifyRelativeUrl('Account/GetRobotOCRDMatch'), {
+                    type: 'POST',
+                    data: {
+                        custID: custID                  
+                    },
+                    success: function (response) {
+                        let childRow = NewRowOrcdMatch(response);
+                        row.child(childRow).show();
+                        tr.addClass('detail-loaded');
+                    },
+                    beforeSend: function () {
+                        td.prop('disabled', true);
+                        robotOCRDTable.find('tbody').addClass('loading');
+                    },
+                    complete: function () {
+                        td.prop('disabled', false);
+                        robotOCRDTable.find('tbody').removeClass('loading');
+                    },
+                    error: function (errMsg) {
+                        console.log(errMsg);
+                        td.prop('disabled', false);
+                        robotOCRDTable.find('tbody').removeClass('loading');
+                    }
+                });
+            }
+        }
+    }
+
+    function NewRowOrcdMatch(data) {
+        let html = '';
+
+        for (let i = 0; i < data.length; i++) {
+            let item = data[i];
+
+            html += `<tr class='robot-ocrd-match'>`;
+            html += `<td class="robot-betting robot-ocrd-match-td" colspan="8" data-custid=${item.CustID} data-matchid=${item.MatchID}>
+                        <span class="icon-chevron-right">${item.MatchName} - ${item.EventDate}: ${item.TotalTicket}</span>
+                    </td>`;
+            html += `</tr>`;
+        }            
+
+        return $(html);
     }
 
     function GenerateRobotImperva(rbImpervas) {

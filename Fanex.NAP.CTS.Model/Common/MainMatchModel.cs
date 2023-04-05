@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class MatchesModel
+    public class MainMatchModel
     {
         public int MatchID { get; set; }
 

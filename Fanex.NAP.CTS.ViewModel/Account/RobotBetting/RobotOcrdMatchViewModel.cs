@@ -6,7 +6,7 @@
 
     public class RobotOcrdMatchViewModel
     {
-        public RobotOcrdMatchViewModel(MatchesModel match, int totalTicket)
+        public RobotOcrdMatchViewModel(MainMatchModel match, int totalTicket)
         {
             this.MatchID = match.MatchID;
             this.MatchName = CachedRef.GetTeamName(match.HomeId) + " vs " + CachedRef.GetTeamName(match.AwayId);

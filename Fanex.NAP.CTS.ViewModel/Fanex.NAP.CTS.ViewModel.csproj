@@ -98,9 +98,11 @@
     <Compile Include="Account\Associated\MatchesAssociationByAIViewModel.cs" />
     <Compile Include="Account\RobotBetting\RobotImpervaViewModel.cs" />
     <Compile Include="Account\RobotBetting\RobotBettingDetailViewModel.cs" />
-    <Compile Include="Account\RobotBetting\RobotOCRDDetailViewModel.cs" />
-    <Compile Include="Account\RobotBetting\RobotOCRDViewModel.cs" />
-    <Compile Include="Account\RobotBetting\RobotSCEViewModel.cs" />
+    <Compile Include="Account\RobotBetting\RobotOcrdMatchViewModel.cs" />
+    <Compile Include="Account\RobotBetting\RobotOcrdTicketViewModel.cs" />
+    <Compile Include="Account\RobotBetting\RobotOcrdTranInfosViewModel.cs" />
+    <Compile Include="Account\RobotBetting\RobotOcrdViewModel.cs" />
+    <Compile Include="Account\RobotBetting\RobotSceViewModel.cs" />
     <Compile Include="Account\RobotBetting\RobotUserDetailViewModel.cs" />
     <Compile Include="Account\RobotBetting\RobotBettingViewModel.cs" />
     <Compile Include="Account\RobotClassificationViewModel.cs" />

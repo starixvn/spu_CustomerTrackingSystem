@@ -16,6 +16,7 @@
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Account.RobotBetting;
     using Fanex.NAP.CTS.Model.Association;
+    using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassification.ProblemAccount;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
@@ -2357,6 +2358,11 @@
                      CustID = 14436694,
                      PeriodRangeType = 101,
                      PeriodRangeName = "Consecutive Tickets > 24 Hours and High Ugly Stake Tickets"
+                },
+                new RobotBettingAIModel {
+                     CustID = 14436694,
+                     PeriodRangeType = 200,
+                     PeriodRangeName = "Consecutive Tickets per Match <= 2 mins and Stake per Ticket < 30 RM"
                 }
             };
 
@@ -2373,16 +2379,7 @@
                     Platform = 2
                 }
             };
-
-            rbs.RobotBettingOCRD = new List<RobotBettingAIModel>()
-            {
-                 new RobotBettingAIModel {
-                    CustID = 14436694,
-                     PeriodRangeType = 300,
-                     PeriodRangeName = "Consecutive Tickets per Match <= 2 mins and Stake per Ticket < 30 RM"
-                }
-            };
-
+            
             return rbs;
         }
 
@@ -2462,25 +2459,74 @@
         }
 
         [HttpPost]
-        public ActionResult GetRobotOCRDMatchByCust(long custID)
+        public ActionResult GetRobotOCRDMatch(long custID)
         {
             var ocrdMatches = Enumerable.Empty<RobotOcrdMatchViewModel>();
 
             var robotMatches = _robotBettingService.GetRobotOCRDMatches(custID);
 
+#if DEBUG
+            robotMatches = GetRobotOCRDMatches_DataTest();
+
+#endif
+
             if (robotMatches.Any())
             {
                 var matchIDs = string.Join(",", robotMatches.Select(x => x.MatchID).Distinct());
 
-                var matchInfos = _commonService.GetMatchInfosByIDs(matchIDs);
-                var totalTicket = 1;
+                var mainMatches = _commonService.GetMainMatchInfosByIDs(matchIDs);
 
-                ocrdMatches = matchInfos.OrderByDescending(x => x.KickOffTime)
-                    .Take(50)
-                    .Select(x => new RobotOcrdMatchViewModel(x, totalTicket));
+#if DEBUG
+                mainMatches = GetMainMatchInfosByIDs_DataTest();
+#endif
+
+                ocrdMatches = mainMatches.OrderByDescending(x => x.EventDate).Take(50)
+                                         .Join(robotMatches, m => m.MatchID, r => r.MatchID,
+                                         (m, r) => new RobotOcrdMatchViewModel(m, r.TotalTickets));
             }
 
             return Json(new { data = ocrdMatches }, JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<RobotOcrdMatchModel> GetRobotOCRDMatches_DataTest()
+        {
+            var matches = new List<RobotOcrdMatchModel>();
+
+            matches.Add(new RobotOcrdMatchModel
+            {
+                MatchID = 1,
+                TotalTickets = 99
+            });
+            matches.Add(new RobotOcrdMatchModel
+            {
+                MatchID = 2,
+                TotalTickets = 1001
+            });
+
+            return matches;
+        }
+
+        private IEnumerable<MainMatchModel> GetMainMatchInfosByIDs_DataTest()
+        {
+            var matches = new List<MainMatchModel>();
+
+            matches.Add(new MainMatchModel
+            {
+                 MatchID = 1,
+                 HomeId = 1,
+                 AwayId = 1,
+                 EventDate = DateTime.Now
+            });
+
+            matches.Add(new MainMatchModel
+            {
+                MatchID = 2,
+                HomeId = 2,
+                AwayId = 2,
+                EventDate = DateTime.Now
+            });
+
+            return matches;
         }
 
         [HttpPost]
@@ -2500,7 +2546,7 @@
                     MatchID = x.MatchID
                 }).Distinct(x => x.TransID));
 
-                var tickets = _commonService.GetTicketDetails(JsonConvert.SerializeObject(tranInfos), matchSize, tranSize);
+                var tickets = _commonService.GetMainTicketDetails(JsonConvert.SerializeObject(tranInfos), matchSize, tranSize);
 
                 ocrdTickets = tickets.Select(x => new RobotOcrdTicketViewModel(x));
             }
@@ -2508,9 +2554,9 @@
             return Json(new { data = ocrdTickets }, JsonRequestBehavior.AllowGet);
         }
 
-        #endregion Robot Betting
+#endregion Robot Betting
 
-        #region Betting Statistic
+#region Betting Statistic
 
         [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetPerformanceBySport(long custId, int getTop)
@@ -2696,6 +2742,6 @@
             return temp = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.BettingStatistics, NAP.Core.Business.Constant.Policy.Read);
         }
 
-        #endregion Betting Statistic
+#endregion Betting Statistic
     }
 }

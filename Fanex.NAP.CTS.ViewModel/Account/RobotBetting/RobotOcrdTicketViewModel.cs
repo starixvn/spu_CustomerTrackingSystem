@@ -6,7 +6,7 @@
 
     public class RobotOcrdTicketViewModel
     {
-        public RobotOcrdTicketViewModel(TicketDetailsModel ticket)
+        public RobotOcrdTicketViewModel(MainTicketDetailModel ticket)
         {
             this.TransDate = ticket.TransDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
             this.TransID = ticket.TransId.ToString();

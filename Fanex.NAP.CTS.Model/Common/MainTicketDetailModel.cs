@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class TicketDetailsModel
+    public class MainTicketDetailModel
     {
         public long TransId { get; set; }
 
