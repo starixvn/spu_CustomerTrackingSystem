@@ -1295,7 +1295,29 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         &[disabled] {
             cursor: not-allowed;
         }
+    }
 
+    .robot-ocrd {
+        background: #A1AFCD;
+        cursor: pointer;
+
+        span {
+            color: #fff;
+            font-weight: 600;
+
+            .title-robot {
+                font-family: "Lato", Arial, Tahoma, sans-serif !important;
+                font-style: normal;
+                font-weight: 500;
+            }
+        }
+
+        &[disabled] {
+            cursor: not-allowed;
+        }
+    }
+
+    .robot-imperva {
         .imperva-line {
             padding-left: 64px;
         }

@@ -1622,8 +1622,20 @@
         font-weight: 500; }
     .dataTable .robot-betting[disabled] {
       cursor: not-allowed; }
-    .dataTable .robot-betting .imperva-line {
-      padding-left: 64px; }
+  .dataTable .robot-ocrd {
+    background: #A1AFCD;
+    cursor: pointer; }
+    .dataTable .robot-ocrd span {
+      color: #fff;
+      font-weight: 600; }
+      .dataTable .robot-ocrd span .title-robot {
+        font-family: "Lato", Arial, Tahoma, sans-serif !important;
+        font-style: normal;
+        font-weight: 500; }
+    .dataTable .robot-ocrd[disabled] {
+      cursor: not-allowed; }
+  .dataTable .robot-imperva .imperva-line {
+    padding-left: 64px; }
   .dataTable .robot-betting-reason {
     background: #8cb5f9;
     cursor: pointer; }

@@ -426,7 +426,7 @@
             ],
             createdRow: function (row, obj) {
                 if (obj.Detail.length == 0) {                    
-                    let td = `<td class="robot-betting robot-ocrd-td" colspan="8" data-custid=${obj.CustID} data-rangetype=${obj.RangeType}>
+                    let td = `<td class="robot-ocrd robot-ocrd-td" colspan="8" data-custid=${obj.CustID} data-rangetype=${obj.RangeType}>
                                     <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</span>
                                   </td>`;
                         $(row).empty().html(td);
@@ -462,9 +462,20 @@
                 isShow = false;
             }
 
-            $('tr[data-custid="' + custID + '"]', robotOCRDTable.find('tbody')).each(function (idx, ele) {
+            let isShowChildRow = false;
+            $('tr[data-custid="' + custID + '"]', robotOCRDTable.find('tbody')).each(function (idx, ele) {      
+                let spanCurrent = $('span', this);
+                if (spanCurrent.hasClass('icon-chevron-down')) {
+                    isShowChildRow = true;
+                } else if (spanCurrent.hasClass('icon-chevron-right')) {
+                    isShowChildRow = false;
+                }
                 if (isShow) {
-                    $(ele).removeClass('hide');
+                    if (spanCurrent.hasClass('icon-chevron-down') || spanCurrent.hasClass('icon-chevron-right')) {
+                        $(ele).removeClass('hide');
+                    } else if (isShowChildRow) {
+                        $(ele).removeClass('hide');
+                    }    
                 } else {
                     $(ele).addClass('hide');
                 }
@@ -478,7 +489,7 @@
     }
 
     function GetRobotOcrdMatch(tr) {
-        let td = $('.robot-betting', tr);
+        let td = $('.robot-ocrd', tr);
         let custID = td.attr('data-custid');
 
         $.ajax(common.modifyRelativeUrl('Account/GetRobotOcrdMatch'), {
@@ -522,7 +533,7 @@
             let item = data[i];
 
             html += `<tr class='robot-ocrd-match' data-custid=${custID}>`;
-            html += `<td class="robot-betting robot-ocrd-match-td" colspan="8" data-custid=${custID} data-matchid=${item.MatchID}>
+            html += `<td class="robot-orcd robot-ocrd-match-td" colspan="8" data-custid=${custID} data-matchid=${item.MatchID}>
                         <span class="icon-chevron-right">${item.MatchName} - ${item.EventDate}: ${item.TotalTicket}</span>
                     </td>`;
             html += `</tr>`;
@@ -617,7 +628,7 @@
 
     function GenerateRobotImperva(rbImpervas) {
         if (rbImpervas.length > 0) {
-            let td = `<td class="robot-betting imperva" colspan="8">`;
+            let td = `<td class="robot-imperva imperva" colspan="8">`;
             td += `<span>Imperva -`;
 
             $.each(rbImpervas, function (index, value) {
