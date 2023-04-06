@@ -2291,8 +2291,6 @@
 //            rbData = GetRobotBetting_DataTest();
 //#endif
 
-            rbData = GetRobotBetting_DataTest();
-
             if (rbData.RobotBettingAI != null && rbData.RobotBettingAI.Any())
             {
                 rbBetting.RobotSCE = rbData.RobotBettingAI.Where(x => x.PeriodRangeType != 200).Select(x => new RobotSceViewModel
@@ -2469,10 +2467,7 @@
 
 //#if DEBUG
 //            robotMatches = GetRobotOCRDMatches_DataTest();
-
 //#endif
-
-            robotMatches = GetRobotOCRDMatches_DataTest();
 
             if (robotMatches.Any())
             {
@@ -2480,9 +2475,9 @@
 
                 var mainMatches = _commonService.GetMainMatchInfosByIDs(matchIDs);
 
-#if DEBUG
-                mainMatches = GetMainMatchInfosByIDs_DataTest();
-#endif
+//#if DEBUG
+//                mainMatches = GetMainMatchInfosByIDs_DataTest();
+//#endif
 
                 ocrdMatches = mainMatches.OrderByDescending(x => x.EventDate).Take(50)
                                          .Join(robotMatches, m => m.MatchID, r => r.MatchID,
@@ -2547,8 +2542,6 @@
 //            ocrdTrans = GetRobotOcrdTrans_DataTest();
 //#endif
 
-            ocrdTrans = GetRobotOcrdTrans_DataTest();
-
             if (ocrdTrans.Any())
             {
                 var tranInfos = JsonConvert.SerializeObject(ocrdTrans.Select(x => new RobotOcrdTranInfosViewModel
@@ -2562,8 +2555,6 @@
 //#if DEBUG
 //                tickets = GetMainTicketDetails_DataTest();
 //#endif
-
-                tickets = GetMainTicketDetails_DataTest();
 
                 ocrdTickets = tickets.OrderByDescending(x=>x.MatchId).ThenByDescending(x=>x.TransDate)
                     .Select(x => new RobotOcrdTicketViewModel(x));

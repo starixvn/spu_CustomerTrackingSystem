@@ -5,80 +5,80 @@
     let robotOCRDTable = $('#tblRobotOCRD');
     let robotImpervaTable = $('#tblImperva');
 
-    function RenderGrid(custID) {
-        robotSCETable.DataTable({
-            dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
-            serverSide: false,
-            ajax: {
-                url: common.modifyRelativeUrl('Account/GetRobotBetting'),
-                data: {
-                    custID: custID
-                },
-                type: "POST",
-                beforeSend: function () {
-                    robotSCETable.find('tbody').addClass('loading');
-                },
-                dataFilter: function (response) {
-                    var json = jQuery.parseJSON(response);
+    //function RenderGrid(custID) {
+    //    robotSCETable.DataTable({
+    //        dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
+    //        serverSide: false,
+    //        ajax: {
+    //            url: common.modifyRelativeUrl('Account/GetRobotBetting'),
+    //            data: {
+    //                custID: custID
+    //            },
+    //            type: "POST",
+    //            beforeSend: function () {
+    //                robotSCETable.find('tbody').addClass('loading');
+    //            },
+    //            dataFilter: function (response) {
+    //                var json = jQuery.parseJSON(response);
 
-                    firstRobotDate.text("First Robot Date: " + json.firstRobotDate);
-                    lastRobotDate.text("Last Robot Date: " + json.lastRobotDate);
+    //                firstRobotDate.text("First Robot Date: " + json.firstRobotDate);
+    //                lastRobotDate.text("Last Robot Date: " + json.lastRobotDate);
                    
-                    return response;
-                },
-                complete: function () {
-                    robotSCETable.find('tbody').removeClass('loading');
-                },
-                error: function (error) {
-                    robotSCETable.find('tbody').removeClass('loading');
-                    console.log(error);
-                }
-            },
-            language: {
-                infoEmpty: "",
-                zeroRecords: "There's no data"
-            },
-            info: false,
-            ordering: false,
-            paging: false,
-            searching: false,
-            scrollX: false,
-            scrollCollapse: false,
-            columnDefs: [
-                { targets: "_all", defaultContent: "-", className: "text-center" },
-            ],
-            columns: [
-                { data: obj => obj.TransDate },
-                { data: obj => obj.Match },
-                { data: obj => obj.TransID },
-                { data: obj => obj.BetType },
-                { data: obj => obj.BetTeam },
-                { data: obj => obj.Stake },
-                { data: obj => obj.Odds },
-                { data: obj => obj.LiveScore }
-            ],
-            createdRow: function (row, obj) {
-                if (obj.Detail.length == 0) {
-                    let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-robotTypeOrigin=${obj.RangeType}>
-                                    <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</span>
-                                  </td>`;
-                    $(row).empty().html(td);
-                }
-            }
-        });
+    //                return response;
+    //            },
+    //            complete: function () {
+    //                robotSCETable.find('tbody').removeClass('loading');
+    //            },
+    //            error: function (error) {
+    //                robotSCETable.find('tbody').removeClass('loading');
+    //                console.log(error);
+    //            }
+    //        },
+    //        language: {
+    //            infoEmpty: "",
+    //            zeroRecords: "There's no data"
+    //        },
+    //        info: false,
+    //        ordering: false,
+    //        paging: false,
+    //        searching: false,
+    //        scrollX: false,
+    //        scrollCollapse: false,
+    //        columnDefs: [
+    //            { targets: "_all", defaultContent: "-", className: "text-center" },
+    //        ],
+    //        columns: [
+    //            { data: obj => obj.TransDate },
+    //            { data: obj => obj.Match },
+    //            { data: obj => obj.TransID },
+    //            { data: obj => obj.BetType },
+    //            { data: obj => obj.BetTeam },
+    //            { data: obj => obj.Stake },
+    //            { data: obj => obj.Odds },
+    //            { data: obj => obj.LiveScore }
+    //        ],
+    //        createdRow: function (row, obj) {
+    //            if (obj.Detail.length == 0) {
+    //                let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-robotTypeOrigin=${obj.RangeType}>
+    //                                <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</span>
+    //                              </td>`;
+    //                $(row).empty().html(td);
+    //            }
+    //        }
+    //    });
 
-        $('tbody', robotSCETable).on('click', 'tr', function () {
-            var tr = $(this).closest('tr');
-            var row = robotSCETable.DataTable().row(tr);
+    //    $('tbody', robotSCETable).on('click', 'tr', function () {
+    //        var tr = $(this).closest('tr');
+    //        var row = robotSCETable.DataTable().row(tr);
 
-            let tdImperva = $('.imperva', tr);
-            let tdTicket = $('.robot-betting', tr);
+    //        let tdImperva = $('.imperva', tr);
+    //        let tdTicket = $('.robot-betting', tr);
 
-            if (tdTicket.length > 0 && tdImperva.length == 0) {
-                LoadRobotDetail(tr, row);
-            }          
-        });
-    }
+    //        if (tdTicket.length > 0 && tdImperva.length == 0) {
+    //            LoadRobotDetail(tr, row);
+    //        }          
+    //    });
+    //}
   
     function LoadRobotDetail(tr, row) {
         let span = $('span', tr);
