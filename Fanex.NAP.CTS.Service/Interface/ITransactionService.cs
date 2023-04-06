@@ -6,7 +6,7 @@
 
     public interface ITransactionService
     {
-        IEnumerable<HistoryTransactionModel> GetTransactionHistory(long ctsCustId, int subscriberId, int dateRange, int pageSize, int pageNumber, out int totalItem);
+        IEnumerable<HistoryTransactionModel> GetTransactionHistory(long ctsCustId, int dateRange, int pageSize, int pageNumber, out int totalItem);
 
         IEnumerable<LatestTransactionModel> GetLatestTransaction(int subscriberId, int transactionLength);
     }

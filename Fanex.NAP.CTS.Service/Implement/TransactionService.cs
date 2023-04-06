@@ -55,12 +55,11 @@
             }
         }        
 
-        public IEnumerable<HistoryTransactionModel> GetTransactionHistory(long ctsCustId, int subscriberId, int dateRange, int pageSize, int pageNumber, out int totalItem)
+        public IEnumerable<HistoryTransactionModel> GetTransactionHistory(long ctsCustId, int dateRange, int pageSize, int pageNumber, out int totalItem)
         {
             var criteria = new GetTransactionHistoryCriteria
             {
-                CTSCustId = ctsCustId,
-                SubscriberId = subscriberId,
+                CTSCustId = ctsCustId,               
                 DateRange = dateRange,
                 Take = pageSize,
                 Skip = pageNumber,
