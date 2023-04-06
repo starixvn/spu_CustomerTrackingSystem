@@ -2287,9 +2287,11 @@
             var rbBetting = new RobotBettingViewModel();           
             var rbData = _robotBettingService.GetRobotBetting(custID);
 
-#if DEBUG
-            rbData = GetRobotBetting_DataTest();            
-#endif
+//#if DEBUG
+//            rbData = GetRobotBetting_DataTest();
+//#endif
+
+            rbData = GetRobotBetting_DataTest();
 
             if (rbData.RobotBettingAI != null && rbData.RobotBettingAI.Any())
             {
@@ -2465,10 +2467,12 @@
 
             var robotMatches = _robotBettingService.GetRobotOcrdMatches(custID);
 
-#if DEBUG
-            robotMatches = GetRobotOCRDMatches_DataTest();
+//#if DEBUG
+//            robotMatches = GetRobotOCRDMatches_DataTest();
 
-#endif
+//#endif
+
+            robotMatches = GetRobotOCRDMatches_DataTest();
 
             if (robotMatches.Any())
             {
@@ -2482,7 +2486,8 @@
 
                 ocrdMatches = mainMatches.OrderByDescending(x => x.EventDate).Take(50)
                                          .Join(robotMatches, m => m.MatchID, r => r.MatchID,
-                                         (m, r) => new RobotOcrdMatchViewModel(m, r.TotalTickets));
+                                         (m, r) => new RobotOcrdMatchViewModel(m, r.TotalTickets))
+                                         .OrderByDescending(x=>x.EventDate).ThenByDescending(x=>x.TotalTicket);
             }
 
             return Json(new { data = ocrdMatches }, JsonRequestBehavior.AllowGet);
@@ -2538,9 +2543,11 @@
             
             var ocrdTrans = _robotBettingService.GetRobotOcrdTrans(custID, matchID);
 
-#if DEBUG
+//#if DEBUG
+//            ocrdTrans = GetRobotOcrdTrans_DataTest();
+//#endif
+
             ocrdTrans = GetRobotOcrdTrans_DataTest();
-#endif
 
             if (ocrdTrans.Any())
             {
@@ -2552,11 +2559,14 @@
 
                 var tickets = _commonService.GetMainTicketDetails(tranInfos, matchSize, tranSize);
 
-#if DEBUG
-                tickets = GetMainTicketDetails_DataTest();
-#endif
+//#if DEBUG
+//                tickets = GetMainTicketDetails_DataTest();
+//#endif
 
-                ocrdTickets = tickets.OrderByDescending(x=>x.TransDate).Select(x => new RobotOcrdTicketViewModel(x));
+                tickets = GetMainTicketDetails_DataTest();
+
+                ocrdTickets = tickets.OrderByDescending(x=>x.MatchId).ThenByDescending(x=>x.TransDate)
+                    .Select(x => new RobotOcrdTicketViewModel(x));
             }
             
             return Json(new { data = ocrdTickets }, JsonRequestBehavior.AllowGet);
@@ -2566,7 +2576,7 @@
         {
             var trans = new List<RobotOcrdTranModel>();
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 1001; i++)
             {
                 trans.Add(new RobotOcrdTranModel
                 {
@@ -2582,12 +2592,12 @@
         {
             var ticket = new List<MainTicketDetailModel>();
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 1001; i++)
             {
                 ticket.Add(new MainTicketDetailModel
                 {
                     TransDate = DateTime.Now,
-                    TransId = 101061018561544213,
+                    TransId = 1 + i,
                     IP = "192.168.1.1",
                     BetType = 1,
                     BetTeam = "h",

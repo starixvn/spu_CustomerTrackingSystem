@@ -627,20 +627,18 @@
     }
 
     function GenerateRobotImperva(rbImpervas) {
-        if (rbImpervas.length > 0) {
-            let td = `<td class="robot-imperva imperva" colspan="8">`;
-            td += `<span>Imperva -`;
+        let td = `<td class="robot-imperva imperva" colspan="8">`;
+        td += `<span>Imperva -`;
 
-            $.each(rbImpervas, function (index, value) {
-                let cssClass = index == 0 ? 'title-robot' : 'title-robot imperva-line';
-                td += `<i class="${cssClass}"> CreatedDate: ${value.CreatedDate} - Platform: ${value.PlatformName}</i><br/>`;
-            })
-            td += `</span></td>`;
+        $.each(rbImpervas, function (index, value) {
+            let cssClass = index == 0 ? 'title-robot' : 'title-robot imperva-line';
+            td += `<i class="${cssClass}"> CreatedDate: ${value.CreatedDate} - Platform: ${value.PlatformName}</i><br/>`;
+        })
+        td += `</span></td>`;
 
-            let tr = `<tr role="row" class="odd">${td}</tr>`;
-          
-            $('tbody', robotImpervaTable).append(tr);  
-        }        
+        let tr = `<tr role="row" class="odd">${td}</tr>`;
+
+        $('tbody', robotImpervaTable).append(tr);      
     }
 
     function GetRobotBetting(custID) {
@@ -658,10 +656,24 @@
                     lastRobotDate.text("Last Robot Date: " + response.data.LastRobotDate);
                 }
 
-                robotSCETable.DataTable().clear().rows.add(response.data.RobotSCE).draw();
-                robotOCRDTable.DataTable().clear().rows.add(response.data.RobotOCRD).draw();       
+                if (response.data.RobotSCE.length == 0
+                    && response.data.RobotOCRD.length == 0
+                    && response.data.RobotImpervas.length == 0
+                ) {
+                    robotSCETable.DataTable().clear().rows.add([]).draw();
+                } else {
+                    if (response.data.RobotSCE.length > 0) {
+                        robotSCETable.DataTable().clear().rows.add(response.data.RobotSCE).draw();
+                    }
 
-                GenerateRobotImperva(response.data.RobotImpervas);
+                    if (response.data.RobotOCRD.length > 0) {
+                        robotOCRDTable.DataTable().clear().rows.add(response.data.RobotOCRD).draw();
+                    }
+
+                    if (response.data.RobotImpervas.length > 0) {
+                        GenerateRobotImperva(response.data.RobotImpervas);
+                    }
+                }                
             },
             complete: function () {
                 robotSCETable.find('tbody').removeClass('loading');
