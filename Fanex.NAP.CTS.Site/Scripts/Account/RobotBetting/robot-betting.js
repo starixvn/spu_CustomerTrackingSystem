@@ -533,8 +533,8 @@
             let item = data[i];
 
             html += `<tr class='robot-ocrd-match' data-custid=${custID}>`;
-            html += `<td class="robot-orcd robot-ocrd-match-td" colspan="8" data-custid=${custID} data-matchid=${item.MatchID}>
-                        <span class="icon-chevron-right">${item.MatchName} - ${item.EventDate}: ${item.TotalTicket}</span>
+            html += `<td class="robot-ocrd robot-ocrd-match-td" colspan="8" data-custid=${custID} data-matchid=${item.MatchID}>
+                        <span class="icon-chevron-right level2">${item.MatchName} - ${item.EventDate}: ${item.TotalTicket}</span>
                     </td>`;
             html += `</tr>`;
         }            
@@ -637,7 +637,7 @@
             })
             td += `</span></td>`;
 
-            let tr = `<tr>${td}</tr>`;
+            let tr = `<tr role="row" class="odd">${td}</tr>`;
           
             $('tbody', robotImpervaTable).append(tr);  
         }        

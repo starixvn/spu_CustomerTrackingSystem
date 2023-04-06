@@ -2610,7 +2610,7 @@
 
 #endregion Robot Betting
 
-#region Betting Statistic
+        #region Betting Statistic
 
         [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetPerformanceBySport(long custId, int getTop)
@@ -2797,5 +2797,6 @@
         }
 
 #endregion Betting Statistic
+
     }
 }

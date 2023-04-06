@@ -1622,20 +1622,6 @@
         font-weight: 500; }
     .dataTable .robot-betting[disabled] {
       cursor: not-allowed; }
-  .dataTable .robot-ocrd {
-    background: #A1AFCD;
-    cursor: pointer; }
-    .dataTable .robot-ocrd span {
-      color: #fff;
-      font-weight: 600; }
-      .dataTable .robot-ocrd span .title-robot {
-        font-family: "Lato", Arial, Tahoma, sans-serif !important;
-        font-style: normal;
-        font-weight: 500; }
-    .dataTable .robot-ocrd[disabled] {
-      cursor: not-allowed; }
-  .dataTable .robot-imperva .imperva-line {
-    padding-left: 64px; }
   .dataTable .robot-betting-reason {
     background: #8cb5f9;
     cursor: pointer; }
@@ -1650,6 +1636,31 @@
         font-style: normal; }
     .dataTable .robot-betting-reason[disabled] {
       cursor: not-allowed; }
+  .dataTable .robot-ocrd {
+    background: #A1AFCD;
+    cursor: pointer; }
+    .dataTable .robot-ocrd span {
+      color: #fff;
+      font-weight: 600; }
+      .dataTable .robot-ocrd span .title-robot {
+        font-family: "Lato", Arial, Tahoma, sans-serif !important;
+        font-style: normal;
+        font-weight: 500; }
+    .dataTable .robot-ocrd .level2 {
+      padding-left: 30px; }
+    .dataTable .robot-ocrd[disabled] {
+      cursor: not-allowed; }
+  .dataTable .robot-imperva {
+    background: #A1AFCD; }
+    .dataTable .robot-imperva span {
+      color: #fff;
+      font-weight: 600; }
+      .dataTable .robot-imperva span .title-robot {
+        font-family: "Lato", Arial, Tahoma, sans-serif !important;
+        font-style: normal;
+        font-weight: 500; }
+      .dataTable .robot-imperva span .imperva-line {
+        padding-left: 64px; }
 
 .table tbody .group-start td {
   font-weight: bold;
