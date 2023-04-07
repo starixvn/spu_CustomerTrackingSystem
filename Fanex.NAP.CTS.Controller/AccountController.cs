@@ -1588,8 +1588,7 @@
             var totalItem = 0;
 
             var data = _transService.GetTransactionHistory(
-                model.CTSCustId,
-                model.SubscriberId,
+                model.CTSCustId,               
                 model.DateRange,
                 take,
                 skip,

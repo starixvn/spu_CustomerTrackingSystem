@@ -7,10 +7,7 @@
     public class GetTransactionHistoryCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_DateRange")]
-        public int DateRange { get; set; }       
-
-        [SpParam(SqlParamName = "ip_SubscriberId")]
-        public int SubscriberId { get; set; }
+        public int DateRange { get; set; }             
 
         [SpParam(SqlParamName = "ip_CTSCustId")]
         public long CTSCustId { get; set; }
