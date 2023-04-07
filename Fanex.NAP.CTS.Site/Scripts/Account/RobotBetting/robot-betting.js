@@ -4,82 +4,7 @@
     let robotSCETable = $('#tableRobotBetting');
     let robotOCRDTable = $('#tblRobotOCRD');
     let robotImpervaTable = $('#tblImperva');
-
-    //function RenderGrid(custID) {
-    //    robotSCETable.DataTable({
-    //        dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
-    //        serverSide: false,
-    //        ajax: {
-    //            url: common.modifyRelativeUrl('Account/GetRobotBetting'),
-    //            data: {
-    //                custID: custID
-    //            },
-    //            type: "POST",
-    //            beforeSend: function () {
-    //                robotSCETable.find('tbody').addClass('loading');
-    //            },
-    //            dataFilter: function (response) {
-    //                var json = jQuery.parseJSON(response);
-
-    //                firstRobotDate.text("First Robot Date: " + json.firstRobotDate);
-    //                lastRobotDate.text("Last Robot Date: " + json.lastRobotDate);
-                   
-    //                return response;
-    //            },
-    //            complete: function () {
-    //                robotSCETable.find('tbody').removeClass('loading');
-    //            },
-    //            error: function (error) {
-    //                robotSCETable.find('tbody').removeClass('loading');
-    //                console.log(error);
-    //            }
-    //        },
-    //        language: {
-    //            infoEmpty: "",
-    //            zeroRecords: "There's no data"
-    //        },
-    //        info: false,
-    //        ordering: false,
-    //        paging: false,
-    //        searching: false,
-    //        scrollX: false,
-    //        scrollCollapse: false,
-    //        columnDefs: [
-    //            { targets: "_all", defaultContent: "-", className: "text-center" },
-    //        ],
-    //        columns: [
-    //            { data: obj => obj.TransDate },
-    //            { data: obj => obj.Match },
-    //            { data: obj => obj.TransID },
-    //            { data: obj => obj.BetType },
-    //            { data: obj => obj.BetTeam },
-    //            { data: obj => obj.Stake },
-    //            { data: obj => obj.Odds },
-    //            { data: obj => obj.LiveScore }
-    //        ],
-    //        createdRow: function (row, obj) {
-    //            if (obj.Detail.length == 0) {
-    //                let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-robotTypeOrigin=${obj.RangeType}>
-    //                                <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</span>
-    //                              </td>`;
-    //                $(row).empty().html(td);
-    //            }
-    //        }
-    //    });
-
-    //    $('tbody', robotSCETable).on('click', 'tr', function () {
-    //        var tr = $(this).closest('tr');
-    //        var row = robotSCETable.DataTable().row(tr);
-
-    //        let tdImperva = $('.imperva', tr);
-    //        let tdTicket = $('.robot-betting', tr);
-
-    //        if (tdTicket.length > 0 && tdImperva.length == 0) {
-    //            LoadRobotDetail(tr, row);
-    //        }          
-    //    });
-    //}
-  
+    
     function LoadRobotDetail(tr, row) {
         let span = $('span', tr);
 
@@ -365,7 +290,7 @@
             createdRow: function (row, obj) {
                 if (obj.Detail.length == 0) {
                     let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-robotTypeOrigin=${obj.RangeType}>
-                                    <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</span>
+                                    <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</i></span>
                                   </td>`;
                     $(row).empty().html(td);
                 }
@@ -386,7 +311,7 @@
         return table;
     }
 
-    function GenerateGridRobotOCRD() {
+    function GenerateGridRobotOcrd() {
         let table = robotOCRDTable.DataTable({
             language: {
                 lengthMenu: "",
@@ -404,15 +329,7 @@
             searching: false,
             columnDefs: [               
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7], className: "text-center" },
-                { targets: [0], width: "15%" },
-                { targets: [1], width: "15%" },
-                { targets: [2], width: "15%" },
-                { targets: [3], width: "15%" },
-                { targets: [4], width: "10%" },
-                { targets: [5], width: "10%" },
-                { targets: [6], width: "10%" },
-                { targets: [7], width: "10%" }
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7], className: "text-center" },                
             ],
             columns: [
                 { data: obj => obj.TransDate },                
@@ -427,12 +344,11 @@
             createdRow: function (row, obj) {
                 if (obj.Detail.length == 0) {                    
                     let td = `<td class="robot-ocrd robot-ocrd-td" colspan="8" data-custid=${obj.CustID} data-rangetype=${obj.RangeType}>
-                                    <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</span>
-                                  </td>`;
-                        $(row).empty().html(td);
+                              <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</i></span>
+                              </td>`;
+                    $(row).empty().html(td);
                 }
-            },
-            drawCallback: function (settings) { }
+            },         
         });
 
         $('tbody', robotOCRDTable).on('click', 'tr', function () {
@@ -534,8 +450,8 @@
 
             html += `<tr class='robot-ocrd-match' data-custid=${custID}>`;
             html += `<td class="robot-ocrd robot-ocrd-match-td" colspan="8" data-custid=${custID} data-matchid=${item.MatchID}>
-                        <span class="icon-chevron-right level2">${item.MatchName} - ${item.EventDate}: ${item.TotalTicket}</span>
-                    </td>`;
+                    <span class="icon-chevron-right level2"><i class="title-robot">${item.MatchName} - ${item.EventDate}: total ${item.TotalTicket} tickets</i>
+                    </span></td>`;
             html += `</tr>`;
         }            
 
@@ -611,15 +527,15 @@
         for (let i = 0; i < data.length; i++) {
             let item = data[i];
 
-            html += `<tr class='robot-ocrd-match robot-ocrd-match-ticket' data-custid=${custID} data-matchid=${matchID}>`;
-            html += `<td class="text-center">${item.TransDate}</td>`;           
-            html += `<td class="text-center">${item.TransID}</td>`;
-            html += `<td class="text-center">${item.IP}</td>`;
-            html += `<td class="text-center">${item.BetTypeName}</td>`;
-            html += `<td class="text-center">${item.BetTeam}</td>`;
-            html += `<td class="text-center">${item.Stake.toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>`;
-            html += `<td class="text-center">${item.Odds}</td>`;
-            html += `<td class="text-center">${item.LiveScore}</td>`;
+            html += `<tr class='robot-ocrd-match robot-ocrd-match-ticket robot-ocrd-body-td' data-custid=${custID} data-matchid=${matchID}>`;
+            html += `<td class="td.td1 text-center">${item.TransDate}</td>`;           
+            html += `<td class="td.td2 text-center">${item.TransID}</td>`;
+            html += `<td class="td.td3 text-center">${item.IP}</td>`;
+            html += `<td class="td.td4 text-center">${item.BetTypeName}</td>`;
+            html += `<td class="td.td5 text-center">${item.BetTeam}</td>`;
+            html += `<td class="td.td6 text-center">${item.Stake.toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>`;
+            html += `<td class="td.td7 text-center">${item.Odds}</td>`;
+            html += `<td class="td.td8 text-center">${item.LiveScore}</td>`;
             html += `</tr>`;
         }
 
@@ -661,12 +577,14 @@
                     && response.data.RobotImpervas.length == 0
                 ) {
                     robotSCETable.DataTable().clear().rows.add([]).draw();
-                } else {
+                    robotOCRDTable.addClass('hide');
+                } else {                    
                     if (response.data.RobotSCE.length > 0) {
                         robotSCETable.DataTable().clear().rows.add(response.data.RobotSCE).draw();
                     }
 
                     if (response.data.RobotOCRD.length > 0) {
+                        robotOCRDTable.removeClass('hide');
                         robotOCRDTable.DataTable().clear().rows.add(response.data.RobotOCRD).draw();
                     }
 
@@ -687,7 +605,7 @@
 
     this.Initial = function (custID) {
         GenerateGridRobotSCE();
-        GenerateGridRobotOCRD();
+        GenerateGridRobotOcrd();
         
         GetRobotBetting(custID);
     }

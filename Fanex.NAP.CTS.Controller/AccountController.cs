@@ -2287,10 +2287,6 @@
             var rbBetting = new RobotBettingViewModel();           
             var rbData = _robotBettingService.GetRobotBetting(custID);
 
-//#if DEBUG
-//            rbData = GetRobotBetting_DataTest();
-//#endif
-
             if (rbData.RobotBettingAI != null && rbData.RobotBettingAI.Any())
             {
                 rbBetting.RobotSCE = rbData.RobotBettingAI.Where(x => x.PeriodRangeType != 200).Select(x => new RobotSceViewModel
@@ -2329,58 +2325,6 @@
             {
                 data = rbBetting,
             }, JsonRequestBehavior.AllowGet);
-        }
-
-        private RobotBettingModel GetRobotBetting_DataTest()
-        {
-            var rbs = new RobotBettingModel
-            {
-                FirstLastRobotDate = new RobotDateAndTypeModel
-                {
-                    FirstRobotDate = DateTime.Now,
-                    LastRobotDate = DateTime.Now
-                }
-            };
-
-            rbs.RobotBettingAI = new List<RobotBettingAIModel>()
-            {
-                new RobotBettingAIModel {
-                     CustID = 14436694,
-                     PeriodRangeType = 1,
-                     PeriodRangeName = "Tickets with Time Interval <= 1s"
-                },
-                new RobotBettingAIModel {
-                     CustID = 14436694,
-                     PeriodRangeType = 3,
-                     PeriodRangeName = "Tickets with 1s < Time Interval < 10s"
-                },
-                new RobotBettingAIModel {
-                     CustID = 14436694,
-                     PeriodRangeType = 101,
-                     PeriodRangeName = "Consecutive Tickets > 24 Hours and High Ugly Stake Tickets"
-                },
-                new RobotBettingAIModel {
-                     CustID = 14436694,
-                     PeriodRangeType = 200,
-                     PeriodRangeName = "Consecutive Tickets per Match <= 2 mins and Stake per Ticket < 30 RM"
-                }
-            };
-
-            rbs.RobotBettingImperva = new List<RobotBettingImpervaModel>()
-            {
-                new RobotBettingImpervaModel {
-                    CustID = 14436694,
-                    CreateTime = DateTime.Now,
-                    Platform = 1
-                },
-                new RobotBettingImpervaModel {
-                    CustID = 14436694,
-                    CreateTime = DateTime.Now,
-                    Platform = 2
-                }
-            };
-            
-            return rbs;
         }
 
         [HttpPost]
@@ -2465,19 +2409,11 @@
 
             var robotMatches = _robotBettingService.GetRobotOcrdMatches(custID);
 
-//#if DEBUG
-//            robotMatches = GetRobotOCRDMatches_DataTest();
-//#endif
-
             if (robotMatches.Any())
             {
                 var matchIDs = string.Join(",", robotMatches.Select(x => x.MatchID).Distinct());
 
                 var mainMatches = _commonService.GetMainMatchInfosByIDs(matchIDs);
-
-//#if DEBUG
-//                mainMatches = GetMainMatchInfosByIDs_DataTest();
-//#endif
 
                 ocrdMatches = mainMatches.OrderByDescending(x => x.EventDate).Take(50)
                                          .Join(robotMatches, m => m.MatchID, r => r.MatchID,
@@ -2486,47 +2422,6 @@
             }
 
             return Json(new { data = ocrdMatches }, JsonRequestBehavior.AllowGet);
-        }
-
-        private IEnumerable<RobotOcrdMatchModel> GetRobotOCRDMatches_DataTest()
-        {
-            var matches = new List<RobotOcrdMatchModel>();
-
-            matches.Add(new RobotOcrdMatchModel
-            {
-                MatchID = 1,
-                TotalTickets = 99
-            });
-            matches.Add(new RobotOcrdMatchModel
-            {
-                MatchID = 2,
-                TotalTickets = 1001
-            });
-
-            return matches;
-        }
-
-        private IEnumerable<MainMatchModel> GetMainMatchInfosByIDs_DataTest()
-        {
-            var matches = new List<MainMatchModel>();
-
-            matches.Add(new MainMatchModel
-            {
-                 MatchID = 1,
-                 HomeId = 1,
-                 AwayId = 1,
-                 EventDate = DateTime.Now
-            });
-
-            matches.Add(new MainMatchModel
-            {
-                MatchID = 2,
-                HomeId = 2,
-                AwayId = 2,
-                EventDate = DateTime.Now
-            });
-
-            return matches;
         }
 
         [HttpPost]
@@ -2538,23 +2433,15 @@
             
             var ocrdTrans = _robotBettingService.GetRobotOcrdTrans(custID, matchID);
 
-//#if DEBUG
-//            ocrdTrans = GetRobotOcrdTrans_DataTest();
-//#endif
-
             if (ocrdTrans.Any())
             {
-                var tranInfos = JsonConvert.SerializeObject(ocrdTrans.Select(x => new RobotOcrdTranInfosViewModel
+                var tranInfos = JsonConvert.SerializeObject(ocrdTrans.Distinct(x=>x.TransID).Select(x => new RobotOcrdTranInfosViewModel
                 {
                     TransID = x.TransID,
                     MatchID = x.MatchID
-                }).Distinct(x => x.TransID));
+                }));
 
-                var tickets = _commonService.GetMainTicketDetails(tranInfos, matchSize, tranSize);
-
-//#if DEBUG
-//                tickets = GetMainTicketDetails_DataTest();
-//#endif
+                var tickets = _commonService.GetMainTicketDetails(tranInfos, tranSize, matchSize);               
 
                 ocrdTickets = tickets.OrderByDescending(x=>x.MatchId).ThenByDescending(x=>x.TransDate)
                     .Select(x => new RobotOcrdTicketViewModel(x));
@@ -2562,54 +2449,8 @@
             
             return Json(new { data = ocrdTickets }, JsonRequestBehavior.AllowGet);
         }
-
-        private IEnumerable<RobotOcrdTranModel> GetRobotOcrdTrans_DataTest()
-        {
-            var trans = new List<RobotOcrdTranModel>();
-
-            for (int i = 0; i < 1001; i++)
-            {
-                trans.Add(new RobotOcrdTranModel
-                {
-                    TransID = 1 + i,
-                    MatchID = 1 + i
-                });
-            }
-
-            return trans;
-        }
-
-        private IEnumerable<MainTicketDetailModel> GetMainTicketDetails_DataTest()
-        {
-            var ticket = new List<MainTicketDetailModel>();
-
-            for (int i = 0; i < 1001; i++)
-            {
-                ticket.Add(new MainTicketDetailModel
-                {
-                    TransDate = DateTime.Now,
-                    TransId = 1 + i,
-                    IP = "192.168.1.1",
-                    BetType = 1,
-                    BetTeam = "h",
-                    Stake = 1,
-                    StakeRM =1,
-                    Odds = 1,
-                    LiveIndicator = true,
-                    LiveAwayScore = 1,
-                    LiveHomeScore = 0,
-                    AwayId = 1,
-                    HomeId = 2,
-                    CustId = 1,
-                    LeagueId = 1,        
-                    EventDate = DateTime.Now
-                });
-            }
-
-            return ticket;
-        }
-
-#endregion Robot Betting
+  
+        #endregion Robot Betting
 
         #region Betting Statistic
 
