@@ -113,19 +113,7 @@
 
             if (paModel != null && paModel.Any())
             {
-                problemAccounts = paModel.OrderByDescending(x => x.CreatedDate).Select(x =>
-                {
-                    return new GetProblemAccountViewModel
-                    {
-                        UserName = x.UserName,
-                        Site = x.Site,
-                        Currency = x.Currency,
-                        Category = x.CategoryName,
-                        Comment = x.Remark,
-                        CreatedBy = x.CreatedBy,
-                        CreatedDateStr = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyy)
-                    };
-                });
+                problemAccounts = paModel.OrderByDescending(x => x.CreatedDate).Select(x => new GetProblemAccountViewModel(x));                
             }
 
             return problemAccounts;

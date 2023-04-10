@@ -106,7 +106,7 @@
                 lineColor: '#C4C4C4'
             }, {
                 title: {
-                    text: 'Win Lost',
+                    text: 'Win Loss',
                     style: {
                         'color': '#333333',
                         'font-size': '13px'
@@ -176,7 +176,7 @@
                     radius: 2
                 },
             }, {
-                name: 'Win Lost',
+                name: 'Win Loss',
                 type: 'line',
                 yAxis: 1,
                 color: "#F15D21",

@@ -88,13 +88,13 @@
                 case (int)ClassificationSourceType.HighRiskPunter71:
                 case (int)ClassificationSourceType.HighRiskPunter72:
                 case (int)ClassificationSourceType.HighRiskPunter73:
-                    spanReason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount}";
+                    spanReason += $"Win loss: {winlost} | Margin: {margin} | Bet Count: {betCount}";
                     break;
                 case (int)ClassificationSourceType.GoodMember:
                 case (int)ClassificationSourceType.GoodMember111:
                 case (int)ClassificationSourceType.GoodMember112:
                 case (int)ClassificationSourceType.GoodMember113:
-                    spanReason += $"Turnover: {turnOver} | Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
+                    spanReason += $"Turnover: {turnOver} | Win loss: {winlost} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
                     break;
                 default: break;
             }

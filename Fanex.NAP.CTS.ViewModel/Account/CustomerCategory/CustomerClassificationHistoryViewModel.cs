@@ -31,5 +31,11 @@
         public string CreatedBy { get; set; }
 
         public string TaggingType { get; set; }
+
+        public bool IsParlay { get; set; }
+
+        public string SportName { get; set; }
+
+        public int IssueTypeID { get; set; }
     }
 }

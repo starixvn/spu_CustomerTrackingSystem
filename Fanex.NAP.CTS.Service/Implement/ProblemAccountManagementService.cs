@@ -39,7 +39,7 @@
             }
         }
 
-        public IEnumerable<ProblemAccountModel> GetProblemAccounts(ProblemAccountFilterViewModel filter)
+        public IEnumerable<GetProblemAccountModel> GetProblemAccounts(ProblemAccountFilterViewModel filter)
         {
             var criteria = new GetProblemAccountCriteria
             {
@@ -53,7 +53,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<ProblemAccountModel>(criteria).ToList();
+                return db.Query<GetProblemAccountModel>(criteria).ToList();
             }
         }
 

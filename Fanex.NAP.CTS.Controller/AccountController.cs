@@ -1681,7 +1681,7 @@
                     ActiveDays = x.ActiveDays,
                     LastXDaysMargin = x.LastXDaysMargin,
                     ProbationPeriodWinloss = x.ProbationPeriodWinloss,
-                    CreatedBy = x.CreatedBy
+                    CreatedBy = x.CreatedBy                   
                 }).ToList();
             }
 
@@ -1701,11 +1701,11 @@
         {
             var divReason = $"<div>";
             var spanReason = string.Empty;
-            var winlost = Math.Round(cc.Winloss, 3);
+            var winloss = Math.Round(cc.Winloss, 3);
 
             if (cc.SourceTypeID == (int)SourceTypeID.Classification_Rescan)
             {
-                spanReason += $"Win lost: {winlost}";
+                spanReason += $"Win loss: {winloss}";
             }
             else if (cc.IsFromTVS)
             {
@@ -1715,7 +1715,13 @@
                     spanReason += $"Void by BetID ";
 
                 if (roleID == 1)
-                    spanReason += $"| Win lost: {winlost} ";
+                    spanReason += $"| Win loss: {winloss} ";
+
+                if (!string.IsNullOrEmpty(cc.SportName))
+                    spanReason += $"| Sport: {cc.SportName}";
+
+                if (cc.IsParlay)
+                    spanReason += $"| Parlay";
             }
 
             if (spanReason == string.Empty)
@@ -1735,7 +1741,7 @@
         private string MappingReasonByCategoryID(string spanReason, CustomerClassificationHistoryModel cc)
         {
             var margin = Math.Round(cc.Margin, 3);
-            var winlost = Math.Round(cc.Winloss, 3);
+            var winloss = Math.Round(cc.Winloss, 3);
             var turnOver = Math.Round(cc.TurnOver, 3);
             var betCount = cc.BetCount;
             var activeDays = cc.ActiveDays;
@@ -1765,26 +1771,26 @@
                 case (int)ClassificationSourceType.HighRiskPunter71:
                 case (int)ClassificationSourceType.HighRiskPunter72:
                 case (int)ClassificationSourceType.HighRiskPunter73:
-                    spanReason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount}";
+                    spanReason += $"Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount}";
                     break;
 
                 case (int)ClassificationSourceType.GoodMember:
                 case (int)ClassificationSourceType.GoodMember111:
                 case (int)ClassificationSourceType.GoodMember112:
                 case (int)ClassificationSourceType.GoodMember113:
-                    spanReason += $"Turnover: {turnOver} | Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
+                    spanReason += $"Turnover: {turnOver} | Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
                     break;
 
                 case (int)ClassificationSourceType.Probation57:
                 case (int)ClassificationSourceType.SmartPunter67:
                 case (int)ClassificationSourceType.HighRiskPunter77:
-                    spanReason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Group Betting Percent: {twGroupBettingRate}";
+                    spanReason += $"Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Group Betting Percent: {twGroupBettingRate}";
                     break;
 
                 case (int)ClassificationSourceType.Probation58:
                 case (int)ClassificationSourceType.SmartPunter68:
                 case (int)ClassificationSourceType.HighRiskPunter78:
-                    spanReason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Desktop Percent: {twDesktopTicket} | Reject Percent: {twTicketRejectRate}";
+                    spanReason += $"Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Desktop Percent: {twDesktopTicket} | Reject Percent: {twTicketRejectRate}";
                     break;
 
                 case (int)ClassificationSourceType.NormalAccountInactive:
@@ -1798,27 +1804,27 @@
                     if (cc.IsFromTVS)
                     {
                         if (cc.TVSRequestID > 0)
-                            spanReason += $"Void by RequestID: { cc.TVSRequestID } | Win lost: {winlost}";
+                            spanReason += $"Void by RequestID: { cc.TVSRequestID } | Win loss: {winloss}";
                         else
-                            spanReason += $"Void by BetID |  Win lost: {winlost}";
+                            spanReason += $"Void by BetID |  Win loss: {winloss}";
                     }
                     else if (cc.IsFromTW)
                     {
-                        spanReason += $"Counter: {cc.RobotCounter} | Win lost: {winlost}";
+                        spanReason += $"Counter: {cc.RobotCounter} | Win loss: {winloss}";
                     }
                     else if (cc.IsFromImperva)
                     {
-                        spanReason += $"{cc.Remark } Win lost: {winlost}";
+                        spanReason += $"{cc.Remark } Win loss: {winloss}";
                     }
                     else if (cc.IsFromAI)
                     {
-                        spanReason += $"Win lost: {winlost}";
+                        spanReason += $"Win loss: {winloss}";
                     }
                     else if (cc.IsFromCTS)
                     {
                         spanReason += $"Robot is marked directly ";
 
-                        spanReason += $" | Win lost: {winlost}";
+                        spanReason += $" | Win loss: {winloss}";
                         if (!string.IsNullOrEmpty(cc.Remark))
                             spanReason += $" | {cc.Remark}";
                     } 
@@ -1834,7 +1840,7 @@
 
         private string MappingReasonBySourceTypeID(string spanReason, CustomerClassificationHistoryModel cc, int roleID)
         {
-            var winlost = Math.Round(cc.Winloss, 3);
+            var winloss = Math.Round(cc.Winloss, 3);
 
             switch (cc.SourceTypeID)
             {
@@ -1845,13 +1851,13 @@
                         spanReason += $"<span> { cc.Remark } </span>";
 
                         if (roleID == 1)
-                            spanReason += $"| Win lost: {winlost} ";
+                            spanReason += $"| Win loss: {winloss} ";
                     }
                     else
                     {
                         spanReason += $"<span> { cc.SourceTypeName } </span>";
                         if (roleID == 1)
-                            spanReason += $"| Win lost: {winlost} ";
+                            spanReason += $"| Win loss: {winloss} ";
 
                         if (!string.IsNullOrEmpty(cc.Remark))
                             spanReason += $"| {cc.Remark}";
@@ -1871,11 +1877,11 @@
                 case (int)SourceTypeID.Classification_ClassifyGBMatchMonitor:
                     if (!string.IsNullOrEmpty(cc.Remark))
                     {
-                        spanReason += $"Match ID {cc.Remark} | Win lost: {winlost}";
+                        spanReason += $"Match ID {cc.Remark} | Win loss: {winloss}";
                     }
                     else
                     {
-                        spanReason += $"Win lost: {winlost}";
+                        spanReason += $"Win loss: {winloss}";
                     }
 
                     break;

@@ -12,7 +12,7 @@
 
         IEnumerable<CategoryInfoModel> GetAllCategory();
 
-        IEnumerable<ProblemAccountModel> GetProblemAccounts(ProblemAccountFilterViewModel filter);
+        IEnumerable<GetProblemAccountModel> GetProblemAccounts(ProblemAccountFilterViewModel filter);
         
         IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories();
 

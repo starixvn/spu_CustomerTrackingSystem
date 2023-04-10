@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class ProblemAccountModel
+    public class GetProblemAccountModel
     {
         public long CTSCustID { get; set; }
 
@@ -29,6 +29,14 @@
         public string CreatedBy { get; set; }
        
         public string Remark { get; set; }
+
+        public int? TVSRequestID { get; set; }
+
+        public bool IsParlay { get; set; }
+
+        public int? SportType { get; set; }
+
+        public int IssueTypeID { get; set; }
 
     }
 }

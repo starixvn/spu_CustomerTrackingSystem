@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.Account
 {
+    using Fanex.NAP.CTS.Core.BaseClasses;
     using System;
 
     public class CustomerClassificationHistoryModel
@@ -61,5 +62,23 @@
         public string LicVIP { get; set; }
         
         public string LicBA { get; set; }
+
+        public bool IsParlay { get; set; }
+
+        public int ? SportType { get; set; }
+
+        public string SportName { 
+            get 
+            {
+                if (this.SportType != null)
+                {
+                    return CachedRef.GetSportTypeName(this.SportType.Value);
+                }
+
+                return string.Empty;
+            } 
+        }
+
+        public int IssueTypeID { get; set; }
     }
 }
