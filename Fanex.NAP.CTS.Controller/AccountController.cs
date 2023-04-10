@@ -2415,10 +2415,18 @@
 
                 var mainMatches = _commonService.GetMainMatchInfosByIDs(matchIDs);
 
-                ocrdMatches = mainMatches.OrderByDescending(x => x.EventDate).Take(50)
+                // for QC Test
+                //ocrdMatches = mainMatches.OrderByDescending(x => x.EventDate).Take(50)
+                //                         .Join(robotMatches, m => m.MatchID, r => r.MatchID,
+                //                         (m, r) => new RobotOcrdMatchViewModel(m, r.TotalTickets))
+                //                         .OrderByDescending(x=>x.EventDate).ThenByDescending(x=>x.TotalTicket);
+
+                ocrdMatches = mainMatches.OrderByDescending(x => x.EventDate).Take(5)
                                          .Join(robotMatches, m => m.MatchID, r => r.MatchID,
                                          (m, r) => new RobotOcrdMatchViewModel(m, r.TotalTickets))
-                                         .OrderByDescending(x=>x.EventDate).ThenByDescending(x=>x.TotalTicket);
+                                         .OrderByDescending(x => x.EventDate).ThenByDescending(x => x.TotalTicket);
+
+                // for QC Test end
             }
 
             return Json(new { data = ocrdMatches }, JsonRequestBehavior.AllowGet);
@@ -2429,7 +2437,7 @@
         {
             var ocrdTickets = Enumerable.Empty<RobotOcrdTicketViewModel>();
             var matchSize = 1;
-            var tranSize = 1000;
+            var tranSize = 10;
             
             var ocrdTrans = _robotBettingService.GetRobotOcrdTrans(custID, matchID);
 
