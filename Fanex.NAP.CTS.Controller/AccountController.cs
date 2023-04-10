@@ -2421,10 +2421,11 @@
                 //                         (m, r) => new RobotOcrdMatchViewModel(m, r.TotalTickets))
                 //                         .OrderByDescending(x=>x.EventDate).ThenByDescending(x=>x.TotalTicket);
 
-                ocrdMatches = mainMatches.OrderByDescending(x => x.EventDate).Take(5)
-                                         .Join(robotMatches, m => m.MatchID, r => r.MatchID,
+                ocrdMatches = mainMatches.Join(robotMatches, m => m.MatchID, r => r.MatchID,
                                          (m, r) => new RobotOcrdMatchViewModel(m, r.TotalTickets))
-                                         .OrderByDescending(x => x.EventDate).ThenByDescending(x => x.TotalTicket);
+                                         .OrderByDescending(x => x.EventDate)
+                                         .ThenByDescending(x => x.TotalTicket)
+                                         .ThenByDescending(x => x.MatchID).Take(5);
 
                 // for QC Test end
             }
@@ -2451,7 +2452,7 @@
 
                 var tickets = _commonService.GetMainTicketDetails(tranInfos, tranSize, matchSize);               
 
-                ocrdTickets = tickets.OrderByDescending(x=>x.MatchId).ThenByDescending(x=>x.TransDate)
+                ocrdTickets = tickets.OrderByDescending(x=>x.TransDate).ThenByDescending(x=>x.TransId)
                     .Select(x => new RobotOcrdTicketViewModel(x));
             }
             

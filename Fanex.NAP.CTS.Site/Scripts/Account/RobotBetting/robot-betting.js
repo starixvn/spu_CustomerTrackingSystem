@@ -450,7 +450,7 @@
 
             html += `<tr class='robot-ocrd-match' data-custid=${custID}>`;
             html += `<td class="robot-ocrd robot-ocrd-match-td" colspan="8" data-custid=${custID} data-matchid=${item.MatchID}>
-                    <span class="icon-chevron-right level2"><i class="title-robot">${item.MatchName} - ${item.EventDate}: total ${item.TotalTicket} tickets</i>
+                    <span class="icon-chevron-right level2"><i class="title-robot">${item.MatchName} - ${item.EventDateStr}: total ${item.TotalTicket} tickets</i>
                     </span></td>`;
             html += `</tr>`;
         }            
