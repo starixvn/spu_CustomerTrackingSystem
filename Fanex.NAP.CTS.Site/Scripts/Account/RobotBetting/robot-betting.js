@@ -565,6 +565,8 @@
             },
             beforeSend: function () {
                 robotSCETable.find('tbody').addClass('loading');
+                robotSCETable.addClass('hide');
+                robotOCRDTable.addClass('hide');
             },
             success: function (response) {
                 if (response.data.FirstRobotDate != '' && response.data.LastRobotDate != '') {
@@ -577,10 +579,11 @@
                     && response.data.RobotImpervas.length == 0
                 ) {
                     robotSCETable.DataTable().clear().rows.add([]).draw();
-                    robotOCRDTable.addClass('hide');
+                    robotSCETable.removeClass('hide');
                 } else {                    
                     if (response.data.RobotSCE.length > 0) {
-                        robotSCETable.DataTable().clear().rows.add(response.data.RobotSCE).draw();
+                        robotSCETable.removeClass('hide');
+                        robotSCETable.DataTable().clear().rows.add(response.data.RobotSCE).draw();                        
                     }
 
                     if (response.data.RobotOCRD.length > 0) {
