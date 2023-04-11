@@ -246,6 +246,9 @@
                                                                 IsFromTVS = group.ro.IsFromTVS,
                                                                 TVSRequestID = group.ro.TVSRequestID,
                                                                 IsDirect = group.ro.IsDirect,
+                                                                IsParlay = group.ro.IsParlay,
+                                                                SportType = group.ro.SportType,
+                                                                IssueTypeID = group.ro.IssueTypeID,
 
                                                                 TurnoverRM = itemLosing?.TurnoverRM,
                                                                 WinlossRM = itemLosing?.WinlossRM,
@@ -288,6 +291,9 @@
                                                      IsFromTW = group.pa.IsFromTW,
                                                      IsDataChanged = group.pa.IsDataChanged,
                                                      ReasonID = group.pa.ReasonID,
+                                                     IsParlay = group.pa.IsParlay,
+                                                     SportType = group.pa.SportType,
+                                                     IssueTypeID = group.pa.IssueTypeID,
 
                                                      BetCount = temp?.BetCount,
                                                      ActiveDays = temp?.ActiveDays,

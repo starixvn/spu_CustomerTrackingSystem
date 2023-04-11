@@ -63,7 +63,7 @@
         
         public string LicBA { get; set; }
 
-        public bool IsParlay { get; set; }
+        public bool? IsParlay { get; set; }
 
         public int ? SportType { get; set; }
 

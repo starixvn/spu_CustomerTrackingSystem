@@ -14,8 +14,7 @@
             this.Category = data.CategoryName;            
             this.CreatedBy = data.CreatedBy;
             this.CreatedDateStr = data.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyy);
-            this.TVSRequestID = data.TVSRequestID;
-            this.IsParlay = data.IsParlay;
+            this.TVSRequestID = data.TVSRequestID;           
             this.IssueTypeID = data.IssueTypeID;
             this.SportName = data.SportType != null ? CachedRef.GetSportTypeName(data.SportType.Value) : string.Empty;
 
@@ -36,9 +35,7 @@
 
         public string CreatedDateStr { get; set; }
 
-        public int? TVSRequestID { get; set; }
-
-        public bool IsParlay { get; set; }
+        public int? TVSRequestID { get; set; }      
        
         public string SportName { get; set; }
 
@@ -53,12 +50,12 @@
                 if (data.TVSRequestID > 0)
                     comment += $"Void by RequestID: { data.TVSRequestID } ";
                 else
-                    comment += $"Void by BetID ";
+                    comment += $"Void by BetID ";              
 
-                if (!string.IsNullOrEmpty(this.SportName))
-                    comment += $"| Sport: {this.SportName}";
+                if (data.SportType != null && data.SportType > 0)
+                    comment += $"| Sport: {this.SportName} ";
 
-                if (data.IsParlay)
+                if (data.IsParlay != null && data.IsParlay.Value)
                     comment += $"| Parlay";
             }
             else

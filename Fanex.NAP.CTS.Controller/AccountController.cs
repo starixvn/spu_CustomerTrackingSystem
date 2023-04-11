@@ -1720,7 +1720,7 @@
                 if (cc.SportType != null && cc.SportType > 0)
                     spanReason += $"| Sport: {cc.SportName} ";
 
-                if (cc.IsParlay)
+                if (cc.IsParlay != null && cc.IsParlay.Value)
                     spanReason += $"| Parlay";
             }
 
