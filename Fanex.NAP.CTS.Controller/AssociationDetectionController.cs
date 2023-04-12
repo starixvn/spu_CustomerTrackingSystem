@@ -228,10 +228,17 @@
         #region Detect Association
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, null,
+            "IsBP:AssociationDetectionByBettingPattern=65",
+            "IsDevice:AssociationDetectionByDevice=66",
+            "IsIP:AssociationDetectionByIP=67",
+            "IsAgent:AssociationDetectionByAgent=68",
+            "Is3MatchesLast7Days:AssociationDetectionByMatch7Days=69",
+            "IsIPLast3Days:AssociationDetectionByIP3Days=70")]
         public ActionResult DetectAssociationByUserNames(DetectAssociationByUserNamesViewModel model)
         {
             var result = DetectAssociation(model, false);
+
             return Json(new
             {
                 data = result,
@@ -332,6 +339,10 @@
                     {                        
                         var custStatisticsList = _associationDetectionService.GetCustStatisticsInfoRealtime(custIDs);
 
+#if DEBUG
+                        custStatisticsList = GetCustStatisticsInfoRealtime_DataTest(orgUserList.Select(x => x.CustID));
+#endif
+
                         result.ExportItemList = GetExportItem(orgUserList, assRearrangeGroup, custStatisticsList);
                     }
                     else
@@ -357,6 +368,24 @@
 
             return result;
         }      
+
+        private IEnumerable<GetCustStatisticsInfoRealtimeModel> GetCustStatisticsInfoRealtime_DataTest(IEnumerable<int> custIDs)
+        {
+            var list = new List<GetCustStatisticsInfoRealtimeModel>();
+
+            foreach (var custID in custIDs)
+            {
+                list.Add(new GetCustStatisticsInfoRealtimeModel
+                {
+                    CustID = custID,
+                    TotalSettledTickets = 199864,
+                    TotalWinlossRM = 1,
+                    TotalTurnoverRM = 1
+                });
+            }    
+
+            return list;
+        }
 
         private IEnumerable<SharedIPInfoModel> DetectAssociationByIP(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds)
         {
@@ -597,7 +626,7 @@
         #region Detail IP
         
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetails)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetailIP)]
         public ActionResult GetDetectAssociationDetailIP(string ips)
         {
             var result = new List<GetAssociationDetectDetailIPViewModel>();
@@ -624,7 +653,7 @@
 
         #region Detail Match
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetails)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetailMatch)]
         public ActionResult GetDetectAssociationDetailMatch(int custID1, int custID2, string custIDList)
         {
             var result = Enumerable.Empty<GetAssociationDetectDetailMatchViewModel>();          
@@ -660,7 +689,7 @@
 
         #region Detail Agent
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetails)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetailAgent)]
         public ActionResult GetDetectAssociationDetailAgent(string agentInfoJson)
         {
             var result = Enumerable.Empty<GetAssociationDetectDetailAgentViewModel>();
@@ -695,7 +724,7 @@
             var excelFile = _associationDetectionService.ExportToExcelAssociationDetect(data.ExportItemList, fileName, templatePath);
 
             return File(excelFile, "application/vnd.ms-excel", fileName);
-        }       
+        }             
 
         private IEnumerable<ExportAssociationDetectModel> GetExportItem(IEnumerable<ValidateUserNameModel> orgUserList
             , IEnumerable<DetectAssociationMergeGroupModel> assMergeGroup
@@ -712,6 +741,7 @@
                     {
                         item.CreatedDate = cust1.CreatedDate;
                         item.CustomerClass = cust1.CustomerClass;
+                        item.CustomerCategory = cust1.CustomerCategory;
                         item.GroupID = cust1.GroupID;
                         item.Danger1 = cust1.Danger1;
                         item.Danger2 = cust1.Danger2;
@@ -721,6 +751,7 @@
                     }
                     if (cust2 != null)
                     {
+                        item.TotalSettledTickets = cust2.TotalSettledTickets;
                         item.TotalWinloss = cust2.TotalWinlossRM;
                         item.WinlossLast3Days = cust2.WinlossRM_Last3Days;
                         item.WinlossLast7Days = cust2.WinlossRM_Last7Days;

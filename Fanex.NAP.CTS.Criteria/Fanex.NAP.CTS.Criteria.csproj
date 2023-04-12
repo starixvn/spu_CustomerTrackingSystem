@@ -102,7 +102,7 @@
     <Compile Include="Api\LicenseeVIPBA\LicenseeBARemoveCriteria.cs" />
     <Compile Include="Api\LicenseeVIPBA\LicenseeVIPRemoveCriteria.cs" />
     <Compile Include="Api\LicenseeVIPBA\LicenseeVIPInsertCriteria.cs" />
-    <Compile Include="AssociationDetection\GetCustStatisticsInfoRealtimeCriteria.cs" />
+    <Compile Include="AssociationDetection\GetMainCustStatisticsInfoCriteria.cs" />
     <Compile Include="Common\GetMatchesInfoCriteria.cs" />
     <Compile Include="Common\GetSitesCriteria.cs" />
     <Compile Include="Common\GetTicketDetailsCriteria.cs" />

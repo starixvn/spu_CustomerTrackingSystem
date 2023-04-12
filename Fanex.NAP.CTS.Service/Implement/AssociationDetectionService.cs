@@ -128,7 +128,7 @@
 
         public IEnumerable<GetCustStatisticsInfoRealtimeModel> GetCustStatisticsInfoRealtime(string custIDList)
         {
-            var criteria = new GetCustStatisticsInfoRealtimeCriteria
+            var criteria = new GetMainCustStatisticsInfoCriteria
             {
                 CustIDList = custIDList
             };
@@ -233,7 +233,7 @@
            
             FillRowData(AssociationDetect, ref writer);
 
-            writer.SyncColumnsWidth(15);
+            writer.SyncColumnsWidth(17);
 
             return writer.ToBytes();
         }
@@ -250,8 +250,10 @@
                         item.UserName,
                         item.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyy),
                         item.CustomerClass != -1 ? item.CustomerClass.ToString() : string.Empty,
-                        (item.GroupID.HasValue ? item.GroupID.ToString() : string.Empty),
+                        item.CustomerCategory = item.CustomerCategory,
                         item.DangerLevel,
+                        (item.GroupID.HasValue ? item.GroupID.ToString() : string.Empty),
+                        item.TotalSettledTickets,
                         item.TotalWinloss,
                         item.WinlossLast3Days,
                         item.WinlossLast7Days,

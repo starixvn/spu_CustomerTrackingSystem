@@ -4,6 +4,8 @@
     {
         public int CustID { get; set; }
 
+        public int? TotalSettledTickets { get; set; }
+
         public decimal? TotalWinlossRM { get; set; }
 
         public decimal? WinlossRM_Last3Days { get; set; }

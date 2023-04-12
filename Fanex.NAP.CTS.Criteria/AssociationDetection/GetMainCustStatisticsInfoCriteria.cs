@@ -3,14 +3,14 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class GetCustStatisticsInfoRealtimeCriteria : CriteriaBase
+    public class GetMainCustStatisticsInfoCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ListCustID")]
+        [SpParam(SqlParamName = "listCustID")]
         public string CustIDList { get; set; }
 
         public override string GetSettingKey()
         {
-            return "Acc_Rpt_GetCustStatisticsInfo_Realtime_ByListCustID";
+            return "Acc_Rpt_CTS_GetCustStatisticsInfo";
         }
 
         public override bool IsValid()

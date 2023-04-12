@@ -775,6 +775,7 @@
                 data: parameters,
                 beforeSend: function () {
                     domElements.divAddUserName.addClass("loading-block");
+                    domElements.btnDetect.prop('disabled', true);
                 },
                 success: function (response) {
                     if (response.data.ErrorCode == 0) {
@@ -799,10 +800,13 @@
                     domElements.divReportContainer.removeClass('hide');
                 },
                 complete: function () {
-                    domElements.divAddUserName.removeClass("loading-block");                    
+                    domElements.divAddUserName.removeClass("loading-block");              
+                    domElements.btnDetect.prop('disabled', false);
                 },
                 error: function (errMsg) {
                     console.log(errMsg);
+                    domElements.divAddUserName.removeClass("loading-block");             
+                    domElements.btnDetect.prop('disabled', false);
                 }
             });
         }

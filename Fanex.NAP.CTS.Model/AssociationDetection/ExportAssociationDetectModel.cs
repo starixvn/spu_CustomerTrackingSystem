@@ -22,7 +22,11 @@
 
         public int Danger4 { get; set; }
 
-        public int Danger5 { get; set; }        
+        public int Danger5 { get; set; }
+
+        public int? TotalSettledTickets { get; set; }
+
+        public string CustomerCategory { get; set; }
 
         public decimal? TotalWinloss { get; set; }
 
