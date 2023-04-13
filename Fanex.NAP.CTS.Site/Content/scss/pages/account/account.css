@@ -1615,6 +1615,7 @@
     cursor: pointer; }
     .dataTable .robot-betting span {
       color: #fff;
+      font-size: 1.5rem;
       font-weight: 600; }
       .dataTable .robot-betting span .title-robot {
         font-family: "Lato", Arial, Tahoma, sans-serif !important;
@@ -1629,10 +1630,11 @@
       color: #fff;
       font-family: "Lato", Arial, Tahoma, sans-serif !important;
       font-style: normal;
+      font-size: 1.5rem;
       font-weight: 500; }
       .dataTable .robot-betting-reason span .title-reason {
         color: #0d5adb;
-        font-weight: 400;
+        font-weight: 500;
         font-style: normal; }
     .dataTable .robot-betting-reason[disabled] {
       cursor: not-allowed; }
@@ -1641,6 +1643,7 @@
     cursor: pointer; }
     .dataTable .robot-ocrd span {
       color: #fff;
+      font-size: 1.5rem;
       font-weight: 600; }
       .dataTable .robot-ocrd span .title-robot {
         font-family: "Lato", Arial, Tahoma, sans-serif !important;
@@ -1654,6 +1657,7 @@
     background: #A1AFCD; }
     .dataTable .robot-imperva span {
       color: #fff;
+      font-size: 1.5rem;
       font-weight: 600; }
       .dataTable .robot-imperva span .title-robot {
         font-family: "Lato", Arial, Tahoma, sans-serif !important;
