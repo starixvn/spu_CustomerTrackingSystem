@@ -339,10 +339,6 @@
                     {                        
                         var custStatisticsList = _associationDetectionService.GetCustStatisticsInfoRealtime(custIDs);
 
-#if DEBUG
-                        custStatisticsList = GetCustStatisticsInfoRealtime_DataTest(orgUserList.Select(x => x.CustID));
-#endif
-
                         result.ExportItemList = GetExportItem(orgUserList, assRearrangeGroup, custStatisticsList);
                     }
                     else
@@ -367,25 +363,7 @@
             }
 
             return result;
-        }      
-
-        private IEnumerable<GetCustStatisticsInfoRealtimeModel> GetCustStatisticsInfoRealtime_DataTest(IEnumerable<int> custIDs)
-        {
-            var list = new List<GetCustStatisticsInfoRealtimeModel>();
-
-            foreach (var custID in custIDs)
-            {
-                list.Add(new GetCustStatisticsInfoRealtimeModel
-                {
-                    CustID = custID,
-                    TotalSettledTickets = 199864,
-                    TotalWinlossRM = 1,
-                    TotalTurnoverRM = 1
-                });
-            }    
-
-            return list;
-        }
+        }            
 
         private IEnumerable<SharedIPInfoModel> DetectAssociationByIP(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds)
         {

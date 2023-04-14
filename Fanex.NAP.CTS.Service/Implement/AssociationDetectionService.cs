@@ -253,7 +253,7 @@
                         item.CustomerCategory = item.CustomerCategory,
                         item.DangerLevel,
                         (item.GroupID.HasValue ? item.GroupID.ToString() : string.Empty),
-                        item.TotalSettledTickets,
+                        item.TotalSettledTickets.HasValue ? item.TotalSettledTickets.Value : 0,
                         item.TotalWinloss,
                         item.WinlossLast3Days,
                         item.WinlossLast7Days,
