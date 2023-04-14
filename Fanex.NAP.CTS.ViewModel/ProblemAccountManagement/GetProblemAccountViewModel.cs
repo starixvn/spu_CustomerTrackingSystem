@@ -14,7 +14,7 @@
             this.Category = data.CategoryName;            
             this.CreatedBy = data.CreatedBy;
             this.CreatedDateStr = data.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyy);
-            this.TVSRequestID = data.TVSRequestID;           
+            this.TVSRequestID = data.TVSRequestID;                 
             this.IssueTypeID = data.IssueTypeID;
             this.SportName = data.SportType != null ? CachedRef.GetSportTypeName(data.SportType.Value) : string.Empty;
 
@@ -45,7 +45,7 @@
         {
             var comment = string.Empty;
 
-            if (string.IsNullOrEmpty(data.Remark))
+            if (string.IsNullOrEmpty(data.Remark) && data.IsFromTVS)
             {
                 if (data.TVSRequestID > 0)
                     comment += $"Void by RequestID: { data.TVSRequestID } ";
