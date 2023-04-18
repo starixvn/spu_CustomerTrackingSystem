@@ -60,7 +60,7 @@
             }
             else
             {
-                comment = data.Remark;
+                comment = string.IsNullOrEmpty(data.Remark) ? "-" : data.Remark;
             }
 
             return comment;
