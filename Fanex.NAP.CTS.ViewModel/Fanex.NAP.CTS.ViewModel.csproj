@@ -41,11 +41,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account\AccountDetail.cs" />
+    <Compile Include="Account\Associated\AssByIPTicketStakeViewModel.cs" />
     <Compile Include="Account\Associated\AssociatedByAccountViewModel.cs" />
     <Compile Include="Account\Associated\CategoryGroupViewModel.cs" />
     <Compile Include="Account\Associated\CategoryViewModel.cs" />
     <Compile Include="Account\Associated\AssociationByIPInfoViewModel.cs" />
-    <Compile Include="Account\Associated\AssociationByIPItemViewModel.cs" />
+    <Compile Include="Account\Associated\AssByIPMatchBettypeViewModel.cs" />
     <Compile Include="Account\Associated\AssociationOTGBViewModel.cs" />
     <Compile Include="Account\Associated\CoupleInfoViewModel.cs" />
     <Compile Include="Account\Associated\AssByOTGBDetailViewModel.cs" />

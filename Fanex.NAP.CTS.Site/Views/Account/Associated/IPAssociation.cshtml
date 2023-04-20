@@ -2,9 +2,15 @@
     <div class="report-cont" style="max-height:500px">
         <div class="table-report" style="width:100%;background:#fff">
             <div class="graph-heading">
-                <div class="bold" style="text-align:center; width:100%">Top 50 matches (Total: <span id="spanIPAssociationTotalMatches"></span> Matches) - Total IP Sharing: <span id="spanIPAssociationTotalIPSharing"></span></div>
+                <div class="bold" style="text-align:center; width:100%">The Latest Matches</div>               
             </div>
-            <table id="tblIPAssociation" class="table table-striped width-100per" style="width:100%">
+
+            <div id="divIPMatchBettype" class="group-ass-ip">
+                <span class="icon-chevron-right">
+                    <i class="label">Shared IP, Match, Bet Type</i>
+                </span>
+            </div>
+            <table id="tblIPAssociation" class="table table-striped width-100per hide" style="width:100%;">
                 <thead>
                     <tr>
                         <th>Match ID</th>
@@ -17,6 +23,34 @@
                 </thead>
                 <tbody></tbody>
             </table>
+        </div>  
+
+        <div class="table-report" style="width:100%;background:#fff">
+            <div id="divIPTicketStake" class="group-ass-ip">
+                <span class="icon-chevron-right">
+                    <i class="label">Shared IP, Fraud Tickets, Stake Digit Similarity</i>
+                </span>
+            </div>
+            <table id="tblIPTicketStakeAss" class="table table-striped width-100per hide" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th>IP</th>
+                        <th>Username</th>
+                        <th>Match ID</th>
+                        <th>Event Date</th>
+                        <th>Trans Date</th>
+                        <th>Trans ID</th>
+                        <th>Bet Type</th>
+                        <th>Bet Team</th>
+                        <th>Stake</th>
+                        <th>Currency</th>
+                        <th>Odds</th>
+                        <th>Live Score</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
+        
     </div>
 </div>

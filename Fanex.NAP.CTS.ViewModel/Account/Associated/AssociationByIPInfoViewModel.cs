@@ -7,12 +7,13 @@
     {
         public AssociationByIPInfoViewModel()
         {
-            ItemList = new List<AssociationByIPItemViewModel>();            
+            IPMatchBettypeList = new List<AssByIPMatchBettypeViewModel>();
+            IPTicketStakeList = new List<AssByIPTicketStakeViewModel>();
         }
 
-        public UInt32 TotalMatchCount { get; set; }
+        public IEnumerable<AssByIPMatchBettypeViewModel> IPMatchBettypeList { get; set; }
 
-        public UInt32 TotalIPSharingCount { get; set; }
+        public IEnumerable<AssByIPTicketStakeViewModel> IPTicketStakeList { get; set; }
 
         public string ErrorMessage { get; set; }
 
@@ -20,10 +21,8 @@
         {
             get
             {
-                return string.IsNullOrEmpty(ErrorMessage) ? 0 : -1;                
+                return string.IsNullOrEmpty(ErrorMessage) ? 0 : -1;
             }
         }
-
-        public List<AssociationByIPItemViewModel> ItemList { get; set; }
     }
 }

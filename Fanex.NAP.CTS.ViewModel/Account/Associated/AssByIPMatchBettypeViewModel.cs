@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.Account
 {    
-    public class AssociationByIPItemViewModel
+    public class AssByIPMatchBettypeViewModel
     {     
         public int MatchID { get; set; }
 

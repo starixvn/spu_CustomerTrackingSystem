@@ -1533,6 +1533,24 @@
   top: 0rem;
   z-index: 10; }
 
+#divIPAssociation .group-ass-ip {
+  border: 1px solid #C4C4C4;
+  line-height: 17px;
+  padding: 7px;
+  /*vertical-align: middle;*/
+  background: #A1AFCD;
+  cursor: pointer; }
+  #divIPAssociation .group-ass-ip span {
+    color: #FFFFFF;
+    font-size: 1.5rem;
+    font-weight: 600; }
+    #divIPAssociation .group-ass-ip span .label {
+      font-family: "Lato", Arial, Tahoma, sans-serif !important;
+      font-style: normal;
+      font-weight: 500; }
+  #divIPAssociation .group-ass-ip[disabled] {
+    cursor: not-allowed; }
+
 #divIPAssociation #tblIPAssociation thead th {
   position: sticky;
   position: -webkit-sticky;

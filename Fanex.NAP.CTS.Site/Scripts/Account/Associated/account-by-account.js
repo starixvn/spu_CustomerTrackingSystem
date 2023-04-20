@@ -22,10 +22,13 @@
     let tableMatchBettingPattern = $('#tblMatchBettingPattern');
     let dataTableMatchBettingPattern = null;
     let divIPAssociation = $('#divIPAssociation');
+    let divIPMatchBettype = $('#divIPMatchBettype');
     let tblIPAssociation = $('#tblIPAssociation');
+    let divIPTicketStake = $('#divIPTicketStake');
+    let tblIPTicketStakeAss = $('#tblIPTicketStakeAss');
     let dataTableIPAssociation = null;
-    let spanIPAssociationTotalMatches = $('#spanIPAssociationTotalMatches');
-    let spanIPAssociationTotalIPSharing = $('#spanIPAssociationTotalIPSharing'); let cbbAssociationCategory = $('#cbbAssociationCategory');
+    let dataTableIPTicketStakeAss = null;
+    let cbbAssociationCategory = $('#cbbAssociationCategory');
     let isSkipTracking = true;
     let isInProcessing = false;
     let tableStakeIPPattern = $("#tblStakeIPPattern");
@@ -183,7 +186,7 @@
                         );
 
                         $('.ip-association', cell).click(() =>
-                            ShowIPAssociation(row.CustId)
+                            ShowIPAssociation(row.CustId, _username, row.Username)
                         );
                     }
                 },
@@ -1103,11 +1106,11 @@
         tblOTGBRound3.removeClass('hide');
     }
 
-    function ShowIPAssociation(custId) {
+    function ShowIPAssociation(custId, userName1, userName2) {
         divIPAssociation.dialog({
             modal: true,
             width: '1400px',
-            title: 'ASSOCIATION DETAILS',
+            title: '',
             resizable: false,
             draggable: true,
             close: function () {
@@ -1118,6 +1121,18 @@
             }
         });
 
+        divIPAssociation.parent().find('.ui-dialog-title').html('<div>ASSOCIATION DETAILS: ' + userName1 + ' - ' + userName2 + '</div>');        
+
+        RenderIPMatchBettype($('#hdCustId').val(), custId);
+
+        RenderIPTicketStake($('#hdCustId').val(), custId);
+
+        GetIPAssociation($('#hdCustId').val(), custId);
+
+        $('.ui-dialog .ui-dialog-content').css('padding', '0');
+    }
+
+    function RenderIPMatchBettype() {
         if (dataTableIPAssociation == null) {
             dataTableIPAssociation = tblIPAssociation.DataTable({
                 language: {
@@ -1146,20 +1161,59 @@
                     { data: obj => obj.BetTypes }
                 ]
             });
+        }        
+    }   
+    
+    function RenderIPTicketStake() {
+        if (dataTableIPTicketStakeAss == null) {
+            dataTableIPTicketStakeAss = tblIPTicketStakeAss.DataTable({
+                language: {
+                    zeroRecords: "There's no data"
+                },
+                info: false,
+                ordering: false,
+                searching: false,
+                scrollX: false,
+                paging: false,                
+                columnDefs: [
+                    { targets: "_all", defaultContent: "-" },
+                    { targets: [0], width: "9%", className: "text-center" },
+                    { targets: [1], width: "9%", className: "text-center" },
+                    { targets: [2], width: "9%", className: "text-center" },
+                    { targets: [3], width: "9%", className: "text-center" },
+                    { targets: [4], width: "9%", className: "text-center" },
+                    { targets: [5], width: "9%", className: "text-center" },
+                    { targets: [6], width: "5%", className: "text-center" },
+                    { targets: [7], width: "9%", className: "text-center" },
+                    { targets: [8], width: "9%", className: "text-center" },
+                    { targets: [9], width: "9%", className: "text-center" },
+                    { targets: [10], width: "7%", className: "text-center" },
+                    { targets: [11], width: "7%", className: "text-center" }
+                ],
+                columns: [
+                    { data: obj => obj.IP },
+                    { data: obj => obj.UserName },
+                    { data: obj => obj.MatchID },
+                    { data: obj => obj.EventDate },
+                    { data: obj => obj.TransDate },
+                    { data: obj => obj.TransID },
+                    { data: obj => obj.BetType },
+                    { data: obj => obj.BetTeam },
+                    { data: obj => obj.Stake },
+                    { data: obj => obj.Currency },
+                    { data: obj => obj.Odds },
+                    { data: obj => obj.LiveScore }
+                ],
+                rowsGroup: [
+                    'first:IP',
+                    'second:IP'
+                ],
+            });
         }
-
-        GetIPAssociation($('#hdCustId').val(), custId);
-
-        $('.ui-dialog .ui-dialog-content').css('padding', '0');
     }
 
     function GetIPAssociation(custId1, custId2) {
-        spanIPAssociationTotalMatches.text("");
-        spanIPAssociationTotalIPSharing.text("");
-
-        var url = common.modifyRelativeUrl('Account/GetIPAssociation');
-
-        $.ajax(url, {
+        $.ajax(common.modifyRelativeUrl('Account/GetIPAssociation'), {
             type: 'POST',
             beforeSend: function () {
                 tblIPAssociation.find('tbody').addClass('loading');
@@ -1171,11 +1225,11 @@
             success: function (response) {
                 if (response !== undefined) {
                     if (response.ErrorCode == 0) {
-                        tblIPAssociation.DataTable().clear().rows.add(response.ItemList);
+                        tblIPAssociation.DataTable().clear().rows.add(response.IPMatchBettypeList);
                         tblIPAssociation.DataTable().columns.adjust().draw();
 
-                        spanIPAssociationTotalMatches.text(response.TotalMatchCount);
-                        spanIPAssociationTotalIPSharing.text(response.TotalIPSharingCount);
+                        tblIPTicketStakeAss.DataTable().clear().rows.add(response.IPTicketStakeList);
+                        tblIPTicketStakeAss.DataTable().columns.adjust().draw();
                     } else {
                         console.log(response.ErrorMessage);
                         common.showError(response.ErrorMessage);
@@ -1427,6 +1481,15 @@
         return newRow;
     }
 
+    function ToggleGroupAssIP(span, target) {
+        if (span.hasClass('icon-chevron-right')) {
+            span.removeClass('icon-chevron-right').addClass('icon-chevron-down');
+            target.removeClass('hide');
+        } else {
+            span.removeClass('icon-chevron-down').addClass('icon-chevron-right');
+            target.addClass('hide');
+        }
+    }
 
     // END Assosication OTGB
 
@@ -1546,5 +1609,10 @@
         });
 
         divMatchBettingPattern.on('dialogclose', () => ClearAIAssociationData());
+
+        divIPMatchBettype.on('click', () => { ToggleGroupAssIP($('span', divIPMatchBettype), tblIPAssociation); });
+
+        divIPTicketStake.on('click', () => { ToggleGroupAssIP($('span', divIPTicketStake), tblIPTicketStakeAss) });
+
     };
 }

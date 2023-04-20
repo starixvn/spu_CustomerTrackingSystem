@@ -1232,59 +1232,91 @@
 
                 var matchInfos = _accountService.GetMatchInfosByIDs(matchIds);
 
-                data = new AssociationByIPInfoViewModel
+                data.ErrorMessage = info.ErrorMessage;
+
+                data.IPMatchBettypeList = info.ItemList.Select(x =>
                 {
-                    TotalMatchCount = info.TotalMatchCount,
-                    TotalIPSharingCount = info.TotalIPCount,
-                    ErrorMessage = info.ErrorMessage,
+                    var homeName = CachedRef.GetTeamName(x.HomeID);
+                    var awayName = CachedRef.GetTeamName(x.AwayID);
+                    var leagueName = CachedRef.GetLeagueName(x.LeagueID);
+                    var betTypeList = new List<string>();
+                    var ip = x.IP != null ? x.IP.Replace(",", ", ") : "-";
+                    var eventDateStr = "-";
 
-                    ItemList = info.ItemList.Select(x =>
+                    if (x.BettypeList != null)
                     {
-                        var homeName = CachedRef.GetTeamName(x.HomeID);
-                        var awayName = CachedRef.GetTeamName(x.AwayID);
-                        var leagueName = CachedRef.GetLeagueName(x.LeagueID);
-                        var betTypeList = new List<string>();
-                        var ip = x.IP;
-                        var eventDateStr = "-";
+                        var arrBetType = x.BettypeList.Split(',');
 
-                        if (x.BettypeList != null)
+                        foreach (var item in arrBetType)
                         {
-                            var arrBetType = x.BettypeList.Split(',');
+                            int.TryParse(item, out int betTypeId);
 
-                            foreach (var item in arrBetType)
-                            {
-                                var betTypeId = 0;
-
-                                int.TryParse(item, out betTypeId);
-
-                                betTypeList.Add(CachedRef.GetBettypeName(betTypeId));
-                            }
+                            betTypeList.Add(CachedRef.GetBettypeName(betTypeId));
                         }
+                    }
 
-                        if (ip != null)
-                        {
-                            ip = ip.Replace(",", ", ");
-                        }
+                    var match = matchInfos.Where(y => y.MatchID == x.MatchID).FirstOrDefault();
 
-                        var match = matchInfos.Where(y => y.MatchID == x.MatchID).FirstOrDefault();
+                    if (match != null && match.EventDate != DateTime.MinValue)
+                        eventDateStr = match.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy);
 
-                        if (match != null && match.EventDate != DateTime.MinValue)
-                            eventDateStr = match.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy);
-
-                        return new AssociationByIPItemViewModel
-                        {
-                            MatchID = x.MatchID,
-                            EventName = homeName != string.Empty ? (homeName + " - vs - " + awayName) : "-",
-                            LeagueName = leagueName != string.Empty ? leagueName : "-",
-                            EventDateString = eventDateStr,
-                            BetTypes = string.Join(", ", betTypeList),
-                            IP = ip
-                        };
-                    }).ToList()
-                };
+                    return new AssByIPMatchBettypeViewModel
+                    {
+                        MatchID = x.MatchID,
+                        EventName = homeName != string.Empty ? (homeName + " - vs - " + awayName) : "-",
+                        LeagueName = leagueName != string.Empty ? leagueName : "-",
+                        EventDateString = eventDateStr,
+                        BetTypes = string.Join(", ", betTypeList),
+                        IP = ip
+                    };
+                });               
             }
 
+            data.IPTicketStakeList = GetAssByIPTicketStake_DataTest();
+
             return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<AssByIPTicketStakeViewModel> GetAssByIPTicketStake_DataTest()
+        {
+            var list = new List<AssByIPTicketStakeViewModel>();
+
+            for (int i = 0; i < 5; i++)
+            {
+                list.Add(new AssByIPTicketStakeViewModel
+                {
+                    IP = "220.174.86.10",
+                    UserName = "Member 01" + i.ToString(),
+                    MatchID = 456123789,
+                    EventDate = DateTime.Now.ToString(Consts.FormatDateToString_MMMddyyyy),
+                    TransDate = DateTime.Now.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                    TransID = "12345678966",
+                    BetType = "HDP",
+                    BetTeam = "h",
+                    Stake = 50,
+                    Currency = "RM",
+                    Odds = new decimal(0.9),
+                    LiveScore = "0-1"
+                });
+
+                list.Add(new AssByIPTicketStakeViewModel
+                {
+                    IP = "220.174.86.12",
+                    UserName = "Member 01" + i.ToString(),
+                    MatchID = 456123789,
+                    EventDate = DateTime.Now.ToString(Consts.FormatDateToString_MMMddyyyy),
+                    TransDate = DateTime.Now.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                    TransID = "12345678966",
+                    BetType = "HDP",
+                    BetTeam = "h",
+                    Stake = 50,
+                    Currency = "RM",
+                    Odds = new decimal(0.9),
+                    LiveScore = "0-1"
+                });
+            }
+
+            return list.OrderBy(x=>x.IP);
         }
 
         #endregion Associated By Account

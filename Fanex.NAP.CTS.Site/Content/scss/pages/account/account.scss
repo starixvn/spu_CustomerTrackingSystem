@@ -1153,6 +1153,31 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         z-index: 10;
     }
 
+    .group-ass-ip {
+        border: 1px solid #C4C4C4;
+        line-height: 17px;
+        padding: 7px;
+        /*vertical-align: middle;*/
+        background: #A1AFCD;
+        cursor: pointer;
+
+        span {
+            color: #FFFFFF;
+            font-size: 1.5rem;
+            font-weight: 600;
+
+            .label {
+                font-family: "Lato", Arial, Tahoma, sans-serif !important;
+                font-style: normal;
+                font-weight: 500;
+            }
+        }
+
+        &[disabled] {
+            cursor: not-allowed;
+        }
+    }
+
     #tblIPAssociation {
         thead th {
             position: sticky;

@@ -724,9 +724,7 @@
                 return new AssociationByIPInfoModel
                 {
                     ItemList = db.Query<AssociationByIPItemModel>(criteria),
-                    ErrorMessage = criteria.ErrorMessage,
-                    TotalIPCount = criteria.TotalIPCount,
-                    TotalMatchCount = criteria.TotalMatchCount
+                    ErrorMessage = criteria.ErrorMessage                   
                 };
             }
         }
