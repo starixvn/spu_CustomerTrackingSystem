@@ -1212,6 +1212,17 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
+        public ActionResult GetAssByIPType(long custID1, long custID2)
+        {
+            var data = _accountService.GetAssociationByIPType(custID1, custID2).ToList();
+
+            data.Add(2);
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
         public ActionResult GetIPAssociation(long custId1, long custId2)
         {
             var data = new AssociationByIPInfoViewModel();
@@ -1275,6 +1286,33 @@
             data.IPTicketStakeList = GetAssByIPTicketStake_DataTest();
 
             return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
+        public ActionResult GetIPTicketStake(long custID1, long custID2)
+        {
+            var result = Enumerable.Empty<AssByIPTicketStakeViewModel>();
+
+            var data = _accountService.GetAssociationBy5GIPDetail(custID1, custID2);
+
+            if (data != null && data.Any())
+            {
+                var transIDs = string.Join(",", data.Select(x => x.TransID).Distinct());
+
+                var tickets = _commonService.GetMainTicketDetails(transIDs, null, null);
+
+                if (tickets != null && tickets.Any())
+                {
+                    result = tickets.Select(x => new AssByIPTicketStakeViewModel(x));
+                }
+            }
+            else
+            {
+                result = GetAssByIPTicketStake_DataTest();
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         private IEnumerable<AssByIPTicketStakeViewModel> GetAssByIPTicketStake_DataTest()

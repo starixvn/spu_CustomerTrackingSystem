@@ -729,6 +729,34 @@
             }
         }
 
+        public IEnumerable<int> GetAssociationByIPType(long custID1, long custID2)
+        {
+            var criteria = new GetAssociationByIPTypeCriteria
+            {
+                CustID1 = custID1,
+                CustID2 = custID2
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<int>(criteria);
+            }
+        }
+
+        public IEnumerable<AssByIPTicketStakeModel> GetAssociationBy5GIPDetail(long custID1, long custID2)
+        {
+            var criteria = new GetAssociationBy5GIPDetailCriteria
+            {
+                CustID1 = custID1,
+                CustID2 = custID2
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<AssByIPTicketStakeModel>(criteria);
+            }
+        }
+
         public CoupleInfoViewModel GetCoupleInfos(long custID1, long custID2)
         {
             var criteria = new GetCoupleInfoCriteria

@@ -151,6 +151,10 @@
 
 		AssociationByIPInfoModel GetAssociationByIPInfo(long custId1, long custId2);
 
+        IEnumerable<int> GetAssociationByIPType(long custID1, long custID2);
+
+        IEnumerable<AssByIPTicketStakeModel> GetAssociationBy5GIPDetail(long custID1, long custID2);
+
         CoupleInfoViewModel GetCoupleInfos(long custID1, long custID2);
 
         IEnumerable<DateTime> GetAIFristAssociationDate(long custID1, long custID2, AccountAssociation_ByAIPattern pattern);

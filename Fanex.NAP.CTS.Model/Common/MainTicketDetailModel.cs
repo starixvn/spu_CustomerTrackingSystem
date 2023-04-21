@@ -36,6 +36,8 @@
 
         public decimal StakeRM { get; set; }
 
+        public string CurrencyName { get; set; }        
+
         public decimal Odds { get; set; }
 
         public decimal Hdp1 { get; set; }

@@ -23,6 +23,7 @@
     let dataTableMatchBettingPattern = null;
     let divIPAssociation = $('#divIPAssociation');
     let divIPMatchBettype = $('#divIPMatchBettype');
+    let divAssociationByIPType = $('#divAssociationByIPType');
     let tblIPAssociation = $('#tblIPAssociation');
     let divIPTicketStake = $('#divIPTicketStake');
     let tblIPTicketStakeAss = $('#tblIPTicketStakeAss');
@@ -1127,10 +1128,40 @@
 
         RenderIPTicketStake($('#hdCustId').val(), custId);
 
-        GetIPAssociation($('#hdCustId').val(), custId);
+        //GetIPAssociation($('#hdCustId').val(), custId);
+
+        GetAssociationByIPType($('#hdCustId').val(), custId);
+
+        divAssociationByIPType.attr('data-tocustid', custId);        
 
         $('.ui-dialog .ui-dialog-content').css('padding', '0');
     }
+
+    function GetAssociationByIPType(custId1, custId2) {
+        $.ajax(common.modifyRelativeUrl('Account/GetAssByIPType'), {
+            type: 'POST',
+            data: {
+                custID1: custId1,
+                custID2: custId2
+            },
+            success: function (response) {
+                if (response !== undefined) {
+                    for (let i = 0; i < response.length; i++) {
+                        if (response[i] == 1) {
+                            divIPMatchBettype.removeClass('hide');
+                        }
+
+                        if (response[i] == 2) {
+                            divIPTicketStake.removeClass('hide');
+                        }
+                    }
+                }
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }   
 
     function RenderIPMatchBettype() {
         if (dataTableIPAssociation == null) {
@@ -1163,6 +1194,41 @@
             });
         }        
     }   
+
+    function GetIPAssociation(custId1, custId2) {
+        $.ajax(common.modifyRelativeUrl('Account/GetIPAssociation'), {
+            type: 'POST',
+            beforeSend: function () {
+                tblIPAssociation.find('tbody').addClass('loading');
+            },
+            data: {
+                custId1: custId1,
+                custId2: custId2
+            },
+            success: function (response) {
+                if (response !== undefined) {
+                    if (response.ErrorCode == 0) {
+                        tblIPAssociation.DataTable().clear().rows.add(response.IPMatchBettypeList);
+                        tblIPAssociation.DataTable().columns.adjust().draw();
+
+                        let childRows = NewRowIPTicketStake(response.IPTicketStakeList);
+
+                        tblIPTicketStakeAss.find('tbody').empty().append(childRows);
+
+                    } else {
+                        console.log(response.ErrorMessage);
+                        common.showError(response.ErrorMessage);
+                    }
+                }
+            },
+            complete: function () {
+                tblIPAssociation.find('tbody').removeClass('loading');
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
     
     function RenderIPTicketStake() {
         if (dataTableIPTicketStakeAss == null) {
@@ -1203,46 +1269,70 @@
                     { data: obj => obj.Currency },
                     { data: obj => obj.Odds },
                     { data: obj => obj.LiveScore }
-                ],
-                rowsGroup: [
-                    'first:IP',
-                    'second:IP'
-                ],
+                ]               
             });
         }
     }
 
-    function GetIPAssociation(custId1, custId2) {
-        $.ajax(common.modifyRelativeUrl('Account/GetIPAssociation'), {
-            type: 'POST',
-            beforeSend: function () {
-                tblIPAssociation.find('tbody').addClass('loading');
-            },
-            data: {
-                custId1: custId1,
-                custId2: custId2
-            },
-            success: function (response) {
-                if (response !== undefined) {
-                    if (response.ErrorCode == 0) {
-                        tblIPAssociation.DataTable().clear().rows.add(response.IPMatchBettypeList);
-                        tblIPAssociation.DataTable().columns.adjust().draw();
+    function GetIPTicketStake() {
+        let span = $('span', divIPMatchBettype);
 
-                        tblIPTicketStakeAss.DataTable().clear().rows.add(response.IPTicketStakeList);
-                        tblIPTicketStakeAss.DataTable().columns.adjust().draw();
-                    } else {
-                        console.log(response.ErrorMessage);
-                        common.showError(response.ErrorMessage);
+        if (span.hasClass('icon-chevron-right')) {
+            span.removeClass('icon-chevron-right').addClass('icon-chevron-down');
+            tblIPTicketStakeAss.removeClass('hide');
+
+            $.ajax(common.modifyRelativeUrl('Account/GetIPTicketStake'), {
+                type: 'POST',
+                beforeSend: function () {
+                    tblIPTicketStakeAss.find('tbody').addClass('loading');
+                },
+                data: {
+                    custId1: $('#hdCustId').val(),
+                    custId2: divAssociationByIPType.attr('data-tocustid')
+                },
+                success: function (response) {
+                    if (response !== undefined) {
+                        let childRows = NewRowIPTicketStake(response);
+
+                        tblIPTicketStakeAss.find('tbody').empty().append(childRows);
                     }
+                },
+                complete: function () {
+                    tblIPTicketStakeAss.find('tbody').removeClass('loading');
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
                 }
-            },
-            complete: function () {
-                tblIPAssociation.find('tbody').removeClass('loading');
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
+            });
+        } else {
+            span.removeClass('icon-chevron-down').addClass('icon-chevron-right');
+            tblIPTicketStakeAss.addClass('hide');
+        }
+    }   
+
+    function NewRowIPTicketStake(data) {
+        let html = '';
+
+        for (let i = 0; i < data.length; i++) {
+            let item = data[i];
+
+            html += `<tr>`;
+            html += `<td class="text-center">${item.IP}</td>`;
+            html += `<td class="text-center">${item.UserName}</td>`;
+            html += `<td class="text-center">${item.MatchID}</td>`;
+            html += `<td class="text-center">${item.EventDate}</td>`;
+            html += `<td class="text-center">${item.TransDate}</td>`;
+            html += `<td class="text-center">${item.TransID}</td>`;
+            html += `<td class="text-center">${item.BetType}</td>`;
+            html += `<td class="text-center">${item.BetTeam}</td>`;
+            html += `<td class="text-center">${item.Stake}</td>`;
+            html += `<td class="text-center">${item.Currency}</td>`;
+            html += `<td class="text-center">${item.Odds}</td>`;
+            html += `<td class="text-center">${item.LiveScore}</td>`;
+            html += `</tr>`;
+        }
+
+        return $(html);
     }
 
     // Assosication OTGB
@@ -1484,12 +1574,12 @@
     function ToggleGroupAssIP(span, target) {
         if (span.hasClass('icon-chevron-right')) {
             span.removeClass('icon-chevron-right').addClass('icon-chevron-down');
-            target.removeClass('hide');
+            target.removeClass('hide');          
         } else {
             span.removeClass('icon-chevron-down').addClass('icon-chevron-right');
             target.addClass('hide');
         }
-    }
+    }    
 
     // END Assosication OTGB
 
@@ -1610,9 +1700,13 @@
 
         divMatchBettingPattern.on('dialogclose', () => ClearAIAssociationData());
 
-        divIPMatchBettype.on('click', () => { ToggleGroupAssIP($('span', divIPMatchBettype), tblIPAssociation); });
+        divIPMatchBettype.on('click', () => {
+            ToggleGroupAssIP($('span', divIPMatchBettype), tblIPAssociation);
+        });
 
-        divIPTicketStake.on('click', () => { ToggleGroupAssIP($('span', divIPTicketStake), tblIPTicketStakeAss) });
+        divIPTicketStake.on('click', () => {
+            GetIPTicketStake();
+        });
 
     };
 }

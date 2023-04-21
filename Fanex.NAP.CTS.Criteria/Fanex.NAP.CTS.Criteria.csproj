@@ -47,6 +47,8 @@
     <Compile Include="Account\Associated\AssociatedAccountDetail\GetCustomerGroupCriteria.cs" />
     <Compile Include="Account\Associated\AssociatedAccountDetail\GetMatchesInfoCriteria.cs" />
     <Compile Include="Account\Associated\ChangeUpdateTaggingAssWithPACriteria.cs" />
+    <Compile Include="Account\Associated\GetAssociationBy5GIPDetailCriteria.cs" />
+    <Compile Include="Account\Associated\GetAssociationByIPTypeCriteria.cs" />
     <Compile Include="Account\Associated\GetAssociationByOTGBCriteria.cs" />
     <Compile Include="Account\Associated\GetCoupleFraudDetailCriteria.cs" />
     <Compile Include="Account\Associated\GetAssociationByIPByCustIdCriteria.cs" />
