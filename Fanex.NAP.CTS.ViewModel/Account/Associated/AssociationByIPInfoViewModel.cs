@@ -7,13 +7,10 @@
     {
         public AssociationByIPInfoViewModel()
         {
-            IPMatchBettypeList = new List<AssByIPMatchBettypeViewModel>();
-            IPTicketStakeList = new List<AssByIPTicketStakeViewModel>();
+            IPMatchBettypeList = new List<AssByIPMatchBettypeViewModel>();           
         }
 
-        public IEnumerable<AssByIPMatchBettypeViewModel> IPMatchBettypeList { get; set; }
-
-        public IEnumerable<AssByIPTicketStakeViewModel> IPTicketStakeList { get; set; }
+        public IEnumerable<AssByIPMatchBettypeViewModel> IPMatchBettypeList { get; set; }       
 
         public string ErrorMessage { get; set; }
 

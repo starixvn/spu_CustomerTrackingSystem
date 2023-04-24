@@ -13,7 +13,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_AssociationByIP_AssType_Get";
+            return "CTS_DC_AssociationByIP_GetAssType";
         }
 
         public override bool IsValid()

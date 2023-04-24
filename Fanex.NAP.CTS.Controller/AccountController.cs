@@ -14,6 +14,7 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.Account.AssociatedAccount;
     using Fanex.NAP.CTS.Model.Account.RobotBetting;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.Common;
@@ -1216,14 +1217,15 @@
         {
             var data = _accountService.GetAssociationByIPType(custID1, custID2).ToList();
 
+#if DEBUG
             data.Add(2);
-
+#endif
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
-        public ActionResult GetIPAssociation(long custId1, long custId2)
+        public ActionResult GetIPMatchBettype(long custId1, long custId2)
         {
             var data = new AssociationByIPInfoViewModel();
             var para1 = custId1;
@@ -1282,9 +1284,7 @@
                     };
                 });               
             }
-
-            data.IPTicketStakeList = GetAssByIPTicketStake_DataTest();
-
+            
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
@@ -1296,70 +1296,124 @@
 
             var data = _accountService.GetAssociationBy5GIPDetail(custID1, custID2);
 
+#if DEBUG
+            if (!data.Any()) 
+            {
+                data = GetAssociationBy5GIPDetail_DataTest();
+            }
+#endif
+
             if (data != null && data.Any())
             {
                 var transIDs = string.Join(",", data.Select(x => x.TransID).Distinct());
 
-                var tickets = _commonService.GetMainTicketDetails(transIDs, null, null);
+                var mainTickets = _commonService.GetMainTicketDetails(transIDs, null, null);
 
-                if (tickets != null && tickets.Any())
+#if DEBUG
+                if (!mainTickets.Any())
                 {
-                    result = tickets.Select(x => new AssByIPTicketStakeViewModel(x));
+                    mainTickets = this.GetRawAssByIPTicketStake_DataTest();
+                }
+#endif
+
+                if (mainTickets != null && mainTickets.Any())
+                {
+                    result = RearrangeAssByIPTicketStake(mainTickets);
                 }
             }
-            else
-            {
-                result = GetAssByIPTicketStake_DataTest();
-            }
-
+           
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<AssByIPTicketStakeViewModel> GetAssByIPTicketStake_DataTest()
+        private IEnumerable<AssByIPTicketStakeModel> GetAssociationBy5GIPDetail_DataTest()
         {
-            var list = new List<AssByIPTicketStakeViewModel>();
+            return new List<AssByIPTicketStakeModel>
+            {
+                new AssByIPTicketStakeModel
+                {
+                    CustID1 = 1,
+                    CustID2 =2,
+                    MatchID  =1,
+                    TransID = 1 
+                }
+            };
+        }
+
+        private IEnumerable<MainTicketDetailModel> GetRawAssByIPTicketStake_DataTest()
+        {            
+            var items = new List<MainTicketDetailModel>();
 
             for (int i = 0; i < 5; i++)
             {
-                list.Add(new AssByIPTicketStakeViewModel
+                items.Add(new MainTicketDetailModel
                 {
                     IP = "220.174.86.10",
                     UserName = "Member 01" + i.ToString(),
-                    MatchID = 456123789,
-                    EventDate = DateTime.Now.ToString(Consts.FormatDateToString_MMMddyyyy),
-                    TransDate = DateTime.Now.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    TransID = "12345678966",
-                    BetType = "HDP",
                     BetTeam = "h",
-                    Stake = 50,
-                    Currency = "RM",
-                    Odds = new decimal(0.9),
-                    LiveScore = "0-1"
+                    MatchId = 123456,
+                    EventDate = new DateTime(2023, 04, 10 + i),
+                    TransDate = new DateTime(2023, 04, 10 + i),
+                    TransId = 456789,
+                    BetType = 1,
+                    Odds = new decimal(1555),
+                    CurrencyName = "RM",
+                    TypeName = "O/U",
+                    Stake = new decimal(7896),
+                    LiveIndicator = true,
+                    LiveHomeScore = 1,
+                    LiveAwayScore = 2
                 });
 
-                list.Add(new AssByIPTicketStakeViewModel
+                items.Add(new MainTicketDetailModel
                 {
                     IP = "220.174.86.12",
                     UserName = "Member 01" + i.ToString(),
-                    MatchID = 456123789,
-                    EventDate = DateTime.Now.ToString(Consts.FormatDateToString_MMMddyyyy),
-                    TransDate = DateTime.Now.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    TransID = "12345678966",
-                    BetType = "HDP",
-                    BetTeam = "h",
-                    Stake = 50,
-                    Currency = "RM",
-                    Odds = new decimal(0.9),
-                    LiveScore = "0-1"
+                    BetTeam = "a",
+                    MatchId = 123456,
+                    EventDate = new DateTime(2023, 04, 20 + i),
+                    TransDate = new DateTime(2023, 04, 20 + i),
+                    TransId = 356777,
+                    BetType = 7,
+                    TypeName = "O/U",
+                    Odds = new decimal(2000),
+                    CurrencyName = "RM",
+                    Stake = new decimal(7896)
                 });
             }
 
-            return list.OrderBy(x=>x.IP);
+            return items;
         }
 
-        #endregion Associated By Account
+        private IEnumerable<AssByIPTicketStakeViewModel> RearrangeAssByIPTicketStake(IEnumerable<MainTicketDetailModel> mainTickets)
+        {
+            var assList = new List<AssByIPTicketStakeViewModel>();
 
-        #region Chain To Evidence
+            var groups = mainTickets.GroupBy(x => x.IP);
+
+            foreach (var group in groups)
+            {
+                var items = group.Select(x => new AssByIPTicketStakeItemViewModel(x))
+                        .OrderByDescending(x => x.EventDate)
+                        .ThenByDescending(x => x.MatchID)
+                        .ThenByDescending(x => x.TransDate)
+                        .ThenByDescending(x => x.TransID);
+
+                var maxEventDateInGroup = items.Max(x => x.EventDate);
+
+                assList.Add(new AssByIPTicketStakeViewModel
+                {
+                    IP = group.Key,
+                    MaxEventDateInGroup = maxEventDateInGroup,
+                    Items = items
+                });
+            }
+
+            return assList.OrderByDescending(x => x.MaxEventDateInGroup);
+        }
+
+#endregion Associated By Account
+
+#region Chain To Evidence
 
         public ActionResult ChainToEvidence()
         {
@@ -1633,9 +1687,9 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        #endregion Chain To Evidence
+#endregion Chain To Evidence
 
-        #region Transaciton History
+#region Transaciton History
 
         public ActionResult TransactionHistory()
         {
@@ -1689,9 +1743,9 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        #endregion Transaciton History
+#endregion Transaciton History
 
-        #region Customer Category
+#region Customer Category
 
         public ActionResult CustomerCategory()
         {
@@ -2306,9 +2360,9 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        #endregion Customer Category
+#endregion Customer Category
 
-        #region Customer Category By Sport
+#region Customer Category By Sport
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileGetCustomerCategoryBySportRpt)]
@@ -2342,9 +2396,9 @@
             return Json(new { data = custs }, JsonRequestBehavior.AllowGet);
         }
 
-        #endregion Customer Category By Sport
+#endregion Customer Category By Sport
 
-        #region Robot Betting
+#region Robot Betting
 
         public ActionResult RobotBetting()
         {
@@ -2527,9 +2581,9 @@
             return Json(new { data = ocrdTickets }, JsonRequestBehavior.AllowGet);
         }
   
-        #endregion Robot Betting
+#endregion Robot Betting
 
-        #region Betting Statistic
+#region Betting Statistic
 
         [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetPerformanceBySport(long custId, int getTop)

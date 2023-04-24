@@ -1178,7 +1178,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         }
     }
 
-    #tblIPAssociation {
+    #tblIPMatchBettype {
         thead th {
             position: sticky;
             position: -webkit-sticky;
@@ -1196,6 +1196,15 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             width: 220px;
             max-width: 220px;
             word-wrap: break-word;
+        }
+    }
+
+    #tblIPTicketStakeAss {
+        .col-ip {
+            width: 220px;
+            max-width: 220px;
+            word-wrap: break-word;
+            vertical-align: top;
         }
     }
 }

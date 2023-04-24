@@ -1551,21 +1551,27 @@
   #divIPAssociation .group-ass-ip[disabled] {
     cursor: not-allowed; }
 
-#divIPAssociation #tblIPAssociation thead th {
+#divIPAssociation #tblIPMatchBettype thead th {
   position: sticky;
   position: -webkit-sticky;
   top: 4rem;
   z-index: 9; }
 
-#divIPAssociation #tblIPAssociation .col-league {
+#divIPAssociation #tblIPMatchBettype .col-league {
   width: 380px;
   max-width: 380px;
   word-wrap: break-word; }
 
-#divIPAssociation #tblIPAssociation .col-ip {
+#divIPAssociation #tblIPMatchBettype .col-ip {
   width: 220px;
   max-width: 220px;
   word-wrap: break-word; }
+
+#divIPAssociation #tblIPTicketStakeAss .col-ip {
+  width: 220px;
+  max-width: 220px;
+  word-wrap: break-word;
+  vertical-align: top; }
 
 #chains_evidence.report-cont {
   padding-top: 0; }

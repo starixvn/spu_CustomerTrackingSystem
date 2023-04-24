@@ -24,7 +24,7 @@
     let divIPAssociation = $('#divIPAssociation');
     let divIPMatchBettype = $('#divIPMatchBettype');
     let divAssociationByIPType = $('#divAssociationByIPType');
-    let tblIPAssociation = $('#tblIPAssociation');
+    let tblIPMatchBettype = $('#tblIPMatchBettype');
     let divIPTicketStake = $('#divIPTicketStake');
     let tblIPTicketStakeAss = $('#tblIPTicketStakeAss');
     let dataTableIPAssociation = null;
@@ -1127,12 +1127,10 @@
         RenderIPMatchBettype($('#hdCustId').val(), custId);
 
         RenderIPTicketStake($('#hdCustId').val(), custId);
-
-        //GetIPAssociation($('#hdCustId').val(), custId);
-
+       
         GetAssociationByIPType($('#hdCustId').val(), custId);
 
-        divAssociationByIPType.attr('data-tocustid', custId);        
+        divAssociationByIPType.attr('data-tocustid', custId);
 
         $('.ui-dialog .ui-dialog-content').css('padding', '0');
     }
@@ -1165,7 +1163,7 @@
 
     function RenderIPMatchBettype() {
         if (dataTableIPAssociation == null) {
-            dataTableIPAssociation = tblIPAssociation.DataTable({
+            dataTableIPAssociation = tblIPMatchBettype.DataTable({
                 language: {
                     zeroRecords: "There's no data"
                 },
@@ -1195,39 +1193,48 @@
         }        
     }   
 
-    function GetIPAssociation(custId1, custId2) {
-        $.ajax(common.modifyRelativeUrl('Account/GetIPAssociation'), {
-            type: 'POST',
-            beforeSend: function () {
-                tblIPAssociation.find('tbody').addClass('loading');
-            },
-            data: {
-                custId1: custId1,
-                custId2: custId2
-            },
-            success: function (response) {
-                if (response !== undefined) {
-                    if (response.ErrorCode == 0) {
-                        tblIPAssociation.DataTable().clear().rows.add(response.IPMatchBettypeList);
-                        tblIPAssociation.DataTable().columns.adjust().draw();
+    function GetIPMatchBettype() {
+        let span = $('span', divIPMatchBettype);
 
-                        let childRows = NewRowIPTicketStake(response.IPTicketStakeList);
+        if (span.hasClass('icon-chevron-right')) {
+            span.removeClass('icon-chevron-right').addClass('icon-chevron-down');
+            tblIPMatchBettype.removeClass('hide');
 
-                        tblIPTicketStakeAss.find('tbody').empty().append(childRows);
+            if (!span.hasClass('detail')) {
+                $.ajax(common.modifyRelativeUrl('Account/GetIPMatchBettype'), {
+                    type: 'POST',
+                    beforeSend: function () {
+                        tblIPMatchBettype.find('tbody').addClass('loading');
+                    },
+                    data: {
+                        custId1: $('#hdCustId').val(),
+                        custId2: divAssociationByIPType.attr('data-tocustid')
+                    },
+                    success: function (response) {
+                        if (response !== undefined) {
+                            if (response.ErrorCode == 0) {
+                                tblIPMatchBettype.DataTable().clear().rows.add(response.IPMatchBettypeList);
+                                tblIPMatchBettype.DataTable().columns.adjust().draw();
 
-                    } else {
-                        console.log(response.ErrorMessage);
-                        common.showError(response.ErrorMessage);
+                                span.addClass('detail');
+                            } else {
+                                console.log(response.ErrorMessage);
+                                common.showError(response.ErrorMessage);
+                            }
+                        }
+                    },
+                    complete: function () {
+                        tblIPMatchBettype.find('tbody').removeClass('loading');
+                    },
+                    error: function (errMsg) {
+                        console.log(errMsg);
                     }
-                }
-            },
-            complete: function () {
-                tblIPAssociation.find('tbody').removeClass('loading');
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
+                });
+            }            
+        } else {
+            span.removeClass('icon-chevron-down').addClass('icon-chevron-right');
+            tblIPMatchBettype.addClass('hide');
+        }
     }
     
     function RenderIPTicketStake() {
@@ -1275,66 +1282,84 @@
     }
 
     function GetIPTicketStake() {
-        let span = $('span', divIPMatchBettype);
+        let span = $('span', divIPTicketStake);
 
         if (span.hasClass('icon-chevron-right')) {
             span.removeClass('icon-chevron-right').addClass('icon-chevron-down');
             tblIPTicketStakeAss.removeClass('hide');
 
-            $.ajax(common.modifyRelativeUrl('Account/GetIPTicketStake'), {
-                type: 'POST',
-                beforeSend: function () {
-                    tblIPTicketStakeAss.find('tbody').addClass('loading');
-                },
-                data: {
-                    custId1: $('#hdCustId').val(),
-                    custId2: divAssociationByIPType.attr('data-tocustid')
-                },
-                success: function (response) {
-                    if (response !== undefined) {
-                        let childRows = NewRowIPTicketStake(response);
+            if (!span.hasClass('detail')) {
+                $.ajax(common.modifyRelativeUrl('Account/GetIPTicketStake'), {
+                    type: 'POST',
+                    beforeSend: function () {
+                        tblIPTicketStakeAss.find('tbody').addClass('loading');
+                    },
+                    data: {
+                        custId1: $('#hdCustId').val(),
+                        custId2: divAssociationByIPType.attr('data-tocustid')
+                    },
+                    success: function (response) {
+                        if (response !== undefined) {
+                            let childRows = NewRowIPTicketStake(response);
 
-                        tblIPTicketStakeAss.find('tbody').empty().append(childRows);
+                            tblIPTicketStakeAss.find('tbody').empty().append(childRows);
+
+                            span.addClass('detail');
+                        }
+                    },
+                    complete: function () {
+                        tblIPTicketStakeAss.find('tbody').removeClass('loading');
+                    },
+                    error: function (errMsg) {
+                        console.log(errMsg);
                     }
-                },
-                complete: function () {
-                    tblIPTicketStakeAss.find('tbody').removeClass('loading');
-                },
-                error: function (errMsg) {
-                    console.log(errMsg);
-                }
-            });
+                });
+            }
         } else {
             span.removeClass('icon-chevron-down').addClass('icon-chevron-right');
             tblIPTicketStakeAss.addClass('hide');
         }
-    }   
+    }
 
     function NewRowIPTicketStake(data) {
         let html = '';
 
         for (let i = 0; i < data.length; i++) {
-            let item = data[i];
+            let groupIPs = data[i].Items;
+            let rowspanNumber = groupIPs.length;
 
-            html += `<tr>`;
-            html += `<td class="text-center">${item.IP}</td>`;
-            html += `<td class="text-center">${item.UserName}</td>`;
-            html += `<td class="text-center">${item.MatchID}</td>`;
-            html += `<td class="text-center">${item.EventDate}</td>`;
-            html += `<td class="text-center">${item.TransDate}</td>`;
-            html += `<td class="text-center">${item.TransID}</td>`;
-            html += `<td class="text-center">${item.BetType}</td>`;
-            html += `<td class="text-center">${item.BetTeam}</td>`;
-            html += `<td class="text-center">${item.Stake}</td>`;
-            html += `<td class="text-center">${item.Currency}</td>`;
-            html += `<td class="text-center">${item.Odds}</td>`;
-            html += `<td class="text-center">${item.LiveScore}</td>`;
-            html += `</tr>`;
+            for (let j = 0; j < groupIPs.length; j++) {
+                html += '<tr>';
+                html += '<td class="text-center col-ip" ' + (j != 0 ? "style='display:none;'" : "rowspan='" + rowspanNumber + "'") + '>' + data[i].IP + '</td>';
+                html += '<td class="text-center">' + groupIPs[j].UserName + '</td>';
+                html += '<td class="text-center">' + groupIPs[j].MatchID + '</td>';
+                html += '<td class="text-center">' + groupIPs[j].EventDateString + '</td>';
+                html += '<td class="text-center">' + groupIPs[j].TransDateString + '</td>';
+                html += '<td class="text-center">' + groupIPs[j].TransID + '</td>';
+                html += '<td class="text-center">' + groupIPs[j].BetType + '</td>';
+                html += '<td class="text-center">' + groupIPs[j].BetTeam + '</td>';
+                html += '<td class="text-center">' + groupIPs[j].Stake + '</td>';
+                html += '<td class="text-center">' + groupIPs[j].Currency + '</td>';
+                html += '<td class="text-center">' + groupIPs[j].Odds + '</td>';
+                html += '<td class="text-center">' + groupIPs[j].LiveScore + '</td>';
+                html += '</tr>';
+            }
         }
 
         return $(html);
     }
 
+    function ClearAssociationByIPTypeData() {        
+        tblIPMatchBettype.DataTable().clear().draw();
+        tblIPMatchBettype.addClass('hide');
+
+        tblIPTicketStakeAss.find('tbody').empty();
+        tblIPTicketStakeAss.addClass('hide');
+
+        $('span', divIPMatchBettype).removeClass('detail').removeClass('icon-chevron-down').addClass('icon-chevron-right');
+        $('span', divIPTicketStake).removeClass('detail').removeClass('icon-chevron-down').addClass('icon-chevron-right');
+    }
+    
     // Assosication OTGB
 
     function ConfigOTGBTable(custId1) {
@@ -1569,17 +1594,7 @@
             .append('</tr>');
 
         return newRow;
-    }
-
-    function ToggleGroupAssIP(span, target) {
-        if (span.hasClass('icon-chevron-right')) {
-            span.removeClass('icon-chevron-right').addClass('icon-chevron-down');
-            target.removeClass('hide');          
-        } else {
-            span.removeClass('icon-chevron-down').addClass('icon-chevron-right');
-            target.addClass('hide');
-        }
-    }    
+    }   
 
     // END Assosication OTGB
 
@@ -1700,8 +1715,10 @@
 
         divMatchBettingPattern.on('dialogclose', () => ClearAIAssociationData());
 
+        divIPAssociation.on('dialogclose', () => ClearAssociationByIPTypeData());
+
         divIPMatchBettype.on('click', () => {
-            ToggleGroupAssIP($('span', divIPMatchBettype), tblIPAssociation);
+            GetIPMatchBettype();
         });
 
         divIPTicketStake.on('click', () => {
