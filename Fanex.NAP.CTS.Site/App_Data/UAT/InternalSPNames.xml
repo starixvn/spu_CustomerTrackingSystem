@@ -63,7 +63,6 @@
 		<Setting Key="CTS_DC_Association_InsertException" SpName="CTS_DC_Association_InsertException_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_Association_RemoveException" SpName="CTS_DC_Association_RemoveException_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_Association_GetException" SpName="CTS_DC_Association_GetException_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_Association_Get" SpName="CTS_DC_Association_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Association_ValidateManualMultipleInput" SpName="CTS_DC_Association_ValidateManualMultipleInput_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_Association_InsertManualMultiple" SpName="CTS_DC_Association_InsertManualMultiple_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_Association_UpdateAssociationRemove" SpName="CTS_DC_Association_UpdateAssociationRemove_xtest" DbName="MySQL.CTS_DataCenter.Admin" />

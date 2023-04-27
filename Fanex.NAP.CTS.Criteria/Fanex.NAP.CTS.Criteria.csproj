@@ -199,7 +199,6 @@
     <Compile Include="Account\CustomerCategory\PinCTSCategoryCustomerClassificationCriteria.cs" />
     <Compile Include="Account\CustomerCategory\UpdateCTSCustomerClassificationCriteria.cs" />
     <Compile Include="Account\CustomerEvidenceByCTSCustIdCriteria.cs" />
-    <Compile Include="Account\CustomerAssociationByCTSCustIdCriteria.cs" />
     <Compile Include="Account\CustomerEvidence\UpdateBetLimitByEvidenceRemovingCriteria.cs" />
     <Compile Include="Account\CustomerEvidence\UpdateBetLimitByEvidenceAddingCriteria.cs" />
     <Compile Include="Account\CustomerFlagInfoByCTSCustIdCriteria.cs" />
