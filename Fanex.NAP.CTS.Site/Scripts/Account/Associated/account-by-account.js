@@ -1358,6 +1358,9 @@
 
         $('span', divIPMatchBettype).removeClass('detail').removeClass('icon-chevron-down').addClass('icon-chevron-right');
         $('span', divIPTicketStake).removeClass('detail').removeClass('icon-chevron-down').addClass('icon-chevron-right');
+
+        divIPMatchBettype.addClass('hide');
+        divIPTicketStake.addClass('hide');
     }
     
     // Assosication OTGB
