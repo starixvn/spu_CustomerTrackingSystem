@@ -1602,7 +1602,7 @@
                 ActionResult = x.ActionResult,
                 BrowserName = x.Browser,
                 DeviceId = x.FirstDeviceCode,
-                Flagged = ((Flagged)x.Flagged).GetStringSlow(),
+                Flagged = string.IsNullOrEmpty(x.Flagged) ? "" : x.Flagged,
                 Ip = isViewIPPermission ? x.Ip : string.Empty,
                 IpId = 0,
                 OSName = x.OS,

@@ -64,7 +64,7 @@
                         TransTimeString = x.TransTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                         Device = x.FirstDeviceCode,
                         IP = x.IP,
-                        RobotTracking = ((Flagged)x.Flagged).GetStringSlow(),
+                        RobotTracking = string.IsNullOrEmpty(x.Flagged) ? "" : x.Flagged,
                         Action = x.Action,
                         ActionResult = x.ActionResult,
                         DeviceType = x.OS,
