@@ -1662,20 +1662,20 @@
         font-style: normal; }
     .dataTable .robot-betting-reason[disabled] {
       cursor: not-allowed; }
-  .dataTable .robot-ocrdtd {
+  .dataTable .robot-rd {
     background: #A1AFCD;
     cursor: pointer; }
-    .dataTable .robot-ocrdtd span {
+    .dataTable .robot-rd span {
       color: #fff;
       font-size: 1.5rem;
       font-weight: 600; }
-      .dataTable .robot-ocrdtd span .title-robot {
+      .dataTable .robot-rd span .title-robot {
         font-family: "Lato", Arial, Tahoma, sans-serif !important;
         font-style: normal;
         font-weight: 500; }
-    .dataTable .robot-ocrdtd .level2 {
+    .dataTable .robot-rd .level2 {
       padding-left: 30px; }
-    .dataTable .robot-ocrdtd[disabled] {
+    .dataTable .robot-rd[disabled] {
       cursor: not-allowed; }
   .dataTable .robot-imperva {
     background: #A1AFCD; }
@@ -2541,56 +2541,56 @@
 .robotBetting-childRow td.td7 {
   width: 9% !important; }
 
-.robot-ocrdtd-thead-th thead th {
+.robot-rd-thead-th thead th {
   width: 10% !important; }
 
-.robot-ocrdtd-thead-th th.th1 {
+.robot-rd-thead-th th.th1 {
   width: 17% !important; }
 
-.robot-ocrdtd-thead-th th.th2 {
+.robot-rd-thead-th th.th2 {
   width: 15% !important; }
 
-.robot-ocrdtd-thead-th th.th3 {
+.robot-rd-thead-th th.th3 {
   width: 15% !important; }
 
-.robot-ocrdtd-thead-th th.th4 {
+.robot-rd-thead-th th.th4 {
   width: 13% !important; }
 
-.robot-ocrdtd-thead-th th.th5 {
+.robot-rd-thead-th th.th5 {
   width: 10% !important; }
 
-.robot-ocrdtd-thead-th th.th6 {
+.robot-rd-thead-th th.th6 {
   width: 10% !important; }
 
-.robot-ocrdtd-thead-th th.th7 {
+.robot-rd-thead-th th.th7 {
   width: 10% !important; }
 
-.robot-ocrdtd-thead-th th.th8 {
+.robot-rd-thead-th th.th8 {
   width: 10% !important; }
 
-.robot-ocrdtd-body-td td {
+.robot-rd-body-td td {
   width: 10%; }
 
-.robot-ocrdtd-body-td td.td1 {
+.robot-rd-body-td td.td1 {
   width: 17%; }
 
-.robot-ocrdtd-body-td td.td2 {
+.robot-rd-body-td td.td2 {
   width: 15% !important; }
 
-.robot-ocrdtd-body-td td.td3 {
+.robot-rd-body-td td.td3 {
   width: 15% !important; }
 
-.robot-ocrdtd-body-td td.td4 {
+.robot-rd-body-td td.td4 {
   width: 13% !important; }
 
-.robot-ocrdtd-body-td td.td5 {
+.robot-rd-body-td td.td5 {
   width: 10% !important; }
 
-.robot-ocrdtd-body-td td.td6 {
+.robot-rd-body-td td.td6 {
   width: 10% !important; }
 
-.robot-ocrdtd-body-td td.td7 {
+.robot-rd-body-td td.td7 {
   width: 10% !important; }
 
-.robot-ocrdtd-body-td td.td8 {
+.robot-rd-body-td td.td8 {
   width: 10% !important; }

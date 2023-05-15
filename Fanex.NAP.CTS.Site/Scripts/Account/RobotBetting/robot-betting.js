@@ -2,7 +2,7 @@
     let firstRobotDate = $('#spanFirstRobotDate');
     let lastRobotDate = $('#spanLastRobotDate');
     let robotSCETable = $('#tableRobotBetting');
-    let robotOcrdTdTable = $('#tblRobotOCRDTD');
+    let robotRDTable = $('#tblRobotRD');
     let robotImpervaTable = $('#tblImperva');
 
     function LoadRobotDetail(tr, row) {
@@ -311,8 +311,8 @@
         return table;
     }
 
-    function GenerateGridRobotOcrdTd() {
-        let table = robotOcrdTdTable.DataTable({
+    function GenerateGridRobotRD() {
+        let table = robotRDTable.DataTable({
             language: {
                 lengthMenu: "",
                 info: "",
@@ -343,7 +343,7 @@
             ],
             createdRow: function (row, obj) {
                 if (obj.Detail.length == 0) {
-                    let td = `<td class="robot-ocrdtd robot-ocrdtd-td" colspan="8" data-custid=${obj.CustID} data-rangetype=${obj.RangeType}>
+                    let td = `<td class="robot-rd robot-rd-td" colspan="8" data-custid=${obj.CustID} data-rangetype=${obj.RangeType}>
                               <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</i></span>
                               </td>`;
                     $(row).empty().html(td);
@@ -351,24 +351,24 @@
             },
         });
 
-        $('tbody', robotOcrdTdTable).on('click', 'tr', function () {
+        $('tbody', robotRDTable).on('click', 'tr', function () {
             var tr = $(this).closest('tr');
-            let tdTicket = $('.robot-ocrdtd-td', tr);
+            let tdTicket = $('.robot-rd-td', tr);
 
             if (tdTicket.length > 0) {
-                GenerateRobotOcrdTdMatch(tr);
+                GenerateRobotRDMatch(tr);
             }
         });
 
         return table;
     }
 
-    function GenerateRobotOcrdTdMatch(tr) {
+    function GenerateRobotRDMatch(tr) {
         let span = $('span', tr);
-        let td = $('.robot-ocrdtd-td', tr);
+        let td = $('.robot-rd-td', tr);
+        let rangeType = td.attr('data-rangetype');
 
         if (tr.hasClass('match-loaded')) {
-            let rangetype = td.attr('data-rangetype');
             let isShow = true;
 
             if (span.hasClass('icon-chevron-right')) {
@@ -379,7 +379,7 @@
             }
 
             let isShowChildRow = false;
-            $('tr[data-rangetype="' + rangetype + '"]', robotOcrdTdTable.find('tbody')).each(function (idx, ele) {
+            $('tr[data-rangetype="' + rangeType + '"]', robotRDTable.find('tbody')).each(function (idx, ele) {
                 let spanCurrent = $('span', this);
                 if (spanCurrent.hasClass('icon-chevron-down')) {
                     isShowChildRow = true;
@@ -398,62 +398,60 @@
             })
 
         } else {
-            let rangeType = td.attr('data-rangetype');
-            GetRobotOcrdTdMatch(tr, rangeType);
+            GetRobotRDMatch(tr, rangeType);
 
             span.removeClass('icon-chevron-right').addClass('icon-chevron-down');
         }
     }
 
-    function GetRobotOcrdTdMatch(tr, rangeType) {
+    function GetRobotRDMatch(tr, rangeType) {
         if (tr && rangeType) {
-            let td = $('.robot-ocrdtd', tr);
+            let td = $('.robot-rd', tr);
             let custID = td.attr('data-custid');
-            let rangetype = td.attr('data-rangetype');
-            $.ajax(common.modifyRelativeUrl('Account/GetRobotOcrdTdMatch'), {
+            $.ajax(common.modifyRelativeUrl('Account/GetRobotRDMatch'), {
                 type: 'POST',
                 data: {
                     rangeType: rangeType,
                     custID: custID
                 },
                 success: function (response) {
-                    let childRow = NewRowOrcdMatch(response.data, custID, rangetype);
+                    let childRow = NewRowOrcdMatch(response.data, custID, rangeType);
 
                     $(tr).after(childRow);
 
                     tr.addClass('match-loaded');
 
-                    $('tr[data-rangetype="' + rangetype + '"]', robotOcrdTdTable.find('tbody')).on('click', function () {
+                    $('tr[data-rangetype="' + rangeType + '"]', robotRDTable.find('tbody')).on('click', function () {
                         let trMatch = $(this).closest('tr');
 
-                        GenerateRobotOcrdTdTicketDetail(trMatch);
+                        GenerateRobotRDTicketDetail(trMatch);
                     });
                 },
                 beforeSend: function () {
                     td.prop('disabled', true);
-                    robotOcrdTdTable.find('tbody').addClass('loading');
+                    robotRDTable.find('tbody').addClass('loading');
                 },
                 complete: function () {
                     td.prop('disabled', false);
-                    robotOcrdTdTable.find('tbody').removeClass('loading');
+                    robotRDTable.find('tbody').removeClass('loading');
                 },
                 error: function (errMsg) {
                     
                     td.prop('disabled', false);
-                    robotOcrdTdTable.find('tbody').removeClass('loading');
+                    robotRDTable.find('tbody').removeClass('loading');
                 }
             });
         }
     }
 
-    function NewRowOrcdMatch(data, custID, rangetype) {
+    function NewRowOrcdMatch(data, custID, rangeType) {
         let html = '';
 
         for (let i = 0; i < data.length; i++) {
             let item = data[i];
 
-            html += `<tr class='robot-ocrdtd-match' data-rangetype=${rangetype}>
-                        <td class="robot-ocrdtd robot-ocrdtd-match-td" colspan="8" data-custid=${custID} data-matchid=${item.MatchID} data-matchguid=${CreateGuid()}>
+            html += `<tr class='robot-rd-match' data-rangetype=${rangeType}>
+                        <td class="robot-rd robot-rd-match-td" colspan="8" data-custid=${custID} data-matchid=${item.MatchID} data-matchguid=${CreateGuid()}>
                             <span class="icon-chevron-right level2"><i class="title-robot">${item.MatchName} - ${item.EventDateStr}: total ${item.TotalTicket} tickets</i>
                             </span>
                         </td>
@@ -463,11 +461,11 @@
         return $(html);
     }
 
-    function GenerateRobotOcrdTdTicketDetail(tr) {
+    function GenerateRobotRDTicketDetail(tr) {
         let span = $('span', tr);
 
         if (tr.hasClass('match-ticket-loaded')) {
-            let td = $('.robot-ocrdtd-match-td', tr);
+            let td = $('.robot-rd-match-td', tr);
             let matchGuid = td.attr('data-matchguid');
             let isShow = true;
 
@@ -478,7 +476,7 @@
                 isShow = false;
             }
 
-            $('tr[data-matchguid="' + matchGuid + '"]', robotOcrdTdTable.find('tbody')).each(function (idx, ele) {
+            $('tr[data-matchguid="' + matchGuid + '"]', robotRDTable.find('tbody')).each(function (idx, ele) {
                 if (isShow) {
                     $(ele).removeClass('hide');
                 } else {
@@ -487,55 +485,55 @@
             })
 
         } else {
-            GetRobotOcrdTdTicketDetail(tr);
+            GetRobotRDTicketDetail(tr);
 
             span.removeClass('icon-chevron-right').addClass('icon-chevron-down');
         }
     }
 
-    function GetRobotOcrdTdTicketDetail(tr) {
-        let td = $('.robot-ocrdtd-match-td', tr);
+    function GetRobotRDTicketDetail(tr) {
+        let td = $('.robot-rd-match-td', tr);
         let custID = td.attr('data-custid');
         let matchID = td.attr('data-matchid');
         let matchGuid = td.attr('data-matchguid');
-        let rangetype = tr.attr('data-rangetype');
+        let rangeType = tr.attr('data-rangetype');
 
-        $.ajax(common.modifyRelativeUrl('Account/GetRobotOcrdTdTicketDetail'), {
+        $.ajax(common.modifyRelativeUrl('Account/GetRobotRDTicketDetail'), {
             type: 'POST',
             data: {
-                rangetype: rangetype,
+                rangetype: rangeType,
                 custID: custID,
                 matchID: matchID
             },
             success: function (response) {
-                let childRow = NewRowOrcdTdTicketDetail(response.data, rangetype, matchGuid);
+                let childRow = NewRowOrcdTdTicketDetail(response.data, rangeType, matchGuid);
                 $(tr).after(childRow);
 
                 tr.addClass('match-ticket-loaded');
             },
             beforeSend: function () {
                 td.prop('disabled', true);
-                robotOcrdTdTable.find('tbody').addClass('loading');
+                robotRDTable.find('tbody').addClass('loading');
             },
             complete: function () {
                 td.prop('disabled', false);
-                robotOcrdTdTable.find('tbody').removeClass('loading');
+                robotRDTable.find('tbody').removeClass('loading');
             },
             error: function (errMsg) {
                 
                 td.prop('disabled', false);
-                robotOcrdTdTable.find('tbody').removeClass('loading');
+                robotRDTable.find('tbody').removeClass('loading');
             }
         });
     }
 
-    function NewRowOrcdTdTicketDetail(data, rangetype, matchGuid) {
+    function NewRowOrcdTdTicketDetail(data, rangeType, matchGuid) {
         let html = '';
 
         for (let i = 0; i < data.length; i++) {
             let item = data[i];
 
-            html += `<tr class='robot-ocrdtd-match robot-ocrdtd-match-ticket robot-ocrdtd-body-td' data-rangetype=${rangetype} data-matchguid=${matchGuid}>
+            html += `<tr class='robot-rd-match robot-rd-match-ticket robot-rd-body-td' data-rangetype=${rangeType} data-matchguid=${matchGuid}>
                         <td class="td.td1 text-center">${item.TransDate}</td>
                         <td class="td.td2 text-center">${item.TransID}</td>
                         <td class="td.td3 text-center">${item.IP}</td>
@@ -581,7 +579,7 @@
             beforeSend: function () {
                 robotSCETable.find('tbody').addClass('loading');
                 robotSCETable.addClass('hide');
-                robotOcrdTdTable.addClass('hide');
+                robotRDTable.addClass('hide');
             },
             success: function (response) {
                 if (response.data.FirstRobotDate != '' && response.data.LastRobotDate != '') {
@@ -602,15 +600,15 @@
                         robotSCETable.DataTable().clear().rows.add(response.data.RobotSCE).draw();
                     }
 
-                    robotOcrdTdTable.DataTable().clear()
+                    robotRDTable.DataTable().clear()
                     if (response.data.RobotOCRD.length > 0) {
-                        robotOcrdTdTable.removeClass('hide');
-                        robotOcrdTdTable.DataTable().rows.add(response.data.RobotOCRD).draw();
+                        robotRDTable.removeClass('hide');
+                        robotRDTable.DataTable().rows.add(response.data.RobotOCRD).draw();
                     }
 
                     if (response.data.RobotTD.length > 0) {
-                        robotOcrdTdTable.removeClass('hide');
-                        robotOcrdTdTable.DataTable().rows.add(response.data.RobotTD).draw();
+                        robotRDTable.removeClass('hide');
+                        robotRDTable.DataTable().rows.add(response.data.RobotTD).draw();
                     }
 
                     if (response.data.RobotImpervas.length > 0) {
@@ -629,7 +627,7 @@
 
     this.Initial = function (custID) {
         GenerateGridRobotSCE();
-        GenerateGridRobotOcrdTd();
+        GenerateGridRobotRD();
 
         GetRobotBetting(custID);
     }
