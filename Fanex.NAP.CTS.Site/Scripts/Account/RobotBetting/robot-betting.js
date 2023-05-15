@@ -1,10 +1,10 @@
 ﻿function robot_betting() {
     let firstRobotDate = $('#spanFirstRobotDate');
-    let lastRobotDate = $('#spanLastRobotDate');   
+    let lastRobotDate = $('#spanLastRobotDate');
     let robotSCETable = $('#tableRobotBetting');
-    let robotOCRDTable = $('#tblRobotOCRD');
+    let robotOcrdTdTable = $('#tblRobotOCRDTD');
     let robotImpervaTable = $('#tblImperva');
-    
+
     function LoadRobotDetail(tr, row) {
         let span = $('span', tr);
 
@@ -58,7 +58,7 @@
                 robotSCETable.find('tbody').removeClass('loading');
             },
             error: function (errMsg) {
-                console.log(errMsg);
+                
                 td.prop('disabled', false);
                 robotSCETable.find('tbody').removeClass('loading');
             }
@@ -86,7 +86,7 @@
                         robotTypeOrigin: robotTypeOrigin
                     },
                     success: function (response) {
-                        if (response.reasonGroups.length  > 0) {
+                        if (response.reasonGroups.length > 0) {
                             let childTable = CreateNewChildTable(response);
 
                             row.child(childTable).show();
@@ -104,7 +104,7 @@
                         robotSCETable.find('tbody').removeClass('loading');
                     },
                     error: function (errMsg) {
-                        console.log(errMsg);
+                        
                         td.prop('disabled', false);
                         robotSCETable.find('tbody').removeClass('loading');
                     }
@@ -115,8 +115,8 @@
 
     function CreateNewChildTable(response) {
         var childTable = '<table id="childTable' + response.childTableId + '" class="display compact nowrap w-100" width="100%">' +
-                         '<thead style="display:none"></thead >' +
-                         '</table>';
+            '<thead style="display:none"></thead >' +
+            '</table>';
 
         return $(childTable);
 
@@ -227,17 +227,17 @@
                         robotSCETable.find('tbody').first().removeClass('loading');
                     },
                     error: function (errMsg) {
-                        console.log(errMsg);
+                        
                         td.prop('disabled', false);
                         robotSCETable.find('tbody').first().removeClass('loading');
                     }
                 });
             }
-        }      
+        }
     }
 
     function NewDetailTicketRows(data) {
-        let html = ''; 
+        let html = '';
 
         for (let i = 0; i < data.length; i++) {
             let item = data[i];
@@ -300,7 +300,7 @@
         $('tbody', robotSCETable).on('click', 'tr', function () {
             var tr = $(this).closest('tr');
             var row = robotSCETable.DataTable().row(tr);
-          
+
             let tdTicket = $('.robot-betting', tr);
 
             if (tdTicket.length > 0) {
@@ -311,8 +311,8 @@
         return table;
     }
 
-    function GenerateGridRobotOcrd() {
-        let table = robotOCRDTable.DataTable({
+    function GenerateGridRobotOcrdTd() {
+        let table = robotOcrdTdTable.DataTable({
             language: {
                 lengthMenu: "",
                 info: "",
@@ -327,12 +327,12 @@
             scrollCollapse: true,
             paging: false,
             searching: false,
-            columnDefs: [               
+            columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7], className: "text-center" },                
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7], className: "text-center" },
             ],
             columns: [
-                { data: obj => obj.TransDate },                
+                { data: obj => obj.TransDate },
                 { data: obj => obj.TransID },
                 { data: obj => obj.IP },
                 { data: obj => obj.BetTypeName },
@@ -342,44 +342,44 @@
                 { data: obj => obj.LiveScore }
             ],
             createdRow: function (row, obj) {
-                if (obj.Detail.length == 0) {                    
-                    let td = `<td class="robot-ocrd robot-ocrd-td" colspan="8" data-custid=${obj.CustID} data-rangetype=${obj.RangeType}>
+                if (obj.Detail.length == 0) {
+                    let td = `<td class="robot-ocrdtd robot-ocrdtd-td" colspan="8" data-custid=${obj.CustID} data-rangetype=${obj.RangeType}>
                               <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</i></span>
                               </td>`;
                     $(row).empty().html(td);
                 }
-            },         
+            },
         });
 
-        $('tbody', robotOCRDTable).on('click', 'tr', function () {
-            var tr = $(this).closest('tr');            
-            let tdTicket = $('.robot-ocrd-td', tr);
+        $('tbody', robotOcrdTdTable).on('click', 'tr', function () {
+            var tr = $(this).closest('tr');
+            let tdTicket = $('.robot-ocrdtd-td', tr);
 
             if (tdTicket.length > 0) {
-                GenerateRobotOcrdMatch(tr);
+                GenerateRobotOcrdTdMatch(tr);
             }
         });
 
         return table;
     }
 
-    function GenerateRobotOcrdMatch(tr) {
+    function GenerateRobotOcrdTdMatch(tr) {
         let span = $('span', tr);
+        let td = $('.robot-ocrdtd-td', tr);
 
         if (tr.hasClass('match-loaded')) {
-            let td = $('.robot-ocrd-td', tr);
-            let custID = td.attr('data-custid');
+            let rangetype = td.attr('data-rangetype');
             let isShow = true;
 
             if (span.hasClass('icon-chevron-right')) {
-                span.removeClass('icon-chevron-right').addClass('icon-chevron-down');                
+                span.removeClass('icon-chevron-right').addClass('icon-chevron-down');
             } else {
                 span.removeClass('icon-chevron-down').addClass('icon-chevron-right');
                 isShow = false;
             }
 
             let isShowChildRow = false;
-            $('tr[data-custid="' + custID + '"]', robotOCRDTable.find('tbody')).each(function (idx, ele) {      
+            $('tr[data-rangetype="' + rangetype + '"]', robotOcrdTdTable.find('tbody')).each(function (idx, ele) {
                 let spanCurrent = $('span', this);
                 if (spanCurrent.hasClass('icon-chevron-down')) {
                     isShowChildRow = true;
@@ -391,89 +391,94 @@
                         $(ele).removeClass('hide');
                     } else if (isShowChildRow) {
                         $(ele).removeClass('hide');
-                    }    
+                    }
                 } else {
                     $(ele).addClass('hide');
                 }
             })
 
         } else {
-            GetRobotOcrdMatch(tr);
+            let rangeType = td.attr('data-rangetype');
+            GetRobotOcrdTdMatch(tr, rangeType);
 
             span.removeClass('icon-chevron-right').addClass('icon-chevron-down');
         }
     }
 
-    function GetRobotOcrdMatch(tr) {
-        let td = $('.robot-ocrd', tr);
-        let custID = td.attr('data-custid');
+    function GetRobotOcrdTdMatch(tr, rangeType) {
+        if (tr && rangeType) {
+            let td = $('.robot-ocrdtd', tr);
+            let custID = td.attr('data-custid');
+            let rangetype = td.attr('data-rangetype');
+            $.ajax(common.modifyRelativeUrl('Account/GetRobotOcrdTdMatch'), {
+                type: 'POST',
+                data: {
+                    rangeType: rangeType,
+                    custID: custID
+                },
+                success: function (response) {
+                    let childRow = NewRowOrcdMatch(response.data, custID, rangetype);
 
-        $.ajax(common.modifyRelativeUrl('Account/GetRobotOcrdMatch'), {
-            type: 'POST',
-            data: {
-                custID: custID
-            },
-            success: function (response) {
-                let childRow = NewRowOrcdMatch(response.data, custID);  
-                
-                $(tr).after(childRow);
+                    $(tr).after(childRow);
 
-                tr.addClass('match-loaded');
+                    tr.addClass('match-loaded');
 
-                $('.robot-ocrd-match', robotOCRDTable).on('click', function () {
-                    let trMatch = $(this).closest('tr');
+                    $('tr[data-rangetype="' + rangetype + '"]', robotOcrdTdTable.find('tbody')).on('click', function () {
+                        let trMatch = $(this).closest('tr');
+
+                        GenerateRobotOcrdTdTicketDetail(trMatch);
+                    });
+                },
+                beforeSend: function () {
+                    td.prop('disabled', true);
+                    robotOcrdTdTable.find('tbody').addClass('loading');
+                },
+                complete: function () {
+                    td.prop('disabled', false);
+                    robotOcrdTdTable.find('tbody').removeClass('loading');
+                },
+                error: function (errMsg) {
                     
-                    GenerateRobotOcrdTicketDetail(trMatch);
-                });
-            },
-            beforeSend: function () {
-                td.prop('disabled', true);
-                robotOCRDTable.find('tbody').addClass('loading');
-            },
-            complete: function () {
-                td.prop('disabled', false);
-                robotOCRDTable.find('tbody').removeClass('loading');
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-                td.prop('disabled', false);
-                robotOCRDTable.find('tbody').removeClass('loading');
-            }
-        });
+                    td.prop('disabled', false);
+                    robotOcrdTdTable.find('tbody').removeClass('loading');
+                }
+            });
+        }
     }
-    
-    function NewRowOrcdMatch(data, custID) {
+
+    function NewRowOrcdMatch(data, custID, rangetype) {
         let html = '';
 
         for (let i = 0; i < data.length; i++) {
             let item = data[i];
 
-            html += `<tr class='robot-ocrd-match' data-custid=${custID}>`;
-            html += `<td class="robot-ocrd robot-ocrd-match-td" colspan="8" data-custid=${custID} data-matchid=${item.MatchID}>
-                    <span class="icon-chevron-right level2"><i class="title-robot">${item.MatchName} - ${item.EventDateStr}: total ${item.TotalTicket} tickets</i>
-                    </span></td>`;
-            html += `</tr>`;
-        }            
+            html += `<tr class='robot-ocrdtd-match' data-rangetype=${rangetype}>
+                        <td class="robot-ocrdtd robot-ocrdtd-match-td" colspan="8" data-custid=${custID} data-matchid=${item.MatchID} data-matchguid=${CreateGuid()}>
+                            <span class="icon-chevron-right level2"><i class="title-robot">${item.MatchName} - ${item.EventDateStr}: total ${item.TotalTicket} tickets</i>
+                            </span>
+                        </td>
+                    </tr>`;
+        }
 
         return $(html);
     }
 
-    function GenerateRobotOcrdTicketDetail(tr) {
+    function GenerateRobotOcrdTdTicketDetail(tr) {
         let span = $('span', tr);
 
         if (tr.hasClass('match-ticket-loaded')) {
-            let td = $('.robot-ocrd-match-td', tr);            
-            let matchID = td.attr('data-matchid');
+            let td = $('.robot-ocrdtd-match-td', tr);
+            let matchGuid = td.attr('data-matchguid');
             let isShow = true;
 
             if (span.hasClass('icon-chevron-right')) {
-                span.removeClass('icon-chevron-right').addClass('icon-chevron-down');                
+                span.removeClass('icon-chevron-right').addClass('icon-chevron-down');
             } else {
                 span.removeClass('icon-chevron-down').addClass('icon-chevron-right');
                 isShow = false;
             }
-            
-            $('tr[data-matchid="' + matchID + '"]', robotOCRDTable.find('tbody')).each(function (idx, ele) {
+
+            $('tr[data-matchguid="' + matchGuid + '"]', robotOcrdTdTable.find('tbody')).each(function (idx, ele) {
                 if (isShow) {
                     $(ele).removeClass('hide');
                 } else {
@@ -482,61 +487,64 @@
             })
 
         } else {
-            GetRobotOcrdTicketDetail(tr);
+            GetRobotOcrdTdTicketDetail(tr);
 
             span.removeClass('icon-chevron-right').addClass('icon-chevron-down');
         }
     }
 
-    function GetRobotOcrdTicketDetail(tr) {
-        let td = $('.robot-ocrd-match-td', tr);
+    function GetRobotOcrdTdTicketDetail(tr) {
+        let td = $('.robot-ocrdtd-match-td', tr);
         let custID = td.attr('data-custid');
         let matchID = td.attr('data-matchid');
+        let matchGuid = td.attr('data-matchguid');
+        let rangetype = tr.attr('data-rangetype');
 
-        $.ajax(common.modifyRelativeUrl('Account/GetRobotOcrdTicketDetail'), {
+        $.ajax(common.modifyRelativeUrl('Account/GetRobotOcrdTdTicketDetail'), {
             type: 'POST',
             data: {
+                rangetype: rangetype,
                 custID: custID,
                 matchID: matchID
             },
             success: function (response) {
-                let childRow = NewRowOrcdTicketDetail(response.data, custID, matchID);       
+                let childRow = NewRowOrcdTdTicketDetail(response.data, rangetype, matchGuid);
                 $(tr).after(childRow);
 
                 tr.addClass('match-ticket-loaded');
             },
             beforeSend: function () {
                 td.prop('disabled', true);
-                robotOCRDTable.find('tbody').addClass('loading');
+                robotOcrdTdTable.find('tbody').addClass('loading');
             },
             complete: function () {
                 td.prop('disabled', false);
-                robotOCRDTable.find('tbody').removeClass('loading');
+                robotOcrdTdTable.find('tbody').removeClass('loading');
             },
             error: function (errMsg) {
-                console.log(errMsg);
+                
                 td.prop('disabled', false);
-                robotOCRDTable.find('tbody').removeClass('loading');
+                robotOcrdTdTable.find('tbody').removeClass('loading');
             }
         });
     }
-    
-    function NewRowOrcdTicketDetail(data, custID, matchID) {
+
+    function NewRowOrcdTdTicketDetail(data, rangetype, matchGuid) {
         let html = '';
 
         for (let i = 0; i < data.length; i++) {
             let item = data[i];
 
-            html += `<tr class='robot-ocrd-match robot-ocrd-match-ticket robot-ocrd-body-td' data-custid=${custID} data-matchid=${matchID}>`;
-            html += `<td class="td.td1 text-center">${item.TransDate}</td>`;           
-            html += `<td class="td.td2 text-center">${item.TransID}</td>`;
-            html += `<td class="td.td3 text-center">${item.IP}</td>`;
-            html += `<td class="td.td4 text-center">${item.BetTypeName}</td>`;
-            html += `<td class="td.td5 text-center">${item.BetTeam}</td>`;
-            html += `<td class="td.td6 text-center">${item.Stake.toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>`;
-            html += `<td class="td.td7 text-center">${item.Odds}</td>`;
-            html += `<td class="td.td8 text-center">${item.LiveScore}</td>`;
-            html += `</tr>`;
+            html += `<tr class='robot-ocrdtd-match robot-ocrdtd-match-ticket robot-ocrdtd-body-td' data-rangetype=${rangetype} data-matchguid=${matchGuid}>
+                        <td class="td.td1 text-center">${item.TransDate}</td>
+                        <td class="td.td2 text-center">${item.TransID}</td>
+                        <td class="td.td3 text-center">${item.IP}</td>
+                        <td class="td.td4 text-center">${item.BetTypeName}</td>
+                        <td class="td.td5 text-center">${item.BetTeam}</td>
+                        <td class="td.td6 text-center">${item.Stake.toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>
+                        <td class="td.td7 text-center">${item.Odds}</td>
+                        <td class="td.td8 text-center">${item.LiveScore}</td>
+                    </tr>`;
         }
 
         return $(html);
@@ -554,7 +562,14 @@
 
         let tr = `<tr role="row" class="odd">${td}</tr>`;
 
-        $('tbody', robotImpervaTable).append(tr);      
+        $('tbody', robotImpervaTable).append(tr);
+    }
+
+    function CreateGuid() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
     }
 
     function GetRobotBetting(custID) {
@@ -566,7 +581,7 @@
             beforeSend: function () {
                 robotSCETable.find('tbody').addClass('loading');
                 robotSCETable.addClass('hide');
-                robotOCRDTable.addClass('hide');
+                robotOcrdTdTable.addClass('hide');
             },
             success: function (response) {
                 if (response.data.FirstRobotDate != '' && response.data.LastRobotDate != '') {
@@ -577,39 +592,45 @@
                 if (response.data.RobotSCE.length == 0
                     && response.data.RobotOCRD.length == 0
                     && response.data.RobotImpervas.length == 0
+                    && response.data.RobotTD.length == 0
                 ) {
                     robotSCETable.DataTable().clear().rows.add([]).draw();
                     robotSCETable.removeClass('hide');
-                } else {                    
+                } else {
                     if (response.data.RobotSCE.length > 0) {
                         robotSCETable.removeClass('hide');
-                        robotSCETable.DataTable().clear().rows.add(response.data.RobotSCE).draw();                        
+                        robotSCETable.DataTable().clear().rows.add(response.data.RobotSCE).draw();
                     }
 
+                    robotOcrdTdTable.DataTable().clear()
                     if (response.data.RobotOCRD.length > 0) {
-                        robotOCRDTable.removeClass('hide');
-                        robotOCRDTable.DataTable().clear().rows.add(response.data.RobotOCRD).draw();
+                        robotOcrdTdTable.removeClass('hide');
+                        robotOcrdTdTable.DataTable().rows.add(response.data.RobotOCRD).draw();
+                    }
+
+                    if (response.data.RobotTD.length > 0) {
+                        robotOcrdTdTable.removeClass('hide');
+                        robotOcrdTdTable.DataTable().rows.add(response.data.RobotTD).draw();
                     }
 
                     if (response.data.RobotImpervas.length > 0) {
                         GenerateRobotImperva(response.data.RobotImpervas);
                     }
-                }                
+                }
             },
             complete: function () {
                 robotSCETable.find('tbody').removeClass('loading');
             },
             error: function (error) {
                 robotSCETable.find('tbody').removeClass('loading');
-                console.log(error);
             }
         });
     }
 
     this.Initial = function (custID) {
         GenerateGridRobotSCE();
-        GenerateGridRobotOcrd();
-        
+        GenerateGridRobotOcrdTd();
+
         GetRobotBetting(custID);
     }
 }
