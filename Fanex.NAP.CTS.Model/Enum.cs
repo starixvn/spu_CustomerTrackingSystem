@@ -40,9 +40,8 @@
     public enum TransactionHistoryLength
     {
         Hours24 = 1,
-        Days7 = 14,
-        Days30 = 30,
-        Days180 = 180
+        Days14 = 14,
+        Weeks5 = 35
     }
 
     public enum ProblemAccountStatus
