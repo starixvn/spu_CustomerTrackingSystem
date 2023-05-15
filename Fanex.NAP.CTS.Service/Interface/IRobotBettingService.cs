@@ -20,6 +20,6 @@
 
         IEnumerable<RobotRDMatchModel> GetRobotRDMatches(int periodRangeType, long custID);
 
-        IEnumerable<RobotRDTranModel> GetRobotRDTrans(int periodRangeType, long custID, long matchID);
+        IEnumerable<RobotRDTicketDetailModel> GetRobotRDTrans(int periodRangeType, long custID, long matchID);
     }
 }

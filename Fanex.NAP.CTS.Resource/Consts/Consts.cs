@@ -409,12 +409,12 @@
             RobotTicketDetail = 2
         };
 
-        public enum RobotDetectionReasonQueryType
+        public enum RobotPeriodRangeType
         {
-            ConsecutiveTicket = 100,
-            UglyStakeTicket = 101,
-            OcrdTicket = 200,
-            TdTicket = 300
+            SCEConsecutive = 100,
+            SCEUglyStake = 101,
+            OCRD = 200,
+            TD = 300
         };
     }
 }

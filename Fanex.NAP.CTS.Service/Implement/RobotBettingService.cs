@@ -95,7 +95,7 @@
 
         public IEnumerable<string> GetTranIds(long custID, int robotTypeOrigin, int? robotTypeDisplay, int? clusterId, string createdTime)
         {
-            bool isSCERobotDetection = (robotTypeOrigin == (int)RobotDetectionReasonQueryType.ConsecutiveTicket || robotTypeOrigin == (int)RobotDetectionReasonQueryType.UglyStakeTicket);
+            bool isSCERobotDetection = (robotTypeOrigin == (int)RobotPeriodRangeType.SCEConsecutive || robotTypeOrigin == (int)RobotPeriodRangeType.SCEUglyStake);
 
             if (isSCERobotDetection)
             {
@@ -168,7 +168,7 @@
             return repository.Fetch<RobotRDMatchModel>(criteria);
         }
 
-        public IEnumerable<RobotRDTranModel> GetRobotRDTrans(int periodRangeType, long custID, long matchID)
+        public IEnumerable<RobotRDTicketDetailModel> GetRobotRDTrans(int periodRangeType, long custID, long matchID)
         {
             var criteria = new GetRDTransCriteria
             {
@@ -177,7 +177,7 @@
                 MatchID = matchID
             };
 
-            return repository.Fetch<RobotRDTranModel>(criteria);
+            return repository.Fetch<RobotRDTicketDetailModel>(criteria);
         }
 
     }

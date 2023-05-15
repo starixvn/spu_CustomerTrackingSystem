@@ -2343,21 +2343,21 @@
 
             if (rbData.RobotBettingAI != null && rbData.RobotBettingAI.Any())
             {
-                rbBetting.RobotSCE = rbData.RobotBettingAI.Where(x => x.PeriodRangeType <= (int)RobotDetectionReasonQueryType.UglyStakeTicket).Select(x => new RobotSceViewModel
+                rbBetting.RobotSCE = rbData.RobotBettingAI.Where(x => x.PeriodRangeType <= (int)RobotPeriodRangeType.SCEUglyStake).Select(x => new RobotSceViewModel
+                                    {
+                                        CustID = x.CustID,
+                                        RangeType = x.PeriodRangeType,
+                                        RangeName = x.PeriodRangeName
+                });
+
+                rbBetting.RobotOCRD = rbData.RobotBettingAI.Where(x => x.PeriodRangeType == (int)RobotPeriodRangeType.OCRD).Select(x => new RobotRDViewModel
                 {
                     CustID = x.CustID,
                     RangeType = x.PeriodRangeType,
                     RangeName = x.PeriodRangeName
                 });
 
-                rbBetting.RobotOCRD = rbData.RobotBettingAI.Where(x => x.PeriodRangeType == (int)RobotDetectionReasonQueryType.OcrdTicket).Select(x => new RobotRDViewModel
-                {
-                    CustID = x.CustID,
-                    RangeType = x.PeriodRangeType,
-                    RangeName = x.PeriodRangeName
-                });
-
-                rbBetting.RobotTD = rbData.RobotBettingAI.Where(x => x.PeriodRangeType == (int)RobotDetectionReasonQueryType.TdTicket).Select(x => new RobotRDViewModel
+                rbBetting.RobotTD = rbData.RobotBettingAI.Where(x => x.PeriodRangeType == (int)RobotPeriodRangeType.TD).Select(x => new RobotRDViewModel
                 {
                     CustID = x.CustID,
                     RangeType = x.PeriodRangeType,
@@ -2401,8 +2401,8 @@
                 {
                     var transToString = _robotBettingService.GetTransFromList(listTrans);
 
-                    var isSCETicketDetails = (robotTypeOrigin == (int)RobotDetectionReasonQueryType.ConsecutiveTicket
-                                            || robotTypeOrigin == (int)RobotDetectionReasonQueryType.UglyStakeTicket) ? true : false;
+                    var isSCETicketDetails = (robotTypeOrigin == (int)RobotPeriodRangeType.SCEConsecutive
+                                            || robotTypeOrigin == (int)RobotPeriodRangeType.SCEUglyStake) ? true : false;
 
                     var ticketDetail = _robotBettingService.GetRobotBettingTicketDetails(transToString, isSCETicketDetails);
 
@@ -2464,15 +2464,15 @@
         }
 
         [HttpPost]
-        public ActionResult GetRobotRDMatch(RobotDetectionReasonQueryType rangeType, long custID)
+        public ActionResult GetRobotRDMatch(RobotPeriodRangeType rangeType, long custID)
         {
             var rdMatches = Enumerable.Empty<RobotRDMatchViewModel>();
 
 
             switch (rangeType)
             {
-                case RobotDetectionReasonQueryType.OcrdTicket:
-                case RobotDetectionReasonQueryType.TdTicket:
+                case RobotPeriodRangeType.OCRD:
+                case RobotPeriodRangeType.TD:
                     {
                         var robotMatches = _robotBettingService.GetRobotRDMatches((int)rangeType, custID);
 
@@ -2496,7 +2496,7 @@
         }
 
         [HttpPost]
-        public ActionResult GetRobotRDTicketDetail(RobotDetectionReasonQueryType rangeType, long custID, long matchID)
+        public ActionResult GetRobotRDTicketDetail(RobotPeriodRangeType rangeType, long custID, long matchID)
         {
             var rdTickets = Enumerable.Empty<RobotRDTicketViewModel>();
             var matchSize = 1;
@@ -2504,14 +2504,14 @@
 
             switch (rangeType)
             {
-                case RobotDetectionReasonQueryType.OcrdTicket:
-                case RobotDetectionReasonQueryType.TdTicket:
+                case RobotPeriodRangeType.OCRD:
+                case RobotPeriodRangeType.TD:
                     {
                         var rdTrans = _robotBettingService.GetRobotRDTrans((int)rangeType, custID, matchID);
 
                         if (rdTrans.Any())
                         {
-                            var tranInfos = JsonConvert.SerializeObject(rdTrans.Distinct(x => x.TransID).Select(x => new RobotRDTranInfosViewModel
+                            var tranInfos = JsonConvert.SerializeObject(rdTrans.Distinct(x => x.TransID).Select(x => new RobotRDTicketDetailViewModel
                             {
                                 TransID = x.TransID,
                                 MatchID = x.MatchID

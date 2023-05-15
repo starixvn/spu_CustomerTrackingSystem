@@ -102,7 +102,7 @@
     <Compile Include="Account\RobotBetting\RobotBettingDetailViewModel.cs" />
     <Compile Include="Account\RobotBetting\RobotRDMatchViewModel.cs" />
     <Compile Include="Account\RobotBetting\RobotRDTicketViewModel.cs" />
-    <Compile Include="Account\RobotBetting\RobotRDTranInfosViewModel.cs" />
+    <Compile Include="Account\RobotBetting\RobotRDTicketDetailViewModel.cs" />
     <Compile Include="Account\RobotBetting\RobotRDViewModel.cs" />
     <Compile Include="Account\RobotBetting\RobotSceViewModel.cs" />
     <Compile Include="Account\RobotBetting\RobotUserDetailViewModel.cs" />

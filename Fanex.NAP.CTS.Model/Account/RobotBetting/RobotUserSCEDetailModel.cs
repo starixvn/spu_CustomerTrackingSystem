@@ -33,7 +33,7 @@
             {
                 switch (RobotTypeDisplay)
                 {
-                    case ((int)Consts.RobotDetectionReasonQueryType.ConsecutiveTicket):
+                    case ((int)Consts.RobotPeriodRangeType.SCEConsecutive):
                         {
                             if (LastTransDate != null)
                             {
@@ -42,7 +42,7 @@
 
                             break;
                         }
-                    case ((int)Consts.RobotDetectionReasonQueryType.UglyStakeTicket):
+                    case ((int)Consts.RobotPeriodRangeType.SCEUglyStake):
                         {
                             if (CreatedDate != null)
                             {
@@ -63,7 +63,7 @@
             {
                 switch (RobotTypeDisplay)
                 {
-                    case ((int)Consts.RobotDetectionReasonQueryType.ConsecutiveTicket):
+                    case ((int)Consts.RobotPeriodRangeType.SCEConsecutive):
                         {
                             if (FirstTransDate != null)
                             {
@@ -72,7 +72,7 @@
 
                             break;
                         }
-                    case ((int)Consts.RobotDetectionReasonQueryType.UglyStakeTicket):
+                    case ((int)Consts.RobotPeriodRangeType.SCEUglyStake):
                         {
                             if (CreatedDate != null)
                             {

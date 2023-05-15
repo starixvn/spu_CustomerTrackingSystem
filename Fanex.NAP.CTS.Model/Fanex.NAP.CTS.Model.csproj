@@ -181,7 +181,7 @@
     <Compile Include="Account\RobotBetting\RobotBettingSceDetailParaModel.cs" />
     <Compile Include="Account\RobotBetting\RobotDateModel.cs" />
     <Compile Include="Account\RobotBetting\RobotRDMatchModel.cs" />
-    <Compile Include="Account\RobotBetting\RobotRDTranModel.cs" />
+    <Compile Include="Account\RobotBetting\RobotRDTicketDetailModel.cs" />
     <Compile Include="Account\RobotBetting\RobotUserSCEDetailModel.cs" />
     <Compile Include="Account\RobotBetting\RobotUserDetailModel.cs" />
     <Compile Include="Account\RobotBetting\RobotBettingAIModel.cs" />

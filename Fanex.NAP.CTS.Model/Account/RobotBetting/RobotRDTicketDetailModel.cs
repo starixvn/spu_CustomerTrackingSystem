@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.Account.RobotBetting
 {
-    public class RobotRDTranModel
+    public class RobotRDTicketDetailModel
     {
         public long MatchID { get; set; }
 
