@@ -5,9 +5,9 @@
     using Fanex.NAP.CTS.Resource.Consts;
     using System;
 
-    public class RobotOcrdMatchViewModel
+    public class RobotRDMatchViewModel
     {
-        public RobotOcrdMatchViewModel(MainMatchModel match, int totalTicket)
+        public RobotRDMatchViewModel(MainMatchModel match, int totalTicket)
         {
             this.MatchID = match.MatchID;
             this.MatchName = CachedRef.GetTeamName(match.HomeId) + " vs " + CachedRef.GetTeamName(match.AwayId);

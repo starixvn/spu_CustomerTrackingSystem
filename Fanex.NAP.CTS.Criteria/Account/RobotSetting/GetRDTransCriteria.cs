@@ -3,8 +3,11 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class GetOCRDTransCriteria : CriteriaBase
+    public class GetRDTransCriteria : CriteriaBase
     {
+        [SpParam(SqlParamName = "ip_PeriodRangeType")]
+        public long PeriodRangeType { get; set; }
+
         [SpParam(SqlParamName = "ip_CustID")]
         public long CustID { get; set; }
 
@@ -13,7 +16,7 @@
 
         public override string GetSettingKey()
         {
-            return "SPU_AIML_OCRD_GetDetails";
+            return "SPU_AIML_RD_GetRobotUserMatchTransList";
         }
 
         public override bool IsValid()

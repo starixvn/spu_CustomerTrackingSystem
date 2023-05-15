@@ -26,7 +26,7 @@
             {
                 CustID = custID
             };
-           
+
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 using (var result = db.QueryMultiple(criteria))
@@ -44,7 +44,7 @@
                         FirstLastRobotDate = firstLastRobotDate,
                         RobotBettingAI = robotAIs,
                         RobotBettingImperva = robotImpervas
-                    };                   
+                    };
                 }
             }
         }
@@ -157,25 +157,27 @@
             return tranIds.Replace(@".0", "");
         }
 
-        public IEnumerable<RobotOcrdMatchModel> GetRobotOcrdMatches(long custID)
+        public IEnumerable<RobotRDMatchModel> GetRobotRDMatches(int periodRangeType, long custID)
         {
-            var criteria = new GetOCRDMatchByCustCriteria
+            var criteria = new GetRDMatchCriteria
             {
+                PeriodRangeType = periodRangeType,
                 CustID = custID
             };
 
-            return repository.Fetch<RobotOcrdMatchModel>(criteria);
+            return repository.Fetch<RobotRDMatchModel>(criteria);
         }
 
-        public IEnumerable<RobotOcrdTranModel> GetRobotOcrdTrans(long custID, long matchID)
+        public IEnumerable<RobotRDTranModel> GetRobotRDTrans(int periodRangeType, long custID, long matchID)
         {
-            var criteria = new GetOCRDTransCriteria
+            var criteria = new GetRDTransCriteria
             {
+                PeriodRangeType = periodRangeType,
                 CustID = custID,
                 MatchID = matchID
             };
 
-            return repository.Fetch<RobotOcrdTranModel>(criteria);
+            return repository.Fetch<RobotRDTranModel>(criteria);
         }
 
     }

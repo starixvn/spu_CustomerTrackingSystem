@@ -4,9 +4,9 @@
     using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Resource.Consts;
 
-    public class RobotOcrdTicketViewModel
+    public class RobotRDTicketViewModel
     {
-        public RobotOcrdTicketViewModel(MainTicketDetailModel ticket)
+        public RobotRDTicketViewModel(MainTicketDetailModel ticket)
         {
             this.TransDate = ticket.TransDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
             this.TransID = ticket.TransId.ToString();

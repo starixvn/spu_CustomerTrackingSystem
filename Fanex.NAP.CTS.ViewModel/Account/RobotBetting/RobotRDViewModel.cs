@@ -2,11 +2,11 @@
 {
     using System.Collections.Generic;
 
-    public class RobotOcrdViewModel
+    public class RobotRDViewModel
     {
-        public RobotOcrdViewModel()
+        public RobotRDViewModel()
         {
-            Detail = new List<RobotOcrdTicketViewModel>();
+            Detail = new List<RobotRDTicketViewModel>();
         }
 
         public long CustID { get; set; }
@@ -15,6 +15,6 @@
 
         public string RangeName { get; set; }
 
-        public List<RobotOcrdTicketViewModel> Detail { get; set; }
+        public List<RobotRDTicketViewModel> Detail { get; set; }
     }
 }

@@ -412,7 +412,9 @@
         public enum RobotDetectionReasonQueryType
         {
             ConsecutiveTicket = 100,
-            UglyStakeTicket = 101
+            UglyStakeTicket = 101,
+            OcrdTicket = 200,
+            TdTicket = 300
         };
     }
 }

@@ -18,8 +18,8 @@
 
         string GetTransFromList(IEnumerable<string> suspiciousTransList);
 
-        IEnumerable<RobotOcrdMatchModel> GetRobotOcrdMatches(long custID);
+        IEnumerable<RobotRDMatchModel> GetRobotRDMatches(int periodRangeType, long custID);
 
-        IEnumerable<RobotOcrdTranModel> GetRobotOcrdTrans(long custID, long matchID);
+        IEnumerable<RobotRDTranModel> GetRobotRDTrans(int periodRangeType, long custID, long matchID);
     }
 }

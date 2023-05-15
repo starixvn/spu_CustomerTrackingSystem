@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.Account.RobotBetting
 {
-    public class RobotOcrdTranInfosViewModel
+    public class RobotRDTranInfosViewModel
     {
         public long TransID { get; set; }
 
