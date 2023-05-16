@@ -28,7 +28,7 @@
 			<Mapping DataField="SubscriberId" ObjectProperty="Id" Class="Subscriber" />
 			<Mapping DataField="SubscriberName" ObjectProperty="Name" Class="Subscriber" />
 		</Setting>
-		<Setting Key="CTS_DC_CustInfo_GetByCTSCustID" SpName="CTS_DC_CustInfo_GetByCTSCustID" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustInfo_GetByCTSCustID" SpName="CTS_DC_CustInfo_GetByCTSCustID_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_GetFlagged" SpName="CTS_DC_CustInfo_GetFlagged" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_GetCustIDsRole" SpName="CTS_DC_CustInfo_GetCustIDsRole" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_GetCustInfoDangerous" SpName="CTS_DC_CustInfo_GetCustInfoDangerous" DbName="MySQL.CTS_DataCenter.Reporter" />

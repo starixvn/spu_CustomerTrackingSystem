@@ -35,5 +35,7 @@
         public bool IsLicenseeVIP { get; set; }
 
         public bool IsLicenseeBA { get; set; }
+
+        public decimal? DangerousScore { get; set; }
     }
 }

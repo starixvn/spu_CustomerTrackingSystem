@@ -71,14 +71,16 @@
                 <span class="tag-text-left">Level: </span>
                 <span class="username tag-text-right">@Model.Role.Name</span>
             </div>
-            <div class="wrapper-tag-info">
-                <span class="tag-text-left">
-                    Dangerous Score
-                    <sup style="vertical-align: super; font-size: smaller;">i</sup>
-                    :
-                </span>
-                <span class="tag-text-right">75%</span>
-            </div>
+            @if (!Model.IsLicensee)
+            {
+                <div class="wrapper-tag-info margin-top-0">
+                    <span class="tag-text-left">
+                        Dangerous Score<sup style="vertical-align: super; font-size: smaller;">i</sup>:
+                    </span>
+                    <span class="tag-text-right">@Model.DangerousScore</span>
+                </div>
+            }
+
         </div>
 
         <div class="account-info">

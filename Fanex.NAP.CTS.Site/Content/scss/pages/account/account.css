@@ -1261,6 +1261,8 @@
           color: #545454; }
         .content-info .wrapper-content .tag-info .wrapper-tag-info .tag-text-right {
           color: #2B2B2B; }
+      .content-info .wrapper-content .tag-info .margin-top-0 {
+        margin-top: -0.3rem !important; }
     @media (min-width: 1200px) {
       .content-info .wrapper-content .account-info {
         grid-template-columns: repeat(5, 1fr); } }
