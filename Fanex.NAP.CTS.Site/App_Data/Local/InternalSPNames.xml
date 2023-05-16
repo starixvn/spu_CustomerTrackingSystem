@@ -148,7 +148,7 @@
 	</Function>
 
 	<Function name="LatestTransaction">
-		<Setting Key="DCS_DC_Transaction_GetLatest" SpName="DCS_DC_Transaction_GetLatest" DbName="MySQL.DCS_DataCenter.Reporter" />
+		<Setting Key="DCS_DC_Transaction_GetLatest" SpName="DCS_DC_Transaction_GetLatest_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
 	</Function>
 
 	<Function name="MatchMonitor">
