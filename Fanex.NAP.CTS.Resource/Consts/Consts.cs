@@ -24,13 +24,13 @@
         public const string FormatDateToString_MMMddyyyy = "MMM dd, yyyy";
         public const string FormatDateToString_MMMddyyyy2 = "MMM-dd-yyyy";
         public const string FormatDateToString_ddMMMyyyy = "dd MMM, yyyy";
-        public const string FormatDateToString_MMMddyyyyhhmmss = "MMM dd, yyyy HH:mm:ss";        
+        public const string FormatDateToString_MMMddyyyyhhmmss = "MMM dd, yyyy HH:mm:ss";
         public const string FormatDateToString_MMMddyyyyhhmmss2 = "MMM dd, yyyy - HH:mm:ss";
         public const string FormatDateToString_MMMddyyyyhhmmsstt = "MMM dd, yyyy HH:mm:ss tt";
         public const string FormatDateToString_MMMddyyyyhhmm = "MMM dd, yyyy HH:mm";
         public const string FormatDateToString_yyyyMMddHHmmss = "yyyyMMddHHmmss";
         public const string FormatDateTimeToString_YYYYmmddThhddmm = "yyyy-MM-dd'T'HH:mm:ss.fffffff'Z'";
-        public const string FormatDateTimeToString_YYYYmmdd = "yyyyMMdd";        
+        public const string FormatDateTimeToString_YYYYmmdd = "yyyyMMdd";
         public const string FormatDatetimeToString_ddMMMyyyyHHmmssfff = "dd MMM, yyyy HH:mm:ss.fff";
         public const string FormatDateTimeToString_ddMMyyyy = "dd/MM/yyyy";
         public const string FormatDateTimeToString_ddMMyyyyhhmmss = "dd/MM/yyyy HH:mm:ss";
@@ -109,6 +109,12 @@
         public const string ProblemAccountManagement_SiteCredit = "Credit";
         public const string ProblemAccountManagement_CategoryPA = "Problem Account Category";
         public const string MarkPA_AssociatedGroup = "Associated Group";
+
+        public struct Platform
+        {
+            public const string Desktop = "Desktop";
+            public const string Mobile = "Mobile";
+        }
 
         public enum ROLE_CUSTOMER
         {
@@ -267,7 +273,7 @@
             AFCSerivce = 4,
             ManualTrigger = 5
         };
-        
+
         public enum TrackingCtsFunctionId
         {
             ProblemAccountMonitor = 1,
@@ -323,11 +329,11 @@
             AssociationDetectionDetails = 51,
             AccountProfileGetCustomerCategoryBySportRpt = 52,
             AccountProfileGetCustomerCategoryHistoryBySportRpt = 53,
-			AssociationDetectionExportToExcel = 54,
-  			AssociatedGroupMonitorAddNewGroupRpt = 55,
+            AssociationDetectionExportToExcel = 54,
+            AssociatedGroupMonitorAddNewGroupRpt = 55,
             AssociatedGroupMonitorUpdateGroupRpt = 56,
             AssociatedGroupMonitorRemoveGroupRpt = 57,
-            AssociatedGroupMonitorAddAccountRpt = 58, 
+            AssociatedGroupMonitorAddAccountRpt = 58,
             AssociatedGroupMonitorTransferAccountRpt = 59,
             AssociatedGroupMonitorSetPARpt = 60,
             AssociatedGroupMonitorExportToExcelRpt = 61,

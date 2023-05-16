@@ -983,7 +983,7 @@
                 return result;
             }
 
-            var groupStateIds = stakeIpPatternDetailModel.StakeFraudDetail.GroupBy(g => g.StateID).Select(s => new { StateId = s.Key, BetCount = s.Max(m => m.BetCount)});
+            var groupStateIds = stakeIpPatternDetailModel.StakeFraudDetail.GroupBy(g => g.StateID).Select(s => new { StateId = s.Key, BetCount = s.Max(m => m.BetCount) });
 
             foreach (var groupStateId in groupStateIds.OrderByDescending(desc => desc.BetCount))
             {
@@ -1176,7 +1176,7 @@
                                           .OrderByDescending(c => c.Key.EventDate).ThenByDescending(c => c.Key.MatchID);
                 int groupId = 0;
 
-                foreach(var group in groupTickets)
+                foreach (var group in groupTickets)
                 {
                     if ((fraudType == AccountAssociationByOTGB.Round1 || fraudType == AccountAssociationByOTGB.Round3) && group.Count() < 2)
                     {
@@ -1758,7 +1758,7 @@
             else if (cc.IsFromTVS)
             {
                 if (cc.TVSRequestID > 0)
-                    spanReason += $"Void by RequestID: { cc.TVSRequestID } ";
+                    spanReason += $"Void by RequestID: {cc.TVSRequestID} ";
                 else
                     spanReason += $"Void by BetID ";
 
@@ -1781,7 +1781,7 @@
             if (spanReason == string.Empty)
                 divReason += $"<div>{MappingAdditionalReason(cc)}</div>" + $"<div>{cc.SourceTypeName}</div>";
             else
-                divReason += $"<div>{MappingAdditionalReason(cc) + spanReason }</div>";
+                divReason += $"<div>{MappingAdditionalReason(cc) + spanReason}</div>";
 
             return divReason;
         }
@@ -1843,7 +1843,7 @@
 
                 case (int)ClassificationSourceType.NormalAccountInactive:
                 case (int)ClassificationSourceType.ProPunterInactive:
-                    spanReason += $"<span> { cc.SourceTypeName } </span>";
+                    spanReason += $"<span> {cc.SourceTypeName} </span>";
                     break;
 
                 case (int)ClassificationSourceType.RobotUser61:
@@ -1852,7 +1852,7 @@
                     if (cc.IsFromTVS)
                     {
                         if (cc.TVSRequestID > 0)
-                            spanReason += $"Void by RequestID: { cc.TVSRequestID } | Win loss: {winloss}";
+                            spanReason += $"Void by RequestID: {cc.TVSRequestID} | Win loss: {winloss}";
                         else
                             spanReason += $"Void by BetID |  Win loss: {winloss}";
                     }
@@ -1862,7 +1862,7 @@
                     }
                     else if (cc.IsFromImperva)
                     {
-                        spanReason += $"{cc.Remark } Win loss: {winloss}";
+                        spanReason += $"{cc.Remark} Win loss: {winloss}";
                     }
                     else if (cc.IsFromAI)
                     {
@@ -1896,14 +1896,14 @@
                 case (int)SourceTypeID.Classification_PAAffectedByUplines:
                     if (!string.IsNullOrEmpty(cc.Remark) && cc.Remark.Contains(Consts.MarkPA_AssociatedGroup))
                     {
-                        spanReason += $"<span> { cc.Remark } </span>";
+                        spanReason += $"<span> {cc.Remark} </span>";
 
                         if (roleID == 1)
                             spanReason += $"| Win loss: {winloss} ";
                     }
                     else
                     {
-                        spanReason += $"<span> { cc.SourceTypeName } </span>";
+                        spanReason += $"<span> {cc.SourceTypeName} </span>";
                         if (roleID == 1)
                             spanReason += $"| Win loss: {winloss} ";
 
@@ -1915,7 +1915,7 @@
 
                 case (int)SourceTypeID.Classification_PAUnmarkDirectly:
                 case (int)SourceTypeID.Classification_UnmarkingPAAffectedDirectly:
-                    spanReason += $"<span> { cc.SourceTypeName } </span>";
+                    spanReason += $"<span> {cc.SourceTypeName} </span>";
                     if (!string.IsNullOrEmpty(cc.Remark))
                     {
                         spanReason += $"| {cc.Remark}";
@@ -1990,7 +1990,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error($"CTS - ExcludeTaggingAssociationWithPA exception: { ex.Message }", ex);
+                LogService.Error($"CTS - ExcludeTaggingAssociationWithPA exception: {ex.Message}", ex);
 
                 return Json(new { errorCode = -1, errorMessage = ex.Message }, JsonRequestBehavior.AllowGet);
             }
@@ -2229,7 +2229,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error($"CTS - Unmark VVIP exception: { ex.Message }", ex);
+                LogService.Error($"CTS - Unmark VVIP exception: {ex.Message}", ex);
 
                 dataLogTrackingServices.LogErrorData(ex, "WEB-UnmarkVVIP");
 
@@ -2338,49 +2338,30 @@
         [HttpPost]
         public ActionResult GetRobotBetting(long custID)
         {
-            var rbBetting = new RobotBettingViewModel();
             var rbData = _robotBettingService.GetRobotBetting(custID);
 
-            if (rbData.RobotBettingAI != null && rbData.RobotBettingAI.Any())
-            {
-                rbBetting.RobotSCE = rbData.RobotBettingAI.Where(x => x.PeriodRangeType <= (int)RobotPeriodRangeType.SCEUglyStake).Select(x => new RobotSceViewModel
-                                    {
-                                        CustID = x.CustID,
-                                        RangeType = x.PeriodRangeType,
-                                        RangeName = x.PeriodRangeName
-                });
+            var isRobotBettingAIValid = rbData?.RobotBettingAI?.Any() ?? false;
+            var isRobotImpervasValid = rbData?.RobotBettingImperva?.Any() ?? false;
+            var isFirstLastRobotDateValid = !rbData.FirstLastRobotDate.FirstRobotDate.Equals(DateTime.MinValue) &&
+                                            !rbData.FirstLastRobotDate.LastRobotDate.Equals(DateTime.MinValue);
 
-                rbBetting.RobotOCRD = rbData.RobotBettingAI.Where(x => x.PeriodRangeType == (int)RobotPeriodRangeType.OCRD).Select(x => new RobotRDViewModel
+            var rbBetting = new RobotBettingViewModel()
+            {
+                RobotBettingAI = isRobotBettingAIValid ? rbData.RobotBettingAI.Select(x => new RobotBettingAIViewModel
                 {
                     CustID = x.CustID,
                     RangeType = x.PeriodRangeType,
                     RangeName = x.PeriodRangeName
-                });
-
-                rbBetting.RobotTD = rbData.RobotBettingAI.Where(x => x.PeriodRangeType == (int)RobotPeriodRangeType.TD).Select(x => new RobotRDViewModel
-                {
-                    CustID = x.CustID,
-                    RangeType = x.PeriodRangeType,
-                    RangeName = x.PeriodRangeName
-                });
-            }
-
-            if (rbData.RobotBettingImperva != null && rbData.RobotBettingImperva.Any())
-            {
-                rbBetting.RobotImpervas = rbData.RobotBettingImperva.OrderBy(x => x.CreateTime).Select(x => new RobotImpervaViewModel
+                }) : Enumerable.Empty<RobotBettingAIViewModel>(),
+                RobotImpervas = isRobotImpervasValid ? rbData.RobotBettingImperva.OrderBy(x => x.CreateTime).Select(x => new RobotImpervaViewModel
                 {
                     CustID = x.CustID,
                     CreatedDate = x.CreateTime.ToString(Consts.FormatDateToString_ddMMMyyyy),
-                    PlatformName = x.Platform == 1 ? "Desktop" : "Mobile"
-                });
-            }
-
-            if (rbData.FirstLastRobotDate.FirstRobotDate != DateTime.MinValue
-                && rbData.FirstLastRobotDate.LastRobotDate != DateTime.MinValue)
-            {
-                rbBetting.FirstRobotDate = rbData.FirstLastRobotDate.FirstRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
-                rbBetting.LastRobotDate = rbData.FirstLastRobotDate.LastRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
-            }
+                    PlatformName = x.Platform == 1 ? Platform.Desktop : Platform.Mobile
+                }) : Enumerable.Empty<RobotImpervaViewModel>(),
+                FirstRobotDate = isFirstLastRobotDateValid ? rbData.FirstLastRobotDate.FirstRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff) : string.Empty,
+                LastRobotDate = isFirstLastRobotDateValid ? rbData.FirstLastRobotDate.LastRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff) : string.Empty
+            };
 
             return Json(new
             {

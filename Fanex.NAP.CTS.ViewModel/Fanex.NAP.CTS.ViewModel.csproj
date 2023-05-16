@@ -98,6 +98,7 @@
     <Compile Include="Account\Evidence\RetractedAndExceptionNode.cs" />
     <Compile Include="Account\GeneralInformation\GeneralInformationFilter.cs" />
     <Compile Include="Account\Associated\MatchesAssociationByAIViewModel.cs" />
+    <Compile Include="Account\RobotBetting\RobotBettingAIViewModel.cs" />
     <Compile Include="Account\RobotBetting\RobotImpervaViewModel.cs" />
     <Compile Include="Account\RobotBetting\RobotBettingDetailViewModel.cs" />
     <Compile Include="Account\RobotBetting\RobotRDMatchViewModel.cs" />

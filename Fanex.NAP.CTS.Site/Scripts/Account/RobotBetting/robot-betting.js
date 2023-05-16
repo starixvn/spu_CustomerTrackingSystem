@@ -1,4 +1,12 @@
-﻿function robot_betting() {
+﻿const RobotPeriodRangeType =
+{
+    SCEConsecutive : 100,
+    SCEUglyStake : 101,
+    OCRD : 200,
+    TD : 300
+}
+
+function robot_betting() {
     let firstRobotDate = $('#spanFirstRobotDate');
     let lastRobotDate = $('#spanLastRobotDate');
     let robotSCETable = $('#tableRobotBetting');
@@ -24,7 +32,7 @@
             } else {
                 let robotTypeOrigin = $('.robot-betting', tr).attr('data-robotTypeOrigin');
 
-                if (robotTypeOrigin == 100 || robotTypeOrigin == 101) {
+                if (robotTypeOrigin == RobotPeriodRangeType.SCEConsecutive || robotTypeOrigin == RobotPeriodRangeType.SCEUglyStake) {
                     GenerateSCEReason(tr, row);
                 } else {
                     GenerateTicketDetail(tr, row);
@@ -58,7 +66,7 @@
                 robotSCETable.find('tbody').removeClass('loading');
             },
             error: function (errMsg) {
-                
+
                 td.prop('disabled', false);
                 robotSCETable.find('tbody').removeClass('loading');
             }
@@ -104,7 +112,7 @@
                         robotSCETable.find('tbody').removeClass('loading');
                     },
                     error: function (errMsg) {
-                        
+
                         td.prop('disabled', false);
                         robotSCETable.find('tbody').removeClass('loading');
                     }
@@ -171,12 +179,12 @@
         let html;
 
         switch (item.RobotTypeDisplay) {
-            case 100:
+            case RobotPeriodRangeType.SCEConsecutive:
                 html = `<td class="robot-betting-reason" colspan="8" data-custid=${item.CustID} data-robotTypeOrigin=${item.RobotTypeOrigin} data-robotTypeDisplay=${item.RobotTypeDisplay} data-clusterId=${item.ClusterID} data-createdTime=${item.CreatedDateToString}>`;
                 html += `<span> ${item.FirstTransDateToString} - ${item.LastTransDateToString} (Total ${item.TotalHours} hours): <i class="title-reason">${item.BetCount} </i> Tickets </span>`;
                 html += `</td >`;
                 break;
-            case 101:
+            case RobotPeriodRangeType.SCEUglyStake:
                 html = `<td class="robot-betting-reason" colspan="8" data-custid=${item.CustID} data-robotTypeOrigin=${item.RobotTypeOrigin}  data-robotTypeDisplay=${item.RobotTypeDisplay} data-clusterId=${item.ClusterID} data-createdTime=${item.CreatedDateToString}>`;
                 html += `<span><i class="title-reason">${item.BetCount}/${item.TotalBetCount}</i> High Ugly Stake Tickets From ${item.FirstTransDateToString} To ${item.LastTransDateToString} </span>`;
                 html += `</td >`;
@@ -227,7 +235,7 @@
                         robotSCETable.find('tbody').first().removeClass('loading');
                     },
                     error: function (errMsg) {
-                        
+
                         td.prop('disabled', false);
                         robotSCETable.find('tbody').first().removeClass('loading');
                     }
@@ -288,12 +296,10 @@
                 { data: obj => obj.LiveScore }
             ],
             createdRow: function (row, obj) {
-                if (obj.Detail.length == 0) {
-                    let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-robotTypeOrigin=${obj.RangeType}>
+                let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-robotTypeOrigin=${obj.RangeType}>
                                     <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</i></span>
                                   </td>`;
-                    $(row).empty().html(td);
-                }
+                $(row).empty().html(td);
             }
         });
 
@@ -342,12 +348,10 @@
                 { data: obj => obj.LiveScore }
             ],
             createdRow: function (row, obj) {
-                if (obj.Detail.length == 0) {
-                    let td = `<td class="robot-rd robot-rd-td" colspan="8" data-custid=${obj.CustID} data-rangetype=${obj.RangeType}>
+                let td = `<td class="robot-rd robot-rd-td" colspan="8" data-custid=${obj.CustID} data-rangetype=${obj.RangeType}>
                               <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</i></span>
                               </td>`;
-                    $(row).empty().html(td);
-                }
+                $(row).empty().html(td);
             },
         });
 
@@ -436,7 +440,7 @@
                     robotRDTable.find('tbody').removeClass('loading');
                 },
                 error: function (errMsg) {
-                    
+
                     td.prop('disabled', false);
                     robotRDTable.find('tbody').removeClass('loading');
                 }
@@ -520,7 +524,7 @@
                 robotRDTable.find('tbody').removeClass('loading');
             },
             error: function (errMsg) {
-                
+
                 td.prop('disabled', false);
                 robotRDTable.find('tbody').removeClass('loading');
             }
@@ -587,32 +591,35 @@
                     lastRobotDate.text("Last Robot Date: " + response.data.LastRobotDate);
                 }
 
-                if (response.data.RobotSCE.length == 0
-                    && response.data.RobotOCRD.length == 0
+                if (response.data.RobotBettingAI.length == 0
                     && response.data.RobotImpervas.length == 0
-                    && response.data.RobotTD.length == 0
                 ) {
                     robotSCETable.DataTable().clear().rows.add([]).draw();
                     robotSCETable.removeClass('hide');
                 } else {
-                    if (response.data.RobotSCE.length > 0) {
+                    const robotSCE = response.data.RobotBettingAI?.filter(item => item.RangeType <= RobotPeriodRangeType.SCEUglyStake) ?? [];
+                    const robotOCRD = response.data.RobotBettingAI?.filter(item => item.RangeType == RobotPeriodRangeType.OCRD) ?? [];
+                    const robotTD = response.data.RobotBettingAI?.filter(item => item.RangeType == RobotPeriodRangeType.TD) ?? [];
+                    const robotImpervas = response.data.RobotImpervas;
+
+                    if (robotSCE.length > 0) {
                         robotSCETable.removeClass('hide');
-                        robotSCETable.DataTable().clear().rows.add(response.data.RobotSCE).draw();
+                        robotSCETable.DataTable().clear().rows.add(robotSCE).draw();
                     }
 
                     robotRDTable.DataTable().clear()
-                    if (response.data.RobotOCRD.length > 0) {
+                    if (robotOCRD.length > 0) {
                         robotRDTable.removeClass('hide');
-                        robotRDTable.DataTable().rows.add(response.data.RobotOCRD).draw();
+                        robotRDTable.DataTable().rows.add(robotOCRD).draw();
                     }
 
-                    if (response.data.RobotTD.length > 0) {
+                    if (robotTD.length > 0) {
                         robotRDTable.removeClass('hide');
-                        robotRDTable.DataTable().rows.add(response.data.RobotTD).draw();
+                        robotRDTable.DataTable().rows.add(robotTD).draw();
                     }
 
-                    if (response.data.RobotImpervas.length > 0) {
-                        GenerateRobotImperva(response.data.RobotImpervas);
+                    if (robotImpervas.length > 0) {
+                        GenerateRobotImperva(robotImpervas);
                     }
                 }
             },
