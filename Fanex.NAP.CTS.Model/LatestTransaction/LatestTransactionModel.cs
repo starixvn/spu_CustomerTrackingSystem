@@ -16,7 +16,7 @@
 
         public string IP { get; set; }
 
-        public int Flagged { get; set; }
+        public string Flagged { get; set; }
 
         public string Action { get; set; }
 
