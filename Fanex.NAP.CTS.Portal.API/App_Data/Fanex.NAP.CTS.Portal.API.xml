@@ -584,9 +584,9 @@
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetCustomerClassCategory">
             <summary>
-            Get customer class's categories
+            Get customer class's categories, class name
             </summary>
-            <returns>A list of customer class's categories in JSON format</returns>
+            <returns>A list of customer class's categories in JSON, API for LAP's website and TW BI</returns>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetSubscriberInfo(System.String)">
             <summary>
