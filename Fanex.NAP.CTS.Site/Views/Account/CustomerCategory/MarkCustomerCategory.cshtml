@@ -21,7 +21,7 @@
                                     @paCategory.CategoryName
                                 </label>
                             }
-                            else if ((paCategory.CategoryGroup == 163 && Model.IsRobotUser))
+                            else if ((paCategory.CategoryGroup == (int)CustomerCategoryGroup.RobotUser && Model.IsRobotUser))
                             {
                                 <label class="checkbox-container disabled" id="CategoryRobot">
                                     <input id="CategoryRobot" type="checkbox" checked="checked" disabled>
@@ -29,9 +29,17 @@
                                     @paCategory.CategoryName
                                 </label>
                             }
+                            else if (paCategory.CategoryID == (int)CustomerCategoryID.RobotOCRD)
+                            {
+                                <label class="checkbox-container disabled">
+                                    <input type="checkbox" disabled>
+                                    <span class="checkmark"></span>
+                                    @paCategory.CategoryName
+                                </label>
+                            }
                             else
                             {
-                               if (Model.IsPinCategory || paCategory.CategoryID == (int)CustomerCategoryID.SystemDetectGroupBetting)
+                                if (Model.IsPinCategory || paCategory.CategoryID == (int)CustomerCategoryID.SystemDetectGroupBetting)
                                 {
                                     <label class="checkbox-container disabled">
                                         <input type="checkbox" disabled>

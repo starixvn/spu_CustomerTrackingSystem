@@ -10,5 +10,7 @@
 
         public int RelevantCategoryGroup { get; set; }
 
+        public int Priorty { get; set; }
+
     }
 }

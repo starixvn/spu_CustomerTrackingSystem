@@ -158,14 +158,14 @@
 		<Setting Key="CTS_DC_MatchMonitor_Details_GetScore" SpName="CTS_DC_MatchMonitor_Details_GetScore" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_MatchMonitor_Details_Get" SpName="CTS_DC_MatchMonitor_Details_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_GetByCustID" SpName="CTS_DC_CustInfo_GetByCustID" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_RobotClassification_GetRobotStatusByTransList" SpName="CTS_DC_RobotClassification_GetRobotStatusByTransList" DbName="MySQL.CTS_DataCenter.Reporter" />		
+		<Setting Key="CTS_DC_RobotClassification_GetRobotStatusByTransList" SpName="CTS_DC_RobotClassification_GetRobotStatusByTransList_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />		
 		<Setting Key="CTS_DC_MatchMonitor_GetStaticList " SpName="CTS_DC_MatchMonitor_GetStaticList" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_MatchMonitor_Details_MergeGroup" SpName="CTS_DC_MatchMonitor_Details_MergeGroup" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function name="RobotClassification">
 		<Setting Key="CTS_DC_RobotClassification_GetHistory" SpName="CTS_DC_RobotClassification_GetHistory" DbName="MySQL.CTS_DataCenter.Reporter" />		
-		<Setting Key="CTS_DC_RobotClassification_GetRobotStatus" SpName="CTS_DC_RobotClassification_GetRobotStatus" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_RobotClassification_GetRobotStatus" SpName="CTS_DC_RobotClassification_GetRobotStatus_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function name="TransactionMonitoringReport">
@@ -193,7 +193,7 @@
 
 	<Function name="ProblemAccountManagement">
 		<Setting Key="CTS_DC_ProblemAccountManagement_Get" SpName="CTS_DC_ProblemAccountManagement_Get" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_ProblemAccountManagement_GetCategories" SpName="CTS_DC_ProblemAccountManagement_GetCategories" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_ProblemAccountManagement_GetCategories" SpName="CTS_DC_ProblemAccountManagement_GetCategories_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_ProblemAccountManagement_ValidateUserName" SpName="CTS_DC_ProblemAccountManagement_ValidateUserName" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustEvidence_GetByReasonId" SpName="CTS_DC_CustEvidence_GetByReasonId" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassification_PA_Insert" SpName="CTS_DC_CustClassification_PA_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
@@ -201,8 +201,8 @@
 	</Function>
 	<Function name="RescanCustomerClassification">
 		<Setting Key="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" SpName="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" DbName="MySQL.CTS_Archive.Admin" />
-		<Setting Key="CTS_DC_CustClassification_PA_ReScan" SpName="CTS_DC_CustClassification_PA_ReScan" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_PA_InsertRobot" SpName="CTS_DC_CustClassification_PA_InsertRobot" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_PA_ReScan" SpName="CTS_DC_CustClassification_PA_ReScan_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_PA_InsertRobot" SpName="CTS_DC_CustClassification_PA_InsertRobot_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_PA_ClearOld" SpName="CTS_DC_CustClassification_PA_ClearOld" DbName="MySQL.CTS_DataCenter.Admin" />
 
 		<Setting Key="CTS_DC_CustClassification_GetCCAndDangerLevel" SpName="CTS_DC_CustClassification_GetCCAndDangerLevel" DbName="MySQL.CTS_DataCenter.Reporter" />

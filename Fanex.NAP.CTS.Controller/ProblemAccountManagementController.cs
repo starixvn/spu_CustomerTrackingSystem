@@ -122,7 +122,9 @@
         [HttpGet]
         public ActionResult GetProblemAccountAllCategories()
         {
-            var data = _pamService.GetProblemAccountCategories().Where(x=>x.CategoryID != (int)CustomerCategoryID.SystemDetectGroupBetting);
+            var data = _pamService.GetProblemAccountCategories()
+                .Where(x => x.CategoryID != (int)CustomerCategoryID.SystemDetectGroupBetting)
+                .OrderBy(x => x.Priorty);
 
             return Json(data, JsonRequestBehavior.AllowGet);
         }
