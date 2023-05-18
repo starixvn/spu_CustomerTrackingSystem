@@ -213,6 +213,7 @@
                     existedPA.RobotClassification = result.Where(c => c.IsRobot).Select(c => new InsertRobotModel
                     {
                         CustID = c.CustID,
+                        CategoryID = c.CategoryID,
                         IsFromTW = c.IsFromTW,
                         IsFromCTS = c.IsFromCTS,
                         IsFromAI = c.IsFromAI,

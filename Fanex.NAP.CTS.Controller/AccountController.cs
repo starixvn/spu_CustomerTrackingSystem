@@ -2018,22 +2018,7 @@
                     CategoryId = x.CategoryID,
                     CategoryName = x.CategoryName ?? string.Empty,
                     CategoryGroup = x.CategoryGroup
-                });
-
-                // hard code for test               
-                var aa = result.ProblemAccountList.ToList().Concat(new List<Model.ProblemAccountManagement.ProblemAccountCategoryModel>()
-                {
-                    new Model.ProblemAccountManagement.ProblemAccountCategoryModel
-                    {
-                        CategoryID = 165,
-                        CategoryGroup = 165,
-                        CategoryName = "Odds Crawler Robot",
-                        RelevantCategoryGroup = 166
-                    }
-                });
-
-                result.ProblemAccountList = aa;
-                // hard code for test end
+                });                                  
 
                 result.IsVVip = classifications.Any(x => x.CategoryID == (int)CustomerCategoryID.VVIP);
             }
