@@ -1,9 +1,9 @@
 ﻿const RobotPeriodRangeType =
 {
-    SCEConsecutive : 100,
-    SCEUglyStake : 101,
-    OCRD : 200,
-    TD : 300
+    SCEConsecutive: 100,
+    SCEUglyStake: 101,
+    OCRD: 200,
+    TD: 300
 }
 
 function robot_betting() {
@@ -419,7 +419,7 @@ function robot_betting() {
                     custID: custID
                 },
                 success: function (response) {
-                    let childRow = NewRowOrcdMatch(response.data, custID, rangeType);
+                    let childRow = NewRowRDMatch(response.data, custID, rangeType);
 
                     $(tr).after(childRow);
 
@@ -448,7 +448,7 @@ function robot_betting() {
         }
     }
 
-    function NewRowOrcdMatch(data, custID, rangeType) {
+    function NewRowRDMatch(data, custID, rangeType) {
         let html = '';
 
         for (let i = 0; i < data.length; i++) {
@@ -510,7 +510,7 @@ function robot_betting() {
                 matchID: matchID
             },
             success: function (response) {
-                let childRow = NewRowOrcdTdTicketDetail(response.data, rangeType, matchGuid);
+                let childRow = NewRowRDTicketDetail(response.data, rangeType, matchGuid);
                 $(tr).after(childRow);
 
                 tr.addClass('match-ticket-loaded');
@@ -531,11 +531,11 @@ function robot_betting() {
         });
     }
 
-    function NewRowOrcdTdTicketDetail(data, rangeType, matchGuid) {
+    function NewRowRDTicketDetail(data, rangeType, matchGuid) {
         let html = '';
 
         for (let i = 0; i < data.length; i++) {
-            let item = data[i];
+            let item = ValidateValuesOfItemForDisplay(data[i]);
 
             html += `<tr class='robot-rd-match robot-rd-match-ticket robot-rd-body-td' data-rangetype=${rangeType} data-matchguid=${matchGuid}>
                         <td class="td.td1 text-center">${item.TransDate}</td>
@@ -550,6 +550,17 @@ function robot_betting() {
         }
 
         return $(html);
+    }
+
+    function ValidateValuesOfItemForDisplay(item) {
+        const result = { ...item };
+        Object.keys(result).forEach(key => {
+            if (result[key] === null || result[key].trim() === "") {
+                result[key] = "-";
+            }
+        });
+
+        return result;
     }
 
     function GenerateRobotImperva(rbImpervas) {
