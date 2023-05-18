@@ -555,7 +555,7 @@ function robot_betting() {
     function ValidateValuesOfItemForDisplay(item) {
         const result = { ...item };
         Object.keys(result).forEach(key => {
-            if (result[key] === null || result[key].trim() === "") {
+            if (result[key] === null || result[key] === "") {
                 result[key] = "-";
             }
         });
