@@ -72,6 +72,8 @@
         
         public string IsLicenseeBA { get; set; }
 
+        public string DangerousScore { get; set; }
+
         public CustomerGeneralStatusViewModel BindingDangerous(CustomerInfoByCustIdsModel custDangerousModel)
         {
             if (custDangerousModel != null)
@@ -105,6 +107,7 @@
                 this.CustStatusID = customerInfoByCTSCustIdModel.CustStatusID;
                 this.StatusName = string.IsNullOrEmpty(customerInfoByCTSCustIdModel.CustStatusName) ? "N/A" : customerInfoByCTSCustIdModel.CustStatusName;
                 this.IsLicensee = customerInfoByCTSCustIdModel.IsLicensee;
+                this.DangerousScore = customerInfoByCTSCustIdModel.DangerousScore.HasValue ? decimal.Round(customerInfoByCTSCustIdModel.DangerousScore.Value) + "%" : string.Empty;                
                 this.IsInternal = customerInfoByCTSCustIdModel.IsInternal;
                 this.UserNameSuffix = customerInfoByCTSCustIdModel.IsLicensee ? (customerInfoByCTSCustIdModel.IsLicenseeVIP ? " (Lic VIP)" : (customerInfoByCTSCustIdModel.IsLicenseeBA ? " (Lic BA)" : string.Empty)) : string.Empty;
                 this.IsLicenseeVIP = customerInfoByCTSCustIdModel.IsLicensee ? (customerInfoByCTSCustIdModel.IsLicenseeVIP ? "Yes" : "No") : "-";
