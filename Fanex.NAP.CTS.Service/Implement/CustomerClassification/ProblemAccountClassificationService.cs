@@ -235,6 +235,7 @@
                                                             (group, itemLosing) => new InsertRobotModel
                                                             {
                                                                 CustID = group.ro.CustID,
+                                                                CategoryID = group.ro.CategoryID,
                                                                 RobotCounter = group.ro.RobotCounter,
                                                                 Remark = group.ro.Remark,
                                                                 CreatedBy = group.ro.CreatedBy,

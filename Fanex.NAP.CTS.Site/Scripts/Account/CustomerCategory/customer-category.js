@@ -17,6 +17,7 @@
         isProblemAccount: false,
         isPAProbation: false
     };
+    let CONST_ROBOT_USER_GROUP = 163;
     let dataTable;
     let dataTableCustomerCategoryBySport;
 
@@ -522,7 +523,7 @@
         });
 
         if (params.CategoryID != 0) {
-            let url = params.CategoryGroup == 163
+            let url = (params.CategoryGroup == CONST_ROBOT_USER_GROUP)
                 ? common.modifyRelativeUrl('Account/SaveMarkRobotAccount')
                 : common.modifyRelativeUrl('Account/SaveMarkCustomerCategory');
 

@@ -63,7 +63,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<ProblemAccountCategoryModel>(criteria).ToList();
+                return db.Query<ProblemAccountCategoryModel>(criteria);
             }
         }
 

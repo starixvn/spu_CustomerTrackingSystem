@@ -1667,7 +1667,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-#endregion Transaciton History
+        #endregion Transaciton History
 
         #region Customer Category
 
@@ -1696,8 +1696,7 @@
 
             if (classification != null && classification.Any())
             {
-                categoryList = classification
-                    .Select(x => new CustomerCategoryViewModel
+                categoryList = classification.Select(x => new CustomerCategoryViewModel
                     {
                         CategoryId = x.CategoryID,
                         CategoryType = x.CategoryType,
@@ -1705,7 +1704,7 @@
                         IsProblemAccount = x.CategoryType == 2
                     }).ToList();
 
-                isVVip = categoryList.Any(x => x.CategoryId == 210); // VVIP
+                isVVip = categoryList.Any(x => x.CategoryId == (int)CustomerCategoryID.VVIP);
                 isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
 
                 isPAProbation = isProblemAccount && classification.Any(x => x.IsProbation);
@@ -1849,6 +1848,8 @@
                 case (int)ClassificationSourceType.RobotUser61:
                 case (int)ClassificationSourceType.RobotUser163:
                 case (int)ClassificationSourceType.RobotUser164:
+                case (int)ClassificationSourceType.RobotOCRD165:
+                case (int)ClassificationSourceType.RobotOCRD166:
                     if (cc.IsFromTVS)
                     {
                         if (cc.TVSRequestID > 0)
@@ -2005,7 +2006,7 @@
                 UserName = userName,
                 IsRobotUser = isRobotUser,
                 IsPinCategory = isPinCategory,
-                ProblemAccountList = _pamService.GetProblemAccountCategories()
+                ProblemAccountList = _pamService.GetProblemAccountCategories().OrderBy(x=>x.Priorty)
             };
 
             var classifications = _accountService.GetCustomerClassification(ctsCustID);
@@ -2017,9 +2018,9 @@
                     CategoryId = x.CategoryID,
                     CategoryName = x.CategoryName ?? string.Empty,
                     CategoryGroup = x.CategoryGroup
-                });
+                });                                  
 
-                result.IsVVip = classifications.Any(x => x.CategoryID == 210); // VVIP
+                result.IsVVip = classifications.Any(x => x.CategoryID == (int)CustomerCategoryID.VVIP);
             }
 
             return PartialView("CustomerCategory/MarkCustomerCategory", result);
@@ -2284,7 +2285,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-#endregion Customer Category
+        #endregion Customer Category
 
         #region Customer Category By Sport
 

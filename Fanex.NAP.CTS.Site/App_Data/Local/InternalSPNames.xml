@@ -14,7 +14,7 @@
 		<Setting Key="CTS_DC_Common_GetStaticList" SpName="CTS_DC_Common_GetStaticList" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Common_GetAllSubscriberGroups" SpName="CTS_DC_Common_GetAllSubscriberGroups" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Common_GetCustomerGroup" SpName="CTS_DC_Common_GetCustomerGroup" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="DCS_DC_Transaction_GetHistory" SpName="DCS_DC_Transaction_GetHistory_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
+		<Setting Key="DCS_DC_Transaction_GetHistory" SpName="DCS_DC_Transaction_GetHistory" DbName="MySQL.DCS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Common_ValidateUsername" SpName="CTS_DC_Common_ValidateUsername" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Common_GetSites" SpName="CTS_DC_Common_GetSites" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
@@ -28,7 +28,7 @@
 			<Mapping DataField="SubscriberId" ObjectProperty="Id" Class="Subscriber" />
 			<Mapping DataField="SubscriberName" ObjectProperty="Name" Class="Subscriber" />
 		</Setting>
-		<Setting Key="CTS_DC_CustInfo_GetByCTSCustID" SpName="CTS_DC_CustInfo_GetByCTSCustID_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustInfo_GetByCTSCustID" SpName="CTS_DC_CustInfo_GetByCTSCustID" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_GetFlagged" SpName="CTS_DC_CustInfo_GetFlagged" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_GetCustIDsRole" SpName="CTS_DC_CustInfo_GetCustIDsRole" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_GetCustInfoDangerous" SpName="CTS_DC_CustInfo_GetCustInfoDangerous" DbName="MySQL.CTS_DataCenter.Reporter" />
@@ -148,7 +148,7 @@
 	</Function>
 
 	<Function name="LatestTransaction">
-		<Setting Key="DCS_DC_Transaction_GetLatest" SpName="DCS_DC_Transaction_GetLatest_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
+		<Setting Key="DCS_DC_Transaction_GetLatest" SpName="DCS_DC_Transaction_GetLatest" DbName="MySQL.DCS_DataCenter.Reporter" />
 	</Function>
 
 	<Function name="MatchMonitor">
@@ -181,7 +181,7 @@
 	</Function>
 
 	<Function name="CustomerProfile">
-		<Setting Key="CTS_DC_CustInfo_Profile_GetAssociationAccount" SpName="CTS_DC_CustInfo_Profile_GetAssociationAccount_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustInfo_Profile_GetAssociationAccount" SpName="CTS_DC_CustInfo_Profile_GetAssociationAccount" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_Profile_GetEvidence" SpName="CTS_DC_CustInfo_Profile_GetEvidence" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_Profile_GetLoginStats" SpName="CTS_DC_CustInfo_Profile_GetLoginStats" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_Profile_GetDate" SpName="CTS_DC_CustInfo_Profile_GetDate" DbName="MySQL.CTS_DataCenter.Reporter" />

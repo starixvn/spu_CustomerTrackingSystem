@@ -92,6 +92,8 @@
         RobotUser61 = 61,
         RobotUser163 = 163,
         RobotUser164 = 164,
+        RobotOCRD165 = 165,
+        RobotOCRD166 = 166,
         Robot81 = 81,
         Robot161 = 161,
         ProPunterInactive = 1002,
@@ -148,9 +150,16 @@
         GetTicketDetailByListCust = 4
     }
 
+    public enum CustomerCategoryGroup
+    {      
+        RobotUser = 163
+    }
+
     public enum CustomerCategoryID
     {
-        SystemDetectGroupBetting = 63
+        VVIP = 210,
+        SystemDetectGroupBetting = 63,
+        RobotOCRD = 165
     }
 
     public enum IPPatternType3S
