@@ -91,12 +91,12 @@
                 if (rescanResult.IsSuccess && rescanResult.CustIds.Any())
                 {
                     rescanResult.IsSuccess = PushDataToExternalPackge(rescanResult.CustIds.Distinct(), parameters);
-                }
 
-                if (rescanResult.IsSuccess && custTORemovedOldPA.Any())
-                {
-                    problemAccountService.RemoveOldProblemAccount(custTORemovedOldPA);
-                }
+                    if (rescanResult.IsSuccess)
+                    {
+                        problemAccountService.RemoveOldProblemAccount(rescanResult.CustIds);
+                    }
+                }               
             }
 
             return rescanResult;
