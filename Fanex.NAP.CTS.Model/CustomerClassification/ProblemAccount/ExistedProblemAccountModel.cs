@@ -24,7 +24,7 @@
 
         public bool IsFromTVS { get; set; }
 
-        public int TVSRequestID { get; set; }
+        public int? TVSRequestID { get; set; }
 
         public bool? IsParlay { get; set; }
 
