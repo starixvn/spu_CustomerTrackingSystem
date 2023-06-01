@@ -78,6 +78,8 @@
     <Compile Include="Account\RobotSetting\GetRDMatchCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRDTransCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRobotUsersSCEDetailsCriteria.cs" />
+    <Compile Include="Api\SearchAccount\GetAccountByNameInSubscriberCriteria.cs" />
+    <Compile Include="Api\SearchAccount\GetListAccountByUserNameInSubscriberCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedAccountCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedGroupMonitorCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\GetAssociatedAccountCriteria.cs" />

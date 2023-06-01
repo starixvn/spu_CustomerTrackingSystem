@@ -191,6 +191,7 @@
     <Compile Include="API\CustomerClassModel.cs" />
     <Compile Include="API\CustomerClassification.cs" />
     <Compile Include="API\ForceSpecialCustomerClassModel.cs" />
+    <Compile Include="API\FPS\SearchAccount\SearchAccountResultModel.cs" />
     <Compile Include="API\LicenseeVIPBA\CustInfoBySiteNameModel.cs" />
     <Compile Include="API\LicenseeVIPBA\LicenseeVIPBAModel.cs" />
     <Compile Include="API\LicenseeVIPBA\RemoveLicenseeBABySiteLogDataModel.cs" />

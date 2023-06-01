@@ -48,6 +48,7 @@
     <Compile Include="Implement\AccountService.cs" />
     <Compile Include="Implement\Api\LicenseeVIPBAService.cs" />
     <Compile Include="Implement\Api\ProblemCaseMonitorService.cs" />
+    <Compile Include="Implement\Api\SearchAccountService.cs" />
     <Compile Include="Implement\AssociatedAccountService.cs" />
     <Compile Include="Implement\AssociatedGroupMonitorService.cs" />
     <Compile Include="Implement\AssociationDetectionService.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Implement\CTSUserService.cs" />
     <Compile Include="Interface\Api\ILicenseeVIPBAService.cs" />
     <Compile Include="Interface\Api\IProblemCaseMonitorService.cs" />
+    <Compile Include="Interface\Api\ISearchAccountService.cs" />
     <Compile Include="Interface\CustomerClassification\IDataLogTrackingServices.cs" />
     <Compile Include="Interface\CustomerClassification\IProblemAccountClassificationService.cs" />
     <Compile Include="Interface\IAccountService.cs" />

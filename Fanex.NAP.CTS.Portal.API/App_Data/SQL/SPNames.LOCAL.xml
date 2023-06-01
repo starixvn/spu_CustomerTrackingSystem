@@ -95,4 +95,8 @@
 		<Setting Key="CTS_DC_CustClassification_LicBA_Insert" SpName="CTS_DC_CustClassification_LicBA_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_LicBA_Remove" SpName="CTS_DC_CustClassification_LicBA_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
 	</Function>
+	<Function name="SearchAccount">
+		<Setting Key="CTS_DC_CustInfo_GetByNameSubscriber" SpName="CTS_DC_CustInfo_GetByNameSubscriber" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustInfo_GetPartialByUserNameSubscriber" SpName="CTS_DC_CustInfo_GetPartialByUserNameSubscriber" DbName="MySQL.CTS_DataCenter.Reporter" />
+	</Function>
 </Functions>
