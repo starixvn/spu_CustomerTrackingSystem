@@ -32,7 +32,27 @@
                             <button class="button button-generate" id="btnRefresh">Refresh</button>
                         </div>
 
-                        <div class="blank"></div>                                             
+                        <div class="blank"></div>
+
+                        <div class="group width-160">
+                            <label class="text">Type of Tickets</label>
+                            <select class="control select-typeoftickets" id="cbbTypeOfTickets">
+                                <option value="1">Suspicious Tickets</option>
+                                <option value="0">All</option>
+                            </select>
+                        </div>
+
+                        <div class="group width-160">
+                            <label class="text">Currency</label>
+                            <select class="control width-select" id="cbbCurrency" multiple="multiple">
+                            </select>
+                        </div>
+
+                        <div class="group width-160">
+                            <label class="text">HDP</label>
+                            <select class="control width-select" id="cbbHDP" multiple="multiple">                              
+                            </select>
+                        </div>
 
                         <div class="group width-160" @(ViewBag.IsDisableScoreFilter ? "hidden" : "")   >
                             <label class="text">Score</label>
@@ -71,6 +91,7 @@
                 </div>
 
                 <div class="breadcrumb-button">
+                    <div class="breadcrumb-totaltickets"></div>
                     <div class="">
                         <button class="button button-primary-outline" id="btnShowAll">Show All</button>
                         <button class="button button-primary-outline" id="btnShowPopupAssDetection">Association Detection</button>
@@ -157,6 +178,7 @@
             <input id="hdBetIDToString" type="hidden" value="@ViewBag.BetIDToString" />
             <input id="hdLiveIndicator" type="hidden" value="@ViewBag.LiveIndicator.ToString()" />
             <input id="hdreason" type="hidden" value="@ViewBag.Reason" />
+            <input id="hdIsSupportShowAllTickets" type="hidden" value="@ViewBag.IsSupportShowAllTickets.ToString()" />
             <input id="hdIsHostPermission" type="hidden" IsHostPermission="@ViewBag.IsHostPermission.ToString()" />
         </div>
     </div>    

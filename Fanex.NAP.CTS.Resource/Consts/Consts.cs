@@ -429,5 +429,11 @@
             OCRD = 200,
             TD = 300
         };
+
+        public enum MatchMonitorDetailViewType
+        {
+            All,
+            Fraud
+        }
     }
 }

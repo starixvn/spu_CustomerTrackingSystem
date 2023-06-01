@@ -103,7 +103,7 @@
                 
                 if (!string.IsNullOrEmpty(this.HomeName) || !string.IsNullOrEmpty(this.AwayName))
                 {
-                    rs = HomeName + " vs " + AwayName;
+                    rs = HomeName + " -vs- " + AwayName;
                 }
 
                 return rs;

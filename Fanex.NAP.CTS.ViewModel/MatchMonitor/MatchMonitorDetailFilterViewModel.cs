@@ -4,6 +4,10 @@
 
     public class MatchMonitorDetailFilterViewModel
     {
+        public int start { get; set; }
+
+        public int length { get; set; }
+
         public string EventDateToString { get; set; }
 
         public Int64 MatchID { get; set; }
@@ -29,6 +33,11 @@
 
                 return eventDate;
             }
+        }
+
+        public string BuildCacheKey(string nameOfFuntion)
+        {
+            return $"{nameOfFuntion}_{EventDateToString}_{MatchID}_{BetTypeID}_{BetID}_{Sites}_{LiveIndicator}";
         }
     }
 }

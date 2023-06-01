@@ -35,6 +35,8 @@
 
         public string KOTime { get; set; }
 
+        public bool IsSupportShowAllTickets { get; set; }
+
         public bool LiveIndicator
         {
             get
@@ -53,7 +55,7 @@
 
                 if (!string.IsNullOrEmpty(HomeName) || !string.IsNullOrEmpty(AwayName))
                 {
-                    rs = HomeName + " vs " + AwayName;
+                    rs = HomeName.ToUpper() + " -vs- " + AwayName.ToUpper();
                 }
 
                 return rs;

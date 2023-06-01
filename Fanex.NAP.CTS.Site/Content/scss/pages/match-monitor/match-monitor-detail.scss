@@ -39,6 +39,7 @@
             font-weight: 600;
             font-size: 13px;
             line-height: 20px;
+            text-transform: none !important;
         }
 
         .title-league-name {
@@ -87,6 +88,11 @@
 
                         .width-select-sites {
                             width: 11.5rem;
+                        }
+
+                        .select-typeoftickets {
+                            height: 3rem;
+                            width: 14.4rem;
                         }
 
                         .text-box {
@@ -199,6 +205,12 @@
                 position: -webkit-sticky;
                 top: 17.8rem;
                 z-index: 9;
+
+                .breadcrumb-totaltickets{
+                    position: absolute;
+                    text-align: center;
+                    width: 100%;
+                  }
             }
 
             .group-info {

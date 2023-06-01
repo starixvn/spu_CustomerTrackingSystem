@@ -375,7 +375,8 @@
     color: #516792;
     font-weight: 600;
     font-size: 13px;
-    line-height: 20px; }
+    line-height: 20px;
+    text-transform: none !important; }
   .detailpage .page-title-match .title-league-name {
     color: #70809e;
     font-weight: 600;
@@ -405,6 +406,9 @@
       width: 18.5rem; }
     .detailpage .monitor-container .monitor-table .group-control .form-filter .group .width-select-sites {
       width: 11.5rem; }
+    .detailpage .monitor-container .monitor-table .group-control .form-filter .group .select-typeoftickets {
+      height: 3rem;
+      width: 14.4rem; }
     .detailpage .monitor-container .monitor-table .group-control .form-filter .group .text-box {
       height: 2.8rem;
       display: flex;
@@ -482,6 +486,11 @@
     position: -webkit-sticky;
     top: 17.8rem;
     z-index: 9; }
+  .detailpage .monitor-container .monitor-table .breadcrumb-button .breadcrumb-totaltickets{
+    position: absolute;
+    text-align: center;
+    width: 100%;
+  }
   .detailpage .monitor-container .monitor-table .group-info {
     display: flex;
     padding: 1rem 0 1.1rem 0;

@@ -1,8 +1,19 @@
-﻿function MatchMonitorDetail() {
+﻿const MatchMonitorDetailViewType = {
+    All: 0,
+    Fraud: 1
+}
+
+const SiteViewType = {
+    All: "A",
+    Credit: "C",
+    Licensee: "L"
+}
+
+function MatchMonitorDetail() {
     let domElements = {
         detailpage: $('#detailpage'),
         groupTable: $('#groupTable'),
-        isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),       
+        isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
         eventDataToString: $("#hdEventDataToString").val(),
         matchID: $("#hdMatchID").val(),
         matchName: $("#hdMatchName").val(),
@@ -11,16 +22,20 @@
         betIDToString: $("#hdBetIDToString").val(),
         reason: $("#hdreason").val(),
         liveIndicator: $("#hdLiveIndicator").val(),
+        isSupportShowAllTickets: $("#hdIsSupportShowAllTickets").val(),
+        cbbTypeOfTickets: $('#cbbTypeOfTickets'),
+        cbbCurrency: $('#cbbCurrency'),
+        cbbHDP: $('#cbbHDP'),
         cbbMatchScore: $('#cbbMatchScore'),
         cbbReason: $('#cbbReason'),
         cbbGroup: $('#cbbGroup'),
-        cbbSites: $('#cbbSites'),    
+        cbbSites: $('#cbbSites'),
         tblMMHomeTeam: $('#tblMMHomeTeam'),
         tblMMAwayTeam: $('#tblMMAwayTeam'),
         divHomeMonitor: $('#first-monitor-datatable'),
         divAwayMonitor: $('#second-monitor-datatable'),
         tblHomeHeaderFixed: $('#tblHomeHeaderFixed'),
-        tblAwayHeaderFixed: $('#tblAwayHeaderFixed'),     
+        tblAwayHeaderFixed: $('#tblAwayHeaderFixed'),
         spanReasonInfo: $('#spanReasonInfo'),
         inputHomeSelectAll: $('#inputHomeSelectAll'),
         inputAwaySelectAll: $('#inputAwaySelectAll'),
@@ -42,10 +57,11 @@
         btnAssDetection: $('#btnAssDetection'),
         btnExportExcel: $('#btnExportExcel'),
         btnVerifyAndClose: $('#btnVerifyAndClose')
-    };   
+    };
 
-    let isFilterOption = false;   
+    let isFilterOption = false;
 
+    let cacheSite = SiteViewType.All;
     let cacheReasonGroupIDDic = {};
 
     function InitialDetailGird(element) {
@@ -99,10 +115,10 @@
                 { targets: [15], width: "3%" },
                 { targets: [16], visible: false },
                 { targets: [17], visible: false }
-            ],            
+            ],
             columns: [
                 {
-                    data: obj => () => {         
+                    data: obj => () => {
                         return `<input type="checkbox" name="chkbx" class="col-checkbox" />`;
                     }
                 },
@@ -118,7 +134,7 @@
                 },
                 { data: obj => obj.CustomerClassToString },
                 { data: obj => RenderBotIcon(obj.RobotType, obj.IsRobot) },
-                { data: obj => obj.DangerToString },               
+                { data: obj => obj.DangerToString },
                 { data: obj => obj.Odds },
                 { data: obj => obj.TransIdToString },
                 { data: obj => obj.Currency },
@@ -128,7 +144,7 @@
                             $(cell).addClass('col-red')
                         }
                     }
-                },               
+                },
                 { data: obj => obj.HDP },
                 { data: obj => obj.Score },
                 { data: obj => obj.TransTimeToString },
@@ -145,11 +161,11 @@
                 {
                     data: obj => () => {
                         if (obj.PICVerified) return "<span class='icon-Check'></span>";
-                        return "-";                       
+                        return "-";
                     }
                 },
                 { data: obj => obj.TransIdToString },
-                { data: obj => obj.ADetectGroupID}
+                { data: obj => obj.ADetectGroupID }
             ],
             createdRow: function (row, data, index) {
                 if (data.TicketStatus == 102)
@@ -160,10 +176,10 @@
                     $(row.cells[1]).addClass('username-hightlight');
                 }
             }
-        });   
-    }   
+        });
+    }
 
-    function GetMatchMonitorDetail() {
+    function GetMatchMonitorDetail(start = 0, length = 1000) {
         $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorDetail'), {
             type: 'POST',
             data:
@@ -172,30 +188,39 @@
                 MatchID: function () { return domElements.matchID; },
                 BetTypeID: function () { return domElements.betTypeID; },
                 BetID: function () { return domElements.betIDToString; },
-                Sites: function () { return domElements.cbbSites.val(); },              
+                Sites: function () { return cacheSite; },
                 Reason: function () { return domElements.reason; },
-                LiveIndicator: function () { return domElements.liveIndicator; }                       
+                LiveIndicator: function () { return domElements.liveIndicator; },
+                Start: start,
+                Length: length
             },
             beforeSend: function () {
                 domElements.tblMMHomeTeam.find('tbody').addClass('loading');
                 domElements.tblMMAwayTeam.find('tbody').addClass('loading');
             },
             success: function (response) {
-                cacheReasonGroupIDDic = response.data.ReasonGroupIDDic;
+                const data = response.data;
+                if (data) {
+                    cacheReasonGroupIDDic = data.ReasonGroupIDDic;
 
-                RefreshFilter(domElements.cbbMatchScore, response.data.ScoreList);
-                RefreshFilter(domElements.cbbReason, response.data.ReasonList);                    
+                    RefreshFilter(domElements.cbbCurrency, data.CurrencyList);
+                    RefreshFilter(domElements.cbbHDP, data.HDPList);
+                    RefreshFilter(domElements.cbbMatchScore, data.ScoreList);
+                    RefreshFilter(domElements.cbbReason, data.ReasonList);
 
-                domElements.tblMMHomeTeam.DataTable().clear().rows.add(response.data.HomeMatchItemList).draw();
-                domElements.tblMMAwayTeam.DataTable().clear().rows.add(response.data.AwayMatchItemList).draw();
+                    domElements.tblMMHomeTeam.DataTable().clear().rows.add(data.HomeMatchItemList).draw();
+                    domElements.tblMMAwayTeam.DataTable().clear().rows.add(data.AwayMatchItemList).draw();
 
-                domElements.spanReasonInfo.text(response.data.ReasonInfos);
+                    domElements.spanReasonInfo.text(data.ReasonInfos);
 
-                RefreshGroupFilter(response.data.GroupList);              
+                    $(".breadcrumb-totaltickets").html(`Total Tickets: ${start + data.HomeMatchItemList.length + data.AwayMatchItemList.length}/${response.totalTickets}`);
+
+                    RefreshGroupFilter(data.GroupList);
+                }
             },
             complete: function (response) {
-                domElements.tblMMHomeTeam.find('tbody').removeClass('loading');   
-                domElements.tblMMAwayTeam.find('tbody').removeClass('loading');                   
+                domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
+                domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
             },
             error: function (error) {
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
@@ -207,7 +232,7 @@
 
     function RefreshFilter(element, data) {
         element.multiselect().empty();
-       
+
         for (var i = 0; i < data.length; i++) {
             element.append(`<option selected value='${data[i]}'>${data[i]}</option>`);
         }
@@ -217,23 +242,23 @@
 
     function RefreshGroupFilter(data) {
         domElements.cbbGroup.multiselect().empty();
-        
+
         if (data.length == 0)
             domElements.cbbGroup.append(`<option selected value='0'>-</option>`);
-        
+
         for (var i = 0; i < data.length; i++) {
             domElements.cbbGroup.append(`<option selected value='${data[i].GroupID}'>${data[i].GroupName}</option>`);
         }
 
         domElements.cbbGroup.multiselect("refresh");
     }
-    
-    function RenderBotIcon(robotType, isRobot) {        
+
+    function RenderBotIcon(robotType, isRobot) {
         let html = '-';
         let spanHtml = '<span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span>';
-        
+
         if (isRobot) {
-            if (robotType == 1) 
+            if (robotType == 1)
                 html = `<span class="icon-big-Robot icon-big-good-robot">${spanHtml}</span>`;
             else if (robotType == 2)
                 html = `<span class="icon-big-Robot icon-big-bad-robot">${spanHtml}</span>`;
@@ -251,7 +276,7 @@
                 LiveIndicator: domElements.liveIndicator == "True",
                 BettypeID: domElements.betTypeID,
                 BetID: domElements.betIDToString,
-                TranIds: GetTranIds().join()               
+                TranIds: GetTranIds().join()
             },
             beforeSend: function () {
                 domElements.tblMMHomeTeam.addClass('loading-value');
@@ -274,16 +299,16 @@
 
     function GetTranIds() {
         let tranIds = [];
-        domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {   
+        domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
             if (data.PICVerified == '-' || data.PICVerified == '' || data.PICVerified == null) {
                 tranIds.push(data.TransIdToString);
-            }         
+            }
         });
         domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
             if (data.PICVerified == '' || data.PICVerified == '' || data.PICVerified == null) {
                 tranIds.push(data.TransIdToString);
-            }           
-        });        
+            }
+        });
 
         return tranIds;
     }
@@ -292,20 +317,20 @@
         return self.indexOf(value) === index;
     }
 
-    function ShowPopupAssDetection() {        
+    function ShowPopupAssDetection() {
         let ctsCustIDs = [];
         let custIDs = [];
         domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
             if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
                 ctsCustIDs.push(data.CTSCustID);
                 custIDs.push(data.CustID);
-            }                
+            }
         });
         domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
             if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
                 ctsCustIDs.push(data.CTSCustID);
                 custIDs.push(data.CustID);
-            }              
+            }
         });
 
         ctsCustIDs = ctsCustIDs.filter(OnlyUnique);
@@ -328,11 +353,11 @@
                 close: function () {
                     $(this).dialog('close');
                 }
-            })       
+            })
         }
     }
 
-    function DetectAssociation() {        
+    function DetectAssociation() {
         let params = {
             CTSCustIDs: domElements.hdSelectedCTSCustIDs.val(),
             CustIDs: domElements.hdSelectedCustIDs.val(),
@@ -351,7 +376,7 @@
                 domElements.tblMMHomeTeam.find('tbody').addClass('loading');
                 domElements.tblMMAwayTeam.find('tbody').addClass('loading');
             },
-            success: function (response) {                
+            success: function (response) {
                 BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam.DataTable(), response.data.ItemList);
                 BindChangeGroupAssWithOptions(domElements.tblMMAwayTeam.DataTable(), response.data.ItemList);
             },
@@ -360,7 +385,7 @@
                 domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
 
                 domElements.inputHomeSelectAll.prop('checked', false);
-                domElements.inputAwaySelectAll.prop('checked', false);           
+                domElements.inputAwaySelectAll.prop('checked', false);
             },
             error: function (error) {
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
@@ -369,14 +394,14 @@
             }
         });
 
-        domElements.divPopupAssDetect.dialog('close');        
+        domElements.divPopupAssDetect.dialog('close');
     }
 
-    function BindChangeGroupAssWithOptions(table, itemList) {        
+    function BindChangeGroupAssWithOptions(table, itemList) {
         table.rows().every(function () {
             let rowData = this.data();
             if ($(this.node()).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
-                let newGroupData = itemList.find(function (x) { return x.CustID == rowData.CustID; });               
+                let newGroupData = itemList.find(function (x) { return x.CustID == rowData.CustID; });
                 if (newGroupData != undefined && newGroupData.GroupID > 0) {
                     rowData.MDetectGroupID = newGroupData.GroupID;
                     rowData.MDetectGroup = newGroupData.GroupName;
@@ -410,10 +435,10 @@
     }
 
     function ReasonOnChange() {
-        let filterGroupIDs = [];   
+        let filterGroupIDs = [];
         var reasonKeys = Object.keys(cacheReasonGroupIDDic);
 
-        $("option:selected", domElements.cbbReason).each(function () {       
+        $("option:selected", domElements.cbbReason).each(function () {
             let groups = FindByReason($(this).text(), reasonKeys)
 
             $(groups).each(function (index, element) {
@@ -421,7 +446,7 @@
             })
         });
 
-        filterGroupIDs = filterGroupIDs.filter(OnlyUnique);        
+        filterGroupIDs = filterGroupIDs.filter(OnlyUnique);
         filterGroupIDs = filterGroupIDs.sort(function (a, b) {
             return a - b;
         })
@@ -436,10 +461,23 @@
         RefreshFilter(domElements.cbbGroup, filterGroupIDs);
     }
 
-    function FindByReason(reason, reasonKeys) {      
+    function TypeOfTicketsOnChange() {
+        switch (Number(domElements.cbbTypeOfTickets.val())) {
+            case MatchMonitorDetailViewType.All: {
+                GetMatchMonitorDetail();
+                break;
+            }
+            case MatchMonitorDetailViewType.Fraud: {
+                GetMatchMonitorDetail();
+                break;
+            }
+        }
+    }
+
+    function FindByReason(reason, reasonKeys) {
         let groupIDs = [];
-        $.grep(reasonKeys, function (key) {            
-            if (reason == key) {                
+        $.grep(reasonKeys, function (key) {
+            if (reason == key) {
                 let groups = cacheReasonGroupIDDic[key];
                 $(groups).each(function (index, element) {
                     groupIDs.push(element);
@@ -454,31 +492,29 @@
     function FilterGrid() {
         $.fn.dataTable.ext.search.push(
             function (settings, searchData, index, rowData, counter) {
-                let isEqualScore = true;
-                let isEqualReason = true;
-                let isEqualGroupID = true;
-                
                 if (!isFilterOption) return true;
 
                 let arrScores = domElements.cbbMatchScore.val();
                 let arrReasons = domElements.cbbReason.val();
-                let arrGroupIDs = domElements.cbbGroup.val();                
-                
-                if (arrScores.find(e => e == rowData['Score']) == undefined) { isEqualScore = false; }
+                let arrGroupIDs = domElements.cbbGroup.val();
+                let arrCurrencys = domElements.cbbCurrency.val();
+                let arrHDPs = domElements.cbbHDP.val();
+
+                const isEqualCurrency = arrCurrencys.find(e => e == rowData['Currency']);
+                if (!isEqualCurrency) return false;
+
+                const isEqualHDP = arrHDPs.find(e => e == rowData['HDP']);
+                if (!isEqualHDP) return false;
+
+                const isEqualScore = arrScores.find(e => e == rowData['Score']);
+                if (!isEqualScore) return false;
 
                 let reason = arrReasons.find(e => rowData['ReasonList'].includes(e));
-                if (reason == false || reason == undefined) { isEqualReason = false; }
+                const isEqualReason = reason;
+                if (!isEqualReason) return false;
 
-                if (arrGroupIDs.indexOf('-') !== -1 && rowData['ADetectGroupID'] == 0) {
-                    isEqualGroupID = true;
-                } else if (arrGroupIDs.find(e => e == rowData['ADetectGroupID']) == undefined) {
-                    isEqualGroupID = false;
-                } 
-
-                if (isEqualScore && isEqualReason && isEqualGroupID)               
-                    return true;               
-                else
-                    return false;
+                const isEqualGroupID = arrGroupIDs.indexOf('-') !== -1 && rowData['ADetectGroupID'] == 0 ? true : arrGroupIDs.find(e => e == rowData['ADetectGroupID']) != undefined;
+                if (!isEqualGroupID) return false;
 
                 return true;
             }
@@ -486,12 +522,12 @@
     }
 
     function ToggleGridSelectAll(input, table) {
-        var nodes = table.rows({ 'search': 'applied' }).nodes(); 
+        var nodes = table.rows({ 'search': 'applied' }).nodes();
 
-        $('input[type="checkbox"][name="chkbx"]', nodes).prop('checked', input.is(":checked"));         
+        $('input[type="checkbox"][name="chkbx"]', nodes).prop('checked', input.is(":checked"));
     }
 
-    function ExportToExcel() {   
+    function ExportToExcel() {
         if (CheckRuleExportExcel()) {
             let mmDetails = {
                 matchInfo: GetDataMatchInfo(),
@@ -510,7 +546,7 @@
             common.showSuccess("Export excel file is in process");
         } else {
             common.showError("Please select at least 2 records to proceed!");
-        }        
+        }
     }
 
     function CheckRuleExportExcel() {
@@ -524,7 +560,7 @@
             if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked'))
                 awayCheckedL = awayCheckedL + 1;
         })
-        
+
         if (homeCheckedL + awayCheckedL >= 2) return true;
         else return false;
     }
@@ -532,7 +568,7 @@
     function GetDataSelectedInGrid(table) {
         let datas = '';
         table.rows(function (idx, data, node) {
-            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {                
+            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
                 if (!$(node).is(':hidden')) {
                     datas += `{&quot;SubscriberType&quot;:&quot;${data.SubscriberType}&quot;`;
                     datas += `,&quot;CTSCustID&quot;:&quot;${data.CTSCustID}&quot;`;
@@ -553,11 +589,11 @@
                     datas += `,&quot;MDetectGroup&quot;:&quot;${data.MDetectGroup}&quot;`;
                     datas += `,&quot;ReasonList&quot;:&quot;${data.ReasonList}&quot;`;
                     datas += `,&quot;PICVerified&quot;:&quot;${data.PICVerified}&quot;},`;
-                }                
+                }
             }
         });
 
-        return datas != '' ? datas.slice(0, -1) : datas;                
+        return datas != '' ? datas.slice(0, -1) : datas;
     }
 
     function GetDataMatchInfo() {
@@ -566,7 +602,7 @@
         datas += `,&quot;EventDateStr&quot;:&quot;${domElements.eventDataToString}&quot;`;
         datas += `,&quot;BetTypeName&quot;:&quot;${domElements.betTypeName}&quot;}`;
         return datas;
-    }   
+    }
 
     function BindScrollHeaderFixed() {
         let $homeHeader = $('thead', domElements.tblMMHomeTeam).clone();
@@ -594,8 +630,22 @@
             }
         })
     }
-   
+
     function Initial() {
+        domElements.cbbCurrency.multiselect({
+            menuWidth: 260,
+            menuHeight: 260,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Currency "
+        });
+
+        domElements.cbbHDP.multiselect({
+            menuWidth: 260,
+            menuHeight: 260,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select HDP "
+        });
+
         domElements.cbbMatchScore.multiselect({
             menuWidth: 260,
             menuHeight: 260,
@@ -619,12 +669,27 @@
 
         domElements.cbbReason.change(function () { ReasonOnChange(); });
 
+        var isSupportShowAllTickets = false;
+        try {
+            isSupportShowAllTickets = JSON.parse(domElements?.isSupportShowAllTickets?.toLowerCase());
+        }
+        catch { }
+
+        domElements.cbbTypeOfTickets.prop('disabled', !isSupportShowAllTickets);
+        if (isSupportShowAllTickets) {
+            domElements.cbbTypeOfTickets.change(function () {
+                TypeOfTicketsOnChange();
+            });
+        }
+
         InitialDetailGird(domElements.tblMMHomeTeam);
 
         InitialDetailGird(domElements.tblMMAwayTeam);
-      
+
         domElements.btnRefresh.on('click', function () {
             isFilterOption = false;
+            domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.Fraud);
+            cacheSite = domElements.cbbSites.val();
             GetMatchMonitorDetail();
         })
 
@@ -662,9 +727,9 @@
     }
 
     $(document).ready(function () {
-        Initial();        
+        Initial();
 
-        GetMatchMonitorDetail();               
+        GetMatchMonitorDetail();
 
         BindScrollHeaderFixed();
     });

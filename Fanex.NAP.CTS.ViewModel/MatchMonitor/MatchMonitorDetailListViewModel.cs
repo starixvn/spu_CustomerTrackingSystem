@@ -24,6 +24,10 @@
 
         public IEnumerable<MatchMonitorDetailItemViewModel> AwayMatchItemList { get; set; }
 
+        public IEnumerable<string> CurrencyList { get; set; }
+
+        public IEnumerable<decimal> HDPList { get; set; }
+
         public IEnumerable<string> ScoreList { get; set; }
 
         public IEnumerable<string> ReasonList { get; set; }
