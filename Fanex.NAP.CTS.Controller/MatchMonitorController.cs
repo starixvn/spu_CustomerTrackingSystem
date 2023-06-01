@@ -155,7 +155,8 @@
                         VerifiedBy = m1.VerifiedBy,
                         KickOffTime = m2.KickOffTime,
                         EventDate = m2.EventDate,
-                        MatchSection = m2.MatchSection
+                        MatchSection = m2.MatchSection,
+                        IsSupportShowAllTickets = m2.IsGetDataFromOrigin == 1
                     });
 
                 return newMatches;

@@ -11,5 +11,7 @@
         public DateTime KickOffTime { get; set; }
 
         public int MatchSection { get; set; }
+
+        public int IsGetDataFromOrigin { get; set; }
     }
 }

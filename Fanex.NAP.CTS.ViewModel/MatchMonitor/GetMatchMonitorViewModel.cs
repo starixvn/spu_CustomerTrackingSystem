@@ -32,6 +32,7 @@
             this.IsVerified = data.IsVerified;
             this.VerifiedBy = data.VerifiedBy;
             this.KOTime = data.KickOffTime.ToString(Consts.FormatTimeToString_hhmmss_2);
+            this.IsSupportShowAllTickets = data.IsSupportShowAllTickets;
         }
 
         public Int64 ID { get; set; }
@@ -72,7 +73,9 @@
 
         public string VerifiedBy { get; set; }
 
-        public string KOTime { get; set; }        
+        public string KOTime { get; set; }
+
+        public bool IsSupportShowAllTickets { get; set; }
 
         public string MarketName
         {

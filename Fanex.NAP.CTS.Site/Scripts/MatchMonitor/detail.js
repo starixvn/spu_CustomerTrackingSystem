@@ -729,6 +729,7 @@ function MatchMonitorDetail() {
     $(document).ready(function () {
         Initial();
 
+        domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.Fraud);
         GetMatchMonitorDetail();
 
         BindScrollHeaderFixed();
