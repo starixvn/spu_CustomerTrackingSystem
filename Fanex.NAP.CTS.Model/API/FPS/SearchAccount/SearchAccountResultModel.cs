@@ -1,16 +1,18 @@
 ﻿namespace Fanex.NAP.CTS.Model.API.FPS.SearchAccount
 {
-    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class SearchAccountResultModel
     {
-        public long CTSCustID { get; set; }
-       
-        public string Username { get; set; }
+        public SearchAccountResultModel()
+        {
+            this.Items = Enumerable.Empty<SearchAccountItemModel>();
+            this.TotalItem = 0;
+        }
 
-        public string RegisterName { get; set; }
+        public IEnumerable<SearchAccountItemModel> Items { get; set; }
 
-        public int SubscriberID { get; set; }
-
+        public int TotalItem { get; set; }
     }
 }

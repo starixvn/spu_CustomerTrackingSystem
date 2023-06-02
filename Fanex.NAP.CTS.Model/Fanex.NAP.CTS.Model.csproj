@@ -191,6 +191,10 @@
     <Compile Include="API\CustomerClassModel.cs" />
     <Compile Include="API\CustomerClassification.cs" />
     <Compile Include="API\ForceSpecialCustomerClassModel.cs" />
+    <Compile Include="API\FPS\Account\GetAssAccountInfoByCustSubscriberModel.cs" />
+    <Compile Include="API\FPS\Account\GetAssAccountInfoByCustSubscriberParamModel.cs" />
+    <Compile Include="API\FPS\SearchAccount\SearchAccountParamModel.cs" />
+    <Compile Include="API\FPS\SearchAccount\SearchAccountItemModel.cs" />
     <Compile Include="API\FPS\SearchAccount\SearchAccountResultModel.cs" />
     <Compile Include="API\LicenseeVIPBA\CustInfoBySiteNameModel.cs" />
     <Compile Include="API\LicenseeVIPBA\LicenseeVIPBAModel.cs" />

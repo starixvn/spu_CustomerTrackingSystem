@@ -97,5 +97,6 @@
 	<Function name="SearchAccount">
 		<Setting Key="CTS_DC_CustInfo_GetByNameSubscriber" SpName="CTS_DC_CustInfo_GetByNameSubscriber_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_GetPartialByUserNameSubscriber" SpName="CTS_DC_CustInfo_GetPartialByUserNameSubscriber_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_Association_GetAccountInfoByCustSubscriber" SpName="CTS_DC_Association_GetAccountInfoByCustSubscriber_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 </Functions>

@@ -4,7 +4,7 @@
 
     public class SearchAccountResultViewModel
     {
-        public SearchAccountResultViewModel(SearchAccountResultModel data)
+        public SearchAccountResultViewModel(SearchAccountItemModel data)
         {
             this.CTSCustID = data.CTSCustID;
             this.Username = data.Username;

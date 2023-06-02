@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
     using Fanex.Logging;
+    using Fanex.NAP.CTS.Model.API.FPS.Account;
     using Fanex.NAP.CTS.Model.API.FPS.SearchAccount;
     using Fanex.NAP.CTS.Service.Implement.Api;
     using Fanex.NAP.CTS.Service.Interface.Api;
@@ -16,33 +17,44 @@
 
     public class FpsController : ApiController
     {
-        private readonly ISearchAccountService _accountService;
+        private readonly IFpsAccountService _accountService;
 
         public FpsController()
         {
-            _accountService = new SearchAccountService();
+            _accountService = new FpsAccountService();
         }
 
-        [HttpGet]
-        public JsonResult<List<SearchAccountResultViewModel>> SearchAccount(int subscriberID, string userName, bool isSearchPartial)
+        [HttpPost]       
+        public JsonResult<SearchAccountResultModel> SearchAccount(SearchAccountParamModel param)
         {
             try
             {
-                var accounts = new List<SearchAccountResultViewModel>();
-                var data = _accountService.SearchAccount(subscriberID, userName);
+                var data = _accountService.SearchAccount(param);               
 
-                if (data != null && data.Any())
-                {
-                    accounts = data.Select(x => new SearchAccountResultViewModel(x)).ToList();                   
-                }
-
-                return Json(accounts.ToList());
+                return Json(data);
                
             }
             catch (Exception ex)
             {
                 LogService.Error("FPS Search Account info exception: " + ex.Message);
-                return Json(new List<SearchAccountResultViewModel>());
+                return Json(new SearchAccountResultModel());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult<GetAssAccountInfoByCustSubscriberModel> GetAssAccountInfoByCustSubscriber(GetAssAccountInfoByCustSubscriberParamModel param)
+        {
+            try
+            {
+                var data = _accountService.GetAssAccountInfoByCustSubscriber(param);
+
+                return Json(data);
+
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Ass Account info by cust subscriber exception: " + ex.Message);
+                return Json(new GetAssAccountInfoByCustSubscriberModel());
             }
         }
 
