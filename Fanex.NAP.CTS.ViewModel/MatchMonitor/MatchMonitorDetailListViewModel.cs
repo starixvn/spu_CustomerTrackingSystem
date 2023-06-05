@@ -4,44 +4,27 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class MatchMonitorDetailListViewModel
+    public class MatchMonitorDetailListViewModel : MMDetailFilterViewModel
     {
-        public MatchMonitorDetailListViewModel()
+        public MatchMonitorDetailListViewModel() : base()
         {
             this.CTSCustIDList = string.Empty;
             this.HomeMatchItemList = Enumerable.Empty<MatchMonitorDetailItemViewModel>();
-            this.AwayMatchItemList = Enumerable.Empty<MatchMonitorDetailItemViewModel>();           
-            this.ScoreList = Enumerable.Empty<string>();
-            this.ReasonList = Enumerable.Empty<string>();
-            this.GroupList = Enumerable.Empty<GroupInfoViewModel>();
-            this.ReasonInfos = string.Empty;
-            this.ReasonGroupIDDic = new Dictionary<string, List<int>>();
-        }        
+            this.AwayMatchItemList = Enumerable.Empty<MatchMonitorDetailItemViewModel>();
+        }
+
+        public long? LastSequenceID { get; set; }
 
         public string CTSCustIDList { get; set; }
-    
+
         public IEnumerable<MatchMonitorDetailItemViewModel> HomeMatchItemList { get; set; }
 
         public IEnumerable<MatchMonitorDetailItemViewModel> AwayMatchItemList { get; set; }
 
-        public IEnumerable<string> CurrencyList { get; set; }
-
-        public IEnumerable<decimal> HDPList { get; set; }
-
-        public IEnumerable<string> ScoreList { get; set; }
-
-        public IEnumerable<string> ReasonList { get; set; }
-
-        public IEnumerable<GroupInfoViewModel> GroupList { get; set; }
-
-        public string ReasonInfos { get; set; }
-
-        public Dictionary<string, List<int>> ReasonGroupIDDic { get; set; }
-
         public void BindReasons(IEnumerable<string> rawReasons)
         {
             var reasons = new List<string>();
-            
+
             foreach (var reason in rawReasons)
             {
                 if (!string.IsNullOrEmpty(reason))
@@ -66,6 +49,5 @@
             }
 
         }
-
     }
 }

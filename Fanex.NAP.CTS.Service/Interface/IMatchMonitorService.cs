@@ -1,16 +1,18 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Core;
+    using Fanex.NAP.CTS.Criteria.MatchMonitor;
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using System;
     using System.Collections.Generic;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public interface IMatchMonitorService
     {
-        IEnumerable<MatchFromMainInfoModel> GetMatchFromMainInfos(MatchMonitorFilterViewModel filter, string matchIDs);
+        IEnumerable<MatchFromMainInfoModel> GetMatchFromMainInfos(MatchMonitorSearchViewModel filter, string matchIDs);
 
-        IEnumerable<GetMatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter, string matchInfoFromMainJson);
+        IEnumerable<GetMatchMonitorModel> GetMatchMonitor(MatchMonitorSearchViewModel filter, string matchInfoFromMainJson);
 
         IEnumerable<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, Int64 betId, int reason);
 
@@ -18,11 +20,13 @@
 
         DBResult VerifyTransMatchMonitorDetail(MatchMonitorDetailVerifyTransParaModel para);
 
-        MatchMonitorDetailResultModel GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter);
+        MatchMonitorDetailResultModel GetMatchMonitorDetail(MatchMonitorDetailSearchViewModel filter);
 
         IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);
 
-        IEnumerable<TicketDetailModel> GetTicketDetail(DateTime eventDate, string transIds);
+        IEnumerable<TicketDetailModel> GetTicketDetail(MatchMonitorDetailSearchViewModel para, string transIds, int batchSize = 1000);
+
+        MMTicketDetailInfoModel GetMMTicketDetailInfoCriteria(MatchMonitorDetailSearchViewModel para);
 
         IEnumerable<MMDetailMergeGroupModel> GetMMDetailMergeGroup(IEnumerable<MMDetailBetTeamModel> mmDetailBetTeams);
 

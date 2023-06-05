@@ -9,44 +9,25 @@
     {
         public MatchMonitorDetailItemViewModel() { }
 
+        public MatchMonitorDetailItemViewModel(TicketDetailModel ticket)
+        {
+            Update(ticket);
+        }
+
+        public MatchMonitorDetailItemViewModel(TicketDetailModel ticket, CustInfoModel cust)
+        {
+            Update(ticket);
+            Update(cust);
+        }
+
         public MatchMonitorDetailItemViewModel(int mergeGroupID, TicketDetailModel ticket, CustInfoModel cust)
         {
-            this.CTSCustID = cust.CTSCustID;
-            this.CustID = cust.CustID;
-            this.SubscriberType = cust.SubscriberType;
-            this.Username = cust.UserName;
-            this.CustomerClass = cust.CustomerClass;
-            //this.PICVerified = verifiedTransID,
-            this.Danger1 = ticket.Danger1;
-            this.Danger2 = ticket.Danger2;
-            this.Danger3 = ticket.Danger3;
-            this.Danger4 = ticket.Danger4;
-            this.Danger5 = ticket.Danger5;
-            this.Odds = ticket.Odds;
-            this.BetID = ticket.TransId.ToString();
-            this.BetTeam = ticket.BetTeam;
-
-            this.Currency = cust.Currency;
-            this.Stake = ticket.Stake;
-            this.Amount = ticket.OrgStake;
-            this.HDP1 = ticket.Hdp1;
-            this.HDP2 = ticket.Hdp2;
-            this.Score = ticket.LiveIndicator ? (ticket.LiveHomeScore + " - " + ticket.LiveAwayScore) : "-";
-            this.TicketStatus = ticket.TicketStatus;
-            this.TransTime = ticket.TransDate;
-            this.TransTimeToString = ticket.TransDate.ToString(Consts.FormatDateToString_ddMMhhmmss);
+            Update(ticket);
+            Update(cust);
             this.ADetectGroup = mergeGroupID.ToString();
             this.ADetectGroupID = mergeGroupID;
-            this.MDetectGroup = "-";
-            this.MDetectGroupID = -2;
-            //this.ReasonList = "",         
-            this.TransId = ticket.TransId;
-            this.RobotType = null;
-            this.IsRobot = false;
-            this.IsPA = cust.ParentID == 50;
-            this.IsNormalLinkedPA = (cust.ParentID == 200 && cust.TaggingType == 1);
         }
-        
+
         public Int64 CTSCustID { get; set; }
 
         public Int64 CustID { get; set; }
@@ -185,6 +166,44 @@
         public bool IsPA { get; set; }
 
         public bool IsNormalLinkedPA { get; set; }
-      
+
+        private void Update(TicketDetailModel ticket)
+        {
+            this.CustomerClass = ticket.CustomerClass;
+            //this.PICVerified = verifiedTransID,
+            this.Danger1 = ticket.Danger1;
+            this.Danger2 = ticket.Danger2;
+            this.Danger3 = ticket.Danger3;
+            this.Danger4 = ticket.Danger4;
+            this.Danger5 = ticket.Danger5;
+            this.Odds = ticket.Odds;
+            this.BetID = ticket.TransId.ToString();
+            this.BetTeam = ticket.BetTeam;
+            this.Currency = ticket.CurrencyName;
+            this.Stake = ticket.Stake;
+            this.Amount = ticket.OrgStake;
+            this.HDP1 = ticket.Hdp1;
+            this.HDP2 = ticket.Hdp2;
+            this.Score = ticket.LiveIndicator ? (ticket.LiveHomeScore + " - " + ticket.LiveAwayScore) : "-";
+            this.TicketStatus = ticket.TicketStatus;
+            this.TransTime = ticket.TransDate;
+            this.TransTimeToString = ticket.TransDate.ToString(Consts.FormatDateToString_ddMMhhmmss);
+            this.MDetectGroup = "-";
+            this.MDetectGroupID = -2;
+            //this.ReasonList = "",         
+            this.TransId = ticket.TransId;
+            this.RobotType = null;
+            this.IsRobot = false;
+        }
+
+        private void Update(CustInfoModel cust)
+        {
+            this.CTSCustID = cust.CTSCustID;
+            this.CustID = cust.CustID;
+            this.SubscriberType = cust.SubscriberType;
+            this.Username = cust.UserName;
+            this.IsPA = cust.ParentID == 50;
+            this.IsNormalLinkedPA = (cust.ParentID == 200 && cust.TaggingType == 1);
+        }
     }
 }

@@ -76,8 +76,6 @@
         public const string AssociationTypeName_IP = "IP";
         public const string AssociationTypeName_IPAssociation = "IP Association";
 
-        public const int MatchMonitor_ReportQueryType = 2;
-
         public const int ProblemCase_ItemID_Robot = 1;
         public const int ProblemCase_ItemID_SuspiciousAssociation = 4;
         public const int ProblemCase_ItemID_ProPunter = 9;
@@ -430,10 +428,10 @@
             TD = 300
         };
 
-        public enum MatchMonitorDetailViewType
+        public enum MatchMonitorQueryType
         {
-            All,
-            Fraud
+            Fraud = 2,
+            All = 3
         }
     }
 }

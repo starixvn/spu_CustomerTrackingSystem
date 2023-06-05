@@ -59,5 +59,9 @@
         public int Danger4 { get; set; }
 
         public int Danger5 { get; set; }
+
+        public int CustomerClass { get; set; }
+
+        public string CurrencyName { get; set; }
     }
 }

@@ -1,12 +1,13 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
     using System;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
-    public class MatchMonitorDetailFilterViewModel
+    public class MatchMonitorDetailSearchViewModel
     {
-        public int start { get; set; }
+        public MatchMonitorQueryType? TypeOfTickets { get; set; }
 
-        public int length { get; set; }
+        public long? LastScannedSequenceID { get; set; }
 
         public string EventDateToString { get; set; }
 
@@ -19,7 +20,7 @@
         public string Sites { get; set; }
 
         public bool LiveIndicator { get; set; }
-      
+
         public DateTime EventDate
         {
             get
@@ -35,9 +36,14 @@
             }
         }
 
-        public string BuildCacheKey(string nameOfFuntion)
+        public string BuildCacheKey(string nameOfFuntion, string region = "")
         {
-            return $"{nameOfFuntion}_{EventDateToString}_{MatchID}_{BetTypeID}_{BetID}_{Sites}_{LiveIndicator}";
+            return $"{region}_{nameOfFuntion}_{EventDateToString}_{MatchID}_{BetTypeID}_{BetID}_{Sites}_{LiveIndicator}";
+        }
+
+        public string BuildCacheKeyForAllMMTicket(string nameOfFunction, string region = "")
+        {
+            return BuildCacheKey(nameOfFunction, region) + $"_{LastScannedSequenceID?.ToString() ?? string.Empty}";
         }
     }
 }
