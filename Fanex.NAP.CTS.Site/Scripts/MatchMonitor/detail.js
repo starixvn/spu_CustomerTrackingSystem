@@ -59,7 +59,7 @@ function MatchMonitorDetail() {
         btnVerifyAndClose: $('#btnVerifyAndClose')
     };
 
-    let isFilterOption = false;
+    let isFilterOptionServerSide = false;
 
     let recordsFilteredGlobal = 0;
     let recordsTotalGlobal = 0;
@@ -67,6 +67,10 @@ function MatchMonitorDetail() {
     let cacheTicketDetail;
     let cacheFilter;
     let cacheReasonGroupIDDic = {};
+
+    let posClickGlobal = 0;
+    let xhr;
+    let currentType = MatchMonitorDetailViewType.Fraud;
 
     function InitialDetailGird(element) {
         element.DataTable({
@@ -187,47 +191,79 @@ function MatchMonitorDetail() {
         recordsFilteredGlobal = 0;
         domElements.tblMMHomeTeam.DataTable().clear();
         domElements.tblMMAwayTeam.DataTable().clear();
-        GetMatchMonitorDetail(typeOfTickets, lastScannedSequenceID);
+        posClickGlobal++;
+        if (xhr) {
+            xhr.onreadystatechange = null;
+            xhr.abort();
+        }
+        GetMatchMonitorDetail(typeOfTickets, lastScannedSequenceID, typeOfTickets == MatchMonitorDetailViewType.All ? posClickGlobal : 0);
     }
 
-    function GetMatchMonitorDetail(typeOfTickets = MatchMonitorDetailViewType.Fraud, lastScannedSequenceID = 0) {
-        $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorDetail'), {
+    function GetMatchMonitorDetail(typeOfTickets = MatchMonitorDetailViewType.Fraud, lastScannedSequenceID = 0, posClick = 0) {
+        currentType = typeOfTickets;
+
+        const data = {
+            EventDateToString: function () { return domElements.eventDataToString; },
+            MatchID: function () { return domElements.matchID; },
+            BetTypeID: function () { return domElements.betTypeID; },
+            BetID: function () { return domElements.betIDToString; },
+            Sites: function () { return cacheSite; },
+            Reason: function () { return domElements.reason; },
+            LiveIndicator: function () { return domElements.liveIndicator; },
+            LastScannedSequenceID: lastScannedSequenceID,
+            TypeOfTickets: typeOfTickets,
+            isFilter: isFilterOptionServerSide,
+            CurrencyListString: JSON.stringify(domElements.cbbCurrency.val()),
+            HDPListString: JSON.stringify(domElements.cbbHDP.val()),
+            ScoreListString: JSON.stringify(domElements.cbbMatchScore.val()),
+            ReasonListString: JSON.stringify(domElements.cbbReason.val()),
+            ReasonGroupIDDicString: JSON.stringify(domElements.cbbGroup.val())
+        };
+
+        xhr = $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorDetail'), {
             type: 'POST',
-            data:
-            {
-                EventDateToString: function () { return domElements.eventDataToString; },
-                MatchID: function () { return domElements.matchID; },
-                BetTypeID: function () { return domElements.betTypeID; },
-                BetID: function () { return domElements.betIDToString; },
-                Sites: function () { return cacheSite; },
-                Reason: function () { return domElements.reason; },
-                LiveIndicator: function () { return domElements.liveIndicator; },
-                LastScannedSequenceID: lastScannedSequenceID,
-                TypeOfTickets: typeOfTickets
-            },
+            tryCount: 0,
+            retryLimit: 3,
+            data: data,
             beforeSend: function () {
                 domElements.tblMMHomeTeam.find('tbody').addClass('loading');
                 domElements.tblMMAwayTeam.find('tbody').addClass('loading');
             },
             success: function (response) {
-                RenderMatchMonitorDetail(response, typeOfTickets);
+                if (typeOfTickets == MatchMonitorDetailViewType.All && posClickGlobal != posClick) {
+                    return;
+                }
+
                 if (typeOfTickets == MatchMonitorDetailViewType.Fraud) {
+                    RenderFilter(response.data);
                     CacheTicketDetail(response);
                 }
 
+                RenderMatchMonitorDetail(response, typeOfTickets);
+
                 if (typeOfTickets == MatchMonitorDetailViewType.All && response?.data?.LastSequenceID) {
-                    GetMatchMonitorDetail(typeOfTickets, response?.data?.LastSequenceID)
+                    GetMatchMonitorDetail(typeOfTickets, response?.data?.LastSequenceID, posClick);
                 }
             },
             complete: function (response) {
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
                 domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
             },
-            error: function (error) {
+            error: function (xhr, textStatus, error) {
+                if (textStatus == 'timeout') {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        //try again
+                        $.ajax(this);
+                        return;
+                    }
+                }
+
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
                 domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
                 console.log(error);
-            }
+            },
+            timeout: 5000
         });
     }
 
@@ -239,6 +275,8 @@ function MatchMonitorDetail() {
     function GetFilterMatchMonitorDetail() {
         $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorFilter'), {
             type: 'POST',
+            tryCount: 0,
+            retryLimit: 3,
             data:
             {
                 EventDateToString: function () { return domElements.eventDataToString; },
@@ -248,85 +286,107 @@ function MatchMonitorDetail() {
                 Sites: function () { return cacheSite; },
                 Reason: function () { return domElements.reason; },
                 LiveIndicator: function () { return domElements.liveIndicator; },
-                TypeOfTickets: MatchMonitorDetailViewType.All
+                TypeOfTickets: MatchMonitorDetailViewType.All,
             },
             success: function (response) {
                 const data = response?.data;
                 if (data) {
                     recordsTotalGlobal = data.RecordsTotal;
-                    RenderFilter(data, recordsTotalGlobal)
+                    RenderFilter(data, recordsTotalGlobal);
+                    FetchMatchMonitorDetail(MatchMonitorDetailViewType.All);
                 }
             },
-            error: function (error) {
+            error: function (xhr, textStatus, error) {
+                if (textStatus == 'timeout') {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        //try again
+                        $.ajax(this);
+                        return;
+                    }
+                }
+
                 console.log(error);
-            }
+            },
+            timeout: 5000
         });
     }
 
     function RenderMatchMonitorDetail(response, typeOfTickets = MatchMonitorDetailViewType.Fraud) {
         const data = response?.data;
         if (data) {
-            if (typeOfTickets == MatchMonitorDetailViewType.Fraud) {
+            if (typeOfTickets == MatchMonitorDetailViewType.Fraud ||
+                (typeOfTickets == MatchMonitorDetailViewType.All && data.isFilter == true)) {
                 recordsTotalGlobal = recordsFilteredGlobal = response.recordsFiltered;
-                RenderFilter(data);
+            }
+            if (typeOfTickets == MatchMonitorDetailViewType.All && data.isFilter == false) {
+                recordsFilteredGlobal += response?.recordsFiltered ?? 0;
+                if (recordsFilteredGlobal > recordsTotalGlobal) {
+                    recordsTotalGlobal = recordsFilteredGlobal;
+                }
             }
 
             domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw();
             domElements.tblMMAwayTeam.DataTable().rows.add(data.AwayMatchItemList).draw();
 
-            recordsFilteredGlobal += response?.recordsFiltered ?? 0;
-            if (recordsFilteredGlobal > recordsTotalGlobal) {
-                recordsTotalGlobal = recordsFilteredGlobal;
-            }
             $(".breadcrumb-totaltickets").html(`Total Tickets: ${recordsFilteredGlobal}/${recordsTotalGlobal}`);
-
         }
     }
 
-    function RenderFilter(data) {
-        cacheReasonGroupIDDic = data.ReasonGroupIDDic;
-        SetupFilter(domElements.cbbCurrency, data.CurrencyList);
-        SetupFilter(domElements.cbbHDP, data.HDPList);
-        SetupFilter(domElements.cbbMatchScore, data.ScoreList);
-        SetupFilter(domElements.cbbReason, data.ReasonList);
-        domElements.spanReasonInfo.text(data.ReasonInfos);
-        SetupGroupFilter(data.GroupList);
+    function RenderFilter(data, typeOfTickets = MatchMonitorDetailViewType.Fraud, isCache = true) {
+        if (data.isFilter === false) {
+            cacheReasonGroupIDDic = data.ReasonGroupIDDic;
+            SetupFilter(domElements.cbbCurrency, data.CurrencyList);
+            SetupFilter(domElements.cbbHDP, data.HDPList);
+            SetupFilter(domElements.cbbMatchScore, data.ScoreList);
+            SetupFilter(domElements.cbbReason, data.ReasonList);
+            domElements.spanReasonInfo.text(data.ReasonInfos);
+            SetupGroupFilter(data.GroupList);
 
-        $(".breadcrumb-totaltickets").html(`Total Tickets: 0/${recordsTotalGlobal}`);
+            $(".breadcrumb-totaltickets").html(`Total Tickets: 0/${recordsTotalGlobal}`);
+        }
+
+        if (data.isFilter === false && typeOfTickets == MatchMonitorDetailViewType.Fraud && isCache) {
+            if (cacheFilter == undefined) {
+                cacheFilter = {};
+            }
+
+            cacheFilter.data = data;
+        }
     }
 
     function RefreshFilter() {
-        if (cacheFilter) {
-            isFilterOption = cacheFilter.isFilterOption;
-            if (isFilterOption === true) {
+        if (cacheFilter && currentType == MatchMonitorDetailViewType.Fraud) {
+            if (cacheFilter.data != undefined) {
+                RenderFilter(cacheFilter.data, MatchMonitorDetailViewType.Fraud, false);
+            }
+
+            isFilterOptionServerSide = cacheFilter.isFilterOption;
+            if (isFilterOptionServerSide === true) {
                 RefreshFilterSelected(domElements.cbbCurrency, cacheFilter.cbbCurrency);
                 RefreshFilterSelected(domElements.cbbHDP, cacheFilter.cbbHDP);
                 RefreshFilterSelected(domElements.cbbMatchScore, cacheFilter.cbbMatchScore);
                 RefreshFilterSelected(domElements.cbbReason, cacheFilter.cbbReason);
                 RefreshFilterSelected(domElements.cbbGroup, cacheFilter.cbbGroup);
-
-                DrawGrid();
             }
         }
     }
 
     function CacheTicketDetail(response) {
-        if (!cacheTicketDetail) {
+        if (cacheTicketDetail == undefined) {
             cacheTicketDetail = {};
         }
 
         cacheTicketDetail.response = response;
-        // cacheTicketDetail.recordsTotalGlobal = recordsTotalGlobal;
-        // cacheTicketDetail.recordsFilteredGlobal = recordsFilteredGlobal;
     }
 
     function CacheFilter() {
-        if (!cacheFilter) {
+        if (cacheFilter == undefined) {
             cacheFilter = {};
         }
 
-        cacheFilter.isFilterOption = isFilterOption;
-        if (isFilterOption === true) {
+        cacheFilter.isFilterOption = isFilterOptionServerSide;
+        if (isFilterOptionServerSide === true) {
             cacheFilter.cbbCurrency = domElements.cbbCurrency.val();
             cacheFilter.cbbHDP = domElements.cbbHDP.val();
             cacheFilter.cbbMatchScore = domElements.cbbMatchScore.val();
@@ -346,8 +406,13 @@ function MatchMonitorDetail() {
         if (cacheTicketDetail) {
             domElements.tblMMHomeTeam.DataTable().clear();
             domElements.tblMMAwayTeam.DataTable().clear();
-            RenderMatchMonitorDetail(cacheTicketDetail.response);
+            posClickGlobal++;
+            if (xhr) {
+                xhr.onreadystatechange = null;
+                xhr.abort();
+            }
             RefreshFilter();
+            RenderMatchMonitorDetail(cacheTicketDetail.response);
         }
     }
 
@@ -590,11 +655,13 @@ function MatchMonitorDetail() {
     function TypeOfTicketsOnChange() {
         switch (Number(domElements.cbbTypeOfTickets.val())) {
             case MatchMonitorDetailViewType.All: {
+                isFilterOptionServerSide = false;
+                currentType = MatchMonitorDetailViewType.All;
                 FetchFilterMatchMonitorDetail();
-                FetchMatchMonitorDetail(MatchMonitorDetailViewType.All);
                 break;
             }
             case MatchMonitorDetailViewType.Fraud: {
+                currentType = MatchMonitorDetailViewType.Fraud;
                 LoadCacheMatchMonitorDetail();
                 break;
             }
@@ -614,38 +681,6 @@ function MatchMonitorDetail() {
         });
 
         return groupIDs;
-    }
-
-    function FilterGrid() {
-        $.fn.dataTable.ext.search.push(
-            function (settings, searchData, index, rowData, counter) {
-                if (!isFilterOption) return true;
-
-                let arrScores = domElements.cbbMatchScore.val();
-                let arrReasons = domElements.cbbReason.val();
-                let arrGroupIDs = domElements.cbbGroup.val();
-                let arrCurrencys = domElements.cbbCurrency.val();
-                let arrHDPs = domElements.cbbHDP.val();
-
-                const isEqualCurrency = arrCurrencys.find(e => e == rowData['Currency']);
-                if (!isEqualCurrency) return false;
-
-                const isEqualHDP = arrHDPs.find(e => e == rowData['HDP']);
-                if (!isEqualHDP) return false;
-
-                const isEqualScore = arrScores.find(e => e == rowData['Score']);
-                if (!isEqualScore) return false;
-
-                let reason = arrReasons.find(e => rowData['ReasonList'].includes(e));
-                const isEqualReason = reason;
-                if (!isEqualReason) return false;
-
-                const isEqualGroupID = arrGroupIDs.indexOf('-') !== -1 && rowData['ADetectGroupID'] == 0 ? true : arrGroupIDs.find(e => e == rowData['ADetectGroupID']) != undefined;
-                if (!isEqualGroupID) return false;
-
-                return true;
-            }
-        );
     }
 
     function ToggleGridSelectAll(input, table) {
@@ -817,17 +852,19 @@ function MatchMonitorDetail() {
         InitialDetailGird(domElements.tblMMAwayTeam);
 
         domElements.btnRefresh.on('click', function () {
-            isFilterOption = false;
+            isFilterOptionServerSide = false;
             ClearCache();
             FetchMatchMonitorDetail();
         })
 
+        domElements.btnGenerateDetail.on('click', function () {
+            isFilterOptionServerSide = true;
+            if (currentType == MatchMonitorDetailViewType.Fraud) {
+                CacheFilter();
+            }
 
-        domElements.cbbCurrency.on('change', function () {
-            console.log(domElements.cbbCurrency);
+            FetchMatchMonitorDetail(currentType);
         })
-
-        domElements.btnGenerateDetail.on('click', function () { isFilterOption = true; DrawGrid(); CacheFilter(); })
 
         domElements.inputHomeSelectAll.on('click', function () { ToggleGridSelectAll(domElements.inputHomeSelectAll, domElements.tblMMHomeTeam.DataTable()) });
 
@@ -857,7 +894,7 @@ function MatchMonitorDetail() {
             });
         })
 
-        FilterGrid();
+        // FilterGrid();
     }
 
     $(document).ready(function () {

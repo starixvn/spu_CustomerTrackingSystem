@@ -21,13 +21,25 @@
         {
             RecordsTotal = mMTicket.TotalTicket;
             CurrencyList = mMTicket.ListCurrency?.Split(',') ?? new List<string>() { "-" }.AsEnumerable();
-            HDPList = mMTicket.ListHDP?.Split(',').Select(x => decimal.Parse(x)) ?? new List<decimal>();
+            HDPList = mMTicket.ListHDP?.Split(',').Select(x => decimal.Parse(x)) ?? new List<decimal>() { };
             ScoreList = mMTicket.ListScore?.Split(',') ?? new List<string>() { "-" }.AsEnumerable();
-            ReasonList = fraudTicket.ReasonList ?? new List<string>() { "-" }.AsEnumerable();
-            GroupList = fraudTicket.GroupList;
-            ReasonInfos = fraudTicket.ReasonInfos;
-            ReasonGroupIDDic = fraudTicket?.ReasonGroupIDDic;
+            var reasonList = fraudTicket.ReasonList?.ToList() ?? new List<string>();
+            reasonList.Add("-");
+            ReasonList = reasonList;
+            var groupList = fraudTicket.GroupList?.ToList() ?? new List<GroupInfoViewModel>();
+            groupList.Add(new GroupInfoViewModel
+            {
+                GroupID = -1,
+                GroupName = "-"
+            });
+            GroupList = groupList;
+            ReasonInfos = string.Join(",", ReasonList);
+            var reasonGroupIDDic = fraudTicket?.ReasonGroupIDDic ?? new Dictionary<string, List<int>>();
+            reasonGroupIDDic.Add("-", new List<int>() { -1 });
+            ReasonGroupIDDic = reasonGroupIDDic;
         }
+
+        public bool isFilter { get; set; }
 
         public long RecordsTotal { get; set; }
 
@@ -44,5 +56,15 @@
         public string ReasonInfos { get; set; }
 
         public Dictionary<string, List<int>> ReasonGroupIDDic { get; set; }
+
+        public string CurrencyListString { get; set; }
+
+        public string HDPListString { get; set; }
+
+        public string ScoreListString { get; set; }
+
+        public string ReasonListString { get; set; }
+
+        public string ReasonGroupIDDicString { get; set; }
     }
 }

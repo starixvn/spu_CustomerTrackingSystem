@@ -166,7 +166,6 @@
             var criteria = new MMTicketDetailInfoCriteria()
             {
                 MatchID = para.MatchID,
-                EventDate = para.EventDate,
                 BetType = para.BetTypeID,
                 IsLive = para.LiveIndicator ? 1 : 0
             };

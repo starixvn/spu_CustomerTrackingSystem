@@ -8,9 +8,6 @@
         [SpParam(SqlParamName = "MatchID")]
         public Int64 MatchID { get; set; }
 
-        [SpParam(SqlParamName = "EventDate")]
-        public DateTime EventDate { get; set; }
-
         [SpParam(SqlParamName = "BetType")]
         public Int32 BetType { get; set; }
 
