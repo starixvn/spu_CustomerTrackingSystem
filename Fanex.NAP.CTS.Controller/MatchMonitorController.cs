@@ -402,11 +402,11 @@
                         var start = 0;
                         do
                         {
-                            result.TicketDetails = _matchMonitorService.GetTicketDetail(para, string.Join(",", tranIdsDistinct));
+                            result.TicketDetails = _matchMonitorService.GetTicketDetail(para, string.Join(",", tranIdsDistinct)).OrderBy(x => x.SequenceID);
 
                             start += result.TicketDetails.Count();
 
-                            result.LastSequenceID = start < filter.RecordsTotal && result.TicketDetails.Any() ? result?.TicketDetails?.Max(x => x.SequenceID) : null;
+                            result.LastSequenceID = start < filter.RecordsTotal && result.TicketDetails.Any() ? result?.TicketDetails?.LastOrDefault()?.SequenceID : null;
                             yield return result;
 
                             para.LastScannedSequenceID = result.LastSequenceID;
@@ -486,7 +486,7 @@
 
             try
             {
-                result = GetMatchMonitorFilterFromCache(para);
+                result = GetMatchMonitorFilterFromCache(para, true);
             }
             catch (Exception ex)
             {
@@ -501,7 +501,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private MMDetailFilterViewModel GetMatchMonitorFilterFromCache(MatchMonitorDetailSearchViewModel para)
+        private MMDetailFilterViewModel GetMatchMonitorFilterFromCache(MatchMonitorDetailSearchViewModel para, bool isCache = false)
         {
             var key = para.BuildCacheKey(nameof(GetMatchMonitorFilterFromCache), MMDetailRegion);
             var result = new MMDetailFilterViewModel();
@@ -516,16 +516,20 @@
                     var fraudTicketDetail = GetFraudMMTicketDetailFromCache(para);
 
                     result = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetail);
-                    _memoryCacheService.PushValueAsync(key, result);
 
-                    Task.Run(() =>
+                    if (isCache)
                     {
-                        para.LastScannedSequenceID = 0;
-                        foreach (var item in GetAllMatchMonitorDetail(para, true))
+                        _memoryCacheService.PushValueAsync(key, result);
+
+                        Task.Run(() =>
                         {
-                            _ = _memoryCacheService.PushValueAsync(para.BuildCacheKeyForAllMMTicket(nameof(GetAllMMTicketDetailFromCache), MMDetailRegion), item);
-                        }
-                    });
+                            para.LastScannedSequenceID = 0;
+                            foreach (var item in GetAllMatchMonitorDetail(para, true))
+                            {
+                                _ = _memoryCacheService.PushValueAsync(para.BuildCacheKeyForAllMMTicket(nameof(GetAllMMTicketDetailFromCache), MMDetailRegion), item);
+                            }
+                        });
+                    }
                 }
             }
 

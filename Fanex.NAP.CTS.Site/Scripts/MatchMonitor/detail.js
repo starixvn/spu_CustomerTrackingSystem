@@ -212,7 +212,7 @@ function MatchMonitorDetail() {
             success: function (response) {
                 RenderMatchMonitorDetail(response, typeOfTickets);
                 if (typeOfTickets == MatchMonitorDetailViewType.Fraud) {
-                    CacheTicketDetail(response, lastScannedSequenceID);
+                    CacheTicketDetail(response);
                 }
 
                 if (typeOfTickets == MatchMonitorDetailViewType.All && response?.data?.LastSequenceID) {
@@ -267,7 +267,7 @@ function MatchMonitorDetail() {
         const data = response?.data;
         if (data) {
             if (typeOfTickets == MatchMonitorDetailViewType.Fraud) {
-                recordsTotalGlobal = response.recordsFiltered;
+                recordsTotalGlobal = recordsFilteredGlobal = response.recordsFiltered;
                 RenderFilter(data);
             }
 
@@ -316,6 +316,8 @@ function MatchMonitorDetail() {
         }
 
         cacheTicketDetail.response = response;
+        // cacheTicketDetail.recordsTotalGlobal = recordsTotalGlobal;
+        // cacheTicketDetail.recordsFilteredGlobal = recordsFilteredGlobal;
     }
 
     function CacheFilter() {
