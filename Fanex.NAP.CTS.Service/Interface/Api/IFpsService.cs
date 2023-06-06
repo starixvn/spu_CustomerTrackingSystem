@@ -2,12 +2,16 @@
 {
     using Fanex.NAP.CTS.Model.API.FPS.Account;
     using Fanex.NAP.CTS.Model.API.FPS.SearchAccount;
+    using Fanex.NAP.CTS.Model.API.FPS.Transaction;
 
-    public interface IFpsAccountService
+    public interface IFpsService
     {
         SearchAccountResultModel SearchAccount(SearchAccountParamModel param);
 
         GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriber(GetAssAccountInfoByCustSubscriberParamModel param);
 
+        TransactionResultModel GetTransactionHistory(TransactionParamModel param);
+
+        GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriber(GetAssAccountsByCustSubscriberParamModel param);
     }
 }

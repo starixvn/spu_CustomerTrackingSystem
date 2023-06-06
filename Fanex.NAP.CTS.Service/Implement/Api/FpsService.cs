@@ -4,15 +4,17 @@
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Criteria.Api.FPS.Account;
     using Fanex.NAP.CTS.Criteria.Api.FPS.SearchAccount;
+    using Fanex.NAP.CTS.Criteria.Api.FPS.Transaction;
     using Fanex.NAP.CTS.Model.API.FPS.Account;
     using Fanex.NAP.CTS.Model.API.FPS.SearchAccount;
+    using Fanex.NAP.CTS.Model.API.FPS.Transaction;
     using Fanex.NAP.CTS.Service.Interface.Api;
 
-    public class FpsAccountService : IFpsAccountService
+    public class FpsService : IFpsService
     {
         private readonly IDynamicRepository repository;
 
-        public FpsAccountService()
+        public FpsService()
         {
             repository = new DynamicRepository();            
         }
@@ -59,6 +61,42 @@
             return DataService.GetSingle<GetAssAccountInfoByCustSubscriberModel>(criteria);
         }
 
+        public GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriber(GetAssAccountsByCustSubscriberParamModel param)
+        {
+            var data = new GetAssAccountsByCustSubscriberResultModel();
 
+            var criteria = new GetAssAccountsByCustSubscriberCriteria
+            {
+                SubscriberID = param.SubscriberID,
+                CTSCustID = param.CTSCustID,
+                Skip = param.Skip,
+                Take = param.Take
+            };
+
+            data.Items = repository.Fetch<GetAssAccountsByCustSubscriberItemModel>(criteria);
+            data.TotalItem = criteria.TotalItem;
+
+            return data;
+        }
+
+        public TransactionResultModel GetTransactionHistory(TransactionParamModel param)
+        {
+            var data = new TransactionResultModel();
+
+            var criteria = new GetTransactionHistoryCriteria
+            {
+                FromDate = param.FromDate,
+                ToDate = param.ToDate,
+                SubscriberID = param.SubscriberID,
+                CTSCustID = param.CTSCustID,
+                Skip = param.Skip,
+                Take = param.Take
+            };
+
+            data.Items = repository.Fetch<TransactionItemModel>(criteria);
+            data.TotalItem = criteria.TotalItem;
+
+            return data;
+        }
     }
 }
