@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
+    using Fanex.NAP.CTS.Core;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
@@ -14,8 +15,13 @@
             this.AwayMatchItemList = Enumerable.Empty<MatchMonitorDetailItemViewModel>();
         }
 
-        public MatchMonitorDetailListViewModel(MatchMonitorDetailListViewModel tickets, MMDetailFilterViewModel filter)
+        public MatchMonitorDetailListViewModel(MatchMonitorDetailListViewModel tickets, MMDetailFilterViewModel filter, string site)
         {
+            if (tickets == null)
+            {
+                return;
+            }
+
             filter.CurrencyList = JsonConvert.DeserializeObject<IEnumerable<string>>(filter.CurrencyListString);
             filter.HDPList = JsonConvert.DeserializeObject<IEnumerable<decimal>>(filter.HDPListString);
             filter.ScoreList = JsonConvert.DeserializeObject<IEnumerable<string>>(filter.ScoreListString);
@@ -28,17 +34,36 @@
                 filter.HDPList.Contains(x.HDP) &&
                 filter.ScoreList.Contains(x.Score ?? "-") &&
                 filter.ReasonList.Any(y => (x.ReasonList ?? "-").Contains(y)) &&
-                reasonGroupIDDic.Contains(x.ADetectGroupID.ToString())
+                reasonGroupIDDic.Contains(x.ADetectGroupID.ToString()) &&
+                site.Contains("A") || site.Contains(x.SubscriberType)
                 );
             AwayMatchItemList = tickets.AwayMatchItemList.Where(x =>
                 filter.CurrencyList.Contains(x.Currency ?? "-") &&
                 filter.HDPList.Contains(x.HDP) &&
                 filter.ScoreList.Contains(x.Score ?? "-") &&
                 filter.ReasonList.Any(y => (x.ReasonList ?? "-").Contains(y)) &&
-                reasonGroupIDDic.Contains(x.ADetectGroupID.ToString())
+                reasonGroupIDDic.Contains(x.ADetectGroupID.ToString()) &&
+                site.Contains("A") || site.Contains(x.SubscriberType)
                 );
 
-            isFilter = filter.isFilter;
+            isFilter = true;
+        }
+
+        public MatchMonitorDetailListViewModel(MatchMonitorDetailListViewModel tickets, string site)
+        {
+            LastSequenceID = tickets.LastSequenceID;
+            CTSCustIDList = tickets.CTSCustIDList;
+            isFilter = tickets.isFilter;
+            RecordsTotal = tickets.RecordsTotal;
+            CurrencyList = tickets.CurrencyList;
+            HDPList = tickets.HDPList;
+            ScoreList = tickets.ScoreList;
+            ReasonList = tickets.ReasonList;
+            GroupList = tickets.GroupList;
+            ReasonInfos = tickets.ReasonInfos;
+            ReasonGroupIDDic = tickets.ReasonGroupIDDic;
+            HomeMatchItemList = tickets.HomeMatchItemList.Where(x => site.Contains("A") || site.Contains(x.SubscriberType));
+            AwayMatchItemList = tickets.AwayMatchItemList.Where(x => site.Contains("A") || site.Contains(x.SubscriberType));
         }
 
         public long? LastSequenceID { get; set; }

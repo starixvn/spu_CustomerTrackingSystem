@@ -40,7 +40,7 @@
 
             ReasonList = reasonList;
             GroupList = groupList;
-            ReasonInfos = string.Join(",", ReasonList);
+            ReasonInfos = string.Join(",", ReasonList.Where(x => !x.Contains("-")));
             ReasonGroupIDDic = reasonGroupIDDic;
         }
 

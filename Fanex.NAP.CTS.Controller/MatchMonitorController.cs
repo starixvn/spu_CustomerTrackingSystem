@@ -236,40 +236,23 @@
                         mdResult = GetAllMMDetailFromCache(para);
                         break;
                     }
-                case MatchMonitorQueryType.All when filter.isFilter || para.Sites != "A":
+                case MatchMonitorQueryType.All:
                     {
                         var allTicketDetails = GetAllMMDetailFromCache(para, true);
-
-                        if (allTicketDetails != null)
-                        {
-                            mdResult = new MatchMonitorDetailListViewModel(allTicketDetails, filter);
-                            if (para.Sites != "A")
-                            {
-                                mdResult.HomeMatchItemList = mdResult.HomeMatchItemList.Where(x => x.SubscriberType == para.Sites);
-                                mdResult.AwayMatchItemList = mdResult.AwayMatchItemList.Where(x => x.SubscriberType == para.Sites);
-                                mdResult.isFilter = true;
-                            }
-                        }
+                        mdResult = new MatchMonitorDetailListViewModel(allTicketDetails, filter, para.Sites);
                         break;
                     }
-                case MatchMonitorQueryType.Fraud when !filter.isFilter && para.Sites == "A":
+                case MatchMonitorQueryType.Fraud when (!filter.isFilter && para.Sites == "A") || para.IsRefresh:
                     {
-                        mdResult = GetFraudMMDetailFromCache(para, true);
+                        var fraudTicket = GetFraudMMDetailFromCache(para, true);
+                        mdResult = new MatchMonitorDetailListViewModel(fraudTicket, para.Sites);
+
                         break;
                     }
-                case MatchMonitorQueryType.Fraud when filter.isFilter || para.Sites != "A":
+                case MatchMonitorQueryType.Fraud:
                     {
                         var fraudTicket = GetFraudMMDetailFromCache(para);
-                        if (fraudTicket != null)
-                        {
-                            mdResult = new MatchMonitorDetailListViewModel(fraudTicket, filter);
-                            if (para.Sites != "A")
-                            {
-                                mdResult.HomeMatchItemList = mdResult.HomeMatchItemList.Where(x => x.SubscriberType == para.Sites);
-                                mdResult.AwayMatchItemList = mdResult.AwayMatchItemList.Where(x => x.SubscriberType == para.Sites);
-                                mdResult.isFilter = true;
-                            }
-                        }
+                        mdResult = new MatchMonitorDetailListViewModel(fraudTicket, filter, para.Sites);
 
                         Task.Run(() => GetMatchMonitorFilterFromCache(para));
                         break;
@@ -309,8 +292,8 @@
 
                 foreach (var ticketDetailGroup in ticketDetailGroups)
                 {
-                    mdItemList = MergeAllMMDetail(matchDetailInfo.VerifiedTrans, custInfo, ticketDetailGroup.TicketDetails);
-                    yield return MergeFraudMMTicketDetail(mdItemList, fraudTicketDetail, ticketDetailGroup.LastSequenceID);
+                    mdItemList = DrawColorAllMMDetail(matchDetailInfo.VerifiedTrans, custInfo, ticketDetailGroup.TicketDetails);
+                    yield return MergeFraudToAllMMDetail(mdItemList, fraudTicketDetail, ticketDetailGroup.LastSequenceID);
                 }
             }
         }
@@ -343,7 +326,7 @@
 
                 await Task.WhenAll(tasks);
 
-                var mergeInfo = MergeFraudMMDetail(matchDetailInfo.VerifiedTrans, custInfo, ticketDetail, mergeGroup, mmStatic.Reasons);
+                var mergeInfo = DrawColorFraudMMDetailWithMergeReasonAGroup(matchDetailInfo.VerifiedTrans, custInfo, ticketDetail, mergeGroup, mmStatic.Reasons);
 
                 mdItemList = MappingRobotStatus(mergeInfo, para.BetTypeID);
 
@@ -742,7 +725,7 @@
             return false;
         }
 
-        private IEnumerable<MatchMonitorDetailItemViewModel> MergeAllMMDetail(IEnumerable<MatchMonitorDetailVerifyTransResultModel> verifiedTrans,
+        private IEnumerable<MatchMonitorDetailItemViewModel> DrawColorAllMMDetail(IEnumerable<MatchMonitorDetailVerifyTransResultModel> verifiedTrans,
             IEnumerable<CustInfoModel> custInfos,
             IEnumerable<TicketDetailModel> tickets)
         {
@@ -772,7 +755,7 @@
             return ticketResult;
         }
 
-        public MatchMonitorDetailListViewModel MergeFraudMMTicketDetail(IEnumerable<MatchMonitorDetailItemViewModel> mdItemList, MatchMonitorDetailListViewModel fraudMMDetailModel, long? lastSequenceID)
+        public MatchMonitorDetailListViewModel MergeFraudToAllMMDetail(IEnumerable<MatchMonitorDetailItemViewModel> mdItemList, MatchMonitorDetailListViewModel fraudMMDetailModel, long? lastSequenceID)
         {
             var fraudHomeMatchItemDictionary = fraudMMDetailModel?.HomeMatchItemList?.ToDictionary(x => x.TransId, x => x);
             var fraudAwayMatchItemDictionary = fraudMMDetailModel?.AwayMatchItemList?.ToDictionary(x => x.TransId, x => x);
@@ -805,7 +788,7 @@
             };
         }
 
-        private IEnumerable<MatchMonitorDetailItemViewModel> MergeFraudMMDetail(IEnumerable<MatchMonitorDetailVerifyTransResultModel> verifiedTrans,
+        private IEnumerable<MatchMonitorDetailItemViewModel> DrawColorFraudMMDetailWithMergeReasonAGroup(IEnumerable<MatchMonitorDetailVerifyTransResultModel> verifiedTrans,
             IEnumerable<CustInfoModel> custInfo,
             IEnumerable<TicketDetailModel> ticket,
             MMDetailMergeGroupViewModel mergeGroup,

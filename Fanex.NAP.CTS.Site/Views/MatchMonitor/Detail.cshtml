@@ -19,24 +19,18 @@
             <div class="group-control">
                 <div class="group-info filter-group">
                     <div class="form-filter">
-                        <div class="group width-120">
+                        <div class="group width-160">
                             <label class="text">Site</label>
-                            <select class="control width-select-sites" id="cbbSites">
+                            <select class="control width-select-one" id="cbbSites">
                                 <option value="A">All</option>
                                 <option value="C">Credit</option>
                                 <option value="L">Licensee</option>
                             </select>
                         </div>
 
-                        <div class="group-button">
-                            <button class="button button-generate" id="btnRefresh">Refresh</button>
-                        </div>
-
-                        <div class="blank"></div>
-
                         <div class="group width-160">
                             <label class="text">Type of Tickets</label>
-                            <select class="control select-typeoftickets" id="cbbTypeOfTickets">
+                            <select class="control width-select-one" id="cbbTypeOfTickets">
                                 <option value="2">Suspicious Tickets</option>
                                 <option value="3">All</option>
                             </select>
@@ -93,6 +87,7 @@
                 <div class="breadcrumb-button">
                     <div class="breadcrumb-totaltickets"></div>
                     <div class="">
+                        <button class="button button-primary-outline" id="btnRefresh">Import New Tickets</button>
                         <button class="button button-primary-outline" id="btnShowAll">Show All</button>
                         <button class="button button-primary-outline" id="btnShowPopupAssDetection">Association Detection</button>
                         <button class="button button-primary-outline" id="btnExportExcel">Export Excel</button>

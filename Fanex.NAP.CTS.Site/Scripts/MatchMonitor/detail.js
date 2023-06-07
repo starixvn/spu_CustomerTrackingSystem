@@ -71,6 +71,7 @@ function MatchMonitorDetail() {
     let posClickGlobal = 0;
     let xhr;
     let currentType = MatchMonitorDetailViewType.Fraud;
+    let isRefresh = false;
 
     function InitialDetailGird(element) {
         element.DataTable({
@@ -217,7 +218,8 @@ function MatchMonitorDetail() {
             HDPListString: JSON.stringify(domElements.cbbHDP.val()),
             ScoreListString: JSON.stringify(domElements.cbbMatchScore.val()),
             ReasonListString: JSON.stringify(domElements.cbbReason.val()),
-            ReasonGroupIDDicString: JSON.stringify(domElements.cbbGroup.val())
+            ReasonGroupIDDicString: JSON.stringify(domElements.cbbGroup.val()),
+            IsRefresh: isRefresh
         };
 
         xhr = $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorDetail'), {
@@ -230,7 +232,7 @@ function MatchMonitorDetail() {
                 domElements.tblMMAwayTeam.find('tbody').addClass('loading');
             },
             success: function (response) {
-                if (response) {
+                if (response?.data) {
                     if (typeOfTickets == MatchMonitorDetailViewType.All && posClickGlobal != posClick) {
                         return;
                     }
@@ -267,6 +269,8 @@ function MatchMonitorDetail() {
             },
             timeout: 5000
         });
+
+        isRefresh = false;
     }
 
     function FetchFilterMatchMonitorDetail() {
@@ -851,11 +855,18 @@ function MatchMonitorDetail() {
 
         InitialDetailGird(domElements.tblMMAwayTeam);
 
-        domElements.btnRefresh.on('click', function () {
+        domElements.cbbSites.change(function () {
             isFilterOptionServerSide = false;
             ClearCache();
             FetchMatchMonitorDetail();
             RefreshFilter();
+        });
+
+        domElements.btnRefresh.on('click', function () {
+            isFilterOptionServerSide = false;
+            ClearCache();
+            isRefresh = true;
+            FetchMatchMonitorDetail();
         })
 
         domElements.btnGenerateDetail.on('click', function () {

@@ -35,6 +35,8 @@
 
         public bool LiveIndicator { get; set; }
 
+        public bool IsRefresh { get; set; }
+
         public DateTime EventDate
         {
             get
