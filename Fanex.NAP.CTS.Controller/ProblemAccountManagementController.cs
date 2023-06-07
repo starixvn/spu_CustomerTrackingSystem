@@ -6,7 +6,6 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassification.ProblemAccount;
-    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
@@ -16,7 +15,7 @@
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using Fanex.NAP.CTS.ViewModel.Common;
-    using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement; 
+    using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement;
     using System;
     using System.Collections.Generic;
     using System.Linq;

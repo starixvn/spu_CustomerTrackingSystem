@@ -283,7 +283,6 @@
     <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
     <Compile Include="CustomerClassification\LogErrorDataModel.cs" />
-    <Compile Include="CustomerClassification\RescanCustomerClassification\RescanCategoryNormalModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\LatestCCDangerLevelModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\ExistedPAResultModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\CustInfoModel.cs" />
