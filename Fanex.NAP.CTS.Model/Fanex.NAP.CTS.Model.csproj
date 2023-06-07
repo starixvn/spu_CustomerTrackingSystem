@@ -338,7 +338,7 @@
     <Compile Include="MatchMonitor\MatchGroupKeyModel.cs" />
     <Compile Include="MatchMonitor\MatchFromMainInfoModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorBetTypeModel.cs" />
-    <Compile Include="MatchMonitor\MatchMonitorDetailResultModel.cs" />
+    <Compile Include="MatchMonitor\MMDetailResultModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailVerifyTransResultModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailVerifyTransParaModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorReasonModel.cs" />

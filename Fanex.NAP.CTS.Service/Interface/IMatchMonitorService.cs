@@ -20,13 +20,13 @@
 
         DBResult VerifyTransMatchMonitorDetail(MatchMonitorDetailVerifyTransParaModel para);
 
-        MatchMonitorDetailResultModel GetMatchMonitorDetail(MatchMonitorDetailSearchViewModel filter);
+        MMDetailResultModel GetMatchMonitorDetail(MMDetailSearchViewModel filter);
 
         IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);
 
-        IEnumerable<TicketDetailModel> GetTicketDetail(MatchMonitorDetailSearchViewModel para, string transIds, int batchSize = 1000);
+        IEnumerable<TicketDetailModel> GetTicketDetail(MMDetailSearchViewModel para, string transIds, int batchSize = 1000);
 
-        MMTicketDetailInfoModel GetMMTicketDetailInfoCriteria(MatchMonitorDetailSearchViewModel para);
+        MMTicketDetailInfoModel GetMMTicketDetailInfoCriteria(MMDetailSearchViewModel para);
 
         IEnumerable<MMDetailMergeGroupModel> GetMMDetailMergeGroup(IEnumerable<MMDetailBetTeamModel> mmDetailBetTeams);
 

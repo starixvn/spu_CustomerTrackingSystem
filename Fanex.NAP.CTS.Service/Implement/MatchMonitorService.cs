@@ -99,7 +99,7 @@
             return repository.Fetch<MatchScoreModel>(criteria);
         }
 
-        public MatchMonitorDetailResultModel GetMatchMonitorDetail(MatchMonitorDetailSearchViewModel filter)
+        public MMDetailResultModel GetMatchMonitorDetail(MMDetailSearchViewModel filter)
         {
             var criteria = new MatchDetailMonitorGetCriteria
             {
@@ -113,7 +113,7 @@
             {
                 var result = db.QueryMultiple(criteria);
 
-                return new MatchMonitorDetailResultModel
+                return new MMDetailResultModel
                 {
                     Custs = result?.Read<MMDetailCustModel>() ?? new List<MMDetailCustModel>(),
                     MatchDetails = result?.Read<MatchMonitorDetailModel>() ?? new List<MatchMonitorDetailModel>(),
@@ -132,7 +132,7 @@
             return repository.Fetch<CustInfoModel>(criteria);
         }
 
-        public IEnumerable<TicketDetailModel> GetTicketDetail(MatchMonitorDetailSearchViewModel para, string transIds, int batchSize = 1000)
+        public IEnumerable<TicketDetailModel> GetTicketDetail(MMDetailSearchViewModel para, string transIds, int batchSize = 1000)
         {
             var criteria = new TicketDetailGetCriteria()
             {
@@ -161,7 +161,7 @@
             return repository.Fetch<TicketDetailModel>(criteria);
         }
 
-        public MMTicketDetailInfoModel GetMMTicketDetailInfoCriteria(MatchMonitorDetailSearchViewModel para)
+        public MMTicketDetailInfoModel GetMMTicketDetailInfoCriteria(MMDetailSearchViewModel para)
         {
             var criteria = new MMTicketDetailInfoCriteria()
             {

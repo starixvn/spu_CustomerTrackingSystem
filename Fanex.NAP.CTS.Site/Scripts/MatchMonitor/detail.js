@@ -189,8 +189,8 @@ function MatchMonitorDetail() {
 
     function FetchMatchMonitorDetail(typeOfTickets = MatchMonitorDetailViewType.Fraud, lastScannedSequenceID = 0) {
         recordsFilteredGlobal = 0;
-        domElements.tblMMHomeTeam.DataTable().clear();
-        domElements.tblMMAwayTeam.DataTable().clear();
+        domElements.tblMMHomeTeam.DataTable().clear().draw();
+        domElements.tblMMAwayTeam.DataTable().clear().draw();
         posClickGlobal++;
         if (xhr) {
             xhr.onreadystatechange = null;
@@ -230,19 +230,21 @@ function MatchMonitorDetail() {
                 domElements.tblMMAwayTeam.find('tbody').addClass('loading');
             },
             success: function (response) {
-                if (typeOfTickets == MatchMonitorDetailViewType.All && posClickGlobal != posClick) {
-                    return;
-                }
+                if (response) {
+                    if (typeOfTickets == MatchMonitorDetailViewType.All && posClickGlobal != posClick) {
+                        return;
+                    }
 
-                if (typeOfTickets == MatchMonitorDetailViewType.Fraud) {
-                    RenderFilter(response.data);
-                    CacheTicketDetail(response);
-                }
+                    if (typeOfTickets == MatchMonitorDetailViewType.Fraud) {
+                        RenderFilter(response.data);
+                        CacheTicketDetail(response);
+                    }
 
-                RenderMatchMonitorDetail(response, typeOfTickets);
+                    RenderMatchMonitorDetail(response, typeOfTickets);
 
-                if (typeOfTickets == MatchMonitorDetailViewType.All && response?.data?.LastSequenceID) {
-                    GetMatchMonitorDetail(typeOfTickets, response?.data?.LastSequenceID, posClick);
+                    if (typeOfTickets == MatchMonitorDetailViewType.All && response?.data?.LastSequenceID) {
+                        GetMatchMonitorDetail(typeOfTickets, response?.data?.LastSequenceID, posClick);
+                    }
                 }
             },
             complete: function (response) {
@@ -358,6 +360,7 @@ function MatchMonitorDetail() {
     function RefreshFilter() {
         if (cacheFilter && currentType == MatchMonitorDetailViewType.Fraud) {
             if (cacheFilter.data != undefined) {
+                cacheFilter.data.isFilter = false;
                 RenderFilter(cacheFilter.data, MatchMonitorDetailViewType.Fraud, false);
             }
 
@@ -397,15 +400,17 @@ function MatchMonitorDetail() {
 
     function ClearCache() {
         cacheTicketDetail = undefined;
-        cacheFilter = undefined;
+        if (domElements.cbbSites.val() === SiteViewType.All) {
+            cacheFilter = undefined;
+        }
         cacheSite = domElements.cbbSites.val();
         domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.Fraud);
     }
 
     function LoadCacheMatchMonitorDetail() {
         if (cacheTicketDetail) {
-            domElements.tblMMHomeTeam.DataTable().clear();
-            domElements.tblMMAwayTeam.DataTable().clear();
+            domElements.tblMMHomeTeam.DataTable().clear().draw();
+            domElements.tblMMAwayTeam.DataTable().clear().draw();
             posClickGlobal++;
             if (xhr) {
                 xhr.onreadystatechange = null;
@@ -618,11 +623,6 @@ function MatchMonitorDetail() {
         domElements.inputOptAgent.prop("checked", isCheckAll);
         domElements.inputOpt3MatchesLast7Days.prop("checked", isCheckAll);
         domElements.inputOptIPLast3Days.prop("checked", isCheckAll);
-    }
-
-    function DrawGrid() {
-        domElements.tblMMHomeTeam.DataTable().draw();
-        domElements.tblMMAwayTeam.DataTable().draw();
     }
 
     function ReasonOnChange() {
@@ -855,6 +855,7 @@ function MatchMonitorDetail() {
             isFilterOptionServerSide = false;
             ClearCache();
             FetchMatchMonitorDetail();
+            RefreshFilter();
         })
 
         domElements.btnGenerateDetail.on('click', function () {
@@ -901,6 +902,7 @@ function MatchMonitorDetail() {
         Initial();
 
         domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.Fraud);
+        domElements.cbbSites.val(SiteViewType.All)
         FetchMatchMonitorDetail();
 
         BindScrollHeaderFixed();

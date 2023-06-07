@@ -181,7 +181,7 @@
     <Compile Include="MatchMonitor\GroupInfoViewModel.cs" />
     <Compile Include="MatchMonitor\MatchFromMainInfoViewModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorBetTypeViewModel.cs" />
-    <Compile Include="MatchMonitor\MatchMonitorDetailSearchViewModel.cs" />
+    <Compile Include="MatchMonitor\MMDetailSearchViewModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailItemViewModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailListViewModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailViewModel.cs" />

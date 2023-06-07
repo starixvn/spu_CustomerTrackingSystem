@@ -3,8 +3,22 @@
     using System;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
-    public class MatchMonitorDetailSearchViewModel
+    public class MMDetailSearchViewModel
     {
+        public MMDetailSearchViewModel() { }
+
+        public MMDetailSearchViewModel(MMDetailSearchViewModel para) {
+            this.TypeOfTickets = para.TypeOfTickets;
+            this.LastScannedSequenceID = para.LastScannedSequenceID;
+            this.EventDateToString = para.EventDateToString;
+            this.MatchID = para.MatchID;
+            this.BetTypeID = para.BetTypeID;
+            this.BetID = para.BetID;
+            this.Sites = para.Sites;
+            this.LiveIndicator = para.LiveIndicator;
+
+        }
+
         public MatchMonitorQueryType? TypeOfTickets { get; set; }
 
         public long? LastScannedSequenceID { get; set; }
@@ -38,7 +52,7 @@
 
         public string BuildCacheKey(string nameOfFuntion, string region = "")
         {
-            return $"{region}_{nameOfFuntion}_{EventDateToString}_{MatchID}_{BetTypeID}_{BetID}_{Sites}_{LiveIndicator}";
+            return $"{region}_{nameOfFuntion}_{EventDateToString}_{MatchID}_{BetTypeID}_{BetID}_{LiveIndicator}";
         }
 
         public string BuildCacheKeyForAllMMTicket(string nameOfFunction, string region = "")

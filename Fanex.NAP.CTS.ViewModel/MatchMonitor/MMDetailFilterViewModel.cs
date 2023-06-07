@@ -24,18 +24,23 @@
             HDPList = mMTicket.ListHDP?.Split(',').Select(x => decimal.Parse(x)) ?? new List<decimal>() { };
             ScoreList = mMTicket.ListScore?.Split(',') ?? new List<string>() { "-" }.AsEnumerable();
             var reasonList = fraudTicket.ReasonList?.ToList() ?? new List<string>();
-            reasonList.Add("-");
-            ReasonList = reasonList;
             var groupList = fraudTicket.GroupList?.ToList() ?? new List<GroupInfoViewModel>();
-            groupList.Add(new GroupInfoViewModel
+            var reasonGroupIDDic = fraudTicket?.ReasonGroupIDDic ?? new Dictionary<string, List<int>>();
+
+            if (fraudTicket.HomeMatchItemList.Count() + fraudTicket.AwayMatchItemList.Count() < mMTicket.TotalTicket)
             {
-                GroupID = -1,
-                GroupName = "-"
-            });
+                if (!reasonList.Any(x => x == "-")) reasonList.Add("-");
+                if (!reasonGroupIDDic.Any(x => x.Key == "-")) reasonGroupIDDic.Add("-", new List<int>() { 0 });
+                if (!groupList.Any(x => x.GroupName == "-")) groupList.Add(new GroupInfoViewModel
+                {
+                    GroupID = 0,
+                    GroupName = "-"
+                });
+            }
+
+            ReasonList = reasonList;
             GroupList = groupList;
             ReasonInfos = string.Join(",", ReasonList);
-            var reasonGroupIDDic = fraudTicket?.ReasonGroupIDDic ?? new Dictionary<string, List<int>>();
-            reasonGroupIDDic.Add("-", new List<int>() { -1 });
             ReasonGroupIDDic = reasonGroupIDDic;
         }
 

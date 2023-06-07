@@ -21,20 +21,21 @@
             filter.ScoreList = JsonConvert.DeserializeObject<IEnumerable<string>>(filter.ScoreListString);
             filter.ReasonList = JsonConvert.DeserializeObject<IEnumerable<string>>(filter.ReasonListString);
             var reasonGroupIDDic = JsonConvert.DeserializeObject<IEnumerable<string>>(filter.ReasonGroupIDDicString);
+            reasonGroupIDDic = reasonGroupIDDic.Select(x => x.Contains("-") ? "0" : x);
 
             HomeMatchItemList = tickets.HomeMatchItemList.Where(x =>
                 filter.CurrencyList.Contains(x.Currency ?? "-") &&
                 filter.HDPList.Contains(x.HDP) &&
                 filter.ScoreList.Contains(x.Score ?? "-") &&
                 filter.ReasonList.Any(y => (x.ReasonList ?? "-").Contains(y)) &&
-                reasonGroupIDDic.Contains(x.ADetectGroup ?? "-1")
+                reasonGroupIDDic.Contains(x.ADetectGroupID.ToString())
                 );
             AwayMatchItemList = tickets.AwayMatchItemList.Where(x =>
                 filter.CurrencyList.Contains(x.Currency ?? "-") &&
                 filter.HDPList.Contains(x.HDP) &&
                 filter.ScoreList.Contains(x.Score ?? "-") &&
                 filter.ReasonList.Any(y => (x.ReasonList ?? "-").Contains(y)) &&
-                reasonGroupIDDic.Contains(x.ADetectGroup ?? "-1")
+                reasonGroupIDDic.Contains(x.ADetectGroupID.ToString())
                 );
 
             isFilter = filter.isFilter;
