@@ -13,5 +13,7 @@
         TransactionResultModel GetTransactionHistory(TransactionParamModel param);
 
         GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriber(GetAssAccountsByCustSubscriberParamModel param);
+
+        LastestTransactionResultModel GetLastestTransactionBySubscriber(LastestTransactionParamModel param);
     }
 }

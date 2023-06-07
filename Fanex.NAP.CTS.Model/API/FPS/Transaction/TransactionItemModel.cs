@@ -8,7 +8,13 @@
 
         public long TransID { get; set; }
 
-        public string LoginName { get; set; }
+        public long CTSCustID { get; set; }
+
+        public int SubscriberID { get; set; }
+
+        public string RegisterName { get; set; }
+
+        public string UserName { get; set; }
 
         public string FirstDeviceCode { get; set; }
 

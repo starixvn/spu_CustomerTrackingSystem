@@ -82,7 +82,9 @@
     <Compile Include="Api\FPS\Account\GetAssAccountsByCustSubscriberCriteria.cs" />
     <Compile Include="Api\FPS\SearchAccount\GetAccountByNameSubscriberCriteria.cs" />
     <Compile Include="Api\FPS\SearchAccount\GetListAccountByUserNameSubscriberCriteria.cs" />
-    <Compile Include="Api\FPS\Transaction\GetTransactionHistoryCriteria.cs" />
+    <Compile Include="Api\FPS\Transaction\GetLastestTransactionCriteria.cs" />
+    <Compile Include="Api\FPS\Transaction\GetTransactionHistoryByCustSubscriberCriteria.cs" />
+    <Compile Include="Api\FPS\Transaction\GetTransactionHistoryBySubscriberCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedAccountCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedGroupMonitorCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\GetAssociatedAccountCriteria.cs" />

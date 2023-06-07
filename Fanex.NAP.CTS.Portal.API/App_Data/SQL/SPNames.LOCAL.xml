@@ -100,6 +100,8 @@
 		<Setting Key="CTS_DC_CustInfo_GetPartialByUserNameSubscriber" SpName="CTS_DC_CustInfo_GetPartialByUserNameSubscriber_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Association_GetAccountInfoByCustSubscriber" SpName="CTS_DC_Association_GetAccountInfoByCustSubscriber_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="DCS_DC_Transaction_GetHistoryBySubscriber" SpName="DCS_DC_Transaction_GetHistoryBySubscriber_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
+		<Setting Key="DCS_DC_Transaction_GetHistoryByCustSubscriber" SpName="DCS_DC_Transaction_GetHistoryByCustSubscriber_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Association_GetAssociationListByCustSubscriber" SpName="CTS_DC_Association_GetAssociationListByCustSubscriber_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="DCS_DC_Transaction_GetLatestBySubscriber" SpName="DCS_DC_Transaction_GetLatestBySubscriber_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
 	</Function>
 </Functions>

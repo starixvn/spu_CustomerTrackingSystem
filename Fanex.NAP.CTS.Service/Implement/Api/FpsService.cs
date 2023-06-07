@@ -9,6 +9,7 @@
     using Fanex.NAP.CTS.Model.API.FPS.SearchAccount;
     using Fanex.NAP.CTS.Model.API.FPS.Transaction;
     using Fanex.NAP.CTS.Service.Interface.Api;
+    using System.Collections.Generic;
 
     public class FpsService : IFpsService
     {
@@ -41,7 +42,7 @@
                 var criteria = new GetAccountByNameSubscriberCriteria
                 {
                     SubscriberID = param.SubscriberID,
-                    UserNameList = param.UserName
+                    UserName = param.UserName
                 };
 
                 data.Items = repository.Fetch<SearchAccountItemModel>(criteria);
@@ -80,10 +81,20 @@
         }
 
         public TransactionResultModel GetTransactionHistory(TransactionParamModel param)
+        {            
+            if (param.CTSCustID != null && param.CTSCustID > 0)
+            {
+                return GetTransactionByCustSubscriber(param);
+            }
+
+            return GetTransactionBySubscriber(param);
+        }
+
+        private TransactionResultModel GetTransactionByCustSubscriber(TransactionParamModel param)
         {
             var data = new TransactionResultModel();
 
-            var criteria = new GetTransactionHistoryCriteria
+            var criteria = new GetTransactionHistoryByCustSubscriberCriteria
             {
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
@@ -94,6 +105,45 @@
             };
 
             data.Items = repository.Fetch<TransactionItemModel>(criteria);
+            data.TotalItem = criteria.TotalItem;
+
+            return data;
+        }
+
+        private TransactionResultModel GetTransactionBySubscriber(TransactionParamModel param)
+        {
+            var data = new TransactionResultModel();
+
+            var criteria = new GetTransactionHistoryBySubscriberCriteria
+            {
+                FromDate = param.FromDate,
+                ToDate = param.ToDate,
+                SubscriberID = param.SubscriberID,
+                UserName = param.UserName,
+                IsPartial = param.IsPartial,
+                Skip = param.Skip,
+                Take = param.Take
+            };
+
+            data.Items = repository.Fetch<TransactionItemModel>(criteria);
+            data.TotalItem = criteria.TotalItem;
+
+            return data;
+        }
+
+        public LastestTransactionResultModel GetLastestTransactionBySubscriber(LastestTransactionParamModel param)
+        {
+            var data = new LastestTransactionResultModel();
+
+            var criteria = new GetLastestTransactionCriteria
+            {                
+                SubscriberID = param.SubscriberID,
+                Length = param.Length,
+                Skip = param.Skip,
+                Take = param.Take
+            };
+
+            data.Items = repository.Fetch<LastestTransactionItemModel>(criteria);
             data.TotalItem = criteria.TotalItem;
 
             return data;

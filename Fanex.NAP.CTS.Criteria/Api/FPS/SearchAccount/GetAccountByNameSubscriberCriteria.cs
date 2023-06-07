@@ -8,8 +8,8 @@
         [SpParam(SqlParamName = "ip_SubscriberID")]
         public int SubscriberID { get; set; }
 
-        [SpParam(SqlParamName = "ip_UserNameList")]
-        public string UserNameList { get; set; }      
+        [SpParam(SqlParamName = "ip_UserName")]
+        public string UserName { get; set; }      
 
         public override string GetSettingKey()
         {
