@@ -292,7 +292,7 @@
 
                 foreach (var ticketDetailGroup in ticketDetailGroups)
                 {
-                    mdItemList = DrawColorAllMMDetail(matchDetailInfo.VerifiedTrans, custInfo, ticketDetailGroup.TicketDetails);
+                    mdItemList = DrawColorAllMMDetailAndUpdateValue(matchDetailInfo.VerifiedTrans, custInfo, ticketDetailGroup.TicketDetails, para.BetTypeID);
                     yield return MergeFraudToAllMMDetail(mdItemList, fraudTicketDetail, ticketDetailGroup.LastSequenceID);
                 }
             }
@@ -725,9 +725,10 @@
             return false;
         }
 
-        private IEnumerable<MatchMonitorDetailItemViewModel> DrawColorAllMMDetail(IEnumerable<MatchMonitorDetailVerifyTransResultModel> verifiedTrans,
+        private IEnumerable<MatchMonitorDetailItemViewModel> DrawColorAllMMDetailAndUpdateValue(IEnumerable<MatchMonitorDetailVerifyTransResultModel> verifiedTrans,
             IEnumerable<CustInfoModel> custInfos,
-            IEnumerable<TicketDetailModel> tickets)
+            IEnumerable<TicketDetailModel> tickets,
+            int betTypeID)
         {
             var ticketResult = new List<MatchMonitorDetailItemViewModel>();
             var custInfoDictionary = custInfos.ToDictionary(x => x.CustID, x => x);
@@ -741,6 +742,10 @@
                 var nTicket = custInfoDictionary.TryGetValue(t.CustId, out var custInfo) ? new MatchMonitorDetailItemViewModel(t, custInfo) : new MatchMonitorDetailItemViewModel(t);
 
                 nTicket.PICVerified = verifiedTransID;
+                nTicket.BetTypeID = betTypeID;
+                nTicket.ADetectGroup = "-";
+                nTicket.ReasonList = "-";
+                
                 ticketResult.Add(nTicket);
             });
 
