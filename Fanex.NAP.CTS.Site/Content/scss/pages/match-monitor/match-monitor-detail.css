@@ -487,6 +487,9 @@
     top: 17.8rem;
     z-index: 9; }
   .detailpage .monitor-container .monitor-table .breadcrumb-button .breadcrumb-totaltickets{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
     text-align: center;
   }
   .detailpage .monitor-container .monitor-table .group-info {

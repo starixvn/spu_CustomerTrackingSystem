@@ -207,6 +207,9 @@
                 z-index: 9;
 
                 .breadcrumb-totaltickets{
+                    position: relative;
+                    left: 50%;
+                    transform: translateX(-50%);
                     text-align: center;
                   }
             }

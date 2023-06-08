@@ -699,6 +699,9 @@
 }
 
 .detailpage .monitor-container .monitor-table .breadcrumb-button .breadcrumb-totaltickets {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
     text-align: center;
 }
 
