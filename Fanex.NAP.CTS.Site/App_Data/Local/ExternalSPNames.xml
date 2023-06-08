@@ -41,7 +41,7 @@
 	</Function>
 
 	<Function name="CustomerClassification">
-		<Setting Key="CTS_GeneralNormalClassification_RescanNormal_Preprocess" SpName="CTS_GeneralNormalClassification_RescanNormal_Preprocess" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
+		<Setting Key="CTS_GeneralNormalClassification_RescanNormal_Preprocess" SpName="CTS_GeneralNormalClassification_RescanNormal_Preprocess_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
 		<Setting Key="CTS_CustomerUpdDanger" SpName="CTS_CustomerUpdDanger" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
 	</Function>
 
@@ -62,7 +62,7 @@
 	</Function>
 
 	<Function Name="DailyProblemClassification">
-		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" TimeOut="1200" />
+		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" TimeOut="1200" />
 	</Function>
 
 	<Function Name="AssociationDetection">
