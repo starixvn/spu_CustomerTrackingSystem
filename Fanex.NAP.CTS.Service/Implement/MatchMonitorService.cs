@@ -142,12 +142,12 @@
 
             switch (para.TypeOfTickets)
             {
-                case MatchMonitorQueryType.Fraud:
+                case MatchMonitorQueryType.TicketFraud:
                     {
                         criteria.ListTransId = transIds;
                         break;
                     }
-                case MatchMonitorQueryType.All:
+                case MatchMonitorQueryType.TicketAll:
                     {
                         criteria.LastScannedSequenceID = para.LastScannedSequenceID;
                         criteria.IsLive = para.LiveIndicator ? 1 : 0;

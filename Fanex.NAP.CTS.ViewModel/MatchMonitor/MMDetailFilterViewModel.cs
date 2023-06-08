@@ -45,7 +45,7 @@
             ReasonGroupIDDic = reasonGroupIDDic;
         }
 
-        public bool isFilter { get; set; }
+        public bool IsFilter { get; set; }
 
         public long? MaxSequenceId { get; set; }
 

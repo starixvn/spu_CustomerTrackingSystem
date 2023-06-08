@@ -16,7 +16,6 @@
             this.BetID = para.BetID;
             this.Sites = para.Sites;
             this.LiveIndicator = para.LiveIndicator;
-
         }
 
         public MatchMonitorQueryType? TypeOfTickets { get; set; }

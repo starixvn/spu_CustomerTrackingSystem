@@ -3,31 +3,36 @@
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class MatchMonitorDetailItemViewModel
     {
+        #region constructor
         public MatchMonitorDetailItemViewModel() { }
 
         public MatchMonitorDetailItemViewModel(TicketDetailModel ticket)
         {
-            Update(ticket);
+            MappingTicketDetail(ticket);
         }
 
         public MatchMonitorDetailItemViewModel(TicketDetailModel ticket, CustInfoModel cust)
         {
-            Update(ticket);
-            Update(cust);
+            MappingTicketDetail(ticket);
+            MappingCustInfo(cust);
         }
 
         public MatchMonitorDetailItemViewModel(int mergeGroupID, TicketDetailModel ticket, CustInfoModel cust)
         {
-            Update(ticket);
-            Update(cust);
+            MappingTicketDetail(ticket);
+            MappingCustInfo(cust);
             this.ADetectGroup = mergeGroupID.ToString();
             this.ADetectGroupID = mergeGroupID;
         }
+        #endregion
 
+        #region property
         public Int64 CTSCustID { get; set; }
 
         public Int64 CustID { get; set; }
@@ -166,8 +171,30 @@
         public bool IsPA { get; set; }
 
         public bool IsNormalLinkedPA { get; set; }
+        #endregion
 
-        private void Update(TicketDetailModel ticket)
+        #region function
+        public bool FilterByHomeAway(string[] matchMonitorBetChoiceIds)
+        {
+            return matchMonitorBetChoiceIds.Any(x => string.Equals(BetTeam, x, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public bool FilterBySite(string site)
+        {
+            return site.Contains("A") || site.Contains(SubscriberType);
+        }
+
+        public MatchMonitorDetailItemViewModel MappingFraudTicketToAllTicket(Dictionary<long, MatchMonitorDetailItemViewModel> fraudMMTicketsDictionary)
+        {
+            if (fraudMMTicketsDictionary != null && fraudMMTicketsDictionary.TryGetValue(TransId, out var value))
+            {
+                return value;
+            }
+
+            return this;
+        }
+
+        private void MappingTicketDetail(TicketDetailModel ticket)
         {
             this.CustomerClass = ticket.CustomerClass;
             //this.PICVerified = verifiedTransID,
@@ -196,7 +223,7 @@
             this.IsRobot = false;
         }
 
-        private void Update(CustInfoModel cust)
+        private void MappingCustInfo(CustInfoModel cust)
         {
             this.CTSCustID = cust.CTSCustID;
             this.CustID = cust.CustID;
@@ -205,5 +232,6 @@
             this.IsPA = cust.ParentID == 50;
             this.IsNormalLinkedPA = (cust.ParentID == 200 && cust.TaggingType == 1);
         }
+        #endregion
     }
 }

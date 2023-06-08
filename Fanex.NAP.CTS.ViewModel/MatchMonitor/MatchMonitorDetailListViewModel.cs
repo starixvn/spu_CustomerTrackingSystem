@@ -35,7 +35,7 @@
                 filter.ScoreList.Contains(x.Score ?? "-") &&
                 filter.ReasonList.Any(y => (x.ReasonList ?? "-").Contains(y)) &&
                 reasonGroupIDDic.Contains(x.ADetectGroupID.ToString()) &&
-                (site.Contains("A") || site.Contains(x.SubscriberType))
+                x.FilterBySite(site)
                 );
             AwayMatchItemList = tickets.AwayMatchItemList.Where(x =>
                 filter.CurrencyList.Contains(x.Currency ?? "-") &&
@@ -43,17 +43,17 @@
                 filter.ScoreList.Contains(x.Score ?? "-") &&
                 filter.ReasonList.Any(y => (x.ReasonList ?? "-").Contains(y)) &&
                 reasonGroupIDDic.Contains(x.ADetectGroupID.ToString()) &&
-                (site.Contains("A") || site.Contains(x.SubscriberType))
+                x.FilterBySite(site)
                 );
 
-            isFilter = true;
+            IsFilter = true;
         }
 
         public MatchMonitorDetailListViewModel(MatchMonitorDetailListViewModel tickets, string site)
         {
             LastSequenceID = tickets.LastSequenceID;
             CTSCustIDList = tickets.CTSCustIDList;
-            isFilter = tickets.isFilter;
+            IsFilter = tickets.IsFilter;
             RecordsTotal = tickets.RecordsTotal;
             CurrencyList = tickets.CurrencyList;
             HDPList = tickets.HDPList;
@@ -62,8 +62,8 @@
             GroupList = tickets.GroupList;
             ReasonInfos = tickets.ReasonInfos;
             ReasonGroupIDDic = tickets.ReasonGroupIDDic;
-            HomeMatchItemList = tickets.HomeMatchItemList.Where(x => site.Contains("A") || site.Contains(x.SubscriberType));
-            AwayMatchItemList = tickets.AwayMatchItemList.Where(x => site.Contains("A") || site.Contains(x.SubscriberType));
+            HomeMatchItemList = tickets.HomeMatchItemList.Where(x => x.FilterBySite(site));
+            AwayMatchItemList = tickets.AwayMatchItemList.Where(x => x.FilterBySite(site));
         }
 
         public long? LastSequenceID { get; set; }

@@ -430,8 +430,8 @@
 
         public enum MatchMonitorQueryType
         {
-            Fraud = 2,
-            All = 3
+            TicketFraud = 2,
+            TicketAll = 3
         }
     }
 }

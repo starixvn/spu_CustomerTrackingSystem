@@ -231,25 +231,25 @@
 
             switch (para.TypeOfTickets)
             {
-                case MatchMonitorQueryType.All when !filter.isFilter && para.Sites == "A":
+                case MatchMonitorQueryType.TicketAll when !filter.IsFilter && para.Sites == "A":
                     {
                         mdResult = GetAllMMDetailFromCache(para);
                         break;
                     }
-                case MatchMonitorQueryType.All:
+                case MatchMonitorQueryType.TicketAll:
                     {
                         var allTicketDetails = GetAllMMDetailFromCache(para, true);
                         mdResult = new MatchMonitorDetailListViewModel(allTicketDetails, filter, para.Sites);
                         break;
                     }
-                case MatchMonitorQueryType.Fraud when para.IsRefresh:
+                case MatchMonitorQueryType.TicketFraud when para.IsRefresh:
                     {
                         var fraudTicket = GetFraudMMDetailFromCache(para, true);
                         mdResult = new MatchMonitorDetailListViewModel(fraudTicket, para.Sites);
 
                         break;
                     }
-                case MatchMonitorQueryType.Fraud:
+                case MatchMonitorQueryType.TicketFraud:
                     {
                         var fraudTicket = GetFraudMMDetailFromCache(para);
                         mdResult = new MatchMonitorDetailListViewModel(fraudTicket, filter, para.Sites);
@@ -364,7 +364,7 @@
 
             switch (para.TypeOfTickets)
             {
-                case MatchMonitorQueryType.Fraud:
+                case MatchMonitorQueryType.TicketFraud:
                     {
                         result.TicketDetails = _matchMonitorService.GetTicketDetail(para, string.Join(",", tranIdsDistinct));
                         var mergeGroup = new MMDetailMergeGroupViewModel();
@@ -382,14 +382,14 @@
                         yield return result;
                         break;
                     }
-                case MatchMonitorQueryType.All:
+                case MatchMonitorQueryType.TicketAll:
                     {
                         var filter = GetMatchMonitorFilterFromCache(para, false);
                         var recordsTotal = filter.RecordsTotal;
                         var start = 0;
                         do
                         {
-                            var batchSize = start < recordsTotal ? 10 : recordsTotal % 10;
+                            var batchSize = start < recordsTotal ? 1000 : recordsTotal % 1000;
                             result.TicketDetails = _matchMonitorService.GetTicketDetail(para, string.Join(",", tranIdsDistinct), (int)batchSize).OrderByDescending(x => x.SequenceID);
 
                             start += result.TicketDetails.Count();
@@ -413,7 +413,7 @@
         private MatchMonitorDetailListViewModel GetAllMMDetailFromCache(MMDetailSearchViewModel filter, bool isAll = false)
         {
             var para = new MMDetailSearchViewModel(filter);
-            para.TypeOfTickets = MatchMonitorQueryType.All;
+            para.TypeOfTickets = MatchMonitorQueryType.TicketAll;
             var result = new MatchMonitorDetailListViewModel();
             try
             {
@@ -480,7 +480,7 @@
         private MatchMonitorDetailListViewModel GetFraudMMDetailFromCache(MMDetailSearchViewModel filter, bool isClearCache = false)
         {
             var para = new MMDetailSearchViewModel(filter);
-            para.TypeOfTickets = MatchMonitorQueryType.Fraud;
+            para.TypeOfTickets = MatchMonitorQueryType.TicketFraud;
             var result = new MatchMonitorDetailListViewModel();
 
             try
@@ -738,15 +738,7 @@
             tickets.ForEach(t =>
             {
                 var verifiedTransID = verifiedTrans.FirstOrDefault(y => y.VerifiedTransID == t.TransId)?.VerifiedTransID.ToString() ?? string.Empty;
-                var nTicket = default(MatchMonitorDetailItemViewModel);
-                if (custInfoDictionary.TryGetValue(t.CustId, out var custInfo))
-                {
-                    nTicket = new MatchMonitorDetailItemViewModel(t, custInfo);
-                }
-                else
-                {
-                    nTicket = new MatchMonitorDetailItemViewModel(t);
-                }
+                var nTicket = custInfoDictionary.TryGetValue(t.CustId, out var custInfo) ? new MatchMonitorDetailItemViewModel(t, custInfo) : new MatchMonitorDetailItemViewModel(t);
 
                 nTicket.PICVerified = verifiedTransID;
                 ticketResult.Add(nTicket);
@@ -762,28 +754,10 @@
 
             return new MatchMonitorDetailListViewModel
             {
-                HomeMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)
-                || string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.O), StringComparison.OrdinalIgnoreCase))
-                    .Select(x =>
-                    {
-                        if (fraudHomeMatchItemDictionary != null && fraudHomeMatchItemDictionary.TryGetValue(x.TransId, out var value))
-                        {
-                            return value;
-                        }
-
-                        return x;
-                    }),
-                AwayMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)
-                || string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.U), StringComparison.OrdinalIgnoreCase))
-                    .Select(x =>
-                    {
-                        if (fraudAwayMatchItemDictionary != null && fraudAwayMatchItemDictionary.TryGetValue(x.TransId, out var value))
-                        {
-                            return value;
-                        }
-
-                        return x;
-                    }),
+                HomeMatchItemList = mdItemList.Where(c => c.FilterByHomeAway(new string[] { nameof(MatchMonitorBetChoiceId.H), nameof(MatchMonitorBetChoiceId.O) }))
+                    .Select(x => x.MappingFraudTicketToAllTicket(fraudHomeMatchItemDictionary)),
+                AwayMatchItemList = mdItemList.Where(c => c.FilterByHomeAway(new string[] { nameof(MatchMonitorBetChoiceId.A), nameof(MatchMonitorBetChoiceId.U) }))
+                    .Select(x => x.MappingFraudTicketToAllTicket(fraudAwayMatchItemDictionary)),
                 LastSequenceID = lastSequenceID
             };
         }
