@@ -63,7 +63,8 @@ function MatchMonitorDetail() {
 
     let recordsFilteredGlobal = 0;
     let recordsTotalGlobal = 0;
-    let cacheSite = SiteViewType.All;
+    let maxSequencId = 0;
+
     let cacheTicketDetail;
     let cacheFilter;
     let cacheReasonGroupIDDic = {};
@@ -188,7 +189,7 @@ function MatchMonitorDetail() {
         });
     }
 
-    function FetchMatchMonitorDetail(typeOfTickets = MatchMonitorDetailViewType.Fraud, lastScannedSequenceID = 0) {
+    function FetchMatchMonitorDetail(typeOfTickets = MatchMonitorDetailViewType.Fraud, lastScannedSequenceID = maxSequencId) {
         recordsFilteredGlobal = 0;
         domElements.tblMMHomeTeam.DataTable().clear().draw();
         domElements.tblMMAwayTeam.DataTable().clear().draw();
@@ -200,77 +201,79 @@ function MatchMonitorDetail() {
         GetMatchMonitorDetail(typeOfTickets, lastScannedSequenceID, typeOfTickets == MatchMonitorDetailViewType.All ? posClickGlobal : 0);
     }
 
-    function GetMatchMonitorDetail(typeOfTickets = MatchMonitorDetailViewType.Fraud, lastScannedSequenceID = 0, posClick = 0) {
-        currentType = typeOfTickets;
+    function GetMatchMonitorDetail(typeOfTickets = MatchMonitorDetailViewType.Fraud, lastScannedSequenceID = maxSequencId, posClick = 0) {
+        if (lastScannedSequenceID) {
+            currentType = typeOfTickets;
 
-        const data = {
-            EventDateToString: function () { return domElements.eventDataToString; },
-            MatchID: function () { return domElements.matchID; },
-            BetTypeID: function () { return domElements.betTypeID; },
-            BetID: function () { return domElements.betIDToString; },
-            Sites: function () { return cacheSite; },
-            Reason: function () { return domElements.reason; },
-            LiveIndicator: function () { return domElements.liveIndicator; },
-            LastScannedSequenceID: lastScannedSequenceID,
-            TypeOfTickets: typeOfTickets,
-            isFilter: isFilterOptionServerSide,
-            CurrencyListString: JSON.stringify(domElements.cbbCurrency.val()),
-            HDPListString: JSON.stringify(domElements.cbbHDP.val()),
-            ScoreListString: JSON.stringify(domElements.cbbMatchScore.val()),
-            ReasonListString: JSON.stringify(domElements.cbbReason.val()),
-            ReasonGroupIDDicString: JSON.stringify(domElements.cbbGroup.val()),
-            IsRefresh: isRefresh
-        };
+            const data = {
+                EventDateToString: function () { return domElements.eventDataToString; },
+                MatchID: function () { return domElements.matchID; },
+                BetTypeID: function () { return domElements.betTypeID; },
+                BetID: function () { return domElements.betIDToString; },
+                Sites: function () { return domElements.cbbSites.val(); },
+                Reason: function () { return domElements.reason; },
+                LiveIndicator: function () { return domElements.liveIndicator; },
+                LastScannedSequenceID: lastScannedSequenceID,
+                TypeOfTickets: typeOfTickets,
+                isFilter: isFilterOptionServerSide,
+                CurrencyListString: JSON.stringify(domElements.cbbCurrency.val()),
+                HDPListString: JSON.stringify(domElements.cbbHDP.val()),
+                ScoreListString: JSON.stringify(domElements.cbbMatchScore.val()),
+                ReasonListString: JSON.stringify(domElements.cbbReason.val()),
+                ReasonGroupIDDicString: JSON.stringify(domElements.cbbGroup.val()),
+                IsRefresh: isRefresh
+            };
 
-        xhr = $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorDetail'), {
-            type: 'POST',
-            tryCount: 0,
-            retryLimit: 3,
-            data: data,
-            beforeSend: function () {
-                domElements.tblMMHomeTeam.find('tbody').addClass('loading');
-                domElements.tblMMAwayTeam.find('tbody').addClass('loading');
-            },
-            success: function (response) {
-                if (response?.data) {
-                    if (typeOfTickets == MatchMonitorDetailViewType.All && posClickGlobal != posClick) {
-                        return;
+            xhr = $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorDetail'), {
+                type: 'POST',
+                tryCount: 0,
+                retryLimit: 3,
+                data: data,
+                beforeSend: function () {
+                    domElements.tblMMHomeTeam.find('tbody').addClass('loading');
+                    domElements.tblMMAwayTeam.find('tbody').addClass('loading');
+                },
+                success: function (response) {
+                    if (response?.data) {
+                        if (typeOfTickets == MatchMonitorDetailViewType.All && posClickGlobal != posClick) {
+                            return;
+                        }
+
+                        if (typeOfTickets == MatchMonitorDetailViewType.Fraud) {
+                            RenderFilter(response.data);
+                            CacheTicketDetail(response);
+                        }
+
+                        RenderMatchMonitorDetail(response, typeOfTickets);
+
+                        if (typeOfTickets == MatchMonitorDetailViewType.All && response?.data?.LastSequenceID) {
+                            GetMatchMonitorDetail(typeOfTickets, response?.data?.LastSequenceID, posClick);
+                        }
+                    }
+                },
+                complete: function (response) {
+                    domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
+                    domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
+                },
+                error: function (xhr, textStatus, error) {
+                    if (textStatus == 'timeout') {
+                        this.tryCount++;
+                        if (this.tryCount <= this.retryLimit) {
+                            //try again
+                            $.ajax(this);
+                            return;
+                        }
                     }
 
-                    if (typeOfTickets == MatchMonitorDetailViewType.Fraud) {
-                        RenderFilter(response.data);
-                        CacheTicketDetail(response);
-                    }
+                    domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
+                    domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
+                    console.log(error);
+                },
+                timeout: 5000
+            });
 
-                    RenderMatchMonitorDetail(response, typeOfTickets);
-
-                    if (typeOfTickets == MatchMonitorDetailViewType.All && response?.data?.LastSequenceID) {
-                        GetMatchMonitorDetail(typeOfTickets, response?.data?.LastSequenceID, posClick);
-                    }
-                }
-            },
-            complete: function (response) {
-                domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
-                domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
-            },
-            error: function (xhr, textStatus, error) {
-                if (textStatus == 'timeout') {
-                    this.tryCount++;
-                    if (this.tryCount <= this.retryLimit) {
-                        //try again
-                        $.ajax(this);
-                        return;
-                    }
-                }
-
-                domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
-                domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
-                console.log(error);
-            },
-            timeout: 5000
-        });
-
-        isRefresh = false;
+            isRefresh = false;
+        }
     }
 
     function FetchFilterMatchMonitorDetail() {
@@ -289,7 +292,7 @@ function MatchMonitorDetail() {
                 MatchID: function () { return domElements.matchID; },
                 BetTypeID: function () { return domElements.betTypeID; },
                 BetID: function () { return domElements.betIDToString; },
-                Sites: function () { return cacheSite; },
+                Sites: function () { return domElements.cbbSites.val(); },
                 Reason: function () { return domElements.reason; },
                 LiveIndicator: function () { return domElements.liveIndicator; },
                 TypeOfTickets: MatchMonitorDetailViewType.All,
@@ -299,7 +302,8 @@ function MatchMonitorDetail() {
                 if (data) {
                     recordsTotalGlobal = data.RecordsTotal;
                     RenderFilter(data, recordsTotalGlobal);
-                    FetchMatchMonitorDetail(MatchMonitorDetailViewType.All);
+                    maxSequencId = data.MaxSequenceId;
+                    FetchMatchMonitorDetail(MatchMonitorDetailViewType.All, maxSequencId);
                 }
             },
             error: function (xhr, textStatus, error) {
@@ -412,21 +416,24 @@ function MatchMonitorDetail() {
         if (domElements.cbbSites.val() === SiteViewType.All) {
             cacheFilter = undefined;
         }
-        cacheSite = domElements.cbbSites.val();
-        domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.Fraud);
     }
 
     function LoadCacheMatchMonitorDetail() {
+        RefreshFilter();
+
         if (cacheTicketDetail) {
-            domElements.tblMMHomeTeam.DataTable().clear().draw();
-            domElements.tblMMAwayTeam.DataTable().clear().draw();
             posClickGlobal++;
             if (xhr) {
                 xhr.onreadystatechange = null;
                 xhr.abort();
             }
-            RefreshFilter();
+            domElements.tblMMHomeTeam.DataTable().clear().draw();
+            domElements.tblMMAwayTeam.DataTable().clear().draw();
+
             RenderMatchMonitorDetail(cacheTicketDetail.response);
+        }
+        else {
+            FetchMatchMonitorDetail(MatchMonitorDetailViewType.Fraud, 1);
         }
     }
 
@@ -867,8 +874,14 @@ function MatchMonitorDetail() {
         domElements.cbbSites.change(function () {
             isFilterOptionServerSide = false;
             ClearCache();
-            FetchMatchMonitorDetail();
-            RefreshFilter();
+            if (currentType == MatchMonitorDetailViewType.Fraud) {
+                FetchMatchMonitorDetail(MatchMonitorDetailViewType.Fraud, 1);
+                RefreshFilter();
+            }
+
+            if (currentType == MatchMonitorDetailViewType.All) {
+                FetchFilterMatchMonitorDetail();
+            }
         });
 
         domElements.btnRefresh.on('click', function () {
@@ -922,7 +935,7 @@ function MatchMonitorDetail() {
         domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.Fraud);
         domElements.cbbSites.val(SiteViewType.All)
         isRefresh = true;
-        FetchMatchMonitorDetail();
+        FetchMatchMonitorDetail(MatchMonitorDetailViewType.Fraud, 1);
 
         BindScrollHeaderFixed();
     });

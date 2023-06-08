@@ -1,10 +1,10 @@
 ﻿namespace Fanex.NAP.CTS.Model.MatchMonitor
 {
-    using System;
-
     public class MMTicketDetailInfoModel
     {
         public long TotalTicket { get; set; }
+
+        public long? MaxSequencId { get; set; }
 
         public string ListCurrency { get; set; }
 

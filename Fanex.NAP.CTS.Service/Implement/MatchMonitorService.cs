@@ -177,7 +177,8 @@
                 ListCurrency = criteria.ListCurrency,
                 ListHDP = criteria.ListHDP,
                 ListScore = criteria.ListScore,
-                TotalTicket = criteria.TotalTicket
+                TotalTicket = criteria.TotalTicket,
+                MaxSequencId = criteria.MaxSequenceId
             };
         }
 

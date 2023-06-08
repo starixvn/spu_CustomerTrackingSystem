@@ -20,6 +20,7 @@
         public MMDetailFilterViewModel(MMTicketDetailInfoModel mMTicket, MatchMonitorDetailListViewModel fraudTicket)
         {
             RecordsTotal = mMTicket.TotalTicket;
+            MaxSequenceId = mMTicket.MaxSequencId;
             CurrencyList = mMTicket.ListCurrency?.Split(',') ?? new List<string>() { "-" }.AsEnumerable();
             HDPList = mMTicket.ListHDP?.Split(',').Select(x => decimal.Parse(x)) ?? new List<decimal>() { };
             ScoreList = mMTicket.ListScore?.Split(',') ?? new List<string>() { "-" }.AsEnumerable();
@@ -45,6 +46,8 @@
         }
 
         public bool isFilter { get; set; }
+
+        public long? MaxSequenceId { get; set; }
 
         public long RecordsTotal { get; set; }
 

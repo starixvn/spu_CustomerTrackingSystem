@@ -17,6 +17,9 @@
         [SpParam(SqlParamName = "TotalTicket")]
         public Int64 TotalTicket { get; set; }
 
+        [SpParam(SqlParamName = "MaxSequenceId")]
+        public Int64? MaxSequenceId { get; set; }
+
         [SpParam(SqlParamName = "ListCurrency")]
         public string ListCurrency { get; set; }
 

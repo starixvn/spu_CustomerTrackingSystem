@@ -390,7 +390,7 @@
                         do
                         {
                             var batchSize = start < recordsTotal ? 10 : recordsTotal % 10;
-                            result.TicketDetails = _matchMonitorService.GetTicketDetail(para, string.Join(",", tranIdsDistinct), (int)batchSize).OrderBy(x => x.SequenceID);
+                            result.TicketDetails = _matchMonitorService.GetTicketDetail(para, string.Join(",", tranIdsDistinct), (int)batchSize).OrderByDescending(x => x.SequenceID);
 
                             start += result.TicketDetails.Count();
 
@@ -428,7 +428,7 @@
                         Task.Run(() =>
                         {
                             result = new MatchMonitorDetailListViewModel();
-                            para.LastScannedSequenceID = 0;
+                            para.LastScannedSequenceID = GetMatchMonitorFilterFromCache(para, false).MaxSequenceId;
                             var homeMatchItemList = new List<MatchMonitorDetailItemViewModel>();
                             var awayMatchItemList = new List<MatchMonitorDetailItemViewModel>();
                             _memoryCacheService.PushValueAsync(para.BuildCacheKey(FlagRunningTask, MMDetailRegion), new { });
