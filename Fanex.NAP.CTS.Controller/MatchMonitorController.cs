@@ -242,7 +242,7 @@
                         mdResult = new MatchMonitorDetailListViewModel(allTicketDetails, filter, para.Sites);
                         break;
                     }
-                case MatchMonitorQueryType.Fraud when (!filter.isFilter && para.Sites == "A") || para.IsRefresh:
+                case MatchMonitorQueryType.Fraud when para.IsRefresh:
                     {
                         var fraudTicket = GetFraudMMDetailFromCache(para, true);
                         mdResult = new MatchMonitorDetailListViewModel(fraudTicket, para.Sites);

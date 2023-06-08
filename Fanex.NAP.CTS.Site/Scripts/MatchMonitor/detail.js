@@ -332,8 +332,13 @@ function MatchMonitorDetail() {
                 }
             }
 
-            domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw();
-            domElements.tblMMAwayTeam.DataTable().rows.add(data.AwayMatchItemList).draw();
+            if (data?.HomeMatchItemList) {
+                domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw();
+            }
+
+            if (data?.AwayMatchItemList) {
+                domElements.tblMMAwayTeam.DataTable().rows.add(data.AwayMatchItemList).draw();
+            }
 
             $(".breadcrumb-totaltickets").html(`Total Tickets: ${recordsFilteredGlobal}/${recordsTotalGlobal}`);
         }
@@ -433,8 +438,10 @@ function MatchMonitorDetail() {
     function SetupFilter(element, data) {
         element.multiselect().empty();
 
-        for (var i = 0; i < data.length; i++) {
-            element.append(`<option selected value='${data[i]}'>${data[i]}</option>`);
+        if (data) {
+            for (var i = 0; i < data.length; i++) {
+                element.append(`<option selected value='${data[i]}'>${data[i]}</option>`);
+            }
         }
 
         element.multiselect("refresh");
@@ -443,11 +450,13 @@ function MatchMonitorDetail() {
     function SetupGroupFilter(data) {
         domElements.cbbGroup.multiselect().empty();
 
-        if (data.length == 0)
-            domElements.cbbGroup.append(`<option selected value='0'>-</option>`);
+        if (data) {
+            if (data.length == 0)
+                domElements.cbbGroup.append(`<option selected value='0'>-</option>`);
 
-        for (var i = 0; i < data.length; i++) {
-            domElements.cbbGroup.append(`<option selected value='${data[i].GroupID}'>${data[i].GroupName}</option>`);
+            for (var i = 0; i < data.length; i++) {
+                domElements.cbbGroup.append(`<option selected value='${data[i].GroupID}'>${data[i].GroupName}</option>`);
+            }
         }
 
         domElements.cbbGroup.multiselect("refresh");
@@ -905,8 +914,6 @@ function MatchMonitorDetail() {
                 VerifyTransMatchMonitorDetail();
             });
         })
-
-        // FilterGrid();
     }
 
     $(document).ready(function () {
@@ -914,6 +921,7 @@ function MatchMonitorDetail() {
 
         domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.Fraud);
         domElements.cbbSites.val(SiteViewType.All)
+        isRefresh = true;
         FetchMatchMonitorDetail();
 
         BindScrollHeaderFixed();

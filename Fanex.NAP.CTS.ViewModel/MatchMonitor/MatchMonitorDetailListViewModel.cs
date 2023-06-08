@@ -35,7 +35,7 @@
                 filter.ScoreList.Contains(x.Score ?? "-") &&
                 filter.ReasonList.Any(y => (x.ReasonList ?? "-").Contains(y)) &&
                 reasonGroupIDDic.Contains(x.ADetectGroupID.ToString()) &&
-                site.Contains("A") || site.Contains(x.SubscriberType)
+                (site.Contains("A") || site.Contains(x.SubscriberType))
                 );
             AwayMatchItemList = tickets.AwayMatchItemList.Where(x =>
                 filter.CurrencyList.Contains(x.Currency ?? "-") &&
@@ -43,7 +43,7 @@
                 filter.ScoreList.Contains(x.Score ?? "-") &&
                 filter.ReasonList.Any(y => (x.ReasonList ?? "-").Contains(y)) &&
                 reasonGroupIDDic.Contains(x.ADetectGroupID.ToString()) &&
-                site.Contains("A") || site.Contains(x.SubscriberType)
+                (site.Contains("A") || site.Contains(x.SubscriberType))
                 );
 
             isFilter = true;
