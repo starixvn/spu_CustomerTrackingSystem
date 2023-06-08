@@ -22,12 +22,7 @@
                 return;
             }
 
-            filter.CurrencyList = JsonConvert.DeserializeObject<IEnumerable<string>>(filter.CurrencyListString);
-            filter.HDPList = JsonConvert.DeserializeObject<IEnumerable<decimal>>(filter.HDPListString);
-            filter.ScoreList = JsonConvert.DeserializeObject<IEnumerable<string>>(filter.ScoreListString);
-            filter.ReasonList = JsonConvert.DeserializeObject<IEnumerable<string>>(filter.ReasonListString);
-            var reasonGroupIDDic = JsonConvert.DeserializeObject<IEnumerable<string>>(filter.ReasonGroupIDDicString);
-            reasonGroupIDDic = reasonGroupIDDic.Select(x => x.Contains("-") ? "0" : x);
+            var reasonGroupIDDic = filter.AGroupList.Select(x => x.Contains("-") ? "0" : x);
 
             HomeMatchItemList = tickets.HomeMatchItemList.Where(x =>
                 filter.CurrencyList.Contains(x.Currency ?? "-") &&

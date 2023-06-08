@@ -63,7 +63,7 @@ function MatchMonitorDetail() {
 
     let recordsFilteredGlobal = 0;
     let recordsTotalGlobal = 0;
-    let maxSequencId = 1;
+    let maxSequenceId = 1;
 
     let cacheTicketDetail;
     let cacheFilter;
@@ -98,7 +98,8 @@ function MatchMonitorDetail() {
             lengthMenu: [1000, 1500, 2000],
             pageLength: 1000,
             scrollX: false,
-            scrollCollapse: false,
+            scrollY: 650,
+            scrollCollapse: true,
             autoWidth: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
@@ -189,7 +190,7 @@ function MatchMonitorDetail() {
         });
     }
 
-    function FetchMatchMonitorDetail(typeOfTickets = MatchMonitorDetailViewType.TicketFraud, lastScannedSequenceID = maxSequencId) {
+    function FetchMatchMonitorDetail(typeOfTickets = MatchMonitorDetailViewType.TicketFraud, lastScannedSequenceID = maxSequenceId) {
         recordsFilteredGlobal = 0;
         domElements.tblMMHomeTeam.DataTable().clear().draw();
         domElements.tblMMAwayTeam.DataTable().clear().draw();
@@ -201,26 +202,26 @@ function MatchMonitorDetail() {
         GetMatchMonitorDetail(typeOfTickets, lastScannedSequenceID, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
     }
 
-    function GetMatchMonitorDetail(typeOfTickets = MatchMonitorDetailViewType.TicketFraud, lastScannedSequenceID = maxSequencId, posClick = 0) {
+    function GetMatchMonitorDetail(typeOfTickets = MatchMonitorDetailViewType.TicketFraud, lastScannedSequenceID = maxSequenceId, posClick = 0) {
         if (lastScannedSequenceID) {
             currentType = typeOfTickets;
 
             const data = {
-                EventDateToString: function () { return domElements.eventDataToString; },
-                MatchID: function () { return domElements.matchID; },
-                BetTypeID: function () { return domElements.betTypeID; },
-                BetID: function () { return domElements.betIDToString; },
-                Sites: function () { return domElements.cbbSites.val(); },
-                Reason: function () { return domElements.reason; },
-                LiveIndicator: function () { return domElements.liveIndicator; },
+                EventDateToString: domElements.eventDataToString,
+                MatchID: domElements.matchID,
+                BetTypeID: domElements.betTypeID,
+                BetID: domElements.betIDToString,
+                Sites: domElements.cbbSites.val(),
+                Reason: domElements.reason,
+                LiveIndicator: domElements.liveIndicator,
                 LastScannedSequenceID: lastScannedSequenceID,
                 TypeOfTickets: typeOfTickets,
                 IsFilter: isFilterOptionServerSide,
-                CurrencyListString: JSON.stringify(domElements.cbbCurrency.val()),
-                HDPListString: JSON.stringify(domElements.cbbHDP.val()),
-                ScoreListString: JSON.stringify(domElements.cbbMatchScore.val()),
-                ReasonListString: JSON.stringify(domElements.cbbReason.val()),
-                ReasonGroupIDDicString: JSON.stringify(domElements.cbbGroup.val()),
+                CurrencyList: domElements.cbbCurrency.val(),
+                HDPList: domElements.cbbHDP.val(),
+                ScoreList: domElements.cbbMatchScore.val(),
+                ReasonList: domElements.cbbReason.val(),
+                AGroupList: domElements.cbbGroup.val(),
                 IsRefresh: isRefresh
             };
 
@@ -228,7 +229,9 @@ function MatchMonitorDetail() {
                 type: 'POST',
                 tryCount: 0,
                 retryLimit: 3,
-                data: data,
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
                 beforeSend: function () {
                     domElements.tblMMHomeTeam.find('tbody').addClass('loading');
                     domElements.tblMMAwayTeam.find('tbody').addClass('loading');
@@ -302,8 +305,8 @@ function MatchMonitorDetail() {
                 if (data) {
                     recordsTotalGlobal = data.RecordsTotal;
                     RenderFilter(data, recordsTotalGlobal);
-                    maxSequencId = data.MaxSequenceId;
-                    FetchMatchMonitorDetail(MatchMonitorDetailViewType.TicketAll, maxSequencId);
+                    maxSequenceId = data.MaxSequenceId;
+                    FetchMatchMonitorDetail(MatchMonitorDetailViewType.TicketAll, maxSequenceId);
                 }
             },
             error: function (xhr, textStatus, error) {

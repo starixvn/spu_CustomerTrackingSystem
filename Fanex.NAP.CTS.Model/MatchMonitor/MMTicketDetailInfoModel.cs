@@ -4,7 +4,7 @@
     {
         public long TotalTicket { get; set; }
 
-        public long? MaxSequencId { get; set; }
+        public long? MaxSequenceId { get; set; }
 
         public string ListCurrency { get; set; }
 

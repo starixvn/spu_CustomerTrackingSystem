@@ -10,9 +10,9 @@
         {
             this.CurrencyList = new List<string>();
             this.HDPList = new List<decimal>();
-            this.ScoreList = Enumerable.Empty<string>();
-            this.ReasonList = Enumerable.Empty<string>();
-            this.GroupList = Enumerable.Empty<GroupInfoViewModel>();
+            this.ScoreList = new List<string>();
+            this.ReasonList = new List<string>();
+            this.GroupList = new List<GroupInfoViewModel>();
             this.ReasonInfos = string.Empty;
             this.ReasonGroupIDDic = new Dictionary<string, List<int>>();
         }
@@ -20,7 +20,7 @@
         public MMDetailFilterViewModel(MMTicketDetailInfoModel mMTicket, MatchMonitorDetailListViewModel fraudTicket)
         {
             RecordsTotal = mMTicket.TotalTicket;
-            MaxSequenceId = mMTicket.MaxSequencId;
+            MaxSequenceId = mMTicket.MaxSequenceId;
             CurrencyList = mMTicket.ListCurrency?.Split(',') ?? new List<string>() { "-" }.AsEnumerable();
             HDPList = mMTicket.ListHDP?.Split(',').Select(x => decimal.Parse(x)) ?? new List<decimal>() { };
             ScoreList = mMTicket.ListScore?.Split(',') ?? new List<string>() { "-" }.AsEnumerable();
@@ -65,14 +65,6 @@
 
         public Dictionary<string, List<int>> ReasonGroupIDDic { get; set; }
 
-        public string CurrencyListString { get; set; }
-
-        public string HDPListString { get; set; }
-
-        public string ScoreListString { get; set; }
-
-        public string ReasonListString { get; set; }
-
-        public string ReasonGroupIDDicString { get; set; }
+        public IEnumerable<string> AGroupList { get; set; }
     }
 }
