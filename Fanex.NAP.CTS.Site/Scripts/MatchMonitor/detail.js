@@ -98,8 +98,6 @@ function MatchMonitorDetail() {
             lengthMenu: [1000, 1500, 2000],
             pageLength: 1000,
             scrollX: false,
-            scrollY: 650,
-            scrollCollapse: true,
             autoWidth: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
@@ -199,7 +197,12 @@ function MatchMonitorDetail() {
             xhr.onreadystatechange = null;
             xhr.abort();
         }
-        GetMatchMonitorDetail(typeOfTickets, lastScannedSequenceID, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
+
+        if (lastScannedSequenceID) {
+            domElements.tblMMHomeTeam.find('tbody').addClass('loading');
+            domElements.tblMMAwayTeam.find('tbody').addClass('loading');
+            GetMatchMonitorDetail(typeOfTickets, lastScannedSequenceID, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
+        }
     }
 
     function GetMatchMonitorDetail(typeOfTickets = MatchMonitorDetailViewType.TicketFraud, lastScannedSequenceID = maxSequenceId, posClick = 0) {
@@ -232,10 +235,6 @@ function MatchMonitorDetail() {
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(data),
-                beforeSend: function () {
-                    domElements.tblMMHomeTeam.find('tbody').addClass('loading');
-                    domElements.tblMMAwayTeam.find('tbody').addClass('loading');
-                },
                 success: function (response) {
                     if (response?.data) {
                         if (typeOfTickets == MatchMonitorDetailViewType.TicketAll && posClickGlobal != posClick) {
@@ -816,44 +815,25 @@ function MatchMonitorDetail() {
         })
     }
 
+    function SetupMultiselect(ccb, selectName, menuWidth = 260, menuHeight = 260) {
+        ccb.multiselect({
+            menuWidth: menuWidth,
+            menuHeight: menuHeight,
+            selectedText: "# of # selected",
+            noneSelectedText: `Select ${selectName} `
+        });
+    }
+
     function Initial() {
         if (cacheTicketDetail) {
             console.log("aaa")
         }
-        domElements.cbbCurrency.multiselect({
-            menuWidth: 260,
-            menuHeight: 260,
-            selectedText: "# of # selected",
-            noneSelectedText: "Select Currency "
-        });
 
-        domElements.cbbHDP.multiselect({
-            menuWidth: 260,
-            menuHeight: 260,
-            selectedText: "# of # selected",
-            noneSelectedText: "Select HDP "
-        });
-
-        domElements.cbbMatchScore.multiselect({
-            menuWidth: 260,
-            menuHeight: 260,
-            selectedText: "# of # selected",
-            noneSelectedText: "Select Score "
-        });
-
-        domElements.cbbGroup.multiselect({
-            menuWidth: 260,
-            menuHeight: 260,
-            selectedText: "# of # selected",
-            noneSelectedText: "Select Group "
-        });
-
-        domElements.cbbReason.multiselect({
-            menuWidth: 180,
-            menuHeight: 180,
-            selectedText: "# of # selected",
-            noneSelectedText: "Select Reason "
-        });
+        SetupMultiselect(domElements.cbbCurrency, "Currency");
+        SetupMultiselect(domElements.cbbHDP, "HDP");
+        SetupMultiselect(domElements.cbbMatchScore, "Score");
+        SetupMultiselect(domElements.cbbGroup, "Group");
+        SetupMultiselect(domElements.cbbReason, "Reason", 180, 180);
 
         domElements.cbbReason.change(function () { ReasonOnChange(); });
 
@@ -931,14 +911,17 @@ function MatchMonitorDetail() {
                 VerifyTransMatchMonitorDetail();
             });
         })
+
+        domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
+        domElements.cbbSites.val(SiteViewType.SiteAll)
+        isRefresh = true;
+        domElements.inputHomeSelectAll.prop('checked', false);
+        domElements.inputAwaySelectAll.prop('checked', false);
     }
 
     $(document).ready(function () {
         Initial();
 
-        domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
-        domElements.cbbSites.val(SiteViewType.SiteAll)
-        isRefresh = true;
         FetchMatchMonitorDetail(MatchMonitorDetailViewType.TicketFraud);
 
         BindScrollHeaderFixed();
