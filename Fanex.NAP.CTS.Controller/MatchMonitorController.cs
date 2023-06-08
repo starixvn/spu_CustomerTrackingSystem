@@ -389,7 +389,7 @@
                         var start = 0;
                         do
                         {
-                            var batchSize = start < recordsTotal ? 1000 : recordsTotal % 1000;
+                            var batchSize = start < recordsTotal ? 10 : recordsTotal % 10;
                             result.TicketDetails = _matchMonitorService.GetTicketDetail(para, string.Join(",", tranIdsDistinct), (int)batchSize).OrderBy(x => x.SequenceID);
 
                             start += result.TicketDetails.Count();
