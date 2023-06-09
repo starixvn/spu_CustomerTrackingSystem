@@ -270,8 +270,7 @@ function MatchMonitorDetail() {
                     domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
                     domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
                     console.log(error);
-                },
-                timeout: 5000
+                }
             });
 
             isRefresh = false;
@@ -339,11 +338,11 @@ function MatchMonitorDetail() {
             }
 
             if (data?.HomeMatchItemList) {
-                domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw();
+                domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw(false);
             }
 
             if (data?.AwayMatchItemList) {
-                domElements.tblMMAwayTeam.DataTable().rows.add(data.AwayMatchItemList).draw();
+                domElements.tblMMAwayTeam.DataTable().rows.add(data.AwayMatchItemList).draw(false);
             }
 
             $(".breadcrumb-totaltickets").html(`Total Tickets: ${recordsFilteredGlobal}/${recordsTotalGlobal}`);
