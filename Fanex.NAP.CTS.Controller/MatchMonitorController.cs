@@ -282,7 +282,7 @@
             {
                 var tasks = new Task[]
                 {
-                        Task.Run(() => custInfo = GetCustInfoByCustID(matchDetailInfo)),
+                        Task.Run(() => custInfo = GetCustInfoByCustID(matchDetailInfo.Custs.Select(c => c.CustID).Distinct())),
                         Task.Run(() => fraudTicketDetail = GetFraudMMDetailFromCache(para))
                 };
 
@@ -292,6 +292,15 @@
 
                 foreach (var ticketDetailGroup in ticketDetailGroups)
                 {
+                    var custInfoOthers = GetCustInfoByCustID(ticketDetailGroup.TicketDetails.Select(ticket => ticket.CustId).Distinct().Except(custInfo.Select(x => x.CustID)));
+
+                    if (custInfoOthers != null)
+                    {
+                        var meregeCustInfo = custInfo.ToList();
+                        meregeCustInfo.AddRange(custInfoOthers);
+                        custInfo = meregeCustInfo;
+                    }    
+
                     mdItemList = DrawColorAllMMDetailAndUpdateValue(matchDetailInfo.VerifiedTrans, custInfo, ticketDetailGroup.TicketDetails, para.BetTypeID);
                     yield return MergeFraudToAllMMDetail(mdItemList, fraudTicketDetail, ticketDetailGroup.LastSequenceID);
                 }
@@ -321,7 +330,7 @@
                         mergeGroup = getTicketDetailAndMergeGroup.MMDetailMergeGroup;
                     }),
                     Task.Run(() => mmStatic = _matchMonitorService.GetMMStaticList()),
-                    Task.Run(() => custInfo = GetCustInfoByCustID(matchDetailInfo))
+                    Task.Run(() => custInfo = GetCustInfoByCustID(matchDetailInfo.Custs.Select(c => c.CustID).Distinct()))
                 };
 
                 await Task.WhenAll(tasks);
@@ -350,10 +359,15 @@
             return mdResult;
         }
 
-        private IEnumerable<CustInfoModel> GetCustInfoByCustID(MMDetailResultModel matchDetailInfo)
+        private IEnumerable<CustInfoModel> GetCustInfoByCustID(IEnumerable<long> custIds)
         {
-            var custIdsOfTotalMatch = matchDetailInfo.Custs.Select(c => c.CustID).Distinct();
-            return _matchMonitorService.GetCustInfoByCustID(string.Join(",", custIdsOfTotalMatch));
+            var custIdsToString = string.Join(",", custIds);
+            if (!string.IsNullOrWhiteSpace(custIdsToString))
+            {
+                return _matchMonitorService.GetCustInfoByCustID(custIdsToString);
+            }
+
+            return Enumerable.Empty<CustInfoModel>();
         }
 
         private IEnumerable<TicketDetailViewModel> GetMMTicketDetail(MMDetailResultModel matchDetailInfo, MMDetailSearchViewModel para, bool isLoop = false)
@@ -745,7 +759,7 @@
                 nTicket.BetTypeID = betTypeID;
                 nTicket.ADetectGroup = "-";
                 nTicket.ReasonList = "-";
-                
+
                 ticketResult.Add(nTicket);
             });
 
