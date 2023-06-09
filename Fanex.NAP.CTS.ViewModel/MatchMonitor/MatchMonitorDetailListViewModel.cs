@@ -11,8 +11,8 @@
         public MatchMonitorDetailListViewModel() : base()
         {
             this.CTSCustIDList = string.Empty;
-            this.HomeMatchItemList = Enumerable.Empty<MatchMonitorDetailItemViewModel>();
-            this.AwayMatchItemList = Enumerable.Empty<MatchMonitorDetailItemViewModel>();
+            this.HomeMatchItemList = new List<MatchMonitorDetailItemViewModel>();
+            this.AwayMatchItemList = new List<MatchMonitorDetailItemViewModel>();
         }
 
         public MatchMonitorDetailListViewModel(MatchMonitorDetailListViewModel tickets, MMDetailFilterViewModel filter, string site)
@@ -31,7 +31,7 @@
                 filter.ReasonList.Any(y => (x.ReasonList ?? "-").Contains(y)) &&
                 reasonGroupIDDic.Contains(x.ADetectGroupID.ToString()) &&
                 x.FilterBySite(site)
-                );
+                ).ToList();
             AwayMatchItemList = tickets.AwayMatchItemList.Where(x =>
                 filter.CurrencyList.Contains(x.Currency ?? "-") &&
                 filter.HDPList.Contains(x.HDP) &&
@@ -39,7 +39,7 @@
                 filter.ReasonList.Any(y => (x.ReasonList ?? "-").Contains(y)) &&
                 reasonGroupIDDic.Contains(x.ADetectGroupID.ToString()) &&
                 x.FilterBySite(site)
-                );
+                ).ToList();
 
             IsFilter = true;
         }
@@ -57,17 +57,17 @@
             GroupList = tickets.GroupList;
             ReasonInfos = tickets.ReasonInfos;
             ReasonGroupIDDic = tickets.ReasonGroupIDDic;
-            HomeMatchItemList = tickets.HomeMatchItemList.Where(x => x.FilterBySite(site));
-            AwayMatchItemList = tickets.AwayMatchItemList.Where(x => x.FilterBySite(site));
+            HomeMatchItemList = tickets.HomeMatchItemList.Where(x => x.FilterBySite(site)).ToList();
+            AwayMatchItemList = tickets.AwayMatchItemList.Where(x => x.FilterBySite(site)).ToList();
         }
 
         public long? LastSequenceID { get; set; }
 
         public string CTSCustIDList { get; set; }
 
-        public IEnumerable<MatchMonitorDetailItemViewModel> HomeMatchItemList { get; set; }
+        public List<MatchMonitorDetailItemViewModel> HomeMatchItemList { get; set; }
 
-        public IEnumerable<MatchMonitorDetailItemViewModel> AwayMatchItemList { get; set; }
+        public List<MatchMonitorDetailItemViewModel> AwayMatchItemList { get; set; }
 
         public void BindReasons(IEnumerable<string> rawReasons)
         {

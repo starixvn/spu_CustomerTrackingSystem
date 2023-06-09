@@ -128,6 +128,11 @@
                 var matchJson = JsonConvert.SerializeObject(matchFromMainInfos);
 
                 matchFromCTSInfos = _matchMonitorService.GetMatchMonitor(para, matchJson);
+                matchFromCTSInfos = matchFromCTSInfos.Join(matchFromMainInfos, x => x.MatchID, y => y.MatchId, (x, y) =>
+                {
+                    x.IsSupportShowAllTickets = y.IsGetDataFromOrigin == 1;
+                    return x;
+                });
             }
 
             return matchFromCTSInfos;
@@ -299,7 +304,7 @@
                         var meregeCustInfo = custInfo.ToList();
                         meregeCustInfo.AddRange(custInfoOthers);
                         custInfo = meregeCustInfo;
-                    }    
+                    }
 
                     mdItemList = DrawColorAllMMDetailAndUpdateValue(matchDetailInfo.VerifiedTrans, custInfo, ticketDetailGroup.TicketDetails, para.BetTypeID);
                     yield return MergeFraudToAllMMDetail(mdItemList, fraudTicketDetail, ticketDetailGroup.LastSequenceID);
@@ -343,10 +348,10 @@
                 {
                     HomeMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)
                         || string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.O), StringComparison.OrdinalIgnoreCase))
-                            .OrderByDescending(x => x.TransTime),
+                            .OrderByDescending(x => x.TransTime).ToList(),
                     AwayMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)
                         || string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.U), StringComparison.OrdinalIgnoreCase))
-                            .OrderByDescending(x => x.TransTime),
+                            .OrderByDescending(x => x.TransTime).ToList(),
                     ScoreList = mdItemList.Select(x => x.Score).Distinct().OrderBy(x => x),
                     GroupList = mergeGroup.Groups,
                     CurrencyList = mdItemList.Select(x => string.IsNullOrEmpty(x.Currency) ? "-" : x.Currency).Distinct().OrderBy(x => x),
@@ -443,8 +448,6 @@
                         {
                             result = new MatchMonitorDetailListViewModel();
                             para.LastScannedSequenceID = GetMatchMonitorFilterFromCache(para, false).MaxSequenceId;
-                            var homeMatchItemList = new List<MatchMonitorDetailItemViewModel>();
-                            var awayMatchItemList = new List<MatchMonitorDetailItemViewModel>();
                             _memoryCacheService.PushValueAsync(para.BuildCacheKey(FlagRunningTask, MMDetailRegion), new { });
                             foreach (var item in GetAllMMDetail(para, true))
                             {
@@ -453,11 +456,8 @@
                                     break;
                                 }
 
-                                homeMatchItemList.AddRange(item.HomeMatchItemList);
-                                awayMatchItemList.AddRange(item.AwayMatchItemList);
-
-                                result.HomeMatchItemList = homeMatchItemList;
-                                result.AwayMatchItemList = awayMatchItemList;
+                                result.HomeMatchItemList.AddRange(item.HomeMatchItemList);
+                                result.AwayMatchItemList.AddRange(item.AwayMatchItemList);
 
                                 _ = _memoryCacheService.PushValueAsync(para.BuildCacheKeyForAllMMTicket(nameof(GetAllMMDetailFromCache), MMDetailRegion), item);
                                 _ = _memoryCacheService.PushValueAsync(key, result);
@@ -774,9 +774,9 @@
             return new MatchMonitorDetailListViewModel
             {
                 HomeMatchItemList = mdItemList.Where(c => c.FilterByHomeAway(new string[] { nameof(MatchMonitorBetChoiceId.H), nameof(MatchMonitorBetChoiceId.O) }))
-                    .Select(x => x.MappingFraudTicketToAllTicket(fraudHomeMatchItemDictionary)),
+                    .Select(x => x.MappingFraudTicketToAllTicket(fraudHomeMatchItemDictionary)).ToList(),
                 AwayMatchItemList = mdItemList.Where(c => c.FilterByHomeAway(new string[] { nameof(MatchMonitorBetChoiceId.A), nameof(MatchMonitorBetChoiceId.U) }))
-                    .Select(x => x.MappingFraudTicketToAllTicket(fraudAwayMatchItemDictionary)),
+                    .Select(x => x.MappingFraudTicketToAllTicket(fraudAwayMatchItemDictionary)).ToList(),
                 LastSequenceID = lastSequenceID
             };
         }
