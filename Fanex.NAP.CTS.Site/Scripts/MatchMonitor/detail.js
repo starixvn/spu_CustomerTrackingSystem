@@ -65,8 +65,11 @@ function MatchMonitorDetail() {
     let recordsTotalGlobal = 0;
     let maxSequenceId = 1;
 
-    let cacheTicketDetail;
-    let cacheFilter;
+    let cacheFilter = {
+        ticketAll: undefined,
+        ticketFraud: undefined
+    }
+
     let cacheReasonGroupIDDic = {};
 
     let posClickGlobal = 0;
@@ -201,15 +204,7 @@ function MatchMonitorDetail() {
         if (lastScannedSequenceID) {
             domElements.tblMMHomeTeam.find('tbody').addClass('loading');
             domElements.tblMMAwayTeam.find('tbody').addClass('loading');
-            GetMatchMonitorDetail(typeOfTickets, lastScannedSequenceID, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
-        }
-    }
-
-    function GetMatchMonitorDetail(typeOfTickets = MatchMonitorDetailViewType.TicketFraud, lastScannedSequenceID = maxSequenceId, posClick = 0) {
-        if (lastScannedSequenceID) {
-            currentType = typeOfTickets;
-
-            const data = {
+            let data = {
                 EventDateToString: domElements.eventDataToString,
                 MatchID: domElements.matchID,
                 BetTypeID: domElements.betTypeID,
@@ -227,6 +222,14 @@ function MatchMonitorDetail() {
                 AGroupList: domElements.cbbGroup.val(),
                 IsRefresh: isRefresh
             };
+            GetMatchMonitorDetail(data, lastScannedSequenceID, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
+        }
+    }
+
+    function GetMatchMonitorDetail(data = null, lastScannedSequenceID = maxSequenceId, posClick = 0) {
+        if (lastScannedSequenceID) {
+            data.LastScannedSequenceID = lastScannedSequenceID;
+            currentType = data.TypeOfTickets;
 
             xhr = $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorDetail'), {
                 type: 'POST',
@@ -237,19 +240,18 @@ function MatchMonitorDetail() {
                 data: JSON.stringify(data),
                 success: function (response) {
                     if (response?.data) {
-                        if (typeOfTickets == MatchMonitorDetailViewType.TicketAll && posClickGlobal != posClick) {
+                        if (data.TypeOfTickets == MatchMonitorDetailViewType.TicketAll && posClickGlobal != posClick) {
                             return;
                         }
 
-                        if (typeOfTickets == MatchMonitorDetailViewType.TicketFraud) {
+                        if (data.TypeOfTickets == MatchMonitorDetailViewType.TicketFraud) {
                             RenderFilter(response.data);
-                            CacheTicketDetail(response);
                         }
 
-                        RenderMatchMonitorDetail(response, typeOfTickets);
+                        RenderMatchMonitorDetail(response, data.TypeOfTickets);
 
-                        if (typeOfTickets == MatchMonitorDetailViewType.TicketAll && response?.data?.LastSequenceID) {
-                            GetMatchMonitorDetail(typeOfTickets, response?.data?.LastSequenceID, posClick);
+                        if (data.TypeOfTickets == MatchMonitorDetailViewType.TicketAll && response?.data?.LastSequenceID) {
+                            GetMatchMonitorDetail(data, response?.data?.LastSequenceID, posClick);
                         }
                     }
                 },
@@ -279,7 +281,13 @@ function MatchMonitorDetail() {
 
     function FetchFilterMatchMonitorDetail() {
         recordsTotalGlobal = 0;
-        GetFilterMatchMonitorDetail();
+        if (cacheFilter.ticketAll) {
+            RefreshFilter(cacheFilter.ticketAll, MatchMonitorDetailViewType.TicketAll);
+            FetchMatchMonitorDetail(MatchMonitorDetailViewType.TicketAll, maxSequenceId);
+        }
+        else {
+            GetFilterMatchMonitorDetail();
+        }
     }
 
     function GetFilterMatchMonitorDetail() {
@@ -302,7 +310,7 @@ function MatchMonitorDetail() {
                 const data = response?.data;
                 if (data) {
                     recordsTotalGlobal = data.RecordsTotal;
-                    RenderFilter(data, recordsTotalGlobal);
+                    RenderFilter(data, MatchMonitorDetailViewType.TicketAll, true);
                     maxSequenceId = data.MaxSequenceId;
                     FetchMatchMonitorDetail(MatchMonitorDetailViewType.TicketAll, maxSequenceId);
                 }
@@ -362,20 +370,25 @@ function MatchMonitorDetail() {
             $(".breadcrumb-totaltickets").html(`Total Tickets: 0/${recordsTotalGlobal}`);
         }
 
-        if (data.IsFilter === false && typeOfTickets == MatchMonitorDetailViewType.TicketFraud && isCache) {
-            if (cacheFilter == undefined) {
-                cacheFilter = {};
+        if (data.IsFilter === false && isCache) {
+            switch (typeOfTickets) {
+                case MatchMonitorDetailViewType.TicketAll: {
+                    cacheFilter.ticketAll = CacheAllDataFilter(cacheFilter.ticketAll, data);
+                    break;
+                }
+                case MatchMonitorDetailViewType.TicketFraud: {
+                    cacheFilter.ticketFraud = CacheAllDataFilter(cacheFilter.ticketFraud, data);
+                    break;
+                }
             }
-
-            cacheFilter.data = data;
         }
     }
 
-    function RefreshFilter() {
-        if (cacheFilter && currentType == MatchMonitorDetailViewType.TicketFraud) {
+    function RefreshFilter(cacheFilter, typeOfTickets) {
+        if (cacheFilter) {
             if (cacheFilter.data != undefined) {
                 cacheFilter.data.IsFilter = false;
-                RenderFilter(cacheFilter.data, MatchMonitorDetailViewType.TicketFraud, false);
+                RenderFilter(cacheFilter.data, typeOfTickets, false);
             }
 
             isFilterOptionServerSide = cacheFilter.isFilterOption;
@@ -387,17 +400,12 @@ function MatchMonitorDetail() {
                 RefreshFilterSelected(domElements.cbbGroup, cacheFilter.cbbGroup);
             }
         }
-    }
-
-    function CacheTicketDetail(response) {
-        if (cacheTicketDetail == undefined) {
-            cacheTicketDetail = {};
+        else {
+            isRefresh = true;
         }
-
-        cacheTicketDetail.response = response;
     }
 
-    function CacheFilter() {
+    function CacheSelectDataFilter(cacheFilter) {
         if (cacheFilter == undefined) {
             cacheFilter = {};
         }
@@ -410,32 +418,28 @@ function MatchMonitorDetail() {
             cacheFilter.cbbReason = domElements.cbbReason.val();
             cacheFilter.cbbGroup = domElements.cbbGroup.val();
         }
+
+        return cacheFilter;
+    }
+
+    function CacheAllDataFilter(cacheFilter, data) {
+        if (cacheFilter == undefined) {
+            cacheFilter = {};
+        }
+
+        cacheFilter.data = data;
+
+        return cacheFilter;
     }
 
     function ClearCache() {
-        cacheTicketDetail = undefined;
-        if (domElements.cbbSites.val() === SiteViewType.SiteAll) {
-            cacheFilter = undefined;
-        }
+        cacheFilter.ticketAll = undefined;
+        cacheFilter.ticketFraud = undefined;
     }
 
-    function LoadCacheMatchMonitorDetail() {
-        RefreshFilter();
-
-        if (cacheTicketDetail) {
-            posClickGlobal++;
-            if (xhr) {
-                xhr.onreadystatechange = null;
-                xhr.abort();
-            }
-            domElements.tblMMHomeTeam.DataTable().clear().draw();
-            domElements.tblMMAwayTeam.DataTable().clear().draw();
-
-            RenderMatchMonitorDetail(cacheTicketDetail.response);
-        }
-        else {
-            FetchMatchMonitorDetail(MatchMonitorDetailViewType.TicketFraud);
-        }
+    function LoadCacheFilterFraudMMDetail() {
+        RefreshFilter(cacheFilter.ticketFraud, MatchMonitorDetailViewType.TicketFraud);
+        FetchMatchMonitorDetail(MatchMonitorDetailViewType.TicketFraud);
     }
 
     function RefreshFilterSelected(element, data) {
@@ -676,14 +680,13 @@ function MatchMonitorDetail() {
     function TypeOfTicketsOnChange() {
         switch (Number(domElements.cbbTypeOfTickets.val())) {
             case MatchMonitorDetailViewType.TicketAll: {
-                isFilterOptionServerSide = false;
                 currentType = MatchMonitorDetailViewType.TicketAll;
                 FetchFilterMatchMonitorDetail();
                 break;
             }
             case MatchMonitorDetailViewType.TicketFraud: {
                 currentType = MatchMonitorDetailViewType.TicketFraud;
-                LoadCacheMatchMonitorDetail();
+                LoadCacheFilterFraudMMDetail();
                 break;
             }
         }
@@ -824,10 +827,6 @@ function MatchMonitorDetail() {
     }
 
     function Initial() {
-        if (cacheTicketDetail) {
-            console.log("aaa")
-        }
-
         SetupMultiselect(domElements.cbbCurrency, "Currency");
         SetupMultiselect(domElements.cbbHDP, "HDP");
         SetupMultiselect(domElements.cbbMatchScore, "Score");
@@ -855,14 +854,22 @@ function MatchMonitorDetail() {
 
         domElements.cbbSites.change(function () {
             isFilterOptionServerSide = false;
-            ClearCache();
-            if (currentType == MatchMonitorDetailViewType.TicketFraud) {
-                FetchMatchMonitorDetail(MatchMonitorDetailViewType.TicketFraud);
-                RefreshFilter();
+            if (isRefresh) {
+                ClearCache();
             }
 
-            if (currentType == MatchMonitorDetailViewType.TicketAll) {
-                FetchFilterMatchMonitorDetail();
+            switch (currentType) {
+                case MatchMonitorDetailViewType.TicketFraud:
+                    {
+                        RefreshFilter(cacheFilter.ticketFraud, MatchMonitorDetailViewType.TicketFraud);
+                        FetchMatchMonitorDetail(MatchMonitorDetailViewType.TicketFraud);
+                        break;
+                    }
+                case MatchMonitorDetailViewType.TicketAll:
+                    {
+                        FetchFilterMatchMonitorDetail();
+                        break;
+                    }
             }
         });
 
@@ -876,8 +883,17 @@ function MatchMonitorDetail() {
 
         domElements.btnGenerateDetail.on('click', function () {
             isFilterOptionServerSide = true;
-            if (currentType == MatchMonitorDetailViewType.TicketFraud) {
-                CacheFilter();
+            switch (currentType) {
+                case MatchMonitorDetailViewType.TicketAll:
+                    {
+                        cacheFilter.ticketAll = CacheSelectDataFilter(cacheFilter.ticketAll);
+                        break;
+                    }
+                case MatchMonitorDetailViewType.TicketFraud:
+                    {
+                        cacheFilter.ticketFraud = CacheSelectDataFilter(cacheFilter.ticketFraud);
+                        break;
+                    }
             }
 
             FetchMatchMonitorDetail(currentType);
