@@ -368,7 +368,7 @@
   background: #DDE2E6;
   font-size: 1.6rem;
   line-height: 18px;
-  display: block; }
+  display: flex; }
   .detailpage .page-title-match .title-description {
     font-weight: bold; }
   .detailpage .page-title-match .title-match-name {
@@ -382,7 +382,9 @@
     font-weight: 900;
     font-size: 12px;
     line-height: 18px;
-    text-transform: none !important; }
+    text-transform: none !important;
+    margin-left: 10px;
+    margin-right: 10px; }
   .detailpage .page-title-match .title-match-vs {
     font-weight: normal;
   }

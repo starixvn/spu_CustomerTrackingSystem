@@ -28,7 +28,7 @@
         background: #DDE2E6;
         font-size: 1.6rem;
         line-height: 18px;
-        display: block;
+        display: flex;
 
         .title-description {
             font-weight: bold;
@@ -44,6 +44,8 @@
             font-size: 12px;
             line-height: 18px;
             text-transform: none !important;
+            margin-left: 10px;
+            margin-right: 10px;
         }
 
         .title-match-vs {

@@ -523,7 +523,7 @@
     background: #dde2e6;
     font-size: 1.6rem;
     line-height: 18px;
-    display: block;
+    display: flex;
 }
 
 .detailpage .page-title-match .title-description {
@@ -540,6 +540,8 @@
     font-size: 12px;
     line-height: 18px;
     text-transform: none !important;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .detailpage .page-title-match .title-match-vs {
