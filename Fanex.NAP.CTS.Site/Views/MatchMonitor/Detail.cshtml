@@ -9,8 +9,8 @@
     <div class="content">
         <div class="page-title-match">
             <span class="title-description">MATCH MONITOR DETAIL</span>
-            <span class="title-match-name"> - @ViewBag.MatchName</span>
-            <span class="title-league-name"> - @ViewBag.LeagueName</span>
+            <span class="title-match-name"> @ViewBag.HomeName <span class="title-match-vs"> vs </span> @ViewBag.AwayName</span>
+            <span class="title-league-name"> @ViewBag.LeagueName</span>
         </div>
     </div>
 
@@ -77,7 +77,7 @@
                             <button class="button button-generate" id="btnGenerate-detail">Generate</button>
                         </div>                        
                     </div>
-                    <div class="detail-area">                        
+                    <div class="detail-area" id="detail-area">                        
                         <span>@ViewBag.SportName - @ViewBag.BettypeName - <span class="market-highlight">@ViewBag.MarketName</span><br /></span>
                         <span id="spanKOTime">KO Time: @ViewBag.KOTime<br /></span>
                         <span class="reason-highlight" id="spanReasonInfo"></span>

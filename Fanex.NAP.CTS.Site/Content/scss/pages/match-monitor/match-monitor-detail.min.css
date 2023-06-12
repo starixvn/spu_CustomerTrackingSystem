@@ -531,18 +531,28 @@
 }
 
 .detailpage .page-title-match .title-match-name {
-    color: #516792;
-    font-weight: 600;
-    font-size: 13px;
-    line-height: 20px;
+    padding: 0px 7px 2px;
+    gap: 10px;
+    background: #b0d0e3;
+    border-radius: 2px;
+    color: #1D2E4F;
+    font-weight: 900;
+    font-size: 12px;
+    line-height: 18px;
     text-transform: none !important;
 }
 
+.detailpage .page-title-match .title-match-vs {
+    font-weight: normal;
+}
+
 .detailpage .page-title-match .title-league-name {
-    color: #70809e;
-    font-weight: 600;
-    font-size: 13px;
-    line-height: 20px;
+    color: #1D2E4F;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    text-transform: capitalize !important;
 }
 
 .detailpage .monitor-container {
@@ -871,7 +881,7 @@
 .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-red,
 .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-red,
 .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-red {
-    color: #f00;
+    color: #C1271D;
 }
 
 .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody tr .col-transtime,
@@ -1039,7 +1049,7 @@
 .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail .username-hightlight,
 .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail .username-hightlight,
 .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail .username-hightlight {
-    background-color: #ffeeb8;
+    background-color: #FDEED8;
 }
 
 .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .group,
@@ -1176,11 +1186,11 @@
 }
 
 .detail-area .market-highlight {
-    color: #ff2020;
+    color: #c1272d;
 }
 
 .detail-area .reason-highlight {
-    color: #f00;
+    color: #c1272d;
 }
 
 .button-verification {

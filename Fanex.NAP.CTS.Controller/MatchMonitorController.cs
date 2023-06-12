@@ -206,7 +206,8 @@
             ViewBag.BetTypeID = para?.BetTypeID;
             ViewBag.BettypeName = para?.BettypeName ?? string.Empty;
             ViewBag.BetIDToString = para?.BetID.ToString();
-            ViewBag.MatchName = para?.MatchName ?? string.Empty;
+            ViewBag.HomeName = para?.HomeName ?? string.Empty;
+            ViewBag.AwayName = para?.AwayName ?? string.Empty;
             ViewBag.LiveIndicator = para?.LiveIndicator ?? true;
             ViewBag.Reason = para?.Reason;
             ViewBag.ReasonName = para?.ReasonName ?? string.Empty;

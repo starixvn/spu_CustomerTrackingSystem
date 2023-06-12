@@ -372,16 +372,27 @@
   .detailpage .page-title-match .title-description {
     font-weight: bold; }
   .detailpage .page-title-match .title-match-name {
-    color: #516792;
-    font-weight: 600;
-    font-size: 13px;
-    line-height: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 0px 7px 2px 7px;
+    gap: 10px;
+    background: #b0d0e3;
+    border-radius: 2px;
+    color: #1D2E4F;
+    font-weight: 900;
+    font-size: 12px;
+    line-height: 18px;
     text-transform: none !important; }
+  .detailpage .page-title-match .title-match-vs {
+    font-weight: normal;
+  }
   .detailpage .page-title-match .title-league-name {
-    color: #70809e;
-    font-weight: 600;
-    font-size: 13px;
-    line-height: 20px; }
+    color: #1D2E4F;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    text-transform: capitalize !important; }
 
 .detailpage .monitor-container {
   margin: 0 1.6rem 1rem 1.6rem; }
@@ -571,7 +582,7 @@
               width: 6px; }
         .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody tr .col-red, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-red, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-red, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-red, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-red, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-red {
           /*color: $account-formular;*/
-          color: #FF0000; }
+          color: #C1271D; }
         .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody tr .col-transtime, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-transtime, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-transtime, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-transtime, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-transtime, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-transtime {
           font-size: 11px !important; }
         .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody tr .col-betid, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody tr .col-dgr, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody tr .col-reason, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-betid, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-dgr, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-reason, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-betid, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-dgr, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-reason, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-betid, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-dgr, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-reason, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-betid, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-dgr, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-reason, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-betid, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-dgr, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-reason {
@@ -629,7 +640,7 @@
         .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail .void-ticket:hover, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail .void-ticket:hover, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail .void-ticket:hover {
           background-color: #A3C4F5 !important; }
       .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail .username-hightlight, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail .username-hightlight, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail .username-hightlight {
-        background-color: #ffeeb8; }
+        background-color: #FDEED8; }
       .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .group, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .group, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .group {
         padding-right: 0;
         margin-right: .6rem; }
@@ -718,9 +729,9 @@
   .detail-area .league-highlight {
     color: #516792; }
   .detail-area .market-highlight {
-    color: #ff2020; }
+    color: #c1272d; }
   .detail-area .reason-highlight {
-    color: #ff0000; }
+    color: #c1272d; }
 
 .button-verification {
   border-radius: 2px;

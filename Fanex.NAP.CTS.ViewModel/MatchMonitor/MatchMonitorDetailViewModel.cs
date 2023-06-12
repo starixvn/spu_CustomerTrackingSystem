@@ -45,20 +45,19 @@
             }
         }
 
-        public string MatchName
+        public string HomeName
         {
             get
             {
-                var rs = "-";
-                var HomeName = CachedRef.GetTeamName(HomeID);
-                var AwayName = CachedRef.GetTeamName(AwayID);
+                return CachedRef.GetTeamName(HomeID);
+            }
+        }
 
-                if (!string.IsNullOrEmpty(HomeName) || !string.IsNullOrEmpty(AwayName))
-                {
-                    rs = HomeName.ToUpper() + " -vs- " + AwayName.ToUpper();
-                }
-
-                return rs;
+        public string AwayName
+        {
+            get
+            {
+                return CachedRef.GetTeamName(AwayID);
             }
         }
 
@@ -66,7 +65,7 @@
         {
             get
             {
-                return CachedRef.GetLeagueName(LeagueID);
+                return CachedRef.GetLeagueName(LeagueID).ToLower();
             }
         }
 
