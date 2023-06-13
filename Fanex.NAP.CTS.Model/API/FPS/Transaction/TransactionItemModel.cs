@@ -29,5 +29,7 @@
         public string URLDetails { get; set; }
 
         public string IP { get; set; }
+
+        public string RobotTracking { get; set; }
     }
 }

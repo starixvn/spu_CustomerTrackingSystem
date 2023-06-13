@@ -12,7 +12,7 @@
 
         public int SubscriberID { get; set; }
 
-        public string LoginName { get; set; }
+        public string RegisterName { get; set; }
 
         public string UserName { get; set; }
 
@@ -29,6 +29,8 @@
         public string URLDetails { get; set; }
 
         public string IP { get; set; }
+
+        public string RobotTracking { get; set; }
 
     }
 }
