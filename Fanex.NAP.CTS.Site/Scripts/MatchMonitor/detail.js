@@ -95,10 +95,10 @@ function MatchMonitorDetail() {
                 zeroRecords: "There's no data"
             },
             ordering: false,
-            searching: true,
-            paging: false,
+            searching: false,
+            paging: true,
             bInfo: false,
-            lengthMenu: [1000, 1500, 2000],
+            lengthMenu: [-1, 1000, 1500, 2000],
             pageLength: 1000,
             scrollX: false,
             autoWidth: false,
@@ -195,6 +195,7 @@ function MatchMonitorDetail() {
         recordsFilteredGlobal = 0;
         domElements.tblMMHomeTeam.DataTable().clear().draw();
         domElements.tblMMAwayTeam.DataTable().clear().draw();
+        RefreshLengthPage(500, true);
         posClickGlobal++;
         if (xhr) {
             xhr.onreadystatechange = null;
@@ -258,6 +259,11 @@ function MatchMonitorDetail() {
                 complete: function (response) {
                     domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
                     domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
+
+                    const data = response?.responseJSON?.data;
+                    if (data?.LastSequenceID == null) {
+                        RefreshLengthPage(-1, false);
+                    }
                 },
                 error: function (xhr, textStatus, error) {
                     if (textStatus == 'timeout') {
@@ -269,14 +275,24 @@ function MatchMonitorDetail() {
                         }
                     }
 
-                    domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
-                    domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
+                    RefreshLengthPage(-1, false);
                     console.log(error);
                 }
             });
 
             isRefresh = false;
         }
+    }
+
+    function RefreshLengthPage(length, isDraw = true) {
+        domElements.tblMMHomeTeam.find('tbody').addClass('loading');
+        domElements.tblMMAwayTeam.find('tbody').addClass('loading');
+
+        domElements.tblMMHomeTeam.DataTable().page.len(length).draw(isDraw);
+        domElements.tblMMAwayTeam.DataTable().page.len(length).draw(isDraw);
+
+        domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
+        domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
     }
 
     function FetchFilterMatchMonitorDetail() {
@@ -309,7 +325,6 @@ function MatchMonitorDetail() {
             success: function (response) {
                 const data = response?.data;
                 if (data) {
-                    recordsTotalGlobal = data.RecordsTotal;
                     RenderFilter(data, MatchMonitorDetailViewType.TicketAll, true);
                     maxSequenceId = data.MaxSequenceId;
                     FetchMatchMonitorDetail(MatchMonitorDetailViewType.TicketAll, maxSequenceId);
@@ -359,6 +374,7 @@ function MatchMonitorDetail() {
 
     function RenderFilter(data, typeOfTickets = MatchMonitorDetailViewType.TicketFraud, isCache = true) {
         if (data.IsFilter === false) {
+            recordsTotalGlobal = data.RecordsTotal;
             cacheReasonGroupIDDic = data.ReasonGroupIDDic;
             SetupFilter(domElements.cbbCurrency, data.CurrencyList);
             SetupFilter(domElements.cbbHDP, data.HDPList);
