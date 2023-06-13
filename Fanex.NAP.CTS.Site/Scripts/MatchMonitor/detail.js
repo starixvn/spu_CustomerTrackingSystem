@@ -267,7 +267,7 @@ function MatchMonitorDetail() {
                     }
                 },
                 error: function (xhr, textStatus, error) {
-                    if (textStatus == 'timeout') {
+                    if (textStatus == 'timeout' || xhr.status == 500) {
                         this.tryCount++;
                         if (this.tryCount <= this.retryLimit) {
                             //try again
@@ -332,7 +332,7 @@ function MatchMonitorDetail() {
                 }
             },
             error: function (xhr, textStatus, error) {
-                if (textStatus == 'timeout') {
+                if (textStatus == 'timeout' || xhr.status == 500) {
                     this.tryCount++;
                     if (this.tryCount <= this.retryLimit) {
                         //try again
