@@ -170,6 +170,12 @@
                 IsLive = para.LiveIndicator ? 1 : 0
             };
 
+            if (para.Sites != "A")
+            {
+                criteria.IsLicensee = para.Sites == "C" ? 0 : 1;
+                criteria.LastSequenceID = para.LastScannedSequenceID;
+            }
+
             repository.Execute(criteria);
 
             return new MMTicketDetailInfoModel

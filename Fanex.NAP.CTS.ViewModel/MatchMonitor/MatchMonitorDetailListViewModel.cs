@@ -5,6 +5,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class MatchMonitorDetailListViewModel : MMDetailFilterViewModel
     {
@@ -46,19 +47,24 @@
 
         public MatchMonitorDetailListViewModel(MatchMonitorDetailListViewModel tickets, string site)
         {
+            HomeMatchItemList = tickets.HomeMatchItemList.Where(x => x.FilterBySite(site)).ToList();
+            AwayMatchItemList = tickets.AwayMatchItemList.Where(x => x.FilterBySite(site)).ToList();
+
+            var mdItemList = new List<MatchMonitorDetailItemViewModel>();
+            mdItemList.AddRange(HomeMatchItemList);
+            mdItemList.AddRange(AwayMatchItemList);
+
+            ScoreList = mdItemList.Select(x => x.Score).Distinct().OrderBy(x => x).ToList();
+            CurrencyList = mdItemList.Select(x => string.IsNullOrEmpty(x.Currency) ? "-" : x.Currency).Distinct().OrderBy(x => x).ToList();
+            HDPList = mdItemList.Select(x => x.HDP).Distinct().OrderBy(x => x).ToList();
+
             LastSequenceID = tickets.LastSequenceID;
             CTSCustIDList = tickets.CTSCustIDList;
             IsFilter = tickets.IsFilter;
             RecordsTotal = tickets.RecordsTotal;
-            CurrencyList = tickets.CurrencyList;
-            HDPList = tickets.HDPList;
-            ScoreList = tickets.ScoreList;
-            ReasonList = tickets.ReasonList;
             GroupList = tickets.GroupList;
-            ReasonInfos = tickets.ReasonInfos;
-            ReasonGroupIDDic = tickets.ReasonGroupIDDic;
-            HomeMatchItemList = tickets.HomeMatchItemList.Where(x => x.FilterBySite(site)).ToList();
-            AwayMatchItemList = tickets.AwayMatchItemList.Where(x => x.FilterBySite(site)).ToList();
+
+            BindReasons(mdItemList.Select(x => x.ReasonList).Distinct());
         }
 
         public long? LastSequenceID { get; set; }
@@ -79,7 +85,7 @@
                     reasons.AddRange(reason.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries));
             }
 
-            this.ReasonList = reasons.Distinct();
+            this.ReasonList = reasons.Distinct().ToList();
             this.ReasonInfos = string.Join(", ", ReasonList);
 
             var reasonGroupIDList = new List<int>();

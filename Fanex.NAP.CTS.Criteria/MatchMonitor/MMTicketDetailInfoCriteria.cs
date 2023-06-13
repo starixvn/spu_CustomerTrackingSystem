@@ -29,6 +29,12 @@
         [SpParam(SqlParamName = "ListScore")]
         public string ListScore { get; set; }
 
+        [SpParam(SqlParamName = "IsLicensee")]
+        public int? IsLicensee { get; set; }
+
+        [SpParam(SqlParamName = "LastSequenceID")]
+        public long? LastSequenceID { get; set; }
+
         public override string GetSettingKey()
             => "CTS_TicketDetails_Info";
 

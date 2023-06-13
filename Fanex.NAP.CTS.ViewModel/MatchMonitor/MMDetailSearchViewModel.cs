@@ -7,7 +7,8 @@
     {
         public MMDetailSearchViewModel() { }
 
-        public MMDetailSearchViewModel(MMDetailSearchViewModel para) {
+        public MMDetailSearchViewModel(MMDetailSearchViewModel para)
+        {
             this.TypeOfTickets = para.TypeOfTickets;
             this.LastScannedSequenceID = para.LastScannedSequenceID;
             this.EventDateToString = para.EventDateToString;
@@ -59,6 +60,12 @@
         public string BuildCacheKeyForAllMMTicket(string nameOfFunction, string region = "")
         {
             return BuildCacheKey(nameOfFunction, region) + $"_{LastScannedSequenceID?.ToString() ?? string.Empty}";
+        }
+
+        public string BuildCacheKeyWithSite(string nameOfFunction, string region = "", string site = "")
+        {
+            var value = string.IsNullOrWhiteSpace(site) ? Sites?.ToString() ?? string.Empty : site;
+            return BuildCacheKey(nameOfFunction, region) + $"_{value}";
         }
     }
 }

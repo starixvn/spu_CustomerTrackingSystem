@@ -400,9 +400,6 @@ function MatchMonitorDetail() {
                 RefreshFilterSelected(domElements.cbbGroup, cacheFilter.cbbGroup);
             }
         }
-        else {
-            isRefresh = true;
-        }
     }
 
     function CacheSelectDataFilter(cacheFilter) {
@@ -854,9 +851,7 @@ function MatchMonitorDetail() {
 
         domElements.cbbSites.change(function () {
             isFilterOptionServerSide = false;
-            if (isRefresh) {
-                ClearCache();
-            }
+            ClearCache();
 
             switch (currentType) {
                 case MatchMonitorDetailViewType.TicketFraud:
