@@ -80,7 +80,8 @@ function MatchMonitorDetail() {
     function InitialDetailGird(element) {
         element.DataTable({
             serverSide: false,
-            dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
+            // dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
+            dom: '',
             pagingType: "full_numbers",
             language: {
                 lengthMenu: "Page size _MENU_",
