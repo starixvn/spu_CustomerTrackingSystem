@@ -903,6 +903,14 @@ function MatchMonitorDetail() {
         domElements.tblMMAwayTeam = $("#tblMMAwayTeam");
         InitialDetailGird(domElements.tblMMHomeTeam);
         InitialDetailGird(domElements.tblMMAwayTeam);
+
+        domElements.inputHomeSelectAll = $('#inputHomeSelectAll'),
+        domElements.inputAwaySelectAll = $('#inputAwaySelectAll'),
+        domElements.inputHomeSelectAll.on('click', function () { ToggleGridSelectAll(domElements.inputHomeSelectAll, domElements.tblMMHomeTeam.DataTable()) });
+        domElements.inputAwaySelectAll.on('click', function () { ToggleGridSelectAll(domElements.inputAwaySelectAll, domElements.tblMMAwayTeam.DataTable()) })
+
+        domElements.tblHomeHeaderFixed = $('#tblHomeHeaderFixed');
+        domElements.tblAwayHeaderFixed = $('#tblAwayHeaderFixed');
     }
 
     function Initial() {
@@ -973,10 +981,6 @@ function MatchMonitorDetail() {
 
             FetchMatchMonitorDetail(currentType);
         })
-
-        domElements.inputHomeSelectAll.on('click', function () { ToggleGridSelectAll(domElements.inputHomeSelectAll, domElements.tblMMHomeTeam.DataTable()) });
-
-        domElements.inputAwaySelectAll.on('click', function () { ToggleGridSelectAll(domElements.inputAwaySelectAll, domElements.tblMMAwayTeam.DataTable()) })
 
         domElements.tickCheckAll.on('click', function () { ToggleTickCheckAll(true); });
 
