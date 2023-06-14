@@ -194,9 +194,10 @@ function MatchMonitorDetail() {
 
     function FetchMatchMonitorDetail(typeOfTickets = MatchMonitorDetailViewType.TicketFraud, lastScannedSequenceID = maxSequenceId) {
         recordsFilteredGlobal = 0;
-        domElements.tblMMHomeTeam.DataTable().clear().draw();
-        domElements.tblMMAwayTeam.DataTable().clear().draw();
+
+        SetupDataTable();
         RefreshLengthPage(500, true);
+
         posClickGlobal++;
         if (xhr) {
             xhr.onreadystatechange = null;
@@ -840,6 +841,70 @@ function MatchMonitorDetail() {
         });
     }
 
+    function SetupDataTable() {
+        $("#tbrMMHomeTeam").html(`
+                                <table id="tblMMHomeTeam" class="table table-striped table-monitor-detail">
+                                <thead>
+                                    <tr>
+                                        <th><input name="select_all" value="1" id="inputHomeSelectAll" type="checkbox" class="col-checkbox" /></th>
+                                        <th>Username</th>
+                                        <th>CC</th>
+                                        <th>Bot</th>
+                                        <th>Dgr</th>
+                                        <th>Odds</th>
+                                        <th>BetID</th>
+                                        <th>Cur</th>
+                                        <th>Amount</th>
+                                        <th>HDP</th>
+                                        <th>Score</th>
+                                        <th>Transtime</th>
+                                        <th title="Auto-detected Association Group">
+                                            A.Gr.
+                                        </th>
+                                        <th title="Manual-detected Association Group: max. 1001 Usernames">
+                                            M.Gr.<sup style="vertical-align: super; font-size: smaller;">i</sup>
+                                        </th>
+                                        <th>Reason</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>`);
+        $("#tbrMMAwayTeam").html(`
+                                <table id="tblMMAwayTeam" class="table table-striped table-monitor-detail">
+                                <thead>
+                                    <tr>
+                                        <th><input name="select_all" value="1" id="inputAwaySelectAll" type="checkbox" class="col-checkbox" /></th>
+                                        <th>Username</th>
+                                        <th>CC</th>
+                                        <th>Bot</th>
+                                        <th>Dgr</th>
+                                        <th>Odds</th>
+                                        <th>BetID</th>
+                                        <th>Cur</th>
+                                        <th>Amount</th>
+                                        <th>HDP</th>
+                                        <th>Score</th>
+                                        <th>Transtime</th>
+                                        <th title="Auto-detected Association Group">
+                                            A.Gr.
+                                        </th>
+                                        <th title="Manual-detected Association Group: max. 1001 Usernames">
+                                            M.Gr.<sup style="vertical-align: super; font-size: smaller;">i</sup>
+                                        </th>
+                                        <th>Reason</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>`);
+
+        domElements.tblMMHomeTeam = $("#tblMMHomeTeam");
+        domElements.tblMMAwayTeam = $("#tblMMAwayTeam");
+        InitialDetailGird(domElements.tblMMHomeTeam);
+        InitialDetailGird(domElements.tblMMAwayTeam);
+    }
+
     function Initial() {
         SetupMultiselect(domElements.cbbCurrency, "Currency");
         SetupMultiselect(domElements.cbbHDP, "HDP");
@@ -862,9 +927,7 @@ function MatchMonitorDetail() {
             });
         }
 
-        InitialDetailGird(domElements.tblMMHomeTeam);
-
-        InitialDetailGird(domElements.tblMMAwayTeam);
+        SetupDataTable();
 
         domElements.cbbSites.change(function () {
             isFilterOptionServerSide = false;
