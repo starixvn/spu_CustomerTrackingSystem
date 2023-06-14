@@ -25,7 +25,7 @@
 
             var reasonGroupIDDic = filter.AGroupList.Select(x => x.Contains("-") ? "0" : x);
 
-            HomeMatchItemList = tickets.HomeMatchItemList.Where(x =>
+            HomeMatchItemList = tickets.HomeMatchItemList.ToList().Where(x =>
                 filter.CurrencyList.Contains(x.Currency ?? "-") &&
                 filter.HDPList.Contains(x.HDP) &&
                 filter.ScoreList.Contains(x.Score ?? "-") &&
@@ -33,7 +33,7 @@
                 reasonGroupIDDic.Contains(x.ADetectGroupID.ToString()) &&
                 x.FilterBySite(site)
                 ).ToList();
-            AwayMatchItemList = tickets.AwayMatchItemList.Where(x =>
+            AwayMatchItemList = tickets.AwayMatchItemList.ToList().Where(x =>
                 filter.CurrencyList.Contains(x.Currency ?? "-") &&
                 filter.HDPList.Contains(x.HDP) &&
                 filter.ScoreList.Contains(x.Score ?? "-") &&
