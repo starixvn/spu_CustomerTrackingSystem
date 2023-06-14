@@ -41,9 +41,11 @@
             }
 
             ReasonList = reasonList;
-            GroupList = groupList;
             ReasonInfos = string.Join(",", ReasonList.Where(x => !x.Contains("-")));
             ReasonGroupIDDic = reasonGroupIDDic.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+
+            var agroup = ReasonGroupIDDic.Where(x => ReasonList.Contains(x.Key)).SelectMany(x => x.Value).Distinct();
+            GroupList = groupList?.Where(x => x.GroupID != null ? agroup.Contains(x.GroupID ?? 0) : false).ToList();
         }
 
         public bool IsFilter { get; set; }

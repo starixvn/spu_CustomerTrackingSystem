@@ -729,7 +729,8 @@ function MatchMonitorDetail() {
     }
 
     function ExportToExcel() {
-        if (CheckRuleExportExcel()) {
+        const errorExportString = ReturnStringErrorExportExcel();
+        if (errorExportString == '') {
             let mmDetails = {
                 matchInfo: GetDataMatchInfo(),
                 homeMItems: GetDataSelectedInGrid(domElements.tblMMHomeTeam.DataTable()),
@@ -746,11 +747,11 @@ function MatchMonitorDetail() {
 
             common.showSuccess("Export excel file is in process");
         } else {
-            common.showError("Please select at least 2 records to proceed!");
+            common.showError(errorExportString);
         }
     }
 
-    function CheckRuleExportExcel() {
+    function ReturnStringErrorExportExcel() {
         let homeCheckedL = 0,
             awayCheckedL = 0;
         domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
@@ -762,8 +763,12 @@ function MatchMonitorDetail() {
                 awayCheckedL = awayCheckedL + 1;
         })
 
-        if (homeCheckedL + awayCheckedL >= 2) return true;
-        else return false;
+        if (homeCheckedL + awayCheckedL < 2)
+            return "Please select at least 2 records to proceed!";
+        if (homeCheckedL + awayCheckedL > 40000)
+            return "Export fail due to size limitation, please contact Administrator for further support.";
+
+        return '';
     }
 
     function GetDataSelectedInGrid(table) {
@@ -905,8 +910,8 @@ function MatchMonitorDetail() {
         InitialDetailGird(domElements.tblMMAwayTeam);
 
         domElements.inputHomeSelectAll = $('#inputHomeSelectAll'),
-        domElements.inputAwaySelectAll = $('#inputAwaySelectAll'),
-        domElements.inputHomeSelectAll.on('click', function () { ToggleGridSelectAll(domElements.inputHomeSelectAll, domElements.tblMMHomeTeam.DataTable()) });
+            domElements.inputAwaySelectAll = $('#inputAwaySelectAll'),
+            domElements.inputHomeSelectAll.on('click', function () { ToggleGridSelectAll(domElements.inputHomeSelectAll, domElements.tblMMHomeTeam.DataTable()) });
         domElements.inputAwaySelectAll.on('click', function () { ToggleGridSelectAll(domElements.inputAwaySelectAll, domElements.tblMMAwayTeam.DataTable()) })
 
         domElements.tblHomeHeaderFixed = $('#tblHomeHeaderFixed');
@@ -918,7 +923,7 @@ function MatchMonitorDetail() {
         SetupMultiselect(domElements.cbbHDP, "HDP");
         SetupMultiselect(domElements.cbbMatchScore, "Score");
         SetupMultiselect(domElements.cbbGroup, "Group");
-        SetupMultiselect(domElements.cbbReason, "Reason", 180, 180);
+        SetupMultiselect(domElements.cbbReason, "Reason");
 
         domElements.cbbReason.change(function () { ReasonOnChange(); });
 
