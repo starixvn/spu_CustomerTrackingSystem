@@ -63,5 +63,11 @@
         public int CustomerClass { get; set; }
 
         public string CurrencyName { get; set; }
+
+        public Int16 CurrencyId { get; set; }
+
+        public Decimal Hdp { get; set; }
+
+        public int IsLicensee { get; set; }
     }
 }

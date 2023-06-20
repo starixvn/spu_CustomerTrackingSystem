@@ -132,7 +132,7 @@
             return repository.Fetch<CustInfoModel>(criteria);
         }
 
-        public IEnumerable<TicketDetailModel> GetTicketDetail(MMDetailSearchViewModel para, string transIds, int batchSize = 1000)
+        public IEnumerable<TicketDetailModel> GetTicketDetail(MMDetailSearchViewModel para, string transIds, MMDetailFilterViewModel filter = null, int batchSize = 1000)
         {
             var criteria = new TicketDetailGetCriteria()
             {
@@ -154,6 +154,15 @@
                         criteria.MatchID = para.MatchID;
                         criteria.BetType = para.BetTypeID;
                         criteria.BatchSize = batchSize;
+                        criteria.IsLiencee = para.Sites == MMSites.All ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0);
+                        criteria.ListCurrency = filter.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList);
+                        criteria.ListHDP = filter.HDPList == null ? null : string.Join(",", filter.HDPList);
+                        criteria.ListScore = filter.ScoreList == null ? null : string.Join(",", filter.ScoreList);
+                        if (filter.AmountList?.Count >= 2)
+                        {
+                            criteria.FromStakeRM = filter.AmountList[0];
+                            criteria.ToStakeRM = filter.AmountList[1];
+                        }
                         break;
                     }
             }
@@ -167,24 +176,23 @@
             {
                 MatchID = para.MatchID,
                 BetType = para.BetTypeID,
-                IsLive = para.LiveIndicator ? 1 : 0
+                IsLive = para.LiveIndicator ? 1 : 0,
             };
 
-            if (para.Sites != "A")
-            {
-                criteria.IsLicensee = para.Sites == "C" ? 0 : 1;
-                criteria.LastSequenceID = para.LastScannedSequenceID;
-            }
-
-            repository.Execute(criteria);
+            var result = repository.FetchMultiple<MMDetailFilterInforHdpModel, MMDetailFilterInforScoreModel, MMDetailFilterInforCurrencyModel>(criteria);
 
             return new MMTicketDetailInfoModel
             {
-                ListCurrency = criteria.ListCurrency,
-                ListHDP = criteria.ListHDP,
-                ListScore = criteria.ListScore,
-                TotalTicket = criteria.TotalTicket,
-                MaxSequenceId = criteria.MaxSequenceId
+                MaxSequenceId = criteria.MaxSequenceId,
+                TotalTicketAll = criteria.TotalTicketAll,
+                TotalTicketCredit = criteria.TotalTicketCredit,
+                TotalTicketLicensee = criteria.TotalTicketLicensee,
+                FilterDetail = new MMDetailFilterInfoModel
+                {
+                    HDPList = result.firstResultSet,
+                    ScoreList = result.secondResultSet,
+                    CurrencyList = result.thirdResultSet
+                }
             };
         }
 

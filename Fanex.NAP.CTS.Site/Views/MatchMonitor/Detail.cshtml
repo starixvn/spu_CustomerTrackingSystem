@@ -20,31 +20,10 @@
                 <div class="group-info filter-group">
                     <div class="form-filter">
                         <div class="group width-160">
-                            <label class="text">Site</label>
-                            <select class="control width-select-one" id="cbbSites">
-                                <option value="A">All</option>
-                                <option value="C">Credit</option>
-                                <option value="L">Licensee</option>
-                            </select>
-                        </div>
-
-                        <div class="group width-160">
                             <label class="text">Type of Tickets</label>
                             <select class="control width-select-one" id="cbbTypeOfTickets">
                                 <option value="2">Suspicious Tickets</option>
                                 <option value="3">All</option>
-                            </select>
-                        </div>
-
-                        <div class="group width-180">
-                            <label class="text">Currency</label>
-                            <select class="control width-select" id="cbbCurrency" multiple="multiple">
-                            </select>
-                        </div>
-
-                        <div class="group width-180">
-                            <label class="text">HDP</label>
-                            <select class="control width-select" id="cbbHDP" multiple="multiple">                              
                             </select>
                         </div>
 
@@ -61,6 +40,27 @@
                             </select>
                         </div>
 
+                        <div class="group width-160">
+                            <label class="text">Site</label>
+                            <select class="control width-select-one" id="cbbSites">
+                                <option value="A">All</option>
+                                <option value="C">Credit</option>
+                                <option value="L">Licensee</option>
+                            </select>
+                        </div>
+
+                        <div class="group width-180">
+                            <label class="text">HDP</label>
+                            <select class="control width-select" id="cbbHDP" multiple="multiple">                              
+                            </select>
+                        </div>
+
+                        <div class="group width-180">
+                            <label class="text">Currency</label>
+                            <select class="control width-select" id="cbbCurrency" multiple="multiple">
+                            </select>
+                        </div>
+
                         <div class="group width-180">
                             <label class="text">Reason</label>
                             <select class="control width-select" id="cbbReason" multiple="multiple">                              
@@ -72,6 +72,12 @@
                             <select class="control width-select" id="cbbGroup" multiple="multiple">                               
                             </select>
                         </div>
+
+                        <div class="group width-180">
+                            <label class="text">Amount</label>
+                            <input id="inputAmount" class="control width-select-one ui-multiselect" placeholder="from - to" style="font-style: italic;"/>
+                        </div>
+
 
                         <div class="group-button">
                             <button class="button button-generate" id="btnGenerate-detail">Generate</button>

@@ -24,14 +24,14 @@
 
         IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);
 
-        IEnumerable<TicketDetailModel> GetTicketDetail(MMDetailSearchViewModel para, string transIds, int batchSize = 1000);
+        IEnumerable<TicketDetailModel> GetTicketDetail(MMDetailSearchViewModel para, string transIds, MMDetailFilterViewModel filter = null, int batchSize = 1000);
 
         MMTicketDetailInfoModel GetMMTicketDetailInfoCriteria(MMDetailSearchViewModel para);
 
         IEnumerable<MMDetailMergeGroupModel> GetMMDetailMergeGroup(IEnumerable<MMDetailBetTeamModel> mmDetailBetTeams);
 
         IEnumerable<RobotStatusModel> GetRobotStatus(string transJson);
-     
+
         MatchMonitorStaticListModel GetMMStaticList();
 
         byte[] ExportExcelMMDetail(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems

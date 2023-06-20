@@ -114,6 +114,13 @@
             public const string Mobile = "Mobile";
         }
 
+        public struct MMSites
+        {
+            public const string All = "A";
+            public const string Credit = "C";
+            public const string Licensee = "L";
+        }
+
         public enum ROLE_CUSTOMER
         {
             MEMBER = 1,

@@ -84,7 +84,9 @@
 
         public string BetTeam { get; set; }
 
-        public string Currency { get; set; }
+        public string CurrencyName { get; set; }
+
+        public short CurrencyId { get; set; }
 
         public decimal Stake { get; set; }
 
@@ -181,7 +183,7 @@
 
         public bool FilterBySite(string site)
         {
-            return site.Contains("A") || site.Contains(SubscriberType);
+            return !string.IsNullOrWhiteSpace(site) ? site.Contains("A") || site.Contains(SubscriberType) : false;
         }
 
         public MatchMonitorDetailItemViewModel MappingFraudTicketToAllTicket(Dictionary<long, MatchMonitorDetailItemViewModel> fraudMMTicketsDictionary)
@@ -192,6 +194,18 @@
             }
 
             return this;
+        }
+
+        public decimal BallHeadHDP()
+        {
+            if (BetTypeID == (int)MatchMonitorBetType.OU
+                    || BetTypeID == (int)MatchMonitorBetType.FirsttOU
+                    || BetTypeID == (int)MatchMonitorBetType.QuarterXOU)
+            {
+                return HDP;
+            }
+
+            return Math.Abs(HDP);
         }
 
         private void MappingTicketDetail(TicketDetailModel ticket)
@@ -206,7 +220,7 @@
             this.Odds = ticket.Odds;
             this.BetID = ticket.TransId.ToString();
             this.BetTeam = ticket.BetTeam;
-            this.Currency = ticket.CurrencyName;
+            this.CurrencyName = ticket.CurrencyName;
             this.Stake = ticket.Stake;
             this.Amount = ticket.OrgStake;
             this.HDP1 = ticket.Hdp1;

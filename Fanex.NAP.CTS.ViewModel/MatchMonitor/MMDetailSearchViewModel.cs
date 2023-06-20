@@ -19,6 +19,8 @@
             this.LiveIndicator = para.LiveIndicator;
         }
 
+        public bool IsSupportShowAllTickets { get; set; }
+
         public MatchMonitorQueryType? TypeOfTickets { get; set; }
 
         public long? LastScannedSequenceID { get; set; }

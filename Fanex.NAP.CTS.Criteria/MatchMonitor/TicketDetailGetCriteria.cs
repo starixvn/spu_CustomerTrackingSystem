@@ -30,6 +30,24 @@
         [SpParam(SqlParamName = "BetType")]
         public int BetType { get; set; }
 
+        [SpParam(SqlParamName = "IsLiencee")]
+        public int? IsLiencee { get; set; }
+
+        [SpParam(SqlParamName = "ListCurrency")]
+        public string ListCurrency { get; set; }
+
+        [SpParam(SqlParamName = "ListHDP")]
+        public string ListHDP { get; set; }
+
+        [SpParam(SqlParamName = "ListScore")]
+        public string ListScore { get; set; }
+
+        [SpParam(SqlParamName = "FromStakeRM")]
+        public decimal? FromStakeRM { get; set; }
+
+        [SpParam(SqlParamName = "ToStakeRM")]
+        public decimal? ToStakeRM { get; set; }
+
         public override string GetSettingKey()
                 => "CTS_Rpt_MatchMonitor_TicketDetails";
 
