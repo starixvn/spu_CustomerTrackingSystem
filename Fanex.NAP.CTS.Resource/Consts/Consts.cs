@@ -253,6 +253,13 @@
             RemoveLicBABySite_API = 50,
         };
 
+        public enum RescanNormalType
+        {
+            Manual = 4,
+            Auto_Customer = 5,
+            Auto_AfftectedDownline = 6
+        }
+
         public enum HttpStatus
         {
             Unauthorized = 401,

@@ -1,17 +1,12 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.Extentions;
-    using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria;
-    using Fanex.NAP.CTS.Criteria.Account.CustomerCategory;
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
     using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.CustomerClassification;
-    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.CTS.Model.LogInputData;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
@@ -57,16 +52,6 @@
             }
 
             return result.IsSuccess;
-        }
-
-        public IEnumerable<RescanCategoryNormalModel> GetExistingCustClassificationNormal(string custIDList)
-        {
-            var criteria = new GetExistingCustClassificationNormalCriteria
-            {
-                CustIDList = custIDList
-            };
-
-            return repository.Fetch<RescanCategoryNormalModel>(criteria);            
         }
 
         #region Private Methods
@@ -118,12 +103,7 @@
                     {
                         var custToString = string.Join(",", custIds);
 
-                        var custNormalInfos = GetExistingCustClassificationNormal(custToString);
-
-                        if (custNormalInfos.Any())
-                        {
-                            ClassifyCustomerGeneralCategoryDaily(custNormalInfos.Distinct().ToXmlString(), parameters.FunctionId);
-                        }
+                        ClassifyNormalCategory(custToString, parameters.FunctionId, RescanNormalType.Manual);
                     }
                 }
 
@@ -252,12 +232,14 @@
             return Enumerable.Empty<long>();
         }
 
-        private void ClassifyCustomerGeneralCategoryDaily(string customersXML, FunctionId funcId)
+        public void ClassifyNormalCategory(string custList, FunctionId functionId, RescanNormalType type)
         {
-            var criteria = new NormalAccountsClassificationGeneralCategorizeDailyCriteria
+            var criteria = new NormalClassificationRescanCriteria
             {
-                CustomersXML = customersXML,              
-                FunctionId = (int)funcId
+                ListCustId = custList,
+                FunctionId = (int)functionId,
+                RescanTypeId = (int)type
+
             };
 
             repository.Execute(criteria);

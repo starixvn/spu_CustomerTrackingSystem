@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.Model.RescanCustClassificationModel
 {
-    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using System.Collections.Generic;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 

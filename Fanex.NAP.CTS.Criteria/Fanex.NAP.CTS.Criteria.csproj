@@ -108,7 +108,6 @@
     <Compile Include="Common\GetMatchesInfoCriteria.cs" />
     <Compile Include="Common\GetSitesCriteria.cs" />
     <Compile Include="Common\GetTicketDetailsCriteria.cs" />
-    <Compile Include="CustomerClassification\GetExistingCustClassificationNormalCriteria.cs" />
     <Compile Include="CustomerClassification\GetLastestCCDangerLevelCriteria.cs" />
     <Compile Include="CustomerClassification\InputErrorLogInsertCriteria.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\CheckNewPAAssociationCustomerForRollbackCriteria.cs" />
@@ -156,7 +155,7 @@
     <Compile Include="LogInputData\LogInputDataCriteria.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\GetExistedTWRobotUserCriteria.cs" />
     <Compile Include="CustomerClassification\GetRoleCustomerCriteria.cs" />
-    <Compile Include="CustomerClassification\NormalAccountsClassificationGeneralCategorizeDailyCriteria.cs" />
+    <Compile Include="CustomerClassification\NormalClassificationRescanCriteria.cs" />
     <Compile Include="ImportEvidences\InsertCustEvidenceFromFileCriteria.cs" />
     <Compile Include="AssociationReport\AssociationReportGetCategoriesCriteria.cs" />
     <Compile Include="ImportEvidences\InsertCustEvidenceQueueCriteria.cs" />
