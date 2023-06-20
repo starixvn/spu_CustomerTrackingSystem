@@ -132,45 +132,49 @@
             return repository.Fetch<CustInfoModel>(criteria);
         }
 
-        public IEnumerable<TicketDetailModel> GetTicketDetail(MMDetailSearchViewModel para, string transIds, MMDetailFilterViewModel filter = null, int batchSize = 1000)
+        public IEnumerable<TicketDetailModel> GetFraudTicketDetail(MMDetailSearchViewModel para, string transIds)
         {
             var criteria = new TicketDetailGetCriteria()
             {
-                QueryType = (int)para.TypeOfTickets,
-                EventDate = para.EventDate
+                QueryType = (int)MatchMonitorQueryType.TicketFraud,
+                EventDate = para.EventDate,
+                ListTransId = transIds
             };
-
-            switch (para.TypeOfTickets)
-            {
-                case MatchMonitorQueryType.TicketFraud:
-                    {
-                        criteria.ListTransId = transIds;
-                        break;
-                    }
-                case MatchMonitorQueryType.TicketAll:
-                    {
-                        criteria.LastScannedSequenceID = para.LastScannedSequenceID;
-                        criteria.IsLive = para.LiveIndicator ? 1 : 0;
-                        criteria.MatchID = para.MatchID;
-                        criteria.BetType = para.BetTypeID;
-                        criteria.BatchSize = batchSize;
-                        criteria.IsLiencee = para.Sites == MMSites.All ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0);
-                        criteria.ListCurrency = filter.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList);
-                        criteria.ListHDP = filter.HDPList == null ? null : string.Join(",", filter.HDPList);
-                        criteria.ListScore = filter.ScoreList == null ? null : string.Join(",", filter.ScoreList);
-                        if (filter.AmountList?.Count >= 2)
-                        {
-                            criteria.FromStakeRM = filter.AmountList[0];
-                            criteria.ToStakeRM = filter.AmountList[1];
-                        }
-                        break;
-                    }
-            }
 
             return repository.Fetch<TicketDetailModel>(criteria);
         }
 
-        public MMTicketDetailInfoModel GetMMTicketDetailInfoCriteria(MMDetailSearchViewModel para)
+        public TicketDetailViewModel GetAllTicketDetail(MMDetailSearchViewModel para, MMDetailFilterViewModel filter = null, int batchSize = 1000)
+        {
+            var criteria = new TicketDetailGetCriteria()
+            {
+                QueryType = (int)MatchMonitorQueryType.TicketAll,
+                EventDate = para.EventDate,
+                LastScannedSequenceID = para.LastScannedSequenceID,
+                IsLive = para.LiveIndicator ? 1 : 0,
+                MatchID = para.MatchID,
+                BetType = para.BetTypeID,
+                BatchSize = batchSize,
+                IsLiencee = para.Sites == MMSites.All ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
+                ListCurrency = filter.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList),
+                ListHDP = filter.HDPList == null ? null : string.Join(",", filter.HDPList),
+                ListScore = filter.ScoreList == null ? null : string.Join(",", filter.ScoreList)
+            };
+
+            if (filter.AmountList?.Count >= 2)
+            {
+                criteria.FromStakeRM = filter.AmountList[0];
+                criteria.ToStakeRM = filter.AmountList[1];
+            }
+
+            return new TicketDetailViewModel
+            {
+                TicketDetails = repository.Fetch<TicketDetailModel>(criteria),
+                LastSequenceID = criteria.NextScannedSequenceID
+            };
+        }
+
+        public MMTicketDetailInfoModel GetMMTicketDetailInfo(MMDetailSearchViewModel para)
         {
             var criteria = new MMTicketDetailInfoCriteria()
             {

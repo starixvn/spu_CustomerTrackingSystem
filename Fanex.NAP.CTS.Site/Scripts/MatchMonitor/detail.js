@@ -35,6 +35,8 @@ function MatchMonitorDetail() {
         cbbGroup: $('#cbbGroup'),
         cbbSites: $('#cbbSites'),
         inputAmount: $('#inputAmount'),
+        inputAmountFrom: $('#inputAmountFrom'),
+        inputAmountTo: $('#inputAmountTo'),
         tblMMHomeTeam: $('#tblMMHomeTeam'),
         tblMMAwayTeam: $('#tblMMAwayTeam'),
         divHomeMonitor: $('#first-monitor-datatable'),
@@ -230,7 +232,6 @@ function MatchMonitorDetail() {
                 AmountList: GetInputAmount() ? domElements.inputAmount.val().replace(" ", "").split("-").map(str => {
                     return Number(str);
                 }) : undefined,
-                IsRefresh: isRefresh
             };
             GetMatchMonitorDetail(data, lastScannedSequenceID, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
         }
@@ -284,8 +285,6 @@ function MatchMonitorDetail() {
                     console.log(error);
                 }
             });
-
-            isRefresh = false;
         }
     }
 
@@ -302,6 +301,13 @@ function MatchMonitorDetail() {
 
     function FetchFilterMatchMonitorDetail() {
         recordsTotalGlobal = 0;
+
+        posClickGlobal++;
+        if (xhr) {
+            xhr.onreadystatechange = null;
+            xhr.abort();
+        }
+
         GetFilterMatchMonitorDetail();
     }
 
@@ -346,6 +352,8 @@ function MatchMonitorDetail() {
             },
             timeout: 5000
         });
+
+        isRefresh = false;
     }
 
     function RenderMatchMonitorDetail(response, typeOfTickets = MatchMonitorDetailViewType.TicketFraud) {
@@ -464,7 +472,7 @@ function MatchMonitorDetail() {
             allVal += dom_ccb[0][i].value;
         }
         if (dom_ccb.val().join('') != allVal) {
-            return dom_ccb.val();
+            return dom_ccb.val() == "" ? null : dom_ccb.val();
         }
 
         return undefined;
@@ -1050,6 +1058,7 @@ function MatchMonitorDetail() {
     $(document).ready(function () {
         Initial();
 
+        isRefresh = true;
         FetchFilterMatchMonitorDetail();
         // FetchMatchMonitorDetail();
 

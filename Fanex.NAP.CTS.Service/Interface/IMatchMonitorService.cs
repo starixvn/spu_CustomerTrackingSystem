@@ -24,9 +24,11 @@
 
         IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);
 
-        IEnumerable<TicketDetailModel> GetTicketDetail(MMDetailSearchViewModel para, string transIds, MMDetailFilterViewModel filter = null, int batchSize = 1000);
+        IEnumerable<TicketDetailModel> GetFraudTicketDetail(MMDetailSearchViewModel para, string transIds);
 
-        MMTicketDetailInfoModel GetMMTicketDetailInfoCriteria(MMDetailSearchViewModel para);
+        TicketDetailViewModel GetAllTicketDetail(MMDetailSearchViewModel para, MMDetailFilterViewModel filter = null, int batchSize = 1000);
+
+        MMTicketDetailInfoModel GetMMTicketDetailInfo(MMDetailSearchViewModel para);
 
         IEnumerable<MMDetailMergeGroupModel> GetMMDetailMergeGroup(IEnumerable<MMDetailBetTeamModel> mmDetailBetTeams);
 
