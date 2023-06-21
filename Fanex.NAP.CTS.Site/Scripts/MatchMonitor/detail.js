@@ -34,7 +34,6 @@ function MatchMonitorDetail() {
         cbbReason: $('#cbbReason'),
         cbbGroup: $('#cbbGroup'),
         cbbSites: $('#cbbSites'),
-        inputAmount: $('#inputAmount'),
         inputAmountFrom: $('#inputAmountFrom'),
         inputAmountTo: $('#inputAmountTo'),
         tblMMHomeTeam: $('#tblMMHomeTeam'),
@@ -80,8 +79,8 @@ function MatchMonitorDetail() {
     let isRefresh = false;
     let isSupportShowAllTickets = false;
 
-    const regexInputAmount = /^[0-9]{1,}\s{0,1}[-]{0,1}\s{0,1}[0-9]{0,}$/;
-    const regexValidAmount = /^[0-9]{1,}\s{0,1}[-]\s{0,1}[0-9]{1,}$/;
+    // const regexInputAmount = /^[0-9]{1,}\s{0,1}[-]{0,1}\s{0,1}[0-9]{0,}$/;
+    const regexInputAmount = /^[0-9]{1,8}/;
 
     function InitialDetailGird(element) {
         element.DataTable({
@@ -229,11 +228,49 @@ function MatchMonitorDetail() {
                 ScoreList: GetSelectDataFilter(domElements.cbbMatchScore),
                 ReasonList: GetSelectDataFilter(domElements.cbbReason),
                 AGroupList: GetSelectDataFilter(domElements.cbbGroup),
-                AmountList: GetInputAmount() ? domElements.inputAmount.val().replace(" ", "").split("-").map(str => {
+                AmountList: GetInputAmount()?.map(str => {
                     return Number(str);
-                }) : undefined,
+                }) ?? undefined,
             };
+            if (typeOfTickets == MatchMonitorDetailViewType.TicketAll) {
+                GetMatchMonitorTotalTicket(data, lastScannedSequenceID);
+            }
             GetMatchMonitorDetail(data, lastScannedSequenceID, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
+        }
+    }
+
+    function GetMatchMonitorTotalTicket(data = null, lastScannedSequenceID = maxSequenceId) {
+        if (lastScannedSequenceID || data.TypeOfTickets == MatchMonitorDetailViewType.TicketFraud) {
+            data.LastScannedSequenceID = lastScannedSequenceID;
+            currentType = data.TypeOfTickets;
+
+            xhr = $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorTotalTicket'), {
+                async: false,
+                type: 'POST',
+                tryCount: 0,
+                retryLimit: 3,
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    if (response?.recordsTotal) {
+                        recordsTotalGlobal = response?.recordsTotal;
+                        $(".breadcrumb-totaltickets").html(`Total Tickets: 0/${ConvertNumberToThousandsString(recordsTotalGlobal)}`);
+                    }
+                },
+                error: function (xhr, textStatus, error) {
+                    if (textStatus == 'timeout') {
+                        this.tryCount++;
+                        if (this.tryCount <= this.retryLimit) {
+                            //try again
+                            $.ajax(this);
+                            return;
+                        }
+                    }
+
+                    console.log(error);
+                }
+            });
         }
     }
 
@@ -260,16 +297,15 @@ function MatchMonitorDetail() {
                         if (data.TypeOfTickets == MatchMonitorDetailViewType.TicketAll && response?.data?.LastSequenceID) {
                             GetMatchMonitorDetail(data, response?.data?.LastSequenceID, posClick);
                         }
+
+                        if (response?.data?.LastSequenceID == null) {
+                            RefreshLengthPage(-1, false);
+                        }
                     }
                 },
                 complete: function (response) {
                     domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
                     domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
-
-                    const data = response?.responseJSON?.data;
-                    if (data?.LastSequenceID == null) {
-                        RefreshLengthPage(-1, false);
-                    }
                 },
                 error: function (xhr, textStatus, error) {
                     if (textStatus == 'timeout') {
@@ -281,7 +317,6 @@ function MatchMonitorDetail() {
                         }
                     }
 
-                    RefreshLengthPage(-1, false);
                     console.log(error);
                 }
             });
@@ -431,7 +466,10 @@ function MatchMonitorDetail() {
                 RefreshFilterSelected(domElements.cbbMatchScore, selectedFilter.cbbMatchScore);
                 RefreshFilterSelected(domElements.cbbReason, selectedFilter.cbbReason);
                 RefreshFilterSelected(domElements.cbbGroup, selectedFilter.cbbGroup);
-                domElements.inputAmount.val(selectedFilter.inputAmount);
+                if (selectedFilter.inputAmount) {
+                    domElements.inputAmountFrom.val(selectedFilter.inputAmount[0]);
+                    domElements.inputAmountTo.val(selectedFilter.inputAmount[1]);
+                }
             }
         }
     }
@@ -458,8 +496,10 @@ function MatchMonitorDetail() {
     }
 
     function GetInputAmount() {
-        if (regexValidAmount.test(domElements.inputAmount.val())) {
-            return domElements.inputAmount.val();
+        if (regexInputAmount.test(domElements.inputAmountFrom.val()) && regexInputAmount.test(domElements.inputAmountTo.val())) {
+            if (Number(domElements.inputAmountFrom.val()) <= Number(domElements.inputAmountTo.val())) {
+                return [domElements.inputAmountFrom.val(), domElements.inputAmountTo.val()];
+            }
         }
 
         return undefined;
@@ -467,12 +507,11 @@ function MatchMonitorDetail() {
 
     function GetSelectDataFilter(dom_ccb) {
         let allVal = '';
-        for (let i = 0; i < dom_ccb[0].length; i++)
-        {
+        for (let i = 0; i < dom_ccb[0].length; i++) {
             allVal += dom_ccb[0][i].value;
         }
         if (dom_ccb.val().join('') != allVal) {
-            return dom_ccb.val() == "" ? null : dom_ccb.val();
+            return dom_ccb.val();
         }
 
         return undefined;
@@ -501,8 +540,7 @@ function MatchMonitorDetail() {
         element.multiselect("refresh");
     }
 
-    function SetupFilterFromDictinary(element, data)
-    {
+    function SetupFilterFromDictinary(element, data) {
         element.multiselect().empty();
 
         if (data) {
@@ -733,20 +771,6 @@ function MatchMonitorDetail() {
     }
 
     function TypeOfTicketsOnChange() {
-        // switch (Number(domElements.cbbTypeOfTickets.val())) {
-        //     case MatchMonitorDetailViewType.TicketAll: {
-        //         currentType = MatchMonitorDetailViewType.TicketAll;
-        //         FetchFilterMatchMonitorDetail();
-        //         break;
-        //     }
-        //     case MatchMonitorDetailViewType.TicketFraud: {
-        //         currentType = MatchMonitorDetailViewType.TicketFraud;
-        //         FetchFilterMatchMonitorDetail();
-        //         // LoadCacheFilterFraudMMDetail();
-        //         break;
-        //     }
-        // }
-
         currentType = Number(domElements.cbbTypeOfTickets.val());
         domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
         FetchFilterMatchMonitorDetail();
@@ -963,6 +987,36 @@ function MatchMonitorDetail() {
         domElements.tblAwayHeaderFixed = $('#tblAwayHeaderFixed');
     }
 
+    function ValidationFilter() {
+        let result = true;
+
+        if (GetSelectDataFilter(domElements.cbbCurrency) == '') {
+            result = false;
+        }
+
+        if (GetSelectDataFilter(domElements.cbbHDP) == '') {
+            result = false;
+        }
+
+        if (GetSelectDataFilter(domElements.cbbMatchScore) == '') {
+            result = false;
+        }
+
+        if (GetSelectDataFilter(domElements.cbbReason) == '') {
+            result = false;
+        }
+        if (GetSelectDataFilter(domElements.cbbGroup) == '') {
+            result = false;
+        }
+
+        if (!((domElements.inputAmountFrom.val() == '' && domElements.inputAmountTo.val() == '') || GetInputAmount())) {
+            common.showError("Please fill in amount input from - to to proceed!");
+            result = false;
+        }
+
+        return result;
+    }
+
     function Initial() {
         SetupMultiselect(domElements.cbbCurrency, "Currency");
         SetupMultiselect(domElements.cbbHDP, "HDP");
@@ -989,26 +1043,15 @@ function MatchMonitorDetail() {
 
         domElements.cbbSites.change(function () {
             ClearCache();
-            // CacheSelectDataFilter();
             FetchFilterMatchMonitorDetail();
-
-            // switch (currentType) {
-            //     case MatchMonitorDetailViewType.TicketFraud:
-            //         {
-            //             RefreshFilter(cacheFilter.ticketFraud, MatchMonitorDetailViewType.TicketFraud);
-            //             FetchMatchMonitorDetail(MatchMonitorDetailViewType.TicketFraud);
-            //             break;
-            //         }
-            //     case MatchMonitorDetailViewType.TicketAll:
-            //         {
-            //             FetchFilterMatchMonitorDetail();
-            //             break;
-            //         }
-            // }
         });
 
-        domElements.inputAmount.on('input', function () {
-            domElements.inputAmount.val(domElements.inputAmount.val().match(regexInputAmount));
+        domElements.inputAmountFrom.on('input', function () {
+            domElements.inputAmountFrom.val(domElements.inputAmountFrom.val().match(regexInputAmount));
+        });
+
+        domElements.inputAmountTo.on('input', function () {
+            domElements.inputAmountTo.val(domElements.inputAmountTo.val().match(regexInputAmount));
         });
 
         domElements.btnRefresh.on('click', function () {
@@ -1019,7 +1062,7 @@ function MatchMonitorDetail() {
         })
 
         domElements.btnGenerateDetail.on('click', function () {
-            if (domElements.inputAmount.val() == '' || GetInputAmount()) {
+            if (ValidationFilter()) {
                 CacheSelectDataFilter();
                 FetchMatchMonitorDetail(currentType);
             }
@@ -1060,7 +1103,6 @@ function MatchMonitorDetail() {
 
         isRefresh = true;
         FetchFilterMatchMonitorDetail();
-        // FetchMatchMonitorDetail();
 
         BindScrollHeaderFixed();
     });

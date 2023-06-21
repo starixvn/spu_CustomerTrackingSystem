@@ -1,12 +1,10 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Core;
-    using Fanex.NAP.CTS.Criteria.MatchMonitor;
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using System;
     using System.Collections.Generic;
-    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public interface IMatchMonitorService
     {
@@ -20,15 +18,15 @@
 
         DBResult VerifyTransMatchMonitorDetail(MatchMonitorDetailVerifyTransParaModel para);
 
-        MMDetailResultModel GetMatchMonitorDetail(MMDetailSearchViewModel filter);
+        MMDetailResultModel GetMatchMonitorDetail(MMDetailInfoViewModel filter);
 
         IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);
 
-        IEnumerable<TicketDetailModel> GetFraudTicketDetail(MMDetailSearchViewModel para, string transIds);
+        IEnumerable<TicketDetailModel> GetFraudTicketDetail(MMDetailInfoViewModel para, string transIds);
 
-        TicketDetailViewModel GetAllTicketDetail(MMDetailSearchViewModel para, MMDetailFilterViewModel filter = null, int batchSize = 1000);
+        TicketDetailViewModel GetAllTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int batchSize = 1000, string transIds = null);
 
-        MMTicketDetailInfoModel GetMMTicketDetailInfo(MMDetailSearchViewModel para);
+        MMTicketDetailInfoModel GetMMTicketDetailInfo(MMDetailInfoViewModel para);
 
         IEnumerable<MMDetailMergeGroupModel> GetMMDetailMergeGroup(IEnumerable<MMDetailBetTeamModel> mmDetailBetTeams);
 

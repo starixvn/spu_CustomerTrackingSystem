@@ -48,8 +48,8 @@
         [SpParam(SqlParamName = "ToStakeRM")]
         public decimal? ToStakeRM { get; set; }
 
-        [SpParam(SqlParamName = "NextScannedSequenceID")]
-        public Int64? NextScannedSequenceID { get; set; }
+        [SpParam(SqlParamName = "MinSequenceIDTotalAll")]
+        public Int64? MinSequenceIDTotalAll { get; set; }
 
         public override string GetSettingKey()
                 => "CTS_Rpt_MatchMonitor_TicketDetails";

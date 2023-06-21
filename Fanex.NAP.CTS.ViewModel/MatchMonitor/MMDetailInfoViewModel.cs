@@ -3,11 +3,11 @@
     using System;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
-    public class MMDetailSearchViewModel
+    public class MMDetailInfoViewModel
     {
-        public MMDetailSearchViewModel() { }
+        public MMDetailInfoViewModel() { }
 
-        public MMDetailSearchViewModel(MMDetailSearchViewModel para)
+        public MMDetailInfoViewModel(MMDetailInfoViewModel para)
         {
             this.TypeOfTickets = para.TypeOfTickets;
             this.LastScannedSequenceID = para.LastScannedSequenceID;

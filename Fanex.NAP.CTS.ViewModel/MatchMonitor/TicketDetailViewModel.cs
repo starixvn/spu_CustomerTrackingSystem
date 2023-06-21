@@ -7,6 +7,6 @@
     {
         public IEnumerable<TicketDetailModel> TicketDetails { get; set; }
         public MMDetailMergeGroupViewModel MMDetailMergeGroup { get; set; }
-        public long? LastSequenceID { get; set; }
+        public long? MinSequenceIDTotalAll { get; set; }
     }
 }

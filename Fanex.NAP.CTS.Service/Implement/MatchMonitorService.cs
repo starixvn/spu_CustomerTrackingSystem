@@ -11,7 +11,6 @@
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
@@ -99,7 +98,7 @@
             return repository.Fetch<MatchScoreModel>(criteria);
         }
 
-        public MMDetailResultModel GetMatchMonitorDetail(MMDetailSearchViewModel filter)
+        public MMDetailResultModel GetMatchMonitorDetail(MMDetailInfoViewModel filter)
         {
             var criteria = new MatchDetailMonitorGetCriteria
             {
@@ -132,7 +131,7 @@
             return repository.Fetch<CustInfoModel>(criteria);
         }
 
-        public IEnumerable<TicketDetailModel> GetFraudTicketDetail(MMDetailSearchViewModel para, string transIds)
+        public IEnumerable<TicketDetailModel> GetFraudTicketDetail(MMDetailInfoViewModel para, string transIds)
         {
             var criteria = new TicketDetailGetCriteria()
             {
@@ -144,7 +143,7 @@
             return repository.Fetch<TicketDetailModel>(criteria);
         }
 
-        public TicketDetailViewModel GetAllTicketDetail(MMDetailSearchViewModel para, MMDetailFilterViewModel filter = null, int batchSize = 1000)
+        public TicketDetailViewModel GetAllTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int batchSize = 1000, string transIds = null)
         {
             var criteria = new TicketDetailGetCriteria()
             {
@@ -156,25 +155,28 @@
                 BetType = para.BetTypeID,
                 BatchSize = batchSize,
                 IsLiencee = para.Sites == MMSites.All ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
-                ListCurrency = filter.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList),
-                ListHDP = filter.HDPList == null ? null : string.Join(",", filter.HDPList),
-                ListScore = filter.ScoreList == null ? null : string.Join(",", filter.ScoreList)
+                ListCurrency = filter?.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList),
+                ListHDP = filter?.HDPList == null ? null : string.Join(",", filter.HDPList),
+                ListScore = filter?.ScoreList == null ? null : string.Join(",", filter.ScoreList),
+                ListTransId = transIds
             };
 
-            if (filter.AmountList?.Count >= 2)
+            if (filter?.AmountList?.Count >= 2)
             {
                 criteria.FromStakeRM = filter.AmountList[0];
                 criteria.ToStakeRM = filter.AmountList[1];
             }
 
+            var result = repository.Fetch<TicketDetailModel>(criteria);
+
             return new TicketDetailViewModel
             {
-                TicketDetails = repository.Fetch<TicketDetailModel>(criteria),
-                LastSequenceID = criteria.NextScannedSequenceID
+                TicketDetails = result,
+                MinSequenceIDTotalAll = criteria.MinSequenceIDTotalAll
             };
         }
 
-        public MMTicketDetailInfoModel GetMMTicketDetailInfo(MMDetailSearchViewModel para)
+        public MMTicketDetailInfoModel GetMMTicketDetailInfo(MMDetailInfoViewModel para)
         {
             var criteria = new MMTicketDetailInfoCriteria()
             {

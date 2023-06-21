@@ -13,45 +13,47 @@
             this.AwayMatchItemList = new List<MatchMonitorDetailItemViewModel>();
         }
 
-        public MatchMonitorDetailListViewModel(MatchMonitorDetailListViewModel tickets, MMDetailFilterViewModel filter, string site)
+        public MatchMonitorDetailListViewModel(MatchMonitorDetailListViewModel matchMonitorDetailList)
         {
-            if (tickets == null)
-            {
-                return;
-            }
+            LastSequenceID = matchMonitorDetailList.LastSequenceID;
+            CTSCustIDList = matchMonitorDetailList.CTSCustIDList;
+            HomeMatchItemList = matchMonitorDetailList.HomeMatchItemList.ToList();
+            AwayMatchItemList = matchMonitorDetailList.AwayMatchItemList.ToList();
+            IsFilter = matchMonitorDetailList.IsFilter;
+            MaxSequenceId = matchMonitorDetailList.MaxSequenceId;
+            RecordsTotal = matchMonitorDetailList.RecordsTotal;
+            CurrencyList = matchMonitorDetailList.CurrencyList;
+            CurrencyIdList = matchMonitorDetailList.CurrencyIdList;
+            HDPList = matchMonitorDetailList.HDPList;
+            ScoreList = matchMonitorDetailList.ScoreList;
+            ReasonList = matchMonitorDetailList.ReasonList;
+            AmountList = matchMonitorDetailList.AmountList;
+            GroupList = matchMonitorDetailList.GroupList;
+            ReasonInfos = matchMonitorDetailList.ReasonInfos;
+            ReasonGroupIDDic = matchMonitorDetailList.ReasonGroupIDDic;
+            AGroupList = matchMonitorDetailList.AGroupList;
+        }
 
+        public void FilterItemMMDetail(MMDetailFilterViewModel filter, string site)
+        {
             var reasonGroupIDDic = filter.AGroupList?.Select(x => x.Contains("-") ? "0" : x);
 
-            HomeMatchItemList = tickets.HomeMatchItemList.ToList().Where(x => FilterItem(x, filter, reasonGroupIDDic, site)).ToList();
-            AwayMatchItemList = tickets.AwayMatchItemList.ToList().Where(x => FilterItem(x, filter, reasonGroupIDDic, site)).ToList();
-
-            ScoreList = tickets.ScoreList;
-            CurrencyList = tickets.CurrencyList;
-            HDPList = tickets.HDPList;
-            CTSCustIDList = tickets.CTSCustIDList;
-            RecordsTotal = tickets.RecordsTotal;
-            GroupList = tickets.GroupList;
-            ReasonList = tickets.ReasonList;
-            ReasonInfos = tickets.ReasonInfos;
-            LastSequenceID = tickets.LastSequenceID;
+            HomeMatchItemList = HomeMatchItemList.Where(x => x.FilterItem(filter, reasonGroupIDDic, site)).ToList();
+            AwayMatchItemList = AwayMatchItemList.Where(x => x.FilterItem(filter, reasonGroupIDDic, site)).ToList();
         }
 
-        private bool FilterItem(MatchMonitorDetailItemViewModel x, MMDetailFilterViewModel filter, IEnumerable<string> reasonGroupIDDic, string site)
+        public void FilterItemMMDetailByReasonAGroup(MMDetailFilterViewModel filter)
         {
-            return
-                (filter.CurrencyIdList?.Contains(x.CurrencyId) ?? true) &&
-                (filter.HDPList?.Contains(x.BallHeadHDP()) ?? true) &&
-                (filter.ScoreList?.Contains(x.Score ?? "-") ?? true) &&
-                (filter.ReasonList?.Any(y => (x.ReasonList ?? "-").Contains(y)) ?? true) &&
-                (reasonGroupIDDic?.Contains(x.ADetectGroupID.ToString()) ?? true) &&
-                (filter.AmountList == null || filter.AmountList.Count() < 2 ? true : x.Amount >= filter.AmountList[0] && x.Amount <= filter.AmountList[1]) &&
-                x.FilterBySite(site);
+            var reasonGroupIDDic = filter.AGroupList?.Select(x => x.Contains("-") ? "0" : x);
+
+            HomeMatchItemList = HomeMatchItemList.Where(x => x.FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic)).ToList();
+            AwayMatchItemList = AwayMatchItemList.Where(x => x.FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic)).ToList();
         }
 
-        public MatchMonitorDetailListViewModel(MatchMonitorDetailListViewModel tickets, string site)
+        public void FilterItemMMDetailBySite(string site)
         {
-            HomeMatchItemList = tickets.HomeMatchItemList.Where(x => x.FilterBySite(site)).ToList();
-            AwayMatchItemList = tickets.AwayMatchItemList.Where(x => x.FilterBySite(site)).ToList();
+            HomeMatchItemList = HomeMatchItemList.Where(x => x.FilterBySite(site)).ToList();
+            AwayMatchItemList = AwayMatchItemList.Where(x => x.FilterBySite(site)).ToList();
 
             var mdItemList = new List<MatchMonitorDetailItemViewModel>();
             mdItemList.AddRange(HomeMatchItemList);
@@ -65,11 +67,7 @@
             }).Distinct().OrderBy(x => x.CurrencyName).ToDictionary(x => x.CurrencyName, y => y.CurrencyId);
             HDPList = mdItemList.Select(x => x.BallHeadHDP()).Distinct().OrderBy(x => x).ToList();
 
-            LastSequenceID = tickets.LastSequenceID;
-            CTSCustIDList = tickets.CTSCustIDList;
-            IsFilter = tickets.IsFilter;
             RecordsTotal = (HomeMatchItemList?.Count() ?? 0) + (AwayMatchItemList?.Count() ?? 0);
-            GroupList = tickets.GroupList;
 
             BindReasons(mdItemList.Select(x => x.ReasonList).Distinct());
         }

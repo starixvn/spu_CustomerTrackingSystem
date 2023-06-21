@@ -65,15 +65,21 @@
             GroupList = groupList?.Where(x => x.GroupID != null ? agroup.Contains(x.GroupID ?? 0) : false).ToList();
         }
 
-        private bool FilterBySite(MMdetailFilterInforTypeBaseModel x, string site)
+        public MMDetailFilterViewModel(MMDetailFilterViewModel filter)
         {
-            if (site == MMSites.All) return true;
-
-            if (site == MMSites.Credit) return x.IsCredit == 1;
-
-            if (site == MMSites.Licensee) return x.IsLicensee == 1;
-
-            return false;
+            IsFilter = filter.IsFilter;
+            MaxSequenceId = filter.MaxSequenceId;
+            RecordsTotal = filter.RecordsTotal;
+            CurrencyList = filter.CurrencyList;
+            CurrencyIdList = filter.CurrencyIdList;
+            HDPList = filter.HDPList;
+            ScoreList = filter.ScoreList;
+            ReasonList = filter.ReasonList;
+            AmountList = filter.AmountList;
+            GroupList = filter.GroupList;
+            ReasonInfos = filter.ReasonInfos;
+            ReasonGroupIDDic = filter.ReasonGroupIDDic;
+            AGroupList = filter.AGroupList;
         }
 
         public bool IsFilter { get; set; }
@@ -101,5 +107,22 @@
         public Dictionary<string, List<int>> ReasonGroupIDDic { get; set; }
 
         public List<string> AGroupList { get; set; }
+
+        public bool IsOnlyFraudTicket()
+        {
+            return (!ReasonList?.Contains("-") ?? false) || !((AGroupList?.Contains("-") ?? true) || (AGroupList?.Contains("0") ?? true));
+        }
+
+        private bool FilterBySite(MMdetailFilterInforTypeBaseModel x, string site)
+        {
+            if (site == MMSites.All) return true;
+
+            if (site == MMSites.Credit) return x.IsCredit == 1;
+
+            if (site == MMSites.Licensee) return x.IsLicensee == 1;
+
+            return false;
+        }
+
     }
 }

@@ -186,6 +186,24 @@
             return !string.IsNullOrWhiteSpace(site) ? site.Contains("A") || site.Contains(SubscriberType) : false;
         }
 
+        public bool FilterByReasonAGroup(List<string> reasonList, IEnumerable<string> reasonGroupIDDic)
+        {
+            return
+                (reasonList?.Any(y => (ReasonList ?? "-").Contains(y)) ?? true) &&
+                (reasonGroupIDDic?.Contains(ADetectGroupID.ToString()) ?? true);
+        }
+
+        public bool FilterItem(MMDetailFilterViewModel filter, IEnumerable<string> reasonGroupIDDic, string site)
+        {
+            return
+                (filter.CurrencyIdList?.Contains(CurrencyId) ?? true) &&
+                (filter.HDPList?.Contains(BallHeadHDP()) ?? true) &&
+                (filter.ScoreList?.Contains(Score ?? "-") ?? true) &&
+                FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic) &&
+                (filter.AmountList == null || filter.AmountList.Count() < 2 ? true : Amount >= filter.AmountList[0] && Amount <= filter.AmountList[1]) &&
+                FilterBySite(site);
+        }
+
         public MatchMonitorDetailItemViewModel MappingFraudTicketToAllTicket(Dictionary<long, MatchMonitorDetailItemViewModel> fraudMMTicketsDictionary)
         {
             if (fraudMMTicketsDictionary != null && fraudMMTicketsDictionary.TryGetValue(TransId, out var value))
@@ -221,6 +239,7 @@
             this.BetID = ticket.TransId.ToString();
             this.BetTeam = ticket.BetTeam;
             this.CurrencyName = ticket.CurrencyName;
+            this.CurrencyId = ticket.CurrencyId;
             this.Stake = ticket.Stake;
             this.Amount = ticket.OrgStake;
             this.HDP1 = ticket.Hdp1;
