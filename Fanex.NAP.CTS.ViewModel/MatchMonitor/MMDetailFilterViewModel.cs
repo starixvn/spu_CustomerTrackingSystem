@@ -40,7 +40,7 @@
                 return new { CurrencyId = isNotValid ? -1 : x.CurrencyId, CurrencyName = isNotValid ? "-" : x.CurrencyName };
             }).Distinct().OrderBy(x => x.CurrencyName).ToDictionary(x => x.CurrencyName, y => y.CurrencyId) ?? new Dictionary<string, int>() { { "-", -1 } };
             HDPList = mMTicket.FilterDetail.HDPList?.Where(x => FilterBySite(x, site)).Select(x => x.Hdp).OrderBy(x => x).ToList() ?? new List<decimal>() { };
-            ScoreList = mMTicket.FilterDetail.ScoreList?.Where(x => FilterBySite(x, site)).Select(x => string.Format($"{x.LiveHomeScore} - {x.LiveAwayScore}")).OrderBy(x => x).ToList() ?? new List<string>() { "-" };
+            ScoreList = mMTicket.FilterDetail.ScoreList?.Any() ?? false ? mMTicket.FilterDetail.ScoreList.Where(x => FilterBySite(x, site)).Select(x => string.Format($"{x.LiveHomeScore} - {x.LiveAwayScore}")).OrderBy(x => x).ToList() : new List<string>() { "-" };
 
             var reasonList = fraudFilter.ReasonList?.ToList() ?? new List<string>();
             var groupList = fraudFilter.GroupList?.ToList() ?? new List<GroupInfoViewModel>();
