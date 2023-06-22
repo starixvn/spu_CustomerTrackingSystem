@@ -81,7 +81,6 @@ function MatchMonitorDetail() {
     let isSupportShowAllTickets = false;
     let timeoutRenderTicketDetail = undefined;
 
-    // const regexInputAmount = /^[0-9]{1,}\s{0,1}[-]{0,1}\s{0,1}[0-9]{0,}$/;
     const regexInputAmount = /^[0-9]{1,8}/;
 
     function InitialDetailGird(element) {
@@ -473,7 +472,6 @@ function MatchMonitorDetail() {
             if (selectedFilter) {
                 RefreshFilterSelected(domElements.cbbCurrency, selectedFilter.cbbCurrency);
                 RefreshFilterSelected(domElements.cbbHDP, selectedFilter.cbbHDP);
-                // RefreshFilterSelected(domElements.cbbMatchScore, selectedFilter.cbbMatchScore);
                 RefreshFilterSelected(domElements.cbbReason, selectedFilter.cbbReason);
                 RefreshFilterSelected(domElements.cbbGroup, selectedFilter.cbbGroup);
                 if (selectedFilter.inputAmount) {
@@ -494,7 +492,6 @@ function MatchMonitorDetail() {
             selectedFilter.cbbCurrency = GetSelectDataFilter(domElements.cbbCurrency);
             selectedFilter.cbbHDP = GetSelectDataFilter(domElements.cbbHDP);
             cacheFilterScore = GetSelectDataFilter(domElements.cbbMatchScore);
-            // selectedFilter.cbbMatchScore = GetSelectDataFilter(domElements.cbbMatchScore);
             selectedFilter.cbbReason = GetSelectDataFilter(domElements.cbbReason);
             selectedFilter.cbbGroup = GetSelectDataFilter(domElements.cbbGroup);
             selectedFilter.inputAmount = GetInputAmount();
@@ -796,6 +793,8 @@ function MatchMonitorDetail() {
     function TypeOfTicketsOnChange() {
         if (currentType == MatchMonitorDetailViewType.TicketAll) {
             cacheFilterScore = undefined;
+            domElements.inputAmountFrom.val('');
+            domElements.inputAmountTo.val('');
         }
 
         currentType = Number(domElements.cbbTypeOfTickets.val());
@@ -1084,6 +1083,8 @@ function MatchMonitorDetail() {
 
         domElements.btnRefresh.on('click', function () {
             ClearCache();
+            domElements.inputAmountFrom.val('');
+            domElements.inputAmountTo.val('');
             isRefresh = true;
             domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud).change();
             FetchMatchMonitorDetail();
