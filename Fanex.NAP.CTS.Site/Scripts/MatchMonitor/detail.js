@@ -1069,6 +1069,8 @@ function MatchMonitorDetail() {
 
         domElements.cbbSites.change(function () {
             ClearCache();
+            domElements.inputAmountFrom.val('');
+            domElements.inputAmountTo.val('');
             cacheFilterScore = GetSelectDataFilter(domElements.cbbMatchScore);
             FetchFilterMatchMonitorDetail();
         });
