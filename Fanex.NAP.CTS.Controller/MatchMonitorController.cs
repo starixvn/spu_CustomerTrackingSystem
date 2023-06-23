@@ -209,13 +209,13 @@
             ViewBag.BetTypeID = para?.BetTypeID;
             ViewBag.BettypeName = para?.BettypeName ?? string.Empty;
             ViewBag.BetIDToString = para?.BetID.ToString();
-            ViewBag.HomeName = para?.HomeName ?? string.Empty;
-            ViewBag.AwayName = para?.AwayName ?? string.Empty;
+            ViewBag.HomeName = para?.HomeName.ToUpper() ?? string.Empty;
+            ViewBag.AwayName = para?.AwayName.ToUpper() ?? string.Empty;
             ViewBag.LiveIndicator = para?.LiveIndicator ?? true;
             ViewBag.Reason = para?.Reason;
             ViewBag.ReasonName = para?.ReasonName ?? string.Empty;
             ViewBag.MatchScore = matchScore?.OrderBy(c => c.ScoreDiff).ThenBy(c => c.LiveHomeScore).ThenBy(c => c.LiveAwayScore);
-            ViewBag.LeagueName = para?.LeagueName ?? string.Empty;
+            ViewBag.LeagueName = para?.LeagueName.ToUpper() ?? string.Empty;
             ViewBag.ReasonGroup = para?.ReasonGroup ?? string.Empty;
             ViewBag.MarketName = para?.MarketName ?? string.Empty;
             ViewBag.BetChoice = para?.BetChoice;

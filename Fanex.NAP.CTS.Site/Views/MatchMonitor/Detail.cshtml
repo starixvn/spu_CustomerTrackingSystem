@@ -8,10 +8,23 @@
 <section class="detailpage" id="detailpage">
     <div class="content">
         <div class="page-title-match">
-            <span class="title-description">MATCH MONITOR DETAIL</span>
-            <span class="title-match-name"> @ViewBag.HomeName <span class="title-match-vs"> vs </span> @ViewBag.AwayName</span>
-            <span class="title-league-name"> @ViewBag.LeagueName</span>
-        </div>
+            <div class="title-box-left">
+                <span class="title-description">MATCH MONITOR DETAIL</span>
+                <span class="title-match-name"> @ViewBag.HomeName <span class="title-match-vs"> vs </span> @ViewBag.AwayName</span>
+                <span class="title-league-name"> @ViewBag.LeagueName</span>
+                <span class="title-ko-time"> KO Time: @ViewBag.KOTime</span>
+
+            </div>
+            <div class="title-box-right">
+                <span class="title-sport-name">
+                    @ViewBag.SportName - @ViewBag.BettypeName -
+                    <span class="title-market">@ViewBag.MarketName</span>
+                    <span class="title-market-line"> | </span>
+                    <span class="title-market" id="spanReasonInfo"> GB, FG</span>                   
+                </span>
+            </div>
+
+            </div>
     </div>
 
     <div class="monitor-container">
@@ -27,7 +40,7 @@
                             </select>
                         </div>
 
-                        <div class="group width-180" @(ViewBag.IsDisableScoreFilter ? "hidden" : "")   >
+                        <div class="group width-160" @(ViewBag.IsDisableScoreFilter ? "hidden" : "")   >
                             <label class="text">Score</label>
                             <select class="control width-select" id="cbbMatchScore" multiple="multiple">
                                 @if (ViewBag.MatchScore != null)
@@ -49,31 +62,31 @@
                             </select>
                         </div>
 
-                        <div class="group width-180">
+                        <div class="group width-160">
                             <label class="text">HDP</label>
                             <select class="control width-select" id="cbbHDP" multiple="multiple">                              
                             </select>
                         </div>
 
-                        <div class="group width-180">
+                        <div class="group width-160">
                             <label class="text">Currency</label>
                             <select class="control width-select" id="cbbCurrency" multiple="multiple">
                             </select>
                         </div>
 
-                        <div class="group width-180">
+                        <div class="group width-160">
                             <label class="text">Reason</label>
                             <select class="control width-select" id="cbbReason" multiple="multiple">                              
                             </select>
                         </div>
 
-                        <div class="group width-180">
+                        <div class="group width-160">
                             <label class="text">A.Gr.</label>
                             <select class="control width-select" id="cbbGroup" multiple="multiple">                               
                             </select>
                         </div>
 
-                        <div class="group width-180">
+                        <div class="group width-160">
                             <label class="text">Amount</label>
                             <div class="ui-multiselect width-amount">
                                 <input class="width-amount-item" type="number" min="0" placeholder="from" id="inputAmountFrom"/>
@@ -82,16 +95,16 @@
                             </div>
                         </div>
 
-
                         <div class="group-button">
                             <button class="button button-generate" id="btnGenerate-detail">Generate</button>
                         </div>                        
                     </div>
-                    <div class="detail-area" id="detail-area">                        
+
+                    @*<div class="detail-area" id="detail-area">                        
                         <span>@ViewBag.SportName - @ViewBag.BettypeName - <span class="market-highlight">@ViewBag.MarketName</span><br /></span>
                         <span id="spanKOTime">KO Time: @ViewBag.KOTime<br /></span>
                         <span class="reason-highlight" id="spanReasonInfo"></span>
-                    </div>
+                    </div>*@
                 </div>
 
                 <div class="breadcrumb-button">
@@ -104,6 +117,7 @@
                         <button class="button button-primary-outline" id="btnVerifyAndClose">Verify and Close</button>
                     </div>
                 </div>
+              
                 <div class="group-table" id="groupTable">                   
                     <div id="first-monitor-datatable">
                         <div id="tbrMMHomeTeam" class="table-report" style="width: 100%">
@@ -171,6 +185,7 @@
                         <table id="tblAwayHeaderFixed"></table>
                     </div>
                 </div>
+            
             </div>
         </div>               
 
