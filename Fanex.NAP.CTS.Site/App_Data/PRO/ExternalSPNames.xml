@@ -68,7 +68,7 @@
 
 	<Function Name="AssociationDetection">
 		<Setting Key="CTS_Association_GetBySharedMatches" SpName="CTS_Association_GetBySharedMatches" DbName="DBCTS.bodb02.bodbSPUNet" TimeOut="300" />
-		<Setting Key="Acc_Rpt_CTS_GetCustStatisticsInfo" SpName="Acc_Rpt_CTS_GetCustStatisticsInfo" DbName="DBDW.bodb_dwrs.bodbSPUNet" />
-		<Setting Key="CTS_Association_IpSharedLast3Days" SpName="CTS_Association_IpSharedLast3Days" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="Acc_Rpt_CTS_GetCustStatisticsInfo" SpName="Acc_Rpt_CTS_GetCustStatisticsInfo" DbName="DBDW.bodb_dwrs.bodbSPUNet" TimeOut="300" />
+		<Setting Key="CTS_Association_IpSharedLast3Days" SpName="CTS_Association_IpSharedLast3Days" DbName="DBCTS.bodb02.bodbSPUNet" TimeOut="300" />
 	</Function>
 </Functions>
