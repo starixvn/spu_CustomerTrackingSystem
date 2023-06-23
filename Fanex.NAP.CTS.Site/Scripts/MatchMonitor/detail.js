@@ -81,7 +81,8 @@ function MatchMonitorDetail() {
     let isSupportShowAllTickets = false;
     let timeoutRenderTicketDetail = undefined;
 
-    const regexInputAmount = /^[0-9]{1,8}/;
+    const regexValidAmount = /^[0-9]{1,8}/;
+    const regexInvalidAmount = /[^0-9]{1,8}/g;
 
     function InitialDetailGird(element) {
         element.DataTable({
@@ -504,7 +505,7 @@ function MatchMonitorDetail() {
     }
 
     function GetInputAmount() {
-        if (regexInputAmount.test(domElements.inputAmountFrom.val()) && regexInputAmount.test(domElements.inputAmountTo.val())) {
+        if (regexValidAmount.test(domElements.inputAmountFrom.val()) && regexValidAmount.test(domElements.inputAmountTo.val())) {
             if (Number(domElements.inputAmountFrom.val()) <= Number(domElements.inputAmountTo.val())) {
                 return [domElements.inputAmountFrom.val(), domElements.inputAmountTo.val()];
             }
@@ -1076,11 +1077,11 @@ function MatchMonitorDetail() {
         });
 
         domElements.inputAmountFrom.on('input', function () {
-            domElements.inputAmountFrom.val(domElements.inputAmountFrom.val().match(regexInputAmount));
+            domElements.inputAmountFrom.val(domElements.inputAmountFrom.val().replace(regexInvalidAmount, ""));
         });
 
         domElements.inputAmountTo.on('input', function () {
-            domElements.inputAmountTo.val(domElements.inputAmountTo.val().match(regexInputAmount));
+            domElements.inputAmountTo.val(domElements.inputAmountTo.val().replace(regexInvalidAmount, ""));
         });
 
         domElements.btnRefresh.on('click', function () {
