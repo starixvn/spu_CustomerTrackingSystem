@@ -4,7 +4,7 @@
     let tableAssociationDetectDetailIP = null;
     let tableAssociationDetectDetailMatch = null;
     let tableAssociationDetectDetailAgent = null;
-    let maxTags = 10000;    
+    let maxTags = 5000;    
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),                   
         btnResultValidationClose: $('#btnResultValidationClose'),  
