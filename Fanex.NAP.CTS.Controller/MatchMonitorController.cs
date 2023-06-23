@@ -404,7 +404,7 @@
 
         private TicketDetailViewModel GetAllMMTicketDetail(MMDetailInfoViewModel info, MMDetailFilterViewModel filter, bool isLoop = false)
         {
-            var batchSize = 1000;
+            var batchSize = 5000;
             var ticketDetails = new List<TicketDetailModel>();
             var result = new TicketDetailViewModel();
 
