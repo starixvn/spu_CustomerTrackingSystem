@@ -16,6 +16,8 @@ function ConvertNumberToThousandsString(x) {
 function MatchMonitorDetail() {
     let domElements = {
         detailpage: $('#detailpage'),
+        groupControl: $('#groupControl'),
+        breadcrumbButton: $('#breadcrumbButton'),
         groupTable: $('#groupTable'),
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
         eventDataToString: $("#hdEventDataToString").val(),
@@ -125,13 +127,13 @@ function MatchMonitorDetail() {
                 { targets: [5], width: "5%" },
                 { targets: [6], width: "5%", className: "text-center col-betid" },
                 { targets: [7], width: "5%" },
-                { targets: [8], width: "6%", className: "text-right" },
-                { targets: [9], width: "5%" },
-                { targets: [10], width: "6%" },
-                { targets: [11], width: "10%", className: "text-center col-transtime" },
+                { targets: [8], width: "5%", className: "text-right" },
+                { targets: [9], width: "4%" },
+                { targets: [10], width: "5%" },
+                { targets: [11], width: "15%", className: "text-center col-transtime" },
                 { targets: [12], width: "5%" },
                 { targets: [13], width: "5%", className: "text-center" },
-                { targets: [14], width: "8%", className: "text-center col-reason" },
+                { targets: [14], width: "7%", className: "text-center col-reason" },
                 { targets: [15], width: "3%" },
                 { targets: [16], visible: false },
                 { targets: [17], visible: false }
@@ -906,32 +908,32 @@ function MatchMonitorDetail() {
         return datas;
     }
 
-    function BindScrollHeaderFixed() {
-        let $homeHeader = $('thead', domElements.tblMMHomeTeam).clone();
-        let $homeFixedHeader = domElements.tblHomeHeaderFixed.append($homeHeader);
-        let $awayHeader = $('thead', domElements.tblMMAwayTeam).clone();
-        let $awayFixedHeader = domElements.tblAwayHeaderFixed.append($awayHeader);
+    //function BindScrollHeaderFixed() {
+    //    let $homeHeader = $('thead', domElements.tblMMHomeTeam).clone();
+    //    let $homeFixedHeader = domElements.tblHomeHeaderFixed.append($homeHeader);
+    //    let $awayHeader = $('thead', domElements.tblMMAwayTeam).clone();
+    //    let $awayFixedHeader = domElements.tblAwayHeaderFixed.append($awayHeader);
 
-        $awayFixedHeader.hide();
-        $homeFixedHeader.hide();
+    //    $awayFixedHeader.hide();
+    //    $homeFixedHeader.hide();
 
-        $(window).bind("scroll", function () {
-            let offset = $(this).scrollTop();
-            var heightHome = domElements.tblMMHomeTeam.innerHeight();
-            var heightAway = domElements.tblMMAwayTeam.innerHeight();
-            if (offset >= heightAway && $awayFixedHeader.is(":hidden")) {
-                $awayFixedHeader.show();
-            } else if (offset <= heightAway && !$awayFixedHeader.is(":hidden")) {
-                $awayFixedHeader.hide();
-            }
+    //    domElements.groupTable.bind("scroll", function () {            
+    //        let offset = $(this).scrollTop();
+    //        var heightHome = domElements.tblMMHomeTeam.innerHeight();
+    //        var heightAway = domElements.tblMMAwayTeam.innerHeight();
+    //        if (offset >= heightAway && $awayFixedHeader.is(":hidden")) {                
+    //            $awayFixedHeader.show();              
+    //        } else if (offset <= heightAway && !$awayFixedHeader.is(":hidden")) {
+    //            $awayFixedHeader.hide();
+    //        }
 
-            if (offset >= heightHome && $homeFixedHeader.is(":hidden")) {
-                $homeFixedHeader.show();
-            } else if (offset <= heightHome && !$homeFixedHeader.is(":hidden")) {
-                $homeFixedHeader.hide();
-            }
-        })
-    }
+    //        if (offset >= heightHome && $homeFixedHeader.is(":hidden")) {
+    //            $homeFixedHeader.show();               
+    //        } else if (offset <= heightHome && !$homeFixedHeader.is(":hidden")) {
+    //            $homeFixedHeader.hide();
+    //        }          
+    //    })
+    //}
 
     function SetupMultiselect(ccb, selectName, menuWidth = 260, menuHeight = 260) {
         ccb.multiselect({
@@ -1044,6 +1046,38 @@ function MatchMonitorDetail() {
         return result;
     }
 
+    function Resize() {
+        domElements.groupTable.width($(window).width() - 25);
+        domElements.groupTable.height($(window).height() - 250);
+        
+        let detailpageHeight = domElements.detailpage.height();      
+
+        if (detailpageHeight > 347) {
+            domElements.breadcrumbButton.css('top', '40rem');
+            domElements.groupTable.css('top', '50rem');
+            domElements.groupTable.height($(window).height() - 420);
+        } else if (detailpageHeight > 267) {
+            domElements.breadcrumbButton.css('top', '32rem');
+            domElements.groupTable.css('top', '39rem');
+            domElements.groupTable.height($(window).height() - 420);
+        } else if (detailpageHeight > 246) {
+            domElements.breadcrumbButton.css('top', '30rem');
+            domElements.groupTable.css('top', '37rem');
+            domElements.groupTable.height($(window).height() - 380);
+        } else if (detailpageHeight > 205) {
+            domElements.breadcrumbButton.css('top', '26rem');
+            domElements.groupTable.css('top', '30.5rem');
+            domElements.groupTable.height($(window).height() - 340);
+        } else if (detailpageHeight > 188){
+            domElements.breadcrumbButton.css('top', '24rem');
+            domElements.groupTable.css('top', '28.5rem');
+            domElements.groupTable.height($(window).height() - 300);
+        } else {
+            domElements.breadcrumbButton.css('top', '17.8rem');
+            domElements.groupTable.css('top', '22.5rem');
+        }
+    }   
+
     function Initial() {
         SetupMultiselect(domElements.cbbCurrency, "Currency");
         SetupMultiselect(domElements.cbbHDP, "HDP");
@@ -1128,7 +1162,13 @@ function MatchMonitorDetail() {
         domElements.cbbSites.val(SiteViewType.SiteAll).change();
         domElements.inputHomeSelectAll.prop('checked', false);
         domElements.inputAwaySelectAll.prop('checked', false);
+
+        Resize();
     }
+
+    $(window).resize(function () {      
+        Resize();
+    });
 
     $(document).ready(function () {
         Initial();
@@ -1137,7 +1177,7 @@ function MatchMonitorDetail() {
         FetchFilterMatchMonitorDetail();
         FetchMatchMonitorDetail();
 
-        BindScrollHeaderFixed();
+        //BindScrollHeaderFixed();
     });
 }
 
