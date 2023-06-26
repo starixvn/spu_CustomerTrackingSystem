@@ -793,8 +793,8 @@ function MatchMonitorDetail() {
         SetupFilter(domElements.cbbGroup, filterGroupIDs);
     }
 
-    function TypeOfTicketsOnChange() {
-        if (currentType == MatchMonitorDetailViewType.TicketAll) {
+    function TypeOfTicketsOnChange(isClear) {
+        if (isClear) {
             domElements.cbbSites.val(SiteViewType.SiteAll).change();
             cacheFilterScore = undefined;
             domElements.inputAmountFrom.val('');
@@ -1097,7 +1097,7 @@ function MatchMonitorDetail() {
         if (isSupportShowAllTickets) {
             domElements.cbbTypeOfTickets.change(function () {
                 CacheSelectDataFilter();
-                TypeOfTicketsOnChange();
+                TypeOfTicketsOnChange(currentType == MatchMonitorDetailViewType.TicketAll);
             });
         }
 
@@ -1120,12 +1120,14 @@ function MatchMonitorDetail() {
         });
 
         domElements.btnRefresh.on('click', function () {
-            ClearCache();
-            domElements.inputAmountFrom.val('');
-            domElements.inputAmountTo.val('');
-            cacheFilterScore = undefined;
             isRefresh = true;
-            domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud).change();
+            ClearCache();
+            domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
+            CacheSelectDataFilter();
+            TypeOfTicketsOnChange(true);
+
+            domElements.cbbSites.val(SiteViewType.SiteAll).change();
+
             FetchMatchMonitorDetail();
         })
 
