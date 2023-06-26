@@ -795,6 +795,7 @@ function MatchMonitorDetail() {
 
     function TypeOfTicketsOnChange() {
         if (currentType == MatchMonitorDetailViewType.TicketAll) {
+            domElements.cbbSites.val(SiteViewType.SiteAll).change();
             cacheFilterScore = undefined;
             domElements.inputAmountFrom.val('');
             domElements.inputAmountTo.val('');
@@ -1007,10 +1008,10 @@ function MatchMonitorDetail() {
         InitialDetailGird(domElements.tblMMHomeTeam);
         InitialDetailGird(domElements.tblMMAwayTeam);
 
-        domElements.inputHomeSelectAll = $('#inputHomeSelectAll'),
-            domElements.inputAwaySelectAll = $('#inputAwaySelectAll'),
-            domElements.inputHomeSelectAll.on('click', function () { ToggleGridSelectAll(domElements.inputHomeSelectAll, domElements.tblMMHomeTeam.DataTable()) });
-        domElements.inputAwaySelectAll.on('click', function () { ToggleGridSelectAll(domElements.inputAwaySelectAll, domElements.tblMMAwayTeam.DataTable()) })
+        domElements.inputHomeSelectAll = $('#inputHomeSelectAll');
+        domElements.inputAwaySelectAll = $('#inputAwaySelectAll');
+        domElements.inputHomeSelectAll.on('click', function () { ToggleGridSelectAll(domElements.inputHomeSelectAll, domElements.tblMMHomeTeam.DataTable()) });
+        domElements.inputAwaySelectAll.on('click', function () { ToggleGridSelectAll(domElements.inputAwaySelectAll, domElements.tblMMAwayTeam.DataTable()) });
 
         domElements.tblHomeHeaderFixed = $('#tblHomeHeaderFixed');
         domElements.tblAwayHeaderFixed = $('#tblAwayHeaderFixed');
@@ -1039,7 +1040,7 @@ function MatchMonitorDetail() {
         }
 
         if (!((domElements.inputAmountFrom.val() == '' && domElements.inputAmountTo.val() == '') || GetInputAmount())) {
-            common.showError("Please fill in amount input from - to to proceed!");
+            common.showError("Please input a valid range (Ex: 500 - 1000)");
             result = false;
         }
 
@@ -1049,8 +1050,8 @@ function MatchMonitorDetail() {
     function Resize() {
         domElements.groupTable.width($(window).width() - 25);
         domElements.groupTable.height($(window).height() - 250);
-        
-        let detailpageHeight = domElements.detailpage.height();      
+
+        let detailpageHeight = domElements.detailpage.height();
 
         if (detailpageHeight > 347) {
             domElements.breadcrumbButton.css('top', '40rem');
@@ -1068,7 +1069,7 @@ function MatchMonitorDetail() {
             domElements.breadcrumbButton.css('top', '26rem');
             domElements.groupTable.css('top', '30.5rem');
             domElements.groupTable.height($(window).height() - 340);
-        } else if (detailpageHeight > 188){
+        } else if (detailpageHeight > 188) {
             domElements.breadcrumbButton.css('top', '24rem');
             domElements.groupTable.css('top', '28.5rem');
             domElements.groupTable.height($(window).height() - 300);
@@ -1076,7 +1077,7 @@ function MatchMonitorDetail() {
             domElements.breadcrumbButton.css('top', '17.8rem');
             domElements.groupTable.css('top', '22.5rem');
         }
-    }   
+    }
 
     function Initial() {
         SetupMultiselect(domElements.cbbCurrency, "Currency");
@@ -1122,6 +1123,7 @@ function MatchMonitorDetail() {
             ClearCache();
             domElements.inputAmountFrom.val('');
             domElements.inputAmountTo.val('');
+            cacheFilterScore = undefined;
             isRefresh = true;
             domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud).change();
             FetchMatchMonitorDetail();
@@ -1166,7 +1168,7 @@ function MatchMonitorDetail() {
         Resize();
     }
 
-    $(window).resize(function () {      
+    $(window).resize(function () {
         Resize();
     });
 

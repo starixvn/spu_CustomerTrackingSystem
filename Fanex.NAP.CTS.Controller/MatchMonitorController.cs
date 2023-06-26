@@ -906,9 +906,8 @@
 
             return new MatchMonitorDetailListViewModel
             {
-                HomeMatchItemList = mdItemList.ToList(), // hard code for test
-                //HomeMatchItemList = mdItemList.Where(c => c.FilterByHomeAway(new string[] { nameof(MatchMonitorBetChoiceId.H), nameof(MatchMonitorBetChoiceId.O) }))
-                //    .Select(x => x.MappingFraudTicketToAllTicket(fraudHomeMatchItemDictionary)).ToList(),
+                HomeMatchItemList = mdItemList.Where(c => c.FilterByHomeAway(new string[] { nameof(MatchMonitorBetChoiceId.H), nameof(MatchMonitorBetChoiceId.O) }))
+                    .Select(x => x.MappingFraudTicketToAllTicket(fraudHomeMatchItemDictionary)).ToList(),
                 AwayMatchItemList = mdItemList.Where(c => c.FilterByHomeAway(new string[] { nameof(MatchMonitorBetChoiceId.A), nameof(MatchMonitorBetChoiceId.U) }))
                     .Select(x => x.MappingFraudTicketToAllTicket(fraudAwayMatchItemDictionary)).ToList(),
                 LastSequenceID = lastSequenceID
