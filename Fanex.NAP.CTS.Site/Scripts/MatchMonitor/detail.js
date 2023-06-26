@@ -590,6 +590,22 @@ function MatchMonitorDetail() {
         domElements.cbbGroup.multiselect("refresh");
     }
 
+    function SetupAGroupFilter(data)
+    {
+        domElements.cbbGroup.multiselect().empty();
+
+        if (data) {
+            if (data.length == 0)
+                domElements.cbbGroup.append(`<option selected value='0'>-</option>`);
+
+            Object.keys(data).forEach(element => {
+                domElements.cbbGroup.append(`<option selected value='${element}'>${data[element]}</option>`);
+            });
+        }
+
+        domElements.cbbGroup.multiselect("refresh");
+    }
+
     function RenderBotIcon(robotType, isRobot) {
         let html = '-';
         let spanHtml = '<span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span>';
@@ -790,7 +806,7 @@ function MatchMonitorDetail() {
             filterGroupIDs.unshift('-');
         }
 
-        SetupFilter(domElements.cbbGroup, filterGroupIDs);
+        SetupAGroupFilter(filterGroupIDs);
     }
 
     function TypeOfTicketsOnChange(isClear) {
