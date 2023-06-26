@@ -536,7 +536,7 @@
       .detailpage .monitor-container .monitor-table .group-control .form-filter .group-drop-down .block-box {
         display: block; }
   .detailpage .monitor-container .monitor-table .breadcrumb-button {
-    width: 98.7%;
+    width: calc(100% - 2.5rem);
     display: flex;
     justify-content: space-between;
     align-items: center;

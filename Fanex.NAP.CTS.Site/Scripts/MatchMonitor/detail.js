@@ -1052,12 +1052,18 @@ function MatchMonitorDetail() {
         domElements.groupTable.height($(window).height() - 250);
 
         let detailpageHeight = domElements.detailpage.height();
+        console.log(detailpageHeight);
 
         if (detailpageHeight > 347) {
             domElements.breadcrumbButton.css('top', '40rem');
             domElements.groupTable.css('top', '50rem');
             domElements.groupTable.height($(window).height() - 420);
-        } else if (detailpageHeight > 267) {
+        } else if (detailpageHeight > 285) {
+            domElements.breadcrumbButton.css('top', '34rem');
+            domElements.groupTable.css('top', '41rem');
+            domElements.groupTable.height($(window).height() - 420);
+        }
+        else if (detailpageHeight > 267) {
             domElements.breadcrumbButton.css('top', '32rem');
             domElements.groupTable.css('top', '39rem');
             domElements.groupTable.height($(window).height() - 420);
@@ -1065,9 +1071,9 @@ function MatchMonitorDetail() {
             domElements.breadcrumbButton.css('top', '30rem');
             domElements.groupTable.css('top', '37rem');
             domElements.groupTable.height($(window).height() - 380);
-        } else if (detailpageHeight > 205) {
+        } else if (detailpageHeight > 207) {
             domElements.breadcrumbButton.css('top', '26rem');
-            domElements.groupTable.css('top', '30.5rem');
+            domElements.groupTable.css('top', '33rem');
             domElements.groupTable.height($(window).height() - 340);
         } else if (detailpageHeight > 188) {
             domElements.breadcrumbButton.css('top', '24rem');

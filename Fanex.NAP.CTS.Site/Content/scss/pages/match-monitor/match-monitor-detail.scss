@@ -274,7 +274,7 @@
             }
 
             .breadcrumb-button {
-                width: 98.7%;
+                width: calc(100% - 2.5rem);
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
