@@ -38,7 +38,7 @@
             {
                 var isNotValid = string.IsNullOrEmpty(x.CurrencyName) || x.CurrencyId == null;
                 return new { CurrencyId = isNotValid ? -1 : x.CurrencyId, CurrencyName = isNotValid ? "-" : x.CurrencyName };
-            }).Distinct().OrderBy(x => x.CurrencyName).ToDictionary(x => x.CurrencyName, y => y.CurrencyId) ?? new Dictionary<string, int>() { { "-", -1 } };
+            }).Distinct().OrderBy(x => x.CurrencyName).Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName)).ToList() ?? new List<KeyValuePair<int, string>>() { new KeyValuePair<int, string>(-1, "-") };
             HDPList = mMTicket.FilterDetail.HDPList?.Where(x => FilterBySite(x, site)).Select(x => x.Hdp).OrderBy(x => x).ToList() ?? new List<decimal>() { };
             ScoreList = mMTicket.FilterDetail.ScoreList?.Any() ?? false ? mMTicket.FilterDetail.ScoreList.Where(x => FilterBySite(x, site)).Select(x => string.Format($"{x.LiveHomeScore} - {x.LiveAwayScore}")).OrderBy(x => x).ToList() : new List<string>() { "-" };
 
@@ -88,7 +88,7 @@
 
         public long RecordsTotal { get; set; }
 
-        public Dictionary<string, int> CurrencyList { get; set; }
+        public List<KeyValuePair<int, string>> CurrencyList { get; set; }
 
         public List<int> CurrencyIdList { get; set; }
 

@@ -567,8 +567,8 @@ function MatchMonitorDetail() {
         element.multiselect().empty();
 
         if (data) {
-            Object.keys(data).forEach(key => {
-                element.append(`<option selected value='${data[key]}'>${key}</option>`);
+            data.forEach(item => {
+                element.append(`<option selected value='${item.Key}'>${item.Value}</option>`);
             });
         }
 
@@ -1040,7 +1040,7 @@ function MatchMonitorDetail() {
         }
 
         if (!((domElements.inputAmountFrom.val() == '' && domElements.inputAmountTo.val() == '') || GetInputAmount())) {
-            common.showError("Please input a valid range (Ex: 500 - 1000)");
+            common.showError("Please input a valid range (Ex: 500 - 1000).");
             result = false;
         }
 
