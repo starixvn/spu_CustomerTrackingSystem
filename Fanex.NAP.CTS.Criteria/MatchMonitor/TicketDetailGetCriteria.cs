@@ -30,8 +30,8 @@
         [SpParam(SqlParamName = "BetType")]
         public int BetType { get; set; }
 
-        [SpParam(SqlParamName = "IsLiencee")]
-        public int? IsLiencee { get; set; }
+        [SpParam(SqlParamName = "IsLicensee")]
+        public int? IsLicensee { get; set; }
 
         [SpParam(SqlParamName = "ListCurrency")]
         public string ListCurrency { get; set; }
