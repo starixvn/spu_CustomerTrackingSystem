@@ -591,16 +591,15 @@ function MatchMonitorDetail() {
         domElements.cbbGroup.multiselect("refresh");
     }
 
-    function SetupAGroupFilter(data)
-    {
+    function SetupAGroupFilter(data) {
         domElements.cbbGroup.multiselect().empty();
 
         if (data) {
             if (data.length == 0)
                 domElements.cbbGroup.append(`<option selected value='0'>-</option>`);
 
-            Object.keys(data).forEach(element => {
-                domElements.cbbGroup.append(`<option selected value='${element}'>${data[element]}</option>`);
+            data.forEach(element => {
+                domElements.cbbGroup.append(`<option selected value='${element}'>${element == "0" ? "-" : element}</option>`);
             });
         }
 
@@ -800,13 +799,6 @@ function MatchMonitorDetail() {
             return a - b;
         })
 
-        if (filterGroupIDs.indexOf(0) !== -1) {
-            filterGroupIDs = $.grep(filterGroupIDs, function (value) {
-                return value != 0;
-            });
-            filterGroupIDs.unshift('-');
-        }
-
         SetupAGroupFilter(filterGroupIDs);
     }
 
@@ -925,7 +917,7 @@ function MatchMonitorDetail() {
         datas += `,&quot;BetTypeName&quot;:&quot;${domElements.betTypeName}&quot;}`;
         return datas;
     }
-    
+
     function SetupMultiselect(ccb, selectName, menuWidth = 260, menuHeight = 260) {
         ccb.multiselect({
             menuWidth: menuWidth,
@@ -1038,7 +1030,7 @@ function MatchMonitorDetail() {
     }
 
     function Resize() {
-        domElements.groupTable.width($(window).width() - 25);        
+        domElements.groupTable.width($(window).width() - 25);
 
         let detailpageHeight = domElements.detailpage.outerHeight();
         let breadcrumbButtonHeight = domElements.breadcrumbButton.outerHeight();
@@ -1048,8 +1040,8 @@ function MatchMonitorDetail() {
 
         domElements.breadcrumbButton.css({ top: breadcrumbButtonTop });
         domElements.groupTable.css('top', groupTableTop);
-      
-        domElements.groupTable.height($(window).height() - detailpageHeight - breadcrumbButtonHeight - 77);      
+
+        domElements.groupTable.height($(window).height() - detailpageHeight - breadcrumbButtonHeight - 77);
     }
 
     function Initial() {
@@ -1152,7 +1144,7 @@ function MatchMonitorDetail() {
 
         isRefresh = true;
         FetchFilterMatchMonitorDetail();
-        FetchMatchMonitorDetail();       
+        FetchMatchMonitorDetail();
     });
 }
 
