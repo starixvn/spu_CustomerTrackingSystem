@@ -16,6 +16,7 @@ function ConvertNumberToThousandsString(x) {
 function MatchMonitorDetail() {
     let domElements = {
         detailpage: $('#detailpage'),
+        divContent: $('#divContent'),
         groupControl: $('#groupControl'),
         breadcrumbButton: $('#breadcrumbButton'),
         groupTable: $('#groupTable'),
@@ -924,34 +925,7 @@ function MatchMonitorDetail() {
         datas += `,&quot;BetTypeName&quot;:&quot;${domElements.betTypeName}&quot;}`;
         return datas;
     }
-
-    //function BindScrollHeaderFixed() {
-    //    let $homeHeader = $('thead', domElements.tblMMHomeTeam).clone();
-    //    let $homeFixedHeader = domElements.tblHomeHeaderFixed.append($homeHeader);
-    //    let $awayHeader = $('thead', domElements.tblMMAwayTeam).clone();
-    //    let $awayFixedHeader = domElements.tblAwayHeaderFixed.append($awayHeader);
-
-    //    $awayFixedHeader.hide();
-    //    $homeFixedHeader.hide();
-
-    //    domElements.groupTable.bind("scroll", function () {            
-    //        let offset = $(this).scrollTop();
-    //        var heightHome = domElements.tblMMHomeTeam.innerHeight();
-    //        var heightAway = domElements.tblMMAwayTeam.innerHeight();
-    //        if (offset >= heightAway && $awayFixedHeader.is(":hidden")) {                
-    //            $awayFixedHeader.show();              
-    //        } else if (offset <= heightAway && !$awayFixedHeader.is(":hidden")) {
-    //            $awayFixedHeader.hide();
-    //        }
-
-    //        if (offset >= heightHome && $homeFixedHeader.is(":hidden")) {
-    //            $homeFixedHeader.show();               
-    //        } else if (offset <= heightHome && !$homeFixedHeader.is(":hidden")) {
-    //            $homeFixedHeader.hide();
-    //        }          
-    //    })
-    //}
-
+    
     function SetupMultiselect(ccb, selectName, menuWidth = 260, menuHeight = 260) {
         ccb.multiselect({
             menuWidth: menuWidth,
@@ -1064,41 +1038,18 @@ function MatchMonitorDetail() {
     }
 
     function Resize() {
-        domElements.groupTable.width($(window).width() - 25);
-        domElements.groupTable.height($(window).height() - 250);
+        domElements.groupTable.width($(window).width() - 25);        
 
-        let detailpageHeight = domElements.detailpage.height();
-        console.log(detailpageHeight);
+        let detailpageHeight = domElements.detailpage.outerHeight();
+        let breadcrumbButtonHeight = domElements.breadcrumbButton.outerHeight();
 
-        if (detailpageHeight > 347) {
-            domElements.breadcrumbButton.css('top', '40rem');
-            domElements.groupTable.css('top', '50rem');
-            domElements.groupTable.height($(window).height() - 420);
-        } else if (detailpageHeight > 285) {
-            domElements.breadcrumbButton.css('top', '34rem');
-            domElements.groupTable.css('top', '41rem');
-            domElements.groupTable.height($(window).height() - 420);
-        }
-        else if (detailpageHeight > 267) {
-            domElements.breadcrumbButton.css('top', '32rem');
-            domElements.groupTable.css('top', '39rem');
-            domElements.groupTable.height($(window).height() - 420);
-        } else if (detailpageHeight > 246) {
-            domElements.breadcrumbButton.css('top', '30rem');
-            domElements.groupTable.css('top', '37rem');
-            domElements.groupTable.height($(window).height() - 380);
-        } else if (detailpageHeight > 207) {
-            domElements.breadcrumbButton.css('top', '26rem');
-            domElements.groupTable.css('top', '33rem');
-            domElements.groupTable.height($(window).height() - 340);
-        } else if (detailpageHeight > 188) {
-            domElements.breadcrumbButton.css('top', '24rem');
-            domElements.groupTable.css('top', '28.5rem');
-            domElements.groupTable.height($(window).height() - 300);
-        } else {
-            domElements.breadcrumbButton.css('top', '17.8rem');
-            domElements.groupTable.css('top', '22.5rem');
-        }
+        let breadcrumbButtonTop = domElements.detailpage.offset().top + domElements.detailpage.outerHeight();
+        let groupTableTop = breadcrumbButtonTop + domElements.breadcrumbButton.outerHeight();
+
+        domElements.breadcrumbButton.css({ top: breadcrumbButtonTop });
+        domElements.groupTable.css('top', groupTableTop);
+      
+        domElements.groupTable.height($(window).height() - detailpageHeight - breadcrumbButtonHeight - 77);      
     }
 
     function Initial() {
@@ -1201,9 +1152,7 @@ function MatchMonitorDetail() {
 
         isRefresh = true;
         FetchFilterMatchMonitorDetail();
-        FetchMatchMonitorDetail();
-
-        //BindScrollHeaderFixed();
+        FetchMatchMonitorDetail();       
     });
 }
 
