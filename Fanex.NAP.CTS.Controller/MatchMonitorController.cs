@@ -659,57 +659,67 @@
             var result = new MMDetailFilterViewModel();
             var mmticketDetailInfo = default(MMTicketDetailInfoModel);
 
-            while (true)
+            try
             {
-                if (_memoryCacheService.GetValue<object>(flagKey) == null)
+                while (true)
                 {
-                    await _memoryCacheService.PushValueAsync(flagKey, new { });
-                    result = _memoryCacheService.GetValue<MMDetailFilterViewModel>(keyWithSite);
-
-                    if (result == null)
+                    if (_memoryCacheService.GetValue<object>(flagKey) == null)
                     {
-                        mmticketDetailInfo = _memoryCacheService.GetValue<MMTicketDetailInfoModel>(key);
-                        if (mmticketDetailInfo == null)
+                        await _memoryCacheService.PushValueAsync(flagKey, new { });
+                        result = _memoryCacheService.GetValue<MMDetailFilterViewModel>(keyWithSite);
+
+                        if (result == null)
                         {
-                            mmticketDetailInfo = _matchMonitorService.GetMMTicketDetailInfo(para);
-                            if (isCache) await _memoryCacheService.PushValueAsync(key, mmticketDetailInfo);
+                            mmticketDetailInfo = _memoryCacheService.GetValue<MMTicketDetailInfoModel>(key);
+                            if (mmticketDetailInfo == null)
+                            {
+                                mmticketDetailInfo = _matchMonitorService.GetMMTicketDetailInfo(para);
+                                if (isCache) await _memoryCacheService.PushValueAsync(key, mmticketDetailInfo);
+                            }
+
+                            var fraudTicketSiteAll = GetFraudMMFilterFromCache(para, MMSites.All);
+                            var fraudTicketDetail = site != MMSites.All ? GetFraudMMFilterFromCache(para, site) : fraudTicketSiteAll;
+                            result = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetail, site);
+
+
+                            if (isCache)
+                            {
+                                _ = Task.Run(() =>
+                                {
+                                    var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.All);
+                                    _memoryCacheService.PushValueAsync(keySite, new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketSiteAll, MMSites.All));
+                                });
+                                _ = Task.Run(() =>
+                                {
+                                    var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.Licensee);
+                                    var fraudTicketDetailSite = GetFraudMMFilterFromCache(para, MMSites.Licensee);
+                                    _memoryCacheService.PushValueAsync(keySite, new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetailSite, MMSites.Licensee));
+                                });
+                                _ = Task.Run(() =>
+                                {
+                                    var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.Credit);
+                                    var fraudTicketDetailSite = GetFraudMMFilterFromCache(para, MMSites.Credit);
+                                    _memoryCacheService.PushValueAsync(keySite, new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetailSite, MMSites.Credit));
+                                });
+                            }
                         }
 
-                        var fraudTicketSiteAll = GetFraudMMFilterFromCache(para, MMSites.All);
-                        var fraudTicketDetail = site != MMSites.All ? GetFraudMMFilterFromCache(para, site) : fraudTicketSiteAll;
-                        result = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetail, site);
+                        await _memoryCacheService.RemoveValueAsync(flagKey);
 
-
-                        if (isCache)
-                        {
-                            _ = Task.Run(() =>
-                            {
-                                var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.All);
-                                _memoryCacheService.PushValueAsync(keySite, new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketSiteAll, MMSites.All));
-                            });
-                            _ = Task.Run(() =>
-                            {
-                                var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.Licensee);
-                                var fraudTicketDetailSite = GetFraudMMFilterFromCache(para, MMSites.Licensee);
-                                _memoryCacheService.PushValueAsync(keySite, new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetailSite, MMSites.Licensee));
-                            });
-                            _ = Task.Run(() =>
-                            {
-                                var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.Credit);
-                                var fraudTicketDetailSite = GetFraudMMFilterFromCache(para, MMSites.Credit);
-                                _memoryCacheService.PushValueAsync(keySite, new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetailSite, MMSites.Credit));
-                            });
-                        }
+                        break;
                     }
-
-                    await _memoryCacheService.RemoveValueAsync(flagKey);
-
-                    break;
+                    else
+                    {
+                        await Task.Delay(2000);
+                    }
                 }
-                else
-                {
-                    await Task.Delay(2000);
-                }
+            }
+            catch (Exception ex)
+            {
+                await _memoryCacheService.RemoveValueAsync(flagKey);
+                LogService.Info("Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
+                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                     + ex.InnerException.StackTrace);
             }
 
             return result;
