@@ -70,6 +70,9 @@
             RecordsTotal = (HomeMatchItemList?.Count() ?? 0) + (AwayMatchItemList?.Count() ?? 0);
 
             BindReasons(mdItemList.Select(x => x.ReasonList).Distinct());
+
+            var agroup = ReasonGroupIDDic.Where(x => ReasonList.Contains(x.Key)).SelectMany(x => x.Value).Distinct();
+            GroupList = GroupList?.Where(x => x.GroupID != null ? agroup.Contains(x.GroupID ?? 0) : false).ToList();
         }
 
         public long? LastSequenceID { get; set; }
