@@ -32,7 +32,7 @@
             <div class="group-control" id="groupControl">
                 <div class="group-info filter-group">
                     <div class="form-filter">
-                        <div class="group width-160">
+                        <div class="group width-180">
                             <label class="text">Type of Tickets</label>
                             <select class="control width-select-one" id="cbbTypeOfTickets">
                                 <option value="2">Suspicious Tickets</option>
@@ -40,7 +40,7 @@
                             </select>
                         </div>
 
-                        <div class="group width-160" @(ViewBag.IsDisableScoreFilter ? "hidden" : "")   >
+                        <div class="group width-180" @(ViewBag.IsDisableScoreFilter ? "hidden" : "")   >
                             <label class="text">Score</label>
                             <select class="control width-select" id="cbbMatchScore" multiple="multiple">
                                 @if (ViewBag.MatchScore != null)
@@ -53,7 +53,7 @@
                             </select>
                         </div>
 
-                        <div class="group width-160">
+                        <div class="group width-180">
                             <label class="text">Site</label>
                             <select class="control width-select-one" id="cbbSites">
                                 <option value="A">All</option>
@@ -62,31 +62,31 @@
                             </select>
                         </div>
 
-                        <div class="group width-160">
+                        <div class="group width-180">
                             <label class="text">HDP</label>
                             <select class="control width-select" id="cbbHDP" multiple="multiple">                              
                             </select>
                         </div>
 
-                        <div class="group width-160">
+                        <div class="group width-180">
                             <label class="text">Currency</label>
                             <select class="control width-select" id="cbbCurrency" multiple="multiple">
                             </select>
                         </div>
 
-                        <div class="group width-160">
+                        <div class="group width-180">
                             <label class="text">Reason</label>
                             <select class="control width-select" id="cbbReason" multiple="multiple">                              
                             </select>
                         </div>
 
-                        <div class="group width-160">
+                        <div class="group width-180">
                             <label class="text">A.Gr.</label>
                             <select class="control width-select" id="cbbGroup" multiple="multiple">                               
                             </select>
                         </div>
 
-                        <div class="group width-160">
+                        <div class="group width-180">
                             <label class="text">Amount</label>
                             <div class="ui-multiselect width-amount">
                                 <input class="width-amount-item" placeholder="from" id="inputAmountFrom"/>
