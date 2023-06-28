@@ -88,6 +88,12 @@
             catch (Exception ex)
             {
                 LogService.Error("FPS Get Transaction History exception: " + ex.Message);
+
+                if (!string.IsNullOrEmpty(ex.Message) && ex.Message.ToLower().Contains("timeout expired"))
+                {
+                    return Json(new TransactionResultModel() {  IsTimeout = true });
+                }
+
                 return Json(new TransactionResultModel());
             }
         }      

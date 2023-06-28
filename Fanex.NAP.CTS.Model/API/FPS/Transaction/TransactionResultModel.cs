@@ -14,5 +14,7 @@
         public IEnumerable<TransactionItemModel> Items { get; set; }
 
         public int TotalItem { get; set; }
+
+        public bool IsTimeout { get; set; }
     }
 }
