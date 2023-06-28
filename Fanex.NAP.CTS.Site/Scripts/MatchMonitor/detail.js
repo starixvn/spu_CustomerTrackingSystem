@@ -803,16 +803,18 @@ function MatchMonitorDetail() {
     }
 
     function TypeOfTicketsOnChange(isClear) {
+        currentType = Number(domElements.cbbTypeOfTickets.val());
+        domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
+
         if (isClear) {
-            domElements.cbbSites.val(SiteViewType.SiteAll).change();
             cacheFilterScore = undefined;
             domElements.inputAmountFrom.val('');
             domElements.inputAmountTo.val('');
+            domElements.cbbSites.val(SiteViewType.SiteAll).change();
         }
-
-        currentType = Number(domElements.cbbTypeOfTickets.val());
-        domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
-        FetchFilterMatchMonitorDetail();
+        else {
+            FetchFilterMatchMonitorDetail();
+        }
     }
 
     function FindByReason(reason, reasonKeys) {
@@ -1090,9 +1092,6 @@ function MatchMonitorDetail() {
             domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
             CacheSelectDataFilter();
             TypeOfTicketsOnChange(true);
-
-            domElements.cbbSites.val(SiteViewType.SiteAll).change();
-
             FetchMatchMonitorDetail();
         })
 
@@ -1127,8 +1126,8 @@ function MatchMonitorDetail() {
             });
         })
 
-        domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud).change();
-        domElements.cbbSites.val(SiteViewType.SiteAll).change();
+        domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
+        domElements.cbbSites.val(SiteViewType.SiteAll);
         domElements.inputHomeSelectAll.prop('checked', false);
         domElements.inputAwaySelectAll.prop('checked', false);
 
