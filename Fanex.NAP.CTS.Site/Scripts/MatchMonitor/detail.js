@@ -803,18 +803,17 @@ function MatchMonitorDetail() {
     }
 
     function TypeOfTicketsOnChange(isClear) {
-        currentType = Number(domElements.cbbTypeOfTickets.val());
-        domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
-
         if (isClear) {
             cacheFilterScore = undefined;
             domElements.inputAmountFrom.val('');
             domElements.inputAmountTo.val('');
-            domElements.cbbSites.val(SiteViewType.SiteAll).change();
+            domElements.cbbSites.val(SiteViewType.SiteAll);
         }
-        else {
-            FetchFilterMatchMonitorDetail();
-        }
+
+        currentType = Number(domElements.cbbTypeOfTickets.val());
+        domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
+
+        FetchFilterMatchMonitorDetail();
     }
 
     function FindByReason(reason, reasonKeys) {
@@ -1090,7 +1089,6 @@ function MatchMonitorDetail() {
             isRefresh = true;
             ClearCache();
             domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
-            CacheSelectDataFilter();
             TypeOfTicketsOnChange(true);
             FetchMatchMonitorDetail();
         })
@@ -1126,8 +1124,6 @@ function MatchMonitorDetail() {
             });
         })
 
-        domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
-        domElements.cbbSites.val(SiteViewType.SiteAll);
         domElements.inputHomeSelectAll.prop('checked', false);
         domElements.inputAwaySelectAll.prop('checked', false);
 
@@ -1141,9 +1137,7 @@ function MatchMonitorDetail() {
     $(document).ready(function () {
         Initial();
 
-        isRefresh = true;
-        FetchFilterMatchMonitorDetail();
-        FetchMatchMonitorDetail();
+        domElements.btnRefresh.click();
     });
 }
 
