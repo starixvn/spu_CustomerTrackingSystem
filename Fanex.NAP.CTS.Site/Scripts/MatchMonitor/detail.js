@@ -195,7 +195,8 @@ function MatchMonitorDetail() {
                     $(row.cells).addClass('void-ticket');
                 else if (data.TicketStatus == 101)
                     $(row.cells).addClass('rejected-ticket');
-                else if (data.SubscriberType === "L") {
+                
+                if (data.SubscriberType === "L") {
                     $(row.cells[1]).addClass('username-hightlight');
                 }
             }
