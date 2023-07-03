@@ -130,7 +130,8 @@
         {
             var criteria = new GetMainCustStatisticsInfoCriteria
             {
-                CustIDList = custIDList
+                CustIDList = custIDList,
+                IsResetBalance = true
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
