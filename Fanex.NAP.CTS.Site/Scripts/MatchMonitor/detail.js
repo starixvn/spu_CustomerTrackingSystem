@@ -195,7 +195,7 @@ function MatchMonitorDetail() {
                     $(row.cells).addClass('void-ticket');
                 else if (data.TicketStatus == 101)
                     $(row.cells).addClass('rejected-ticket');
-                
+
                 if (data.SubscriberType === "L") {
                     $(row.cells[1]).addClass('username-hightlight');
                 }
@@ -386,7 +386,9 @@ function MatchMonitorDetail() {
                 const data = response?.data;
                 if (data) {
                     RenderFilter(data);
-                    maxSequenceId = data.MaxSequenceId;
+                    if (maxSequenceId == 1 && currentType == MatchMonitorDetailViewType.TicketAll) {
+                        maxSequenceId = data.MaxSequenceId;
+                    }
                 }
             },
             error: function (xhr, textStatus, error) {
@@ -690,16 +692,12 @@ function MatchMonitorDetail() {
         ctsCustIDs = ctsCustIDs.filter(OnlyUnique);
         custIDs = custIDs.filter(OnlyUnique);
 
-        let custSelectedLength = custIDs.length;
-        if (custSelectedLength <= 1) {
-            common.showError("Please select at least 2 Usernames to proceed!");
-        }
-        else if (custSelectedLength > 1 && custSelectedLength <= 1001) {
+        if (IsValidAssDetection(custIDs.length)) {
             domElements.hdSelectedCTSCustIDs.val(ctsCustIDs.join());
             domElements.hdSelectedCustIDs.val(custIDs.join());
             domElements.divPopupAssDetect.dialog({
                 modal: true,
-                width: '750px',
+                width: '800px',
                 title: 'ASSOCIATION DETECTION',
                 titleIsHtml: false,
                 resizable: true,
@@ -711,7 +709,29 @@ function MatchMonitorDetail() {
         }
     }
 
+    function IsValidAssDetection(custSelectedLength)
+    {
+        if (custSelectedLength <= 1) {
+            common.showError("Please select at least 2 Usernames to proceed!");
+            return false;
+        }
+
+        if (custSelectedLength > 1001)
+        {
+            common.showError("Exceeded max 1001 usernames. Please try again with a smaller range.");
+            return false;
+        }
+
+        return true;
+    }
+
     function DetectAssociation() {
+        posClickGlobal++;
+        if (xhr) {
+            xhr.onreadystatechange = null;
+            xhr.abort();
+        }
+
         let params = {
             CTSCustIDs: domElements.hdSelectedCTSCustIDs.val(),
             CustIDs: domElements.hdSelectedCustIDs.val(),
@@ -733,6 +753,8 @@ function MatchMonitorDetail() {
             success: function (response) {
                 BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam.DataTable(), response.data.ItemList);
                 BindChangeGroupAssWithOptions(domElements.tblMMAwayTeam.DataTable(), response.data.ItemList);
+                const totalItem = response.data.ItemList.length;
+                $(".breadcrumb-totaltickets").html(`Total Tickets: ${ConvertNumberToThousandsString(totalItem)}/${ConvertNumberToThousandsString(totalItem)}`);
             },
             complete: function (response) {
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
@@ -806,8 +828,6 @@ function MatchMonitorDetail() {
     function TypeOfTicketsOnChange(isClear) {
         if (isClear) {
             cacheFilterScore = undefined;
-            domElements.inputAmountFrom.val('');
-            domElements.inputAmountTo.val('');
             domElements.cbbSites.val(SiteViewType.SiteAll);
         }
 
@@ -839,8 +859,7 @@ function MatchMonitorDetail() {
     }
 
     function ExportToExcel() {
-        const errorExportString = ReturnStringErrorExportExcel();
-        if (errorExportString == '') {
+        if (IsValidExportExcel()) {
             let mmDetails = {
                 matchInfo: GetDataMatchInfo(),
                 homeMItems: GetDataSelectedInGrid(domElements.tblMMHomeTeam.DataTable()),
@@ -856,12 +875,10 @@ function MatchMonitorDetail() {
             $('#postToIframe').submit().remove();
 
             common.showSuccess("Export excel file is in process");
-        } else {
-            common.showError(errorExportString);
         }
     }
 
-    function ReturnStringErrorExportExcel() {
+    function IsValidExportExcel() {
         let homeCheckedL = 0,
             awayCheckedL = 0;
         domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
@@ -874,11 +891,17 @@ function MatchMonitorDetail() {
         })
 
         if (homeCheckedL + awayCheckedL < 2)
-            return "Please select at least 2 records to proceed!";
+        {
+            common.showError("Please select at least 2 records to proceed!")
+            return false;
+        }
         if (homeCheckedL + awayCheckedL > 40000)
-            return "Export fail due to size limitation, please contact Administrator for further support.";
+        {
+            common.showError("Export fail due to size limitation, please contact Administrator for further support.")
+            return false;
+        }
 
-        return '';
+        return true;
     }
 
     function GetDataSelectedInGrid(table) {
@@ -1072,8 +1095,6 @@ function MatchMonitorDetail() {
 
         domElements.cbbSites.change(function () {
             ClearCache();
-            domElements.inputAmountFrom.val('');
-            domElements.inputAmountTo.val('');
             cacheFilterScore = GetSelectDataFilter(domElements.cbbMatchScore);
             FetchFilterMatchMonitorDetail();
         });
@@ -1088,6 +1109,9 @@ function MatchMonitorDetail() {
 
         domElements.btnRefresh.on('click', function () {
             isRefresh = true;
+            domElements.inputAmountFrom.val('');
+            domElements.inputAmountTo.val('');
+            maxSequenceId = 1;
             ClearCache();
             domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
             TypeOfTicketsOnChange(true);
@@ -1111,6 +1135,8 @@ function MatchMonitorDetail() {
 
             domElements.inputHomeSelectAll.prop('checked', false);
             domElements.inputAwaySelectAll.prop('checked', false);
+
+            $(".breadcrumb-totaltickets").html(`Total Tickets: ${ConvertNumberToThousandsString(recordsFilteredGlobal)}/${ConvertNumberToThousandsString(recordsTotalGlobal)}`);
         })
 
         domElements.btnShowPopupAssDetection.on('click', function () { ShowPopupAssDetection(); })
