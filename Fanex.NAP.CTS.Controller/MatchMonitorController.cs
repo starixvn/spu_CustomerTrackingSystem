@@ -497,16 +497,7 @@
                 transIdsRemove = transIdsAll.Except(transIds).ToList();
             }
 
-            if (filter.ScoreList == null && filter.HDPList == null && filter.CurrencyIdList == null && filter.AmountList == null && filter.ReasonList == null && filter.AGroupList == null)
-            {
-                result = Task.Run(() => GetAllMMFilterFromCache(info, info.Sites, false)).Result.RecordsTotal;
-            }
-            else
-            {
-                result = (long)_matchMonitorService.GetAllTicketDetail(info, filter, 0, transIdsRemove.Count > 0 ? string.Join(",", transIdsRemove) : null).MinSequenceIDTotalAll;
-            }
-
-
+            result = (long)_matchMonitorService.GetAllTicketDetail(info, filter, 0, transIdsRemove.Count > 0 ? string.Join(",", transIdsRemove) : null).MinSequenceIDTotalAll;
 
             return result;
         }
