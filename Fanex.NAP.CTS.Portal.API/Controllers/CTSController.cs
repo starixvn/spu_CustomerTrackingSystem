@@ -166,100 +166,100 @@
             }
         }
 
-        [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.AddSystemFormulaBetAccountAPI)]
-        public JsonResult<InsertNAPProblemAccountResult> AddSystemFormulaBetAccount(TWProblemAccountParams dataParam)
-        {
-            var isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
-            var result = string.Empty;
-            var orgCustomerList = dataParam.CustomerList.Split(',').Select(u => new TWProblemAccountModel { Username = u });
-            if (orgCustomerList.Count() <= 100)
-            {
-                try
-                {
-                    var customers = _problemAccountMonitorService.GetCustClassBySite(dataParam.CustomerList);
-                    var perfCust = _problemAccountMonitorService.GetCustomerPerformance(customers?.Where(c => c.IsMonitorSite).Select(c => c.CustID)?.Distinct());
-                    var fullData = (from oCust in orgCustomerList
-                                    join cust in customers on oCust.Username equals cust.Username into temp
-                                    from cust in temp.DefaultIfEmpty()
-                                    join pCust in perfCust on cust.CustID equals pCust.CustID into temp2
-                                    from pCust in temp2.DefaultIfEmpty()
-                                    select new TWProblemAccountModel
-                                    {
-                                        CustID = cust.CustID,
-                                        Username = oCust.Username,
-                                        IsMonitorCategoryGroup = cust.IsMonitorCategoryGroup,
-                                        IsMonitorSite = cust.IsMonitorSite,
-                                        Winloss = pCust == null ? 0 : pCust.Winloss
-                                    }).Where(x => x.CustID > 0).ToList();
+        //[HttpPost]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.AddSystemFormulaBetAccountAPI)]
+        //public JsonResult<InsertNAPProblemAccountResult> AddSystemFormulaBetAccount(TWProblemAccountParams dataParam)
+        //{
+        //    var isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
+        //    var result = string.Empty;
+        //    var orgCustomerList = dataParam.CustomerList.Split(',').Select(u => new TWProblemAccountModel { Username = u });
+        //    if (orgCustomerList.Count() <= 100)
+        //    {
+        //        try
+        //        {
+        //            var customers = _problemAccountMonitorService.GetCustClassBySite(dataParam.CustomerList);
+        //            var perfCust = _problemAccountMonitorService.GetCustomerPerformance(customers?.Where(c => c.IsMonitorSite).Select(c => c.CustID)?.Distinct());
+        //            var fullData = (from oCust in orgCustomerList
+        //                            join cust in customers on oCust.Username equals cust.Username into temp
+        //                            from cust in temp.DefaultIfEmpty()
+        //                            join pCust in perfCust on cust.CustID equals pCust.CustID into temp2
+        //                            from pCust in temp2.DefaultIfEmpty()
+        //                            select new TWProblemAccountModel
+        //                            {
+        //                                CustID = cust.CustID,
+        //                                Username = oCust.Username,
+        //                                IsMonitorCategoryGroup = cust.IsMonitorCategoryGroup,
+        //                                IsMonitorSite = cust.IsMonitorSite,
+        //                                Winloss = pCust == null ? 0 : pCust.Winloss
+        //                            }).Where(x => x.CustID > 0).ToList();
 
-                    var monitorList = fullData.Where(c => (c.Winloss < 0 && c.IsMonitorSite) || (c.Winloss >= 0 && c.IsMonitorSite && c.IsMonitorCategoryGroup));
+        //            var monitorList = fullData.Where(c => (c.Winloss < 0 && c.IsMonitorSite) || (c.Winloss >= 0 && c.IsMonitorSite && c.IsMonitorCategoryGroup));
 
-                    var monitorListMoreData = monitorList.Select(c => new
-                    {
-                        CustID = c.CustID,
-                        UserName = c.Username,
-                        RoleID = dataParam.RoleId,
-                        ReasonID = dataParam.ReasonId,
-                        PreventActionID = dataParam.PreventActionId,
-                        Comment = dataParam.Comment,
-                        VoidTime = dataParam.VoidTime,
-                        LimitAmount = dataParam.LimitAmount,
-                        UserID = dataParam.UserId,
-                        IP = dataParam.IP
-                    });
+        //            var monitorListMoreData = monitorList.Select(c => new
+        //            {
+        //                CustID = c.CustID,
+        //                UserName = c.Username,
+        //                RoleID = dataParam.RoleId,
+        //                ReasonID = dataParam.ReasonId,
+        //                PreventActionID = dataParam.PreventActionId,
+        //                Comment = dataParam.Comment,
+        //                VoidTime = dataParam.VoidTime,
+        //                LimitAmount = dataParam.LimitAmount,
+        //                UserID = dataParam.UserId,
+        //                IP = dataParam.IP
+        //            });
 
-                    var markPAList = fullData.Except(monitorList);
+        //            var markPAList = fullData.Except(monitorList);
 
-                    var monitorListMoreDataJson = JsonConvert.SerializeObject(monitorListMoreData);
-                    if (isWriteLogInfo)
-                    {
-                        LogService.Info(monitorListMoreDataJson);
-                    }
+        //            var monitorListMoreDataJson = JsonConvert.SerializeObject(monitorListMoreData);
+        //            if (isWriteLogInfo)
+        //            {
+        //                LogService.Info(monitorListMoreDataJson);
+        //            }
 
-                    _problemAccountMonitorService.InsertSystemFormulaCust(monitorListMoreDataJson);
+        //            _problemAccountMonitorService.InsertSystemFormulaCust(monitorListMoreDataJson);
 
-                    result = string.Join(",", monitorListMoreData.Select(x => x.UserName));
+        //            result = string.Join(",", monitorListMoreData.Select(x => x.UserName));
 
-                    if (markPAList.Any())
-                    {
-                        var pas = markPAList.Select(x => new InsertProblemAccountModel
-                        {
-                            CustID = x.CustID,
-                            ReasonID = dataParam.ReasonId,
-                            Remark = dataParam.Comment,
-                            IsDirectPA = true,
-                            IsFromTW = true,
-                            CreatedBy = dataParam.UserId
-                        });
+        //            if (markPAList.Any())
+        //            {
+        //                var pas = markPAList.Select(x => new InsertProblemAccountModel
+        //                {
+        //                    CustID = x.CustID,
+        //                    ReasonID = dataParam.ReasonId,
+        //                    Remark = dataParam.Comment,
+        //                    IsDirectPA = true,
+        //                    IsFromTW = true,
+        //                    CreatedBy = dataParam.UserId
+        //                });
 
-                        var insertResult = _paClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Reason, "InsertPA From TW-API", FromFlow.CTSAPI, true);
+        //                var insertResult = _paClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Reason, "InsertPA From TW-API", FromFlow.CTSAPI, true);
 
-                        if (insertResult.ErrorCode == 0)
-                        {
-                            _problemAccountMonitorService.RemoveSystemFormulaBetCustomer(string.Join(",", pas.Select(c => c.CustID)));
+        //                if (insertResult.ErrorCode == 0)
+        //                {
+        //                    _problemAccountMonitorService.RemoveSystemFormulaBetCustomer(string.Join(",", pas.Select(c => c.CustID)));
 
-                            if (result != string.Empty)
-                                result += ",";
+        //                    if (result != string.Empty)
+        //                        result += ",";
 
-                            result += string.Join(",", markPAList.Select(x => x.Username));
-                        }
+        //                    result += string.Join(",", markPAList.Select(x => x.Username));
+        //                }
 
-                        if (isWriteLogInfo)
-                        {
-                            LogService.Info(string.Join(",", markPAList.Select(c => c.CustID)));
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    LogService.Error("AddSystemFormulaBetAccount failed: "
-                                        + "\nException" + ex.Message + ex.StackTrace);
-                }
-            }
+        //                if (isWriteLogInfo)
+        //                {
+        //                    LogService.Info(string.Join(",", markPAList.Select(c => c.CustID)));
+        //                }
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            LogService.Error("AddSystemFormulaBetAccount failed: "
+        //                                + "\nException" + ex.Message + ex.StackTrace);
+        //        }
+        //    }
 
-            return Json(new InsertNAPProblemAccountResult { SuccessList = result });
-        }
+        //    return Json(new InsertNAPProblemAccountResult { SuccessList = result });
+        //}
 
         /// <summary>
         /// Get association by custId and level

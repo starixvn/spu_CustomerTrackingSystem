@@ -19,7 +19,7 @@
 		<Setting Key="CTS_CustomerLastTicketDate_Get" SpName="CTS_CustomerLastTicketDate_Get" DbName="DBCTS.bodb02.bodbSPUNet" />		
 		<Setting Key="CTS_CustomerStatistics_GetPerformance_ByBettype" SpName="CTS_CustomerStatistics_GetPerformance_ByBettype" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
 		<Setting Key="CTS_CustomerStatistics_GetPerformanceDaily" SpName="CTS_CustomerStatistics_GetPerformanceDaily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
-		<Setting Key="CTS_CustomerStatistics_GetPerformance_BySport" SpName="CTS_CustomerStatistics_GetPerformance_BySport" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
+		<Setting Key="CTS_CustomerStatistics_GetPerformance_BySport" SpName="CTS_CustomerStatistics_GetPerformance_BySport_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
 		<Setting Key="FS_MoveBetBalanceUpDate_Get" SpName="FS_MoveBetBalanceUpDate_Get" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
 		<Setting Key="FS_CTSSportList_Get" SpName="FS_CTSSportList_Get" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
 		<Setting Key="FS_CTSLeagueList_GetBySports" SpName="FS_CTSLeagueList_GetBySports" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
@@ -67,7 +67,7 @@
 
 	<Function Name="AssociationDetection">
 		<Setting Key="CTS_Association_GetBySharedMatches" SpName="CTS_Association_GetBySharedMatches" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="Acc_Rpt_CTS_GetCustStatisticsInfo" SpName="Acc_Rpt_CTS_GetCustStatisticsInfo" DbName="DBDW.bodb_dwrs.bodbSPUNet" />
+		<Setting Key="Acc_Rpt_CTS_GetCustStatisticsInfo" SpName="Acc_Rpt_CTS_GetCustStatisticsInfo_xtest" DbName="DBDW.bodb_dwrs.bodbSPUNet" />
 		<Setting Key="CTS_Association_IpSharedLast3Days" SpName="CTS_Association_IpSharedLast3Days" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 </Functions>

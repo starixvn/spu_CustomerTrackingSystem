@@ -8,6 +8,9 @@
         [SpParam(SqlParamName = "listCustID")]
         public string CustIDList { get; set; }
 
+        [SpParam(SqlParamName = "isResetBalance")]
+        public bool IsResetBalance { get; set; }
+
         public override string GetSettingKey()
         {
             return "Acc_Rpt_CTS_GetCustStatisticsInfo";
