@@ -19,6 +19,7 @@ function MatchMonitorDetail() {
         divContent: $('#divContent'),
         groupControl: $('#groupControl'),
         breadcrumbButton: $('#breadcrumbButton'),
+        breadcrumbTotalTickets: $(".breadcrumb-totaltickets"),
         groupTable: $('#groupTable'),
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
         eventDataToString: $("#hdEventDataToString").val(),
@@ -225,7 +226,7 @@ function MatchMonitorDetail() {
                 clearTimeout(timeoutRenderTicketDetail);
             }
 
-            $(".breadcrumb-totaltickets").html('');
+            domElements.breadcrumbTotalTickets.html('');
 
             timeoutRenderTicketDetail = setTimeout(() => {
                 let data = {
@@ -277,7 +278,7 @@ function MatchMonitorDetail() {
                 success: function (response) {
                     if (response?.recordsTotal >= 0) {
                         recordsTotalGlobal = response?.recordsTotal;
-                        $(".breadcrumb-totaltickets").html(`Total Tickets: 0/${ConvertNumberToThousandsString(recordsTotalGlobal)}`);
+                        domElements.breadcrumbTotalTickets.html(`Total Tickets: 0/${ConvertNumberToThousandsString(recordsTotalGlobal)}`);
                     }
                 },
                 error: function (xhr, textStatus, error) {
@@ -431,7 +432,7 @@ function MatchMonitorDetail() {
                 domElements.tblMMAwayTeam.DataTable().rows.add(data.AwayMatchItemList).draw(false);
             }
 
-            $(".breadcrumb-totaltickets").html(`Total Tickets: ${ConvertNumberToThousandsString(recordsFilteredGlobal)}/${ConvertNumberToThousandsString(recordsTotalGlobal)}`);
+            domElements.breadcrumbTotalTickets.html(`Total Tickets: ${ConvertNumberToThousandsString(recordsFilteredGlobal)}/${ConvertNumberToThousandsString(recordsTotalGlobal)}`);
         }
     }
 
@@ -709,15 +710,13 @@ function MatchMonitorDetail() {
         }
     }
 
-    function IsValidAssDetection(custSelectedLength)
-    {
+    function IsValidAssDetection(custSelectedLength) {
         if (custSelectedLength <= 1) {
             common.showError("Please select at least 2 Usernames to proceed!");
             return false;
         }
 
-        if (custSelectedLength > 1001)
-        {
+        if (custSelectedLength > 1001) {
             common.showError("Exceeded max 1001 usernames. Please try again with a smaller range.");
             return false;
         }
@@ -753,8 +752,12 @@ function MatchMonitorDetail() {
             success: function (response) {
                 BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam.DataTable(), response.data.ItemList);
                 BindChangeGroupAssWithOptions(domElements.tblMMAwayTeam.DataTable(), response.data.ItemList);
-                const totalItem = response.data.ItemList.length;
-                $(".breadcrumb-totaltickets").html(`Total Tickets: ${ConvertNumberToThousandsString(totalItem)}/${ConvertNumberToThousandsString(totalItem)}`);
+                const totalItem =
+                    domElements.tblMMHomeTeam.DataTable().rows().nodes().length
+                    + domElements.tblMMAwayTeam.DataTable().rows().nodes().length
+                    - domElements.tblMMHomeTeam.DataTable().rows().nodes().filter(function (x) { return $(x).css('display') == 'none'; }).length
+                    - domElements.tblMMAwayTeam.DataTable().rows().nodes().filter(function (x) { return $(x).css('display') == 'none'; }).length
+                domElements.breadcrumbTotalTickets.html(`Total Tickets: ${ConvertNumberToThousandsString(totalItem)}/${ConvertNumberToThousandsString(totalItem)}`);
             },
             complete: function (response) {
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
@@ -890,13 +893,11 @@ function MatchMonitorDetail() {
                 awayCheckedL = awayCheckedL + 1;
         })
 
-        if (homeCheckedL + awayCheckedL < 2)
-        {
+        if (homeCheckedL + awayCheckedL < 2) {
             common.showError("Please select at least 2 records to proceed!")
             return false;
         }
-        if (homeCheckedL + awayCheckedL > 40000)
-        {
+        if (homeCheckedL + awayCheckedL > 40000) {
             common.showError("Export fail due to size limitation, please contact Administrator for further support.")
             return false;
         }
@@ -1136,7 +1137,7 @@ function MatchMonitorDetail() {
             domElements.inputHomeSelectAll.prop('checked', false);
             domElements.inputAwaySelectAll.prop('checked', false);
 
-            $(".breadcrumb-totaltickets").html(`Total Tickets: ${ConvertNumberToThousandsString(recordsFilteredGlobal)}/${ConvertNumberToThousandsString(recordsTotalGlobal)}`);
+            domElements.breadcrumbTotalTickets.html(`Total Tickets: ${ConvertNumberToThousandsString(recordsFilteredGlobal)}/${ConvertNumberToThousandsString(recordsTotalGlobal)}`);
         })
 
         domElements.btnShowPopupAssDetection.on('click', function () { ShowPopupAssDetection(); })
