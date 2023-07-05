@@ -173,6 +173,8 @@
         public bool IsPA { get; set; }
 
         public bool IsNormalLinkedPA { get; set; }
+
+        public MatchMonitorQueryType TypeOfTicket { get; set; } = MatchMonitorQueryType.TicketFraud;
         #endregion
 
         #region function

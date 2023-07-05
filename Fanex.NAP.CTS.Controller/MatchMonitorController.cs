@@ -893,6 +893,7 @@
                 nTicket.BetTypeID = betTypeID;
                 nTicket.ADetectGroup = "-";
                 nTicket.ReasonList = "-";
+                nTicket.TypeOfTicket = MatchMonitorQueryType.TicketAll;
 
                 ticketResult.Add(nTicket);
             });
