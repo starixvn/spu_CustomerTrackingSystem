@@ -1151,6 +1151,8 @@ function MatchMonitorDetail() {
         domElements.cbbTypeOfTickets.prop('disabled', !isSupportShowAllTickets);
         if (isSupportShowAllTickets) {
             domElements.cbbTypeOfTickets.change(function () {
+                cacheMGroup.isActive = false;
+                cacheMGroup.selectMgroup = {};
                 CacheSelectDataFilter();
                 TypeOfTicketsOnChange(currentType == MatchMonitorDetailViewType.TicketAll);
             });
@@ -1193,6 +1195,8 @@ function MatchMonitorDetail() {
                     FetchMatchMonitorDetail(currentType);
                 }
                 else {
+                    domElements.inputHomeSelectAll.prop('checked', false);
+                    domElements.inputAwaySelectAll.prop('checked', false);
                     FilterUIGrid();
                 }
             }
