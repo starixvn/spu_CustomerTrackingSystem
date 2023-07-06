@@ -744,6 +744,8 @@ function MatchMonitorDetail() {
             xhr.abort();
         }
 
+        cacheMGroup.selectMgroup = {};
+
         let params = {
             CTSCustIDs: domElements.hdSelectedCTSCustIDs.val(),
             CustIDs: domElements.hdSelectedCustIDs.val(),
