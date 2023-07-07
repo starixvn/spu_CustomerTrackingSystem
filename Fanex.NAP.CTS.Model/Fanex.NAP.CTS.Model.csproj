@@ -196,6 +196,12 @@
     <Compile Include="API\FPS\Account\GetAssAccountsByCustSubscriberItemModel.cs" />
     <Compile Include="API\FPS\Account\GetAssAccountsByCustSubscriberParamModel.cs" />
     <Compile Include="API\FPS\Account\GetAssAccountsByCustSubscriberResultModel.cs" />
+    <Compile Include="API\FPS\Account\GetAssMatrixAccountByCustSubscriberItemModel.cs" />
+    <Compile Include="API\FPS\Account\GetAssMatrixAccountByCustSubscriberParamModel.cs" />
+    <Compile Include="API\FPS\Account\GetAssMatrixAccountByCustSubscriberResultModel.cs" />
+    <Compile Include="API\FPS\Device\GetAssDevicesByCustSubscriberItemModel.cs" />
+    <Compile Include="API\FPS\Device\GetAssDevicesByCustSubscriberParamModel.cs" />
+    <Compile Include="API\FPS\Device\GetAssDevicesByCustSubscriberResultModel.cs" />
     <Compile Include="API\FPS\SearchAccount\SearchAccountParamModel.cs" />
     <Compile Include="API\FPS\SearchAccount\SearchAccountItemModel.cs" />
     <Compile Include="API\FPS\SearchAccount\SearchAccountResultModel.cs" />
