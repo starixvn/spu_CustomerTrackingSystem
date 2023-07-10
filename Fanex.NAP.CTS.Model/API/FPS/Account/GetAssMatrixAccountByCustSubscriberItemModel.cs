@@ -14,7 +14,7 @@
 
         public int DeviceID { get; set; }
 
-        public string DeviceCode { get; set; }
+        public string FirstDeviceCode { get; set; }
 
         public DateTime CreatedTime { get; set; }
     }
