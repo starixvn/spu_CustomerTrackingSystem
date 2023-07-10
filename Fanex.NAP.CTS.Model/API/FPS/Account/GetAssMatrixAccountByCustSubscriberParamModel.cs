@@ -6,6 +6,8 @@
 
         public long CTSCustID { get; set; }
 
-        public int NoOfRecord { get; set; }
+        public int NoOfCustomer { get; set; }
+
+        public int NoOfDevice { get; set; }
     }
 }

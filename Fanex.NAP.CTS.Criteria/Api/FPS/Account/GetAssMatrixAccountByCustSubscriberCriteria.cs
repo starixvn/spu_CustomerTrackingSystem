@@ -11,8 +11,11 @@
         [SpParam(SqlParamName = "ip_CTSCustID")]
         public long CTSCustID { get; set; }
 
-        [SpParam(SqlParamName = "ip_NoOfRecord")]
-        public int NoOfRecord { get; set; }
+        [SpParam(SqlParamName = "ip_NoOfCustomer")]
+        public int NoOfCustomer { get; set; }
+
+        [SpParam(SqlParamName = "ip_NoOfDevice")]
+        public int NoOfDevice { get; set; }
 
         public override string GetSettingKey() => "CTS_DC_Association_GetAssociationMaxtrixByCustSubscriber";
 

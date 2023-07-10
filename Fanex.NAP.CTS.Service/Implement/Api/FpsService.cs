@@ -106,7 +106,8 @@
             {
                 SubscriberID = param.SubscriberID,
                 CTSCustID = param.CTSCustID,
-                NoOfRecord = param.NoOfRecord
+                NoOfCustomer = param.NoOfCustomer,
+                NoOfDevice = param.NoOfDevice
             };
 
             data.Items = repository.Fetch<GetAssMatrixAccountByCustSubscriberItemModel>(criteria);
