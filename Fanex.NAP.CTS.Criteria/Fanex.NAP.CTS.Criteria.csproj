@@ -172,6 +172,7 @@
     <Compile Include="MatchMonitor\GetMatchFromMainInfoCriteria.cs" />
     <Compile Include="MatchMonitor\GetMatchMonitorStaticListCriteria.cs" />
     <Compile Include="MatchMonitor\MMDetailMergeGroupCriteria.cs" />
+    <Compile Include="MatchMonitor\MMTicketDetailInfoCriteria.cs" />
     <Compile Include="MatchMonitor\RobotStatusByTransGetCriteria.cs" />
     <Compile Include="MatchMonitor\CustInfoByCustIdGetCriteria.cs" />
     <Compile Include="MatchMonitor\MatchDetailMonitorGetCriteria.cs" />

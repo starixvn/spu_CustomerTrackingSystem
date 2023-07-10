@@ -31,9 +31,9 @@ select {
 }
 
 select[disabled] {
-    background-color: #ededed;
+    background-color: #ededed !important;
     border-color: #d9d9d9;
-    color: #777;
+    color: #777 !important;
 }
 
 // Dropdown list

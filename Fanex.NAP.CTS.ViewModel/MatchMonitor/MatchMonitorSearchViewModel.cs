@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class MatchMonitorFilterViewModel
+    public class MatchMonitorSearchViewModel
     {
         public int DateType { get; set; } /* #1: InsertDate, 2: EventDate */
 

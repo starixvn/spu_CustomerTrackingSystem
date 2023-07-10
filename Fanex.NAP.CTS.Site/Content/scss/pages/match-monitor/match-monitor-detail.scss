@@ -22,30 +22,90 @@
     }
 
     .page-title-match {
-        padding: 8px 16px;
+        padding: 8px 8px 8px 16px;
         text-transform: uppercase;
         color: #DF5615;
         background: #DDE2E6;
         font-size: 1.6rem;
         line-height: 18px;
-        display: block;
+        display: flex;
 
-        .title-description {
-            font-weight: bold;
+        .title-box-left {
+            width: 75%;
+
+            .title-description {
+                font-weight: bold;
+            }
+
+            .title-match-name {
+                padding: 0px 7px 2px 7px;
+                background: #b0d0e3;
+                border-radius: 2px;
+                color: #1D2E4F;
+                font-weight: 900;
+                font-size: 13px;
+                line-height: 18px;
+                text-transform: none !important;
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+
+            .title-match-vs {
+                font-weight: normal;
+            }
+
+            .title-league-name {
+                color: #1D2E4F;
+                font-style: italic;
+                font-weight: 400;
+                font-size: 13px;
+                line-height: 18px;
+                text-transform: capitalize !important;
+            }
+
+            .title-ko-time {
+                padding: 1px 7px 1px 7px;
+                border: 1px solid rgba(152, 161, 178, 1);
+                border-radius: 2px;
+                color: #475A7C;
+                font-family: Lato;
+                font-size: 13px;
+                font-weight: 700;
+                line-height: 16px;
+                letter-spacing: 0em;
+                text-align: left;
+                text-transform: none !important;
+                margin-left: 10px;
+                margin-right: 10px;
+            }
         }
 
-        .title-match-name {
-            color: #516792;
-            font-weight: 600;
-            font-size: 13px;
-            line-height: 20px;
-        }
+        .title-box-right {
+            width: 25%;
 
-        .title-league-name {
-            color: #70809e;
-            font-weight: 600;
-            font-size: 13px;
-            line-height: 20px;
+            .title-sport-name {
+                float: right;
+                padding: 1px 12px 1px 12px;
+                background: #FFFFFF;
+                border-radius: 2px;
+                color: #7A7A7A;
+                font-weight: 900;
+                font-size: 13px;
+                line-height: 18px;
+                text-transform: none !important;
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+
+            .title-market {
+                color: #c1272d;
+            }
+
+            .title-market-line {
+                color: #DDDDDD;
+                margin-left: 3px;
+                margin-right: 3px;
+            }
         }
     }
 
@@ -53,11 +113,13 @@
         margin: 0 1.6rem 1rem 1.6rem;
 
         .monitor-table {
+
             .group-control {
                 position: sticky;
                 top: 6rem;
                 z-index: 99;
                 background: $page-bg;
+                width: 100%;
 
                 .title-association {
                     margin-bottom: -1.3rem;
@@ -87,6 +149,30 @@
 
                         .width-select-sites {
                             width: 11.5rem;
+                        }
+
+                        .width-select-one {
+                            height: 3rem;
+                            width: 16.4rem;
+                        }
+
+                        .width-amount {
+                            display: flex;
+                            justify-content: space-between;
+                            padding-left: 0px !important;
+                            padding-right: 0px !important;
+                            align-items: center;
+                        }
+
+                        .width-amount-item {
+                            color: #474747;
+                            width: 47%;
+                            font-style: italic;
+                            border: aliceblue;
+                            border: 0px;
+                            background-color: #f0f8ff00;
+                            -moz-appearance: textfield;
+                            text-align: center;
                         }
 
                         .text-box {
@@ -188,17 +274,21 @@
             }
 
             .breadcrumb-button {
-                width: 100%;
+                width: calc(100% - 2.5rem);
                 display: flex;
-                justify-content: flex-end;
+                justify-content: space-between;
                 align-items: center;
-                padding: 1rem;
+                padding: 1rem 2rem 1rem 1rem;                          
                 background-color: #E3E9F6;
                 border-radius: 1px;
-                position: sticky;
-                position: -webkit-sticky;
+                position: fixed;
                 top: 17.8rem;
                 z-index: 9;
+                float: right;
+
+                .breadcrumb-totaltickets {
+                    float: left;
+                }
             }
 
             .group-info {
@@ -216,138 +306,36 @@
 
             .group-table {
                 display: flex;
-                /*padding: 0;*/
                 background: #FFFFFF;
                 width: 100%;
-            }
+                height: calc(100vh - 250px);
+                overflow: scroll;
+                position: fixed;
+                top: 22.5rem;
+                z-index: 8;
 
-            #monitor-datatable, #first-monitor-datatable, #second-monitor-datatable {
-                flex: 50%;
+                #monitor-datatable, #first-monitor-datatable, #second-monitor-datatable {
+                    flex: 50%;
 
-                .table-report {
-                    font-family: $font-family;
+                    .table-report {
+                        font-family: $font-family;
 
-                    .wrapper-info-table {
-                        padding: 0 1rem;
-                        /* position: sticky;
-                        position: -webkit-sticky;
-                        top: 21rem;*/
-                        z-index: 7;
-                        transition: top 0.01s linear;
-                    }
-
-                    .table-monitor, .table-monitor-detail {
-                        width: 100% !important;
-
-                        .loading {
-                            position: relative;
-
-                            &:after {
-                                content: '';
-                                position: absolute;
-                                left: 50%;
-                                top: 75%;
-                                border-radius: 50%;
-                                width: 2.4rem;
-                                height: 2.4rem;
-                                border: 0.25rem solid rgba(57, 110, 248, 0.2);
-                                border-top-color: rgba(57, 110, 248, 1);
-                                -webkit-animation: spin 1s infinite linear;
-                                animation: spin 1s infinite linear;
-                            }
-
-                            tr {
-                                opacity: .3;
-                            }
+                        .wrapper-info-table {
+                            padding: 0 1rem;
+                            z-index: 7;
+                            transition: top 0.01s linear;
                         }
 
-                        thead {
-                            tr {
-                                position: sticky;
-                                top: 22.4rem;
-                                z-index: 7;
-
-                                th {
-                                    /* position: sticky;
-                                    top: 22.4rem;
-                                    z-index: 30;*/
-                                    /*padding-left: 1.5rem;
-                                    padding-right: 1.5rem;*/
-                                    font-weight: 300;
-                                    border-right: none;
-                                    font-size: 13px;
-                                }
-                            }
-                        }
-
-                        tbody {
-                            tr {
-                                td {
-                                    padding-left: 0.1rem;
-                                    padding-right: 0.1rem;
-                                    border-right: none;
-                                    border-bottom: none;
-                                    font-size: 12px;
-                                    padding-top: 5px;
-                                    padding-bottom: 5px;
-                                    line-height: 10px !important;
-
-                                    .click-view-details, .click-view-name {
-                                        cursor: pointer;
-                                    }
-
-                                    .container-checkbox {
-                                        padding-left: 19px;
-
-                                        .checkmark {
-                                            top: 50%;
-                                            /*left: 5%;*/
-                                            z-index: 1;
-                                            transform: translate(50%,-50%);
-                                            /*height: 8px;*/
-                                            width: 6px;
-                                        }
-
-                                        pointer-events: none;
-                                    }
-                                }
-
-                                .col-red {
-                                    /*color: $account-formular;*/
-                                    color: #FF0000;
-                                }
-
-                                .col-transtime {
-                                    font-size: 11px !important;
-                                }
-
-                                .col-betid, .col-dgr, .col-reason {
-                                    font-size: 10px !important;
-                                }
-
-                                .icon-Check {
-                                    &::before {
-                                        color: #209005;
-                                    }
-                                }
-                            }
-
-                            tr td:last-child {
-                                border-right: 1px solid #C4C4C4 !important;
-                            }
-
-                            tr:last-child td {
-                                border-bottom: 1px solid #C4C4C4 !important;
-                            }
-
-                            .icon-loading {
+                        .table-monitor, .table-monitor-detail {
+                            /*  width: 100% !important;*/
+                            .loading {
                                 position: relative;
 
                                 &:after {
                                     content: '';
                                     position: absolute;
-                                    left: 0;
-                                    top: 0;
+                                    left: 50%;
+                                    top: 75%;
                                     border-radius: 50%;
                                     width: 2.4rem;
                                     height: 2.4rem;
@@ -356,105 +344,204 @@
                                     -webkit-animation: spin 1s infinite linear;
                                     animation: spin 1s infinite linear;
                                 }
-                            }
 
-                            .icon-loading-group {
-                                position: relative;
-
-                                &:after {
-                                    content: '';
-                                    position: absolute;
-                                    left: -0.8rem;
-                                    top: -1rem;
-                                    border-radius: 50%;
-                                    width: 1.8rem;
-                                    height: 1.8rem;
-                                    border: 0.25rem solid rgba(57, 110, 248, 0.2);
-                                    border-top-color: rgba(57, 110, 248, 1);
-                                    -webkit-animation: spin 1s infinite linear;
-                                    animation: spin 1s infinite linear;
+                                tr {
+                                    opacity: .3;
                                 }
                             }
 
-                            .row-blank {
-                                padding-left: 1.5rem !important;
-                                padding-right: 1.5rem !important;
+                            thead {
+                                tr {
+                                    position: sticky;
+                                    top: 0.01rem;
+                                    z-index: 7;
+
+                                    th {
+                                        font-weight: 300;
+                                        border-right: none;
+                                        font-size: 13px;
+                                    }
+                                }
+                            }
+
+                            tbody {
+                                tr {
+                                    td {
+                                        padding-left: 0.1rem;
+                                        padding-right: 0.1rem;
+                                        border-right: none;
+                                        border-bottom: none;
+                                        font-size: 12px;
+                                        padding-top: 5px;
+                                        padding-bottom: 5px;
+                                        line-height: 10px !important;
+                                        color: #333333;
+
+                                        .click-view-details, .click-view-name {
+                                            cursor: pointer;
+                                            color: #396EF8;
+                                        }
+
+                                        .container-checkbox {
+                                            padding-left: 19px;
+
+                                            .checkmark {
+                                                top: 50%;
+                                                /*left: 5%;*/
+                                                z-index: 1;
+                                                transform: translate(50%,-50%);
+                                                /*height: 8px;*/
+                                                width: 6px;
+                                            }
+
+                                            pointer-events: none;
+                                        }
+                                    }
+
+                                    .col-red {
+                                        color: #C1272D;
+                                    }
+
+                                    .col-transtime {
+                                        font-size: 12px !important;
+                                    }
+
+                                    .col-betid, .col-dgr, .col-reason {
+                                        font-size: 12px !important;
+                                    }
+
+                                    .icon-Check {
+                                        &::before {
+                                            color: #209005;
+                                        }
+                                    }
+                                }
+
+                                tr td:last-child {
+                                    border-right: 1px solid #C4C4C4 !important;
+                                }
+
+                                tr:last-child td {
+                                    border-bottom: 1px solid #C4C4C4 !important;
+                                }
+
+                                .icon-loading {
+                                    position: relative;
+
+                                    &:after {
+                                        content: '';
+                                        position: absolute;
+                                        left: 0;
+                                        top: 0;
+                                        border-radius: 50%;
+                                        width: 2.4rem;
+                                        height: 2.4rem;
+                                        border: 0.25rem solid rgba(57, 110, 248, 0.2);
+                                        border-top-color: rgba(57, 110, 248, 1);
+                                        -webkit-animation: spin 1s infinite linear;
+                                        animation: spin 1s infinite linear;
+                                    }
+                                }
+
+                                .icon-loading-group {
+                                    position: relative;
+
+                                    &:after {
+                                        content: '';
+                                        position: absolute;
+                                        left: -0.8rem;
+                                        top: -1rem;
+                                        border-radius: 50%;
+                                        width: 1.8rem;
+                                        height: 1.8rem;
+                                        border: 0.25rem solid rgba(57, 110, 248, 0.2);
+                                        border-top-color: rgba(57, 110, 248, 1);
+                                        -webkit-animation: spin 1s infinite linear;
+                                        animation: spin 1s infinite linear;
+                                    }
+                                }
+
+                                .row-blank {
+                                    padding-left: 1.5rem !important;
+                                    padding-right: 1.5rem !important;
+                                }
                             }
                         }
-                    }
 
-                    .col-checkbox {
-                        display: inline;
-                        transition: all ease-in-out 0.3s;
-                        cursor: pointer;
-                        margin: 0.1px;
-                    }
-
-                    .table-monitor-detail {
-                        .click-view-details {
-                            color: #474747;
+                        .col-checkbox {
+                            display: inline;
+                            transition: all ease-in-out 0.3s;
+                            cursor: pointer;
+                            margin: 0.1px;
                         }
 
-                        .rejected-ticket {
-                            background-color: #F1A0A0;
+                        .table-monitor-detail {
+                            .click-view-details {
+                                color: #474747;
+                            }
 
-                            &:hover {
-                                background-color: #F1A0A0 !important;
+                            .rejected-ticket {
+                                background-color: #F1A0A0;
+
+                                &:hover {
+                                    background-color: #F1A0A0 !important;
+                                }
+                            }
+
+                            .void-ticket {
+                                background-color: #A3C4F5;
+
+                                &:hover {
+                                    background-color: #A3C4F5 !important;
+                                }
+                            }
+
+                            .username-hightlight {
+                                background-color: #FDEED8;
                             }
                         }
 
-                        .void-ticket {
-                            background-color: #A3C4F5;
-
-                            &:hover {
-                                background-color: #A3C4F5 !important;
-                            }
+                        .group {
+                            padding-right: 0;
+                            margin-right: .6rem;
                         }
 
-                        .username-hightlight {
-                            background-color: #ffeeb8;
+                        .fixed-header {
+                            position: sticky;
+                            position: -webkit-sticky;
+                            top: 23.8rem;
+                            z-index: 9;
                         }
-                    }
-
-                    .group {
-                        padding-right: 0;
-                        margin-right: .6rem;
-                    }
-
-                    .fixed-header {
-                        position: sticky;
-                        position: -webkit-sticky;
-                        top: 19rem;
-                        z-index: 9;
                     }
                 }
-            }
 
-            #first-monitor-datatable {
-                padding-right: 1rem;
-            }
+                #first-monitor-datatable {
+                    padding-right: 1rem;
+                }
 
-            #tblHomeHeaderFixed, #tblAwayHeaderFixed {
-                position: sticky;
-                top: 22.4rem;
-                display: none;
-                background-color: white;
+                #tblHomeHeaderFixed, #tblAwayHeaderFixed {                   
+                    top: 25rem;
+                    display: none;
+                    position: sticky;                  
+                    z-index: 5;
+                    background-color: white;
 
-                thead {
-                    tr {
-                        th {
-                            background: #1D2E4F;
-                            border: 1px solid #C4C4C4;
-                            line-height: 1;
-                            padding: 7px;
-                            vertical-align: middle;
-                            color: #fff;
-                            font-weight: 400;
+                    thead {
+                        tr {
+                            th {
+                                background: #1D2E4F;
+                                border: 1px solid #C4C4C4;
+                                line-height: 1;
+                                padding: 7px;
+                                vertical-align: middle;
+                                color: #fff;
+                                font-weight: 400;
 
-                            input {
-                                margin: 0;
-                                padding: 0;
-                                display: unset;
+                                input {
+                                    margin: 0;
+                                    padding: 0;
+                                    display: unset;
+                                }
                             }
                         }
                     }
@@ -554,11 +641,11 @@
     }
 
     .market-highlight {
-        color: #ff2020;
+        color: #c1272d;
     }
 
     .reason-highlight {
-        color: #ff0000;
+        color: #c1272d;
     }
 }
 

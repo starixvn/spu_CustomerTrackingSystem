@@ -6,35 +6,41 @@
 }
 
 <section class="detailpage" id="detailpage">
-    <div class="content">
+    <div class="content" id="divContent">
         <div class="page-title-match">
-            <span class="title-description">MATCH MONITOR DETAIL</span>
-            <span class="title-match-name"> - @ViewBag.MatchName</span>
-            <span class="title-league-name"> - @ViewBag.LeagueName</span>
-        </div>
+            <div class="title-box-left">
+                <span class="title-description">MATCH MONITOR DETAIL</span>
+                <span class="title-match-name"> @ViewBag.HomeName <span class="title-match-vs"> vs </span> @ViewBag.AwayName</span>
+                <span class="title-league-name"> @ViewBag.LeagueName</span>
+                <span class="title-ko-time"> KO Time: @ViewBag.KOTime</span>
+
+            </div>
+            <div class="title-box-right">
+                <span class="title-sport-name">
+                    @ViewBag.SportName - @ViewBag.BettypeName -
+                    <span class="title-market">@ViewBag.MarketName</span>
+                    <span class="title-market-line"> | </span>
+                    <span class="title-market" id="spanReasonInfo"> GB, FG</span>                   
+                </span>
+            </div>
+
+            </div>
     </div>
 
     <div class="monitor-container">
         <div class="monitor-table">
-            <div class="group-control">
+            <div class="group-control" id="groupControl">
                 <div class="group-info filter-group">
                     <div class="form-filter">
-                        <div class="group width-120">
-                            <label class="text">Site</label>
-                            <select class="control width-select-sites" id="cbbSites">
-                                <option value="A">All</option>
-                                <option value="C">Credit</option>
-                                <option value="L">Licensee</option>
+                        <div class="group width-180">
+                            <label class="text">Type of Tickets</label>
+                            <select class="control width-select-one" id="cbbTypeOfTickets">
+                                <option value="2">Suspicious Tickets</option>
+                                <option value="3">All</option>
                             </select>
                         </div>
 
-                        <div class="group-button">
-                            <button class="button button-generate" id="btnRefresh">Refresh</button>
-                        </div>
-
-                        <div class="blank"></div>                                             
-
-                        <div class="group width-160" @(ViewBag.IsDisableScoreFilter ? "hidden" : "")   >
+                        <div class="group width-180" @(ViewBag.IsDisableScoreFilter ? "hidden" : "")   >
                             <label class="text">Score</label>
                             <select class="control width-select" id="cbbMatchScore" multiple="multiple">
                                 @if (ViewBag.MatchScore != null)
@@ -47,7 +53,28 @@
                             </select>
                         </div>
 
-                        <div class="group width-160">
+                        <div class="group width-180">
+                            <label class="text">Site</label>
+                            <select class="control width-select-one" id="cbbSites">
+                                <option value="A">All</option>
+                                <option value="C">Credit</option>
+                                <option value="L">Licensee</option>
+                            </select>
+                        </div>
+
+                        <div class="group width-180">
+                            <label class="text">HDP</label>
+                            <select class="control width-select" id="cbbHDP" multiple="multiple">                              
+                            </select>
+                        </div>
+
+                        <div class="group width-180">
+                            <label class="text">Currency</label>
+                            <select class="control width-select" id="cbbCurrency" multiple="multiple">
+                            </select>
+                        </div>
+
+                        <div class="group width-180">
                             <label class="text">Reason</label>
                             <select class="control width-select" id="cbbReason" multiple="multiple">                              
                             </select>
@@ -59,28 +86,41 @@
                             </select>
                         </div>
 
+                        <div class="group width-180">
+                            <label class="text">Amount</label>
+                            <div class="ui-multiselect width-amount">
+                                <input class="width-amount-item" placeholder="from" id="inputAmountFrom"/>
+                                <label>-</label>
+                                <input class="width-amount-item" placeholder="to" id="inputAmountTo"/>
+                            </div>
+                        </div>
+
                         <div class="group-button">
                             <button class="button button-generate" id="btnGenerate-detail">Generate</button>
                         </div>                        
                     </div>
-                    <div class="detail-area">                        
+
+                    @*<div class="detail-area" id="detail-area">                        
                         <span>@ViewBag.SportName - @ViewBag.BettypeName - <span class="market-highlight">@ViewBag.MarketName</span><br /></span>
                         <span id="spanKOTime">KO Time: @ViewBag.KOTime<br /></span>
                         <span class="reason-highlight" id="spanReasonInfo"></span>
-                    </div>
+                    </div>*@
                 </div>
 
-                <div class="breadcrumb-button">
-                    <div class="">
+                <div class="breadcrumb-button" id="breadcrumbButton">
+                    <div class="breadcrumb-totaltickets"></div>
+                    <div>
+                        <button class="button button-primary-outline" id="btnRefresh">Import New Tickets</button>
                         <button class="button button-primary-outline" id="btnShowAll">Show All</button>
                         <button class="button button-primary-outline" id="btnShowPopupAssDetection">Association Detection</button>
                         <button class="button button-primary-outline" id="btnExportExcel">Export Excel</button>
                         <button class="button button-primary-outline" id="btnVerifyAndClose">Verify and Close</button>
                     </div>
                 </div>
+              
                 <div class="group-table" id="groupTable">                   
                     <div id="first-monitor-datatable">
-                        <div class="table-report" style="width: 100%">
+                        <div id="tbrMMHomeTeam" class="table-report" style="width: 100%; padding-bottom: 8px;">
                             <table id="tblMMHomeTeam" class="table table-striped table-monitor-detail">
                                 <thead>
                                     <tr>
@@ -113,7 +153,7 @@
                     </div>
 
                     <div id="second-monitor-datatable">
-                        <div class="table-report" style="width: 100%">
+                        <div id="tbrMMAwayTeam" class="table-report" style="width: 100%; padding-bottom: 8px;">
                             <table id="tblMMAwayTeam" class="table table-striped table-monitor-detail">
                                 <thead>
                                     <tr>
@@ -145,6 +185,7 @@
                         <table id="tblAwayHeaderFixed"></table>
                     </div>
                 </div>
+            
             </div>
         </div>               
 
@@ -157,6 +198,7 @@
             <input id="hdBetIDToString" type="hidden" value="@ViewBag.BetIDToString" />
             <input id="hdLiveIndicator" type="hidden" value="@ViewBag.LiveIndicator.ToString()" />
             <input id="hdreason" type="hidden" value="@ViewBag.Reason" />
+            <input id="hdIsSupportShowAllTickets" type="hidden" value="@ViewBag.IsSupportShowAllTickets.ToString()" />
             <input id="hdIsHostPermission" type="hidden" IsHostPermission="@ViewBag.IsHostPermission.ToString()" />
         </div>
     </div>    
@@ -164,8 +206,8 @@
 
 <div id="divPopupAssDetect" class="popup-add" style="display: none">
     <div class="flex-container">
-        <div class="box-left">
-            <div class="flex-container" style="border-bottom: 1px solid #C0C0C0;">
+        <div class="box-left" style="padding-right: 10px">
+            <div class="flex-container" style="border-bottom: 1px solid #C0C0C0; justify-content: space-between; align-items: center;">
                 <div style="margin-top: 1px; margin-bottom: 1px;">
                     <span class='icon-Check'></span>
                     <span class="checkbox-filter checkbox-all">
@@ -178,6 +220,9 @@
                     </span>
                 </div>
 
+                <span class="limit-username" style="font-size: 12px;">
+                    Max: <span id="spanAddUserNameMaxTag">1001</span> usernames
+                </span>
             </div> <!--div end - flex-container-->
 
             <div class="flex-container">
@@ -234,7 +279,7 @@
             </div> <!--div end - flex-container margin-top-10-->
         </div>
 
-        <div class="box-right">
+        <div class="box-right" style="margin-left: 30px !important">
             <button id="btnAssDetection" class="button button-primary-outline" title="Association Detection">Detect</button>
         </div>
 

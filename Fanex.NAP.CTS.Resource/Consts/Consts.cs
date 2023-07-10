@@ -76,8 +76,6 @@
         public const string AssociationTypeName_IP = "IP";
         public const string AssociationTypeName_IPAssociation = "IP Association";
 
-        public const int MatchMonitor_ReportQueryType = 2;
-
         public const int ProblemCase_ItemID_Robot = 1;
         public const int ProblemCase_ItemID_SuspiciousAssociation = 4;
         public const int ProblemCase_ItemID_ProPunter = 9;
@@ -114,6 +112,13 @@
         {
             public const string Desktop = "Desktop";
             public const string Mobile = "Mobile";
+        }
+
+        public struct MMSites
+        {
+            public const string All = "A";
+            public const string Credit = "C";
+            public const string Licensee = "L";
         }
 
         public enum ROLE_CUSTOMER
@@ -429,5 +434,11 @@
             OCRD = 200,
             TD = 300
         };
+
+        public enum MatchMonitorQueryType
+        {
+            TicketFraud = 2,
+            TicketAll = 3
+        }
     }
 }

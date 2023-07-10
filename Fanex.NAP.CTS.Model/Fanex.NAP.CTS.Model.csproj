@@ -338,7 +338,8 @@
     <Compile Include="MatchMonitor\MatchGroupKeyModel.cs" />
     <Compile Include="MatchMonitor\MatchFromMainInfoModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorBetTypeModel.cs" />
-    <Compile Include="MatchMonitor\MatchMonitorDetailResultModel.cs" />
+    <Compile Include="MatchMonitor\MMDetailFilterInfoModel.cs" />
+    <Compile Include="MatchMonitor\MMDetailResultModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailVerifyTransResultModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailVerifyTransParaModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorReasonModel.cs" />
@@ -347,6 +348,7 @@
     <Compile Include="MatchMonitor\MMDetailBetTeamModel.cs" />
     <Compile Include="MatchMonitor\MMDetailCustModel.cs" />
     <Compile Include="MatchMonitor\MMDetailMergeGroupModel.cs" />
+    <Compile Include="MatchMonitor\MMTicketDetailInfoModel.cs" />
     <Compile Include="MatchMonitor\RobotStatusModel.cs" />
     <Compile Include="MatchMonitor\TransGroupModel.cs" />
     <Compile Include="MatchMonitor\CustInfoModel.cs" />

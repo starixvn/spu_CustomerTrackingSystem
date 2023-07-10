@@ -36,5 +36,6 @@
 
         public DateTime KickOffTime { get; set; }
 
+        public bool IsSupportShowAllTickets { get; set; }
     }
 }

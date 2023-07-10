@@ -10,7 +10,7 @@
         public int QueryType { get; set; }
 
         [SpParam(SqlParamName = "LastScannedSequenceID")]
-        public Int64 LastScannedSequenceID { get; set; }
+        public Int64? LastScannedSequenceID { get; set; }
 
         [SpParam(SqlParamName = "BatchSize")]
         public int BatchSize { get; set; }
@@ -20,6 +20,36 @@
 
         [SpParam(SqlParamName = "EventDate")]
         public DateTime EventDate { get; set; }
+
+        [SpParam(SqlParamName = "IsLive")]
+        public int IsLive { get; set; }
+
+        [SpParam(SqlParamName = "MatchID")]
+        public long MatchID { get; set; }
+
+        [SpParam(SqlParamName = "BetType")]
+        public int BetType { get; set; }
+
+        [SpParam(SqlParamName = "IsLicensee")]
+        public int? IsLicensee { get; set; }
+
+        [SpParam(SqlParamName = "ListCurrency")]
+        public string ListCurrency { get; set; }
+
+        [SpParam(SqlParamName = "ListHDP")]
+        public string ListHDP { get; set; }
+
+        [SpParam(SqlParamName = "ListScore")]
+        public string ListScore { get; set; }
+
+        [SpParam(SqlParamName = "FromStakeRM")]
+        public decimal? FromStakeRM { get; set; }
+
+        [SpParam(SqlParamName = "ToStakeRM")]
+        public decimal? ToStakeRM { get; set; }
+
+        [SpParam(SqlParamName = "MinSequenceIDTotalAll")]
+        public Int64? MinSequenceIDTotalAll { get; set; }
 
         public override string GetSettingKey()
                 => "CTS_Rpt_MatchMonitor_TicketDetails";

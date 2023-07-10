@@ -12,6 +12,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class MatchMonitorService : IMatchMonitorService
     {
@@ -22,7 +23,7 @@
             repository = new DynamicRepository();
         }
 
-        public IEnumerable<MatchFromMainInfoModel> GetMatchFromMainInfos(MatchMonitorFilterViewModel filter, string matchIDs)
+        public IEnumerable<MatchFromMainInfoModel> GetMatchFromMainInfos(MatchMonitorSearchViewModel filter, string matchIDs)
         {
             var criteria = new GetMatchFromMainInfoCriteria
             {
@@ -35,14 +36,14 @@
             return repository.Fetch<MatchFromMainInfoModel>(criteria);
         }
 
-        public IEnumerable<GetMatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter, string matchInfoFromMainJson)
+        public IEnumerable<GetMatchMonitorModel> GetMatchMonitor(MatchMonitorSearchViewModel filter, string matchInfoFromMainJson)
         {
             var criteria = new MatchMonitorGetCriteria
             {
                 FromDate = filter?.FromDate ?? DateTime.Now,
                 ToDate = filter?.ToDate ?? DateTime.Now,
                 SportType = filter.Sports,
-                Market = filter.Market,                
+                Market = filter.Market,
                 BetTypes = filter.BetTypes,
                 IsVerified = filter.IsVerified,
                 Reasons = filter.Reasons,
@@ -61,7 +62,7 @@
                 BettypeID = para.BettypeID,
                 BetID = para.BetID,
                 TranIds = para.TranIds,
-                VerifiedBy = para.VerifiedBy                
+                VerifiedBy = para.VerifiedBy
             };
 
             repository.Fetch<DBResult>(criteria);
@@ -97,7 +98,7 @@
             return repository.Fetch<MatchScoreModel>(criteria);
         }
 
-        public MatchMonitorDetailResultModel GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter)
+        public MMDetailResultModel GetMatchMonitorDetail(MMDetailInfoViewModel filter)
         {
             var criteria = new MatchDetailMonitorGetCriteria
             {
@@ -111,7 +112,7 @@
             {
                 var result = db.QueryMultiple(criteria);
 
-                return new MatchMonitorDetailResultModel
+                return new MMDetailResultModel
                 {
                     Custs = result?.Read<MMDetailCustModel>() ?? new List<MMDetailCustModel>(),
                     MatchDetails = result?.Read<MatchMonitorDetailModel>() ?? new List<MatchMonitorDetailModel>(),
@@ -130,16 +131,75 @@
             return repository.Fetch<CustInfoModel>(criteria);
         }
 
-        public IEnumerable<TicketDetailModel> GetTicketDetail(DateTime eventDate, string transIds)
+        public IEnumerable<TicketDetailModel> GetFraudTicketDetail(MMDetailInfoViewModel para, string transIds)
         {
             var criteria = new TicketDetailGetCriteria()
             {
-                QueryType = Consts.MatchMonitor_ReportQueryType,
-                EventDate = eventDate,
+                QueryType = (int)MatchMonitorQueryType.TicketFraud,
+                EventDate = para.EventDate,
                 ListTransId = transIds
             };
 
             return repository.Fetch<TicketDetailModel>(criteria);
+        }
+
+        public TicketDetailViewModel GetAllTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int batchSize = 1000, string transIds = null)
+        {
+            var criteria = new TicketDetailGetCriteria()
+            {
+                QueryType = (int)MatchMonitorQueryType.TicketAll,
+                EventDate = para.EventDate,
+                LastScannedSequenceID = para.LastScannedSequenceID,
+                IsLive = para.LiveIndicator ? 1 : 0,
+                MatchID = para.MatchID,
+                BetType = para.BetTypeID,
+                BatchSize = batchSize,
+                IsLicensee = para.Sites == MMSites.All ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
+                ListCurrency = filter?.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList),
+                ListHDP = filter?.HDPList == null ? null : string.Join(",", filter.HDPList),
+                ListScore = filter?.ScoreList == null ? null : string.Join(",", filter.ScoreList),
+                ListTransId = transIds
+            };
+
+            if (filter?.AmountList?.Count >= 2)
+            {
+                criteria.FromStakeRM = filter.AmountList[0];
+                criteria.ToStakeRM = filter.AmountList[1];
+            }
+
+            var result = repository.Fetch<TicketDetailModel>(criteria);
+
+            return new TicketDetailViewModel
+            {
+                TicketDetails = result,
+                MinSequenceIDTotalAll = criteria.MinSequenceIDTotalAll
+            };
+        }
+
+        public MMTicketDetailInfoModel GetMMTicketDetailInfo(MMDetailInfoViewModel para)
+        {
+            var criteria = new MMTicketDetailInfoCriteria()
+            {
+                MatchID = para.MatchID,
+                BetType = para.BetTypeID,
+                IsLive = para.LiveIndicator ? 1 : 0,
+            };
+
+            var result = repository.FetchMultiple<MMDetailFilterInforHdpModel, MMDetailFilterInforScoreModel, MMDetailFilterInforCurrencyModel>(criteria);
+
+            return new MMTicketDetailInfoModel
+            {
+                MaxSequenceId = criteria.MaxSequenceId,
+                TotalTicketAll = criteria.TotalTicketAll,
+                TotalTicketCredit = criteria.TotalTicketCredit,
+                TotalTicketLicensee = criteria.TotalTicketLicensee,
+                FilterDetail = new MMDetailFilterInfoModel
+                {
+                    HDPList = result.firstResultSet,
+                    ScoreList = result.secondResultSet,
+                    CurrencyList = result.thirdResultSet
+                }
+            };
         }
 
         public IEnumerable<MMDetailMergeGroupModel> GetMMDetailMergeGroup(IEnumerable<MMDetailBetTeamModel> mmDetailBetTeams)
@@ -163,7 +223,7 @@
 
             return repository.Fetch<RobotStatusModel>(criteria);
         }
-       
+
         public MatchMonitorStaticListModel GetMMStaticList()
         {
             var criteria = new GetMatchMonitorStaticListCriteria();
@@ -201,7 +261,7 @@
             if (lengthH > lengthA)
             {
                 for (int i = 0; i < lengthH; i++)
-                {                   
+                {
                     if (i < lengthA)
                         writer.WriteRow(1, NewRecordTblHomeAway(tblHome[i], tblAway[i]));
                     else
@@ -264,7 +324,7 @@
                     itemA.DangerToString,
                     itemA.Odds,
                     itemA.BetID.ToString(),
-                    itemA.Currency,                  
+                    itemA.Currency,
                     (itemA.Amount % 1 == 0 ? itemA.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemA.Amount.ToString()),
                     itemA.HDP,
                     itemA.Score,
@@ -280,21 +340,21 @@
         {
             return new object[]
                 {
-                    itemH.SubscriberType,                    
+                    itemH.SubscriberType,
                     itemH.Username,
                     itemH.CustomerClass == -1 ? "-" : itemH.CustomerClass.ToString(),
                     (itemH.IsRobot ? "x" : "-"),
                     itemH.DangerToString,
                     itemH.Odds,
                     itemH.BetID.ToString(),
-                    itemH.Currency,                   
+                    itemH.Currency,
                     (itemH.Amount % 1 == 0 ? itemH.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemH.Amount.ToString()),
                     itemH.HDP,
                     itemH.Score,
                     itemH.TransTimeToString,
                     itemH.ADetectGroup,
                     itemH.MDetectGroup,
-                    itemH.ReasonList,                    
+                    itemH.ReasonList,
                     (!string.IsNullOrEmpty(itemH.PICVerified) ? "x" : "-"),
                     "",
                     itemA.SubscriberType,
@@ -304,7 +364,7 @@
                     itemA.DangerToString,
                     itemA.Odds,
                     itemA.BetID.ToString(),
-                    itemA.Currency,                   
+                    itemA.Currency,
                     (itemA.Amount % 1 == 0 ? itemA.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemA.Amount.ToString()),
                     itemA.HDP,
                     itemA.Score,

@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class MatchMonitorDetailResultModel
+    public class MMDetailResultModel
     {
         public IEnumerable<MMDetailCustModel> Custs { get; set; }
 
