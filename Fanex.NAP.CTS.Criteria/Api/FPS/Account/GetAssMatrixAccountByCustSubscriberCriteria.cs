@@ -11,17 +11,8 @@
         [SpParam(SqlParamName = "ip_CTSCustID")]
         public long CTSCustID { get; set; }
 
-        [SpParam(SqlParamName = "ip_Skip")]
-        public int Skip { get; set; }
-
-        [SpParam(SqlParamName = "ip_Take")]
-        public int Take { get; set; }
-
-        [SpParam(SqlParamName = "op_TotalPages")]
-        public int TotalPages { get; set; }
-
-        [SpParam(SqlParamName = "op_TotalRows")]
-        public int TotalRows { get; set; }
+        [SpParam(SqlParamName = "ip_NoOfRecord")]
+        public int NoOfRecord { get; set; }
 
         public override string GetSettingKey() => "CTS_DC_Association_GetAssociationMaxtrixByCustSubscriber";
 

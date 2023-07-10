@@ -12,6 +12,7 @@
     using Fanex.NAP.CTS.Model.API.FPS.Transaction;
     using Fanex.NAP.CTS.Service.Interface.Api;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class FpsService : IFpsService
     {
@@ -105,13 +106,10 @@
             {
                 SubscriberID = param.SubscriberID,
                 CTSCustID = param.CTSCustID,
-                Skip = param.Skip,
-                Take = param.Take
+                NoOfRecord = param.NoOfRecord
             };
 
             data.Items = repository.Fetch<GetAssMatrixAccountByCustSubscriberItemModel>(criteria);
-            data.TotalPages = criteria.TotalPages;
-            data.TotalRows = criteria.TotalRows;
 
             return data;
         }

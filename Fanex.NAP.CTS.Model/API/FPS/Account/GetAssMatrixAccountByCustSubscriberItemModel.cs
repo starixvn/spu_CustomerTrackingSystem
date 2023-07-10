@@ -4,24 +4,18 @@
 
     public class GetAssMatrixAccountByCustSubscriberItemModel
     {
-        public int DeviceID { get; set; }
-
-        public string DeviceNo { get; set; }
-
-        public int AccountID { get; set; }
-
-        public string UserName { get; set; }
-
-        public DateTime LastAccessedDate { get; set; }
-
-        public DateTime FirstSeenDate { get; set; }
-
-        public int EXCEPTIONID { get; set; }
-
-        public int Level { get; set; }
+        public int ID { get; set; }
 
         public long CTSCustID { get; set; }
 
-        public string UserName2 { get; set; }
+        public string UserName { get; set; }
+
+        public string RegisterName { get; set; }
+
+        public int DeviceID { get; set; }
+
+        public string DeviceCode { get; set; }
+
+        public DateTime CreatedTime { get; set; }
     }
 }
