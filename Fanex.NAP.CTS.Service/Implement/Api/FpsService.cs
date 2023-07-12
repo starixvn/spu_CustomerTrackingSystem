@@ -73,12 +73,10 @@
             {
                 SubscriberID = param.SubscriberID,
                 CTSCustID = param.CTSCustID,
-                Skip = param.Skip,
-                Take = param.Take
+                NoOfRecord = param.NoOfRecord
             };
 
             data.Items = repository.Fetch<GetAssAccountsByCustSubscriberItemModel>(criteria);
-            data.TotalItem = criteria.TotalItem;
 
             return data;
         }

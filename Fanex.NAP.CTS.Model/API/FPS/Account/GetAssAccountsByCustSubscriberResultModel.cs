@@ -8,11 +8,8 @@
         public GetAssAccountsByCustSubscriberResultModel()
         {
             this.Items = Enumerable.Empty<GetAssAccountsByCustSubscriberItemModel>();
-            this.TotalItem = 0;
         }
 
         public IEnumerable<GetAssAccountsByCustSubscriberItemModel> Items { get; set; }
-
-        public int TotalItem { get; set; }
     }
 }
