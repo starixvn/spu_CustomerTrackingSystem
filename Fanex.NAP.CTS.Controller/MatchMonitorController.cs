@@ -20,6 +20,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using System.Web.Mvc;
     using System.Web.Script.Serialization;
@@ -235,7 +236,7 @@
 
             switch (para.TypeOfTickets)
             {
-                case MatchMonitorQueryType.TicketAll when filter.IsOnlyFraudTicket():
+                case MatchMonitorQueryType.TicketAll when para.IsSupportShowAllTickets && filter.IsOnlyFraudTicket():
                 case MatchMonitorQueryType.TicketFraud:
                     {
                         var fraudTicket = GetFraudMMDetailFromCache(para, para.Sites);
@@ -246,7 +247,7 @@
                         }
                         break;
                     }
-                case MatchMonitorQueryType.TicketAll:
+                case MatchMonitorQueryType.TicketAll when para.IsSupportShowAllTickets:
                     {
                         var allTicketDetails = GetAllMMDetailFromCache(para, filter);
                         mdResult = new MatchMonitorDetailListViewModel(allTicketDetails);
@@ -484,7 +485,7 @@
 
             switch (info.TypeOfTickets)
             {
-                case MatchMonitorQueryType.TicketAll when filter.IsOnlyFraudTicket():
+                case MatchMonitorQueryType.TicketAll when info.IsSupportShowAllTickets && filter.IsOnlyFraudTicket():
                 case MatchMonitorQueryType.TicketFraud:
                     {
                         var fraudTicket = GetFraudMMDetailFromCache(info, info.Sites);
@@ -496,7 +497,7 @@
                         recordsTotal = (mdResult?.AwayMatchItemList?.Count() ?? 0) + (mdResult?.HomeMatchItemList?.Count() ?? 0);
                         break;
                     }
-                case MatchMonitorQueryType.TicketAll:
+                case MatchMonitorQueryType.TicketAll when info.IsSupportShowAllTickets:
                     {
                         recordsTotal = GetTotalAllTicketDetailByFilter(info, filter);
                         break;
@@ -577,6 +578,7 @@
             try
             {
                 var key = para.BuildCacheKeyWithSite(nameof(GetFraudMMDetailFromCache), MMDetailRegion, site);
+                var flagKey = para.BuildCacheKeyWithSite(nameof(GetFraudMMDetailFromCache), MMDetailRegion, FlagRunningTask);
 
                 lock (key)
                 {
@@ -587,19 +589,35 @@
 
                     if (result == null)
                     {
-                        fraudMMSiteAll = _memoryCacheService.GetValue<MatchMonitorDetailListViewModel>(keySiteAll);
-
-                        if (fraudMMSiteAll == null)
+                        while (true)
                         {
-                            fraudMMSiteAll = Task.Run(() => GetFraudMMDetailSiteAll(para)).Result;
-                            _ = _memoryCacheService.PushValueAsync(keySiteAll, fraudMMSiteAll);
-                        }
+                            if (_memoryCacheService.GetValue<object>(flagKey) == null)
+                            {
+                                _memoryCacheService.PushValueAsync(flagKey, new { });
 
-                        result = new MatchMonitorDetailListViewModel(fraudMMSiteAll);
-                        if (site != MMSites.All)
-                        {
-                            result.FilterItemMMDetailBySite(site);
-                            _ = _memoryCacheService.PushValueAsync(key, result);
+                                fraudMMSiteAll = _memoryCacheService.GetValue<MatchMonitorDetailListViewModel>(keySiteAll);
+
+                                if (fraudMMSiteAll == null)
+                                {
+                                    fraudMMSiteAll = Task.Run(() => GetFraudMMDetailSiteAll(para)).Result;
+                                    _ = _memoryCacheService.PushValueAsync(keySiteAll, fraudMMSiteAll);
+                                }
+
+                                result = new MatchMonitorDetailListViewModel(fraudMMSiteAll);
+                                if (site != MMSites.All)
+                                {
+                                    result.FilterItemMMDetailBySite(site);
+                                    _ = _memoryCacheService.PushValueAsync(key, result);
+                                }
+
+                                _memoryCacheService.RemoveValueAsync(flagKey);
+
+                                break;
+                            }
+                            else
+                            {
+                                Thread.Sleep(2000);
+                            }
                         }
                     }
                 }
@@ -623,12 +641,9 @@
             {
                 switch (para.TypeOfTickets)
                 {
-                    case MatchMonitorQueryType.TicketAll:
+                    case MatchMonitorQueryType.TicketAll when para.IsSupportShowAllTickets:
                         {
-                            if (para.IsSupportShowAllTickets)
-                            {
-                                result = Task.Run(() => GetAllMMFilterFromCache(para, para.Sites, false)).Result;
-                            }
+                            result = Task.Run(() => GetAllMMFilterFromCache(para, para.Sites, false)).Result;
                             break;
                         }
                     case MatchMonitorQueryType.TicketFraud:
