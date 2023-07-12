@@ -256,12 +256,12 @@ function MatchMonitorDetail() {
                     LiveIndicator: domElements.liveIndicator,
                     LastScannedSequenceID: lastScannedSequenceID,
                     TypeOfTickets: typeOfTickets,
-                    IsFilter: IsFilterOptionServerSide(),
-                    CurrencyIdList: GetSelectDataFilter(domElements.cbbCurrency),
-                    HDPList: GetSelectDataFilter(domElements.cbbHDP),
-                    ScoreList: GetSelectDataFilter(domElements.cbbMatchScore),
-                    ReasonList: GetSelectDataFilter(domElements.cbbReason),
-                    AGroupList: GetSelectDataFilter(domElements.cbbGroup),
+                    IsFilter: currentType == MatchMonitorDetailViewType.TicketFraud || IsFilterOptionServerSide(),
+                    CurrencyIdList: GetSelectDataFilter(domElements.cbbCurrency , currentType == MatchMonitorDetailViewType.TicketFraud),
+                    HDPList: GetSelectDataFilter(domElements.cbbHDP, currentType == MatchMonitorDetailViewType.TicketFraud),
+                    ScoreList: GetSelectDataFilter(domElements.cbbMatchScore, currentType == MatchMonitorDetailViewType.TicketFraud),
+                    ReasonList: GetSelectDataFilter(domElements.cbbReason, currentType == MatchMonitorDetailViewType.TicketFraud),
+                    AGroupList: GetSelectDataFilter(domElements.cbbGroup, currentType == MatchMonitorDetailViewType.TicketFraud),
                     AmountList: GetInputAmount()?.map(str => {
                         return Number(str);
                     }) ?? undefined,
@@ -538,12 +538,12 @@ function MatchMonitorDetail() {
         return undefined;
     }
 
-    function GetSelectDataFilter(dom_ccb) {
+    function GetSelectDataFilter(dom_ccb, isGetAllValue = false) {
         let allVal = '';
         for (let i = 0; i < dom_ccb[0].length; i++) {
             allVal += dom_ccb[0][i].value;
         }
-        if (dom_ccb.val().join('') != allVal) {
+        if (isGetAllValue || dom_ccb.val().join('') != allVal) {
             return dom_ccb.val();
         }
 
@@ -757,7 +757,7 @@ function MatchMonitorDetail() {
             IsOptIPLast3Days: domElements.inputOptIPLast3Days.is(":checked")
         }
 
-        $.ajax(common.modifyRelativeUrl('MatchMonitor/DetectGroupAssWithOptions'), {
+        xhr = $.ajax(common.modifyRelativeUrl('MatchMonitor/DetectGroupAssWithOptions'), {
             type: 'POST',
             data: params,
             beforeSend: function () {

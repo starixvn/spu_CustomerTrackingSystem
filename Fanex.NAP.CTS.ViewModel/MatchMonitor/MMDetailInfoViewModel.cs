@@ -59,11 +59,6 @@
             return $"{region}_{nameOfFuntion}_{EventDateToString}_{MatchID}_{BetTypeID}_{BetID}_{LiveIndicator}";
         }
 
-        public string BuildCacheKeyForAllMMTicket(string nameOfFunction, string region = "")
-        {
-            return BuildCacheKey(nameOfFunction, region) + $"_{LastScannedSequenceID?.ToString() ?? string.Empty}";
-        }
-
         public string BuildCacheKeyWithSite(string nameOfFunction, string region = "", string site = "")
         {
             var value = string.IsNullOrWhiteSpace(site) ? Sites?.ToString() ?? string.Empty : site;

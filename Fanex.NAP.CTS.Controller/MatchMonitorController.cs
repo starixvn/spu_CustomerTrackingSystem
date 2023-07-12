@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.Common.Extensions;
-    using Fanex.Data;
     using Fanex.Logging;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;
@@ -18,13 +17,9 @@
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using Newtonsoft.Json;
-    using NPOI.SS.Util;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Runtime.CompilerServices;
-    using System.Security.Cryptography;
-    using System.Threading;
     using System.Threading.Tasks;
     using System.Web.Mvc;
     using System.Web.Script.Serialization;
@@ -48,6 +43,7 @@
             _matchMonitorService = new MatchMonitorService();
             _associationDetectionService = new AssociationDetectionService();
             _memoryCacheService = new MemoryCacheService();
+            MMDetailRegion = CurrentSession.UserId.ToString();
         }
 
         #region Main Page
@@ -244,7 +240,7 @@
                     {
                         var fraudTicket = GetFraudMMDetailFromCache(para, para.Sites);
                         mdResult = new MatchMonitorDetailListViewModel(fraudTicket);
-                        if (filter.IsFilter)
+                        if (FilterValidation(para, filter))
                         {
                             mdResult.FilterItemMMDetail(filter, para.Sites);
                         }
@@ -269,6 +265,55 @@
                 data = mdResult,
                 recordsFiltered = recordsFiltered,
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        private bool FilterValidation(MMDetailInfoViewModel para, MMDetailFilterViewModel filter)
+        {
+            if (filter.IsFilter)
+            {
+                var filterAll = GetFraudMMFilterFromCache(para);
+                var count = 0;
+
+                if (!filterAll.HDPList.Except(filter.HDPList).Any())
+                {
+                    filter.HDPList = null;
+                    count++;
+                }
+
+                if (!filterAll.ScoreList.Except(filter.ScoreList).Any())
+                {
+                    filter.ScoreList = null;
+                    count++;
+                }
+
+                if (!filterAll.CurrencyList.Select(x => x.Key).Except(filter.CurrencyIdList).Any())
+                {
+                    filter.CurrencyIdList = null;
+                    count++;
+                }
+
+                if (!filterAll.ReasonGroupIDDic.Where(x => filter.ReasonList.Contains(x.Key)).SelectMany(x => x.Value).Distinct()
+                    .ToList().ConvertAll(x => x.ToString()).Except(filter.AGroupList).Any())
+                {
+                    filter.AGroupList = null;
+                    count++;
+                }
+
+                if (!filterAll.ReasonList.Except(filter.ReasonList).Any())
+                {
+                    filter.ReasonList = null;
+                    count++;
+                }
+
+                if (!filter.AmountList?.Any() ?? true)
+                {
+                    count++;
+                }
+
+                filter.IsFilter = count < 6;
+            }
+
+            return filter.IsFilter;
         }
 
         private async Task<MatchMonitorDetailListViewModel> GetAllMMDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, bool isLoop = false)
@@ -444,7 +489,7 @@
                     {
                         var fraudTicket = GetFraudMMDetailFromCache(info, info.Sites);
                         mdResult = new MatchMonitorDetailListViewModel(fraudTicket);
-                        if (filter.IsFilter)
+                        if (FilterValidation(info, filter))
                         {
                             mdResult.FilterItemMMDetail(filter, info.Sites);
                         }
