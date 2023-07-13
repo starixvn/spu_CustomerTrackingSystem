@@ -7,7 +7,7 @@
     {
         public MMDetailInfoViewModel() { }
 
-        public MMDetailInfoViewModel(MMDetailInfoViewModel para)
+        private MMDetailInfoViewModel(MMDetailInfoViewModel para)
         {
             this.TypeOfTickets = para.TypeOfTickets;
             this.LastScannedSequenceID = para.LastScannedSequenceID;
@@ -53,6 +53,8 @@
                 return eventDate;
             }
         }
+
+        public MMDetailInfoViewModel Clone() => new MMDetailInfoViewModel(this);
 
         public string BuildCacheKey(string nameOfFuntion, string region = "")
         {

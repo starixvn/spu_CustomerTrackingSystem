@@ -65,7 +65,7 @@
             GroupList = groupList?.Where(x => x.GroupID != null ? agroup.Contains(x.GroupID ?? 0) : false).ToList();
         }
 
-        public MMDetailFilterViewModel(MMDetailFilterViewModel filter)
+        protected MMDetailFilterViewModel(MMDetailFilterViewModel filter)
         {
             IsFilter = filter.IsFilter;
             MaxSequenceId = filter.MaxSequenceId;
@@ -107,6 +107,56 @@
         public Dictionary<string, List<int>> ReasonGroupIDDic { get; set; }
 
         public List<string> AGroupList { get; set; }
+
+        public MMDetailFilterViewModel Clone() => new MMDetailFilterViewModel(this);
+
+        public bool IsValidFilterFraudTicketLastest(MMDetailFilterViewModel filterLastest)
+        {
+            if (IsFilter)
+            {
+                var count = 0;
+
+                if (!filterLastest.HDPList.Except(HDPList).Any())
+                {
+                    HDPList = null;
+                    count++;
+                }
+
+                if (!filterLastest.ScoreList.Except(ScoreList).Any())
+                {
+                    ScoreList = null;
+                    count++;
+                }
+
+                if (!filterLastest.CurrencyList.Select(x => x.Key).Except(CurrencyIdList).Any())
+                {
+                    CurrencyIdList = null;
+                    count++;
+                }
+
+                if (!filterLastest.ReasonGroupIDDic.Where(x => ReasonList.Contains(x.Key)).SelectMany(x => x.Value).Distinct()
+                    .ToList().ConvertAll(x => x.ToString()).Except(AGroupList).Any())
+                {
+                    AGroupList = null;
+                    count++;
+                }
+
+                if (!filterLastest.ReasonList.Except(ReasonList).Any())
+                {
+                    ReasonList = null;
+                    count++;
+                }
+
+                if (!AmountList?.Any() ?? true)
+                {
+                    count++;
+                }
+
+                IsFilter = count < 6;
+            }
+
+            return IsFilter;
+        }
 
         public bool IsOnlyFraudTicket()
         {
