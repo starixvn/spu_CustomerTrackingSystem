@@ -56,7 +56,7 @@
 
         public string BuildCacheKey(string nameOfFuntion, string region = "")
         {
-            return $"{region}_{nameOfFuntion}_{EventDateToString}_{MatchID}_{BetTypeID}_{BetID}_{LiveIndicator}";
+            return $"{nameOfFuntion}_{region}_{EventDateToString}_{MatchID}_{BetTypeID}_{BetID}_{LiveIndicator}";
         }
 
         public string BuildCacheKeyWithSite(string nameOfFunction, string region = "", string site = "")

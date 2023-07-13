@@ -241,7 +241,7 @@
                     {
                         var fraudTicket = GetFraudMMDetailFromCache(para, para.Sites);
                         mdResult = new MatchMonitorDetailListViewModel(fraudTicket);
-                        if (FilterValidation(para, filter))
+                        if (IsValidFilterFraudTicket(para, filter))
                         {
                             mdResult.FilterItemMMDetail(filter, para.Sites);
                         }
@@ -268,7 +268,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private bool FilterValidation(MMDetailInfoViewModel para, MMDetailFilterViewModel filter)
+        private bool IsValidFilterFraudTicket(MMDetailInfoViewModel para, MMDetailFilterViewModel filter)
         {
             if (filter.IsFilter)
             {
@@ -490,7 +490,7 @@
                     {
                         var fraudTicket = GetFraudMMDetailFromCache(info, info.Sites);
                         mdResult = new MatchMonitorDetailListViewModel(fraudTicket);
-                        if (FilterValidation(info, filter))
+                        if (IsValidFilterFraudTicket(info, filter))
                         {
                             mdResult.FilterItemMMDetail(filter, info.Sites);
                         }
@@ -646,23 +646,25 @@
                             result = Task.Run(() => GetAllMMFilterFromCache(para, para.Sites, false)).Result;
                             break;
                         }
-                    case MatchMonitorQueryType.TicketFraud:
+                    case MatchMonitorQueryType.TicketFraud when !para.IsRefresh:
                         {
-                            if (para.IsRefresh)
+                            result = GetFraudMMFilterFromCache(para, para.Sites);
+                            break;
+                        }
+                    case MatchMonitorQueryType.TicketFraud when para.IsRefresh:
+                        {
+                            var removeKey = $"{MMDetailRegion}_{para.EventDateToString}_{para.MatchID}_{para.BetTypeID}_{para.BetID}_{para.LiveIndicator}";
+                            _memoryCacheService.RemoveKeyContainsValue(removeKey);
+                            result = GetFraudMMFilterFromCache(para, para.Sites);
+
+                            if (para.IsSupportShowAllTickets)
                             {
                                 Task.Run(() =>
                                 {
-                                    var removeKey = $"{para.EventDateToString}_{para.MatchID}_{para.BetTypeID}_{para.BetID}_{para.LiveIndicator}";
-                                    _memoryCacheService.RemoveKeyContainsValue(removeKey);
-                                    GetFraudMMDetailFromCache(para, MMSites.All);
-                                    if (para.IsSupportShowAllTickets)
-                                    {
-                                        _ = GetAllMMFilterFromCache(para);
-                                    }
+                                    _ = GetAllMMFilterFromCache(para);
                                 });
                             }
 
-                            result = GetFraudMMFilterFromCache(para, para.Sites);
                             break;
                         }
                 }
