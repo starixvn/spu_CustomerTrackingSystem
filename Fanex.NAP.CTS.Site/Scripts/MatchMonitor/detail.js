@@ -838,7 +838,7 @@ function MatchMonitorDetail() {
         let amountList = GetInputAmount()?.map(str => {
             return Number(str);
         }) ?? undefined;
-        if (amountList && !(item.Amount >= amountList[0] && item.Amount <= amountList[1])) {
+        if (amountList && !(item.Stake >= amountList[0] && item.Stake <= amountList[1])) {
             return false;
         }
 

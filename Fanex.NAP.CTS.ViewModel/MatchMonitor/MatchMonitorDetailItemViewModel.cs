@@ -202,7 +202,7 @@
                 (filter.HDPList?.Contains(BallHeadHDP()) ?? true) &&
                 (filter.ScoreList?.Contains(Score ?? "-") ?? true) &&
                 FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic) &&
-                (filter.AmountList == null || filter.AmountList.Count() < 2 ? true : Amount >= filter.AmountList[0] && Amount <= filter.AmountList[1]) &&
+                (filter.AmountList == null || filter.AmountList.Count() < 2 ? true : Stake >= filter.AmountList[0] && Stake <= filter.AmountList[1]) &&
                 FilterBySite(site);
         }
 
