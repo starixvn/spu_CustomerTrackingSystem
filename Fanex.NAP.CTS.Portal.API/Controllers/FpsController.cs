@@ -2,6 +2,7 @@
 {
     using Fanex.Logging;
     using Fanex.NAP.CTS.Model.API.FPS.Account;
+    using Fanex.NAP.CTS.Model.API.FPS.Device;
     using Fanex.NAP.CTS.Model.API.FPS.SearchAccount;
     using Fanex.NAP.CTS.Model.API.FPS.Transaction;
     using Fanex.NAP.CTS.Service.Implement.Api;
@@ -25,15 +26,15 @@
             _fpsService = new FpsService();
         }
 
-        [HttpPost]       
+        [HttpPost]
         public JsonResult<SearchAccountResultModel> SearchAccount(SearchAccountParamModel param)
         {
             try
             {
-                var data = _fpsService.SearchAccount(param);               
+                var data = _fpsService.SearchAccount(param);
 
                 return Json(data);
-               
+
             }
             catch (Exception ex)
             {
@@ -48,7 +49,7 @@
             try
             {
                 var data = _fpsService.GetAssAccountInfoByCustSubscriber(param);
-             
+
                 return Json(data);
 
             }
@@ -57,7 +58,7 @@
                 LogService.Error("FPS Get Ass Account info by cust subscriber exception: " + ex.Message);
                 return Json(new GetAssAccountInfoByCustSubscriberModel());
             }
-        }       
+        }
 
         [HttpPost]
         public JsonResult<GetAssAccountsByCustSubscriberResultModel> GetAssAccountsByCustSubscriber(GetAssAccountsByCustSubscriberParamModel param)
@@ -65,7 +66,7 @@
             try
             {
                 var data = _fpsService.GetAssAccountsByCustSubscriber(param);
-               
+
                 return Json(data);
 
             }
@@ -75,12 +76,44 @@
                 return Json(new GetAssAccountsByCustSubscriberResultModel());
             }
         }
-        
+
+        [HttpPost]
+        public JsonResult<GetAssDevicesByCustSubscriberResultModel> GetAssDevicesByCustSubscriber(GetAssDevicesByCustSubscriberParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetAssDevicesByCustSubscriber(param);
+
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Ass Account info by cust subscriber exception: " + ex.Message);
+                return Json(new GetAssDevicesByCustSubscriberResultModel());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult<GetAssMatrixAccountByCustSubscriberResultModel> GetAssMatrixAccountByCustSubscriber(GetAssMatrixAccountByCustSubscriberParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetAssMatrixAccountByCustSubscriber(param);
+
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Ass Account info by cust subscriber exception: " + ex.Message);
+                return Json(new GetAssMatrixAccountByCustSubscriberResultModel());
+            }
+        }
+
         [HttpPost]
         public JsonResult<TransactionResultModel> GetTransactionHistory(TransactionParamModel param)
         {
             try
-            {                    
+            {
                 var data = _fpsService.GetTransactionHistory(param);
 
                 return Json(data);
@@ -91,12 +124,12 @@
 
                 if (!string.IsNullOrEmpty(ex.Message) && ex.Message.ToLower().Contains("timeout expired"))
                 {
-                    return Json(new TransactionResultModel() {  IsTimeout = true });
+                    return Json(new TransactionResultModel() { IsTimeout = true });
                 }
 
                 return Json(new TransactionResultModel());
             }
-        }      
+        }
 
         [HttpPost]
         public JsonResult<LastestTransactionResultModel> GetLastestTransactionBySubscriber(LastestTransactionParamModel param)
@@ -104,7 +137,7 @@
             try
             {
                 var data = _fpsService.GetLastestTransactionBySubscriber(param);
-              
+
                 return Json(data);
             }
             catch (Exception ex)
@@ -112,6 +145,6 @@
                 LogService.Error("FPS Get Lastest Transaction By Subscriber exception: " + ex.Message);
                 return Json(new LastestTransactionResultModel());
             }
-        }       
+        }
     }
 }

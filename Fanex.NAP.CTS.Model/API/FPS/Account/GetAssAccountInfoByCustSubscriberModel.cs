@@ -10,5 +10,6 @@
 
         public DateTime? FirstLogin { get; set; }
 
+        public string FirstDevice { get; set; }
     }
 }

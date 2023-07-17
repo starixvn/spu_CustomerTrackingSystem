@@ -102,6 +102,8 @@
 		<Setting Key="DCS_DC_Transaction_GetHistoryBySubscriber" SpName="DCS_DC_Transaction_GetHistoryBySubscriber_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
 		<Setting Key="DCS_DC_Transaction_GetHistoryByCustSubscriber" SpName="DCS_DC_Transaction_GetHistoryByCustSubscriber_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Association_GetAssociationListByCustSubscriber" SpName="CTS_DC_Association_GetAssociationListByCustSubscriber_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_Association_GetAssociationDeviceByCustSubscriber" SpName="CTS_DC_Association_GetAssociationDeviceByCustSubscriber_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_Association_GetAssociationMaxtrixByCustSubscriber" SpName="CTS_DC_Association_GetAssociationMaxtrixByCustSubscriber_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="DCS_DC_Transaction_GetLatestBySubscriber" SpName="DCS_DC_Transaction_GetLatestBySubscriber_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
 	</Function>
 </Functions>

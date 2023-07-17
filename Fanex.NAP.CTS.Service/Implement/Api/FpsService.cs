@@ -3,13 +3,16 @@
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Criteria.Api.FPS.Account;
+    using Fanex.NAP.CTS.Criteria.Api.FPS.Device;
     using Fanex.NAP.CTS.Criteria.Api.FPS.SearchAccount;
     using Fanex.NAP.CTS.Criteria.Api.FPS.Transaction;
     using Fanex.NAP.CTS.Model.API.FPS.Account;
+    using Fanex.NAP.CTS.Model.API.FPS.Device;
     using Fanex.NAP.CTS.Model.API.FPS.SearchAccount;
     using Fanex.NAP.CTS.Model.API.FPS.Transaction;
     using Fanex.NAP.CTS.Service.Interface.Api;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class FpsService : IFpsService
     {
@@ -17,7 +20,7 @@
 
         public FpsService()
         {
-            repository = new DynamicRepository();            
+            repository = new DynamicRepository();
         }
 
         public SearchAccountResultModel SearchAccount(SearchAccountParamModel param)
@@ -36,7 +39,7 @@
 
                 data.Items = repository.Fetch<SearchAccountItemModel>(criteria);
                 data.TotalItem = criteria.TotalItem;
-            } 
+            }
             else
             {
                 var criteria = new GetAccountByNameSubscriberCriteria
@@ -70,18 +73,48 @@
             {
                 SubscriberID = param.SubscriberID,
                 CTSCustID = param.CTSCustID,
-                Skip = param.Skip,
-                Take = param.Take
+                NoOfRecord = param.NoOfRecord
             };
 
             data.Items = repository.Fetch<GetAssAccountsByCustSubscriberItemModel>(criteria);
-            data.TotalItem = criteria.TotalItem;
+
+            return data;
+        }
+
+        public GetAssDevicesByCustSubscriberResultModel GetAssDevicesByCustSubscriber(GetAssDevicesByCustSubscriberParamModel param)
+        {
+            var data = new GetAssDevicesByCustSubscriberResultModel();
+
+            var criteria = new GetAssDevicesByCustSubscriberCriteria
+            {
+                SubscriberID = param.SubscriberID,
+                CTSCustID = param.CTSCustID,
+                NoOfRecord = param.NoOfRecord
+            };
+
+            data.Items = repository.Fetch<GetAssDevicesByCustSubscriberItemModel>(criteria);
+
+            return data;
+        }
+
+        public GetAssMatrixAccountByCustSubscriberResultModel GetAssMatrixAccountByCustSubscriber(GetAssMatrixAccountByCustSubscriberParamModel param)
+        {
+            var data = new GetAssMatrixAccountByCustSubscriberResultModel();
+            var criteria = new GetAssMatrixAccountByCustSubscriberCriteria()
+            {
+                SubscriberID = param.SubscriberID,
+                CTSCustID = param.CTSCustID,
+                NoOfCustomer = param.NoOfCustomer,
+                NoOfDevice = param.NoOfDevice
+            };
+
+            data.Items = repository.Fetch<GetAssMatrixAccountByCustSubscriberItemModel>(criteria);
 
             return data;
         }
 
         public TransactionResultModel GetTransactionHistory(TransactionParamModel param)
-        {            
+        {
             if (param.CTSCustID != null && param.CTSCustID > 0)
             {
                 return GetTransactionByCustSubscriber(param);
@@ -136,7 +169,7 @@
             var data = new LastestTransactionResultModel();
 
             var criteria = new GetLastestTransactionCriteria
-            {                
+            {
                 SubscriberID = param.SubscriberID,
                 Length = param.Length,
                 Skip = param.Skip,

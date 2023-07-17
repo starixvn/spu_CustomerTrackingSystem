@@ -80,6 +80,8 @@
     <Compile Include="Account\RobotSetting\GetRobotUsersSCEDetailsCriteria.cs" />
     <Compile Include="Api\FPS\Account\GetAssAccountInfoByCustSubscriberCriteria.cs" />
     <Compile Include="Api\FPS\Account\GetAssAccountsByCustSubscriberCriteria.cs" />
+    <Compile Include="Api\FPS\Account\GetAssMatrixAccountByCustSubscriberCriteria.cs" />
+    <Compile Include="Api\FPS\Device\GetAssDevicesByCustSubscriberCriteria.cs" />
     <Compile Include="Api\FPS\SearchAccount\GetAccountByNameSubscriberCriteria.cs" />
     <Compile Include="Api\FPS\SearchAccount\GetListAccountByUserNameSubscriberCriteria.cs" />
     <Compile Include="Api\FPS\Transaction\GetLastestTransactionCriteria.cs" />
