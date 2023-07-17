@@ -126,7 +126,7 @@
 
         public MMDetailFilterViewModel Clone() => new MMDetailFilterViewModel(this);
 
-        public bool IsValidFilterFraudTicketLastest(MMDetailFilterViewModel filterLastest)
+        public bool IsValidFilterFraudTicketLatest(MMDetailFilterViewModel filterLastest)
         {
             if (IsFilter)
             {

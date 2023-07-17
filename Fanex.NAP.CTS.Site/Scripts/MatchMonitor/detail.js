@@ -258,11 +258,11 @@ function MatchMonitorDetail() {
                     TypeOfTickets: typeOfTickets,
                     IsSupportShowAllTickets: isSupportShowAllTickets,
                     IsFilter: currentType == MatchMonitorDetailViewType.TicketFraud || IsFilterOptionServerSide(),
-                    CurrencyIdList: GetSelectDataFilter(domElements.cbbCurrency, currentType == MatchMonitorDetailViewType.TicketFraud),
-                    HDPList: GetSelectDataFilter(domElements.cbbHDP, currentType == MatchMonitorDetailViewType.TicketFraud),
-                    ScoreList: GetSelectDataFilter(domElements.cbbMatchScore, currentType == MatchMonitorDetailViewType.TicketFraud),
-                    ReasonList: GetSelectDataFilter(domElements.cbbReason, currentType == MatchMonitorDetailViewType.TicketFraud),
-                    AGroupList: GetSelectDataFilter(domElements.cbbGroup, currentType == MatchMonitorDetailViewType.TicketFraud),
+                    CurrencyIdList: GetSelectDataFilter(domElements.cbbCurrency, true),
+                    HDPList: GetSelectDataFilter(domElements.cbbHDP, true),
+                    ScoreList: GetSelectDataFilter(domElements.cbbMatchScore, true),
+                    ReasonList: GetSelectDataFilter(domElements.cbbReason, true),
+                    AGroupList: GetSelectDataFilter(domElements.cbbGroup, true),
                     AmountList: GetInputAmount()?.map(str => {
                         return Number(str);
                     }) ?? undefined,

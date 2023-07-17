@@ -239,7 +239,7 @@
                 case MatchMonitorQueryType.TicketFraud:
                     {
                         mdResult = GetFraudMMDetailFromCache(para, para.Sites).Clone();
-                        if (filter.IsValidFilterFraudTicketLastest(GetFraudMMFilterFromCache(para)))
+                        if (filter.IsValidFilterFraudTicketLatest(GetFraudMMFilterFromCache(para)))
                         {
                             mdResult.FilterItemMMDetail(filter, para.Sites);
                         }
@@ -434,7 +434,7 @@
                 case MatchMonitorQueryType.TicketFraud:
                     {
                         var mdResult = GetFraudMMDetailFromCache(info, info.Sites).Clone();
-                        if (filter.IsValidFilterFraudTicketLastest(GetFraudMMFilterFromCache(info)))
+                        if (filter.IsValidFilterFraudTicketLatest(GetFraudMMFilterFromCache(info)))
                         {
                             mdResult.FilterItemMMDetail(filter, info.Sites);
                         }
@@ -628,8 +628,11 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private MMDetailFilterViewModel GetFraudMMFilterFromCache(MMDetailInfoViewModel para, string site = MMSites.All)
+        private MMDetailFilterViewModel GetFraudMMFilterFromCache(MMDetailInfoViewModel info, string site = MMSites.All)
         {
+            var para = info.Clone();
+            para.TypeOfTickets = MatchMonitorQueryType.TicketFraud;
+
             var key = para.BuildCacheKeyWithSite(nameof(GetFraudMMFilterFromCache), MMDetailRegion, site);
             var result = new MMDetailFilterViewModel();
 
