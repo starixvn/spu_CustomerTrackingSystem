@@ -92,8 +92,8 @@ function MatchMonitorDetail() {
     let isSupportShowAllTickets = false;
     let timeoutRenderTicketDetail = undefined;
 
-    const regexValidAmount = /^[0-9]{1,8}/;
-    const regexInvalidAmount = /[^0-9]{1,8}/g;
+    const regexValidAmount = /^[0-9]{1,15}/;
+    const regexInvalidAmount = /[^0-9]{1,15}/g;
 
     function InitialDetailGird(element) {
         element.DataTable({

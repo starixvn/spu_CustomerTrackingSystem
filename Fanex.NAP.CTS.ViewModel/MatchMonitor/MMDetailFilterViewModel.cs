@@ -98,7 +98,23 @@
 
         public List<string> ReasonList { get; set; }
 
-        public List<decimal> AmountList { get; set; }
+        private List<decimal> amountList { get; set; }
+
+        public List<decimal> AmountList
+        {
+            get { return amountList; }
+            set
+            {
+                if (value?.Count() > 0)
+                {
+                    amountList = value;
+                    amountList[0] = amountList[0] < 0 ? 0 : amountList[0];
+                    amountList[0] = amountList[0] > 922337203685477 ? 922337203685477 : amountList[0];
+                    amountList[1] = amountList[1] < 0 ? 0 : amountList[1];
+                    amountList[1] = amountList[1] > 922337203685477 ? 922337203685477 : amountList[1];
+                }
+            }
+        }
 
         public List<GroupInfoViewModel> GroupList { get; set; }
 
