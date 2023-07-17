@@ -900,7 +900,6 @@ function MatchMonitorDetail() {
         }
 
         currentType = Number(domElements.cbbTypeOfTickets.val());
-        domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
 
         FetchFilterMatchMonitorDetail();
     }
@@ -1192,6 +1191,7 @@ function MatchMonitorDetail() {
         domElements.btnGenerateDetail.on('click', function () {
             if (ValidationFilter()) {
                 CacheSelectDataFilter();
+                domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
                 if (!cacheMGroup.isActive) {
                     FetchMatchMonitorDetail(currentType);
                 }
@@ -1226,11 +1226,9 @@ function MatchMonitorDetail() {
         domElements.btnExportExcel.on('click', function () { ExportToExcel(); })
 
         domElements.btnVerifyAndClose.on('click', function () {
-            if (currentType == MatchMonitorDetailViewType.TicketFraud) {
-                common.showConfirmation2('<div class="popup - content">Are you sure about this?<br>Once confirmed, all tickets\' review status will be updated to "Verified".</div>', function () {
-                    VerifyTransMatchMonitorDetail();
-                });
-            }
+            common.showConfirmation2('<div class="popup - content">Are you sure about this?<br>Once confirmed, all tickets\' review status will be updated to "Verified".</div>', function () {
+                VerifyTransMatchMonitorDetail();
+            });
         })
 
         domElements.inputHomeSelectAll.prop('checked', false);
