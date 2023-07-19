@@ -460,8 +460,11 @@
             [Description("Non-Sport")]
             NonSport = 229,
 
-            [Description("Saba")]
-            Saba = 145
+            [Description("Saba Soccer")]
+            SabaSoccer = 145,
+
+            [Description("Saba Basketball")]
+            SabaBasketball = 912
         }
     }
 }
