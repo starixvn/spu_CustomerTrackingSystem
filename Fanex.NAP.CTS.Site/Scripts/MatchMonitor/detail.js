@@ -1030,7 +1030,7 @@ function MatchMonitorDetail() {
                                         <th>Odds</th>
                                         <th>BetID</th>
                                         <th>Cur</th>
-                                        <th>Amount</th>
+                                        <th>Amt</th>
                                         <th>HDP</th>
                                         <th>Score</th>
                                         <th>Transtime</th>
@@ -1058,7 +1058,7 @@ function MatchMonitorDetail() {
                                         <th>Odds</th>
                                         <th>BetID</th>
                                         <th>Cur</th>
-                                        <th>Amount</th>
+                                        <th>Amt</th>
                                         <th>HDP</th>
                                         <th>Score</th>
                                         <th>Transtime</th>
