@@ -278,7 +278,7 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                padding: 1rem 2rem 1rem 1rem;                          
+                padding: 1rem 2rem 1rem 1rem;
                 background-color: #E3E9F6;
                 border-radius: 1px;
                 position: fixed;
@@ -404,11 +404,20 @@
 
                                     .col-transtime {
                                         font-size: 12px !important;
+                                        min-width: 50px;
                                     }
 
-                                    .col-betid, .col-dgr, .col-reason {
+                                    .col-betid, .col-reason {
                                         font-size: 12px !important;
                                     }
+
+                                    .col-dgr {
+                                        font-size: 12px !important;
+                                    }
+
+                                    .col-amt {
+                                        font-weight: bold;
+                                    }                                    
 
                                     .icon-Check {
                                         &::before {
@@ -519,10 +528,10 @@
                     padding-right: 1rem;
                 }
 
-                #tblHomeHeaderFixed, #tblAwayHeaderFixed {                   
+                #tblHomeHeaderFixed, #tblAwayHeaderFixed {
                     top: 25rem;
                     display: none;
-                    position: sticky;                  
+                    position: sticky;
                     z-index: 5;
                     background-color: white;
 
