@@ -13,25 +13,12 @@
             this.AwayMatchItemList = new List<MatchMonitorDetailItemViewModel>();
         }
 
-        public MatchMonitorDetailListViewModel(MatchMonitorDetailListViewModel matchMonitorDetailList)
+        private MatchMonitorDetailListViewModel(MatchMonitorDetailListViewModel matchMonitorDetailList) : base(matchMonitorDetailList)
         {
             LastSequenceID = matchMonitorDetailList.LastSequenceID;
             CTSCustIDList = matchMonitorDetailList.CTSCustIDList;
             HomeMatchItemList = matchMonitorDetailList.HomeMatchItemList.ToList();
             AwayMatchItemList = matchMonitorDetailList.AwayMatchItemList.ToList();
-            IsFilter = matchMonitorDetailList.IsFilter;
-            MaxSequenceId = matchMonitorDetailList.MaxSequenceId;
-            RecordsTotal = matchMonitorDetailList.RecordsTotal;
-            CurrencyList = matchMonitorDetailList.CurrencyList;
-            CurrencyIdList = matchMonitorDetailList.CurrencyIdList;
-            HDPList = matchMonitorDetailList.HDPList;
-            ScoreList = matchMonitorDetailList.ScoreList;
-            ReasonList = matchMonitorDetailList.ReasonList;
-            AmountList = matchMonitorDetailList.AmountList;
-            GroupList = matchMonitorDetailList.GroupList;
-            ReasonInfos = matchMonitorDetailList.ReasonInfos;
-            ReasonGroupIDDic = matchMonitorDetailList.ReasonGroupIDDic;
-            AGroupList = matchMonitorDetailList.AGroupList;
         }
 
         public void FilterItemMMDetail(MMDetailFilterViewModel filter, string site)
@@ -82,6 +69,8 @@
         public List<MatchMonitorDetailItemViewModel> HomeMatchItemList { get; set; }
 
         public List<MatchMonitorDetailItemViewModel> AwayMatchItemList { get; set; }
+
+        public new MatchMonitorDetailListViewModel Clone() => new MatchMonitorDetailListViewModel(this);
 
         public void BindReasons(IEnumerable<string> rawReasons)
         {

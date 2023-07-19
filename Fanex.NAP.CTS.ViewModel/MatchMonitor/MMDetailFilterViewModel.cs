@@ -65,7 +65,7 @@
             GroupList = groupList?.Where(x => x.GroupID != null ? agroup.Contains(x.GroupID ?? 0) : false).ToList();
         }
 
-        public MMDetailFilterViewModel(MMDetailFilterViewModel filter)
+        protected MMDetailFilterViewModel(MMDetailFilterViewModel filter)
         {
             IsFilter = filter.IsFilter;
             MaxSequenceId = filter.MaxSequenceId;
@@ -98,7 +98,23 @@
 
         public List<string> ReasonList { get; set; }
 
-        public List<decimal> AmountList { get; set; }
+        private List<decimal> amountList { get; set; }
+
+        public List<decimal> AmountList
+        {
+            get { return amountList; }
+            set
+            {
+                if (value?.Count() > 0)
+                {
+                    amountList = value;
+                    amountList[0] = amountList[0] < 0 ? 0 : amountList[0];
+                    amountList[0] = amountList[0] > 922337203685477 ? 922337203685477 : amountList[0];
+                    amountList[1] = amountList[1] < 0 ? 0 : amountList[1];
+                    amountList[1] = amountList[1] > 922337203685477 ? 922337203685477 : amountList[1];
+                }
+            }
+        }
 
         public List<GroupInfoViewModel> GroupList { get; set; }
 
@@ -107,6 +123,56 @@
         public Dictionary<string, List<int>> ReasonGroupIDDic { get; set; }
 
         public List<string> AGroupList { get; set; }
+
+        public MMDetailFilterViewModel Clone() => new MMDetailFilterViewModel(this);
+
+        public bool IsValidFilterFraudTicketLatest(MMDetailFilterViewModel filterLastest)
+        {
+            if (IsFilter)
+            {
+                var count = 0;
+
+                if (!filterLastest.HDPList.Except(HDPList).Any())
+                {
+                    HDPList = null;
+                    count++;
+                }
+
+                if (!filterLastest.ScoreList.Except(ScoreList).Any())
+                {
+                    ScoreList = null;
+                    count++;
+                }
+
+                if (!filterLastest.CurrencyList.Select(x => x.Key).Except(CurrencyIdList).Any())
+                {
+                    CurrencyIdList = null;
+                    count++;
+                }
+
+                if (!filterLastest.ReasonGroupIDDic.Where(x => ReasonList.Contains(x.Key)).SelectMany(x => x.Value).Distinct()
+                    .ToList().ConvertAll(x => x.ToString()).Except(AGroupList).Any())
+                {
+                    AGroupList = null;
+                    count++;
+                }
+
+                if (!filterLastest.ReasonList.Except(ReasonList).Any())
+                {
+                    ReasonList = null;
+                    count++;
+                }
+
+                if (!AmountList?.Any() ?? true)
+                {
+                    count++;
+                }
+
+                IsFilter = count < 6;
+            }
+
+            return IsFilter;
+        }
 
         public bool IsOnlyFraudTicket()
         {

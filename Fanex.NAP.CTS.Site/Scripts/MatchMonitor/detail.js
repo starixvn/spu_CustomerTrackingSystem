@@ -92,8 +92,8 @@ function MatchMonitorDetail() {
     let isSupportShowAllTickets = false;
     let timeoutRenderTicketDetail = undefined;
 
-    const regexValidAmount = /^[0-9]{1,8}/;
-    const regexInvalidAmount = /[^0-9]{1,8}/g;
+    const regexValidAmount = /^[0-9]{1,15}/;
+    const regexInvalidAmount = /[^0-9]{1,15}/g;
 
     function InitialDetailGird(element) {
         element.DataTable({
@@ -256,12 +256,13 @@ function MatchMonitorDetail() {
                     LiveIndicator: domElements.liveIndicator,
                     LastScannedSequenceID: lastScannedSequenceID,
                     TypeOfTickets: typeOfTickets,
-                    IsFilter: IsFilterOptionServerSide(),
-                    CurrencyIdList: GetSelectDataFilter(domElements.cbbCurrency),
-                    HDPList: GetSelectDataFilter(domElements.cbbHDP),
-                    ScoreList: GetSelectDataFilter(domElements.cbbMatchScore),
-                    ReasonList: GetSelectDataFilter(domElements.cbbReason),
-                    AGroupList: GetSelectDataFilter(domElements.cbbGroup),
+                    IsSupportShowAllTickets: isSupportShowAllTickets,
+                    IsFilter: currentType == MatchMonitorDetailViewType.TicketFraud || IsFilterOptionServerSide(),
+                    CurrencyIdList: GetSelectDataFilter(domElements.cbbCurrency, true),
+                    HDPList: GetSelectDataFilter(domElements.cbbHDP, true),
+                    ScoreList: GetSelectDataFilter(domElements.cbbMatchScore, true),
+                    ReasonList: GetSelectDataFilter(domElements.cbbReason, true),
+                    AGroupList: GetSelectDataFilter(domElements.cbbGroup, true),
                     AmountList: GetInputAmount()?.map(str => {
                         return Number(str);
                     }) ?? undefined,
@@ -538,12 +539,12 @@ function MatchMonitorDetail() {
         return undefined;
     }
 
-    function GetSelectDataFilter(dom_ccb) {
+    function GetSelectDataFilter(dom_ccb, isGetAllValue = false) {
         let allVal = '';
         for (let i = 0; i < dom_ccb[0].length; i++) {
             allVal += dom_ccb[0][i].value;
         }
-        if (dom_ccb.val().join('') != allVal) {
+        if (isGetAllValue || dom_ccb.val().join('') != allVal) {
             return dom_ccb.val();
         }
 
@@ -757,7 +758,7 @@ function MatchMonitorDetail() {
             IsOptIPLast3Days: domElements.inputOptIPLast3Days.is(":checked")
         }
 
-        $.ajax(common.modifyRelativeUrl('MatchMonitor/DetectGroupAssWithOptions'), {
+        xhr = $.ajax(common.modifyRelativeUrl('MatchMonitor/DetectGroupAssWithOptions'), {
             type: 'POST',
             data: params,
             beforeSend: function () {
@@ -899,7 +900,6 @@ function MatchMonitorDetail() {
         }
 
         currentType = Number(domElements.cbbTypeOfTickets.val());
-        domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
 
         FetchFilterMatchMonitorDetail();
     }
@@ -1191,6 +1191,7 @@ function MatchMonitorDetail() {
         domElements.btnGenerateDetail.on('click', function () {
             if (ValidationFilter()) {
                 CacheSelectDataFilter();
+                domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
                 if (!cacheMGroup.isActive) {
                     FetchMatchMonitorDetail(currentType);
                 }
@@ -1225,11 +1226,9 @@ function MatchMonitorDetail() {
         domElements.btnExportExcel.on('click', function () { ExportToExcel(); })
 
         domElements.btnVerifyAndClose.on('click', function () {
-            if (currentType == MatchMonitorDetailViewType.TicketFraud) {
-                common.showConfirmation2('<div class="popup - content">Are you sure about this?<br>Once confirmed, all tickets\' review status will be updated to "Verified".</div>', function () {
-                    VerifyTransMatchMonitorDetail();
-                });
-            }
+            common.showConfirmation2('<div class="popup - content">Are you sure about this?<br>Once confirmed, all tickets\' review status will be updated to "Verified".</div>', function () {
+                VerifyTransMatchMonitorDetail();
+            });
         })
 
         domElements.inputHomeSelectAll.prop('checked', false);

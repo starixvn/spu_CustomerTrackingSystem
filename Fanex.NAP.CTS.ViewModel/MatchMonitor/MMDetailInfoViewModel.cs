@@ -7,7 +7,7 @@
     {
         public MMDetailInfoViewModel() { }
 
-        public MMDetailInfoViewModel(MMDetailInfoViewModel para)
+        private MMDetailInfoViewModel(MMDetailInfoViewModel para)
         {
             this.TypeOfTickets = para.TypeOfTickets;
             this.LastScannedSequenceID = para.LastScannedSequenceID;
@@ -54,14 +54,11 @@
             }
         }
 
+        public MMDetailInfoViewModel Clone() => new MMDetailInfoViewModel(this);
+
         public string BuildCacheKey(string nameOfFuntion, string region = "")
         {
-            return $"{region}_{nameOfFuntion}_{EventDateToString}_{MatchID}_{BetTypeID}_{BetID}_{LiveIndicator}";
-        }
-
-        public string BuildCacheKeyForAllMMTicket(string nameOfFunction, string region = "")
-        {
-            return BuildCacheKey(nameOfFunction, region) + $"_{LastScannedSequenceID?.ToString() ?? string.Empty}";
+            return $"{nameOfFuntion}_{region}_{EventDateToString}_{MatchID}_{BetTypeID}_{BetID}_{LiveIndicator}";
         }
 
         public string BuildCacheKeyWithSite(string nameOfFunction, string region = "", string site = "")
