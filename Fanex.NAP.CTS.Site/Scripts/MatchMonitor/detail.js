@@ -257,7 +257,7 @@ function MatchMonitorDetail() {
                     LastScannedSequenceID: lastScannedSequenceID,
                     TypeOfTickets: typeOfTickets,
                     IsSupportShowAllTickets: isSupportShowAllTickets,
-                    IsFilter: currentType == MatchMonitorDetailViewType.TicketFraud || IsFilterOptionServerSide(),
+                    IsFilter: true,
                     CurrencyIdList: GetSelectDataFilter(domElements.cbbCurrency, true),
                     HDPList: GetSelectDataFilter(domElements.cbbHDP, true),
                     ScoreList: GetSelectDataFilter(domElements.cbbMatchScore, true),

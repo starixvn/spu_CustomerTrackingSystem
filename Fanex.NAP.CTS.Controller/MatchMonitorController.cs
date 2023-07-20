@@ -247,13 +247,11 @@
                     }
                 case MatchMonitorQueryType.TicketAll when para.IsSupportShowAllTickets:
                     {
-                        if (filter.IsValidFilterTicketLatest(Task.Run(() => GetAllMMFilterFromCache(para)).Result))
+                        filter.IsValidFilterTicketLatest(Task.Run(() => GetAllMMFilterFromCache(para)).Result);
+                        mdResult = GetAllMMDetailFromCache(para, filter).Clone();
+                        if (filter.ReasonList != null || filter.AGroupList != null)
                         {
-                            mdResult = GetAllMMDetailFromCache(para, filter).Clone();
-                            if (filter.ReasonList != null || filter.AGroupList != null)
-                            {
-                                mdResult.FilterItemMMDetailByReasonAGroup(filter);
-                            }
+                            mdResult.FilterItemMMDetailByReasonAGroup(filter);
                         }
                         break;
                     }
@@ -446,10 +444,8 @@
                     }
                 case MatchMonitorQueryType.TicketAll when info.IsSupportShowAllTickets:
                     {
-                        if (filter.IsValidFilterTicketLatest(Task.Run(() => GetAllMMFilterFromCache(info)).Result))
-                        {
-                            recordsTotal = GetTotalAllTicketDetailByFilter(info, filter);
-                        }
+                        filter.IsValidFilterTicketLatest(Task.Run(() => GetAllMMFilterFromCache(info)).Result);
+                        recordsTotal = GetTotalAllTicketDetailByFilter(info, filter);
                         break;
                     }
             }
@@ -682,6 +678,7 @@
                             if (mmticketDetailInfo == null)
                             {
                                 mmticketDetailInfo = _matchMonitorService.GetMMTicketDetailInfo(para);
+                                mmticketDetailInfo.FilterDetail.ScoreList = null;
                                 if (isCache) await _memoryCacheService.PushValueAsync(key, mmticketDetailInfo);
                             }
 
