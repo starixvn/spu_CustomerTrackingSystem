@@ -678,7 +678,6 @@
                             if (mmticketDetailInfo == null)
                             {
                                 mmticketDetailInfo = _matchMonitorService.GetMMTicketDetailInfo(para);
-                                mmticketDetailInfo.FilterDetail.ScoreList = null;
                                 if (isCache) await _memoryCacheService.PushValueAsync(key, mmticketDetailInfo);
                             }
 

@@ -812,7 +812,7 @@ function MatchMonitorDetail() {
             return false;
         }
 
-        if (!domElements.cbbMatchScore.val().find(x => x == item.Score)) {
+        if (!domElements.cbbMatchScore.val().find(x => x == "-" || x == item.Score)) {
             return false;
         }
 
