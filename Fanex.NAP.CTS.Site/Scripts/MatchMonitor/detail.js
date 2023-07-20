@@ -136,7 +136,7 @@ function MatchMonitorDetail() {
                 { targets: [5], width: "5%" },
                 { targets: [6], width: "5%", className: "text-center col-betid" },
                 { targets: [7], width: "5%" },
-                { targets: [8], width: "5%", className: "text-right" },
+                { targets: [8], width: "5%", className: "text-right col-amt" },
                 { targets: [9], width: "4%" },
                 { targets: [10], width: "5%" },
                 { targets: [11], width: "15%", className: "text-center col-transtime" },
@@ -730,8 +730,8 @@ function MatchMonitorDetail() {
             return false;
         }
 
-        if (custSelectedLength > 1001) {
-            common.showError("Exceeded max 1001 usernames. Please try again with a smaller range.");
+        if (custSelectedLength > 5000) {
+            common.showError("Exceeded max 5000 usernames. Please try again with a smaller range.");
             return false;
         }
 
@@ -1030,14 +1030,14 @@ function MatchMonitorDetail() {
                                         <th>Odds</th>
                                         <th>BetID</th>
                                         <th>Cur</th>
-                                        <th>Amount</th>
+                                        <th>Amt</th>
                                         <th>HDP</th>
                                         <th>Score</th>
                                         <th>Transtime</th>
                                         <th title="Auto-detected Association Group">
                                             A.Gr.
                                         </th>
-                                        <th title="Manual-detected Association Group: max. 1001 Usernames">
+                                        <th title="Manual-detected Association Group: max. 5000 Usernames">
                                             M.Gr.<sup style="vertical-align: super; font-size: smaller;">i</sup>
                                         </th>
                                         <th>Reason</th>
@@ -1058,14 +1058,14 @@ function MatchMonitorDetail() {
                                         <th>Odds</th>
                                         <th>BetID</th>
                                         <th>Cur</th>
-                                        <th>Amount</th>
+                                        <th>Amt</th>
                                         <th>HDP</th>
                                         <th>Score</th>
                                         <th>Transtime</th>
                                         <th title="Auto-detected Association Group">
                                             A.Gr.
                                         </th>
-                                        <th title="Manual-detected Association Group: max. 1001 Usernames">
+                                        <th title="Manual-detected Association Group: max. 5000 Usernames">
                                             M.Gr.<sup style="vertical-align: super; font-size: smaller;">i</sup>
                                         </th>
                                         <th>Reason</th>
