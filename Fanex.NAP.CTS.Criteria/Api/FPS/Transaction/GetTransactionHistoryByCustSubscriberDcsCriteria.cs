@@ -4,16 +4,13 @@
     using Fanex.Data.Repository;
     using System;
 
-    public class GetTransactionHistoryBySubscriberCriteria : CriteriaBase
+    public class GetTransactionHistoryByCustSubscriberDcsCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_SubscriberID")]
-        public int SubscriberID { get; set; }      
+        public int SubscriberID { get; set; }
 
-        [SpParam(SqlParamName = "ip_UserName")]
-        public string UserName { get; set; }
-
-        [SpParam(SqlParamName = "ip_IsPartial")]
-        public bool IsPartial { get; set; }
+        [SpParam(SqlParamName = "ip_CTSCustID")]
+        public long? CTSCustID { get; set; }
 
         [SpParam(SqlParamName = "ip_FromDate")]
         public DateTime FromDate { get; set; }
@@ -28,11 +25,11 @@
         public int Take { get; set; }
 
         [SpParam(SqlParamName = "op_TotalItem")]
-        public int TotalItem { get; set; }      
+        public int TotalItem { get; set; }
 
         public override string GetSettingKey()
         {
-            return "DCS_DC_Transaction_GetHistoryBySubscriber";
+            return "DCS_ET_Transaction_GetHistoryByAccountSubscriber";
         }
 
         public override bool IsValid()

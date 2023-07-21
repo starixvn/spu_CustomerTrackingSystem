@@ -205,6 +205,7 @@
     <Compile Include="API\FPS\SearchAccount\SearchAccountParamModel.cs" />
     <Compile Include="API\FPS\SearchAccount\SearchAccountItemModel.cs" />
     <Compile Include="API\FPS\SearchAccount\SearchAccountResultModel.cs" />
+    <Compile Include="API\FPS\Subscriber\SubscriberFpsInfo.cs" />
     <Compile Include="API\FPS\Transaction\LastestTransactionItemModel.cs" />
     <Compile Include="API\FPS\Transaction\LastestTransactionParamModel.cs" />
     <Compile Include="API\FPS\Transaction\LastestTransactionResultModel.cs" />

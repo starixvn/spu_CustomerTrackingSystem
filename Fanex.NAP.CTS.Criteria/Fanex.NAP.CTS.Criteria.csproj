@@ -84,9 +84,13 @@
     <Compile Include="Api\FPS\Device\GetAssDevicesByCustSubscriberCriteria.cs" />
     <Compile Include="Api\FPS\SearchAccount\GetAccountByNameSubscriberCriteria.cs" />
     <Compile Include="Api\FPS\SearchAccount\GetListAccountByUserNameSubscriberCriteria.cs" />
-    <Compile Include="Api\FPS\Transaction\GetLastestTransactionCriteria.cs" />
-    <Compile Include="Api\FPS\Transaction\GetTransactionHistoryByCustSubscriberCriteria.cs" />
-    <Compile Include="Api\FPS\Transaction\GetTransactionHistoryBySubscriberCriteria.cs" />
+    <Compile Include="Api\FPS\Subscriber\GetSubscriberDcsExBySubscriberName.cs" />
+    <Compile Include="Api\FPS\Transaction\GetLastestTransactionCtsCriteria.cs" />
+    <Compile Include="Api\FPS\Transaction\GetLastestTransactionDcsCriteria.cs" />
+    <Compile Include="Api\FPS\Transaction\GetTransactionHistoryByCustSubscriberCtsCriteria.cs" />
+    <Compile Include="Api\FPS\Transaction\GetTransactionHistoryByCustSubscriberDcsCriteria.cs" />
+    <Compile Include="Api\FPS\Transaction\GetTransactionHistoryBySubscriberCtsCriteria.cs" />
+    <Compile Include="Api\FPS\Transaction\GetTransactionHistoryBySubscriberDcsCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedAccountCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedGroupMonitorCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\GetAssociatedAccountCriteria.cs" />

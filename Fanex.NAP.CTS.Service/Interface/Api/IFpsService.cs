@@ -7,11 +7,12 @@
 
     public interface IFpsService
     {
+        #region cts
         SearchAccountResultModel SearchAccount(SearchAccountParamModel param);
 
         GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriber(GetAssAccountInfoByCustSubscriberParamModel param);
 
-        TransactionResultModel GetTransactionHistory(TransactionParamModel param);
+        TransactionResultModel GetTransactionHistoryCts(TransactionParamModel param);
 
         GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriber(GetAssAccountsByCustSubscriberParamModel param);
 
@@ -19,6 +20,13 @@
 
         GetAssMatrixAccountByCustSubscriberResultModel GetAssMatrixAccountByCustSubscriber(GetAssMatrixAccountByCustSubscriberParamModel param);
 
-        LastestTransactionResultModel GetLastestTransactionBySubscriber(LastestTransactionParamModel param);
+        LastestTransactionResultModel GetLastestTransactionBySubscriberCts(LastestTransactionParamModel param);
+        #endregion cts
+
+        #region dcs
+        TransactionResultModel GetTransactionHistoryDcs(TransactionParamModel param);
+
+        LastestTransactionResultModel GetLastestTransactionBySubscriberDcs(LastestTransactionParamModel param);
+        #endregion dcs
     }
 }
