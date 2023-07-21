@@ -43,12 +43,12 @@ function MatchMonitorDetail() {
         tblMMHomeTeam: $('#tblMMHomeTeam'),
         tblMMAwayTeam: $('#tblMMAwayTeam'),
         divHomeMonitor: $('#first-monitor-datatable'),
-        divAwayMonitor: $('#second-monitor-datatable'),
-        tblHomeHeaderFixed: $('#tblHomeHeaderFixed'),
-        tblAwayHeaderFixed: $('#tblAwayHeaderFixed'),
+        divAwayMonitor: $('#second-monitor-datatable'),      
         spanReasonInfo: $('#spanReasonInfo'),
         inputHomeSelectAll: $('#inputHomeSelectAll'),
         inputAwaySelectAll: $('#inputAwaySelectAll'),
+        iconHToggleBetID: $('#iconHToggleBetID'),
+        iconAToggleBetID: $('#iconAToggleBetID'),
         divPopupAssDetect: $('#divPopupAssDetect'),
         btnShowPopupAssDetection: $('#btnShowPopupAssDetection'),
         tickCheckAll: $('#tickCheckAll'),
@@ -123,7 +123,7 @@ function MatchMonitorDetail() {
             autoWidth: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 5, 7, 9, 10, 12, 14, 15], className: "text-center" },
+                { targets: [0, 1, 2, 3, 5, 7, 9, 10, 12, 13, 14, 15, 16], className: "text-center" },
                 {
                     targets: [0], width: "3%", render: function (data, type, full, meta) {
                         return '<input type="checkbox" class="col-checkbox" name="chkbx" value="' + $('<div/>').text(data).html() + '">';
@@ -132,20 +132,21 @@ function MatchMonitorDetail() {
                 { targets: [1], width: "17%" },
                 { targets: [2], width: "4%" },
                 { targets: [3], width: "4%" },
-                { targets: [4], width: "11%", className: "text-center col-dgr" },
+                { targets: [4], width: "10%", className: "text-center col-dgr" },
                 { targets: [5], width: "5%" },
                 { targets: [6], width: "5%", className: "text-center col-betid" },
                 { targets: [7], width: "5%" },
                 { targets: [8], width: "5%", className: "text-right col-amt" },
                 { targets: [9], width: "4%" },
                 { targets: [10], width: "5%" },
-                { targets: [11], width: "15%", className: "text-center col-transtime" },
-                { targets: [12], width: "5%" },
-                { targets: [13], width: "5%", className: "text-center" },
-                { targets: [14], width: "7%", className: "text-center col-reason" },
-                { targets: [15], width: "3%" },
-                { targets: [16], visible: false },
-                { targets: [17], visible: false }
+                { targets: [11], width: "13%", className: "text-center col-transtime" },
+                { targets: [12], width: "3%" },
+                { targets: [13], width: "5%" },
+                { targets: [14], width: "5%", className: "text-center" },
+                { targets: [15], width: "7%", className: "text-center col-reason" },
+                { targets: [16], width: "3%" },
+                { targets: [17], visible: false },
+                { targets: [18], visible: false }
             ],
             columns: [
                 {
@@ -179,6 +180,7 @@ function MatchMonitorDetail() {
                 { data: obj => obj.HDP },
                 { data: obj => obj.Score },
                 { data: obj => obj.TransTimeToString },
+                { data: obj => obj.Betform },
                 { data: obj => obj.ADetectGroup },
                 {
                     data: obj => () => {
@@ -225,6 +227,7 @@ function MatchMonitorDetail() {
         recordsFilteredGlobal = 0;
 
         SetupDataTable();
+
         setTimeout(() => {
             RefreshLengthPage(500, true);
         }, 10);
@@ -443,7 +446,12 @@ function MatchMonitorDetail() {
             }
 
             if (data?.HomeMatchItemList) {
-                domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw(false);
+                var obj = [];
+                for (var i = 0; i < 500; i++) {                   
+                    obj.push(...data.HomeMatchItemList);
+                }
+
+                domElements.tblMMHomeTeam.DataTable().rows.add(obj).draw(false);
             }
 
             if (data?.AwayMatchItemList) {
@@ -925,6 +933,30 @@ function MatchMonitorDetail() {
         $('input[type="checkbox"][name="chkbx"]', nodes).prop('checked', input.is(":checked"));
     }
 
+    function ToggleBetID(table, isExpand) {        
+        //table.rows().every(function () {
+        //    let rowData = this.data();
+
+        //    if (isExpand) {
+        //        rowData.TransIdToString = "newnewnewnewIDEXPAND";
+        //    } else {
+        //        rowData.TransIdToString = "...new";
+        //    }
+
+        //    this.invalidate();
+        //});
+
+        //col-betid
+
+        $('tr', domElements.tblMMHomeTeam).each(function (idx, tr) {
+            if (isExpand) {
+                $(tr).find('td.col-betid').text('newnewnewnewIDEXPAND');
+            } else {
+                $(tr).find('td.col-betid').text('...new');
+            }
+        });
+    }
+
     function ExportToExcel() {
         if (IsValidExportExcel()) {
             let mmDetails = {
@@ -987,8 +1019,9 @@ function MatchMonitorDetail() {
                     datas += `,&quot;Currency&quot;:&quot;${data.CurrencyName}&quot;`;
                     datas += `,&quot;Amount&quot;:&quot;${data.Amount}&quot;`;
                     datas += `,&quot;HDP&quot;:&quot;${data.HDP}&quot;`;
-                    datas += `,&quot;Score&quot;:&quot;${data.Score}&quot;`;
+                    datas += `,&quot;Score&quot;:&quot;${data.Score}&quot;`;                    
                     datas += `,&quot;TransTimeToString&quot;:&quot;${data.TransTimeToString}&quot;`;
+                    datas += `,&quot;Betform&quot;:&quot;${data.Betform}&quot;`;
                     datas += `,&quot;ADetectGroup&quot;:&quot;${data.ADetectGroup}&quot;`;
                     datas += `,&quot;MDetectGroup&quot;:&quot;${data.MDetectGroup}&quot;`;
                     datas += `,&quot;ReasonList&quot;:&quot;${data.ReasonList}&quot;`;
@@ -1028,12 +1061,13 @@ function MatchMonitorDetail() {
                                         <th>Bot</th>
                                         <th>Dgr</th>
                                         <th>Odds</th>
-                                        <th>BetID</th>
+                                        <th><div class="type-outer"><span class="col-title">BetID</span><span id="iconHToggleBetID" class="icon-account_detail icon-collapse-expand"></span></div></th>
                                         <th>Cur</th>
                                         <th>Amt</th>
                                         <th>HDP</th>
                                         <th>Score</th>
                                         <th>Transtime</th>
+                                        <th>B.f.</th>
                                         <th title="Auto-detected Association Group">
                                             A.Gr.
                                         </th>
@@ -1056,12 +1090,13 @@ function MatchMonitorDetail() {
                                         <th>Bot</th>
                                         <th>Dgr</th>
                                         <th>Odds</th>
-                                        <th>BetID</th>
+                                        <th><div class="type-outer"><span class="col-title">BetID</span><span id="iconAToggleBetID" class="icon-account_detail icon-collapse-expand"></span></div></th>
                                         <th>Cur</th>
                                         <th>Amt</th>
                                         <th>HDP</th>
                                         <th>Score</th>
                                         <th>Transtime</th>
+                                        <th>B.f.</th>
                                         <th title="Auto-detected Association Group">
                                             A.Gr.
                                         </th>
@@ -1077,16 +1112,39 @@ function MatchMonitorDetail() {
 
         domElements.tblMMHomeTeam = $("#tblMMHomeTeam");
         domElements.tblMMAwayTeam = $("#tblMMAwayTeam");
+
         InitialDetailGird(domElements.tblMMHomeTeam);
         InitialDetailGird(domElements.tblMMAwayTeam);
 
         domElements.inputHomeSelectAll = $('#inputHomeSelectAll');
         domElements.inputAwaySelectAll = $('#inputAwaySelectAll');
+
         domElements.inputHomeSelectAll.on('click', function () { ToggleGridSelectAll(domElements.inputHomeSelectAll, domElements.tblMMHomeTeam.DataTable()) });
         domElements.inputAwaySelectAll.on('click', function () { ToggleGridSelectAll(domElements.inputAwaySelectAll, domElements.tblMMAwayTeam.DataTable()) });
 
-        domElements.tblHomeHeaderFixed = $('#tblHomeHeaderFixed');
-        domElements.tblAwayHeaderFixed = $('#tblAwayHeaderFixed');
+        domElements.iconHToggleBetID = $('#iconHToggleBetID');
+        domElements.iconAToggleBetID = $('#iconAToggleBetID');
+
+      
+
+        domElements.iconHToggleBetID.on('click', function () {            
+            if (domElements.iconHToggleBetID.hasClass('expand')) {
+                domElements.iconHToggleBetID.removeClass('expand');
+                ToggleBetID(domElements.tblMMHomeTeam.DataTable(), false);
+            } else {
+                domElements.iconHToggleBetID.addClass('expand');
+                ToggleBetID(domElements.tblMMHomeTeam.DataTable(), true);
+            }
+        });
+        domElements.iconAToggleBetID.on('click', function () {
+            if (domElements.iconAToggleBetID.hasClass('expand')) {
+                domElements.iconAToggleBetID.removeClass('expand');
+                ToggleBetID(domElements.tblMMAwayTeam.DataTable(), false);
+            } else {
+                domElements.iconAToggleBetID.addClass('expand');
+                ToggleBetID(domElements.tblMMAwayTeam.DataTable(), true);
+            }
+        });        
     }
 
     function ValidationFilter() {

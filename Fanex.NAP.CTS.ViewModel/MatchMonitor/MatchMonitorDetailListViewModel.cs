@@ -47,11 +47,15 @@
             mdItemList.AddRange(AwayMatchItemList);
 
             ScoreList = mdItemList.Select(x => x.Score).Distinct().OrderBy(x => x).ToList();
+
             CurrencyList = mdItemList.Select(x =>
             {
                 var isNotValid = string.IsNullOrEmpty(x.CurrencyName) || x.CurrencyId == null;
                 return new { CurrencyId = isNotValid ? -1 : x.CurrencyId, CurrencyName = isNotValid ? "-" : x.CurrencyName };
-            }).Distinct().OrderBy(x => x.CurrencyName).Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName)).ToList();
+            }).Distinct()
+            .OrderBy(x => x.CurrencyName)
+            .Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName)).ToList();
+
             HDPList = mdItemList.Select(x => x.BallHeadHDP()).Distinct().OrderBy(x => x).ToList();
 
             RecordsTotal = (HomeMatchItemList?.Count() ?? 0) + (AwayMatchItemList?.Count() ?? 0);
@@ -59,6 +63,7 @@
             BindReasons(mdItemList.Select(x => x.ReasonList).Distinct());
 
             var agroup = ReasonGroupIDDic.Where(x => ReasonList.Contains(x.Key)).SelectMany(x => x.Value).Distinct();
+
             GroupList = GroupList?.Where(x => x.GroupID != null ? agroup.Contains(x.GroupID ?? 0) : false).ToList();
         }
 

@@ -131,6 +131,8 @@
 
         public string BetTeam { get; set; }
 
+        public string Betform { get; set; }
+
         public string CurrencyName { get; set; }
 
         public short CurrencyId { get; set; }

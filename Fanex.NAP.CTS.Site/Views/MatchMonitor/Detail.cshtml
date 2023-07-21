@@ -98,13 +98,7 @@
                         <div class="group-button">
                             <button class="button button-generate" id="btnGenerate-detail">Generate</button>
                         </div>                        
-                    </div>
-
-                    @*<div class="detail-area" id="detail-area">                        
-                        <span>@ViewBag.SportName - @ViewBag.BettypeName - <span class="market-highlight">@ViewBag.MarketName</span><br /></span>
-                        <span id="spanKOTime">KO Time: @ViewBag.KOTime<br /></span>
-                        <span class="reason-highlight" id="spanReasonInfo"></span>
-                    </div>*@
+                    </div>                   
                 </div>
 
                 <div class="breadcrumb-button" id="breadcrumbButton">
@@ -130,12 +124,13 @@
                                         <th>Bot</th>
                                         <th>Dgr</th>
                                         <th>Odds</th>
-                                        <th>BetID</th>
+                                        <th><div class="type-outer"><span class="col-title">BetID</span><span id="iconHToggleBetID" class="icon-account_detail icon-collapse-expand"></span></div></th>
                                         <th>Cur</th>
                                         <th>Amt</th>
                                         <th>HDP</th>
                                         <th>Score</th>
                                         <th>Transtime</th>
+                                        <th>B.f.</th>
                                         <th title="Auto-detected Association Group">
                                             A.Gr.
                                         </th>
@@ -148,8 +143,7 @@
                                 </thead>
                                 <tbody></tbody>
                             </table>
-                        </div>     
-                        <table id="tblHomeHeaderFixed"></table>
+                        </div>                            
                     </div>
 
                     <div id="second-monitor-datatable">
@@ -163,12 +157,13 @@
                                         <th>Bot</th>
                                         <th>Dgr</th>
                                         <th>Odds</th>
-                                        <th>BetID</th>
+                                        <th><div class="type-outer"><span class="col-title">BetID</span><span id="iconAToggleBetID" class="icon-account_detail icon-collapse-expand"></span></div></th>
                                         <th>Cur</th>
                                         <th>Amt</th>
                                         <th>HDP</th>
                                         <th>Score</th>
                                         <th>Transtime</th>
+                                        <th>B.f.</th>
                                         <th title="Auto-detected Association Group">
                                             A.Gr.
                                         </th>
@@ -181,8 +176,7 @@
                                 </thead>
                                 <tbody></tbody>
                             </table>
-                        </div> 
-                        <table id="tblAwayHeaderFixed"></table>
+                        </div>                         
                     </div>
                 </div>
             
