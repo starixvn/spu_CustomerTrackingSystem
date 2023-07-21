@@ -9,7 +9,7 @@
         [SpParam(SqlParamName = "ip_SubscriberID")]
         public int SubscriberID { get; set; }
 
-        [SpParam(SqlParamName = "ip_UserName")]
+        [SpParam(SqlParamName = "ip_LoginName")]
         public string UserName { get; set; }
 
         [SpParam(SqlParamName = "ip_IsPartial")]
