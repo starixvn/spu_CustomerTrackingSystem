@@ -239,7 +239,7 @@
                 case MatchMonitorQueryType.TicketFraud:
                     {
                         mdResult = GetFraudMMDetailFromCache(para, para.Sites).Clone();
-                        if (filter.IsValidFilterFraudTicketLatest(GetFraudMMFilterFromCache(para)))
+                        if (filter.IsValidFilterTicketLatest(GetFraudMMFilterFromCache(para)))
                         {
                             mdResult.FilterItemMMDetail(filter, para.Sites);
                         }
@@ -247,6 +247,7 @@
                     }
                 case MatchMonitorQueryType.TicketAll when para.IsSupportShowAllTickets:
                     {
+                        filter.IsValidFilterTicketLatest(Task.Run(() => GetAllMMFilterFromCache(para)).Result);
                         mdResult = GetAllMMDetailFromCache(para, filter).Clone();
                         if (filter.ReasonList != null || filter.AGroupList != null)
                         {
@@ -434,7 +435,7 @@
                 case MatchMonitorQueryType.TicketFraud:
                     {
                         var mdResult = GetFraudMMDetailFromCache(info, info.Sites).Clone();
-                        if (filter.IsValidFilterFraudTicketLatest(GetFraudMMFilterFromCache(info)))
+                        if (filter.IsValidFilterTicketLatest(GetFraudMMFilterFromCache(info)))
                         {
                             mdResult.FilterItemMMDetail(filter, info.Sites);
                         }
@@ -443,6 +444,7 @@
                     }
                 case MatchMonitorQueryType.TicketAll when info.IsSupportShowAllTickets:
                     {
+                        filter.IsValidFilterTicketLatest(Task.Run(() => GetAllMMFilterFromCache(info)).Result);
                         recordsTotal = GetTotalAllTicketDetailByFilter(info, filter);
                         break;
                     }

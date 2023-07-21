@@ -28,7 +28,7 @@
             MappingTicketDetail(ticket);
             MappingCustInfo(cust);
             this.ADetectGroup = mergeGroupID.ToString();
-            this.ADetectGroupID = mergeGroupID;
+            this.ADetectGroupID = mergeGroupID;           
         }
         #endregion
 
@@ -57,22 +57,69 @@
         {
             get
             {
-                string danger = string.Empty;
+                var danger = string.Empty;
+                var commaCount = 0;
 
                 if (Danger1 != 0)
-                    danger += "Ori" + Danger1;
+                {
+                    danger += "OR" + Danger1;
+                }                    
 
                 if (Danger2 != 0)
-                    danger += string.IsNullOrEmpty(danger) ? "ABI" + Danger2 : "-ABI" + Danger2;
+                {                    
+                    if (string.IsNullOrEmpty(danger))
+                    {
+                        danger += "A" + Danger2;
+                    }
+                    else
+                    {
+                        commaCount++;
 
+                        danger += "," + AddSpaceDanger(commaCount) + "A" + Danger2;
+                    }
+                }
+                    
                 if (Danger3 != 0)
-                    danger += string.IsNullOrEmpty(danger) ? "OS" + Danger3 : "-OS" + Danger3;
+                {                   
+                    if (string.IsNullOrEmpty(danger))
+                    {
+                        danger += "OS" + Danger3;
+                    }
+                    else
+                    {
+                        commaCount++;
 
+                        danger += "," + AddSpaceDanger(commaCount) + "OS" + Danger3;
+                    }
+                }
+                    
                 if (Danger4 != 0)
-                    danger += string.IsNullOrEmpty(danger) ? "BkB" + Danger4 : "-BkB" + Danger4;
+                {                    
+                    if (string.IsNullOrEmpty(danger))
+                    {
+                        danger += "B" + Danger4;
+                    }
+                    else
+                    {
+                        commaCount++;
 
+                        danger += "," + AddSpaceDanger(commaCount) + "B" + Danger4;
+                    }
+                }
+                    
                 if (Danger5 != 0)
-                    danger += string.IsNullOrEmpty(danger) ? "ES" + Danger5 : "-ES" + Danger5;
+                {                    
+                    if (string.IsNullOrEmpty(danger))
+                    {
+                        danger += "E" + Danger5;
+                    }
+                    else
+                    {
+                        commaCount++;
+
+                        danger += "," + AddSpaceDanger(commaCount) + "E" + Danger5;
+                    }
+                }                    
 
                 return (danger == string.Empty) ? "-" : danger;
             }
@@ -175,6 +222,7 @@
         public bool IsNormalLinkedPA { get; set; }
 
         public MatchMonitorQueryType TypeOfTicket { get; set; } = MatchMonitorQueryType.TicketFraud;
+
         #endregion
 
         #region function
@@ -266,6 +314,11 @@
             this.Username = cust.UserName;
             this.IsPA = cust.ParentID == 50;
             this.IsNormalLinkedPA = (cust.ParentID == 200 && cust.TaggingType == 1);
+        }
+
+        private string AddSpaceDanger(int commaCount)
+        {
+            return commaCount % 2 == 0 ? " " : string.Empty;
         }
         #endregion
     }
