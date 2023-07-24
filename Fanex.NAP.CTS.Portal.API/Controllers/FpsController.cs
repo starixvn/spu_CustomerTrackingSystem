@@ -30,11 +30,11 @@
 
         #region cts
         [HttpPost]
-        public JsonResult<SearchAccountResultModel> SearchAccount(SearchAccountParamModel param)
+        public JsonResult<SearchAccountResultModel> SearchAccountCts(SearchAccountParamModel param)
         {
             try
             {
-                var data = _fpsService.SearchAccount(param);
+                var data = _fpsService.SearchAccountCts(param);
 
                 return Json(data);
 
@@ -47,11 +47,11 @@
         }
 
         [HttpPost]
-        public JsonResult<GetAssAccountInfoByCustSubscriberModel> GetAssAccountInfoByCustSubscriber(GetAssAccountInfoByCustSubscriberParamModel param)
+        public JsonResult<GetAssAccountInfoByCustSubscriberModel> GetAssAccountInfoByCustSubscriberCts(GetAssAccountInfoByCustSubscriberParamModel param)
         {
             try
             {
-                var data = _fpsService.GetAssAccountInfoByCustSubscriber(param);
+                var data = _fpsService.GetAssAccountInfoByCustSubscriberCts(param);
 
                 return Json(data);
 
@@ -64,11 +64,11 @@
         }
 
         [HttpPost]
-        public JsonResult<GetAssAccountsByCustSubscriberResultModel> GetAssAccountsByCustSubscriber(GetAssAccountsByCustSubscriberParamModel param)
+        public JsonResult<GetAssAccountsByCustSubscriberResultModel> GetAssAccountsByCustSubscriberCts(GetAssAccountsByCustSubscriberParamModel param)
         {
             try
             {
-                var data = _fpsService.GetAssAccountsByCustSubscriber(param);
+                var data = _fpsService.GetAssAccountsByCustSubscriberCts(param);
 
                 return Json(data);
 
@@ -81,11 +81,11 @@
         }
 
         [HttpPost]
-        public JsonResult<GetAssDevicesByCustSubscriberResultModel> GetAssDevicesByCustSubscriber(GetAssDevicesByCustSubscriberParamModel param)
+        public JsonResult<GetAssDevicesByCustSubscriberResultModel> GetAssDevicesByCustSubscriberCts(GetAssDevicesByCustSubscriberParamModel param)
         {
             try
             {
-                var data = _fpsService.GetAssDevicesByCustSubscriber(param);
+                var data = _fpsService.GetAssDevicesByCustSubscriberCts(param);
 
                 return Json(data);
             }
@@ -97,11 +97,11 @@
         }
 
         [HttpPost]
-        public JsonResult<GetAssMatrixAccountByCustSubscriberResultModel> GetAssMatrixAccountByCustSubscriber(GetAssMatrixAccountByCustSubscriberParamModel param)
+        public JsonResult<GetAssMatrixAccountByCustSubscriberResultModel> GetAssMatrixAccountByCustSubscriberCts(GetAssMatrixAccountByCustSubscriberParamModel param)
         {
             try
             {
-                var data = _fpsService.GetAssMatrixAccountByCustSubscriber(param);
+                var data = _fpsService.GetAssMatrixAccountByCustSubscriberCts(param);
 
                 return Json(data);
             }
@@ -174,6 +174,89 @@
             }
 
             return Json(new SubscriberFpsInfo());
+        }
+
+        [HttpPost]
+        public JsonResult<SearchAccountResultModel> SearchAccountDcs(SearchAccountParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.SearchAccountDcs(param);
+
+                return Json(data);
+
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Search Account info Dcs exception: " + ex.Message);
+                return Json(new SearchAccountResultModel());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult<GetAssAccountInfoByCustSubscriberModel> GetAssAccountInfoByCustSubscriberDcs(GetAssAccountInfoByCustSubscriberParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetAssAccountInfoByCustSubscriberDcs(param);
+
+                return Json(data);
+
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Ass Account info by cust subscriber Dcs exception: " + ex.Message);
+                return Json(new GetAssAccountInfoByCustSubscriberModel());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult<GetAssAccountsByCustSubscriberResultModel> GetAssAccountsByCustSubscriberDcs(GetAssAccountsByCustSubscriberParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetAssAccountsByCustSubscriberDcs(param);
+
+                return Json(data);
+
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Ass Account info by cust subscriber Dcs exception: " + ex.Message);
+                return Json(new GetAssAccountsByCustSubscriberResultModel());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult<GetAssDevicesByCustSubscriberResultModel> GetAssDevicesByCustSubscriberDcs(GetAssDevicesByCustSubscriberParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetAssDevicesByCustSubscriberDcs(param);
+
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Ass Account info by cust subscriber Dcs exception: " + ex.Message);
+                return Json(new GetAssDevicesByCustSubscriberResultModel());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult<GetAssMatrixAccountByCustSubscriberResultModel> GetAssMatrixAccountByCustSubscriberDcs(GetAssMatrixAccountByCustSubscriberParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetAssMatrixAccountByCustSubscriberDcs(param);
+
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Ass Account info by cust subscriber Dcs exception: " + ex.Message);
+                return Json(new GetAssMatrixAccountByCustSubscriberResultModel());
+            }
         }
 
         [HttpPost]

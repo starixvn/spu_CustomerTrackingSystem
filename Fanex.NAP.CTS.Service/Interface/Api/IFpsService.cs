@@ -8,25 +8,36 @@
     public interface IFpsService
     {
         #region cts
-        SearchAccountResultModel SearchAccount(SearchAccountParamModel param);
+        SearchAccountResultModel SearchAccountCts(SearchAccountParamModel param);
 
-        GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriber(GetAssAccountInfoByCustSubscriberParamModel param);
+        GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriberCts(GetAssAccountInfoByCustSubscriberParamModel param);
 
         TransactionResultModel GetTransactionHistoryCts(TransactionParamModel param);
 
-        GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriber(GetAssAccountsByCustSubscriberParamModel param);
+        GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriberCts(GetAssAccountsByCustSubscriberParamModel param);
 
-        GetAssDevicesByCustSubscriberResultModel GetAssDevicesByCustSubscriber(GetAssDevicesByCustSubscriberParamModel param);
+        GetAssDevicesByCustSubscriberResultModel GetAssDevicesByCustSubscriberCts(GetAssDevicesByCustSubscriberParamModel param);
 
-        GetAssMatrixAccountByCustSubscriberResultModel GetAssMatrixAccountByCustSubscriber(GetAssMatrixAccountByCustSubscriberParamModel param);
+        GetAssMatrixAccountByCustSubscriberResultModel GetAssMatrixAccountByCustSubscriberCts(GetAssMatrixAccountByCustSubscriberParamModel param);
 
         LastestTransactionResultModel GetLastestTransactionBySubscriberCts(LastestTransactionParamModel param);
         #endregion cts
 
         #region dcs
+        SearchAccountResultModel SearchAccountDcs(SearchAccountParamModel param);
+
+        GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriberDcs(GetAssAccountInfoByCustSubscriberParamModel param);
+
+
         TransactionResultModel GetTransactionHistoryDcs(TransactionParamModel param);
 
         LastestTransactionResultModel GetLastestTransactionBySubscriberDcs(LastestTransactionParamModel param);
+
+        GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriberDcs(GetAssAccountsByCustSubscriberParamModel param);
+
+        GetAssDevicesByCustSubscriberResultModel GetAssDevicesByCustSubscriberDcs(GetAssDevicesByCustSubscriberParamModel param);
+
+        GetAssMatrixAccountByCustSubscriberResultModel GetAssMatrixAccountByCustSubscriberDcs(GetAssMatrixAccountByCustSubscriberParamModel param);
         #endregion dcs
     }
 }

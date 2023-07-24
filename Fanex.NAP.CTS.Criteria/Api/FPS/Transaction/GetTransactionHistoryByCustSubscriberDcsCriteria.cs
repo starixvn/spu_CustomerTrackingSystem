@@ -9,7 +9,7 @@
         [SpParam(SqlParamName = "ip_SubscriberID")]
         public int SubscriberID { get; set; }
 
-        [SpParam(SqlParamName = "ip_CTSCustID")]
+        [SpParam(SqlParamName = "ip_AccountID")]
         public long? CTSCustID { get; set; }
 
         [SpParam(SqlParamName = "ip_FromDate")]

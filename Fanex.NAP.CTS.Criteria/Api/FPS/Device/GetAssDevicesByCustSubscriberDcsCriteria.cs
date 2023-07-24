@@ -1,14 +1,14 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Api.FPS.Account
+﻿namespace Fanex.NAP.CTS.Criteria.Api.FPS.Device
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class GetAssAccountsByCustSubscriberCriteria : CriteriaBase
+    public class GetAssDevicesByCustSubscriberDcsCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_SubscriberID")]
         public int SubscriberID { get; set; }
 
-        [SpParam(SqlParamName = "ip_CTSCustID")]
+        [SpParam(SqlParamName = "ip_AccountID")]
         public long CTSCustID { get; set; }
 
         [SpParam(SqlParamName = "ip_NoOfRecord")]
@@ -16,7 +16,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_Association_GetAssociationListByCustSubscriber";
+            return "DCS_ET_Association_GetAssociationDeviceByAccountSubscriber";
         }
 
         public override bool IsValid()

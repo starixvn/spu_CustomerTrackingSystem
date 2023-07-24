@@ -6,7 +6,7 @@
 
         public string UserName { get; set; }
 
-        public string RegisterName { get; set; }
+        public string RegisterName { get; set; } = string.Empty;
 
         public int DeviceInCommon { get; set; }
 

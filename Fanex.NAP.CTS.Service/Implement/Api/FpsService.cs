@@ -26,13 +26,13 @@
 
         #region cts
 
-        public SearchAccountResultModel SearchAccount(SearchAccountParamModel param)
+        public SearchAccountResultModel SearchAccountCts(SearchAccountParamModel param)
         {
             var data = new SearchAccountResultModel();
 
             if (param.IsSearchPartial)
             {
-                var criteria = new GetListAccountByUserNameSubscriberCriteria
+                var criteria = new GetListAccountByUserNameSubscriberCtsCriteria
                 {
                     SubscriberID = param.SubscriberID,
                     UserName = param.UserName,
@@ -45,7 +45,7 @@
             }
             else
             {
-                var criteria = new GetAccountByNameSubscriberCriteria
+                var criteria = new GetAccountByNameSubscriberCtsCriteria
                 {
                     SubscriberID = param.SubscriberID,
                     UserName = param.UserName
@@ -57,9 +57,9 @@
             return data;
         }
 
-        public GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriber(GetAssAccountInfoByCustSubscriberParamModel param)
+        public GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriberCts(GetAssAccountInfoByCustSubscriberParamModel param)
         {
-            var criteria = new GetAssAccountInfoByCustSubscriberCriteria
+            var criteria = new GetAssAccountInfoByCustSubscriberCtsCriteria
             {
                 CTSCustID = param.CTSCustID,
                 SubscriberID = param.SubscriberID
@@ -68,11 +68,11 @@
             return DataService.GetSingle<GetAssAccountInfoByCustSubscriberModel>(criteria);
         }
 
-        public GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriber(GetAssAccountsByCustSubscriberParamModel param)
+        public GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriberCts(GetAssAccountsByCustSubscriberParamModel param)
         {
             var data = new GetAssAccountsByCustSubscriberResultModel();
 
-            var criteria = new GetAssAccountsByCustSubscriberCriteria
+            var criteria = new GetAssAccountsByCustSubscriberCtsCriteria
             {
                 SubscriberID = param.SubscriberID,
                 CTSCustID = param.CTSCustID,
@@ -84,11 +84,11 @@
             return data;
         }
 
-        public GetAssDevicesByCustSubscriberResultModel GetAssDevicesByCustSubscriber(GetAssDevicesByCustSubscriberParamModel param)
+        public GetAssDevicesByCustSubscriberResultModel GetAssDevicesByCustSubscriberCts(GetAssDevicesByCustSubscriberParamModel param)
         {
             var data = new GetAssDevicesByCustSubscriberResultModel();
 
-            var criteria = new GetAssDevicesByCustSubscriberCriteria
+            var criteria = new GetAssDevicesByCustSubscriberCtsCriteria
             {
                 SubscriberID = param.SubscriberID,
                 CTSCustID = param.CTSCustID,
@@ -100,10 +100,10 @@
             return data;
         }
 
-        public GetAssMatrixAccountByCustSubscriberResultModel GetAssMatrixAccountByCustSubscriber(GetAssMatrixAccountByCustSubscriberParamModel param)
+        public GetAssMatrixAccountByCustSubscriberResultModel GetAssMatrixAccountByCustSubscriberCts(GetAssMatrixAccountByCustSubscriberParamModel param)
         {
             var data = new GetAssMatrixAccountByCustSubscriberResultModel();
-            var criteria = new GetAssMatrixAccountByCustSubscriberCriteria()
+            var criteria = new GetAssMatrixAccountByCustSubscriberCtsCriteria()
             {
                 SubscriberID = param.SubscriberID,
                 CTSCustID = param.CTSCustID,
@@ -187,6 +187,56 @@
         #endregion cts
 
         #region dcs
+        public SearchAccountResultModel SearchAccountDcs(SearchAccountParamModel param)
+        {
+            var data = new SearchAccountResultModel();
+            var items = default(IEnumerable<SearchAccountItemDcsModel>);
+
+            if (param.IsSearchPartial)
+            {
+                var criteria = new GetListAccountByUserNameSubscriberDcsCriteria
+                {
+                    SubscriberID = param.SubscriberID,
+                    UserName = param.UserName,
+                    Take = param.Take,
+                    Skip = param.Skip
+                };
+
+                items = repository.Fetch<SearchAccountItemDcsModel>(criteria);
+                data.TotalItem = criteria.TotalItem;
+            }
+            else
+            {
+                var criteria = new GetAccountByNameSubscriberDcsCriteria
+                {
+                    SubscriberID = param.SubscriberID,
+                    UserName = param.UserName
+                };
+
+                items = repository.Fetch<SearchAccountItemDcsModel>(criteria);
+            }
+
+            data.Items = items.Select(x => new SearchAccountItemModel()
+            {
+                CTSCustID = x.AccountID,
+                SubscriberID = x.SubscriberID,
+                Username = x.LoginName
+            });
+
+            return data;
+        }
+
+        public GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriberDcs(GetAssAccountInfoByCustSubscriberParamModel param)
+        {
+            var criteria = new GetAssAccountInfoByCustSubscriberDcsCriteria
+            {
+                CTSCustID = param.CTSCustID,
+                SubscriberID = param.SubscriberID
+            };
+
+            return DataService.GetSingle<GetAssAccountInfoByCustSubscriberModel>(criteria);
+        }
+
         public TransactionResultModel GetTransactionHistoryDcs(TransactionParamModel param)
         {
             if (param.CTSCustID != null && param.CTSCustID > 0)
@@ -228,6 +278,69 @@
                 URLDetails = x.URLDetails
             });
             data.TotalItem = criteria.TotalItem;
+
+            return data;
+        }
+
+        public GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriberDcs(GetAssAccountsByCustSubscriberParamModel param)
+        {
+            var data = new GetAssAccountsByCustSubscriberResultModel();
+
+            var criteria = new GetAssAccountsByCustSubscriberDcsCriteria
+            {
+                SubscriberID = param.SubscriberID,
+                CTSCustID = param.CTSCustID,
+                NoOfRecord = param.NoOfRecord
+            };
+
+            data.Items = repository.Fetch<GetAssAccountsByCustSubscriberItemDcsModel>(criteria).Select(x => new GetAssAccountsByCustSubscriberItemModel
+            {
+                AssociatedAccount = x.AssociatedAccount,
+                CTSCustID = x.AccountID,
+                DeviceInCommon = x.DeviceInCommon,
+                OtherDeives = x.OtherDeives,
+                UserName = x.LoginName
+            });
+
+            return data;
+        }
+
+        public GetAssDevicesByCustSubscriberResultModel GetAssDevicesByCustSubscriberDcs(GetAssDevicesByCustSubscriberParamModel param)
+        {
+            var data = new GetAssDevicesByCustSubscriberResultModel();
+
+            var criteria = new GetAssDevicesByCustSubscriberDcsCriteria
+            {
+                SubscriberID = param.SubscriberID,
+                CTSCustID = param.CTSCustID,
+                NoOfRecord = param.NoOfRecord
+            };
+
+            data.Items = repository.Fetch<GetAssDevicesByCustSubscriberItemModel>(criteria);
+
+            return data;
+        }
+
+        public GetAssMatrixAccountByCustSubscriberResultModel GetAssMatrixAccountByCustSubscriberDcs(GetAssMatrixAccountByCustSubscriberParamModel param)
+        {
+            var data = new GetAssMatrixAccountByCustSubscriberResultModel();
+            var criteria = new GetAssMatrixAccountByCustSubscriberDcsCriteria()
+            {
+                SubscriberID = param.SubscriberID,
+                CTSCustID = param.CTSCustID,
+                NoOfCustomer = param.NoOfCustomer,
+                NoOfDevice = param.NoOfDevice
+            };
+
+            data.Items = repository.Fetch<GetAssMatrixAccountByCustSubscriberItemDcsModel>(criteria).Select(x => new GetAssMatrixAccountByCustSubscriberItemModel
+            {
+                CreatedTime = x.CreatedTime,
+                CTSCustID = x.AccountID,
+                DeviceID = x.DeviceID,
+                FirstDeviceCode = x.FirstDeviceCode,
+                ID = x.ID,
+                UserName = x.LoginName
+            });
 
             return data;
         }

@@ -3,7 +3,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class GetAssMatrixAccountByCustSubscriberCriteria : CriteriaBase
+    public class GetAssMatrixAccountByCustSubscriberCtsCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_SubscriberID")]
         public int SubscriberID { get; set; }
