@@ -30,6 +30,9 @@
         [SpParam(SqlParamName = "BetType")]
         public int BetType { get; set; }
 
+        [SpParam(SqlParamName = "BetID")]
+        public long BetID { get; set; }
+
         [SpParam(SqlParamName = "IsLicensee")]
         public int? IsLicensee { get; set; }
 

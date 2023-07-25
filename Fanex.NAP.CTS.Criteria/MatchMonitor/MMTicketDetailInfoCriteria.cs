@@ -3,6 +3,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
     using System;
+
     public class MMTicketDetailInfoCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "MatchID")]
@@ -10,6 +11,9 @@
 
         [SpParam(SqlParamName = "BetType")]
         public Int32 BetType { get; set; }
+
+        [SpParam(SqlParamName = "BetID")]
+        public long BetID { get; set; }
 
         [SpParam(SqlParamName = "IsLive")]
         public Int32 IsLive { get; set; }

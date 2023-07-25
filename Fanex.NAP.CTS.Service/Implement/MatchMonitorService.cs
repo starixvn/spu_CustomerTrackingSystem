@@ -153,6 +153,7 @@
                 IsLive = para.LiveIndicator ? 1 : 0,
                 MatchID = para.MatchID,
                 BetType = para.BetTypeID,
+                BetID = para.BetID,
                 BatchSize = batchSize,
                 IsLicensee = para.Sites == MMSites.All ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
                 ListCurrency = filter?.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList),
@@ -182,6 +183,7 @@
             {
                 MatchID = para.MatchID,
                 BetType = para.BetTypeID,
+                BetID = para.BetID,
                 IsLive = para.LiveIndicator ? 1 : 0,
             };
 

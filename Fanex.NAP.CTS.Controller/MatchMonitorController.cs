@@ -92,7 +92,7 @@
                     if (para.DateType == 1)
                         matchFromCTSInfos = GetMMByScanDate(para);
                     else
-                        matchFromCTSInfos = GetMMByEventDate(para);
+                        matchFromCTSInfos = GetMMByEventDate(para);                   
 
                     matchMonitors = matchFromCTSInfos?.Select(x => new GetMatchMonitorViewModel(x, mmStatic)).OrderBy(c => c.MatchSection);
 
