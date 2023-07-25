@@ -33,15 +33,19 @@ function MatchMonitorDetail() {
         reason: $("#hdreason").val(),
         liveIndicator: $("#hdLiveIndicator").val(),
         isSupportShowAllTickets: $("#hdIsSupportShowAllTickets").val(),
+        cbbMarket: $('#cbbMarket'),
+        cbbBetType: $('#cbbBetType'),
         cbbTypeOfTickets: $('#cbbTypeOfTickets'),
-        cbbCurrency: $('#cbbCurrency'),
-        cbbHDP: $('#cbbHDP'),
         cbbMatchScore: $('#cbbMatchScore'),
+        cbbSites: $('#cbbSites'),
+        cbbDanger: $('#cbbDanger'),
+        cbbCurrency: $('#cbbCurrency'),
         cbbReason: $('#cbbReason'),
         cbbGroup: $('#cbbGroup'),
-        cbbSites: $('#cbbSites'),
+        cbbHDP: $('#cbbHDP'),       
         inputAmountFrom: $('#inputAmountFrom'),
         inputAmountTo: $('#inputAmountTo'),
+        cbbTicketsStatus: $('#cbbTicketsStatus'),
         tblMMHomeTeam: $('#tblMMHomeTeam'),
         tblMMAwayTeam: $('#tblMMAwayTeam'),
         divHomeMonitor: $('#first-monitor-datatable'),
@@ -77,6 +81,7 @@ function MatchMonitorDetail() {
 
     let cacheFilter = {};
     let cacheFilterScore = undefined;
+
     let cacheMGroup = {
         itemMMHomeTeam: [],
         itemMMAwayTeam: [],
@@ -194,7 +199,7 @@ function MatchMonitorDetail() {
                 { data: obj => obj.HDP },
                 { data: obj => obj.Score },
                 { data: obj => obj.TransTimeToString },
-                { data: obj => obj.Betform },
+                { data: obj => obj.BetFrom },
                 { data: obj => obj.ADetectGroup },
                 {
                     data: obj => () => {
@@ -245,7 +250,24 @@ function MatchMonitorDetail() {
             menuWidth: menuWidth,
             menuHeight: menuHeight,
             selectedText: "# of # selected",
-            noneSelectedText: `Select ${selectName} `
+            noneSelectedText: `Select ${selectName}`
+        });
+    }
+
+    function SetupMultiselectFilter(ccb, selectName, menuWidth = 260, menuHeight = 260) {
+        ccb.multiselect({
+            menuWidth: menuWidth,
+            menuHeight: menuHeight,
+            selectedText: "# of # selected",
+            noneSelectedText: `Select ${selectName}`,
+            enableClickableOptGroups: true,
+            includeSelectAllOption: true,
+            groupsCollapsable: true,
+            optGroupChecked: true
+        }).multiselectfilter({
+            width: 150,
+            placeholder: '',
+            label: ''
         });
     }
 
@@ -389,8 +411,6 @@ function MatchMonitorDetail() {
 
         domElements.iconHToggleBetID = $('#iconHToggleBetID');
         domElements.iconAToggleBetID = $('#iconAToggleBetID');
-
-
 
         domElements.iconHToggleBetID.on('click', function () {
             if (domElements.iconHToggleBetID.hasClass('expand')) {
@@ -1133,7 +1153,7 @@ function MatchMonitorDetail() {
                     datas += `,&quot;HDP&quot;:&quot;${data.HDP}&quot;`;
                     datas += `,&quot;Score&quot;:&quot;${data.Score}&quot;`;
                     datas += `,&quot;TransTimeToString&quot;:&quot;${data.TransTimeToString}&quot;`;
-                    datas += `,&quot;Betform&quot;:&quot;${data.Betform}&quot;`;
+                    datas += `,&quot;BetFrom&quot;:&quot;${data.BetFrom}&quot;`;
                     datas += `,&quot;ADetectGroup&quot;:&quot;${data.ADetectGroup}&quot;`;
                     datas += `,&quot;MDetectGroup&quot;:&quot;${data.MDetectGroup}&quot;`;
                     datas += `,&quot;ReasonList&quot;:&quot;${data.ReasonList}&quot;`;
@@ -1251,11 +1271,13 @@ function MatchMonitorDetail() {
     }
 
     function Initial() {
-        SetupMultiselect(domElements.cbbCurrency, "Currency");
+        SetupMultiselectFilter(domElements.cbbDanger, "Danger");
+        SetupMultiselectFilter(domElements.cbbCurrency, "Currency");
         SetupMultiselect(domElements.cbbHDP, "HDP");
         SetupMultiselect(domElements.cbbMatchScore, "Score");
         SetupMultiselect(domElements.cbbGroup, "Group");
         SetupMultiselect(domElements.cbbReason, "Reason");
+        SetupMultiselect(domElements.cbbTicketsStatus, "Status");
 
         domElements.cbbReason.change(function () { ReasonOnChange(); });
 
