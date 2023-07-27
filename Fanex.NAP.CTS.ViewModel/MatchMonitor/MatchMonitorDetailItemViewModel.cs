@@ -20,7 +20,7 @@
         public MatchMonitorDetailItemViewModel(TicketDetailModel ticket, CustInfoModel cust)
         {
             MappingTicketDetail(ticket);
-            MappingCustInfo(cust);
+            MappingCustInfo(cust);            
         }
 
         public MatchMonitorDetailItemViewModel(int mergeGroupID, TicketDetailModel ticket, CustInfoModel cust)
@@ -219,6 +219,8 @@
 
         public int BetTypeID { get; set; }
 
+        public bool IsLive { get; set; }
+
         public bool IsPA { get; set; }
 
         public bool IsNormalLinkedPA { get; set; }
@@ -243,17 +245,32 @@
             return
                 (reasonList?.Any(y => (ReasonList ?? "-").Contains(y)) ?? true) &&
                 (reasonGroupIDDic?.Contains(ADetectGroupID.ToString()) ?? true);
+        } 
+        
+        public bool FilterByDanger(MMDetailFilterViewModel filter)
+        {
+            var isPass = (filter.Danger1List?.Contains(Danger1) ?? false) ||
+                (filter.Danger2List?.Contains(Danger2) ?? false) ||
+                (filter.Danger3List?.Contains(Danger3) ?? false) ||
+                (filter.Danger4List?.Contains(Danger4) ?? false) ||
+                (filter.Danger5List?.Contains(Danger5) ?? false);
+
+            return isPass;
         }
 
         public bool FilterItem(MMDetailFilterViewModel filter, IEnumerable<string> reasonGroupIDDic, string site)
-        {
-            return
-                (filter.CurrencyIdList?.Contains(CurrencyId) ?? true) &&
-                (filter.HDPList?.Contains(BallHeadHDP()) ?? true) &&
+        {          
+            var filterData =
                 (filter.ScoreList?.Contains(Score ?? "-") ?? true) &&
-                FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic) &&
-                (filter.AmountList == null || filter.AmountList.Count() < 2 ? true : Stake >= filter.AmountList[0] && Stake <= filter.AmountList[1]) &&
-                FilterBySite(site);
+                FilterBySite(site) &&
+                FilterByDanger(filter) &&                
+                (filter.CurrencyIdList?.Contains(CurrencyId) ?? true) &&
+                FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic) &&      
+               (filter.HDPList?.Contains(BallHeadHDP()) ?? true) &&
+               (filter.AmountList == null || filter.AmountList.Count() < 2 ? true : Stake >= filter.AmountList[0] && Stake <= filter.AmountList[1]) &&
+               (filter.TicketStatusList?.Contains(TicketStatus) ?? true);
+
+            return filterData;
         }
 
         public MatchMonitorDetailItemViewModel MappingFraudTicketToAllTicket(Dictionary<long, MatchMonitorDetailItemViewModel> fraudMMTicketsDictionary)
@@ -276,7 +293,7 @@
             }
 
             return Math.Abs(HDP);
-        }
+        }        
 
         private void MappingTicketDetail(TicketDetailModel ticket)
         {
@@ -288,6 +305,7 @@
             this.Danger4 = ticket.Danger4;
             this.Danger5 = ticket.Danger5;
             this.Odds = ticket.Odds;
+            this.BetTypeID = ticket.BetType;
             this.BetID = ticket.TransId.ToString();
             this.BetTeam = ticket.BetTeam;
             this.BetFrom = ticket.BetFrom;
@@ -323,6 +341,7 @@
         {
             return commaCount % 2 == 0 ? " " : string.Empty;
         }
+
         #endregion
     }
 }

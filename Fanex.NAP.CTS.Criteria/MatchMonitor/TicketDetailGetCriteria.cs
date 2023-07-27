@@ -39,11 +39,17 @@
         [SpParam(SqlParamName = "ListCurrency")]
         public string ListCurrency { get; set; }
 
-        [SpParam(SqlParamName = "ListHDP")]
-        public string ListHDP { get; set; }
+        [SpParam(SqlParamName = "ListHDPBetTeam")]
+        public string ListHDPBetTeam { get; set; }
 
         [SpParam(SqlParamName = "ListScore")]
         public string ListScore { get; set; }
+
+        [SpParam(SqlParamName = "ListDanger")]
+        public string ListDanger { get; set; }
+
+        [SpParam(SqlParamName = "ListStatus")]
+        public string ListStatus { get; set; }        
 
         [SpParam(SqlParamName = "FromStakeRM")]
         public decimal? FromStakeRM { get; set; }

@@ -4,6 +4,8 @@
 
     public class DetectGroupAssociationItemViewModel
     {
+        public DetectGroupAssociationItemViewModel() { }
+
         public DetectGroupAssociationItemViewModel(DetectAssociationMergeGroupModel data)
         {
             this.CTSCustID = data.CTSCustID;

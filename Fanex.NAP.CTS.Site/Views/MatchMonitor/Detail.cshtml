@@ -1,4 +1,6 @@
-﻿@{ ViewBag.Title = "MATCH MONITOR DETAIL";
+﻿@using Fanex.NAP.CTS.Resource.Consts;
+
+@{ ViewBag.Title = "MATCH MONITOR DETAIL";
     Layout = "~/Views/Shared/_Layout.cshtml"; }
 
 @section styles{
@@ -20,11 +22,11 @@
                     @ViewBag.SportName - @ViewBag.BettypeName -
                     <span class="title-market">@ViewBag.MarketName</span>
                     <span class="title-market-line"> | </span>
-                    <span class="title-market" id="spanReasonInfo"> GB, FG</span>                   
+                    <span class="title-market" id="spanReasonInfo"> GB, FG</span>
                 </span>
             </div>
 
-            </div>
+        </div>
     </div>
 
     <div class="monitor-container">
@@ -35,32 +37,58 @@
                         <div class="group width-180">
                             <label class="text">Market</label>
                             <select class="control width-select-one" id="cbbMarket">
-                                <option value="1">Live</option>
-                                <option value="0">NonLive</option>
+                                <option value="True">Live</option>
+                                <option value="False">Non-Live</option>
                             </select>
                         </div>
                         <div class="group width-180">
                             <label class="text">Bet Type</label>
                             <select class="control width-select-one" id="cbbBetType">
-                                <option value="1">HDP</option>
-                                <option value="7">1st HDP</option>
-                                <option value="3">OU</option>
-                                <option value="8">1st OU</option>
-                                <option value="2">OE</option>
-                                <option value="12">1st OE</option>
-                                <option value="413">Correct Score</option>
-                                <option value="414">1st Correct Score</option>
-                                <option value="6">Total Goal</option>
-                                <option value="126">1st Total Goal</option>
-                                <option value="609">Quarter X Handicap</option>
-                                <option value="610">Quarter X OU</option>
-                                <option value="612">Quarter X Moneyline</option>
+                                @if (ViewBag.SportType == (int)Consts.MatchMonitorSportType.Soccer)
+                                {
+                                    <option value="1">HDP</option>
+                                    <option value="3">O/U</option>
+                                    <option value="7">1st HDP</option>
+                                    <option value="8">1st O/U</option>
+                                    <option value="2">O/E</option>
+                                    <option value="12">1st O/E</option>
+                                    <option value="413">Correct Score</option>
+                                    <option value="414">1st Correct Score</option>
+                                    <option value="6">Total Goal</option>
+                                    <option value="126">1st Total Goal</option>
+                                }
+                                else if (ViewBag.SportType == (int)Consts.MatchMonitorSportType.Basketball)
+                                {
+                                    <option value="1">HDP</option>
+                                    <option value="3">O/U</option>
+                                    <option value="7">1st HDP</option>
+                                    <option value="8">1st O/U</option>
+                                    <option value="20">Moneyline</option>
+                                    <option value="609" data-betid="801">Quarter 1 HDP</option>
+                                    <option value="609" data-betid="802">Quarter 2 HDP</option>
+                                    <option value="609" data-betid="803">Quarter 3 HDP</option>
+                                    <option value="609" data-betid="804">Quarter 4 HDP</option>
+                                    <option value="610" data-betid="801">Quarter 1 O/U</option>
+                                    <option value="610" data-betid="802">Quarter 2 O/U</option>
+                                    <option value="610" data-betid="803">Quarter 3 O/U</option>
+                                    <option value="610" data-betid="804">Quarter 4 O/U</option>
+                                    <option value="612" data-betid="801">Quarter 1 Moneyline</option>
+                                    <option value="612" data-betid="801">Quarter 2 Moneyline</option>
+                                    <option value="612" data-betid="803">Quarter 3 Moneyline</option>
+                                    <option value="612" data-betid="804">Quarter 4 Moneyline</option>
+                                }
+                                else if (ViewBag.SportType == (int)Consts.MatchMonitorSportType.ESport)
+                                {
+                                    <option value="1">HDP</option>
+                                    <option value="3">O/U</option>
+                                    <option value="20">Moneyline</option>
+                                }
                             </select>
                         </div>
                         <div class="group width-180">
-                            <label class="text">Type of Tickets</label>
+                            <label class="text">Tickets Type</label>
                             <select class="control width-select-one" id="cbbTypeOfTickets">
-                                <option value="2">Suspicious Tickets</option>
+                                <option value="2">Suspicious</option>
                                 <option value="3">All</option>
                             </select>
                         </div>
@@ -89,43 +117,10 @@
 
                         <div class="group width-180">
                             <label class="text">Danger</label>
-                            <select class="control width-select" id="cbbDanger" multiple="multiple">
-                                <optgroup label="None" data-danger-type="None">
-                                    <option selected value=0>-</option>
-                                </optgroup>
-                                <optgroup label="Original" data-danger-type="Danger1">
-                                    @for (int i = 1; i < 50; i++)
-                                    {
-                                        <option selected value=1>Original @i</option>
-                                    }
-                                </optgroup>
-                                <optgroup label="ABI" data-danger-type="Danger2">
-                                    @for (int i = 1; i < 50; i++)
-                                    {
-                                        <option selected value=1>ABI @i</option>
-                                    }
-                                </optgroup>
-                                <optgroup label="Other Sport" data-danger-type="Danger3">
-                                    @for (int i = 1; i < 50; i++)
-                                    {
-                                        <option selected value=1>Other Sport @i</option>
-                                    }
-                                </optgroup>
-                                <optgroup label="Basketball" data-danger-type="Danger4">
-                                    @for (int i = 1; i < 50; i++)
-                                    {
-                                        <option selected value=1>Basketball @i</option>
-                                    }
-                                </optgroup>
-                                <optgroup label="ESports" data-danger-type="Danger5">
-                                    @for (int i = 1; i < 50; i++)
-                                    {
-                                        <option selected value=1>ESports @i</option>
-                                    }
-                                </optgroup>
+                            <select class="control width-select" id="cbbDanger" multiple="multiple">                               
                             </select>
                         </div>
-                       
+
                         <div class="group width-180">
                             <label class="text">Currency</label>
                             <select class="control width-select" id="cbbCurrency" multiple="multiple">
@@ -140,7 +135,13 @@
 
                         <div class="group width-180">
                             <label class="text">A.Gr.</label>
-                            <select class="control width-select" id="cbbGroup" multiple="multiple">
+                            <select class="control width-select" id="cbbAGroup" multiple="multiple">
+                            </select>
+                        </div>
+
+                        <div class="group width-180">
+                            <label class="text">M.Gr.</label>
+                            <select class="control width-select" id="cbbMGroup" multiple="multiple">
                             </select>
                         </div>
 
@@ -174,10 +175,10 @@
                             </select>
                         </div>
 
-                        <div class="group-button">
+                        <div class="group-button" style="margin-left: 0px">
                             <button class="button button-generate" id="btnGenerate-detail">Generate</button>
                         </div>
-                    </div>                   
+                    </div>
                 </div>
 
                 <div class="breadcrumb-button" id="breadcrumbButton">
@@ -190,8 +191,8 @@
                         <button class="button button-primary-outline" id="btnVerifyAndClose">Verify and Close</button>
                     </div>
                 </div>
-              
-                <div class="group-table" id="groupTable">                   
+
+                <div class="group-table" id="groupTable">
                     <div id="first-monitor-datatable">
                         <div id="tbrMMHomeTeam" class="table-report" style="width: 100%; padding-bottom: 8px;">
                             <table id="tblMMHomeTeam" class="table table-striped table-monitor-detail">
@@ -222,7 +223,7 @@
                                 </thead>
                                 <tbody></tbody>
                             </table>
-                        </div>                            
+                        </div>
                     </div>
 
                     <div id="second-monitor-datatable">
@@ -255,12 +256,12 @@
                                 </thead>
                                 <tbody></tbody>
                             </table>
-                        </div>                         
+                        </div>
                     </div>
                 </div>
-            
+
             </div>
-        </div>               
+        </div>
 
         <div class="hide">
             <input id="hdEventDataToString" type="hidden" value="@ViewBag.EventDateToString" />
@@ -274,7 +275,7 @@
             <input id="hdIsSupportShowAllTickets" type="hidden" value="@ViewBag.IsSupportShowAllTickets.ToString()" />
             <input id="hdIsHostPermission" type="hidden" IsHostPermission="@ViewBag.IsHostPermission.ToString()" />
         </div>
-    </div>    
+    </div>
 </section>
 
 <div id="divPopupAssDetect" class="popup-add" style="display: none">
@@ -359,6 +360,8 @@
         <div class="hide">
             <input id="hdSelectedCTSCustIDs" type="hidden" />
             <input id="hdSelectedCustIDs" type="hidden" />
+            <input id="hdSelectedHomeDetectMGr" type="hidden" />
+            <input id="hdSelectedAwayDetectMGr" type="hidden" />
         </div>
     </div>
 </div>

@@ -189,4 +189,16 @@
         Round3 = 3
     }
 
+    public enum TicketStatus
+    {
+        Refund = 103,
+        Lose = 113,
+        Completed = 131,
+        Won = 112,
+        Reject = 101,
+        Draw = 111,
+        Running = 0,
+        Void = 102,
+        Waiting = 1
+    }
 }

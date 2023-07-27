@@ -80,6 +80,7 @@
             ReasonInfos = filter.ReasonInfos;
             ReasonGroupIDDic = filter.ReasonGroupIDDic;
             AGroupList = filter.AGroupList;
+            SubscriberTypeList = filter.SubscriberTypeList;
         }
 
         public bool IsFilter { get; set; }
@@ -88,6 +89,8 @@
 
         public long RecordsTotal { get; set; }
 
+        public List<string> SubscriberTypeList { get; set; }
+
         public List<KeyValuePair<int, string>> CurrencyList { get; set; }
 
         public List<int> CurrencyIdList { get; set; }
@@ -95,6 +98,18 @@
         public List<decimal> HDPList { get; set; }
 
         public List<string> ScoreList { get; set; }
+
+        public List<int> Danger1List { get; set; }
+
+        public List<int> Danger2List { get; set; }
+
+        public List<int> Danger3List { get; set; }
+
+        public List<int> Danger4List { get; set; }
+
+        public List<int> Danger5List { get; set; }
+
+        public List<int> StatusList { get; set; }
 
         public List<string> ReasonList { get; set; }
 
@@ -124,6 +139,10 @@
 
         public List<string> AGroupList { get; set; }
 
+        public List<string> MGroupList { get; set; }
+
+        public List<int> TicketStatusList { get; set; }
+
         public MMDetailFilterViewModel Clone() => new MMDetailFilterViewModel(this);
 
         public bool IsValidFilterTicketLatest(MMDetailFilterViewModel filterLastest)
@@ -132,32 +151,32 @@
             {
                 var count = 0;
 
-                if (!filterLastest.HDPList.Except(HDPList).Any())
+                if (filterLastest.HDPList != null && !filterLastest.HDPList.Except(HDPList).Any())
                 {
                     HDPList = null;
                     count++;
                 }
-
-                if (!filterLastest.ScoreList.Except(ScoreList).Any())
+               
+                if (filterLastest.ScoreList != null && !filterLastest.ScoreList.Except(ScoreList).Any())
                 {
                     ScoreList = null;
                     count++;
                 }
 
-                if (!filterLastest.CurrencyList.Select(x => x.Key).Except(CurrencyIdList).Any())
+                if (filterLastest.CurrencyList != null && !filterLastest.CurrencyList.Select(x => x.Key).Except(CurrencyIdList).Any())
                 {
                     CurrencyIdList = null;
                     count++;
                 }
 
-                if (!filterLastest.ReasonGroupIDDic.Where(x => ReasonList.Contains(x.Key)).SelectMany(x => x.Value).Distinct()
+                if (filterLastest.ReasonGroupIDDic != null && !filterLastest.ReasonGroupIDDic.Where(x => ReasonList.Contains(x.Key)).SelectMany(x => x.Value).Distinct()
                     .ToList().ConvertAll(x => x.ToString()).Except(AGroupList).Any())
                 {
                     AGroupList = null;
                     count++;
                 }
 
-                if (!filterLastest.ReasonList.Except(ReasonList).Any())
+                if (filterLastest.ReasonList != null && !filterLastest.ReasonList.Except(ReasonList).Any())
                 {
                     ReasonList = null;
                     count++;
@@ -168,7 +187,13 @@
                     count++;
                 }
 
-                IsFilter = count < 6;
+                if (filterLastest.TicketStatusList != null && !filterLastest.TicketStatusList.Except(TicketStatusList).Any())
+                {
+                    TicketStatusList = null;
+                    count++;
+                }
+
+                IsFilter = count < 7;
             }
 
             return IsFilter;

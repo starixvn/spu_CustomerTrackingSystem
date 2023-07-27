@@ -157,8 +157,10 @@
                 BatchSize = batchSize,
                 IsLicensee = para.Sites == MMSites.All ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
                 ListCurrency = filter?.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList),
-                ListHDP = filter?.HDPList == null ? null : string.Join(",", filter.HDPList),
+                ListHDPBetTeam = filter?.HDPList == null ? null : string.Join(",", filter.HDPList),
                 ListScore = filter?.ScoreList == null ? null : string.Join(",", filter.ScoreList),
+                //ListDanger = filter?.DangerList == null ? null : string.Join(",", filter.DangerList),
+                ListStatus = filter?.StatusList == null ? null : string.Join(",", filter.StatusList),
                 ListTransId = transIds
             };
 
