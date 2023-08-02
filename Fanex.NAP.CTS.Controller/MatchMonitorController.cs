@@ -742,16 +742,19 @@
 
                             if (mmticketDetailInfo == null)
                             {
-                                mmticketDetailInfo = _matchMonitorService.GetMMTicketDetailInfo(para);
+                                mmticketDetailInfo = _matchMonitorService.GetMMTicketDetailInfo(para);                               
 
                                 if (isCache) 
                                     await _memoryCacheService.PushValueAsync(key, mmticketDetailInfo);
                             }
 
                             var fraudTicketSiteAll = GetFraudMMFilterFromCache(para, MMSites.All);
-                            var fraudTicketDetail = site != MMSites.All ? GetFraudMMFilterFromCache(para, site) : fraudTicketSiteAll;
-                            result = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetail, site);
+                            fraudTicketSiteAll.BindDropdownListByMainTicketInfo(mmticketDetailInfo.FilterDetail.TicketInfoList, para.LiveIndicator);
 
+                            var fraudTicketDetail = site != MMSites.All ? GetFraudMMFilterFromCache(para, site) : fraudTicketSiteAll;
+
+                            result = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetail, site);
+                            
                             if (isCache)
                             {
                                 _ = Task.Run(() =>
@@ -759,7 +762,6 @@
                                     var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.All);
                                     _memoryCacheService.PushValueAsync(keySite, new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketSiteAll, MMSites.All));
                                 });
-
                                 _ = Task.Run(() =>
                                 {
                                     var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.Licensee);

@@ -379,7 +379,7 @@ function MatchMonitorDetail() {
 
             if (data.Danger4.DangerItems.length > 0) siteSelector.append(BuildOptgroup(4, "Basketball", data.Danger4.DangerItems));
 
-            if (data.Danger5.DangerItems.length > 0) siteSelector.append(BuildOptgroup(5, "ESports", data.Danger5.DangerItems));
+            if (data.Danger5.DangerItems.length > 0) siteSelector.append(BuildOptgroup(5, "E-Sports", data.Danger5.DangerItems));
          
             domElements.cbbDanger.multiselect('refresh');
         }               
@@ -892,6 +892,7 @@ function MatchMonitorDetail() {
                 const data = response?.data;
                 if (data) {
                     RenderFilter(data);
+
                     if (maxSequenceId == 1 && currentType == MatchMonitorDetailViewType.TicketAll) {
                         maxSequenceId = data.MaxSequenceId;
                     }

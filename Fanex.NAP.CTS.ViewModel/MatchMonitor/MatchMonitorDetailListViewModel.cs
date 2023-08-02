@@ -83,9 +83,7 @@
 
         public List<MatchMonitorDetailItemViewModel> HomeMatchItemList { get; set; }
 
-        public List<MatchMonitorDetailItemViewModel> AwayMatchItemList { get; set; }
-
-        public MMDetailFilterDropdownListViewModel DropdownList { get; set; }
+        public List<MatchMonitorDetailItemViewModel> AwayMatchItemList { get; set; }        
 
         public new MatchMonitorDetailListViewModel Clone() => new MatchMonitorDetailListViewModel(this);
 
@@ -117,7 +115,7 @@
                 this.ReasonGroupIDDic.Add(reason, reasonGroupIDList.Distinct().ToList());
             }
 
-        }      
+        }
 
         public void BindDropdownList(IEnumerable<MatchMonitorDetailItemViewModel> mdItemList)
         {
@@ -155,7 +153,7 @@
                     }),
                     Task.Run(() =>
                     {
-                        #region Currency - Danger                                            
+                        #region Currency - Danger
                         var dangerList = new List<DangerCurrencyViewModel>();
                        dangerList.AddRange(mdItemList.Where(x=> x.Danger1 > 0).GroupBy(x=> new { x.Danger1 })
                             .Select(g => new DangerCurrencyViewModel {
@@ -201,7 +199,7 @@
                                 ReasonItems = g.Select(x => new CurrencyReasonItemViewModel { ReasonList = x.ReasonList }).Distinct(x=>x.ReasonList)
                             });
                         #endregion
-                    }),                     
+                    }),
                     Task.Run(() =>
                     {
                         #region Reason - AGroup
@@ -216,7 +214,7 @@
                     Task.Run(() =>
                     {
                         #region Danger                       
-                        var dangerList = mdItemList.Where(x=> !string.IsNullOrEmpty(x.DangerToString));                       
+                        var dangerList = mdItemList.Where(x=> !string.IsNullOrEmpty(x.DangerToString));
                         var currency1 = dangerList.Where(x=>x.Danger1 > 0).Select(x=>x.CurrencyName).Distinct();
                         var currency2 = dangerList.Where(x=>x.Danger2 > 0).Select(x=>x.CurrencyName).Distinct();
                         var currency3 = dangerList.Where(x=>x.Danger3 > 0).Select(x=>x.CurrencyName).Distinct();
@@ -230,7 +228,7 @@
                         DropdownList.Danger.Danger2.DangerItems = dangerList.Where(x=>x.Danger2 > 0).Select(x=>x.Danger2).Distinct()
                             .Select(x=> new DangerItemViewModel{ Danger = x, DangerName = "ABI " + x })
                             .OrderBy(x=>x.Danger);
-                        
+
                         DropdownList.Danger.Danger3.DangerItems = dangerList.Where(x=>x.Danger3 > 0).Select(x=>x.Danger3).Distinct()
                             .Select(x=> new DangerItemViewModel{ Danger = x, DangerName = "Other Sports " + x })
                             .OrderBy(x=>x.Danger);
@@ -240,9 +238,9 @@
                             .OrderBy(x=>x.Danger);
 
                         DropdownList.Danger.Danger5.DangerItems = dangerList.Where(x=>x.Danger5 > 0).Select(x=>x.Danger5).Distinct()
-                            .Select(x=> new DangerItemViewModel{ Danger = x, DangerName = "ESports " + x })
+                            .Select(x=> new DangerItemViewModel{ Danger = x, DangerName = "E-Sports " + x })
                             .OrderBy(x=>x.Danger);
-                       
+
                         if (mdItemList.Any(x=>string.IsNullOrEmpty(x.DangerToString)))
                         {
                              DropdownList.Danger.NoneDanger.DangerItems = new List<DangerItemViewModel> { new DangerItemViewModel {  Danger = 0, DangerName = "-"} };
@@ -255,13 +253,13 @@
                         DropdownList.TicketStatusList = mdItemList.Select(x=>x.TicketStatus).Distinct()
                             .Select(x=> new TicketStatusViewModel {
                                  TicketStatus = x,
-                                 TicketStatusName = Enum.GetName(typeof(TicketStatus), x)
-                            });
+                                 TicketStatusName = Enum.GetName(typeof(StatusTicket), x)
+                            }).OrderBy(x=>x.StatusOrderIdx);
                         #endregion
                     })
                 };
 
-            Task.WhenAll(tasks).Wait();               
-        }       
+            Task.WhenAll(tasks).Wait();
+        }
     }
 }

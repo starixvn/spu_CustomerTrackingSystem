@@ -200,6 +200,7 @@
     <Compile Include="MatchMonitor\FilterDependOn\TicketStatusViewModel.cs" />
     <Compile Include="MatchMonitor\GetMatchMonitorViewModel.cs" />
     <Compile Include="MatchMonitor\MMDetailFilterDropdownListViewModel.cs" />
+    <Compile Include="MatchMonitor\MMDetailFilterTicketInfoViewModel.cs" />
     <Compile Include="MatchMonitor\MMDetailFilterViewModel.cs" />
     <Compile Include="MatchMonitor\GroupInfoViewModel.cs" />
     <Compile Include="MatchMonitor\MatchFromMainInfoViewModel.cs" />

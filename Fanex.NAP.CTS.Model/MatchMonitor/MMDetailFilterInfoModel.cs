@@ -2,11 +2,16 @@
 {
     using System;
     using System.Collections.Generic;
+
     public class MMDetailFilterInfoModel
     {
         public IEnumerable<MMDetailFilterInforHdpModel> HDPList { get; set; }
+
         public IEnumerable<MMDetailFilterInforScoreModel> ScoreList { get; set; }
+
         public IEnumerable<MMDetailFilterInforCurrencyModel> CurrencyList { get; set; }
+
+        public IEnumerable<MMDetailFilterTicketInfoModel> TicketInfoList { get; set; }
     }
 
     public class MMdetailFilterInforTypeBaseModel

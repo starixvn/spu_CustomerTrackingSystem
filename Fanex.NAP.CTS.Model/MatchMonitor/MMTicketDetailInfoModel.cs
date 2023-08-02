@@ -1,8 +1,7 @@
-﻿using Fanex.Data;
-using System;
-
-namespace Fanex.NAP.CTS.Model.MatchMonitor
+﻿namespace Fanex.NAP.CTS.Model.MatchMonitor
 {
+    using System;  
+
     public class MMTicketDetailInfoModel
     {
         public long? MaxSequenceId { get; set; }
@@ -14,5 +13,6 @@ namespace Fanex.NAP.CTS.Model.MatchMonitor
         public Int64 TotalTicketCredit { get; set; }
 
         public MMDetailFilterInfoModel FilterDetail { get; set; }
+
     }
 }
