@@ -392,9 +392,8 @@
                     GroupList = mergeGroup.Groups.ToList(),
                     CurrencyList = mdItemList.Select(x =>
                     {
-                        var isNotValid = string.IsNullOrEmpty(x.CurrencyName) || x.CurrencyId == null;
-                        return new { CurrencyId = isNotValid ? -1 : x.CurrencyId, CurrencyName = isNotValid ? "-" : x.CurrencyName };
-                    }).Distinct().OrderBy(x => x.CurrencyName).Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName)).ToList(),
+                        return new { CurrencyId = string.IsNullOrEmpty(x.CurrencyName) ? -1 : x.CurrencyId, CurrencyName = string.IsNullOrEmpty(x.CurrencyName) ? "-" : x.CurrencyName };
+                    }).Distinct(x => x.CurrencyId).OrderBy(x => x.CurrencyName).Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName)).ToList(),
                     HDPList = mdItemList.Select(x => x.BallHeadHDP()).Distinct().OrderBy(x => x).ToList(),
                     SubscriberTypeList = mdItemList.Select(x=>x.SubscriberType).Distinct().ToList()
                 };
@@ -418,7 +417,7 @@
             return Enumerable.Empty<CustInfoModel>();
         }
 
-        private TicketDetailViewModel GetFraudMMTicketDetail(MMDetailResultModel matchDetailInfo, MMDetailInfoViewModel para)        
+        private TicketDetailViewModel GetFraudMMTicketDetail(MMDetailResultModel matchDetailInfo, MMDetailInfoViewModel para)
         {
             var result = new TicketDetailViewModel();
 
@@ -749,30 +748,31 @@
                             }
 
                             var fraudTicketSiteAll = GetFraudMMFilterFromCache(para, MMSites.All);
-                            fraudTicketSiteAll.BindDropdownListByMainTicketInfo(mmticketDetailInfo.FilterDetail.TicketInfoList, para.LiveIndicator);
+
+                            fraudTicketSiteAll.BindDropdownListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);
 
                             var fraudTicketDetail = site != MMSites.All ? GetFraudMMFilterFromCache(para, site) : fraudTicketSiteAll;
 
-                            result = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetail, site);
+                            result = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetail, site, para.LiveIndicator);
                             
                             if (isCache)
                             {
                                 _ = Task.Run(() =>
                                 {
                                     var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.All);
-                                    _memoryCacheService.PushValueAsync(keySite, new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketSiteAll, MMSites.All));
+                                    _memoryCacheService.PushValueAsync(keySite, new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketSiteAll, MMSites.All, para.LiveIndicator));
                                 });
                                 _ = Task.Run(() =>
                                 {
                                     var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.Licensee);
                                     var fraudTicketDetailSite = GetFraudMMFilterFromCache(para, MMSites.Licensee);
-                                    _memoryCacheService.PushValueAsync(keySite, new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetailSite, MMSites.Licensee));
+                                    _memoryCacheService.PushValueAsync(keySite, new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetailSite, MMSites.Licensee, para.LiveIndicator));
                                 });
                                 _ = Task.Run(() =>
                                 {
                                     var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.Credit);
                                     var fraudTicketDetailSite = GetFraudMMFilterFromCache(para, MMSites.Credit);
-                                    _memoryCacheService.PushValueAsync(keySite, new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetailSite, MMSites.Credit));
+                                    _memoryCacheService.PushValueAsync(keySite, new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetailSite, MMSites.Credit, para.LiveIndicator));
                                 });
                             }
                         }

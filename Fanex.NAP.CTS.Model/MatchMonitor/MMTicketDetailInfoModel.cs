@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Model.MatchMonitor
 {
-    using System;  
+    using System;
+    using System.Collections.Generic;
 
     public class MMTicketDetailInfoModel
     {
@@ -12,7 +13,7 @@
 
         public Int64 TotalTicketCredit { get; set; }
 
-        public MMDetailFilterInfoModel FilterDetail { get; set; }
+        public IEnumerable<MMDetailFilterTicketInfoModel> TicketInfoList { get; set; }
 
     }
 }

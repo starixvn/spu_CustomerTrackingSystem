@@ -178,35 +178,7 @@
                 MinSequenceIDTotalAll = criteria.MinSequenceIDTotalAll
             };
         }
-
-        public MMTicketDetailInfoModel GetMMTicketDetailInfo_Old(MMDetailInfoViewModel para)
-        {
-            var criteria = new MMTicketDetailInfoCriteria()
-            {
-                MatchID = para.MatchID,
-                BetType = para.BetTypeID,
-                BetID = para.BetID,
-                IsLive = para.LiveIndicator ? 1 : 0
-            };
-
-            var result = repository.FetchMultiple<MMDetailFilterInforHdpModel, MMDetailFilterInforScoreModel, MMDetailFilterInforCurrencyModel>(criteria);
-
-            return new MMTicketDetailInfoModel
-            {
-                MaxSequenceId = criteria.MaxSequenceId,
-                TotalTicketAll = criteria.TotalTicketAll,
-                TotalTicketCredit = criteria.TotalTicketCredit,
-                TotalTicketLicensee = criteria.TotalTicketLicensee,
-
-                FilterDetail = new  MMDetailFilterInfoModel
-                {
-                    HDPList = result.firstResultSet,
-                    ScoreList = result.secondResultSet,
-                    CurrencyList = result.thirdResultSet
-                }
-            };
-        }
-
+       
         public MMTicketDetailInfoModel GetMMTicketDetailInfo(MMDetailInfoViewModel para)
         {
             var criteria = new MMTicketDetailInfoCriteria()
@@ -225,11 +197,7 @@
                 TotalTicketAll = criteria.TotalTicketAll,
                 TotalTicketCredit = criteria.TotalTicketCredit,
                 TotalTicketLicensee = criteria.TotalTicketLicensee,
-
-                FilterDetail = new MMDetailFilterInfoModel()
-                {
-                    TicketInfoList = result
-                }
+                TicketInfoList = result               
             };
         }
 
