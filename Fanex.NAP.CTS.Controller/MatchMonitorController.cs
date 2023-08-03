@@ -275,8 +275,7 @@
             var mdResult = default(MatchMonitorDetailListViewModel);
 
             switch (para.TypeOfTickets)
-            {
-                case MatchMonitorQueryType.TicketAll when para.IsSupportShowAllTickets && filter.IsOnlyFraudTicket():
+            {              
                 case MatchMonitorQueryType.TicketFraud:
                     {
                         mdResult = GetFraudMMDetailFromCache(para, para.Sites).Clone();
@@ -394,7 +393,7 @@
                     {
                         return new { CurrencyId = string.IsNullOrEmpty(x.CurrencyName) ? -1 : x.CurrencyId, CurrencyName = string.IsNullOrEmpty(x.CurrencyName) ? "-" : x.CurrencyName };
                     }).Distinct(x => x.CurrencyId).OrderBy(x => x.CurrencyName).Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName)).ToList(),
-                    HDPList = mdItemList.Select(x => x.BallHeadHDP()).Distinct().OrderBy(x => x).ToList(),
+                    HDPBetTeamList = mdItemList.Select(x => x.BallHeadHDPOrBetTeam()).Distinct().OrderBy(x => x).ToList(),
                     SubscriberTypeList = mdItemList.Select(x=>x.SubscriberType).Distinct().ToList()
                 };
 
@@ -476,10 +475,9 @@
             long recordsTotal = 0;
 
             try
-            {
+            {             
                 switch (info.TypeOfTickets)
-                {
-                    case MatchMonitorQueryType.TicketAll when info.IsSupportShowAllTickets && filter.IsOnlyFraudTicket():
+                {                    
                     case MatchMonitorQueryType.TicketFraud:
                         {
                             var mdResult = GetFraudMMDetailFromCache(info, info.Sites).Clone();
@@ -504,7 +502,7 @@
                 var logInfo = info != null ? JsonConvert.SerializeObject(info) : string.Empty;
                 var logFilter = filter != null ? JsonConvert.SerializeObject(filter) : string.Empty;
 
-                LogService.Info("Get Match Monitor Total Ticket Error: " + ex.Message + ex.StackTrace + "\n"
+                LogService.Error("Get Match Monitor Total Ticket Error: " + ex.Message + ex.StackTrace + "\n"
                      + "Info" + logInfo + "\n"
                      + "Filter" + logFilter + "\n"
                      + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException

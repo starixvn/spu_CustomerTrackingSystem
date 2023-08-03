@@ -18,9 +18,9 @@
 
             </div>
             <div class="title-box-right">
-                <span class="title-sport-name">
+                <span class="title-sport-name" id="spanSportBetTypeInfo">
                     @ViewBag.SportName - @ViewBag.BettypeName -
-                    <span class="title-market">@ViewBag.MarketName</span>
+                    <span class="title-market" id="spanMarketInfo">@ViewBag.MarketName</span>
                     <span class="title-market-line"> | </span>
                     <span class="title-market" id="spanReasonInfo"> GB, FG</span>
                 </span>
@@ -50,20 +50,20 @@
                                     <option value="3">O/U</option>
                                     <option value="7">1st HDP</option>
                                     <option value="8">1st O/U</option>
-                                    <option value="2">O/E</option>
-                                    <option value="12">1st O/E</option>
-                                    <option value="413">Correct Score</option>
-                                    <option value="414">1st Correct Score</option>
-                                    <option value="6">Total Goal</option>
-                                    <option value="126">1st Total Goal</option>
+                                    <option value="2" data-is-support-suspicious="false">O/E</option>
+                                    <option value="12" data-is-support-suspicious="false">1st O/E</option>
+                                    <option value="413" data-is-support-suspicious="false">Correct Score</option>
+                                    <option value="414" data-is-support-suspicious="false">1st Correct Score</option>
+                                    <option value="6" data-is-support-suspicious="false">Total Goal</option>
+                                    <option value="126" data-is-support-suspicious="false">1st Total Goal</option>
                                 }
                                 else if (ViewBag.SportType == (int)Consts.MatchMonitorSportType.Basketball)
                                 {
-                                    <option value="1">HDP</option>
-                                    <option value="3">O/U</option>
-                                    <option value="7">1st HDP</option>
-                                    <option value="8">1st O/U</option>
-                                    <option value="20">Moneyline</option>
+                                    <option value="1" data-betid="0">HDP</option>
+                                    <option value="3" data-betid="0">O/U</option>
+                                    <option value="7" data-betid="0">1st HDP</option>
+                                    <option value="8" data-betid="0">1st O/U</option>
+                                    <option value="20" data-betid="0">Moneyline</option>
                                     <option value="609" data-betid="801">Quarter 1 HDP</option>
                                     <option value="609" data-betid="802">Quarter 2 HDP</option>
                                     <option value="609" data-betid="803">Quarter 3 HDP</option>
@@ -272,6 +272,8 @@
             <input id="hdBetIDToString" type="hidden" value="@ViewBag.BetIDToString" />
             <input id="hdLiveIndicator" type="hidden" value="@ViewBag.LiveIndicator.ToString()" />
             <input id="hdreason" type="hidden" value="@ViewBag.Reason" />
+            <input id="hdSportType" type="hidden" value="@ViewBag.SportType">
+            <input id="hdSportName" type="hidden" value="@ViewBag.SportName" />
             <input id="hdIsSupportShowAllTickets" type="hidden" value="@ViewBag.IsSupportShowAllTickets.ToString()" />
             <input id="hdIsHostPermission" type="hidden" IsHostPermission="@ViewBag.IsHostPermission.ToString()" />
         </div>
@@ -361,7 +363,7 @@
             <input id="hdSelectedCTSCustIDs" type="hidden" />
             <input id="hdSelectedCustIDs" type="hidden" />
             <input id="hdSelectedHomeDetectMGr" type="hidden" />
-            <input id="hdSelectedAwayDetectMGr" type="hidden" />
+            <input id="hdSelectedAwayDetectMGr" type="hidden" />           
         </div>
     </div>
 </div>

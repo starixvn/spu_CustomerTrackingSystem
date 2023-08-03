@@ -61,9 +61,8 @@
                     .OrderBy(x => x.CurrencyName)
                     .Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName))
                     .ToList();
-
-                this.HDPOrBetTeamList = mtFilterBySite.Select(x => x.HdpBetTeam).OrderBy(x => x).ToList();
-                this.HDPList = mtFilterBySite.Select(x => decimal.Parse(x.HdpBetTeam)).Distinct().OrderBy(x => x).ToList();
+              
+                this.HDPBetTeamList = mtFilterBySite.Select(x => x.HdpBetTeam).Distinct().OrderBy(x => x).ToList();
 
                 this.ScoreList = mtFilterBySite.Select(x => 
                 {
@@ -101,8 +100,7 @@
             {
                 this.SubscriberTypeList = new List<string>();
                 this.CurrencyList = new List<KeyValuePair<int, string>>();
-                this.HDPList = new List<decimal>();
-                this.HDPOrBetTeamList = new List<string>();
+                this.HDPBetTeamList = new List<string>();              
                 this.ScoreList = new List<string>();
                 this.ReasonList = new List<string>();
                 this.GroupList = new List<GroupInfoViewModel>();
@@ -118,7 +116,7 @@
             RecordsTotal = filter.RecordsTotal;
             CurrencyList = filter.CurrencyList;
             CurrencyIdList = filter.CurrencyIdList;
-            HDPList = filter.HDPList;
+            HDPBetTeamList = filter.HDPBetTeamList;
             ScoreList = filter.ScoreList;
             ReasonList = filter.ReasonList;
             AmountList = filter.AmountList;
@@ -141,10 +139,8 @@
 
         public List<int> CurrencyIdList { get; set; }
 
-        public List<decimal> HDPList { get; set; }
-
-        public List<string> HDPOrBetTeamList { get; set; }
-
+        public List<string> HDPBetTeamList { get; set; }
+     
         public List<string> ScoreList { get; set; }
 
         public List<int> Danger1List { get; set; }
@@ -201,9 +197,9 @@
             {
                 var count = 0;
 
-                if (filterLastest.HDPList != null && !filterLastest.HDPList.Except(HDPList).Any())
+                if (filterLastest.HDPBetTeamList != null && !filterLastest.HDPBetTeamList.Except(HDPBetTeamList).Any())
                 {
-                    HDPList = null;
+                    HDPBetTeamList = null;
                     count++;
                 }
                
@@ -249,10 +245,10 @@
             return IsFilter;
         }
 
-        public bool IsOnlyFraudTicket()
-        {
-            return (!ReasonList?.Contains("-") ?? false) || !((AGroupList?.Contains("-") ?? true) || (AGroupList?.Contains("0") ?? true));
-        }
+        //public bool IsOnlyFraudTicket()
+        //{           
+        //    return (!ReasonList?.Contains("-") ?? false) || !((AGroupList?.Contains("-") ?? true) || (AGroupList?.Contains("0") ?? true));
+        //}
 
         //private bool FilterBySite(MMdetailFilterInforTypeBaseModel x, string site)
         //{

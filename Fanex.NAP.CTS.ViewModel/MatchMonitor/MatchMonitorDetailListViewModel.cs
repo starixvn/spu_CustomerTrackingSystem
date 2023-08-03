@@ -56,13 +56,12 @@
 
             CurrencyList = mdItemList.Select(x =>
             {
-                var isNotValid = string.IsNullOrEmpty(x.CurrencyName) || x.CurrencyId == null;
-                return new { CurrencyId = isNotValid ? -1 : x.CurrencyId, CurrencyName = isNotValid ? "-" : x.CurrencyName };
-            }).Distinct()
+                return new { CurrencyId = string.IsNullOrEmpty(x.CurrencyName) ? -1 : x.CurrencyId, CurrencyName = string.IsNullOrEmpty(x.CurrencyName) ? "-" : x.CurrencyName };
+            }).Distinct(x=>x.CurrencyId)
             .OrderBy(x => x.CurrencyName)
             .Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName)).ToList();
 
-            HDPList = mdItemList.Select(x => x.BallHeadHDP()).Distinct().OrderBy(x => x).ToList();
+            HDPBetTeamList = mdItemList.Select(x => x.BallHeadHDPOrBetTeam()).Distinct().OrderBy(x => x).ToList();
 
             RecordsTotal = (HomeMatchItemList?.Count() ?? 0) + (AwayMatchItemList?.Count() ?? 0);
 

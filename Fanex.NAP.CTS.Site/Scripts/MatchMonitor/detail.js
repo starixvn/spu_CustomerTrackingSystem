@@ -30,6 +30,8 @@ function MatchMonitorDetail() {
         betTypeID: $("#hdBetTypeID").val(),
         betTypeName: $("#hdBetTypeName").val(),
         betIDToString: $("#hdBetIDToString").val(),
+        sportType: $('#hdSportType').val(),
+        sportName: $('#hdSportName').val(),
         reason: $("#hdreason").val(),
         liveIndicator: $("#hdLiveIndicator").val(),
         isSupportShowAllTickets: $("#hdIsSupportShowAllTickets").val(),        
@@ -51,7 +53,9 @@ function MatchMonitorDetail() {
         tblMMAwayTeam: $('#tblMMAwayTeam'),
         divHomeMonitor: $('#first-monitor-datatable'),
         divAwayMonitor: $('#second-monitor-datatable'),
-        spanReasonInfo: $('#spanReasonInfo'),
+        spanSportBetTypeInfo: $('#spanSportBetTypeInfo'),
+        spanMarketInfo: $('#spanMarketInfo'),
+        spanReasonInfo: $('#spanReasonInfo'),        
         inputHomeSelectAll: $('#inputHomeSelectAll'),
         inputAwaySelectAll: $('#inputAwaySelectAll'),
         iconHToggleBetID: $('#iconHToggleBetID'),
@@ -65,7 +69,7 @@ function MatchMonitorDetail() {
         inputOptIP: $('#inputOptIP'),
         inputOptAgent: $('#inputOptAgent'),
         inputOptIPLast3Days: $('#inputOptIPLast3Days'),
-        inputOpt3MatchesLast7Days: $('#inputOpt3MatchesLast7Days'),
+        inputOpt3MatchesLast7Days: $('#inputOpt3MatchesLast7Days'),        
         hdSelectedCTSCustIDs: $('#hdSelectedCTSCustIDs'),
         hdSelectedCustIDs: $('#hdSelectedCustIDs'),
         hdSelectedHomeDetectMGr: $('#hdSelectedHomeDetectMGr'),
@@ -536,6 +540,18 @@ function MatchMonitorDetail() {
         return undefined;
     }
 
+    function GetBetID() {
+        if (domElements.sportType == 2) {
+            $("option:selected", domElements.cbbBetType).each(function () {
+                let betID = $(this).attr('data-betid');
+
+                return betID != undefined ? betID : 0;               
+            }); 
+        } else {
+            return domElements.betIDToString;
+        }
+    }
+
     function ValidationFilter() {
         let result = true;
 
@@ -612,7 +628,7 @@ function MatchMonitorDetail() {
         cacheReasonGroupIDDic = data.ReasonGroupIDDic;
 
         SetupFilterFromDictinary(domElements.cbbCurrency, data.CurrencyList);
-        SetupFilter(domElements.cbbHDP, data.HDPList);
+        SetupFilter(domElements.cbbHDP, data.HDPBetTeamList);
         SetupFilterScore(domElements.cbbMatchScore, data.ScoreList);
         SetupFilter(domElements.cbbReason, data.ReasonList);
 
@@ -626,13 +642,17 @@ function MatchMonitorDetail() {
         } else {
             domElements.cbbSites.empty();
             if (data.SubscriberTypeList) {
-                if (data.SubscriberTypeList.length == 2)
+                if (data.SubscriberTypeList.length == 2) {
+                    domElements.cbbSites.prop('disabled', false);
                     domElements.cbbSites.append(`<option selected value='A'>All</option>`);
+                } else if (data.SubscriberTypeList.length == 1) {
+                    domElements.cbbSites.prop('disabled', true);
+                }
                 data.SubscriberTypeList.forEach(item => {
                     let subName = item == "C" ? "Credit" : "Licensee";
                     domElements.cbbSites.append(`<option value='${item}'>${subName}</option>`);
                 });
-            }  
+            }
         }
 
         if (data.DropdownList) {
@@ -734,7 +754,7 @@ function MatchMonitorDetail() {
                     EventDateToString: domElements.eventDataToString,
                     MatchID: domElements.matchID,
                     BetTypeID: domElements.cbbBetType.val(),
-                    BetID: domElements.betIDToString,
+                    BetID: GetBetID(),
                     LiveIndicator: domElements.cbbMarket.val(),
                     LastScannedSequenceID: lastScannedSequenceID,
                     IsSupportShowAllTickets: isSupportShowAllTickets,
@@ -752,7 +772,7 @@ function MatchMonitorDetail() {
                     Reason: domElements.reason,
                     AGroupList: GetSelectDataFilter(domElements.cbbAGroup, true),
                     MGroupList: GetSelectDataFilter(domElements.cbbMGroup, true),
-                    HDPList: GetSelectDataFilter(domElements.cbbHDP, true),
+                    HDPBetTeamList: GetSelectDataFilter(domElements.cbbHDP, true),
                     AmountList: GetInputAmount()?.map(str => {
                         return Number(str);
                     }) ?? undefined,
@@ -880,7 +900,7 @@ function MatchMonitorDetail() {
                 EventDateToString: function () { return domElements.eventDataToString; },
                 MatchID: function () { return domElements.matchID; },
                 BetTypeID: function () { return domElements.cbbBetType.val(); },
-                BetID: function () { return domElements.betIDToString; },
+                BetID: function () { return GetBetID(); },
                 Sites: function () { return domElements.cbbSites.val(); },
                 Reason: function () { return domElements.reason; },
                 LiveIndicator: function () { return domElements.cbbMarket.val(); },
@@ -1010,7 +1030,7 @@ function MatchMonitorDetail() {
                 MatchId: domElements.matchID,
                 LiveIndicator: domElements.cbbMarket.val(),
                 BettypeID: domElements.cbbBetType.val(),
-                BetID: domElements.betIDToString,
+                BetID: GetBetID(),
                 TranIds: GetTranIds().join()
             },
             beforeSend: function () {
@@ -1351,15 +1371,31 @@ function MatchMonitorDetail() {
     function MarketOnChange() {
         RestoreDefaulCbbSite();
 
+        let txtMarket = $("option:selected", domElements.cbbMarket).text();
+
+        domElements.spanMarketInfo.text(txtMarket);
+
         currentType = Number(domElements.cbbTypeOfTickets.val());
 
         isRefresh = true;
 
-        FetchFilterMatchMonitorDetail();      
+        FetchFilterMatchMonitorDetail();
     }
 
     function BetTypeOnChange() {
         RestoreDefaulCbbSite();
+
+        let betTypeSelected = $("option:selected", domElements.cbbBetType);
+        let txtBetType = betTypeSelected.text();
+       
+        if (betTypeSelected.attr('data-is-support-suspicious') == 'false') {
+            domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketAll);
+            domElements.cbbTypeOfTickets.prop('disabled', true);
+        } else {
+            domElements.cbbTypeOfTickets.prop('disabled', false);
+        }
+
+        domElements.spanSportBetTypeInfo.text(`${domElements.sportName} - ${txtBetType} -`);
 
         currentType = Number(domElements.cbbTypeOfTickets.val());
 

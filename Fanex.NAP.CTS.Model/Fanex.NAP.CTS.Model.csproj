@@ -367,6 +367,7 @@
     <Compile Include="MatchMonitor\MatchGroupKeyModel.cs" />
     <Compile Include="MatchMonitor\MatchFromMainInfoModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorBetTypeModel.cs" />
+    <Compile Include="MatchMonitor\MMDetailDangerModel.cs" />
     <Compile Include="MatchMonitor\MMDetailFilterTicketInfoModel.cs" />
     <Compile Include="MatchMonitor\MMDetailResultModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailVerifyTransResultModel.cs" />

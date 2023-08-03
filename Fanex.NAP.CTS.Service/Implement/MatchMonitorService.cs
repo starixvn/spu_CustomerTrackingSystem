@@ -157,9 +157,9 @@
                 BatchSize = batchSize,
                 IsLicensee = para.Sites == MMSites.All ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
                 ListCurrency = filter?.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList),
-                ListHDPBetTeam = filter?.HDPList == null ? null : string.Join(",", filter.HDPList),
+                ListHDPBetTeam = filter?.HDPBetTeamList == null ? null : string.Join(",", filter.HDPBetTeamList),
                 ListScore = filter?.ScoreList == null ? null : string.Join(",", filter.ScoreList),
-                //ListDanger = filter?.DangerList == null ? null : string.Join(",", filter.DangerList),
+                ListDanger = GenerateDangerJson(filter.Danger1List, filter.Danger2List, filter.Danger3List, filter.Danger4List, filter.Danger5List),
                 ListStatus = filter?.StatusList == null ? null : string.Join(",", filter.StatusList),
                 ListTransId = transIds
             };
@@ -177,6 +177,19 @@
                 TicketDetails = result,
                 MinSequenceIDTotalAll = criteria.MinSequenceIDTotalAll
             };
+        }
+
+        private string GenerateDangerJson(List<int> danger1List, List<int> danger2List, List<int> danger3List, List<int> danger4List, List<int> danger5List)
+        {           
+            var jsonDanger = new List<MMDetailDangerModel>();
+
+            danger1List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger1 = x }); });
+            danger2List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger2 = x }); });
+            danger3List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger3 = x }); });
+            danger4List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger4 = x }); });
+            danger5List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger5 = x }); });
+
+            return JsonConvert.SerializeObject(jsonDanger);
         }
        
         public MMTicketDetailInfoModel GetMMTicketDetailInfo(MMDetailInfoViewModel para)

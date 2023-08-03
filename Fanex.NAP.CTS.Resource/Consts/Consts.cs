@@ -155,10 +155,16 @@
         public enum MatchMonitorBetType
         {
             HDP = 1,
+            OE = 2,
             OU = 3,
+            TotalGoal = 6,
             FirstHDP = 7,
-            FirsttOU = 8,
+            FirstOU = 8,
+            FirstOE = 12,
             Moneyline = 20,
+            FirstTotalGoal = 126,
+            CorrectScore = 413,
+            FirstCorrectScore = 414,
             QuarterXHDP = 609,
             QuarterXOU = 610,
             QuarterXMoneyline = 612
