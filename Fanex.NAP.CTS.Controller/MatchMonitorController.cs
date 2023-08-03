@@ -275,7 +275,7 @@
             var mdResult = default(MatchMonitorDetailListViewModel);
 
             switch (para.TypeOfTickets)
-            {              
+            {
                 case MatchMonitorQueryType.TicketFraud:
                     {
                         mdResult = GetFraudMMDetailFromCache(para, para.Sites).Clone();
@@ -394,7 +394,8 @@
                         return new { CurrencyId = string.IsNullOrEmpty(x.CurrencyName) ? -1 : x.CurrencyId, CurrencyName = string.IsNullOrEmpty(x.CurrencyName) ? "-" : x.CurrencyName };
                     }).Distinct(x => x.CurrencyId).OrderBy(x => x.CurrencyName).Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName)).ToList(),
                     HDPBetTeamList = mdItemList.Select(x => x.BallHeadHDPOrBetTeam()).Distinct().OrderBy(x => x).ToList(),
-                    SubscriberTypeList = mdItemList.Select(x=>x.SubscriberType).Distinct().ToList()
+                    SubscriberTypeList = mdItemList.Select(x=>x.SubscriberType).Distinct().ToList(),
+                    TicketStatusList = mdItemList.Select(x => x.TicketStatus).Distinct().ToList()
                 };
 
                 mdResult.RecordsTotal = (mdResult?.HomeMatchItemList?.Count() ?? 0) + (mdResult?.AwayMatchItemList?.Count() ?? 0);
@@ -681,7 +682,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Info("Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
+                LogService.Error("Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
                      + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                      + ex.InnerException.StackTrace);
             }

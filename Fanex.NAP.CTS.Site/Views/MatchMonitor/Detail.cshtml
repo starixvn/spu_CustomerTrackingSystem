@@ -30,7 +30,10 @@
     </div>
 
     <div class="monitor-container">
-        <div class="monitor-table">
+        <div class="monitor-table" id="divFilterMonitor">
+            <div class="loading-container" id="divFilterLoading" style="display: none;">
+                <div class="loading-icon"></div>
+            </div>
             <div class="group-control" id="groupControl">
                 <div class="group-info filter-group">
                     <div class="form-filter">
@@ -204,7 +207,16 @@
                                         <th>Bot</th>
                                         <th>Dgr</th>
                                         <th>Odds</th>
-                                        <th><div class="type-outer"><span class="col-title">BetID</span><span id="iconHToggleBetID" class="icon-account_detail icon-collapse-expand"></span></div></th>
+                                        <th>
+                                            <div class="type-outer">
+                                                <span class="col-title">BetID</span>
+                                                <span id="iconHToggleBetID" class="dropdown-button icon-collapse-expand">
+                                                    <span></span>
+                                                    <span></span>
+                                                    <span></span>
+                                                </span>                                                
+                                            </div>
+                                        </th>
                                         <th>Cur</th>
                                         <th>Amt</th>
                                         <th>HDP</th>
@@ -237,7 +249,16 @@
                                         <th>Bot</th>
                                         <th>Dgr</th>
                                         <th>Odds</th>
-                                        <th><div class="type-outer"><span class="col-title">BetID</span><span id="iconAToggleBetID" class="icon-account_detail icon-collapse-expand"></span></div></th>
+                                        <th>
+                                            <div class="type-outer">
+                                                <span class="col-title">BetID</span>
+                                                <span id="iconAToggleBetID" class="dropdown-button icon-collapse-expand">
+                                                    <span></span>
+                                                    <span></span>
+                                                    <span></span>
+                                                </span>
+                                            </div>
+                                        </th>
                                         <th>Cur</th>
                                         <th>Amt</th>
                                         <th>HDP</th>

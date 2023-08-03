@@ -70,6 +70,8 @@
             var agroup = ReasonGroupIDDic.Where(x => ReasonList.Contains(x.Key)).SelectMany(x => x.Value).Distinct();
 
             GroupList = GroupList?.Where(x => x.GroupID != null ? agroup.Contains(x.GroupID ?? 0) : false).ToList();
+
+            TicketStatusList = mdItemList.Select(x => x.TicketStatus).Distinct().ToList();
         }       
 
         public bool IsLive { get; set; }

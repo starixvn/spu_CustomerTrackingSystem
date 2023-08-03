@@ -20,6 +20,8 @@ function MatchMonitorDetail() {
         detailpage: $('#detailpage'),
         divContent: $('#divContent'),
         groupControl: $('#groupControl'),
+        divFilterMonitor: $('#divFilterMonitor'),
+        divFilterLoading: $('#divFilterLoading'),
         breadcrumbButton: $('#breadcrumbButton'),
         breadcrumbTotalTickets: $(".breadcrumb-totaltickets"),
         groupTable: $('#groupTable'),
@@ -426,7 +428,16 @@ function MatchMonitorDetail() {
                                         <th>Bot</th>
                                         <th>Dgr</th>
                                         <th>Odds</th>
-                                        <th><div class="type-outer"><span class="col-title">BetID</span><span id="iconHToggleBetID" class="icon-account_detail icon-collapse-expand"></span></div></th>
+                                        <th>
+                                            <div class="type-outer">
+                                                <span class="col-title">BetID</span>
+                                                <span id="iconHToggleBetID" class="dropdown-button icon-collapse-expand">
+                                                    <span></span>
+                                                    <span></span>
+                                                    <span></span>
+                                                </div>
+                                            </div>
+                                        </th>
                                         <th>Cur</th>
                                         <th>Amt</th>
                                         <th>HDP</th>
@@ -455,7 +466,16 @@ function MatchMonitorDetail() {
                                         <th>Bot</th>
                                         <th>Dgr</th>
                                         <th>Odds</th>
-                                        <th><div class="type-outer"><span class="col-title">BetID</span><span id="iconAToggleBetID" class="icon-account_detail icon-collapse-expand"></span></div></th>
+                                        <th>
+                                            <div class="type-outer">
+                                                <span class="col-title">BetID</span>
+                                                <span id="iconAToggleBetID" class="dropdown-button icon-collapse-expand">
+                                                    <span></span>
+                                                    <span></span>
+                                                    <span></span>
+                                                </span>
+                                            </div>
+                                        </th>
                                         <th>Cur</th>
                                         <th>Amt</th>
                                         <th>HDP</th>
@@ -538,7 +558,7 @@ function MatchMonitorDetail() {
         }
 
         return undefined;
-    }
+    }   
 
     function GetBetID() {
         if (domElements.sportType == 2) {
@@ -636,10 +656,14 @@ function MatchMonitorDetail() {
 
         SetupGroupFilter(data.GroupList);
 
-        if (data.RecordsTotal <= 0) {
-            domElements.cbbMGroup.multiselect().empty();
+        domElements.cbbMGroup.multiselect().empty();
+
+        if (data.RecordsTotal <= 0) {            
             domElements.cbbMGroup.multiselect("refresh");
         } else {
+            domElements.cbbMGroup.append(`<option selected value='0'>-</option>`);
+            domElements.cbbMGroup.multiselect("refresh");
+
             domElements.cbbSites.empty();
             if (data.SubscriberTypeList) {
                 if (data.SubscriberTypeList.length == 2) {
@@ -1369,6 +1393,8 @@ function MatchMonitorDetail() {
     //#region Event OnChange
 
     function MarketOnChange() {
+        AddFilterLoading();
+
         RestoreDefaulCbbSite();
 
         let txtMarket = $("option:selected", domElements.cbbMarket).text();
@@ -1380,9 +1406,13 @@ function MatchMonitorDetail() {
         isRefresh = true;
 
         FetchFilterMatchMonitorDetail();
+
+        RemoveFilterLoading();   
     }
 
     function BetTypeOnChange() {
+        AddFilterLoading();
+
         RestoreDefaulCbbSite();
 
         let betTypeSelected = $("option:selected", domElements.cbbBetType);
@@ -1402,20 +1432,27 @@ function MatchMonitorDetail() {
         isRefresh = true;
 
         FetchFilterMatchMonitorDetail();
+
+        RemoveFilterLoading(); 
     }
 
     function TypeOfTicketsOnChange(isClear) {
+        AddFilterLoading();
+
         if (isClear) {
-            cacheFilterScore = undefined;
-            domElements.cbbSites.val(SiteViewType.SiteAll);
+            cacheFilterScore = undefined;                    
+            RestoreDefaulCbbSite();            
         }
 
         currentType = Number(domElements.cbbTypeOfTickets.val());
 
         FetchFilterMatchMonitorDetail();
+
+        RemoveFilterLoading(); 
     }
 
     function RestoreDefaulCbbSite() {
+        domElements.cbbSites.prop('disabled', false);
         domElements.cbbSites.empty();
         domElements.cbbSites.append(`<option selected value='A'>All</option>`);
         domElements.cbbSites.append(`<option selected value='C'>Credit</option>`);
@@ -1625,6 +1662,16 @@ function MatchMonitorDetail() {
             domElements.cbbHDP.multiselect("refresh");
         }
     }   
+
+    function AddFilterLoading() {
+        domElements.divFilterMonitor.addClass('loading-background');
+        domElements.divFilterLoading.css('display', 'block');
+    }
+
+    function RemoveFilterLoading() {
+        domElements.divFilterMonitor.removeClass('loading-background');
+        domElements.divFilterLoading.css('display', 'none');
+    }
    
     //#endregion Event OnChange
 

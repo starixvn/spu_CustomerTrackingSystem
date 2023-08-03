@@ -268,7 +268,7 @@
                 FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic) &&      
                (filter.HDPBetTeamList?.Contains(BallHeadHDPOrBetTeam()) ?? true) &&
                (filter.AmountList == null || filter.AmountList.Count() < 2 ? true : Stake >= filter.AmountList[0] && Stake <= filter.AmountList[1]) &&
-               (filter.TicketStatusList?.Contains(TicketStatus) ?? true);
+               (filter.TicketStatusList?.Contains(TicketStatus) ?? false);
 
             return filterData;
         }
