@@ -90,7 +90,7 @@
 		<Setting Key="DCS_DC_Transaction_GetHistoryByCustSubscriber" SpName="DCS_DC_Transaction_GetHistoryByCustSubscriber" DbName="MySQL.DCS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Association_GetAssociationListByCustSubscriber" SpName="CTS_DC_Association_GetAssociationListByCustSubscriber" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Association_GetAssociationDeviceByCustSubscriber" SpName="CTS_DC_Association_GetAssociationDeviceByCustSubscriber" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_Association_GetAssociationMaxtrixByCustSubscriber" SpName="CTS_DC_Association_GetAssociationMaxtrixByCustSubscriber" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_Association_GetAssociationMatrixByCustSubscriber" SpName="CTS_DC_Association_GetAssociationMatrixByCustSubscriber" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="DCS_DC_Transaction_GetLatestBySubscriber" SpName="DCS_DC_Transaction_GetLatestBySubscriber" DbName="MySQL.DCS_DataCenter.Reporter" />
 		<Setting Key="DCS_ET_Subscriber_GetInfoBySubscriberName" SpName="DCS_ET_Subscriber_GetInfoBySubscriberName" DbName="MySQL.DCS_Extra.Reporter" />
 		<Setting Key="DCS_ET_Transaction_GetHistoryByAccountSubscriber" SpName="DCS_ET_Transaction_GetHistoryByAccountSubscriber" DbName="MySQL.DCS_Extra.Reporter" />
@@ -101,6 +101,6 @@
 		<Setting Key="DCS_ET_Association_GetAccountInfoByAccountSubscriber" SpName="DCS_ET_Association_GetAccountInfoByAccountSubscriber" DbName="MySQL.DCS_Extra.Reporter" />
 		<Setting Key="DCS_ET_Association_GetAssociationListByAccountSubscriber" SpName="DCS_ET_Association_GetAssociationListByAccountSubscriber" DbName="MySQL.DCS_Extra.Reporter" />
 		<Setting Key="DCS_ET_Association_GetAssociationDeviceByAccountSubscriber" SpName="DCS_ET_Association_GetAssociationDeviceByAccountSubscriber" DbName="MySQL.DCS_Extra.Reporter" />
-		<Setting Key="DCS_ET_Association_GetAssociationMaxtrixByAccountSubscriber" SpName="DCS_ET_Association_GetAssociationMaxtrixByAccountSubscriber" DbName="MySQL.DCS_Extra.Reporter" />
+		<Setting Key="DCS_ET_Association_GetAssociationMatrixByAccountSubscriber" SpName="DCS_ET_Association_GetAssociationMatrixByAccountSubscriber" DbName="MySQL.DCS_Extra.Reporter" />
 	</Function>
 </Functions>

@@ -17,7 +17,7 @@
         [SpParam(SqlParamName = "ip_NoOfDevice")]
         public int NoOfDevice { get; set; }
 
-        public override string GetSettingKey() => "DCS_ET_Association_GetAssociationMaxtrixByAccountSubscriber";
+        public override string GetSettingKey() => "DCS_ET_Association_GetAssociationMatrixByAccountSubscriber";
 
         public override bool IsValid() => true;
     }
