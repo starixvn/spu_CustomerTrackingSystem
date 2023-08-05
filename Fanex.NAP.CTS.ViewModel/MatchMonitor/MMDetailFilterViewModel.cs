@@ -60,9 +60,11 @@
                 }).Distinct(x => x.CurrencyId)
                     .OrderBy(x => x.CurrencyName)
                     .Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName))
-                    .ToList();
+                    .ToList();               
               
-                this.HDPBetTeamList = mtFilterBySite.Select(x => x.HdpBetTeam).Distinct().OrderBy(x => x).ToList();
+                this.HDPList = mtFilterBySite.Select(x => x.Hdp).Distinct().OrderBy(x => x).ToList();
+
+                this.BetTeamList = mtFilterBySite.Select(x => x.BetTeam).Distinct().OrderBy(x => x).ToList();
 
                 this.ScoreList = mtFilterBySite.Select(x => 
                 {
@@ -99,8 +101,9 @@
             else
             {
                 this.SubscriberTypeList = new List<string>();
-                this.CurrencyList = new List<KeyValuePair<int, string>>();
-                this.HDPBetTeamList = new List<string>();              
+                this.CurrencyList = new List<KeyValuePair<int, string>>();               
+                this.HDPList = new List<decimal>();
+                this.BetTeamList = new List<string>();
                 this.ScoreList = new List<string>();
                 this.ReasonList = new List<string>();
                 this.GroupList = new List<GroupInfoViewModel>();
@@ -111,20 +114,21 @@
        
         protected MMDetailFilterViewModel(MMDetailFilterViewModel filter)
         {
-            IsFilter = filter.IsFilter;
-            MaxSequenceId = filter.MaxSequenceId;
-            RecordsTotal = filter.RecordsTotal;
-            CurrencyList = filter.CurrencyList;
-            CurrencyIdList = filter.CurrencyIdList;
-            HDPBetTeamList = filter.HDPBetTeamList;
-            ScoreList = filter.ScoreList;
-            ReasonList = filter.ReasonList;
-            AmountList = filter.AmountList;
-            GroupList = filter.GroupList;
-            ReasonInfos = filter.ReasonInfos;
-            ReasonGroupIDDic = filter.ReasonGroupIDDic;
-            AGroupList = filter.AGroupList;
-            SubscriberTypeList = filter.SubscriberTypeList;
+            this.IsFilter = filter.IsFilter;
+            this.MaxSequenceId = filter.MaxSequenceId;
+            this.RecordsTotal = filter.RecordsTotal;
+            this.CurrencyList = filter.CurrencyList;
+            this.CurrencyIdList = filter.CurrencyIdList;
+            this.HDPList = filter.HDPList;
+            this.BetTeamList = filter.BetTeamList;
+            this.ScoreList = filter.ScoreList;
+            this.ReasonList = filter.ReasonList;
+            this.AmountList = filter.AmountList;
+            this.GroupList = filter.GroupList;
+            this.ReasonInfos = filter.ReasonInfos;
+            this.ReasonGroupIDDic = filter.ReasonGroupIDDic;
+            this.AGroupList = filter.AGroupList;
+            this.SubscriberTypeList = filter.SubscriberTypeList;
         }
 
         public bool IsFilter { get; set; }
@@ -139,7 +143,9 @@
 
         public List<int> CurrencyIdList { get; set; }
 
-        public List<string> HDPBetTeamList { get; set; }
+        public List<decimal> HDPList { get; set; }
+
+        public List<string> BetTeamList { get; set; }
      
         public List<string> ScoreList { get; set; }
 
@@ -197,12 +203,18 @@
             {
                 var count = 0;
 
-                if (filterLastest.HDPBetTeamList != null && !filterLastest.HDPBetTeamList.Except(HDPBetTeamList).Any())
+                if (filterLastest.HDPList != null && this.HDPList != null && !filterLastest.HDPList.Except(HDPList).Any())
                 {
-                    HDPBetTeamList = null;
+                    HDPList = null;
                     count++;
                 }
-               
+
+                if (filterLastest.BetTeamList != null && this.BetTeamList != null && !filterLastest.BetTeamList.Except(BetTeamList).Any())
+                {
+                    BetTeamList = null;
+                    count++;
+                }
+
                 if (filterLastest.ScoreList != null && !filterLastest.ScoreList.Except(ScoreList).Any())
                 {
                     ScoreList = null;
@@ -239,7 +251,7 @@
                     count++;
                 }
 
-                IsFilter = count < 7;
+                IsFilter = count < 8;
             }
 
             return IsFilter;

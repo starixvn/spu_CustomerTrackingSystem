@@ -13,7 +13,8 @@
             this.TicketStatus = ticketInfo.TicketStatus;
             this.CurrencyId = ticketInfo.CurrencyId;
             this.CurrencyName = ticketInfo.CurrencyName;
-            this.HdpBetTeam = ticketInfo.HdpBetTeam;
+            this.Hdp = ticketInfo.Hdp;
+            this.BetTeam = ticketInfo.BetTeam;
             this.Danger1 = ticketInfo.Danger1;
             this.Danger2 = ticketInfo.Danger2;
             this.Danger3 = ticketInfo.Danger3;
@@ -40,7 +41,9 @@
 
         public string CurrencyName { get; set; }
 
-        public string HdpBetTeam { get; set; }
+        public decimal Hdp { get; set; }
+
+        public string BetTeam { get; set; }
 
         public int Danger1 { get; set; }
 

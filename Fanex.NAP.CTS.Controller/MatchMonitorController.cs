@@ -352,6 +352,11 @@
             var mdResult = new MatchMonitorDetailListViewModel();
             var mdItemList = Enumerable.Empty<MatchMonitorDetailItemViewModel>();
 
+            var isSingleGrid = para.BetTypeID == (int)MatchMonitorBetType.CorrectScore 
+                || para.BetTypeID == (int)MatchMonitorBetType.FirstCorrectScore
+                || para.BetTypeID == (int)MatchMonitorBetType.TotalGoal 
+                || para.BetTypeID == (int)MatchMonitorBetType.FirstTotalGoal;
+
             var matchDetailInfo = _matchMonitorService.GetMatchMonitorDetail(para);
 
             if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
@@ -381,24 +386,27 @@
 
                 mdResult = new MatchMonitorDetailListViewModel
                 {
-                    HomeMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)
+                    HomeMatchItemList = !isSingleGrid ? mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)
                         || string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.O), StringComparison.OrdinalIgnoreCase))
-                            .OrderByDescending(x => x.TransTime).ToList(),
-                    AwayMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)
+                            .OrderByDescending(x => x.TransTime).ToList() : new List<MatchMonitorDetailItemViewModel>(),
+                    AwayMatchItemList = !isSingleGrid ? mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)
                         || string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.U), StringComparison.OrdinalIgnoreCase))
-                            .OrderByDescending(x => x.TransTime).ToList(),
+                            .OrderByDescending(x => x.TransTime).ToList() : new List<MatchMonitorDetailItemViewModel>(),
+                    ItemList = isSingleGrid ? mdItemList.ToList() : new List<MatchMonitorDetailItemViewModel>(),
+                    IsSingleGrid = isSingleGrid,
                     ScoreList = mdItemList.Select(x => x.Score).Distinct().OrderBy(x => x).ToList(),
                     GroupList = mergeGroup.Groups.ToList(),
                     CurrencyList = mdItemList.Select(x =>
                     {
                         return new { CurrencyId = string.IsNullOrEmpty(x.CurrencyName) ? -1 : x.CurrencyId, CurrencyName = string.IsNullOrEmpty(x.CurrencyName) ? "-" : x.CurrencyName };
                     }).Distinct(x => x.CurrencyId).OrderBy(x => x.CurrencyName).Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName)).ToList(),
-                    HDPBetTeamList = mdItemList.Select(x => x.BallHeadHDPOrBetTeam()).Distinct().OrderBy(x => x).ToList(),
+                    HDPList = mdItemList.Select(x => x.BallHeadHDP()).Distinct().OrderBy(x => x).ToList(),                    
+                    BetTeamList = mdItemList.Select(x => x.BallHeadBetTeam()).Distinct().OrderBy(x => x).ToList(),
                     SubscriberTypeList = mdItemList.Select(x=>x.SubscriberType).Distinct().ToList(),
                     TicketStatusList = mdItemList.Select(x => x.TicketStatus).Distinct().ToList()
                 };
 
-                mdResult.RecordsTotal = (mdResult?.HomeMatchItemList?.Count() ?? 0) + (mdResult?.AwayMatchItemList?.Count() ?? 0);
+                mdResult.RecordsTotal = mdItemList?.Count() ?? 0;
                 mdResult.BindReasons(mdItemList.Select(x => x.ReasonList).Distinct());
                 mdResult.BindDropdownList(mdItemList);
             }
@@ -682,7 +690,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error("Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
+                LogService.Info("Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
                      + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                      + ex.InnerException.StackTrace);
             }

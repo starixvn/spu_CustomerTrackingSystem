@@ -156,13 +156,24 @@
                 BetID = para.BetID,
                 BatchSize = batchSize,
                 IsLicensee = para.Sites == MMSites.All ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
-                ListCurrency = filter?.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList),
-                ListHDPBetTeam = filter?.HDPBetTeamList == null ? null : string.Join(",", filter.HDPBetTeamList),
+                ListCurrency = filter?.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList),              
                 ListScore = filter?.ScoreList == null ? null : string.Join(",", filter.ScoreList),
                 ListDanger = GenerateDangerJson(filter.Danger1List, filter.Danger2List, filter.Danger3List, filter.Danger4List, filter.Danger5List),
                 ListStatus = filter?.StatusList == null ? null : string.Join(",", filter.StatusList),
                 ListTransId = transIds
-            };
+            };           
+
+            if (para.BetTypeID == (int)MatchMonitorBetType.TotalGoal
+                || para.BetTypeID == (int)MatchMonitorBetType.FirstTotalGoal
+                || para.BetTypeID == (int)MatchMonitorBetType.CorrectScore
+                || para.BetTypeID == (int)MatchMonitorBetType.FirstCorrectScore)
+            {
+                criteria.ListHDPBetTeam = filter?.HDPList == null ? null : string.Join(",", filter.HDPList);
+            }
+            else
+            {
+                criteria.ListHDPBetTeam = filter?.BetTeamList == null ? null : string.Join(",", filter.BetTeamList);
+            }
 
             if (filter?.AmountList?.Count >= 2)
             {

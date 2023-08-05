@@ -47,7 +47,7 @@ function MatchMonitorDetail() {
         cbbReason: $('#cbbReason'),
         cbbAGroup: $('#cbbAGroup'),
         cbbMGroup: $('#cbbMGroup'),
-        cbbHDP: $('#cbbHDP'),
+        cbbHDPBetTeam: $('#cbbHDPBetTeam'),
         inputAmountFrom: $('#inputAmountFrom'),
         inputAmountTo: $('#inputAmountTo'),
         cbbTicketsStatus: $('#cbbTicketsStatus'),
@@ -116,6 +116,7 @@ function MatchMonitorDetail() {
     let currentType = MatchMonitorDetailViewType.TicketFraud;
     let isRefresh = false;
     let isSupportShowAllTickets = false;
+    let isSingleGrid = false;
     let timeoutRenderTicketDetail = undefined;
 
     const regexValidAmount = /^[0-9]{1,15}/;
@@ -330,8 +331,8 @@ function MatchMonitorDetail() {
         domElements.cbbAGroup.multiselect().empty();
 
         if (data) {
-            if (data.length == 0)
-                domElements.cbbAGroup.append(`<option selected value='0'>-</option>`);
+            //if (data.length == 0)
+            //    domElements.cbbAGroup.append(`<option selected value='0'>-</option>`);
 
             for (var i = 0; i < data.length; i++) {
                 domElements.cbbAGroup.append(`<option selected value='${data[i].GroupID}'>${data[i].GroupName}</option>`);
@@ -345,8 +346,8 @@ function MatchMonitorDetail() {
         domElements.cbbAGroup.multiselect().empty();
 
         if (data) {
-            if (data.length == 0)
-                domElements.cbbAGroup.append(`<option selected value='0'>-</option>`);
+            //if (data.length == 0)
+            //    domElements.cbbAGroup.append(`<option selected value='0'>-</option>`);
 
             data.forEach(element => {
                 domElements.cbbAGroup.append(`<option selected value='${element}'>${element == "0" ? "-" : element}</option>`);
@@ -560,7 +561,25 @@ function MatchMonitorDetail() {
         return undefined;
     }   
 
-    function GetBetID() {
+    function GetHDPSelected(dom_ccb, isGetAllValue = false) {
+        return isSingleGrid ? undefined : GetSelectDataFilter(dom_ccb, isGetAllValue);
+    }
+
+    function GetBetTeamSelected(dom_ccb, isGetAllValue = false) {
+        return isSingleGrid ? GetSelectDataFilter(dom_ccb, isGetAllValue) : undefined;
+    }
+
+    function GetBetTypeSelected() {        
+        let betTypeSelected = $("option:selected", domElements.cbbBetType);
+
+        if (betTypeSelected.length > 0) {
+            return betTypeSelected.attr('data-bettypeid')
+        }
+       
+        return domElements.betTypeID;
+    }
+
+    function GetBetIDSelected() {
         if (domElements.sportType == 2) {
             $("option:selected", domElements.cbbBetType).each(function () {
                 let betID = $(this).attr('data-betid');
@@ -579,7 +598,7 @@ function MatchMonitorDetail() {
             result = false;
         }
 
-        if (GetSelectDataFilter(domElements.cbbHDP) == '') {
+        if (GetSelectDataFilter(domElements.cbbHDPBetTeam) == '') {
             result = false;
         }
 
@@ -632,7 +651,7 @@ function MatchMonitorDetail() {
             var selectedFilter = cacheFilter[MatchMonitorDetailViewType.TicketFraud];
             if (selectedFilter) {
                 RefreshFilterSelected(domElements.cbbCurrency, selectedFilter.cbbCurrency);
-                RefreshFilterSelected(domElements.cbbHDP, selectedFilter.cbbHDP);
+                RefreshFilterSelected(domElements.cbbHDPBetTeam, selectedFilter.cbbHDPBetTeam);
                 RefreshFilterSelected(domElements.cbbReason, selectedFilter.cbbReason);
                 RefreshFilterSelected(domElements.cbbAGroup, selectedFilter.cbbAGroup);
                 if (selectedFilter.inputAmount) {
@@ -645,10 +664,17 @@ function MatchMonitorDetail() {
 
     function RenderFilter(data) {
         recordsTotalGlobal = data.RecordsTotal;
+        isSingleGrid = data.IsSingleGrid;
         cacheReasonGroupIDDic = data.ReasonGroupIDDic;
 
-        SetupFilterFromDictinary(domElements.cbbCurrency, data.CurrencyList);
-        SetupFilter(domElements.cbbHDP, data.HDPBetTeamList);
+        SetupFilterFromDictinary(domElements.cbbCurrency, data.CurrencyList);        
+
+        if (data.IsSingleGrid) {
+            SetupFilter(domElements.cbbHDPBetTeam, data.BetTeamList);
+        } else {
+            SetupFilter(domElements.cbbHDPBetTeam, data.HDPList);
+        }
+
         SetupFilterScore(domElements.cbbMatchScore, data.ScoreList);
         SetupFilter(domElements.cbbReason, data.ReasonList);
 
@@ -682,6 +708,7 @@ function MatchMonitorDetail() {
         if (data.DropdownList) {
             SetupDanger(data.DropdownList.Danger);
             SetupTicketStatusFilter(data.DropdownList.TicketStatusList);
+            cacheFilterDependOn.SubscriberTypeCurrencyList = data.DropdownList.SubscriberTypeCurrencyList;
             cacheFilterDependOn.ScoreCurrencyList = data.DropdownList.ScoreCurrencyList;
             cacheFilterDependOn.DangerCurrencyList = data.DropdownList.DangerCurrencyList;
             cacheFilterDependOn.CurrencyReasonList = data.DropdownList.CurrencyReasonList;
@@ -707,7 +734,7 @@ function MatchMonitorDetail() {
             }
 
             selectedFilter.cbbCurrency = GetSelectDataFilter(domElements.cbbCurrency);
-            selectedFilter.cbbHDP = GetSelectDataFilter(domElements.cbbHDP);
+            selectedFilter.cbbHDPBetTeam = GetSelectDataFilter(domElements.cbbHDPBetTeam);
 
             cacheFilterScore = GetSelectDataFilter(domElements.cbbMatchScore);
 
@@ -726,7 +753,7 @@ function MatchMonitorDetail() {
         if (GetSelectDataFilter(domElements.cbbCurrency))
             return true;
 
-        if (GetSelectDataFilter(domElements.cbbHDP))
+        if (GetSelectDataFilter(domElements.cbbHDPBetTeam))
             return true;
 
         if (GetSelectDataFilter(domElements.cbbMatchScore))
@@ -763,7 +790,7 @@ function MatchMonitorDetail() {
             xhr.abort();
         }
 
-        if (lastScannedSequenceID || typeOfTickets == MatchMonitorDetailViewType.TicketFraud) {
+        if (lastScannedSequenceID || typeOfTickets == MatchMonitorDetailViewType.TicketFraud) {      
             domElements.tblMMHomeTeam.find('tbody').addClass('loading');
             domElements.tblMMAwayTeam.find('tbody').addClass('loading');
 
@@ -777,8 +804,8 @@ function MatchMonitorDetail() {
                 let data = {
                     EventDateToString: domElements.eventDataToString,
                     MatchID: domElements.matchID,
-                    BetTypeID: domElements.cbbBetType.val(),
-                    BetID: GetBetID(),
+                    BetTypeID: GetBetTypeSelected(),
+                    BetID: GetBetIDSelected(),
                     LiveIndicator: domElements.cbbMarket.val(),
                     LastScannedSequenceID: lastScannedSequenceID,
                     IsSupportShowAllTickets: isSupportShowAllTickets,
@@ -796,7 +823,8 @@ function MatchMonitorDetail() {
                     Reason: domElements.reason,
                     AGroupList: GetSelectDataFilter(domElements.cbbAGroup, true),
                     MGroupList: GetSelectDataFilter(domElements.cbbMGroup, true),
-                    HDPBetTeamList: GetSelectDataFilter(domElements.cbbHDP, true),
+                    HDPList: GetHDPSelected(domElements.cbbHDPBetTeam, true),
+                    BetTeamList: GetBetTeamSelected(domElements.cbbHDPBetTeam, true),
                     AmountList: GetInputAmount()?.map(str => {
                         return Number(str);
                     }) ?? undefined,
@@ -923,8 +951,8 @@ function MatchMonitorDetail() {
             {
                 EventDateToString: function () { return domElements.eventDataToString; },
                 MatchID: function () { return domElements.matchID; },
-                BetTypeID: function () { return domElements.cbbBetType.val(); },
-                BetID: function () { return GetBetID(); },
+                BetTypeID: function () { return GetBetTypeSelected(); },
+                BetID: function () { return GetBetIDSelected(); },
                 Sites: function () { return domElements.cbbSites.val(); },
                 Reason: function () { return domElements.reason; },
                 LiveIndicator: function () { return domElements.cbbMarket.val(); },
@@ -937,7 +965,7 @@ function MatchMonitorDetail() {
                 if (data) {
                     RenderFilter(data);
 
-                    if (maxSequenceId == 1 && currentType == MatchMonitorDetailViewType.TicketAll) {
+                    if (maxSequenceId == 1 && data.MaxSequenceId > 0 && currentType == MatchMonitorDetailViewType.TicketAll) {
                         maxSequenceId = data.MaxSequenceId;
                     }
                 }
@@ -977,20 +1005,20 @@ function MatchMonitorDetail() {
                 }
             }
 
-            if (data?.HomeMatchItemList) {
-                //var obj = [];
-                //for (var i = 0; i < 50; i++) {                   
-                //    obj.push(...data.HomeMatchItemList);
-                //}
+            if (data?.IsSingleGrid) {
+                domElements.tblMMHomeTeam.DataTable().rows.add(data.ItemList).draw(false);
+                domElements.tblMMAwayTeam.hide();
+            } else {
+                domElements.tblMMAwayTeam.show();
 
-                //domElements.tblMMHomeTeam.DataTable().rows.add(obj).draw(false);
+                if (data?.HomeMatchItemList) {                   
+                    domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw(false);
+                }
 
-                domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw(false);
-            }
-
-            if (data?.AwayMatchItemList) {
-                domElements.tblMMAwayTeam.DataTable().rows.add(data.AwayMatchItemList).draw(false);
-            }
+                if (data?.AwayMatchItemList) {
+                    domElements.tblMMAwayTeam.DataTable().rows.add(data.AwayMatchItemList).draw(false);
+                }
+            }           
 
             domElements.breadcrumbTotalTickets.html(`Total Tickets: ${ConvertNumberToThousandsString(recordsFilteredGlobal)}/${ConvertNumberToThousandsString(recordsTotalGlobal)}`);
 
@@ -1053,8 +1081,8 @@ function MatchMonitorDetail() {
             {
                 MatchId: domElements.matchID,
                 LiveIndicator: domElements.cbbMarket.val(),
-                BettypeID: domElements.cbbBetType.val(),
-                BetID: GetBetID(),
+                BettypeID: GetBetTypeSelected(),
+                BetID: GetBetIDSelected(),
                 TranIds: GetTranIds().join()
             },
             beforeSend: function () {
@@ -1232,7 +1260,7 @@ function MatchMonitorDetail() {
             return false;
         }
 
-        if (!domElements.cbbHDP.val().find(x => x == Math.abs(item.HDP))) {
+        if (!domElements.cbbHDPBetTeam.val().find(x => x == Math.abs(item.HDP))) {
             return false;
         }  
 
@@ -1422,6 +1450,7 @@ function MatchMonitorDetail() {
             domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketAll);
             domElements.cbbTypeOfTickets.prop('disabled', true);
         } else {
+            domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
             domElements.cbbTypeOfTickets.prop('disabled', false);
         }
 
@@ -1482,7 +1511,7 @@ function MatchMonitorDetail() {
         }
     }
 
-    function SiteOnChange() {
+    function SiteOnChange() {      
         if (cacheFilterDependOn.SubscriberTypeCurrencyList) {
             let currencyItems = [];
 
@@ -1555,7 +1584,7 @@ function MatchMonitorDetail() {
                                         reasonItems.push(x);
                                 }) 
                             }
-                                                      
+                        
                         });
                         return false;
                     }
@@ -1574,7 +1603,7 @@ function MatchMonitorDetail() {
         }
     }
 
-    function ReasonOnChange() {
+    function ReasonOnChange_Old() {      
         let filterGroupIDs = [];
         let reasonKeys = Object.keys(cacheReasonGroupIDDic);
 
@@ -1594,7 +1623,7 @@ function MatchMonitorDetail() {
         SetupAGroupFilter(filterGroupIDs);
 
         AGroupOnChange();
-    }
+    }   
 
     function FindByReason(reason, reasonKeys) {
         let groupIDs = [];
@@ -1609,6 +1638,32 @@ function MatchMonitorDetail() {
         });
 
         return groupIDs;
+    }
+
+    function ReasonOnChange() {
+        if (cacheFilterDependOn.ReasonAGroupList) {
+            let aGrItems = [];
+            $("option:selected", domElements.cbbReason).each(function () {
+                let reason = $(this).text();
+
+                $.each(cacheFilterDependOn.ReasonAGroupList, function (idx, item) {
+                    if (item["Reason"].includes(reason)) {                        
+                        item["AGroupItems"].forEach(x => {                           
+                            if (aGrItems.findIndex(y => y == x.AGroupID) == -1)
+                                aGrItems.push(x.AGroupID);
+                        })
+                    }
+                })
+            })
+
+            domElements.cbbAGroup.multiselect().empty();
+            if (aGrItems.length > 0) {
+                aGrItems.forEach(item => {
+                    domElements.cbbAGroup.append(`<option selected value='${item}'>${item}</option>`);
+                });
+            }
+            domElements.cbbAGroup.multiselect("refresh");         
+        }
     }
 
     function AGroupOnChange() {
@@ -1653,13 +1708,13 @@ function MatchMonitorDetail() {
                 })
             })
 
-            domElements.cbbHDP.multiselect().empty();
+            domElements.cbbHDPBetTeam.multiselect().empty();
             if (hdpChoiceItems.length > 0) {
                 hdpChoiceItems.forEach(item => {
-                    domElements.cbbHDP.append(`<option selected value='${item.HDP}'>${item.HDP}</option>`);
+                    domElements.cbbHDPBetTeam.append(`<option selected value='${item.HDP}'>${item.HDP}</option>`);
                 });
             }
-            domElements.cbbHDP.multiselect("refresh");
+            domElements.cbbHDPBetTeam.multiselect("refresh");
         }
     }   
 
@@ -1732,7 +1787,7 @@ function MatchMonitorDetail() {
     function Initial() {
         SetupMultiselectFilter(domElements.cbbDanger, "Danger");
         SetupMultiselectFilter(domElements.cbbCurrency, "Currency");
-        SetupMultiselect(domElements.cbbHDP, "HDP");
+        SetupMultiselect(domElements.cbbHDPBetTeam, "HDP");
         SetupMultiselect(domElements.cbbMatchScore, "Score");
         SetupMultiselect(domElements.cbbAGroup, "A.Gr.");
         SetupMultiselect(domElements.cbbMGroup, "M.Gr.");        
@@ -1740,7 +1795,7 @@ function MatchMonitorDetail() {
         SetupMultiselect(domElements.cbbTicketsStatus, "Status");
         
         domElements.cbbMarket.val(domElements.liveIndicator);
-        domElements.cbbBetType.val(domElements.betTypeID);     
+        domElements.cbbBetType.val(`${domElements.betTypeID}_${domElements.betIDToString}`);     
         
         domElements.cbbMarket.change(function () { MarketOnChange(); });
         domElements.cbbBetType.change(function () { BetTypeOnChange(); });

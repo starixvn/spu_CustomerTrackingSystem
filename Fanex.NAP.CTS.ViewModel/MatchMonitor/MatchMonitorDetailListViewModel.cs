@@ -15,6 +15,7 @@
             this.CTSCustIDList = string.Empty;
             this.HomeMatchItemList = new List<MatchMonitorDetailItemViewModel>();
             this.AwayMatchItemList = new List<MatchMonitorDetailItemViewModel>();
+            this.ItemList = new List<MatchMonitorDetailItemViewModel>();
             this.DropdownList = new MMDetailFilterDropdownListViewModel();
         }
 
@@ -24,6 +25,7 @@
             this.CTSCustIDList = matchMonitorDetailList.CTSCustIDList;
             this.HomeMatchItemList = matchMonitorDetailList.HomeMatchItemList.ToList();
             this.AwayMatchItemList = matchMonitorDetailList.AwayMatchItemList.ToList();
+            this.ItemList = new List<MatchMonitorDetailItemViewModel>();
             this.DropdownList = matchMonitorDetailList.DropdownList;
         }
 
@@ -59,9 +61,11 @@
                 return new { CurrencyId = string.IsNullOrEmpty(x.CurrencyName) ? -1 : x.CurrencyId, CurrencyName = string.IsNullOrEmpty(x.CurrencyName) ? "-" : x.CurrencyName };
             }).Distinct(x=>x.CurrencyId)
             .OrderBy(x => x.CurrencyName)
-            .Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName)).ToList();
+            .Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName)).ToList();            
 
-            HDPBetTeamList = mdItemList.Select(x => x.BallHeadHDPOrBetTeam()).Distinct().OrderBy(x => x).ToList();
+            HDPList = mdItemList.Select(x => x.BallHeadHDP()).Distinct().OrderBy(x => x).ToList();
+
+            BetTeamList = mdItemList.Select(x => x.BallHeadBetTeam()).Distinct().OrderBy(x => x).ToList();
 
             RecordsTotal = (HomeMatchItemList?.Count() ?? 0) + (AwayMatchItemList?.Count() ?? 0);
 
@@ -82,9 +86,13 @@
 
         public string CTSCustIDList { get; set; }
 
+        public bool IsSingleGrid { get; set; }
+
         public List<MatchMonitorDetailItemViewModel> HomeMatchItemList { get; set; }
 
-        public List<MatchMonitorDetailItemViewModel> AwayMatchItemList { get; set; }        
+        public List<MatchMonitorDetailItemViewModel> AwayMatchItemList { get; set; }
+
+        public List<MatchMonitorDetailItemViewModel> ItemList { get; set; }
 
         public new MatchMonitorDetailListViewModel Clone() => new MatchMonitorDetailListViewModel(this);
 
@@ -139,8 +147,18 @@
                     }),
                     Task.Run(() =>
                     {
-                        #region SubscriberType - Currency
-                         DropdownList.SubscriberTypeCurrencyList = mdItemList.GroupBy(x => x.SubscriberType)
+                        #region SubscriberType - Currency                         
+                        var subscriberTypeCurrency = new List<SubscriberTypeCurrencyViewModel>();
+                        subscriberTypeCurrency.Add(new SubscriberTypeCurrencyViewModel{
+                            SubscriberType = "A",
+                            CurrencyItems = mdItemList.Select(x=>
+                                {
+                                    var isNotValid = string.IsNullOrEmpty(x.CurrencyName) || x.CurrencyId == 0;
+                                    return new SubscriberTypeCurrencyItemViewModel { CurrencyId = isNotValid ? -1 : x.CurrencyId, CurrencyName = isNotValid ? "-" : x.CurrencyName };
+                                }).Distinct(x => x.CurrencyId)
+                        });
+
+                        subscriberTypeCurrency.AddRange(mdItemList.GroupBy(x => x.SubscriberType)
                             .Select(g => new SubscriberTypeCurrencyViewModel
                             {
                                 SubscriberType = g.Key,
@@ -149,7 +167,10 @@
                                     var isNotValid = string.IsNullOrEmpty(x.CurrencyName) || x.CurrencyId == 0;
                                     return new SubscriberTypeCurrencyItemViewModel { CurrencyId = isNotValid ? -1 : x.CurrencyId, CurrencyName = isNotValid ? "-" : x.CurrencyName };
                                 }).Distinct(x => x.CurrencyId)
-                            });
+                            }));
+
+                        DropdownList.SubscriberTypeCurrencyList = subscriberTypeCurrency;
+
                         #endregion
                     }),
                     Task.Run(() =>

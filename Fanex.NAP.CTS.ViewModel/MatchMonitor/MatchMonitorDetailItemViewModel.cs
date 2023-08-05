@@ -145,7 +145,7 @@
 
         public decimal HDP2 { get; set; }
 
-        public string HDP
+        public decimal HDP
         {
             get
             {
@@ -153,22 +153,22 @@
                     || BetTypeID == (int)MatchMonitorBetType.FirstOU
                     || BetTypeID == (int)MatchMonitorBetType.QuarterXOU)
                 {
-                    return HDP1.ToString();
+                    return HDP1;
                 }
 
                 if (!string.IsNullOrEmpty(BetTeam))
                 {
                     if (string.Equals(BetTeam, "h", StringComparison.OrdinalIgnoreCase))
                     {
-                        return (HDP2 - HDP1).ToString();
+                        return (HDP2 - HDP1);
                     }
                     else if (string.Equals(BetTeam, "a", StringComparison.OrdinalIgnoreCase))
                     {
-                        return (HDP1 - HDP2).ToString();
+                        return (HDP1 - HDP2);
                     }
                 }
 
-                return "0";
+                return 0;
             }
         }
 
@@ -265,8 +265,9 @@
                 FilterBySite(site) &&
                 FilterByDanger(filter) &&                
                 (filter.CurrencyIdList?.Contains(CurrencyId) ?? true) &&
-                FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic) &&      
-               (filter.HDPBetTeamList?.Contains(BallHeadHDPOrBetTeam()) ?? true) &&
+                FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic) &&
+               (filter.HDPList?.Contains(BallHeadHDP()) ?? true) &&
+               (filter.BetTeamList?.Contains(BallHeadBetTeam()) ?? true) &&
                (filter.AmountList == null || filter.AmountList.Count() < 2 ? true : Stake >= filter.AmountList[0] && Stake <= filter.AmountList[1]) &&
                (filter.TicketStatusList?.Contains(TicketStatus) ?? false);
 
@@ -283,7 +284,24 @@
             return this;
         }
 
-        public string BallHeadHDPOrBetTeam()
+        public decimal BallHeadHDP()
+        {          
+            if (BetTypeID == (int)MatchMonitorBetType.OU
+                    || BetTypeID == (int)MatchMonitorBetType.FirstOU
+                    || BetTypeID == (int)MatchMonitorBetType.QuarterXOU)
+            {
+                return HDP;
+            }
+
+            if (this.HDP < 0)
+            {
+                return Math.Abs(this.HDP);
+            }
+
+            return this.HDP;
+        }
+
+        public string BallHeadBetTeam()
         {
             if (BetTypeID == (int)MatchMonitorBetType.TotalGoal
                 || BetTypeID == (int)MatchMonitorBetType.FirstTotalGoal
@@ -297,17 +315,15 @@
                     || BetTypeID == (int)MatchMonitorBetType.FirstOU
                     || BetTypeID == (int)MatchMonitorBetType.QuarterXOU)
             {
-                return HDP;
+                return HDP.ToString();
             }
-
-            decimal.TryParse(this.HDP, out decimal hdpDecimal);
-
-            if (hdpDecimal < 0)
+         
+            if (this.HDP < 0)
             {
-                return Math.Abs(hdpDecimal).ToString();
+                return Math.Abs(this.HDP).ToString();
             }
 
-            return HDP;
+            return this.HDP.ToString();
         }
 
         private void MappingTicketDetail(TicketDetailModel ticket)

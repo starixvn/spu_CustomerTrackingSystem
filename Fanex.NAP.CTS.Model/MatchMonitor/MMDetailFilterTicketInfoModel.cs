@@ -14,7 +14,9 @@
 
         public string CurrencyName { get; set; }
 
-        public string HdpBetTeam { get; set; }
+        public decimal Hdp { get; set; }
+
+        public string BetTeam { get; set; }
 
         public int Danger1 { get; set; }
 
