@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn
 {
     using Fanex.NAP.CTS.Core.Extentions;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -38,7 +39,7 @@
                 .Select(g => new MGrHDPViewModel
                 {
                     MGr = g.Key,
-                    HDPItems = g.Select(x => new MGrHDPItemViewModel { HDP = x.HDP }).Distinct(x => x.HDP)
+                    HDPItems = g.Select(x => new MGrHDPItemViewModel { HDP = Math.Abs(x.HDP) }).Distinct(x => x.HDP)
                 });
         }
     }

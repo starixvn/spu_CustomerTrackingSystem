@@ -15,7 +15,7 @@
             this.CTSCustIDList = string.Empty;
             this.HomeMatchItemList = new List<MatchMonitorDetailItemViewModel>();
             this.AwayMatchItemList = new List<MatchMonitorDetailItemViewModel>();
-            this.ItemList = new List<MatchMonitorDetailItemViewModel>();
+            //this.ItemList = new List<MatchMonitorDetailItemViewModel>();
             this.DropdownList = new MMDetailFilterDropdownListViewModel();
         }
 
@@ -25,7 +25,7 @@
             this.CTSCustIDList = matchMonitorDetailList.CTSCustIDList;
             this.HomeMatchItemList = matchMonitorDetailList.HomeMatchItemList.ToList();
             this.AwayMatchItemList = matchMonitorDetailList.AwayMatchItemList.ToList();
-            this.ItemList = new List<MatchMonitorDetailItemViewModel>();
+            //this.ItemList = new List<MatchMonitorDetailItemViewModel>();
             this.DropdownList = matchMonitorDetailList.DropdownList;
         }
 
@@ -92,7 +92,7 @@
 
         public List<MatchMonitorDetailItemViewModel> AwayMatchItemList { get; set; }
 
-        public List<MatchMonitorDetailItemViewModel> ItemList { get; set; }
+        //public List<MatchMonitorDetailItemViewModel> ItemList { get; set; }
 
         public new MatchMonitorDetailListViewModel Clone() => new MatchMonitorDetailListViewModel(this);
 

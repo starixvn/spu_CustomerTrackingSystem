@@ -99,6 +99,7 @@ function MatchMonitorDetail() {
         AGrMGrList: [],
         MGrHDPList: [],
         Danger: null,
+        HDPList: [],
         TicketStatusList: []
     };
     let cacheMGroup = {
@@ -581,14 +582,13 @@ function MatchMonitorDetail() {
 
     function GetBetIDSelected() {
         if (domElements.sportType == 2) {
-            $("option:selected", domElements.cbbBetType).each(function () {
-                let betID = $(this).attr('data-betid');
+            let betTypeSelected = $("option:selected", domElements.cbbBetType);
 
-                return betID != undefined ? betID : 0;               
-            }); 
-        } else {
-            return domElements.betIDToString;
+            if (betTypeSelected.length > 0) {
+                return betTypeSelected.attr('data-betid');
+            }
         }
+        return domElements.betIDToString;
     }
 
     function ValidationFilter() {
@@ -662,7 +662,7 @@ function MatchMonitorDetail() {
         }
     }
 
-    function RenderFilter(data) {
+    function RenderFilter(data, isRefreshcbbSite) {
         recordsTotalGlobal = data.RecordsTotal;
         isSingleGrid = data.IsSingleGrid;
         cacheReasonGroupIDDic = data.ReasonGroupIDDic;
@@ -671,9 +671,11 @@ function MatchMonitorDetail() {
 
         if (data.IsSingleGrid) {
             SetupFilter(domElements.cbbHDPBetTeam, data.BetTeamList);
+            cacheFilterDependOn.HDPList = data.BetTeamList;
         } else {
             SetupFilter(domElements.cbbHDPBetTeam, data.HDPList);
-        }
+            cacheFilterDependOn.HDPList = data.HDPList;
+        }        
 
         SetupFilterScore(domElements.cbbMatchScore, data.ScoreList);
         SetupFilter(domElements.cbbReason, data.ReasonList);
@@ -690,23 +692,25 @@ function MatchMonitorDetail() {
             domElements.cbbMGroup.append(`<option selected value='0'>-</option>`);
             domElements.cbbMGroup.multiselect("refresh");
 
-            domElements.cbbSites.empty();
-            if (data.SubscriberTypeList) {
-                if (data.SubscriberTypeList.length == 2) {
-                    domElements.cbbSites.prop('disabled', false);
-                    domElements.cbbSites.append(`<option selected value='A'>All</option>`);
-                } else if (data.SubscriberTypeList.length == 1) {
-                    domElements.cbbSites.prop('disabled', true);
+            if (isRefreshcbbSite) {
+                domElements.cbbSites.empty();
+                if (data.SubscriberTypeList) {
+                    if (data.SubscriberTypeList.length == 2) {
+                        domElements.cbbSites.prop('disabled', false);
+                        domElements.cbbSites.append(`<option selected value='A'>All</option>`);
+                    } else if (data.SubscriberTypeList.length == 1) {
+                        domElements.cbbSites.prop('disabled', true);
+                    }
+                    data.SubscriberTypeList.forEach(item => {
+                        let subName = item == "C" ? "Credit" : "Licensee";
+                        domElements.cbbSites.append(`<option value='${item}'>${subName}</option>`);
+                    });
                 }
-                data.SubscriberTypeList.forEach(item => {
-                    let subName = item == "C" ? "Credit" : "Licensee";
-                    domElements.cbbSites.append(`<option value='${item}'>${subName}</option>`);
-                });
-            }
+            }            
         }
 
         if (data.DropdownList) {
-            SetupDanger(data.DropdownList.Danger);
+            SetupDanger(data.DropdownList.Danger);           
             SetupTicketStatusFilter(data.DropdownList.TicketStatusList);
             cacheFilterDependOn.SubscriberTypeCurrencyList = data.DropdownList.SubscriberTypeCurrencyList;
             cacheFilterDependOn.ScoreCurrencyList = data.DropdownList.ScoreCurrencyList;
@@ -929,7 +933,7 @@ function MatchMonitorDetail() {
         }
     }
 
-    function FetchFilterMatchMonitorDetail() {
+    function FetchFilterMatchMonitorDetail(isRefreshcbbSite) {
         recordsTotalGlobal = 0;
 
         posClickGlobal++;
@@ -938,32 +942,33 @@ function MatchMonitorDetail() {
             xhr.abort();
         }
 
-        GetFilterMatchMonitorDetail();
+        GetFilterMatchMonitorDetail(isRefreshcbbSite);
     }
 
-    function GetFilterMatchMonitorDetail() {
+    function GetFilterMatchMonitorDetail(isRefreshcbbSite) {
+        var paramFilter = {
+            EventDateToString: domElements.eventDataToString,
+            MatchID: domElements.matchID,
+            BetTypeID: GetBetTypeSelected(),
+            BetID: GetBetIDSelected(),
+            Sites: domElements.cbbSites.val(),
+            Reason: domElements.reason,
+            LiveIndicator: domElements.cbbMarket.val(),
+            TypeOfTickets: currentType,
+            IsRefresh: isRefresh,
+            IsSupportShowAllTickets: isSupportShowAllTickets
+        };       
+
         $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorFilter'), {
             async: false,
             type: 'POST',
             tryCount: 0,
             retryLimit: 3,
-            data:
-            {
-                EventDateToString: function () { return domElements.eventDataToString; },
-                MatchID: function () { return domElements.matchID; },
-                BetTypeID: function () { return GetBetTypeSelected(); },
-                BetID: function () { return GetBetIDSelected(); },
-                Sites: function () { return domElements.cbbSites.val(); },
-                Reason: function () { return domElements.reason; },
-                LiveIndicator: function () { return domElements.cbbMarket.val(); },
-                TypeOfTickets: currentType,
-                IsRefresh: isRefresh,
-                IsSupportShowAllTickets: isSupportShowAllTickets
-            },
+            data: paramFilter,
             success: function (response) {
                 const data = response?.data;
                 if (data) {
-                    RenderFilter(data);
+                    RenderFilter(data, isRefreshcbbSite);
 
                     if (maxSequenceId == 1 && data.MaxSequenceId > 0 && currentType == MatchMonitorDetailViewType.TicketAll) {
                         maxSequenceId = data.MaxSequenceId;
@@ -1005,24 +1010,19 @@ function MatchMonitorDetail() {
                 }
             }
 
-            if (data?.IsSingleGrid) {
-                domElements.tblMMHomeTeam.DataTable().rows.add(data.ItemList).draw(false);
-                domElements.tblMMAwayTeam.hide();
-            } else {
-                domElements.tblMMAwayTeam.show();
+            if (data?.HomeMatchItemList) {
+                domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw(false);
+            }
 
-                if (data?.HomeMatchItemList) {                   
-                    domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw(false);
-                }
-
-                if (data?.AwayMatchItemList) {
-                    domElements.tblMMAwayTeam.DataTable().rows.add(data.AwayMatchItemList).draw(false);
-                }
-            }           
+            if (data?.AwayMatchItemList) {
+                domElements.tblMMAwayTeam.DataTable().rows.add(data.AwayMatchItemList).draw(false);
+            }         
 
             domElements.breadcrumbTotalTickets.html(`Total Tickets: ${ConvertNumberToThousandsString(recordsFilteredGlobal)}/${ConvertNumberToThousandsString(recordsTotalGlobal)}`);
 
-            SetupMGroupFilter([]);
+            if (!cacheFilterDependOn.MGrHDPList) {
+                SetupMGroupFilter([]);
+            }            
         }
     }
 
@@ -1138,18 +1138,18 @@ function MatchMonitorDetail() {
             },
             success: function (response) {
                 let itemList = response?.data?.ItemList;
-                if (response?.data?.ItemList) {
+                if (response?.data?.ItemList) {  
                     cacheMGroup.isActive = true;
                     cacheFilterDependOn.AGrMGrList = response.dependOnMGr.AGrMGrList;
                     cacheFilterDependOn.MGrHDPList = response.dependOnMGr.MGrHDPList;
-                    AGroupOnChange(); // Refresh MGr filter
+                    AGroupOnChange();
 
                     BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam.DataTable(), itemList);
                     BindChangeGroupAssWithOptions(domElements.tblMMAwayTeam.DataTable(), itemList);
 
                     cacheMGroup.itemMMHomeTeam = domElements.tblMMHomeTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
                     cacheMGroup.itemMMAwayTeam = domElements.tblMMAwayTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
-
+                    
                     FilterUIGrid();
                 }
             },
@@ -1259,7 +1259,7 @@ function MatchMonitorDetail() {
         if (!domElements.cbbMGroup.val().find(x => x == item.MDetectGroupID)) {
             return false;
         }
-
+       
         if (!domElements.cbbHDPBetTeam.val().find(x => x == Math.abs(item.HDP))) {
             return false;
         }  
@@ -1299,7 +1299,7 @@ function MatchMonitorDetail() {
 
     function FilterUIGrid() {
         let totalItem = 0;
-
+    
         let itemMMHomeTeamFilter = cacheMGroup.itemMMHomeTeam.filter(FilterAssociationDetection);
         let itemMMAwayTeamFilter = cacheMGroup.itemMMAwayTeam.filter(FilterAssociationDetection);
 
@@ -1433,7 +1433,7 @@ function MatchMonitorDetail() {
 
         isRefresh = true;
 
-        FetchFilterMatchMonitorDetail();
+        FetchFilterMatchMonitorDetail(true);
 
         RemoveFilterLoading();   
     }
@@ -1460,22 +1460,23 @@ function MatchMonitorDetail() {
 
         isRefresh = true;
 
-        FetchFilterMatchMonitorDetail();
+        FetchFilterMatchMonitorDetail(true);
 
         RemoveFilterLoading(); 
     }
 
-    function TypeOfTicketsOnChange(isClear) {
+    function TypeOfTicketsOnChange(isClear, isRefreshcbbSite) {
         AddFilterLoading();
 
         if (isClear) {
-            cacheFilterScore = undefined;                    
-            RestoreDefaulCbbSite();            
+            cacheFilterScore = undefined;            
         }
+
+        domElements.cbbSites.prop('disabled', false);         
 
         currentType = Number(domElements.cbbTypeOfTickets.val());
 
-        FetchFilterMatchMonitorDetail();
+        FetchFilterMatchMonitorDetail(isRefreshcbbSite);
 
         RemoveFilterLoading(); 
     }
@@ -1488,6 +1489,16 @@ function MatchMonitorDetail() {
         domElements.cbbSites.append(`<option selected value='L'>Licensee</option>`);
 
         domElements.cbbSites.val(SiteViewType.SiteAll);
+    }
+
+    function RestoreCbbHDPBetTeam(data) {
+        domElements.cbbHDPBetTeam.multiselect().empty();
+        if (data.length > 0) {
+            data.forEach(item => {
+                domElements.cbbHDPBetTeam.append(`<option selected value='${item}'>${item}</option>`);
+            });
+        }
+        domElements.cbbHDPBetTeam.multiselect("refresh");
     }
 
     function MatchScoreOnChange() {
@@ -1601,44 +1612,7 @@ function MatchMonitorDetail() {
 
             ReasonOnChange();
         }
-    }
-
-    function ReasonOnChange_Old() {      
-        let filterGroupIDs = [];
-        let reasonKeys = Object.keys(cacheReasonGroupIDDic);
-
-        $("option:selected", domElements.cbbReason).each(function () {
-            let groups = FindByReason($(this).text(), reasonKeys)
-
-            $(groups).each(function (index, element) {
-                filterGroupIDs.push(element);
-            })
-        });
-
-        filterGroupIDs = filterGroupIDs.filter(OnlyUnique);
-        filterGroupIDs = filterGroupIDs.sort(function (a, b) {
-            return a - b;
-        })
-
-        SetupAGroupFilter(filterGroupIDs);
-
-        AGroupOnChange();
-    }   
-
-    function FindByReason(reason, reasonKeys) {
-        let groupIDs = [];
-        $.grep(reasonKeys, function (key) {
-            if (reason == key) {
-                let groups = cacheReasonGroupIDDic[key];
-                $(groups).each(function (index, element) {
-                    groupIDs.push(element);
-                })
-            }
-            return true;
-        });
-
-        return groupIDs;
-    }
+    }  
 
     function ReasonOnChange() {
         if (cacheFilterDependOn.ReasonAGroupList) {
@@ -1701,8 +1675,11 @@ function MatchMonitorDetail() {
                 let mGr = $(this).text();
 
                 $.each(cacheFilterDependOn.MGrHDPList, function (idx, item) {
-                    if (item["MGr"] == mGr) {
-                        item["HDPItems"].map(function (curr) { hdpChoiceItems.push(curr); });
+                    if (item["MGr"] == mGr) {                       
+                        item["HDPItems"].map(function (hdp) {
+                            if (hdpChoiceItems.findIndex((obj) => obj == hdp.HDP) == -1)
+                                hdpChoiceItems.push(hdp.HDP);
+                        });
                         return false;
                     }
                 })
@@ -1711,7 +1688,7 @@ function MatchMonitorDetail() {
             domElements.cbbHDPBetTeam.multiselect().empty();
             if (hdpChoiceItems.length > 0) {
                 hdpChoiceItems.forEach(item => {
-                    domElements.cbbHDPBetTeam.append(`<option selected value='${item.HDP}'>${item.HDP}</option>`);
+                    domElements.cbbHDPBetTeam.append(`<option selected value='${item}'>${item}</option>`);
                 });
             }
             domElements.cbbHDPBetTeam.multiselect("refresh");
@@ -1818,7 +1795,7 @@ function MatchMonitorDetail() {
                 cacheMGroup.isActive = false;
                 cacheMGroup.selectMgroup = {};
                 CacheSelectDataFilter();
-                TypeOfTicketsOnChange(currentType == MatchMonitorDetailViewType.TicketAll);
+                TypeOfTicketsOnChange(currentType == MatchMonitorDetailViewType.TicketAll, false);
             });
         }
 
@@ -1843,14 +1820,15 @@ function MatchMonitorDetail() {
             cacheMGroup.isActive = false;
             domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
             RestoreDefaulCbbSite();
-            TypeOfTicketsOnChange(true);            
+            TypeOfTicketsOnChange(true, true);            
             FetchMatchMonitorDetail();
         })
 
         domElements.btnGenerateDetail.on('click', function () {
             if (ValidationFilter()) {
                 CacheSelectDataFilter();
-                domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
+                domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);                
+
                 if (!cacheMGroup.isActive) {
                     FetchMatchMonitorDetail(currentType);
                 }
@@ -1869,12 +1847,14 @@ function MatchMonitorDetail() {
         domElements.btnShowAll.on('click', function () {
             if (cacheMGroup.isActive) {
                 cacheMGroup.isActive = false;
-                cacheMGroup.selectMgroup = {};
-
                 domElements.inputHomeSelectAll.prop('checked', false);
                 domElements.inputAwaySelectAll.prop('checked', false);
 
+                RestoreCbbHDPBetTeam(cacheFilterDependOn.HDPList);
+
                 domElements.btnGenerateDetail.click();
+                
+                cacheMGroup.selectMgroup = {};
             }
         })
 

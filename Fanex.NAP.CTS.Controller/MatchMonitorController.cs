@@ -291,12 +291,17 @@
                     {
                         filter.IsValidFilterTicketLatest(Task.Run(() => GetAllMMFilterFromCache(para)).Result);
 
-                        mdResult = GetAllMMDetailFromCache(para, filter).Clone();
-
-                        if (filter.ReasonList != null || filter.AGroupList != null)
+                        var allTicketFromCache = GetAllMMDetailFromCache(para, filter);
+                        if (allTicketFromCache != null)
                         {
-                            mdResult.FilterItemMMDetailByReasonAGroup(filter);
+                            mdResult = allTicketFromCache.Clone();
+
+                            if (filter.ReasonList != null || filter.AGroupList != null)
+                            {
+                                mdResult.FilterItemMMDetailByReasonAGroup(filter);
+                            }
                         }
+                        
                         break;
                     }
             }
@@ -307,8 +312,8 @@
                 recordsFiltered = (mdResult?.AwayMatchItemList?.Count() ?? 0) + (mdResult?.HomeMatchItemList?.Count() ?? 0),
             }, JsonRequestBehavior.AllowGet);
         }
-
-        private async Task<MatchMonitorDetailListViewModel> GetAllMMDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, bool isLoop = false)
+   
+        private async Task<MatchMonitorDetailListViewModel> GetAllTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, bool isLoop = false)
         {
             var result = default(MatchMonitorDetailListViewModel);
 
@@ -324,9 +329,9 @@
             {
                 var tasks = new Task[]
                 {
-                        Task.Run(() => custInfo = GetCustInfoByCustID(matchDetailInfo.Custs.Select(c => c.CustID).Distinct())),
-                        Task.Run(() => fraudTicketDetail = GetFraudMMDetailFromCache(para)),
-                        Task.Run(() => ticketDetailGroup = GetAllMMTicketDetail(para, filter, isLoop))
+                    Task.Run(() => custInfo = GetCustInfoByCustID(matchDetailInfo.Custs.Select(c => c.CustID).Distinct())),
+                    Task.Run(() => fraudTicketDetail = GetFraudMMDetailFromCache(para)),
+                    Task.Run(() => ticketDetailGroup = GetAllMMTicketDetail(para, filter, isLoop))
                 };
 
                 await Task.WhenAll(tasks);
@@ -391,8 +396,7 @@
                             .OrderByDescending(x => x.TransTime).ToList() : new List<MatchMonitorDetailItemViewModel>(),
                     AwayMatchItemList = !isSingleGrid ? mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)
                         || string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.U), StringComparison.OrdinalIgnoreCase))
-                            .OrderByDescending(x => x.TransTime).ToList() : new List<MatchMonitorDetailItemViewModel>(),
-                    ItemList = isSingleGrid ? mdItemList.ToList() : new List<MatchMonitorDetailItemViewModel>(),
+                            .OrderByDescending(x => x.TransTime).ToList() : new List<MatchMonitorDetailItemViewModel>(),                  
                     IsSingleGrid = isSingleGrid,
                     ScoreList = mdItemList.Select(x => x.Score).Distinct().OrderBy(x => x).ToList(),
                     GroupList = mergeGroup.Groups.ToList(),
@@ -402,15 +406,14 @@
                     }).Distinct(x => x.CurrencyId).OrderBy(x => x.CurrencyName).Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName)).ToList(),
                     HDPList = mdItemList.Select(x => x.BallHeadHDP()).Distinct().OrderBy(x => x).ToList(),                    
                     BetTeamList = mdItemList.Select(x => x.BallHeadBetTeam()).Distinct().OrderBy(x => x).ToList(),
-                    SubscriberTypeList = mdItemList.Select(x=>x.SubscriberType).Distinct().ToList(),
-                    TicketStatusList = mdItemList.Select(x => x.TicketStatus).Distinct().ToList()
+                    SubscriberTypeList = mdItemList.Select(x=>x.SubscriberType).Distinct().ToList(),                   
                 };
 
                 mdResult.RecordsTotal = mdItemList?.Count() ?? 0;
                 mdResult.BindReasons(mdItemList.Select(x => x.ReasonList).Distinct());
                 mdResult.BindDropdownList(mdItemList);
             }
-
+           
             return mdResult;
         }
 
@@ -569,7 +572,7 @@
 
             try
             {
-                result = Task.Run(() => GetAllMMDetail(para, filter, true)).Result;
+                result = Task.Run(() => GetAllTicketDetail(para, filter, true)).Result;
             }
             catch (Exception ex)
             {
@@ -714,10 +717,15 @@
                 result = _memoryCacheService.GetValue<MMDetailFilterViewModel>(key);
 
                 if (result == null)
-                {
-                    result = GetFraudMMDetailFromCache(para, site).Clone();
+                {                   
+                    var fraudTicketFromCache = GetFraudMMDetailFromCache(para, site);
 
-                    _memoryCacheService.PushValueAsync(key, result);
+                    if (fraudTicketFromCache != null)
+                    {
+                        result = fraudTicketFromCache.Clone();
+
+                        _memoryCacheService.PushValueAsync(key, result);
+                    }                    
                 }
             }
 
@@ -756,30 +764,45 @@
 
                             var fraudTicketSiteAll = GetFraudMMFilterFromCache(para, MMSites.All);
 
-                            fraudTicketSiteAll.BindDropdownListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);
-
                             var fraudTicketDetail = site != MMSites.All ? GetFraudMMFilterFromCache(para, site) : fraudTicketSiteAll;
 
-                            result = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetail, site, para.LiveIndicator);
-                            
+                            result = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetail, site, para.LiveIndicator);                            
+                            result.BindDropdownListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);
+                            result.BindDropdownListByFraudTicket(fraudTicketDetail);
+
                             if (isCache)
                             {
                                 _ = Task.Run(() =>
                                 {
                                     var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.All);
-                                    _memoryCacheService.PushValueAsync(keySite, new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketSiteAll, MMSites.All, para.LiveIndicator));
+                                    var typeOfAllTicketAllSiteCache = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketSiteAll, MMSites.All, para.LiveIndicator);
+
+                                    typeOfAllTicketAllSiteCache.BindDropdownListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);
+                                    typeOfAllTicketAllSiteCache.BindDropdownListByFraudTicket(fraudTicketSiteAll);
+
+                                    _memoryCacheService.PushValueAsync(keySite, typeOfAllTicketAllSiteCache);
                                 });
                                 _ = Task.Run(() =>
                                 {
                                     var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.Licensee);
-                                    var fraudTicketDetailSite = GetFraudMMFilterFromCache(para, MMSites.Licensee);
-                                    _memoryCacheService.PushValueAsync(keySite, new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetailSite, MMSites.Licensee, para.LiveIndicator));
+                                    var fraudTicketLicensee = GetFraudMMFilterFromCache(para, MMSites.Licensee);
+                                    var typeOfAllTicketAllLicenseeCache = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketLicensee, MMSites.Licensee, para.LiveIndicator);
+
+                                    typeOfAllTicketAllLicenseeCache.BindDropdownListByMainTicketInfo(mmticketDetailInfo.TicketInfoList.Where(x=>x.IsLicensee), para.LiveIndicator);
+                                    typeOfAllTicketAllLicenseeCache.BindDropdownListByFraudTicket(fraudTicketLicensee);
+
+                                    _memoryCacheService.PushValueAsync(keySite, typeOfAllTicketAllLicenseeCache);
                                 });
                                 _ = Task.Run(() =>
                                 {
-                                    var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.Credit);
-                                    var fraudTicketDetailSite = GetFraudMMFilterFromCache(para, MMSites.Credit);
-                                    _memoryCacheService.PushValueAsync(keySite, new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetailSite, MMSites.Credit, para.LiveIndicator));
+                                    var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.Credit);                                    
+                                    var fraudTicketCredit = GetFraudMMFilterFromCache(para, MMSites.Credit);
+                                    
+                                    var typeOfAllTicketAllCreditCache = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketCredit, MMSites.Credit, para.LiveIndicator);
+                                    typeOfAllTicketAllCreditCache.BindDropdownListByMainTicketInfo(mmticketDetailInfo.TicketInfoList.Where(x => !x.IsLicensee), para.LiveIndicator);
+                                    typeOfAllTicketAllCreditCache.BindDropdownListByFraudTicket(fraudTicketCredit);
+
+                                    _memoryCacheService.PushValueAsync(keySite, typeOfAllTicketAllCreditCache);
                                 });
                             }
                         }

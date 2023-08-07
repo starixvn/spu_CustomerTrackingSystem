@@ -159,7 +159,7 @@
                 ListCurrency = filter?.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList),              
                 ListScore = filter?.ScoreList == null ? null : string.Join(",", filter.ScoreList),
                 ListDanger = GenerateDangerJson(filter.Danger1List, filter.Danger2List, filter.Danger3List, filter.Danger4List, filter.Danger5List),
-                ListStatus = filter?.StatusList == null ? null : string.Join(",", filter.StatusList),
+                ListStatus = filter?.TicketStatusList == null ? null : string.Join(",", filter.TicketStatusList),
                 ListTransId = transIds
             };           
 

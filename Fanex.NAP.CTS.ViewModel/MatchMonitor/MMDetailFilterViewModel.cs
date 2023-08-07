@@ -72,31 +72,38 @@
                 }).Distinct(x=>x).OrderBy(x => x).ToList();
 
                 this.SubscriberTypeList = mtFilterBySite.Select(x => { return x.IsLicensee ? "L" : "C"; }).Distinct().ToList();
-
-                var reasonList = fraudFilter.ReasonList?.ToList() ?? new List<string>();
+                
                 var groupList = fraudFilter.GroupList?.ToList() ?? new List<GroupInfoViewModel>();
-                var reasonGroupIDDic = fraudFilter?.ReasonGroupIDDic ?? new Dictionary<string, List<int>>();
-                if (fraudFilter.RecordsTotal < RecordsTotal)
-                {
-                    if (!reasonList.Any(x => x == "-")) reasonList.Insert(0, "-");
-                    if (!reasonGroupIDDic.Any(x => x.Key == "-")) reasonGroupIDDic.Add("-", new List<int>() { 0 });
-                    if (!groupList.Any(x => x.GroupName == "-")) groupList.Insert(0, new GroupInfoViewModel
-                    {
-                        GroupID = 0,
-                        GroupName = "-"
-                    });
-                }
-                // Reason List
-                this.ReasonList = reasonList;
-                ReasonInfos = string.Join(", ", ReasonList.Where(x => !x.Contains("-")));
-                ReasonGroupIDDic = reasonGroupIDDic.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
-
-                var agroup = ReasonGroupIDDic.Where(x => ReasonList.Contains(x.Key)).SelectMany(x => x.Value).Distinct();
+                //var reasonGroupIDDic = fraudFilter?.ReasonGroupIDDic ?? new Dictionary<string, List<int>>();
 
                 // Group List
-                this.GroupList = groupList?.Where(x => x.GroupID != null ? agroup.Contains(x.GroupID ?? 0) : false).ToList();
+                this.GroupList = fraudFilter.GroupList?.ToList() ?? new List<GroupInfoViewModel>();
 
-                this.DropdownList = fraudFilter.DropdownList;
+                // Reason List              
+                this.ReasonList = fraudFilter.ReasonList?.ToList() ?? new List<string>();
+
+                if (fraudFilter.RecordsTotal < RecordsTotal)
+                {
+                    this.GroupList.Insert(0, new GroupInfoViewModel { GroupID = 0, GroupName = "-" });
+                    this.ReasonList.Insert(0, "-");
+
+                    //if (!reasonList.Any(x => x == "-")) reasonList.Insert(0, "-");
+                    //if (!reasonGroupIDDic.Any(x => x.Key == "-")) reasonGroupIDDic.Add("-", new List<int>() { 0 });
+                    //if (!groupList.Any(x => x.GroupName == "-")) groupList.Insert(0, new GroupInfoViewModel
+                    //{
+                    //    GroupID = 0,
+                    //    GroupName = "-"
+                    //});
+                }
+
+                //ReasonInfos = string.Join(", ", ReasonList.Where(x => !x.Contains("-")));
+                //ReasonGroupIDDic = reasonGroupIDDic.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+
+                //var agroup = ReasonGroupIDDic.Where(x => ReasonList.Contains(x.Key)).SelectMany(x => x.Value).Distinct();
+
+                //// Group List
+                //this.GroupList = groupList?.Where(x => x.GroupID != null ? agroup.Contains(x.GroupID ?? 0) : false).ToList();
+               
             }
             else
             {
@@ -106,8 +113,7 @@
                 this.BetTeamList = new List<string>();
                 this.ScoreList = new List<string>();
                 this.ReasonList = new List<string>();
-                this.GroupList = new List<GroupInfoViewModel>();
-                this.DropdownList = new MMDetailFilterDropdownListViewModel();
+                this.GroupList = new List<GroupInfoViewModel>();              
             }
            
         }
@@ -275,6 +281,11 @@
 
         public void BindDropdownListByMainTicketInfo(IEnumerable<MMDetailFilterTicketInfoModel> tiItemList, bool liveIndicator)
         {
+            if (this.DropdownList == null)
+            {
+                this.DropdownList = new MMDetailFilterDropdownListViewModel();
+            }
+
             var tiItemViewList = tiItemList.Select(x => new MMDetailFilterTicketInfoViewModel(x, liveIndicator));
 
             var tasks = new Task[]
@@ -384,5 +395,17 @@
             Task.WhenAll(tasks).Wait();
         }
 
+        public void BindDropdownListByFraudTicket(MMDetailFilterViewModel fraudTicketModel)
+        {
+            if (this.DropdownList == null)
+            {
+                this.DropdownList = new MMDetailFilterDropdownListViewModel();
+            }
+
+            this.DropdownList.SubscriberTypeCurrencyList = fraudTicketModel.DropdownList.SubscriberTypeCurrencyList;
+            this.DropdownList.CurrencyReasonList = fraudTicketModel.DropdownList.CurrencyReasonList;
+            this.DropdownList.DangerCurrencyList = fraudTicketModel.DropdownList.DangerCurrencyList;
+            this.DropdownList.ReasonAGroupList = fraudTicketModel.DropdownList.ReasonAGroupList;            
+        }
     }
 }

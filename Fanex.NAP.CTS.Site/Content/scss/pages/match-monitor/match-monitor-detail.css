@@ -471,7 +471,7 @@
       width: 11.5rem; }
     .detailpage .monitor-container .monitor-table .group-control .form-filter .group .width-select-one {
       height: 3rem;
-      width: 16.4rem; }
+      /*width: 16.4rem;*/ }
     .detailpage .monitor-container .monitor-table .group-control .form-filter .group .width-amount {
       display: flex;
       justify-content: space-between;
