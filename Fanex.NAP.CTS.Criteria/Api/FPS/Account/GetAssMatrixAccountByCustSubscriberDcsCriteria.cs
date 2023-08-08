@@ -3,12 +3,12 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class GetAssMatrixAccountByCustSubscriberCriteria : CriteriaBase
+    public class GetAssMatrixAccountByCustSubscriberDcsCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_SubscriberID")]
         public int SubscriberID { get; set; }
 
-        [SpParam(SqlParamName = "ip_CTSCustID")]
+        [SpParam(SqlParamName = "ip_AccountID")]
         public long CTSCustID { get; set; }
 
         [SpParam(SqlParamName = "ip_NoOfCustomer")]
@@ -17,7 +17,7 @@
         [SpParam(SqlParamName = "ip_NoOfDevice")]
         public int NoOfDevice { get; set; }
 
-        public override string GetSettingKey() => "CTS_DC_Association_GetAssociationMaxtrixByCustSubscriber";
+        public override string GetSettingKey() => "DCS_ET_Association_GetAssociationMatrixByAccountSubscriber";
 
         public override bool IsValid() => true;
     }

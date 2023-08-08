@@ -8,7 +8,7 @@
        
         public string Username { get; set; }
 
-        public string RegisterName { get; set; }
+        public string RegisterName { get; set; } = string.Empty;
 
         public int SubscriberID { get; set; }
 
