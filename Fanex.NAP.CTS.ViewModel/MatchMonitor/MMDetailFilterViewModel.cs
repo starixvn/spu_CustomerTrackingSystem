@@ -84,8 +84,10 @@
 
                 if (fraudFilter.RecordsTotal < RecordsTotal)
                 {
-                    this.GroupList.Insert(0, new GroupInfoViewModel { GroupID = 0, GroupName = "-" });
-                    this.ReasonList.Insert(0, "-");
+                    if (!this.GroupList.Any(x=> x.GroupName == "-"))
+                        this.GroupList.Insert(0, new GroupInfoViewModel { GroupID = 0, GroupName = "-" });
+                    if (!this.ReasonList.Any(x => x == "-"))
+                        this.ReasonList.Insert(0, "-");
 
                     //if (!reasonList.Any(x => x == "-")) reasonList.Insert(0, "-");
                     //if (!reasonGroupIDDic.Any(x => x.Key == "-")) reasonGroupIDDic.Add("-", new List<int>() { 0 });

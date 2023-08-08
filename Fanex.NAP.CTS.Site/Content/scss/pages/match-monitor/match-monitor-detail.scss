@@ -207,6 +207,10 @@
                         }
                     }
 
+                    .width-110 {
+                        min-width: 110px;
+                    }
+
                     .width-160 {
                         min-width: 120px;
                     }
@@ -220,14 +224,14 @@
                     }
 
                     .group-button {
-                        margin-left: 10px;
+                        margin-left: 0px;
 
                         .button-generate {
                             background-color: #396ef8;
                             border-radius: 2px;
                             color: $page-bg;
                             height: auto !important;
-                            padding: .7rem 2rem;
+                            padding: 0.7rem 2rem 0.7rem 2rem;
                         }
                     }
 
@@ -292,6 +296,67 @@
                             display: block;
                         }
                     }
+
+                    .button {
+                        margin-right: 0px;
+                        margin-bottom: 0px;
+                    }
+                }
+
+                .first-row {
+                    border: 1px solid #C4C4C4;
+                    border-bottom: none;
+                    background-color: #F4F4F4;
+                    padding: 8px;
+                    border-radius: 3px 3px 0px 0px;
+
+                    .first-row-info {
+                        margin-right: 0px;
+
+                        .info-text {
+                            font-weight: bold;
+                            color: black;
+                            padding-right: 5px;
+                        }
+
+                        .info-select {
+                            width: 149px;
+                        }
+                    }
+
+                    .first-row-line {
+                        color: #C4C4C4;
+                        margin-left: 8px;
+                        margin-right: 8px;
+                        margin-bottom: 0.5px;
+                        height: 26px;
+                        border: 1px solid rgba(196, 196, 196, 1);
+                    }
+                }
+
+                .second-row-depend-1 {
+                    border-top: 1px solid #C4C4C4;
+                    border-bottom: 1px solid #C4C4C4;
+                    padding: 8px;
+                    margin-top: 0px;
+                }
+
+                .second-row-depend-2 {
+                    border-top: 1px solid #C4C4C4;
+                    border-bottom: 1px solid #C4C4C4;
+                    background-color: #EDF1F9;
+                    padding: 8px;
+                    margin-top: 0px;
+                }
+
+                .start-box {
+                    border-left: 1px solid #C4C4C4;
+                }
+
+                .end-box {
+                    border-right: 1px solid #C4C4C4;                  
+                    padding-top: 26.5px;
+                    height: 67px;
                 }
             }
 
@@ -315,7 +380,7 @@
 
             .group-info {
                 display: flex;
-                padding: 1rem 0 0.2rem 0;
+                padding: 1rem 0 0 0;
                 position: sticky;
                 top: 9.6rem;
                 /* background: #FFFFFF;*/

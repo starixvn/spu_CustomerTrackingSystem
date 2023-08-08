@@ -872,9 +872,7 @@
             });
 
             var data = _associationDetectionService.DetectGroupDetectAssociation(mergeGroupInfo).Select(x => new DetectGroupAssociationItemViewModel(x));
-
-            //data = DetectGroupDetectAssociation_DataTest(data); // hard code for test
-
+          
             result.ItemList = this.RearrangeAssGroup(data, true);
 
              var dependOnMGr = BuildDependOnMGr(result.ItemList, model.HomeDetectMGr, model.AwayDetectMGr);
@@ -902,18 +900,7 @@
 
             return mGrDependOn;
         }
-
-        private IEnumerable<DetectGroupAssociationItemViewModel> DetectGroupDetectAssociation_DataTest(IEnumerable<DetectGroupAssociationItemViewModel> dataTest)
-        {
-            return dataTest.Select(x =>
-            {
-                var y = x;
-                y.GroupID = 1;
-                y.GroupName = "1";
-                return y;
-            });
-        }
-
+       
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailVerifyTransRpt)]
         public ActionResult VerifyTransMMDetail(MatchMonitorDetailVerifyTransParaModel para)
