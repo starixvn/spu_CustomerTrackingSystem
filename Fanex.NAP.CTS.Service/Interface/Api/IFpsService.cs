@@ -2,8 +2,10 @@
 {
     using Fanex.NAP.CTS.Model.API.FPS.Account;
     using Fanex.NAP.CTS.Model.API.FPS.Device;
+    using Fanex.NAP.CTS.Model.API.FPS.Search;
     using Fanex.NAP.CTS.Model.API.FPS.SearchAccount;
     using Fanex.NAP.CTS.Model.API.FPS.Transaction;
+    using System.Collections.Generic;
 
     public interface IFpsService
     {
@@ -24,20 +26,33 @@
         #endregion cts
 
         #region dcs
+
+        #region search
         SearchAccountResultModel SearchAccountDcs(SearchAccountParamModel param);
 
+        IEnumerable<SearchDeviceItemDcsModel> SearchDeviceDcs(SearchDeviceParamModel param);
+        #endregion
+
+        #region account
         GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriberDcs(GetAssAccountInfoByCustSubscriberParamModel param);
-
-
-        TransactionResultModel GetTransactionHistoryDcs(TransactionParamModel param);
-
-        LastestTransactionResultModel GetLastestTransactionBySubscriberDcs(LastestTransactionParamModel param);
 
         GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriberDcs(GetAssAccountsByCustSubscriberParamModel param);
 
         GetAssDevicesByCustSubscriberResultModel GetAssDevicesByCustSubscriberDcs(GetAssDevicesByCustSubscriberParamModel param);
 
         GetAssMatrixAccountByCustSubscriberResultModel GetAssMatrixAccountByCustSubscriberDcs(GetAssMatrixAccountByCustSubscriberParamModel param);
+        #endregion
+
+        #region device
+        GetAssDeviceInfoByIDSubscriberModel GetAssDeviceInfoByIDSubscriberDcs(GetAssDeviceInfoByIDSubscriberParamModel param);
+        #endregion
+
+        #region report
+        TransactionResultModel GetTransactionHistoryDcs(TransactionParamModel param);
+
+        LastestTransactionResultModel GetLastestTransactionBySubscriberDcs(LastestTransactionParamModel param);
+        #endregion
+
         #endregion dcs
     }
 }

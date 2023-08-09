@@ -4,14 +4,15 @@
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Criteria.Api.FPS.Account;
     using Fanex.NAP.CTS.Criteria.Api.FPS.Device;
+    using Fanex.NAP.CTS.Criteria.Api.FPS.Search;
     using Fanex.NAP.CTS.Criteria.Api.FPS.SearchAccount;
     using Fanex.NAP.CTS.Criteria.Api.FPS.Transaction;
     using Fanex.NAP.CTS.Model.API.FPS.Account;
     using Fanex.NAP.CTS.Model.API.FPS.Device;
+    using Fanex.NAP.CTS.Model.API.FPS.Search;
     using Fanex.NAP.CTS.Model.API.FPS.SearchAccount;
     using Fanex.NAP.CTS.Model.API.FPS.Transaction;
     using Fanex.NAP.CTS.Service.Interface.Api;
-    using Newtonsoft.Json;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -187,6 +188,8 @@
         #endregion cts
 
         #region dcs
+
+        #region search
         public SearchAccountResultModel SearchAccountDcs(SearchAccountParamModel param)
         {
             var data = new SearchAccountResultModel();
@@ -226,6 +229,20 @@
             return data;
         }
 
+        public IEnumerable<SearchDeviceItemDcsModel> SearchDeviceDcs(SearchDeviceParamModel param)
+        {
+            var criteria = new GetListDeviceByCodeSubscriberDcsCriteria
+            {
+                SubscriberID = param.SubscriberID,
+                DeviceCode = param.DeviceCode
+            };
+
+            var items = repository.Fetch<SearchDeviceItemDcsModel>(criteria);
+            return items;
+        }
+        #endregion
+
+        #region account
         public GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriberDcs(GetAssAccountInfoByCustSubscriberParamModel param)
         {
             var criteria = new GetAssAccountInfoByCustSubscriberDcsCriteria
@@ -235,51 +252,6 @@
             };
 
             return DataService.GetSingle<GetAssAccountInfoByCustSubscriberModel>(criteria);
-        }
-
-        public TransactionResultModel GetTransactionHistoryDcs(TransactionParamModel param)
-        {
-            if (param.CTSCustID != null && param.CTSCustID > 0)
-            {
-                return GetTransactionByCustSubscriberDcs(param);
-            }
-
-            return GetTransactionBySubscriberDcs(param);
-        }
-
-        private TransactionResultModel GetTransactionByCustSubscriberDcs(TransactionParamModel param)
-        {
-            var data = new TransactionResultModel();
-
-            var criteria = new GetTransactionHistoryByCustSubscriberDcsCriteria
-            {
-                FromDate = param.FromDate,
-                ToDate = param.ToDate,
-                SubscriberID = param.SubscriberID,
-                CTSCustID = param.CTSCustID,
-                Skip = param.Skip,
-                Take = param.Take
-            };
-
-            data.Items = repository.Fetch<TransactionDcsItemModel>(criteria).Select(x => new TransactionItemModel()
-            {
-                Action = x.Action,
-                ActionResult = x.ActionResult,
-                Browser = x.Browser,
-                CTSCustID = x.AccountID,
-                FirstDeviceCode = x.FirstDeviceCode,
-                IP = x.IP,
-                OS = x.OS,
-                UserName = x.LoginName,
-                RobotTracking = x.RobotTracking,
-                SubscriberID = x.SubscriberID,
-                TransID = x.TransID,
-                TransTime = x.TransTime,
-                URLDetails = x.URLDetails
-            });
-            data.TotalItem = criteria.TotalItem;
-
-            return data;
         }
 
         public GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriberDcs(GetAssAccountsByCustSubscriberParamModel param)
@@ -341,6 +313,70 @@
                 ID = x.ID,
                 UserName = x.LoginName
             });
+
+            return data;
+        }
+        #endregion
+
+        #region device
+        public GetAssDeviceInfoByIDSubscriberModel GetAssDeviceInfoByIDSubscriberDcs(GetAssDeviceInfoByIDSubscriberParamModel param)
+        {
+            var criteria = new GetAssDeviceInfoByIDSubscriberDcsCriteria()
+            {
+                DeviceID = param.DeviceID,
+                SubscriberID = param.SubscriberID,
+            };
+
+            var data = repository.FetchMultiple<GetAssDeviceInfoByIDSubscriberModel, GetAssDeviceFirstSeen>(criteria);
+            var result = data.firstResultSet.FirstOrDefault() ?? new GetAssDeviceInfoByIDSubscriberModel();
+            result.FirstSeenBySubscriber = data.secondResultSet;
+
+            return result;
+        }
+        #endregion
+
+        #region report
+        public TransactionResultModel GetTransactionHistoryDcs(TransactionParamModel param)
+        {
+            if (param.CTSCustID != null && param.CTSCustID > 0)
+            {
+                return GetTransactionByCustSubscriberDcs(param);
+            }
+
+            return GetTransactionBySubscriberDcs(param);
+        }
+
+        private TransactionResultModel GetTransactionByCustSubscriberDcs(TransactionParamModel param)
+        {
+            var data = new TransactionResultModel();
+
+            var criteria = new GetTransactionHistoryByCustSubscriberDcsCriteria
+            {
+                FromDate = param.FromDate,
+                ToDate = param.ToDate,
+                SubscriberID = param.SubscriberID,
+                CTSCustID = param.CTSCustID,
+                Skip = param.Skip,
+                Take = param.Take
+            };
+
+            data.Items = repository.Fetch<TransactionDcsItemModel>(criteria).Select(x => new TransactionItemModel()
+            {
+                Action = x.Action,
+                ActionResult = x.ActionResult,
+                Browser = x.Browser,
+                CTSCustID = x.AccountID,
+                FirstDeviceCode = x.FirstDeviceCode,
+                IP = x.IP,
+                OS = x.OS,
+                UserName = x.LoginName,
+                RobotTracking = x.RobotTracking,
+                SubscriberID = x.SubscriberID,
+                TransID = x.TransID,
+                TransTime = x.TransTime,
+                URLDetails = x.URLDetails
+            });
+            data.TotalItem = criteria.TotalItem;
 
             return data;
         }
@@ -413,6 +449,8 @@
 
             return data;
         }
+        #endregion
+
         #endregion dcs
     }
 }

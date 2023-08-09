@@ -1,9 +1,9 @@
 ﻿namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
     using Fanex.Logging;
-    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.API.FPS.Account;
     using Fanex.NAP.CTS.Model.API.FPS.Device;
+    using Fanex.NAP.CTS.Model.API.FPS.Search;
     using Fanex.NAP.CTS.Model.API.FPS.SearchAccount;
     using Fanex.NAP.CTS.Model.API.FPS.Subscriber;
     using Fanex.NAP.CTS.Model.API.FPS.Transaction;
@@ -11,9 +11,9 @@
     using Fanex.NAP.CTS.Service.Implement.Api;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Interface.Api;
-    using Microsoft.Ajax.Utilities;
-    using Newtonsoft.Json;
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Http;
     using System.Web.Http.Results;
 
@@ -152,6 +152,8 @@
         #endregion cts
 
         #region dcs
+
+        #region get sub
         [HttpGet]
         public JsonResult<SubscriberFpsInfo> GetSubscriberInfoDcs(string subscriberName)
         {
@@ -175,7 +177,9 @@
 
             return Json(new SubscriberFpsInfo());
         }
+        #endregion
 
+        #region search
         [HttpPost]
         public JsonResult<SearchAccountResultModel> SearchAccountDcs(SearchAccountParamModel param)
         {
@@ -193,6 +197,25 @@
             }
         }
 
+        [HttpPost]
+        public JsonResult<List<SearchDeviceItemDcsModel>> SearchDeviceDcs(SearchDeviceParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.SearchDeviceDcs(param);
+
+                return Json(data.ToList());
+
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Search Device info Dcs exception: " + ex.Message);
+                return Json(new List<SearchDeviceItemDcsModel>());
+            }
+        }
+        #endregion
+
+        #region account
         [HttpPost]
         public JsonResult<GetAssAccountInfoByCustSubscriberModel> GetAssAccountInfoByCustSubscriberDcs(GetAssAccountInfoByCustSubscriberParamModel param)
         {
@@ -258,7 +281,28 @@
                 return Json(new GetAssMatrixAccountByCustSubscriberResultModel());
             }
         }
+        #endregion
 
+        #region device
+        [HttpPost]
+        public JsonResult<GetAssDeviceInfoByIDSubscriberModel> GetAssDeviceInfoByIdSubscriberDcs(GetAssDeviceInfoByIDSubscriberParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetAssDeviceInfoByIDSubscriberDcs(param);
+
+                return Json(data);
+
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Ass Account info by cust subscriber Dcs exception: " + ex.Message);
+                return Json(new GetAssDeviceInfoByIDSubscriberModel());
+            }
+        }
+        #endregion
+
+        #region report
         [HttpPost]
         public JsonResult<TransactionResultModel> GetTransactionHistoryDcs(TransactionParamModel param)
         {
@@ -296,6 +340,8 @@
                 return Json(new LastestTransactionResultModel());
             }
         }
+        #endregion
+
         #endregion dcs
     }
 }
