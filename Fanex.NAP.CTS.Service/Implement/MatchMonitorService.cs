@@ -191,7 +191,18 @@
         }
 
         private string GenerateDangerJson(List<int> danger1List, List<int> danger2List, List<int> danger3List, List<int> danger4List, List<int> danger5List)
-        {           
+        {
+            var isPass = (danger1List?.Any() ?? false) &&
+                (danger2List?.Any() ?? false) &&
+                (danger3List?.Any() ?? false) &&
+                (danger4List?.Any() ?? false) &&
+                (danger5List?.Any() ?? false);
+
+            if (!isPass)
+            {
+                return null;
+            }
+
             var jsonDanger = new List<MMDetailDangerModel>();
 
             danger1List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger1 = x }); });
@@ -319,6 +330,7 @@
                     itemH.HDP,
                     itemH.Score,
                     itemH.TransTimeToString,
+                    itemH.BetFrom,
                     itemH.ADetectGroup,
                     itemH.MDetectGroup,
                     itemH.ReasonList,
@@ -326,7 +338,7 @@
                     null, null, null, null,
                     null, null, null,
                     null, null, null,
-                    null, null, null,
+                    null, null, null, null,
                     null, null, null, null
                 };
         }
@@ -338,7 +350,7 @@
                     null, null, null, null,
                     null, null, null,
                     null, null, null,
-                    null, null, null,
+                    null, null, null, null,
                     null, null, null, null,
                     itemA.SubscriberType,
                     itemA.Username,
@@ -352,6 +364,7 @@
                     itemA.HDP,
                     itemA.Score,
                     itemA.TransTimeToString,
+                    itemA.BetFrom,
                     itemA.ADetectGroup,
                     itemA.MDetectGroup,
                     itemA.ReasonList,
@@ -375,6 +388,7 @@
                     itemH.HDP,
                     itemH.Score,
                     itemH.TransTimeToString,
+                    itemH.BetFrom,
                     itemH.ADetectGroup,
                     itemH.MDetectGroup,
                     itemH.ReasonList,
@@ -392,6 +406,7 @@
                     itemA.HDP,
                     itemA.Score,
                     itemA.TransTimeToString,
+                    itemA.BetFrom,
                     itemA.ADetectGroup,
                     itemA.MDetectGroup,
                     itemA.ReasonList,

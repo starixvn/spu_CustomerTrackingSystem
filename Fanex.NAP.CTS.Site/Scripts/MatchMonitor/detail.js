@@ -97,7 +97,7 @@ function MatchMonitorDetail() {
         CurrencyReasonList: [],
         ReasonAGroupList: [],
         AGrMGrList: [],
-        MGrHDPList: [],
+        AGrHDPList: [],
         Danger: null,
         HDPList: [],
         TicketStatusList: []
@@ -711,20 +711,22 @@ function MatchMonitorDetail() {
         }
 
         if (data.DropdownList) {
-            SetupDanger(data.DropdownList.Danger);           
+            SetupDanger(data.DropdownList.Danger);
             SetupTicketStatusFilter(data.DropdownList.TicketStatusList);
+
             cacheFilterDependOn.SubscriberTypeCurrencyList = data.DropdownList.SubscriberTypeCurrencyList;
             cacheFilterDependOn.ScoreCurrencyList = data.DropdownList.ScoreCurrencyList;
             cacheFilterDependOn.DangerCurrencyList = data.DropdownList.DangerCurrencyList;
             cacheFilterDependOn.CurrencyReasonList = data.DropdownList.CurrencyReasonList;
             cacheFilterDependOn.ReasonAGroupList = data.DropdownList.ReasonAGroupList;
+            cacheFilterDependOn.AGrHDPList = data.DropdownList.AGrHDPList;
             cacheFilterDependOn.Danger = data.DropdownList.Danger;
             cacheFilterDependOn.TicketStatusList = data.DropdownList.TicketStatusList;
         }
         
         if (cacheFilter[MatchMonitorDetailViewType.TicketFraud]) {
             LoadSelectDataFilter();
-        }  
+        }
     }
 
     //#endregion Render
@@ -819,7 +821,8 @@ function MatchMonitorDetail() {
                     IsFilter: true,    
                     TypeOfTickets: typeOfTickets,
                     ScoreList: GetSelectDataFilter(domElements.cbbMatchScore, true),
-                    Sites: domElements.cbbSites.val(),                  
+                    Sites: domElements.cbbSites.val(),
+                    IsDangerNone: GetDangerSelectDataFilter(0).length > 0,
                     Danger1List: GetDangerSelectDataFilter(1),
                     Danger2List: GetDangerSelectDataFilter(2),
                     Danger3List: GetDangerSelectDataFilter(3),
@@ -961,7 +964,7 @@ function MatchMonitorDetail() {
             TypeOfTickets: currentType,
             IsRefresh: isRefresh,
             IsSupportShowAllTickets: isSupportShowAllTickets
-        };       
+        };
 
         $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorFilter'), {
             async: false,
@@ -1160,9 +1163,8 @@ function MatchMonitorDetail() {
                 let itemList = response?.data?.ItemList;
                 if (response?.data?.ItemList) {  
                     cacheMGroup.isActive = true;
-                    cacheFilterDependOn.AGrMGrList = response.dependOnMGr.AGrMGrList;
-                    cacheFilterDependOn.MGrHDPList = response.dependOnMGr.MGrHDPList;
-                    AGroupOnChange();
+                    cacheFilterDependOn.AGrMGrList = response.dependOnMGr.AGrMGrList;          
+                    AGrOnChange();
 
                     BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam.DataTable(), itemList);
                     BindChangeGroupAssWithOptions(domElements.tblMMAwayTeam.DataTable(), itemList);
@@ -1602,14 +1604,19 @@ function MatchMonitorDetail() {
         domElements.cbbCurrency.multiselect("refresh");
     }
 
-    function CurrencyOnChange() {
+    function CurrencyOnChange() {       
         if (cacheFilterDependOn.CurrencyReasonList) {
             let reasonItems = [];
 
             $("option:selected", domElements.cbbCurrency).each(function () {
                 let currencyId = $(this).val();
 
-                $.each(cacheFilterDependOn.CurrencyReasonList, function (idx, item) {
+                $.each(cacheFilterDependOn.CurrencyReasonList, function (idx, item) {                    
+                    if (item["CurrencyId"] == 0) {
+                        if (reasonItems.findIndex((obj) => obj == "-") == -1)
+                            reasonItems.push("-");
+                    }
+
                     if (item["CurrencyId"] == currencyId) {
                         item["ReasonItems"].map(function (reason) {
                             if (reason.ReasonList) {                               
@@ -1643,11 +1650,20 @@ function MatchMonitorDetail() {
             $("option:selected", domElements.cbbReason).each(function () {
                 let reason = $(this).text();
 
+                if (reason == "-") {
+                    if (aGrItems.findIndex(y => y == "-") == -1)
+                        aGrItems.push("-");
+                }
+
                 $.each(cacheFilterDependOn.ReasonAGroupList, function (idx, item) {
                     if (item["Reason"].includes(reason)) {                        
-                        item["AGroupItems"].forEach(x => {                           
-                            if (aGrItems.findIndex(y => y == x.AGroupID) == -1)
-                                aGrItems.push(x.AGroupID);
+                        item["AGroupItems"].forEach(x => {
+                            let aGr = x.AGroupID;
+                            if (aGr == 0) {
+                                aGr = "-";
+                            }
+                            if (aGrItems.findIndex(y => y == aGr) == -1)
+                                aGrItems.push(aGr);
                         })
                     }
                 })
@@ -1659,46 +1675,60 @@ function MatchMonitorDetail() {
                     domElements.cbbAGroup.append(`<option selected value='${item}'>${item}</option>`);
                 });
             }
-            domElements.cbbAGroup.multiselect("refresh");         
+            domElements.cbbAGroup.multiselect("refresh");     
+
+            AGrOnChange();
         }
     }
 
-    function AGroupOnChange() {
+    function AGrOnChange() {
+        let aGrOptions = $("option", domElements.cbbAGroup);
+
+        if (aGrOptions.length == 0) {
+            domElements.cbbMGroup.multiselect().empty();
+            domElements.cbbHDPBetTeam.multiselect().empty();
+        }
+
         if (cacheFilterDependOn.AGrMGrList.length > 0) {
             let mGrItems = [];
 
             $("option:selected", domElements.cbbAGroup).each(function () {
                 let aGr = $(this).text();
+                if (aGr == "-") aGr = 0;
 
                 $.each(cacheFilterDependOn.AGrMGrList, function (idx, item) {
                     if (item["AGr"] == aGr) {
-                        item["MGrItems"].map(function (curr) { mGrItems.push(curr); });
+                        item["MGrItems"].map(function (curr) {
+                            if (mGrItems.findIndex(y => y == curr.MGr) == -1)
+                                mGrItems.push(curr.MGr);
+                        });
+                        
                         return false;
                     }
                 })
             })
-
+            
             domElements.cbbMGroup.multiselect().empty();
+           // domElements.cbbMGroup.append(`<option selected value='0'>-</option>`);
+
             if (mGrItems.length > 0) {
                 mGrItems.forEach(item => {
-                    domElements.cbbMGroup.append(`<option selected value='${item.MGr}'>${item.MGr}</option>`);
+                    domElements.cbbMGroup.append(`<option selected value='${item}'>${item}</option>`);
                 });
             }
-            domElements.cbbMGroup.multiselect("refresh");
-
-            MGroupOnChange();
+            domElements.cbbMGroup.multiselect("refresh");            
         }
-    }
 
-    function MGroupOnChange() {
-        if (cacheFilterDependOn.MGrHDPList.length > 0) {
+        if (cacheFilterDependOn.AGrHDPList) {
             let hdpChoiceItems = [];
 
-            $("option:selected", domElements.cbbMGroup).each(function () {
-                let mGr = $(this).text();
+            $("option:selected", domElements.cbbAGroup).each(function () {
+                let aGr = $(this).text();
 
-                $.each(cacheFilterDependOn.MGrHDPList, function (idx, item) {
-                    if (item["MGr"] == mGr) {                       
+                if (aGr == "-") aGr = 0;
+
+                $.each(cacheFilterDependOn.AGrHDPList, function (idx, item) {
+                    if (item["AGr"] == aGr) {
                         item["HDPItems"].map(function (hdp) {
                             if (hdpChoiceItems.findIndex((obj) => obj == hdp.HDP) == -1)
                                 hdpChoiceItems.push(hdp.HDP);
@@ -1716,7 +1746,7 @@ function MatchMonitorDetail() {
             }
             domElements.cbbHDPBetTeam.multiselect("refresh");
         }
-    }   
+    }    
 
     function AddFilterLoading() {
         domElements.divFilterMonitor.addClass('loading-background');
@@ -1804,7 +1834,7 @@ function MatchMonitorDetail() {
         domElements.cbbDanger.change(function () { DangerOnChange(); });
         domElements.cbbCurrency.change(function () { CurrencyOnChange(); });
         domElements.cbbReason.change(function () { ReasonOnChange(); });
-        domElements.cbbAGroup.change(function () { AGroupOnChange(); });
+        domElements.cbbAGroup.change(function () { AGrOnChange(); });
         domElements.cbbMGroup.change(function () { MGroupOnChange(); });
 
         try {

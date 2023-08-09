@@ -35,6 +35,8 @@
    
         public string TransTimeToString { get; set; }
 
+        public string BetFrom { get; set; }
+
         public string ADetectGroup { get; set; }
 
         public string MDetectGroup { get; set; }

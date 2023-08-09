@@ -693,9 +693,15 @@
             }
             catch (Exception ex)
             {
-                LogService.Info("Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
-                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                     + ex.InnerException.StackTrace);
+                var errMsg = "Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n";
+
+                if (ex.InnerException != null)
+                {
+                    errMsg += "\n" + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                     + ex.InnerException.StackTrace;
+                }
+
+                LogService.Info(errMsg);
             }
 
             return Json(new

@@ -157,6 +157,8 @@
      
         public List<string> ScoreList { get; set; }
 
+        public bool IsDangerNone { get; set; }
+
         public List<int> Danger1List { get; set; }
 
         public List<int> Danger2List { get; set; }
@@ -291,7 +293,7 @@
             var tiItemViewList = tiItemList.Select(x => new MMDetailFilterTicketInfoViewModel(x, liveIndicator));
 
             var tasks = new Task[]
-            {                           
+            {
                 Task.Run(() => 
                 {
                     #region Score - Currency
@@ -343,6 +345,17 @@
                             }));
 
                         this.DropdownList.DangerCurrencyList = dangerList;
+                    #endregion
+                }),
+                Task.Run(() =>
+                {
+                    #region Currency - Reason
+                   DropdownList.CurrencyReasonList = tiItemViewList.GroupBy(x => x.CurrencyId)
+                            .Select(g => new CurrencyReasonViewModel
+                            {
+                                CurrencyId = g.Key,
+                                ReasonItems = g.Select(x => new CurrencyReasonItemViewModel { ReasonList = string.Empty}).Distinct(x=>x.ReasonList)
+                            });
                     #endregion
                 }),
                 Task.Run(() => 
@@ -404,10 +417,19 @@
                 this.DropdownList = new MMDetailFilterDropdownListViewModel();
             }
 
-            this.DropdownList.SubscriberTypeCurrencyList = fraudTicketModel.DropdownList.SubscriberTypeCurrencyList;
-            this.DropdownList.CurrencyReasonList = fraudTicketModel.DropdownList.CurrencyReasonList;
+            this.DropdownList.SubscriberTypeCurrencyList = fraudTicketModel.DropdownList.SubscriberTypeCurrencyList;            
+            
+            if (fraudTicketModel.RecordsTotal < RecordsTotal && fraudTicketModel.DropdownList.CurrencyReasonList != null)
+            {
+                this.DropdownList.CurrencyReasonList = new List<CurrencyReasonViewModel>(){ new CurrencyReasonViewModel{ CurrencyId = 0 } }.Union(fraudTicketModel.DropdownList.CurrencyReasonList);
+            }
+            else
+            {
+                this.DropdownList.CurrencyReasonList = fraudTicketModel.DropdownList.CurrencyReasonList;
+            }
             this.DropdownList.DangerCurrencyList = fraudTicketModel.DropdownList.DangerCurrencyList;
-            this.DropdownList.ReasonAGroupList = fraudTicketModel.DropdownList.ReasonAGroupList;            
+            this.DropdownList.ReasonAGroupList = fraudTicketModel.DropdownList.ReasonAGroupList;
+            this.DropdownList.AGrHDPList = fraudTicketModel.DropdownList.AGrHDPList;
         }
     }
 }

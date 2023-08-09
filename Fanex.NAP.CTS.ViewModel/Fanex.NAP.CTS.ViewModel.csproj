@@ -177,6 +177,8 @@
     <Compile Include="MatchMonitor\DetectGroup\TicketSelectForMGrViewModel.cs" />
     <Compile Include="MatchMonitor\ExExcelTicketInfoViewModel.cs" />
     <Compile Include="MatchMonitor\ExExlMatchInfoViewModel.cs" />
+    <Compile Include="MatchMonitor\FilterDependOn\AGrHDPItemViewModel.cs" />
+    <Compile Include="MatchMonitor\FilterDependOn\AGrHDPViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\AGrMGrItemViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\AGrMGrViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\CurrencyReasonItemViewModel.cs" />

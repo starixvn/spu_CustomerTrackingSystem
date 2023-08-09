@@ -175,9 +175,16 @@
                     }),
                     Task.Run(() =>
                     {
-                        #region Currency - Danger
+                        #region  Danger - Currency                        
                         var dangerList = new List<DangerCurrencyViewModel>();
-                       dangerList.AddRange(mdItemList.Where(x=> x.Danger1 > 0).GroupBy(x=> new { x.Danger1 })
+
+                        dangerList.AddRange(mdItemList.Where(x=> x.Danger1 == 0 && x.Danger2 == 0 && x.Danger3 == 0 && x.Danger4 == 0 && x.Danger5 == 0).GroupBy(x=>x.Danger1)
+                            .Select(g => new DangerCurrencyViewModel {
+                                    DangerType = 0,
+                                    DangerValue = 0,
+                                    CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
+                                }));
+                        dangerList.AddRange(mdItemList.Where(x=> x.Danger1 > 0).GroupBy(x=> new { x.Danger1 })
                             .Select(g => new DangerCurrencyViewModel {
                                 DangerType = 1,
                                 DangerValue = g.Key.Danger1,
@@ -224,13 +231,26 @@
                     }),
                     Task.Run(() =>
                     {
-                        #region Reason - AGroup
+                        #region Reason - AGr
                         DropdownList.ReasonAGroupList = mdItemList.GroupBy(x => x.ReasonList)
                             .Select(g => new ReasonAGroupViewModel
                             {
                                 Reason = g.Key,
                                 AGroupItems = g.Select(x => new ReasonAGroupItemViewModel { AGroupID = x.ADetectGroupID }).Distinct()
                             });
+                        #endregion
+                    }),
+                    Task.Run(() =>
+                    {
+                        #region AGr - HDP
+                        
+                        DropdownList.AGrHDPList = mdItemList.GroupBy(x=>x.ADetectGroupID)
+                            .Select(g=> new AGrHDPViewModel
+                            {
+                                 AGr = g.Key,
+                                 HDPItems = g.Select(x=> new AGrHDPItemViewModel{ HDP = Math.Abs(x.HDP)}).Distinct(x=>x.HDP)
+                            });
+
                         #endregion
                     }),
                     Task.Run(() =>
@@ -263,7 +283,7 @@
                             .Select(x=> new DangerItemViewModel{ Danger = x, DangerName = "E-Sports " + x })
                             .OrderBy(x=>x.Danger);
 
-                        if (mdItemList.Any(x=>string.IsNullOrEmpty(x.DangerToString)))
+                        if (mdItemList.Any(x=>x.DangerToString == "-"))
                         {
                              DropdownList.Danger.NoneDanger.DangerItems = new List<DangerItemViewModel> { new DangerItemViewModel {  Danger = 0, DangerName = "-"} };
                         }

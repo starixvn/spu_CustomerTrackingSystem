@@ -249,21 +249,31 @@
         
         public bool FilterByDanger(MMDetailFilterViewModel filter)
         {
-            var isPass = (filter.Danger1List?.Contains(Danger1) ?? false) ||
+            var isPass = filter.Danger1List == null &&
+                filter.Danger2List == null &&
+                filter.Danger3List == null &&
+                filter.Danger4List == null &&
+                filter.Danger5List == null;
+
+            if (isPass) 
+                return isPass;
+           
+            isPass = (filter.Danger1List?.Contains(Danger1) ?? false) ||
                 (filter.Danger2List?.Contains(Danger2) ?? false) ||
                 (filter.Danger3List?.Contains(Danger3) ?? false) ||
                 (filter.Danger4List?.Contains(Danger4) ?? false) ||
-                (filter.Danger5List?.Contains(Danger5) ?? false);
+                (filter.Danger5List?.Contains(Danger5) ?? false) ||
+                (filter.IsDangerNone ? DangerToString == "-" : true);
 
             return isPass;
         }
 
         public bool FilterItem(MMDetailFilterViewModel filter, IEnumerable<string> reasonGroupIDDic, string site)
-        {          
+        {
             var filterData =
                 (filter.ScoreList?.Contains(Score ?? "-") ?? true) &&
                 FilterBySite(site) &&
-                FilterByDanger(filter) &&                
+                FilterByDanger(filter) &&
                 (filter.CurrencyIdList?.Contains(CurrencyId) ?? true) &&
                 FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic) &&
                (filter.HDPList?.Contains(BallHeadHDP()) ?? true) &&
@@ -294,7 +304,7 @@
             }
 
             if (this.HDP < 0)
-            {
+            {               
                 return Math.Abs(this.HDP);
             }
 

@@ -354,7 +354,7 @@
                 }
 
                 .end-box {
-                    border-right: 1px solid #C4C4C4;                  
+                    border-right: 1px solid #C4C4C4;
                     padding-top: 26.5px;
                     height: 67px;
                 }
@@ -541,6 +541,7 @@
 
                                     .col-betid, .col-reason {
                                         font-size: 12px !important;
+                                        min-width: 82px;
                                     }
 
                                     .col-dgr {
