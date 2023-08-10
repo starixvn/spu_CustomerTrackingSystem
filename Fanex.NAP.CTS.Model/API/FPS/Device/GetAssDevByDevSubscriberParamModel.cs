@@ -4,7 +4,7 @@
     {
         public int SubscriberID { get; set; }
 
-        public int DeviceID { get; set; }
+        public long DeviceID { get; set; }
 
         public int NoOfRecord { get; set; }
     }

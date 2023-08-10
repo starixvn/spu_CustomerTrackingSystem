@@ -2,7 +2,7 @@
 {
     public class GetAssDeviceInfoByIDSubscriberParamModel
     {
-        public int DeviceID { get; set; }
+        public long DeviceID { get; set; }
 
         public int SubscriberID { get; set; }
     }

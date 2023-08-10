@@ -9,7 +9,7 @@
         public int SubscriberID { get; set; }
 
         [SpParam(SqlParamName = "ip_DeviceID")]
-        public int DeviceID { get; set; }
+        public long DeviceID { get; set; }
 
         [SpParam(SqlParamName = "ip_NoOfRecord")]
         public int NoOfRecord { get; set; }

@@ -334,9 +334,48 @@
                 return Json(new List<GetAssDevByDevSubscriberItemModel>());
             }
         }
+
+        [HttpPost]
+        public JsonResult<List<GetAssMatrixByDeviceSubscriberItemModel>> GetAssMatrixByDeviceSubscriberDcs(GetAssMatrixByDeviceSubscriberParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetAssMatrixByDeviceSubscriberDcs(param);
+
+                return Json(data.ToList());
+
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Ass Matrix by Device subscriber Dcs exception: " + ex.Message);
+                return Json(new List<GetAssMatrixByDeviceSubscriberItemModel>());
+            }
+        }
         #endregion
 
         #region report
+        [HttpPost]
+        public JsonResult<TransactionHistoryDcsResultModel> GetTransactionHistoryByDeviceDcs(TransactionHistoryByDeviceParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetTransactionHistoryByDeviceDcs(param);
+
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Transaction History By Device Dcs exception: " + ex.Message);
+
+                if (!string.IsNullOrEmpty(ex.Message) && ex.Message.ToLower().Contains("timeout expired"))
+                {
+                    return Json(new TransactionHistoryDcsResultModel() { IsTimeout = true });
+                }
+
+                return Json(new TransactionHistoryDcsResultModel());
+            }
+        }
+
         [HttpPost]
         public JsonResult<TransactionResultModel> GetTransactionHistoryDcs(TransactionParamModel param)
         {

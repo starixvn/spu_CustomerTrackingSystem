@@ -357,9 +357,41 @@
 
             return repository.Fetch<GetAssDevByDevSubscriberItemModel>(criteria);
         }
+
+        public IEnumerable<GetAssMatrixByDeviceSubscriberItemModel> GetAssMatrixByDeviceSubscriberDcs(GetAssMatrixByDeviceSubscriberParamModel param)
+        {
+            var criteria = new GetAssMatrixByDeviceSubsriberDcsCriteria
+            {
+                DeviceID = param.DeviceID,
+                NoOfCustomer = param.NoOfCustomer,
+                NoOfDevice = param.NoOfDevice,
+                SubscriberID = param.SubscriberID,
+            };
+
+            return repository.Fetch<GetAssMatrixByDeviceSubscriberItemModel>(criteria);
+        }
         #endregion
 
         #region report
+        public TransactionHistoryDcsResultModel GetTransactionHistoryByDeviceDcs(TransactionHistoryByDeviceParamModel param)
+        {
+            var criteria = new GetTransHistoryByDevSubDcsCriteria
+            {
+                DeviceID = param.DeviceID,
+                FromDate = param.FromDate,
+                SubscriberID = param.SubscriberID,
+                ToDate = param.ToDate,
+                Skip = param.Skip,
+                Take = param.Take,
+            };
+
+            return new TransactionHistoryDcsResultModel()
+            {
+                Items = repository.Fetch<TransactionHistoryDcsItemModel>(criteria),
+                TotalItem = criteria.TotalItem
+            };
+        }
+
         public TransactionResultModel GetTransactionHistoryDcs(TransactionParamModel param)
         {
             if (param.CTSCustID != null && param.CTSCustID > 0)

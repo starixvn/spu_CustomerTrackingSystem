@@ -89,6 +89,7 @@
     <Compile Include="Api\FPS\Device\GetAssDeviceInfoByIDSubscriberDcsCriteria.cs" />
     <Compile Include="Api\FPS\Device\GetAssDevicesByCustSubscriberCtsCriteria.cs" />
     <Compile Include="Api\FPS\Device\GetAssDevicesByCustSubscriberDcsCriteria.cs" />
+    <Compile Include="Api\FPS\Device\GetAssMatrixByDeviceSubsriberDcsCriteria.cs" />
     <Compile Include="Api\FPS\Search\GetAccountByNameSubscriberCtsCriteria.cs" />
     <Compile Include="Api\FPS\Search\GetAccountByNameSubscriberDcsCriteria.cs" />
     <Compile Include="Api\FPS\Search\GetListAccountByUserNameSubscriberCtsCriteria.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Api\FPS\Transaction\GetTransactionHistoryByCustSubscriberDcsCriteria.cs" />
     <Compile Include="Api\FPS\Transaction\GetTransactionHistoryBySubscriberCtsCriteria.cs" />
     <Compile Include="Api\FPS\Transaction\GetTransactionHistoryBySubscriberDcsCriteria.cs" />
+    <Compile Include="Api\FPS\Transaction\GetTransHistoryByDevSubDcsCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedAccountCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedGroupMonitorCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\GetAssociatedAccountCriteria.cs" />

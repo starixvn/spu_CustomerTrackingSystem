@@ -118,5 +118,7 @@
 		<Setting Key="DCS_ET_Association_GetDeviceInfoByDeviceSubscriber" SpName="DCS_ET_Association_GetDeviceInfoByDeviceSubscriber_xtest" DbName="MySQL.DCS_Extra.Reporter" />
 		<Setting Key="DCS_ET_Association_GetAssociationAccountByDeviceSubscriber" SpName="DCS_ET_Association_GetAssociationAccountByDeviceSubscriber_xtest" DbName="MySQL.DCS_Extra.Reporter" />
 		<Setting Key="DCS_ET_Association_GetAssociationDeviceByDeviceSubscriber" SpName="DCS_ET_Association_GetAssociationDeviceByDeviceSubscriber_xtest" DbName="MySQL.DCS_Extra.Reporter" />
+		<Setting Key="DCS_ET_Association_GetAssociationMatrixByDeviceSubscriber" SpName="DCS_ET_Association_GetAssociationMatrixByDeviceSubscriber_xtest" DbName="MySQL.DCS_Extra.Reporter" />
+		<Setting Key="DCS_ET_Transaction_GetHistoryByDeviceSubscriber" SpName="DCS_ET_Transaction_GetHistoryByDeviceSubscriber_xtest" DbName="MySQL.DCS_Extra.Reporter" />
 	</Function>
 </Functions>

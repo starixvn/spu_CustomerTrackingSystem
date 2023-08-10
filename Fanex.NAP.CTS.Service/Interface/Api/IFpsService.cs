@@ -49,9 +49,13 @@
         IEnumerable<GetAssAccByDevSubscriberItemModel> GetAssAccByDevSubscriberDcs(GetAssAccByDevSubscriberParamModel param);
 
         IEnumerable<GetAssDevByDevSubscriberItemModel> GetAssDevByDevSubscriberDcs(GetAssDevByDevSubscriberParamModel param);
+
+        IEnumerable<GetAssMatrixByDeviceSubscriberItemModel> GetAssMatrixByDeviceSubscriberDcs(GetAssMatrixByDeviceSubscriberParamModel param);
         #endregion
 
         #region report
+        TransactionHistoryDcsResultModel GetTransactionHistoryByDeviceDcs(TransactionHistoryByDeviceParamModel param);
+
         TransactionResultModel GetTransactionHistoryDcs(TransactionParamModel param);
 
         LastestTransactionResultModel GetLastestTransactionBySubscriberDcs(LastestTransactionParamModel param);

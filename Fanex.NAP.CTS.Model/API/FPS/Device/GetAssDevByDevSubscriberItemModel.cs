@@ -4,7 +4,7 @@ namespace Fanex.NAP.CTS.Model.API.FPS.Device
 {
     public class GetAssDevByDevSubscriberItemModel
     {
-        public int          DeviceID            { get; set; }
+        public long         DeviceID            { get; set; }
 
         public string       DeviceCode          { get; set; }
 
