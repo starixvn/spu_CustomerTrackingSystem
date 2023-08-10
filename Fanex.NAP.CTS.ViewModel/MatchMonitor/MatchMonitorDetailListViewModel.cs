@@ -240,19 +240,19 @@
                             });
                         #endregion
                     }),
-                    Task.Run(() =>
-                    {
-                        #region AGr - HDP
+                    //Task.Run(() =>
+                    //{
+                    //    #region AGr - HDP
                         
-                        DropdownList.AGrHDPList = mdItemList.GroupBy(x=>x.ADetectGroupID)
-                            .Select(g=> new AGrHDPViewModel
-                            {
-                                 AGr = g.Key,
-                                 HDPItems = g.Select(x=> new AGrHDPItemViewModel{ HDP = Math.Abs(x.HDP)}).Distinct(x=>x.HDP)
-                            });
+                    //    DropdownList.AGrHDPList = mdItemList.GroupBy(x=>x.ADetectGroupID)
+                    //        .Select(g=> new AGrHDPViewModel
+                    //        {
+                    //             AGr = g.Key,
+                    //             HDPItems = g.Select(x=> new AGrHDPItemViewModel{ HDP = Math.Abs(x.HDP)}).Distinct(x=>x.HDP)
+                    //        });
 
-                        #endregion
-                    }),
+                    //    #endregion
+                    //}),
                     Task.Run(() =>
                     {
                         #region Danger                       

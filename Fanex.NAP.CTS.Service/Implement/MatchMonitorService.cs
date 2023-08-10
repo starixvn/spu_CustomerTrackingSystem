@@ -158,7 +158,7 @@
                 IsLicensee = para.Sites == MMSites.All ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
                 ListCurrency = filter?.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList),              
                 ListScore = filter?.ScoreList == null ? null : string.Join(",", filter.ScoreList),
-                ListDanger = GenerateDangerJson(filter.Danger1List, filter.Danger2List, filter.Danger3List, filter.Danger4List, filter.Danger5List),
+                ListDanger = GenerateDangerJson(filter),
                 ListStatus = filter?.TicketStatusList == null ? null : string.Join(",", filter.TicketStatusList),
                 ListTransId = transIds
             };           
@@ -190,13 +190,13 @@
             };
         }
 
-        private string GenerateDangerJson(List<int> danger1List, List<int> danger2List, List<int> danger3List, List<int> danger4List, List<int> danger5List)
+        private string GenerateDangerJson(MMDetailFilterViewModel filter)
         {
-            var isPass = (danger1List?.Any() ?? false) &&
-                (danger2List?.Any() ?? false) &&
-                (danger3List?.Any() ?? false) &&
-                (danger4List?.Any() ?? false) &&
-                (danger5List?.Any() ?? false);
+            var isPass = (filter.Danger1List?.Any() ?? false) &&
+                (filter.Danger2List?.Any() ?? false) &&
+                (filter.Danger3List?.Any() ?? false) &&
+                (filter.Danger4List?.Any() ?? false) &&
+                (filter.Danger5List?.Any() ?? false);
 
             if (!isPass)
             {
@@ -205,11 +205,13 @@
 
             var jsonDanger = new List<MMDetailDangerModel>();
 
-            danger1List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger1 = x }); });
-            danger2List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger2 = x }); });
-            danger3List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger3 = x }); });
-            danger4List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger4 = x }); });
-            danger5List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger5 = x }); });
+            if (filter.IsDangerNone)
+                jsonDanger.Add(new MMDetailDangerModel { Danger1 = 0, Danger2 = 0, Danger3 = 0, Danger4 = 0, Danger5 = 0 });
+            filter.Danger1List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger1 = x }); });
+            filter.Danger2List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger2 = x }); });
+            filter.Danger3List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger3 = x }); });
+            filter.Danger4List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger4 = x }); });
+            filter.Danger5List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger5 = x }); });
 
             return JsonConvert.SerializeObject(jsonDanger);
         }

@@ -96,8 +96,7 @@ function MatchMonitorDetail() {
         DangerCurrencyList: [],
         CurrencyReasonList: [],
         ReasonAGroupList: [],
-        AGrMGrList: [],
-        AGrHDPList: [],
+        AGrMGrList: [],     
         Danger: null,
         HDPList: [],
         TicketStatusList: []
@@ -718,8 +717,7 @@ function MatchMonitorDetail() {
             cacheFilterDependOn.ScoreCurrencyList = data.DropdownList.ScoreCurrencyList;
             cacheFilterDependOn.DangerCurrencyList = data.DropdownList.DangerCurrencyList;
             cacheFilterDependOn.CurrencyReasonList = data.DropdownList.CurrencyReasonList;
-            cacheFilterDependOn.ReasonAGroupList = data.DropdownList.ReasonAGroupList;
-            cacheFilterDependOn.AGrHDPList = data.DropdownList.AGrHDPList;
+            cacheFilterDependOn.ReasonAGroupList = data.DropdownList.ReasonAGroupList;           
             cacheFilterDependOn.Danger = data.DropdownList.Danger;
             cacheFilterDependOn.TicketStatusList = data.DropdownList.TicketStatusList;
         }
@@ -1717,35 +1715,7 @@ function MatchMonitorDetail() {
                 });
             }
             domElements.cbbMGroup.multiselect("refresh");            
-        }
-
-        if (cacheFilterDependOn.AGrHDPList) {
-            let hdpChoiceItems = [];
-
-            $("option:selected", domElements.cbbAGroup).each(function () {
-                let aGr = $(this).text();
-
-                if (aGr == "-") aGr = 0;
-
-                $.each(cacheFilterDependOn.AGrHDPList, function (idx, item) {
-                    if (item["AGr"] == aGr) {
-                        item["HDPItems"].map(function (hdp) {
-                            if (hdpChoiceItems.findIndex((obj) => obj == hdp.HDP) == -1)
-                                hdpChoiceItems.push(hdp.HDP);
-                        });
-                        return false;
-                    }
-                })
-            })
-
-            domElements.cbbHDPBetTeam.multiselect().empty();
-            if (hdpChoiceItems.length > 0) {
-                hdpChoiceItems.forEach(item => {
-                    domElements.cbbHDPBetTeam.append(`<option selected value='${item}'>${item}</option>`);
-                });
-            }
-            domElements.cbbHDPBetTeam.multiselect("refresh");
-        }
+        }        
     }    
 
     function AddFilterLoading() {

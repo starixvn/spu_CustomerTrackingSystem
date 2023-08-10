@@ -103,9 +103,10 @@
 
                 //var agroup = ReasonGroupIDDic.Where(x => ReasonList.Contains(x.Key)).SelectMany(x => x.Value).Distinct();
 
-                //// Group List
+                // Group List
                 //this.GroupList = groupList?.Where(x => x.GroupID != null ? agroup.Contains(x.GroupID ?? 0) : false).ToList();
-               
+
+                var testAGrHDP = "";
             }
             else
             {
@@ -421,15 +422,16 @@
             
             if (fraudTicketModel.RecordsTotal < RecordsTotal && fraudTicketModel.DropdownList.CurrencyReasonList != null)
             {
-                this.DropdownList.CurrencyReasonList = new List<CurrencyReasonViewModel>(){ new CurrencyReasonViewModel{ CurrencyId = 0 } }.Union(fraudTicketModel.DropdownList.CurrencyReasonList);
+                this.DropdownList.CurrencyReasonList = new List<CurrencyReasonViewModel>(){ new CurrencyReasonViewModel{ CurrencyId = 0 } }.Union(fraudTicketModel.DropdownList.CurrencyReasonList);                
+
             }
             else
             {
-                this.DropdownList.CurrencyReasonList = fraudTicketModel.DropdownList.CurrencyReasonList;
+                this.DropdownList.CurrencyReasonList = fraudTicketModel.DropdownList.CurrencyReasonList;              
             }
             this.DropdownList.DangerCurrencyList = fraudTicketModel.DropdownList.DangerCurrencyList;
             this.DropdownList.ReasonAGroupList = fraudTicketModel.DropdownList.ReasonAGroupList;
-            this.DropdownList.AGrHDPList = fraudTicketModel.DropdownList.AGrHDPList;
+            
         }
     }
 }
