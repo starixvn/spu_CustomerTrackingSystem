@@ -191,6 +191,8 @@
     <Compile Include="API\CustomerClassModel.cs" />
     <Compile Include="API\CustomerClassification.cs" />
     <Compile Include="API\ForceSpecialCustomerClassModel.cs" />
+    <Compile Include="API\FPS\Account\GetAssAccByDevSubscriberItemModel.cs" />
+    <Compile Include="API\FPS\Account\GetAssAccByDevSubscriberParamModel.cs" />
     <Compile Include="API\FPS\Account\GetAssAccountInfoByCustSubscriberModel.cs" />
     <Compile Include="API\FPS\Account\GetAssAccountInfoByCustSubscriberParamModel.cs" />
     <Compile Include="API\FPS\Account\GetAssAccountsByCustSubscriberItemDcsModel.cs" />
@@ -201,11 +203,13 @@
     <Compile Include="API\FPS\Account\GetAssMatrixAccountByCustSubscriberItemModel.cs" />
     <Compile Include="API\FPS\Account\GetAssMatrixAccountByCustSubscriberParamModel.cs" />
     <Compile Include="API\FPS\Account\GetAssMatrixAccountByCustSubscriberResultModel.cs" />
+    <Compile Include="API\FPS\Device\GetAssDevByDevSubscriberParamModel.cs" />
     <Compile Include="API\FPS\Device\GetAssDeviceInfoByIDSubscriberModel.cs" />
     <Compile Include="API\FPS\Device\GetAssDeviceInfoByIDSubscriberParamModel.cs" />
     <Compile Include="API\FPS\Device\GetAssDevicesByCustSubscriberItemModel.cs" />
     <Compile Include="API\FPS\Device\GetAssDevicesByCustSubscriberParamModel.cs" />
     <Compile Include="API\FPS\Device\GetAssDevicesByCustSubscriberResultModel.cs" />
+    <Compile Include="API\FPS\Device\GetAssDevByDevSubscriberItemModel.cs" />
     <Compile Include="API\FPS\Search\SearchAccountItemDcsModel.cs" />
     <Compile Include="API\FPS\Search\SearchAccountParamModel.cs" />
     <Compile Include="API\FPS\Search\SearchAccountItemModel.cs" />

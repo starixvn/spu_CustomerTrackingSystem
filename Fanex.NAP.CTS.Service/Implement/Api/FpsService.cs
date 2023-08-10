@@ -333,6 +333,30 @@
 
             return result;
         }
+
+        public IEnumerable<GetAssAccByDevSubscriberItemModel> GetAssAccByDevSubscriberDcs(GetAssAccByDevSubscriberParamModel param)
+        {
+            var criteria = new GetAssAccByDevSubscriberDcsCriteria
+            {
+                DeviceID = param.DeviceID,
+                NoOfRecord = param.NoOfRecord,
+                SubscriberID = param.SubscriberID,
+            };
+
+            return repository.Fetch<GetAssAccByDevSubscriberItemModel>(criteria);
+        }
+
+        public IEnumerable<GetAssDevByDevSubscriberItemModel> GetAssDevByDevSubscriberDcs(GetAssDevByDevSubscriberParamModel param)
+        {
+            var criteria = new GetAssDevByDevSubscriberDcsCriteria
+            {
+                DeviceID = param.DeviceID,
+                NoOfRecord = param.NoOfRecord,
+                SubscriberID = param.SubscriberID,
+            };
+
+            return repository.Fetch<GetAssDevByDevSubscriberItemModel>(criteria);
+        }
         #endregion
 
         #region report

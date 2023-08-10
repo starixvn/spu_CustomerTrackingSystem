@@ -78,12 +78,14 @@
     <Compile Include="Account\RobotSetting\GetRDMatchCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRDTransCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRobotUsersSCEDetailsCriteria.cs" />
+    <Compile Include="Api\FPS\Account\GetAssAccByDevSubscriberDcsCriteria.cs" />
     <Compile Include="Api\FPS\Account\GetAssAccountInfoByCustSubscriberCtsCriteria.cs" />
     <Compile Include="Api\FPS\Account\GetAssAccountInfoByCustSubscriberDcsCriteria.cs" />
     <Compile Include="Api\FPS\Account\GetAssAccountsByCustSubscriberCtsCriteria.cs" />
     <Compile Include="Api\FPS\Account\GetAssAccountsByCustSubscriberDcsCriteria.cs" />
     <Compile Include="Api\FPS\Account\GetAssMatrixAccountByCustSubscriberCtsCriteria.cs" />
     <Compile Include="Api\FPS\Account\GetAssMatrixAccountByCustSubscriberDcsCriteria.cs" />
+    <Compile Include="Api\FPS\Device\GetAssDevByDevSubscriberDcsCriteria.cs" />
     <Compile Include="Api\FPS\Device\GetAssDeviceInfoByIDSubscriberDcsCriteria.cs" />
     <Compile Include="Api\FPS\Device\GetAssDevicesByCustSubscriberCtsCriteria.cs" />
     <Compile Include="Api\FPS\Device\GetAssDevicesByCustSubscriberDcsCriteria.cs" />

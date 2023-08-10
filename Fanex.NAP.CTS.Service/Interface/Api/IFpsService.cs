@@ -45,6 +45,10 @@
 
         #region device
         GetAssDeviceInfoByIDSubscriberModel GetAssDeviceInfoByIDSubscriberDcs(GetAssDeviceInfoByIDSubscriberParamModel param);
+
+        IEnumerable<GetAssAccByDevSubscriberItemModel> GetAssAccByDevSubscriberDcs(GetAssAccByDevSubscriberParamModel param);
+
+        IEnumerable<GetAssDevByDevSubscriberItemModel> GetAssDevByDevSubscriberDcs(GetAssDevByDevSubscriberParamModel param);
         #endregion
 
         #region report

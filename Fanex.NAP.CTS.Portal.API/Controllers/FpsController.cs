@@ -296,8 +296,42 @@
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Ass Account info by cust subscriber Dcs exception: " + ex.Message);
+                LogService.Error("FPS Get Ass Account info by id subscriber Dcs exception: " + ex.Message);
                 return Json(new GetAssDeviceInfoByIDSubscriberModel());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult<List<GetAssAccByDevSubscriberItemModel>> GetAssAccountsByDeviceSubscriberDcs(GetAssAccByDevSubscriberParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetAssAccByDevSubscriberDcs(param);
+
+                return Json(data.ToList());
+
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Ass Account by Device subscriber Dcs exception: " + ex.Message);
+                return Json(new List<GetAssAccByDevSubscriberItemModel>());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult<List<GetAssDevByDevSubscriberItemModel>> GetAssDevByDeviceSubscriberDcs(GetAssDevByDevSubscriberParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetAssDevByDevSubscriberDcs(param);
+
+                return Json(data.ToList());
+
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Ass Device by Device subscriber Dcs exception: " + ex.Message);
+                return Json(new List<GetAssDevByDevSubscriberItemModel>());
             }
         }
         #endregion
