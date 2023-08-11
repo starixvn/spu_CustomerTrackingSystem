@@ -6,6 +6,6 @@
 
         public string DeviceCode { get; set; }
 
-        public string DeviceTypeName { get; set; }
+        public string OS { get; set; }
     }
 }

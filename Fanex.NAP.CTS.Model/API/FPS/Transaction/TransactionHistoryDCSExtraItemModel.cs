@@ -26,12 +26,12 @@
 
         public string RobotTracking { get; set; }
 
-        public string CountryName { get; set; }
+        public string Country { get; set; }
 
-        public string RegionName { get; set; }
+        public string Region { get; set; }
 
-        public string CityName { get; set; }
+        public string City { get; set; }
 
-        public string ISPName { get; set; }
+        public string ISP { get; set; }
     }
 }
