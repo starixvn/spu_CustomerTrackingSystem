@@ -245,7 +245,7 @@
             return
                 (reasonList?.Any(y => (ReasonList ?? "-").Contains(y)) ?? true) &&
                 (reasonGroupIDDic?.Contains(ADetectGroupID.ToString()) ?? true);
-        } 
+        }        
         
         public bool FilterByDanger(MMDetailFilterViewModel filter)
         {
@@ -267,7 +267,7 @@
 
             return isPass;
         }
-
+       
         public bool FilterItem(MMDetailFilterViewModel filter, IEnumerable<string> reasonGroupIDDic, string site)
         {
             var filterData =
@@ -275,7 +275,7 @@
                 FilterBySite(site) &&
                 FilterByDanger(filter) &&
                 (filter.CurrencyIdList?.Contains(CurrencyId) ?? true) &&
-                FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic) &&
+                FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic) &&              
                (filter.HDPList?.Contains(BallHeadHDP()) ?? true) &&
                (filter.BetTeamList?.Contains(BallHeadBetTeam()) ?? true) &&
                (filter.AmountList == null || filter.AmountList.Count() < 2 ? true : Stake >= filter.AmountList[0] && Stake <= filter.AmountList[1]) &&

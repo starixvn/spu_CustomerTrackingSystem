@@ -13,6 +13,7 @@
             this.CurrencyReasonList = new List<CurrencyReasonViewModel>();
             this.ReasonAGroupList = new List<ReasonAGroupViewModel>();
             //this.AGrHDPList = new List<AGrHDPViewModel>();
+            this.AGrMGrBlankList = new List<AGrMGrViewModel>();
             this.Danger = new DangerViewModel();
             this.TicketStatusList = new List<TicketStatusViewModel>();
         }
@@ -28,6 +29,8 @@
         public IEnumerable<ReasonAGroupViewModel> ReasonAGroupList { get; set; }
 
         //public IEnumerable<AGrHDPViewModel> AGrHDPList { get; set; }
+
+        public IEnumerable<AGrMGrViewModel> AGrMGrBlankList { get; set; }
 
         public DangerViewModel Danger { get; set; }
 

@@ -326,50 +326,50 @@
                     #endregion
                 }),
                 Task.Run(() =>
-                    {
-                        #region  Danger - Currency                        
-                        var dangerList = new List<DangerCurrencyViewModel>();
+                {
+                    #region  Danger - Currency                        
+                    var dangerList = new List<DangerCurrencyViewModel>();
 
-                        dangerList.AddRange(tiItemViewList.Where(x=> x.Danger1 == 0 && x.Danger2 == 0 && x.Danger3 == 0 && x.Danger4 == 0 && x.Danger5 == 0).GroupBy(x=>x.Danger1)
-                            .Select(g => new DangerCurrencyViewModel {
-                                    DangerType = 0,
-                                    DangerValue = 0,
-                                    CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
-                                }));
-                        dangerList.AddRange(tiItemViewList.Where(x=> x.Danger1 > 0).GroupBy(x=> new { x.Danger1 })
-                            .Select(g => new DangerCurrencyViewModel {
-                                DangerType = 1,
-                                DangerValue = g.Key.Danger1,
+                    dangerList.AddRange(tiItemViewList.Where(x=> x.Danger1 == 0 && x.Danger2 == 0 && x.Danger3 == 0 && x.Danger4 == 0 && x.Danger5 == 0).GroupBy(x=>x.Danger1)
+                        .Select(g => new DangerCurrencyViewModel {
+                                DangerType = 0,
+                                DangerValue = 0,
                                 CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
                             }));
-                        dangerList.AddRange(tiItemViewList.Where(x=> x.Danger2 > 0).GroupBy(x=> new { x.Danger2 })
-                            .Select(g => new DangerCurrencyViewModel {
-                                DangerType = 2,
-                                DangerValue = g.Key.Danger2,
-                                CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
-                            }));
-                        dangerList.AddRange(tiItemViewList.Where(x=> x.Danger3 > 0).GroupBy(x=> new { x.Danger3 })
-                            .Select(g => new DangerCurrencyViewModel {
-                                DangerType = 3,
-                                DangerValue = g.Key.Danger3,
-                                CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
-                            }));
-                        dangerList.AddRange(tiItemViewList.Where(x=> x.Danger4 > 0).GroupBy(x=> new { x.Danger4 })
-                            .Select(g => new DangerCurrencyViewModel {
-                                DangerType = 4,
-                                DangerValue = g.Key.Danger4,
-                                CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
-                            }));
-                        dangerList.AddRange(tiItemViewList.Where(x=> x.Danger5 > 0).GroupBy(x=> new { x.Danger5 })
-                            .Select(g => new DangerCurrencyViewModel {
-                                DangerType = 5,
-                                DangerValue = g.Key.Danger5,
-                                CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
-                            }));
+                    dangerList.AddRange(tiItemViewList.Where(x=> x.Danger1 > 0).GroupBy(x=> new { x.Danger1 })
+                        .Select(g => new DangerCurrencyViewModel {
+                            DangerType = 1,
+                            DangerValue = g.Key.Danger1,
+                            CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
+                        }));
+                    dangerList.AddRange(tiItemViewList.Where(x=> x.Danger2 > 0).GroupBy(x=> new { x.Danger2 })
+                        .Select(g => new DangerCurrencyViewModel {
+                            DangerType = 2,
+                            DangerValue = g.Key.Danger2,
+                            CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
+                        }));
+                    dangerList.AddRange(tiItemViewList.Where(x=> x.Danger3 > 0).GroupBy(x=> new { x.Danger3 })
+                        .Select(g => new DangerCurrencyViewModel {
+                            DangerType = 3,
+                            DangerValue = g.Key.Danger3,
+                            CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
+                        }));
+                    dangerList.AddRange(tiItemViewList.Where(x=> x.Danger4 > 0).GroupBy(x=> new { x.Danger4 })
+                        .Select(g => new DangerCurrencyViewModel {
+                            DangerType = 4,
+                            DangerValue = g.Key.Danger4,
+                            CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
+                        }));
+                    dangerList.AddRange(tiItemViewList.Where(x=> x.Danger5 > 0).GroupBy(x=> new { x.Danger5 })
+                        .Select(g => new DangerCurrencyViewModel {
+                            DangerType = 5,
+                            DangerValue = g.Key.Danger5,
+                            CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
+                        }));
 
-                        DropdownList.DangerCurrencyList = dangerList;
-                        #endregion
-                    }),
+                    DropdownList.DangerCurrencyList = dangerList;
+                    #endregion
+                }),
                 Task.Run(() => 
                 {
                     #region Score - Currency
@@ -395,7 +395,7 @@
                                 ReasonItems = g.Select(x => new CurrencyReasonItemViewModel { ReasonList = string.Empty}).Distinct(x=>x.ReasonList)
                             });
                     #endregion
-                }),
+                }),                
                 Task.Run(() => 
                 {
                     #region Danger                       
@@ -459,12 +459,17 @@
             {
                 this.DropdownList.CurrencyReasonList = new List<CurrencyReasonViewModel>(){ new CurrencyReasonViewModel{ CurrencyId = 0 } }.Union(fraudTicketModel.DropdownList.CurrencyReasonList);
                 this.DropdownList.ReasonAGroupList = new List<ReasonAGroupViewModel>() { new ReasonAGroupViewModel {  Reason = "-" } }.Union(fraudTicketModel.DropdownList.ReasonAGroupList);
+                this.DropdownList.AGrMGrBlankList = new List<AGrMGrViewModel>()
+                {
+                    new AGrMGrViewModel { AGr = 0, MGrItems = new List<AGrMGrItemViewModel>() { new AGrMGrItemViewModel {  MGr = "-" } }}
+                }.Union(fraudTicketModel.DropdownList.AGrMGrBlankList);
             }
             else
             {
                 this.DropdownList.CurrencyReasonList = fraudTicketModel.DropdownList.CurrencyReasonList;
                 this.DropdownList.ReasonAGroupList = fraudTicketModel.DropdownList.ReasonAGroupList;
-            }           
+                this.DropdownList.AGrMGrBlankList = fraudTicketModel.DropdownList.AGrMGrBlankList;
+            }
         }
     }
 }

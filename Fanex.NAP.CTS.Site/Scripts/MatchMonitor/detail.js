@@ -96,7 +96,8 @@ function MatchMonitorDetail() {
         DangerCurrencyList: [],
         CurrencyReasonList: [],
         ReasonAGroupList: [],
-        AGrMGrList: [],     
+        AGrMGrBlankList: [],
+        AGrMGrList: [],
         Danger: null,
         HDPList: [],
         TicketStatusList: []
@@ -601,6 +602,16 @@ function MatchMonitorDetail() {
         return false;
     }
 
+    function CheckSelectedFull(element) {
+        let opt = $("option", element).length;
+        let optSelect = $("option:selected", element).length;
+
+        if (opt > 0 && opt == optSelect) {
+            return true;
+        }
+        return false;
+    }
+
     function CheckSelected(element) {
         let opt = $("option", element).length;
         let optSelect = $("option:selected", element).length;        
@@ -732,9 +743,10 @@ function MatchMonitorDetail() {
             cacheFilterDependOn.SubscriberTypeCurrencyList = data.DropdownList.SubscriberTypeCurrencyList;
             cacheFilterDependOn.ScoreCurrencyList = data.DropdownList.ScoreCurrencyList;
             cacheFilterDependOn.DangerCurrencyList = data.DropdownList.DangerCurrencyList;
-            cacheFilterDependOn.CurrencyReasonList = data.DropdownList.CurrencyReasonList;
-            cacheFilterDependOn.ReasonAGroupList = data.DropdownList.ReasonAGroupList;           
             cacheFilterDependOn.Danger = data.DropdownList.Danger;
+            cacheFilterDependOn.CurrencyReasonList = data.DropdownList.CurrencyReasonList;
+            cacheFilterDependOn.ReasonAGroupList = data.DropdownList.ReasonAGroupList;   
+            cacheFilterDependOn.AGrMGrBlankList = data.DropdownList.AGrMGrBlankList;            
             cacheFilterDependOn.TicketStatusList = data.DropdownList.TicketStatusList;
         }
         
@@ -956,7 +968,6 @@ function MatchMonitorDetail() {
     function FetchFilterMatchMonitorDetail(isRefreshcbbSite) {
         recordsTotalGlobal = 0;
 
-
         posClickGlobal++;
         if (xhr) {
             xhr.onreadystatechange = null;
@@ -1041,11 +1052,11 @@ function MatchMonitorDetail() {
                 domElements.tblMMAwayTeam.DataTable().rows.add(data.AwayMatchItemList).draw(false);
             }         
            
-            RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsTotalGlobal);
+            RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsTotalGlobal);            
 
-            if (!cacheFilterDependOn.MGrHDPList) {
-                SetupMGroupFilter([]);
-            }
+            //SetupMGroupFilter(cacheFilterDependOn.AGrMGrList);
+
+            FilterUIGridByMGr();
         }
     }
 
@@ -1178,7 +1189,7 @@ function MatchMonitorDetail() {
                 if (response?.data?.ItemList) {  
                     cacheMGroup.isActive = true;
                     cacheFilterDependOn.AGrMGrList = response.dependOnMGr.AGrMGrList;          
-                    AGrOnChange();
+                    AGrOnChange(false);
 
                     BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam.DataTable(), itemList);
                     BindChangeGroupAssWithOptions(domElements.tblMMAwayTeam.DataTable(), itemList);
@@ -1186,7 +1197,12 @@ function MatchMonitorDetail() {
                     cacheMGroup.itemMMHomeTeam = domElements.tblMMHomeTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
                     cacheMGroup.itemMMAwayTeam = domElements.tblMMAwayTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
                     
-                    FilterUIGrid();
+                    //FilterUIGrid();
+                    let totalItem = cacheMGroup.itemMMHomeTeam.length + cacheMGroup.itemMMAwayTeam.length;
+
+                    RefreshBreadcrumbTotalTickets(totalItem, totalItem); 
+
+                    FilterUIGridByMGr();
                 }
             },
             complete: function (response) {
@@ -1333,6 +1349,34 @@ function MatchMonitorDetail() {
         })
     }
 
+    function FilterUIGridByMGr() {
+        if (CheckSelectedFull(domElements.cbbMGroup)) {
+            return;
+        }
+
+        let totalItem = 0;
+
+        //let itemMMHomeTeamFilter = cacheMGroup.itemMMHomeTeam.filter(function (item) {
+        //    return domElements.cbbMGroup.val().find(x => x == item.MDetectGroup);
+        //});
+        //let itemMMAwayTeamFilter = cacheMGroup.itemMMAwayTeam.filter(function (item) {
+        //    return domElements.cbbMGroup.val().find(x => x == item.MDetectGroup);
+        //});
+
+        let itemMMHomeTeamFilter = domElements.tblMMHomeTeam.DataTable().data().filter(function (item) {
+            return domElements.cbbMGroup.val().find(x => x == item.MDetectGroup);
+        });
+        let itemMMAwayTeamFilter = domElements.tblMMAwayTeam.DataTable().data().filter(function (item) {
+            return domElements.cbbMGroup.val().find(x => x == item.MDetectGroup);
+        });
+
+        domElements.tblMMHomeTeam.DataTable().clear().rows.add(itemMMHomeTeamFilter).draw();
+        domElements.tblMMAwayTeam.DataTable().clear().rows.add(itemMMAwayTeamFilter).draw();
+        totalItem = itemMMHomeTeamFilter.length + itemMMAwayTeamFilter.length;
+
+        RefreshBreadcrumbTotalTickets(totalItem, totalItem); 
+    }
+
     function FilterUIGrid() {
         let totalItem = 0;
     
@@ -1344,6 +1388,28 @@ function MatchMonitorDetail() {
         totalItem = itemMMHomeTeamFilter.length + itemMMAwayTeamFilter.length;
 
         RefreshBreadcrumbTotalTickets(totalItem, totalItem);       
+    }
+
+    function ShowAllDataGrid() {
+        if (!ValidateTicketStatus()) {
+            return;
+        }
+        if (ValidationFilter()) {
+            CacheSelectDataFilter();
+            domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
+            
+            if (!cacheMGroup.isActive) {
+                FetchMatchMonitorDetail(currentType);
+
+                AGrOnChange(true);
+            }
+            else {
+                domElements.inputHomeSelectAll.prop('checked', false);
+                domElements.inputAwaySelectAll.prop('checked', false);                               
+            }
+
+            FilterUIGridByMGr();
+        }
     }
 
     //#endregion Detect Association
@@ -1477,16 +1543,6 @@ function MatchMonitorDetail() {
         domElements.cbbSites.append(`<option selected value='L'>Licensee</option>`);
 
         domElements.cbbSites.val(SiteViewType.SiteAll);
-    }
-
-    function RestoreCbbHDPBetTeam(data) {
-        domElements.cbbHDPBetTeam.multiselect().empty();
-        if (data.length > 0) {
-            data.forEach(item => {
-                domElements.cbbHDPBetTeam.append(`<option selected value='${item}'>${item}</option>`);
-            });
-        }
-        domElements.cbbHDPBetTeam.multiselect("refresh");
     }
 
     function MarketOnChange() {
@@ -1705,42 +1761,67 @@ function MatchMonitorDetail() {
         }
     }
 
-    function AGrOnChange() {
+    function AGrOnChange(isGetDependMGrBlank) {
         let aGrOptions = $("option", domElements.cbbAGroup);
 
         if (aGrOptions.length == 0) {
             domElements.cbbMGroup.multiselect().empty();
-        }
-
-        if (cacheFilterDependOn.AGrMGrList.length > 0) {
-            let mGrItems = [];
-
-            $("option:selected", domElements.cbbAGroup).each(function () {
-                let aGr = $(this).text();
-                if (aGr == "-") aGr = 0;
-
-                $.each(cacheFilterDependOn.AGrMGrList, function (idx, item) {
-                    if (item["AGr"] == aGr) {
-                        item["MGrItems"].map(function (curr) {
-                            if (mGrItems.findIndex(y => y == curr.MGr) == -1)
-                                mGrItems.push(curr.MGr);
-                        });
-
-                        return false;
-                    }
-                })
-            })
-
-            domElements.cbbMGroup.multiselect().empty();
-
-            if (mGrItems.length > 0) {
-                mGrItems.forEach(item => {
-                    domElements.cbbMGroup.append(`<option selected value='${item}'>${item}</option>`);
-                });
-            }
             domElements.cbbMGroup.multiselect("refresh");
+            return;
         }
-    }    
+
+        let mGrBlankItems = [];        
+        if (isGetDependMGrBlank && cacheFilterDependOn.AGrMGrBlankList.length > 0) {
+            mGrBlankItems = GetDependOnAGrMGr(cacheFilterDependOn.AGrMGrBlankList);
+        }
+
+        let mGrItems = [];
+        if (cacheFilterDependOn.AGrMGrList.length > 0) {    
+            mGrItems = GetDependOnAGrMGr(cacheFilterDependOn.AGrMGrList);                     
+        }
+
+        domElements.cbbMGroup.multiselect().empty();
+
+        if (mGrBlankItems.length > 0) {
+            mGrBlankItems.forEach(item => {
+                domElements.cbbMGroup.append(`<option selected value='${item}'>${item}</option>`);
+            });
+        }
+
+        if (mGrItems.length > 0) {
+            mGrItems.forEach(item => {
+                domElements.cbbMGroup.append(`<option selected value='${item}'>${item}</option>`);
+            });
+        }
+        domElements.cbbMGroup.multiselect("refresh");
+    } 
+
+    function GetDependOnAGrMGr(data) {
+        let mGrItems = [];
+
+        $("option:selected", domElements.cbbAGroup).each(function () {
+            let aGr = $(this).text();
+            if (aGr == "-") aGr = 0;
+
+            $.each(data, function (idx, item) {
+                if (item["AGr"] == aGr) {
+                    item["MGrItems"].map(function (curr) {
+                        if (mGrItems.findIndex(y => y == curr.MGr) == -1) {
+                            if (curr.MGr == 0) {
+                                mGrItems.push("-");
+                            } else {
+                                mGrItems.push(curr.MGr);
+                            }
+                        }
+                    });
+
+                    return false;
+                }
+            })
+        })
+
+        return mGrItems;
+    }
 
     function AddFilterLoading() {
         domElements.divFilterMonitor.addClass('loading-background');
@@ -1828,8 +1909,7 @@ function MatchMonitorDetail() {
         domElements.cbbDanger.change(function () { DangerOnChange(); });
         domElements.cbbCurrency.change(function () { CurrencyOnChange(); });
         domElements.cbbReason.change(function () { ReasonOnChange(); });
-        domElements.cbbAGroup.change(function () { AGrOnChange(); });
-        domElements.cbbMGroup.change(function () { MGroupOnChange(); });
+        domElements.cbbAGroup.change(function () { AGrOnChange(true); });
 
         try {
             isSupportShowAllTickets = JSON.parse(domElements?.isSupportShowAllTickets?.toLowerCase());
@@ -1880,13 +1960,14 @@ function MatchMonitorDetail() {
                 domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);                
 
                 if (!cacheMGroup.isActive) {
-                    FetchMatchMonitorDetail(currentType);
+                    FetchMatchMonitorDetail(currentType);                   
                 }
                 else {
                     domElements.inputHomeSelectAll.prop('checked', false);
                     domElements.inputAwaySelectAll.prop('checked', false);
-                    FilterUIGrid();
-                }
+                    //FilterUIGrid();         
+                    FilterUIGridByMGr();
+                }                
             }
         })
 
@@ -1899,10 +1980,9 @@ function MatchMonitorDetail() {
                 cacheMGroup.isActive = false;
                 domElements.inputHomeSelectAll.prop('checked', false);
                 domElements.inputAwaySelectAll.prop('checked', false);
-
-                RestoreCbbHDPBetTeam(cacheFilterDependOn.HDPList);
-
-                domElements.btnGenerateDetail.click();
+           
+                //domElements.btnGenerateDetail.click();
+                ShowAllDataGrid();
                 
                 cacheMGroup.selectMgroup = {};
             }

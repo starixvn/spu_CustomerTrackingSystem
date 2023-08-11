@@ -32,15 +32,9 @@
                 .Select(g => new AGrMGrViewModel
                 {
                     AGr = g.Key,
-                    MGrItems = g.Select(x => new AGrMGrItemViewModel { MGr = x.MGr }).Distinct(x=>x.MGr)
+                    MGrItems = g.Select(x => new AGrMGrItemViewModel { MGr = x.MGr.ToString() }).Distinct(x=>x.MGr)
                 });
-
-            this.MGrHDPList = newMGr.GroupBy(x => x.MGr)
-                .Select(g => new MGrHDPViewModel
-                {
-                    MGr = g.Key,
-                    HDPItems = g.Select(x => new MGrHDPItemViewModel { HDP = Math.Abs(x.HDP) }).Distinct(x => x.HDP)
-                });
+            
         }
     }
 }

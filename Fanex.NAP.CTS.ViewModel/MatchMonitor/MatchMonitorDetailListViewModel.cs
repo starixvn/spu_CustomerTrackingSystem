@@ -243,7 +243,17 @@
                                 AGroupItems = g.Select(x => new ReasonAGroupItemViewModel { AGroupID = x.ADetectGroupID }).Distinct()
                             });
                         #endregion
-                    }),                    
+                    }),
+                    Task.Run(() => {
+                        #region AGr - MGr Blank
+                        DropdownList.AGrMGrBlankList = mdItemList.GroupBy(x=>x.ADetectGroupID)
+                            .Select(g=>new AGrMGrViewModel{
+                                 AGr = g.Key,
+                                 MGrItems = new List<AGrMGrItemViewModel>() { new AGrMGrItemViewModel {  MGr = "-" } }
+                            });
+
+                        #endregion
+                    }),
                     Task.Run(() =>
                     {
                         #region Danger                       

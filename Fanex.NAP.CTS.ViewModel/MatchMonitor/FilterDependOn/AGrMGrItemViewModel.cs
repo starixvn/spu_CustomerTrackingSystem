@@ -4,6 +4,6 @@
 
         public AGrMGrItemViewModel() { }
 
-        public int MGr { get; set; }
+        public string MGr { get; set; }
     }
 }
