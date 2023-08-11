@@ -137,14 +137,20 @@
             {
                 QueryType = (int)MatchMonitorQueryType.TicketFraud,
                 EventDate = para.EventDate,
-                ListTransId = transIds
+                ListTransId = transIds,
+                MatchID = para.MatchID,
+                BetType = para.BetTypeID,
+                BetID = para.BetID,
+                IsLive = para.LiveIndicator ? 1 : 0
             };
 
             return repository.Fetch<TicketDetailModel>(criteria);
         }
 
         public TicketDetailViewModel GetAllTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int batchSize = 1000, string transIds = null)
-        {
+        {                                   
+            var scoreList = (filter.ScoreList == null || !para.LiveIndicator) ? null : string.Join(",", filter.ScoreList);
+
             var criteria = new TicketDetailGetCriteria()
             {
                 QueryType = (int)MatchMonitorQueryType.TicketAll,
@@ -157,22 +163,22 @@
                 BatchSize = batchSize,
                 IsLicensee = para.Sites == MMSites.All ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
                 ListCurrency = filter?.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList),              
-                ListScore = filter?.ScoreList == null ? null : string.Join(",", filter.ScoreList),
+                ListScore = scoreList,
                 ListDanger = GenerateDangerJson(filter),
                 ListStatus = filter?.TicketStatusList == null ? null : string.Join(",", filter.TicketStatusList),
                 ListTransId = transIds
-            };           
+            };
 
             if (para.BetTypeID == (int)MatchMonitorBetType.TotalGoal
                 || para.BetTypeID == (int)MatchMonitorBetType.FirstTotalGoal
                 || para.BetTypeID == (int)MatchMonitorBetType.CorrectScore
                 || para.BetTypeID == (int)MatchMonitorBetType.FirstCorrectScore)
-            {
-                criteria.ListHDPBetTeam = filter?.HDPList == null ? null : string.Join(",", filter.HDPList);
+            {                
+                criteria.ListHDPBetTeam = filter?.BetTeamList == null ? null : string.Join(",", filter.BetTeamList);
             }
             else
             {
-                criteria.ListHDPBetTeam = filter?.BetTeamList == null ? null : string.Join(",", filter.BetTeamList);
+                criteria.ListHDPBetTeam = filter?.HDPList == null ? null : string.Join(",", filter.HDPList);
             }
 
             if (filter?.AmountList?.Count >= 2)
@@ -191,18 +197,7 @@
         }
 
         private string GenerateDangerJson(MMDetailFilterViewModel filter)
-        {
-            var isPass = (filter.Danger1List?.Any() ?? false) &&
-                (filter.Danger2List?.Any() ?? false) &&
-                (filter.Danger3List?.Any() ?? false) &&
-                (filter.Danger4List?.Any() ?? false) &&
-                (filter.Danger5List?.Any() ?? false);
-
-            if (!isPass)
-            {
-                return null;
-            }
-
+        {           
             var jsonDanger = new List<MMDetailDangerModel>();
 
             if (filter.IsDangerNone)

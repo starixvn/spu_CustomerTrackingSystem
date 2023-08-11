@@ -71,7 +71,7 @@
                     return isLiveIndicator ? string.Format($"{x.LiveHomeScore} - {x.LiveAwayScore}") : "-";
                 }).Distinct(x=>x).OrderBy(x => x).ToList();
 
-                this.SubscriberTypeList = mtFilterBySite.Select(x => { return x.IsLicensee ? "L" : "C"; }).Distinct().ToList();
+                //this.SubscriberTypeList = mtFilterBySite.Select(x => { return x.IsLicensee ? "L" : "C"; }).Distinct().ToList();
                 
                 var groupList = fraudFilter.GroupList?.ToList() ?? new List<GroupInfoViewModel>();
                 //var reasonGroupIDDic = fraudFilter?.ReasonGroupIDDic ?? new Dictionary<string, List<int>>();
@@ -105,8 +105,6 @@
 
                 // Group List
                 //this.GroupList = groupList?.Where(x => x.GroupID != null ? agroup.Contains(x.GroupID ?? 0) : false).ToList();
-
-                var testAGrHDP = "";
             }
             else
             {
@@ -295,26 +293,50 @@
 
             var tasks = new Task[]
             {
-                Task.Run(() => 
+                Task.Run(() =>
                 {
-                    #region Score - Currency
-                    this.DropdownList.ScoreCurrencyList = tiItemViewList.GroupBy(x => x.Score)
-                            .Select(g => new ScoreCurrencyViewModel
+                    #region SubscriberType - Currency                         
+                        var subscriberTypeCurrency = new List<SubscriberTypeCurrencyViewModel>();
+                        
+                        subscriberTypeCurrency.AddRange(tiItemViewList.GroupBy(x => x.IsLicensee)
+                            .Select(g => new SubscriberTypeCurrencyViewModel
                             {
-                                Score = g.Key,
-                                CurrencyItems = g.Select(x =>
+                                SubscriberType = g.Key == true ? "L" : "C",
+                                CurrencyItems = g.Select(x=>
                                 {
                                     var isNotValid = string.IsNullOrEmpty(x.CurrencyName) || x.CurrencyId == 0;
-                                    return new ScoreCurrencyItemViewModel { CurrencyId = isNotValid ? -1 : x.CurrencyId, CurrencyName = isNotValid ? "-" : x.CurrencyName };
+                                    return new SubscriberTypeCurrencyItemViewModel { CurrencyId = isNotValid ? -1 : x.CurrencyId, CurrencyName = isNotValid ? "-" : x.CurrencyName };
                                 }).Distinct(x => x.CurrencyId)
-                            });
+                            }));
+
+                        if (subscriberTypeCurrency.Count == 2)
+                        {
+                            subscriberTypeCurrency.Insert(0, new SubscriberTypeCurrencyViewModel{
+                                 SubscriberType = "A",
+                                 CurrencyItems = tiItemList.Select(x=>
+                                    {
+                                        var isNotValid = string.IsNullOrEmpty(x.CurrencyName) || x.CurrencyId == 0;
+                                        return new SubscriberTypeCurrencyItemViewModel { CurrencyId = isNotValid ? -1 : x.CurrencyId, CurrencyName = isNotValid ? "-" : x.CurrencyName };
+                                    }).Distinct(x => x.CurrencyId)
+                            });                            
+                        }
+
+                        DropdownList.SubscriberTypeCurrencyList = subscriberTypeCurrency;
+
                     #endregion
                 }),
-                Task.Run(() => 
-                {
-                    #region Currency - Danger
-                    var dangerList = new List<DangerCurrencyViewModel>();
-                       dangerList.AddRange(tiItemViewList.Where(x=> x.Danger1 > 0).GroupBy(x=> new { x.Danger1 })
+                Task.Run(() =>
+                    {
+                        #region  Danger - Currency                        
+                        var dangerList = new List<DangerCurrencyViewModel>();
+
+                        dangerList.AddRange(tiItemViewList.Where(x=> x.Danger1 == 0 && x.Danger2 == 0 && x.Danger3 == 0 && x.Danger4 == 0 && x.Danger5 == 0).GroupBy(x=>x.Danger1)
+                            .Select(g => new DangerCurrencyViewModel {
+                                    DangerType = 0,
+                                    DangerValue = 0,
+                                    CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
+                                }));
+                        dangerList.AddRange(tiItemViewList.Where(x=> x.Danger1 > 0).GroupBy(x=> new { x.Danger1 })
                             .Select(g => new DangerCurrencyViewModel {
                                 DangerType = 1,
                                 DangerValue = g.Key.Danger1,
@@ -345,9 +367,24 @@
                                 CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
                             }));
 
-                        this.DropdownList.DangerCurrencyList = dangerList;
+                        DropdownList.DangerCurrencyList = dangerList;
+                        #endregion
+                    }),
+                Task.Run(() => 
+                {
+                    #region Score - Currency
+                    this.DropdownList.ScoreCurrencyList = tiItemViewList.GroupBy(x => x.Score)
+                            .Select(g => new ScoreCurrencyViewModel
+                            {
+                                Score = g.Key,
+                                CurrencyItems = g.Select(x =>
+                                {
+                                    var isNotValid = string.IsNullOrEmpty(x.CurrencyName) || x.CurrencyId == 0;
+                                    return new ScoreCurrencyItemViewModel { CurrencyId = isNotValid ? -1 : x.CurrencyId, CurrencyName = isNotValid ? "-" : x.CurrencyName };
+                                }).Distinct(x => x.CurrencyId)
+                            });
                     #endregion
-                }),
+                }),              
                 Task.Run(() =>
                 {
                     #region Currency - Reason
@@ -417,21 +454,17 @@
             {
                 this.DropdownList = new MMDetailFilterDropdownListViewModel();
             }
-
-            this.DropdownList.SubscriberTypeCurrencyList = fraudTicketModel.DropdownList.SubscriberTypeCurrencyList;            
-            
+         
             if (fraudTicketModel.RecordsTotal < RecordsTotal && fraudTicketModel.DropdownList.CurrencyReasonList != null)
             {
-                this.DropdownList.CurrencyReasonList = new List<CurrencyReasonViewModel>(){ new CurrencyReasonViewModel{ CurrencyId = 0 } }.Union(fraudTicketModel.DropdownList.CurrencyReasonList);                
-
+                this.DropdownList.CurrencyReasonList = new List<CurrencyReasonViewModel>(){ new CurrencyReasonViewModel{ CurrencyId = 0 } }.Union(fraudTicketModel.DropdownList.CurrencyReasonList);
+                this.DropdownList.ReasonAGroupList = new List<ReasonAGroupViewModel>() { new ReasonAGroupViewModel {  Reason = "-" } }.Union(fraudTicketModel.DropdownList.ReasonAGroupList);
             }
             else
             {
-                this.DropdownList.CurrencyReasonList = fraudTicketModel.DropdownList.CurrencyReasonList;              
-            }
-            this.DropdownList.DangerCurrencyList = fraudTicketModel.DropdownList.DangerCurrencyList;
-            this.DropdownList.ReasonAGroupList = fraudTicketModel.DropdownList.ReasonAGroupList;
-            
+                this.DropdownList.CurrencyReasonList = fraudTicketModel.DropdownList.CurrencyReasonList;
+                this.DropdownList.ReasonAGroupList = fraudTicketModel.DropdownList.ReasonAGroupList;
+            }           
         }
     }
 }

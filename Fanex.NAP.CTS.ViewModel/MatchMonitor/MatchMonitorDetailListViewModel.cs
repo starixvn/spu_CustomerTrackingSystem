@@ -149,15 +149,7 @@
                     {
                         #region SubscriberType - Currency                         
                         var subscriberTypeCurrency = new List<SubscriberTypeCurrencyViewModel>();
-                        subscriberTypeCurrency.Add(new SubscriberTypeCurrencyViewModel{
-                            SubscriberType = "A",
-                            CurrencyItems = mdItemList.Select(x=>
-                                {
-                                    var isNotValid = string.IsNullOrEmpty(x.CurrencyName) || x.CurrencyId == 0;
-                                    return new SubscriberTypeCurrencyItemViewModel { CurrencyId = isNotValid ? -1 : x.CurrencyId, CurrencyName = isNotValid ? "-" : x.CurrencyName };
-                                }).Distinct(x => x.CurrencyId)
-                        });
-
+                        
                         subscriberTypeCurrency.AddRange(mdItemList.GroupBy(x => x.SubscriberType)
                             .Select(g => new SubscriberTypeCurrencyViewModel
                             {
@@ -168,6 +160,18 @@
                                     return new SubscriberTypeCurrencyItemViewModel { CurrencyId = isNotValid ? -1 : x.CurrencyId, CurrencyName = isNotValid ? "-" : x.CurrencyName };
                                 }).Distinct(x => x.CurrencyId)
                             }));
+
+                        if (subscriberTypeCurrency.Count == 2)
+                        {
+                            subscriberTypeCurrency.Insert(0, new SubscriberTypeCurrencyViewModel {
+                                SubscriberType = "A",
+                                CurrencyItems = mdItemList.Select(x=>
+                                    {
+                                        var isNotValid = string.IsNullOrEmpty(x.CurrencyName) || x.CurrencyId == 0;
+                                        return new SubscriberTypeCurrencyItemViewModel { CurrencyId = isNotValid ? -1 : x.CurrencyId, CurrencyName = isNotValid ? "-" : x.CurrencyName };
+                                    }).Distinct(x => x.CurrencyId)
+                            });
+                        }
 
                         DropdownList.SubscriberTypeCurrencyList = subscriberTypeCurrency;
 
@@ -239,20 +243,7 @@
                                 AGroupItems = g.Select(x => new ReasonAGroupItemViewModel { AGroupID = x.ADetectGroupID }).Distinct()
                             });
                         #endregion
-                    }),
-                    //Task.Run(() =>
-                    //{
-                    //    #region AGr - HDP
-                        
-                    //    DropdownList.AGrHDPList = mdItemList.GroupBy(x=>x.ADetectGroupID)
-                    //        .Select(g=> new AGrHDPViewModel
-                    //        {
-                    //             AGr = g.Key,
-                    //             HDPItems = g.Select(x=> new AGrHDPItemViewModel{ HDP = Math.Abs(x.HDP)}).Distinct(x=>x.HDP)
-                    //        });
-
-                    //    #endregion
-                    //}),
+                    }),                    
                     Task.Run(() =>
                     {
                         #region Danger                       

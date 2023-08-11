@@ -327,7 +327,7 @@ function MatchMonitorDetail() {
         element.multiselect("refresh");
     }   
 
-    function SetupGroupFilter(data) {
+    function SetupAGroupFilter(data) {
         domElements.cbbAGroup.multiselect().empty();
 
         if (data) {
@@ -340,22 +340,7 @@ function MatchMonitorDetail() {
         }
 
         domElements.cbbAGroup.multiselect("refresh");
-    }
-
-    function SetupAGroupFilter(data) {
-        domElements.cbbAGroup.multiselect().empty();
-
-        if (data) {
-            //if (data.length == 0)
-            //    domElements.cbbAGroup.append(`<option selected value='0'>-</option>`);
-
-            data.forEach(element => {
-                domElements.cbbAGroup.append(`<option selected value='${element}'>${element == "0" ? "-" : element}</option>`);
-            });
-        }
-
-        domElements.cbbAGroup.multiselect("refresh");
-    }
+    }   
 
     function SetupMGroupFilter(data) {
         domElements.cbbMGroup.multiselect().empty();
@@ -400,6 +385,21 @@ function MatchMonitorDetail() {
         optgroup += "</optgroup>";
         
         return optgroup;
+    }
+
+    function SetupSubscriberTypeFilter(data) {
+        domElements.cbbSites.empty();
+        if (data) {           
+            data.forEach(item => {
+                let subName = "All";
+                if (item.SubscriberType == "C") {
+                    subName = "Credit";
+                } else if (item.SubscriberType == "L") {
+                    subName = "Licensee";
+                }               
+                domElements.cbbSites.append(`<option value='${item.SubscriberType}'>${subName}</option>`);
+            });
+        }
     }
 
     function SetupTicketStatusFilter(data) {        
@@ -588,32 +588,61 @@ function MatchMonitorDetail() {
             }
         }
         return domElements.betIDToString;
+    }    
+
+    function ValidateTicketStatus() {
+        let opt = $("option", domElements.cbbTicketsStatus).length;
+        if (opt > 0) {
+            return true;           
+        }
+        domElements.tblMMHomeTeam.DataTable().clear().draw(false);
+        domElements.tblMMAwayTeam.DataTable().clear().draw(false);  
+
+        return false;
+    }
+
+    function CheckSelected(element) {
+        let opt = $("option", element).length;
+        let optSelect = $("option:selected", element).length;        
+
+        if (opt > 0 && optSelect > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    function ValidateCbb(element) {
+        if (!CheckSelected(element)) {
+            element.parent().find('button').addClass('border-error');
+            return false;
+        } else {
+            element.parent().find('button').removeClass('border-error');
+            return true;
+        }
     }
 
     function ValidationFilter() {
         let result = true;
 
-        if (GetSelectDataFilter(domElements.cbbCurrency) == '') {
+        if (!ValidateCbb(domElements.cbbMatchScore)) {
             result = false;
         }
-
-        if (GetSelectDataFilter(domElements.cbbHDPBetTeam) == '') {
+        if (!ValidateCbb(domElements.cbbDanger)) {
             result = false;
         }
-
-        if (GetSelectDataFilter(domElements.cbbMatchScore) == '') {
+        if (!ValidateCbb(domElements.cbbCurrency)) {
             result = false;
         }
-
-        if (GetSelectDataFilter(domElements.cbbReason) == '') {
+        if (!ValidateCbb(domElements.cbbReason)) {
             result = false;
         }
-
-        if (GetSelectDataFilter(domElements.cbbAGroup) == '') {
+        if (!ValidateCbb(domElements.cbbAGroup)) {
             result = false;
         }
-
-        if (GetSelectDataFilter(domElements.cbbTicketsStatus) == '') {
+        if (!ValidateCbb(domElements.cbbHDPBetTeam)) {           
+            result = false;
+        }
+        if (!ValidateCbb(domElements.cbbTicketsStatus)) {
             result = false;
         }
 
@@ -623,7 +652,7 @@ function MatchMonitorDetail() {
         }
 
         return result;
-    }  
+    }
 
     function GetDangerSelectDataFilter(dangerType) {   
         let dangerValues = [];
@@ -680,7 +709,7 @@ function MatchMonitorDetail() {
 
         SetupFilter(domElements.cbbReason, data.ReasonList);
 
-        SetupGroupFilter(data.GroupList);
+        SetupAGroupFilter(data.GroupList);
 
         RefreshReasonInfo(data.ReasonList);
 
@@ -690,29 +719,16 @@ function MatchMonitorDetail() {
             domElements.cbbMGroup.multiselect("refresh");
         } else {
             domElements.cbbMGroup.append(`<option selected value='0'>-</option>`);
-            domElements.cbbMGroup.multiselect("refresh");
-
-            if (isRefreshcbbSite) {
-                domElements.cbbSites.empty();
-                if (data.SubscriberTypeList) {
-                    if (data.SubscriberTypeList.length == 2) {
-                        domElements.cbbSites.prop('disabled', false);
-                        domElements.cbbSites.append(`<option selected value='A'>All</option>`);
-                    } else if (data.SubscriberTypeList.length == 1) {
-                        domElements.cbbSites.prop('disabled', true);
-                    }
-                    data.SubscriberTypeList.forEach(item => {
-                        let subName = item == "C" ? "Credit" : "Licensee";
-                        domElements.cbbSites.append(`<option value='${item}'>${subName}</option>`);
-                    });
-                }
-            }            
+            domElements.cbbMGroup.multiselect("refresh");                
         }
 
         if (data.DropdownList) {
             SetupDanger(data.DropdownList.Danger);
             SetupTicketStatusFilter(data.DropdownList.TicketStatusList);
 
+            if (data.RecordsTotal > 0 && isRefreshcbbSite) {
+                SetupSubscriberTypeFilter(data.DropdownList.SubscriberTypeCurrencyList);
+            }
             cacheFilterDependOn.SubscriberTypeCurrencyList = data.DropdownList.SubscriberTypeCurrencyList;
             cacheFilterDependOn.ScoreCurrencyList = data.DropdownList.ScoreCurrencyList;
             cacheFilterDependOn.DangerCurrencyList = data.DropdownList.DangerCurrencyList;
@@ -818,7 +834,7 @@ function MatchMonitorDetail() {
                     IsSupportShowAllTickets: isSupportShowAllTickets,
                     IsFilter: true,    
                     TypeOfTickets: typeOfTickets,
-                    ScoreList: GetSelectDataFilter(domElements.cbbMatchScore, true),
+                    ScoreList: domElements.sportType == 1 ? GetSelectDataFilter(domElements.cbbMatchScore, true) : undefined,
                     Sites: domElements.cbbSites.val(),
                     IsDangerNone: GetDangerSelectDataFilter(0).length > 0,
                     Danger1List: GetDangerSelectDataFilter(1),
@@ -1441,6 +1457,38 @@ function MatchMonitorDetail() {
 
     //#region Event OnChange
 
+    function ChangeCbbTypeOfTickets() {
+        let betTypeSelected = $("option:selected", domElements.cbbBetType);
+      
+        if (betTypeSelected.attr('data-is-support-suspicious') == 'false') {
+            domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketAll);
+            domElements.cbbTypeOfTickets.prop('disabled', true);
+        } else {
+            domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
+            domElements.cbbTypeOfTickets.prop('disabled', false);
+        }
+    }
+
+    function RestoreDefaulCbbSite() {
+        domElements.cbbSites.prop('disabled', false);
+        domElements.cbbSites.empty();
+        domElements.cbbSites.append(`<option selected value='A'>All</option>`);
+        domElements.cbbSites.append(`<option selected value='C'>Credit</option>`);
+        domElements.cbbSites.append(`<option selected value='L'>Licensee</option>`);
+
+        domElements.cbbSites.val(SiteViewType.SiteAll);
+    }
+
+    function RestoreCbbHDPBetTeam(data) {
+        domElements.cbbHDPBetTeam.multiselect().empty();
+        if (data.length > 0) {
+            data.forEach(item => {
+                domElements.cbbHDPBetTeam.append(`<option selected value='${item}'>${item}</option>`);
+            });
+        }
+        domElements.cbbHDPBetTeam.multiselect("refresh");
+    }
+
     function MarketOnChange() {
         AddFilterLoading();
 
@@ -1449,6 +1497,8 @@ function MatchMonitorDetail() {
         let txtMarket = $("option:selected", domElements.cbbMarket).text();
 
         domElements.spanMarketInfo.text(txtMarket);
+
+        ChangeCbbTypeOfTickets();
 
         currentType = Number(domElements.cbbTypeOfTickets.val());
 
@@ -1462,18 +1512,11 @@ function MatchMonitorDetail() {
     function BetTypeOnChange() {
         AddFilterLoading();
 
-        RestoreDefaulCbbSite();
-
-        let betTypeSelected = $("option:selected", domElements.cbbBetType);
-        let txtBetType = betTypeSelected.text();
+        RestoreDefaulCbbSite();       
        
-        if (betTypeSelected.attr('data-is-support-suspicious') == 'false') {
-            domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketAll);
-            domElements.cbbTypeOfTickets.prop('disabled', true);
-        } else {
-            domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
-            domElements.cbbTypeOfTickets.prop('disabled', false);
-        }
+        ChangeCbbTypeOfTickets();
+
+        let txtBetType = $("option:selected", domElements.cbbBetType).text();     
 
         domElements.spanSportBetTypeInfo.text(`${domElements.sportName} - ${txtBetType} -`);
 
@@ -1503,27 +1546,7 @@ function MatchMonitorDetail() {
 
         RemoveFilterLoading(); 
     }
-
-    function RestoreDefaulCbbSite() {
-        domElements.cbbSites.prop('disabled', false);
-        domElements.cbbSites.empty();
-        domElements.cbbSites.append(`<option selected value='A'>All</option>`);
-        domElements.cbbSites.append(`<option selected value='C'>Credit</option>`);
-        domElements.cbbSites.append(`<option selected value='L'>Licensee</option>`);
-
-        domElements.cbbSites.val(SiteViewType.SiteAll);
-    }
-
-    function RestoreCbbHDPBetTeam(data) {
-        domElements.cbbHDPBetTeam.multiselect().empty();
-        if (data.length > 0) {
-            data.forEach(item => {
-                domElements.cbbHDPBetTeam.append(`<option selected value='${item}'>${item}</option>`);
-            });
-        }
-        domElements.cbbHDPBetTeam.multiselect("refresh");
-    }
-
+    
     function MatchScoreOnChange() {
         if (cacheFilterDependOn.ScoreCurrencyList) {
             let currencyItems = [];
@@ -1533,7 +1556,10 @@ function MatchMonitorDetail() {
                 
                 $.each(cacheFilterDependOn.ScoreCurrencyList, function (idx, item) {
                     if (item["Score"] == currentScore) {
-                        item["CurrencyItems"].map(function (curr) { currencyItems.push(curr); });
+                        item["CurrencyItems"].map(function (curr) {                           
+                            if (currencyItems.findIndex(y => y.CurrencyId == curr.CurrencyId) == -1)
+                                currencyItems.push(curr);
+                        });
                         return false;
                     }
                 });
@@ -1684,7 +1710,6 @@ function MatchMonitorDetail() {
 
         if (aGrOptions.length == 0) {
             domElements.cbbMGroup.multiselect().empty();
-            domElements.cbbHDPBetTeam.multiselect().empty();
         }
 
         if (cacheFilterDependOn.AGrMGrList.length > 0) {
@@ -1700,22 +1725,21 @@ function MatchMonitorDetail() {
                             if (mGrItems.findIndex(y => y == curr.MGr) == -1)
                                 mGrItems.push(curr.MGr);
                         });
-                        
+
                         return false;
                     }
                 })
             })
-            
+
             domElements.cbbMGroup.multiselect().empty();
-           // domElements.cbbMGroup.append(`<option selected value='0'>-</option>`);
 
             if (mGrItems.length > 0) {
                 mGrItems.forEach(item => {
                     domElements.cbbMGroup.append(`<option selected value='${item}'>${item}</option>`);
                 });
             }
-            domElements.cbbMGroup.multiselect("refresh");            
-        }        
+            domElements.cbbMGroup.multiselect("refresh");
+        }
     }    
 
     function AddFilterLoading() {
@@ -1848,6 +1872,9 @@ function MatchMonitorDetail() {
         })
 
         domElements.btnGenerateDetail.on('click', function () {
+            if (!ValidateTicketStatus()) {
+                return;
+            }
             if (ValidationFilter()) {
                 CacheSelectDataFilter();
                 domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);                

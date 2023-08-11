@@ -326,11 +326,11 @@
 
                     .first-row-line {
                         color: #C4C4C4;
-                        margin-left: 8px;
-                        margin-right: 8px;
+                        margin-left: 9px;
+                        margin-right: 9px;
                         margin-bottom: 0.5px;
                         height: 26px;
-                        border: 1px solid rgba(196, 196, 196, 1);
+                        border-right: 1px solid rgba(196, 196, 196, 1);
                     }
                 }
 
@@ -358,6 +358,10 @@
                     padding-top: 26.5px;
                     height: 67px;
                 }
+
+                .border-error {
+                    border: 1px solid #ff1b00;
+                }
             }
 
             .breadcrumb-button {
@@ -365,7 +369,7 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                padding: 1rem 2rem 1rem 1rem;
+                padding: 0.7rem 2rem 0.7rem 1rem;
                 background-color: #E3E9F6;
                 border-radius: 1px;
                 position: fixed;

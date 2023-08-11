@@ -573,11 +573,11 @@
           width: 149px; }
       .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-line {
         color: #C4C4C4;
-        margin-left: 8px;
-        margin-right: 8px;
+        margin-left: 9px;
+        margin-right: 9px;
         margin-bottom: 0.5px;
         height: 26px;
-        border: 1px solid #c4c4c4; }
+        border-right: 1px solid #c4c4c4; }
     .detailpage .monitor-container .monitor-table .group-control .second-row-depend-1 {
       border-top: 1px solid #C4C4C4;
       border-bottom: 1px solid #C4C4C4;
@@ -595,12 +595,14 @@
       border-right: 1px solid #C4C4C4;
       padding-top: 26.5px;
       height: 67px; }
+    .detailpage .monitor-container .monitor-table .group-control .border-error {
+      border: 1px solid #ff1b00; }
   .detailpage .monitor-container .monitor-table .breadcrumb-button {
     width: calc(100% - 2.5rem);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem 1rem 1rem;
+    padding: 0.7rem 2rem 0.7rem 1rem;
     background-color: #E3E9F6;
     border-radius: 1px;
     position: fixed;
