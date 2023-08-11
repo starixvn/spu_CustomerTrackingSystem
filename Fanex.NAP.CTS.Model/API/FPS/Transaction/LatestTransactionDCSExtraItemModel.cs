@@ -1,20 +1,18 @@
-﻿namespace Fanex.NAP.CTS.Model.API.FPS.Transaction
-{
-    using System;
+﻿using System;
 
-    public class LastestTransactionItemModel
+namespace Fanex.NAP.CTS.Model.API.FPS.Transaction
+{
+    public class LatestTransactionDCSExtraItemModel
     {
         public DateTime TransTime { get; set; }
 
         public long TransID { get; set; }
 
-        public long CTSCustID { get; set; }
+        public long AccountID { get; set; }
 
         public int SubscriberID { get; set; }
 
-        public string RegisterName { get; set; }
-
-        public string UserName { get; set; }
+        public string LoginName { get; set; }
 
         public string FirstDeviceCode { get; set; }
 
@@ -32,5 +30,12 @@
 
         public string RobotTracking { get; set; }
 
+        public string Country { get; set; }
+
+        public string Region { get; set; }
+
+        public string City { get; set; }
+
+        public string ISP { get; set; }
     }
 }

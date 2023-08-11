@@ -135,7 +135,7 @@
         }
 
         [HttpPost]
-        public JsonResult<LastestTransactionResultModel> GetLastestTransactionBySubscriberDCSCenter(LastestTransactionParamModel param)
+        public JsonResult<LatestTransactionResultModel> GetLastestTransactionBySubscriberDCSCenter(LatestTransactionParamModel param)
         {
             try
             {
@@ -146,7 +146,7 @@
             catch (Exception ex)
             {
                 LogService.Error("FPS Get Lastest Transaction By Subscriber DCS Center exception: " + ex.Message);
-                return Json(new LastestTransactionResultModel());
+                return Json(new LatestTransactionResultModel());
             }
         }
         #endregion dcs center
@@ -399,7 +399,7 @@
         }
 
         [HttpPost]
-        public JsonResult<LastestTransactionResultModel> GetLastestTransactionBySubscriberDCSExtra(LastestTransactionParamModel param)
+        public JsonResult<LatestTransactionResultModel> GetLastestTransactionBySubscriberDCSExtra(LatestTransactionParamModel param)
         {
             try
             {
@@ -410,7 +410,7 @@
             catch (Exception ex)
             {
                 LogService.Error("FPS Get Lastest Transaction By Subscriber DCS Extra exception: " + ex.Message);
-                return Json(new LastestTransactionResultModel());
+                return Json(new LatestTransactionResultModel());
             }
         }
         #endregion

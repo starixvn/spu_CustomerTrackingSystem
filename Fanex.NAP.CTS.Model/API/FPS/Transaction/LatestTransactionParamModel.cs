@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.API.FPS.Transaction
 {
-    public class LastestTransactionParamModel
+    public class LatestTransactionParamModel
     {
         public int SubscriberID { get; set; }
 

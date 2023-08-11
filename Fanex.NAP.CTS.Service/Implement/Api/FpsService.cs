@@ -168,9 +168,9 @@
             return data;
         }
 
-        public LastestTransactionResultModel GetLastestTransactionBySubscriber_DCSCenter(LastestTransactionParamModel param)
+        public LatestTransactionResultModel GetLastestTransactionBySubscriber_DCSCenter(LatestTransactionParamModel param)
         {
-            var data = new LastestTransactionResultModel();
+            var data = new LatestTransactionResultModel();
 
             var criteria = new GetLastestTransactionDCSCenterCriteria
             {
@@ -180,7 +180,23 @@
                 Take = param.Take
             };
 
-            data.Items = repository.Fetch<LastestTransactionItemModel>(criteria);
+            data.Items = repository.Fetch<LatestTransactionDCSCenterItemModel>(criteria).Select(x => new LatestTransactionItemModel()
+            {
+                Action = x.Action,
+                ActionResult = x.ActionResult,
+                Browser = x.Browser,
+                CTSCustID = x.CTSCustID,
+                FirstDeviceCode = x.FirstDeviceCode,
+                IP = x.IP,
+                OS = x.OS,
+                RobotTracking = x.RobotTracking,
+                SubscriberID = x.SubscriberID,
+                TransID = x.TransID,
+                TransTime = x.TransTime,
+                URLDetails = x.URLDetails,
+                UserName = x.UserName,
+                RegisterName = x.RegisterName,
+            });
             data.TotalItem = criteria.TotalItem;
 
             return data;
@@ -473,9 +489,9 @@
             return data;
         }
 
-        public LastestTransactionResultModel GetLastestTransactionBySubscriber_DCSExtra(LastestTransactionParamModel param)
+        public LatestTransactionResultModel GetLastestTransactionBySubscriber_DCSExtra(LatestTransactionParamModel param)
         {
-            var data = new LastestTransactionResultModel();
+            var data = new LatestTransactionResultModel();
 
             var criteria = new GetLastestTransactionDCSExtraCriteria
             {
@@ -485,7 +501,7 @@
                 Take = param.Take
             };
 
-            data.Items = repository.Fetch<LastestTransactionDcsItemModel>(criteria).Select(x => new LastestTransactionItemModel()
+            data.Items = repository.Fetch<LatestTransactionDCSExtraItemModel>(criteria).Select(x => new LatestTransactionItemModel()
             {
                 Action = x.Action,
                 ActionResult = x.ActionResult,
@@ -499,7 +515,11 @@
                 TransID = x.TransID,
                 TransTime = x.TransTime,
                 URLDetails = x.URLDetails,
-                UserName = x.LoginName
+                UserName = x.LoginName,
+                City = x.City,
+                Country = x.Country,
+                ISP = x.ISP,
+                Region = x.Region
             });
             data.TotalItem = criteria.TotalItem;
 

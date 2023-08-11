@@ -22,7 +22,7 @@
 
         GetAssMatrixAccountByCustSubscriberResultModel GetAssMatrixAccountByCustSubscriber_DCSCenter(GetAssMatrixAccountByCustSubscriberParamModel param);
 
-        LastestTransactionResultModel GetLastestTransactionBySubscriber_DCSCenter(LastestTransactionParamModel param);
+        LatestTransactionResultModel GetLastestTransactionBySubscriber_DCSCenter(LatestTransactionParamModel param);
         #endregion cts
 
         #region dcs
@@ -58,7 +58,7 @@
 
         TransactionResultModel GetTransactionHistory_DCSExtra(TransactionParamModel param);
 
-        LastestTransactionResultModel GetLastestTransactionBySubscriber_DCSExtra(LastestTransactionParamModel param);
+        LatestTransactionResultModel GetLastestTransactionBySubscriber_DCSExtra(LatestTransactionParamModel param);
         #endregion
 
         #endregion dcs
