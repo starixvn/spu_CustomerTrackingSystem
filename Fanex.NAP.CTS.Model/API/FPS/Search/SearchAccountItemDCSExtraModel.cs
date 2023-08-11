@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.API.FPS.SearchAccount
 {
-    public class SearchAccountItemDcsModel
+    public class SearchAccountItemDCSExtraModel
     {
         public long AccountID { get; set; }
 

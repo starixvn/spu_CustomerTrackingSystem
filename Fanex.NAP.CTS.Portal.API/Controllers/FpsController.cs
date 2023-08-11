@@ -28,102 +28,102 @@
             _subscriberService = new SubscriberService();
         }
 
-        #region cts
+        #region dcs center
         [HttpPost]
-        public JsonResult<SearchAccountResultModel> SearchAccountCts(SearchAccountParamModel param)
+        public JsonResult<SearchAccountResultModel> SearchAccountDCSCenter(SearchAccountParamModel param)
         {
             try
             {
-                var data = _fpsService.SearchAccountCts(param);
+                var data = _fpsService.SearchAccount_DCSCenter(param);
 
                 return Json(data);
 
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Search Account info Cts exception: " + ex.Message);
+                LogService.Error("FPS Search Account info DCS Center exception: " + ex.Message);
                 return Json(new SearchAccountResultModel());
             }
         }
 
         [HttpPost]
-        public JsonResult<GetAssAccountInfoByCustSubscriberModel> GetAssAccountInfoByCustSubscriberCts(GetAssAccountInfoByCustSubscriberParamModel param)
+        public JsonResult<GetAssAccountInfoByCustSubscriberModel> GetAssAccountInfoByCustSubscriberDCSCenter(GetAssAccountInfoByCustSubscriberParamModel param)
         {
             try
             {
-                var data = _fpsService.GetAssAccountInfoByCustSubscriberCts(param);
+                var data = _fpsService.GetAssAccountInfoByCustSubscriber_DCSCenter(param);
 
                 return Json(data);
 
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Ass Account info by cust subscriber Cts exception: " + ex.Message);
+                LogService.Error("FPS Get Ass Account info by cust subscriber DCS Center exception: " + ex.Message);
                 return Json(new GetAssAccountInfoByCustSubscriberModel());
             }
         }
 
         [HttpPost]
-        public JsonResult<GetAssAccountsByCustSubscriberResultModel> GetAssAccountsByCustSubscriberCts(GetAssAccountsByCustSubscriberParamModel param)
+        public JsonResult<GetAssAccountsByCustSubscriberResultModel> GetAssAccountsByCustSubscriberDCSCenter(GetAssAccountsByCustSubscriberParamModel param)
         {
             try
             {
-                var data = _fpsService.GetAssAccountsByCustSubscriberCts(param);
+                var data = _fpsService.GetAssAccountsByCustSubscriber_DCSCenter(param);
 
                 return Json(data);
 
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Ass Account info by cust subscriber Cts exception: " + ex.Message);
+                LogService.Error("FPS Get Ass Account info by cust subscriber DCS Center exception: " + ex.Message);
                 return Json(new GetAssAccountsByCustSubscriberResultModel());
             }
         }
 
         [HttpPost]
-        public JsonResult<GetAssDevicesByCustSubscriberResultModel> GetAssDevicesByCustSubscriberCts(GetAssDevicesByCustSubscriberParamModel param)
+        public JsonResult<GetAssDevicesByCustSubscriberResultModel> GetAssDevicesByCustSubscriberDCSCenter(GetAssDevicesByCustSubscriberParamModel param)
         {
             try
             {
-                var data = _fpsService.GetAssDevicesByCustSubscriberCts(param);
+                var data = _fpsService.GetAssDevicesByCustSubscriber_DCSCenter(param);
 
                 return Json(data);
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Ass Account info by cust subscriber Cts exception: " + ex.Message);
+                LogService.Error("FPS Get Ass Account info by cust subscriber DCS Center exception: " + ex.Message);
                 return Json(new GetAssDevicesByCustSubscriberResultModel());
             }
         }
 
         [HttpPost]
-        public JsonResult<GetAssMatrixAccountByCustSubscriberResultModel> GetAssMatrixAccountByCustSubscriberCts(GetAssMatrixAccountByCustSubscriberParamModel param)
+        public JsonResult<GetAssMatrixAccountByCustSubscriberResultModel> GetAssMatrixAccountByCustSubscriberDCSCenter(GetAssMatrixAccountByCustSubscriberParamModel param)
         {
             try
             {
-                var data = _fpsService.GetAssMatrixAccountByCustSubscriberCts(param);
+                var data = _fpsService.GetAssMatrixAccountByCustSubscriber_DCSCenter(param);
 
                 return Json(data);
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Ass Account info by cust subscriber Cts exception: " + ex.Message);
+                LogService.Error("FPS Get Ass Account info by cust subscriber DCS Center exception: " + ex.Message);
                 return Json(new GetAssMatrixAccountByCustSubscriberResultModel());
             }
         }
 
         [HttpPost]
-        public JsonResult<TransactionResultModel> GetTransactionHistoryCts(TransactionParamModel param)
+        public JsonResult<TransactionResultModel> GetTransactionHistoryDCSCenter(TransactionParamModel param)
         {
             try
             {
-                var data = _fpsService.GetTransactionHistoryCts(param);
+                var data = _fpsService.GetTransactionHistory_DCSCenter(param);
 
                 return Json(data);
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Transaction History Cts exception: " + ex.Message);
+                LogService.Error("FPS Get Transaction History DCS Center exception: " + ex.Message);
 
                 if (!string.IsNullOrEmpty(ex.Message) && ex.Message.ToLower().Contains("timeout expired"))
                 {
@@ -135,31 +135,31 @@
         }
 
         [HttpPost]
-        public JsonResult<LastestTransactionResultModel> GetLastestTransactionBySubscriberCts(LastestTransactionParamModel param)
+        public JsonResult<LastestTransactionResultModel> GetLastestTransactionBySubscriberDCSCenter(LastestTransactionParamModel param)
         {
             try
             {
-                var data = _fpsService.GetLastestTransactionBySubscriberCts(param);
+                var data = _fpsService.GetLastestTransactionBySubscriber_DCSCenter(param);
 
                 return Json(data);
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Lastest Transaction By Subscriber Cts exception: " + ex.Message);
+                LogService.Error("FPS Get Lastest Transaction By Subscriber DCS Center exception: " + ex.Message);
                 return Json(new LastestTransactionResultModel());
             }
         }
-        #endregion cts
+        #endregion dcs center
 
-        #region dcs
+        #region dcs extra
 
         #region get sub
         [HttpGet]
-        public JsonResult<SubscriberFpsInfo> GetSubscriberInfoDcs(string subscriberName)
+        public JsonResult<SubscriberFpsInfo> GetSubscriberInfoDCSExtra(string subscriberName)
         {
             try
             {
-                var subscriber = _subscriberService.GetSubscriberDcsExBySubscriberName(subscriberName);
+                var subscriber = _subscriberService.GetSubscriberBySubscriberName_DCSExtra(subscriberName);
 
                 if (subscriber != null && subscriber.SubscriberStatus)
                 {
@@ -172,7 +172,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error("Get Subscriber info Dcs exception: " + ex.Message);
+                LogService.Error("Get Subscriber info DCS Extra exception: " + ex.Message);
             }
 
             return Json(new SubscriberFpsInfo());
@@ -181,103 +181,103 @@
 
         #region search
         [HttpPost]
-        public JsonResult<SearchAccountResultModel> SearchAccountDcs(SearchAccountParamModel param)
+        public JsonResult<SearchAccountResultModel> SearchAccountDCSExtra(SearchAccountParamModel param)
         {
             try
             {
-                var data = _fpsService.SearchAccountDcs(param);
+                var data = _fpsService.SearchAccount_DCSExtra(param);
 
                 return Json(data);
 
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Search Account info Dcs exception: " + ex.Message);
+                LogService.Error("FPS Search Account info DCS Extra exception: " + ex.Message);
                 return Json(new SearchAccountResultModel());
             }
         }
 
         [HttpPost]
-        public JsonResult<List<SearchDeviceItemDcsModel>> SearchDeviceDcs(SearchDeviceParamModel param)
+        public JsonResult<List<SearchDeviceItemDCSExtraModel>> SearchDeviceDCSExtra(SearchDeviceParamModel param)
         {
             try
             {
-                var data = _fpsService.SearchDeviceDcs(param);
+                var data = _fpsService.SearchDevice_DCSExtra(param);
 
                 return Json(data.ToList());
 
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Search Device info Dcs exception: " + ex.Message);
-                return Json(new List<SearchDeviceItemDcsModel>());
+                LogService.Error("FPS Search Device info DCS Extra exception: " + ex.Message);
+                return Json(new List<SearchDeviceItemDCSExtraModel>());
             }
         }
         #endregion
 
         #region account
         [HttpPost]
-        public JsonResult<GetAssAccountInfoByCustSubscriberModel> GetAssAccountInfoByCustSubscriberDcs(GetAssAccountInfoByCustSubscriberParamModel param)
+        public JsonResult<GetAssAccountInfoByCustSubscriberModel> GetAssAccountInfoByCustSubscriberDCSExtra(GetAssAccountInfoByCustSubscriberParamModel param)
         {
             try
             {
-                var data = _fpsService.GetAssAccountInfoByCustSubscriberDcs(param);
+                var data = _fpsService.GetAssAccountInfoByCustSubscriber_DCSExtra(param);
 
                 return Json(data);
 
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Ass Account info by cust subscriber Dcs exception: " + ex.Message);
+                LogService.Error("FPS Get Ass Account info by cust subscriber DCS Extra exception: " + ex.Message);
                 return Json(new GetAssAccountInfoByCustSubscriberModel());
             }
         }
 
         [HttpPost]
-        public JsonResult<GetAssAccountsByCustSubscriberResultModel> GetAssAccountsByCustSubscriberDcs(GetAssAccountsByCustSubscriberParamModel param)
+        public JsonResult<GetAssAccountsByCustSubscriberResultModel> GetAssAccountsByCustSubscriberDCSExtra(GetAssAccountsByCustSubscriberParamModel param)
         {
             try
             {
-                var data = _fpsService.GetAssAccountsByCustSubscriberDcs(param);
+                var data = _fpsService.GetAssAccountsByCustSubscriber_DCSExtra(param);
 
                 return Json(data);
 
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Ass Account info by cust subscriber Dcs exception: " + ex.Message);
+                LogService.Error("FPS Get Ass Account info by cust subscriber DCS Extra exception: " + ex.Message);
                 return Json(new GetAssAccountsByCustSubscriberResultModel());
             }
         }
 
         [HttpPost]
-        public JsonResult<GetAssDevicesByCustSubscriberResultModel> GetAssDevicesByCustSubscriberDcs(GetAssDevicesByCustSubscriberParamModel param)
+        public JsonResult<GetAssDevicesByCustSubscriberResultModel> GetAssDevicesByCustSubscriberDCSExtra(GetAssDevicesByCustSubscriberParamModel param)
         {
             try
             {
-                var data = _fpsService.GetAssDevicesByCustSubscriberDcs(param);
+                var data = _fpsService.GetAssDevicesByCustSubscriber_DCSExtra(param);
 
                 return Json(data);
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Ass Account info by cust subscriber Dcs exception: " + ex.Message);
+                LogService.Error("FPS Get Ass Account info by cust subscriber DCS Extra exception: " + ex.Message);
                 return Json(new GetAssDevicesByCustSubscriberResultModel());
             }
         }
 
         [HttpPost]
-        public JsonResult<GetAssMatrixAccountByCustSubscriberResultModel> GetAssMatrixAccountByCustSubscriberDcs(GetAssMatrixAccountByCustSubscriberParamModel param)
+        public JsonResult<GetAssMatrixAccountByCustSubscriberResultModel> GetAssMatrixAccountByCustSubscriberDCSExtra(GetAssMatrixAccountByCustSubscriberParamModel param)
         {
             try
             {
-                var data = _fpsService.GetAssMatrixAccountByCustSubscriberDcs(param);
+                var data = _fpsService.GetAssMatrixAccountByCustSubscriber_DCSExtra(param);
 
                 return Json(data);
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Ass Account info by cust subscriber Dcs exception: " + ex.Message);
+                LogService.Error("FPS Get Ass Account info by cust subscriber DCS Extra exception: " + ex.Message);
                 return Json(new GetAssMatrixAccountByCustSubscriberResultModel());
             }
         }
@@ -285,69 +285,69 @@
 
         #region device
         [HttpPost]
-        public JsonResult<GetAssDeviceInfoByIDSubscriberModel> GetAssDeviceInfoByIdSubscriberDcs(GetAssDeviceInfoByIDSubscriberParamModel param)
+        public JsonResult<GetAssDeviceInfoByIDSubscriberModel> GetAssDeviceInfoByIdSubscriberDCSExtra(GetAssDeviceInfoByIDSubscriberParamModel param)
         {
             try
             {
-                var data = _fpsService.GetAssDeviceInfoByIDSubscriberDcs(param);
+                var data = _fpsService.GetAssDeviceInfoByIDSubscriber_DCSExtra(param);
 
                 return Json(data);
 
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Ass Account info by id subscriber Dcs exception: " + ex.Message);
+                LogService.Error("FPS Get Ass Account info by id subscriber DCS Extra exception: " + ex.Message);
                 return Json(new GetAssDeviceInfoByIDSubscriberModel());
             }
         }
 
         [HttpPost]
-        public JsonResult<List<GetAssAccByDevSubscriberItemModel>> GetAssAccountsByDeviceSubscriberDcs(GetAssAccByDevSubscriberParamModel param)
+        public JsonResult<List<GetAssAccByDevSubscriberItemModel>> GetAssAccountsByDeviceSubscriberDCSExtra(GetAssAccByDevSubscriberParamModel param)
         {
             try
             {
-                var data = _fpsService.GetAssAccByDevSubscriberDcs(param);
+                var data = _fpsService.GetAssAccByDevSubscriber_DCSExtra(param);
 
                 return Json(data.ToList());
 
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Ass Account by Device subscriber Dcs exception: " + ex.Message);
+                LogService.Error("FPS Get Ass Account by Device subscriber DCS Extra exception: " + ex.Message);
                 return Json(new List<GetAssAccByDevSubscriberItemModel>());
             }
         }
 
         [HttpPost]
-        public JsonResult<List<GetAssDevByDevSubscriberItemModel>> GetAssDevByDeviceSubscriberDcs(GetAssDevByDevSubscriberParamModel param)
+        public JsonResult<List<GetAssDevByDevSubscriberItemModel>> GetAssDevByDeviceSubscriberDCSExtra(GetAssDevByDevSubscriberParamModel param)
         {
             try
             {
-                var data = _fpsService.GetAssDevByDevSubscriberDcs(param);
+                var data = _fpsService.GetAssDevByDevSubscriber_DCSExtra(param);
 
                 return Json(data.ToList());
 
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Ass Device by Device subscriber Dcs exception: " + ex.Message);
+                LogService.Error("FPS Get Ass Device by Device subscriber DCS Extra exception: " + ex.Message);
                 return Json(new List<GetAssDevByDevSubscriberItemModel>());
             }
         }
 
         [HttpPost]
-        public JsonResult<List<GetAssMatrixByDeviceSubscriberItemModel>> GetAssMatrixByDeviceSubscriberDcs(GetAssMatrixByDeviceSubscriberParamModel param)
+        public JsonResult<List<GetAssMatrixByDeviceSubscriberItemModel>> GetAssMatrixByDeviceSubscriberDCSExtra(GetAssMatrixByDeviceSubscriberParamModel param)
         {
             try
             {
-                var data = _fpsService.GetAssMatrixByDeviceSubscriberDcs(param);
+                var data = _fpsService.GetAssMatrixByDeviceSubscriber_DCSExtra(param);
 
                 return Json(data.ToList());
 
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Ass Matrix by Device subscriber Dcs exception: " + ex.Message);
+                LogService.Error("FPS Get Ass Matrix by Device subscriber DCS Extra exception: " + ex.Message);
                 return Json(new List<GetAssMatrixByDeviceSubscriberItemModel>());
             }
         }
@@ -355,39 +355,39 @@
 
         #region report
         [HttpPost]
-        public JsonResult<TransactionHistoryDcsResultModel> GetTransactionHistoryByDeviceDcs(TransactionHistoryByDeviceParamModel param)
+        public JsonResult<TransactionHistoryDCSExtraResultModel> GetTransactionHistoryByDeviceDCSExtra(TransactionHistoryByDeviceParamModel param)
         {
             try
             {
-                var data = _fpsService.GetTransactionHistoryByDeviceDcs(param);
+                var data = _fpsService.GetTransactionHistoryByDevice_DCSExtra(param);
 
                 return Json(data);
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Transaction History By Device Dcs exception: " + ex.Message);
+                LogService.Error("FPS Get Transaction History By Device DCS Extra exception: " + ex.Message);
 
                 if (!string.IsNullOrEmpty(ex.Message) && ex.Message.ToLower().Contains("timeout expired"))
                 {
-                    return Json(new TransactionHistoryDcsResultModel() { IsTimeout = true });
+                    return Json(new TransactionHistoryDCSExtraResultModel() { IsTimeout = true });
                 }
 
-                return Json(new TransactionHistoryDcsResultModel());
+                return Json(new TransactionHistoryDCSExtraResultModel());
             }
         }
 
         [HttpPost]
-        public JsonResult<TransactionResultModel> GetTransactionHistoryDcs(TransactionParamModel param)
+        public JsonResult<TransactionResultModel> GetTransactionHistoryDCSExtra(TransactionParamModel param)
         {
             try
             {
-                var data = _fpsService.GetTransactionHistoryDcs(param);
+                var data = _fpsService.GetTransactionHistory_DCSExtra(param);
 
                 return Json(data);
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Transaction History Dcs exception: " + ex.Message);
+                LogService.Error("FPS Get Transaction History DCS Extra exception: " + ex.Message);
 
                 if (!string.IsNullOrEmpty(ex.Message) && ex.Message.ToLower().Contains("timeout expired"))
                 {
@@ -399,22 +399,22 @@
         }
 
         [HttpPost]
-        public JsonResult<LastestTransactionResultModel> GetLastestTransactionBySubscriberDcs(LastestTransactionParamModel param)
+        public JsonResult<LastestTransactionResultModel> GetLastestTransactionBySubscriberDCSExtra(LastestTransactionParamModel param)
         {
             try
             {
-                var data = _fpsService.GetLastestTransactionBySubscriberDcs(param);
+                var data = _fpsService.GetLastestTransactionBySubscriber_DCSExtra(param);
 
                 return Json(data);
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Lastest Transaction By Subscriber Dcs exception: " + ex.Message);
+                LogService.Error("FPS Get Lastest Transaction By Subscriber DCS Extra exception: " + ex.Message);
                 return Json(new LastestTransactionResultModel());
             }
         }
         #endregion
 
-        #endregion dcs
+        #endregion dcs extra
     }
 }

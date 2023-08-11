@@ -3,12 +3,12 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class GetAssAccountsByCustSubscriberCtsCriteria : CriteriaBase
+    public class GetAssAccountsByCustSubscriberDCSExtraCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_SubscriberID")]
         public int SubscriberID { get; set; }
 
-        [SpParam(SqlParamName = "ip_CTSCustID")]
+        [SpParam(SqlParamName = "ip_AccountID")]
         public long CTSCustID { get; set; }
 
         [SpParam(SqlParamName = "ip_NoOfRecord")]
@@ -16,7 +16,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_Association_GetAssociationListByCustSubscriber";
+            return "DCS_ET_Association_GetAssociationListByAccountSubscriber";
         }
 
         public override bool IsValid()

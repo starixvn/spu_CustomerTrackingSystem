@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.API.FPS.Search
 {
-    public class SearchDeviceItemDcsModel
+    public class SearchDeviceItemDCSExtraModel
     {
         public long DeviceID { get; set; }
 

@@ -3,12 +3,12 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class GetListAccountByUserNameSubscriberDcsCriteria : CriteriaBase
+    public class GetListAccountByUserNameSubscriberDCSCenterCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_SubscriberID")]
         public int SubscriberID { get; set; }
 
-        [SpParam(SqlParamName = "ip_LoginName")]
+        [SpParam(SqlParamName = "ip_UserName")]
         public string UserName { get; set; }
 
         [SpParam(SqlParamName = "ip_Skip")]
@@ -22,7 +22,7 @@
 
         public override string GetSettingKey()
         {
-            return "DCS_ET_AccountInfo_GetPartialByLoginNameSubscriber";
+            return "CTS_DC_CustInfo_GetPartialByUserNameSubscriber";
         }
 
         public override bool IsValid()

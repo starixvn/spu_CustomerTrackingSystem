@@ -1,19 +1,19 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Api.FPS.Search
+﻿namespace Fanex.NAP.CTS.Criteria.Api.FPS.SearchAccount
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class GetListDeviceByCodeSubscriberDcsCriteria : CriteriaBase
+    public class GetAccountByNameSubscriberDCSExtraCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_SubscriberID")]
         public int SubscriberID { get; set; }
 
-        [SpParam(SqlParamName = "ip_DeviceCode")]
-        public string DeviceCode { get; set; }
+        [SpParam(SqlParamName = "ip_LoginName")]
+        public string UserName { get; set; }
 
         public override string GetSettingKey()
         {
-            return "DCS_ET_DeviceInfo_GetByDeviceSubscriber";
+            return "DCS_ET_AccountInfo_GetByLoginNameSubscriber";
         }
 
         public override bool IsValid()

@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class TransactionHistoryDcsItemModel
+    public class TransactionHistoryDCSExtraItemModel
     {
         public long TransID { get; set; }
 

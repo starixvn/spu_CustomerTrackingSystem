@@ -20,7 +20,7 @@ namespace Fanex.NAP.CTS.Service.Implement
             return DataService.GetSingle<SubscriberInfo>(criteria);
         }
 
-        public SubscriberFpsInfo GetSubscriberDcsExBySubscriberName(string subscriberName)
+        public SubscriberFpsInfo GetSubscriberBySubscriberName_DCSExtra(string subscriberName)
         {
             var criteria = new GetSubscriberDcsExBySubscriberName
             {

@@ -4,7 +4,7 @@
     using Fanex.Data.Repository;
     using System;
 
-    public class GetTransHistoryByDevSubDcsCriteria : CriteriaBase
+    public class GetTransHistoryByDevSubDCSExtraCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_SubscriberID")]
         public int SubscriberID { get; set; }

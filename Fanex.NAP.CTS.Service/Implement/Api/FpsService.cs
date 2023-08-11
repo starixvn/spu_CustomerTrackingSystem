@@ -27,13 +27,13 @@
 
         #region cts
 
-        public SearchAccountResultModel SearchAccountCts(SearchAccountParamModel param)
+        public SearchAccountResultModel SearchAccount_DCSCenter(SearchAccountParamModel param)
         {
             var data = new SearchAccountResultModel();
 
             if (param.IsSearchPartial)
             {
-                var criteria = new GetListAccountByUserNameSubscriberCtsCriteria
+                var criteria = new GetListAccountByUserNameSubscriberDCSCenterCriteria
                 {
                     SubscriberID = param.SubscriberID,
                     UserName = param.UserName,
@@ -46,7 +46,7 @@
             }
             else
             {
-                var criteria = new GetAccountByNameSubscriberCtsCriteria
+                var criteria = new GetAccountByNameSubscriberDCSCenterCriteria
                 {
                     SubscriberID = param.SubscriberID,
                     UserName = param.UserName
@@ -58,9 +58,9 @@
             return data;
         }
 
-        public GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriberCts(GetAssAccountInfoByCustSubscriberParamModel param)
+        public GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriber_DCSCenter(GetAssAccountInfoByCustSubscriberParamModel param)
         {
-            var criteria = new GetAssAccountInfoByCustSubscriberCtsCriteria
+            var criteria = new GetAssAccountInfoByCustSubscriberDCSCenterCriteria
             {
                 CTSCustID = param.CTSCustID,
                 SubscriberID = param.SubscriberID
@@ -69,11 +69,11 @@
             return DataService.GetSingle<GetAssAccountInfoByCustSubscriberModel>(criteria);
         }
 
-        public GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriberCts(GetAssAccountsByCustSubscriberParamModel param)
+        public GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriber_DCSCenter(GetAssAccountsByCustSubscriberParamModel param)
         {
             var data = new GetAssAccountsByCustSubscriberResultModel();
 
-            var criteria = new GetAssAccountsByCustSubscriberCtsCriteria
+            var criteria = new GetAssAccountsByCustSubscriberDCSCenterCriteria
             {
                 SubscriberID = param.SubscriberID,
                 CTSCustID = param.CTSCustID,
@@ -85,11 +85,11 @@
             return data;
         }
 
-        public GetAssDevicesByCustSubscriberResultModel GetAssDevicesByCustSubscriberCts(GetAssDevicesByCustSubscriberParamModel param)
+        public GetAssDevicesByCustSubscriberResultModel GetAssDevicesByCustSubscriber_DCSCenter(GetAssDevicesByCustSubscriberParamModel param)
         {
             var data = new GetAssDevicesByCustSubscriberResultModel();
 
-            var criteria = new GetAssDevicesByCustSubscriberCtsCriteria
+            var criteria = new GetAssDevicesByCustSubscriberDCSCenterCriteria
             {
                 SubscriberID = param.SubscriberID,
                 CTSCustID = param.CTSCustID,
@@ -101,10 +101,10 @@
             return data;
         }
 
-        public GetAssMatrixAccountByCustSubscriberResultModel GetAssMatrixAccountByCustSubscriberCts(GetAssMatrixAccountByCustSubscriberParamModel param)
+        public GetAssMatrixAccountByCustSubscriberResultModel GetAssMatrixAccountByCustSubscriber_DCSCenter(GetAssMatrixAccountByCustSubscriberParamModel param)
         {
             var data = new GetAssMatrixAccountByCustSubscriberResultModel();
-            var criteria = new GetAssMatrixAccountByCustSubscriberCtsCriteria()
+            var criteria = new GetAssMatrixAccountByCustSubscriberDCSCenterCriteria()
             {
                 SubscriberID = param.SubscriberID,
                 CTSCustID = param.CTSCustID,
@@ -117,21 +117,21 @@
             return data;
         }
 
-        public TransactionResultModel GetTransactionHistoryCts(TransactionParamModel param)
+        public TransactionResultModel GetTransactionHistory_DCSCenter(TransactionParamModel param)
         {
             if (param.CTSCustID != null && param.CTSCustID > 0)
             {
-                return GetTransactionByCustSubscriberCts(param);
+                return GetTransactionByCustSubscriber_DCSCenter(param);
             }
 
-            return GetTransactionBySubscriberCts(param);
+            return GetTransactionBySubscriber_DCSCenter(param);
         }
 
-        private TransactionResultModel GetTransactionByCustSubscriberCts(TransactionParamModel param)
+        private TransactionResultModel GetTransactionByCustSubscriber_DCSCenter(TransactionParamModel param)
         {
             var data = new TransactionResultModel();
 
-            var criteria = new GetTransactionHistoryByCustSubscriberCtsCriteria
+            var criteria = new GetTransactionHistoryByCustSubscriberDCSCenterCriteria
             {
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
@@ -147,11 +147,11 @@
             return data;
         }
 
-        private TransactionResultModel GetTransactionBySubscriberCts(TransactionParamModel param)
+        private TransactionResultModel GetTransactionBySubscriber_DCSCenter(TransactionParamModel param)
         {
             var data = new TransactionResultModel();
 
-            var criteria = new GetTransactionHistoryBySubscriberCtsCriteria
+            var criteria = new GetTransactionHistoryBySubscriberDCSCenterCriteria
             {
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
@@ -168,11 +168,11 @@
             return data;
         }
 
-        public LastestTransactionResultModel GetLastestTransactionBySubscriberCts(LastestTransactionParamModel param)
+        public LastestTransactionResultModel GetLastestTransactionBySubscriber_DCSCenter(LastestTransactionParamModel param)
         {
             var data = new LastestTransactionResultModel();
 
-            var criteria = new GetLastestTransactionCtsCriteria
+            var criteria = new GetLastestTransactionDCSCenterCriteria
             {
                 SubscriberID = param.SubscriberID,
                 Length = param.Length,
@@ -190,14 +190,14 @@
         #region dcs
 
         #region search
-        public SearchAccountResultModel SearchAccountDcs(SearchAccountParamModel param)
+        public SearchAccountResultModel SearchAccount_DCSExtra(SearchAccountParamModel param)
         {
             var data = new SearchAccountResultModel();
-            var items = default(IEnumerable<SearchAccountItemDcsModel>);
+            var items = default(IEnumerable<SearchAccountItemDCSExtraModel>);
 
             if (param.IsSearchPartial)
             {
-                var criteria = new GetListAccountByUserNameSubscriberDcsCriteria
+                var criteria = new GetListAccountByUserNameSubscriberDCSExtraCriteria
                 {
                     SubscriberID = param.SubscriberID,
                     UserName = param.UserName,
@@ -205,18 +205,18 @@
                     Skip = param.Skip
                 };
 
-                items = repository.Fetch<SearchAccountItemDcsModel>(criteria);
+                items = repository.Fetch<SearchAccountItemDCSExtraModel>(criteria);
                 data.TotalItem = criteria.TotalItem;
             }
             else
             {
-                var criteria = new GetAccountByNameSubscriberDcsCriteria
+                var criteria = new GetAccountByNameSubscriberDCSExtraCriteria
                 {
                     SubscriberID = param.SubscriberID,
                     UserName = param.UserName
                 };
 
-                items = repository.Fetch<SearchAccountItemDcsModel>(criteria);
+                items = repository.Fetch<SearchAccountItemDCSExtraModel>(criteria);
             }
 
             data.Items = items.Select(x => new SearchAccountItemModel()
@@ -229,23 +229,23 @@
             return data;
         }
 
-        public IEnumerable<SearchDeviceItemDcsModel> SearchDeviceDcs(SearchDeviceParamModel param)
+        public IEnumerable<SearchDeviceItemDCSExtraModel> SearchDevice_DCSExtra(SearchDeviceParamModel param)
         {
-            var criteria = new GetListDeviceByCodeSubscriberDcsCriteria
+            var criteria = new GetListDeviceByCodeSubscriberDCSExtraCriteria
             {
                 SubscriberID = param.SubscriberID,
                 DeviceCode = param.DeviceCode
             };
 
-            var items = repository.Fetch<SearchDeviceItemDcsModel>(criteria);
+            var items = repository.Fetch<SearchDeviceItemDCSExtraModel>(criteria);
             return items;
         }
         #endregion
 
         #region account
-        public GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriberDcs(GetAssAccountInfoByCustSubscriberParamModel param)
+        public GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriber_DCSExtra(GetAssAccountInfoByCustSubscriberParamModel param)
         {
-            var criteria = new GetAssAccountInfoByCustSubscriberDcsCriteria
+            var criteria = new GetAssAccountInfoByCustSubscriberDCSExtraCriteria
             {
                 CTSCustID = param.CTSCustID,
                 SubscriberID = param.SubscriberID
@@ -254,11 +254,11 @@
             return DataService.GetSingle<GetAssAccountInfoByCustSubscriberModel>(criteria);
         }
 
-        public GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriberDcs(GetAssAccountsByCustSubscriberParamModel param)
+        public GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriber_DCSExtra(GetAssAccountsByCustSubscriberParamModel param)
         {
             var data = new GetAssAccountsByCustSubscriberResultModel();
 
-            var criteria = new GetAssAccountsByCustSubscriberDcsCriteria
+            var criteria = new GetAssAccountsByCustSubscriberDCSExtraCriteria
             {
                 SubscriberID = param.SubscriberID,
                 CTSCustID = param.CTSCustID,
@@ -277,11 +277,11 @@
             return data;
         }
 
-        public GetAssDevicesByCustSubscriberResultModel GetAssDevicesByCustSubscriberDcs(GetAssDevicesByCustSubscriberParamModel param)
+        public GetAssDevicesByCustSubscriberResultModel GetAssDevicesByCustSubscriber_DCSExtra(GetAssDevicesByCustSubscriberParamModel param)
         {
             var data = new GetAssDevicesByCustSubscriberResultModel();
 
-            var criteria = new GetAssDevicesByCustSubscriberDcsCriteria
+            var criteria = new GetAssDevicesByCustSubscriberDCSExtraCriteria
             {
                 SubscriberID = param.SubscriberID,
                 CTSCustID = param.CTSCustID,
@@ -293,10 +293,10 @@
             return data;
         }
 
-        public GetAssMatrixAccountByCustSubscriberResultModel GetAssMatrixAccountByCustSubscriberDcs(GetAssMatrixAccountByCustSubscriberParamModel param)
+        public GetAssMatrixAccountByCustSubscriberResultModel GetAssMatrixAccountByCustSubscriber_DCSExtra(GetAssMatrixAccountByCustSubscriberParamModel param)
         {
             var data = new GetAssMatrixAccountByCustSubscriberResultModel();
-            var criteria = new GetAssMatrixAccountByCustSubscriberDcsCriteria()
+            var criteria = new GetAssMatrixAccountByCustSubscriberDCSExtraCriteria()
             {
                 SubscriberID = param.SubscriberID,
                 CTSCustID = param.CTSCustID,
@@ -304,7 +304,7 @@
                 NoOfDevice = param.NoOfDevice
             };
 
-            data.Items = repository.Fetch<GetAssMatrixAccountByCustSubscriberItemDcsModel>(criteria).Select(x => new GetAssMatrixAccountByCustSubscriberItemModel
+            data.Items = repository.Fetch<GetAssMatrixAccountByCustSubscriberItemDCSExtraModel>(criteria).Select(x => new GetAssMatrixAccountByCustSubscriberItemModel
             {
                 CreatedTime = x.CreatedTime,
                 CTSCustID = x.AccountID,
@@ -319,9 +319,9 @@
         #endregion
 
         #region device
-        public GetAssDeviceInfoByIDSubscriberModel GetAssDeviceInfoByIDSubscriberDcs(GetAssDeviceInfoByIDSubscriberParamModel param)
+        public GetAssDeviceInfoByIDSubscriberModel GetAssDeviceInfoByIDSubscriber_DCSExtra(GetAssDeviceInfoByIDSubscriberParamModel param)
         {
-            var criteria = new GetAssDeviceInfoByIDSubscriberDcsCriteria()
+            var criteria = new GetAssDeviceInfoByIDSubscriberDCSExtraCriteria()
             {
                 DeviceID = param.DeviceID,
                 SubscriberID = param.SubscriberID,
@@ -334,9 +334,9 @@
             return result;
         }
 
-        public IEnumerable<GetAssAccByDevSubscriberItemModel> GetAssAccByDevSubscriberDcs(GetAssAccByDevSubscriberParamModel param)
+        public IEnumerable<GetAssAccByDevSubscriberItemModel> GetAssAccByDevSubscriber_DCSExtra(GetAssAccByDevSubscriberParamModel param)
         {
-            var criteria = new GetAssAccByDevSubscriberDcsCriteria
+            var criteria = new GetAssAccByDevSubscriberDCSExtraCriteria
             {
                 DeviceID = param.DeviceID,
                 NoOfRecord = param.NoOfRecord,
@@ -346,9 +346,9 @@
             return repository.Fetch<GetAssAccByDevSubscriberItemModel>(criteria);
         }
 
-        public IEnumerable<GetAssDevByDevSubscriberItemModel> GetAssDevByDevSubscriberDcs(GetAssDevByDevSubscriberParamModel param)
+        public IEnumerable<GetAssDevByDevSubscriberItemModel> GetAssDevByDevSubscriber_DCSExtra(GetAssDevByDevSubscriberParamModel param)
         {
-            var criteria = new GetAssDevByDevSubscriberDcsCriteria
+            var criteria = new GetAssDevByDevSubscriberDCSExtraCriteria
             {
                 DeviceID = param.DeviceID,
                 NoOfRecord = param.NoOfRecord,
@@ -358,9 +358,9 @@
             return repository.Fetch<GetAssDevByDevSubscriberItemModel>(criteria);
         }
 
-        public IEnumerable<GetAssMatrixByDeviceSubscriberItemModel> GetAssMatrixByDeviceSubscriberDcs(GetAssMatrixByDeviceSubscriberParamModel param)
+        public IEnumerable<GetAssMatrixByDeviceSubscriberItemModel> GetAssMatrixByDeviceSubscriber_DCSExtra(GetAssMatrixByDeviceSubscriberParamModel param)
         {
-            var criteria = new GetAssMatrixByDeviceSubsriberDcsCriteria
+            var criteria = new GetAssMatrixByDeviceSubsriberDCSExtraCriteria
             {
                 DeviceID = param.DeviceID,
                 NoOfCustomer = param.NoOfCustomer,
@@ -373,9 +373,9 @@
         #endregion
 
         #region report
-        public TransactionHistoryDcsResultModel GetTransactionHistoryByDeviceDcs(TransactionHistoryByDeviceParamModel param)
+        public TransactionHistoryDCSExtraResultModel GetTransactionHistoryByDevice_DCSExtra(TransactionHistoryByDeviceParamModel param)
         {
-            var criteria = new GetTransHistoryByDevSubDcsCriteria
+            var criteria = new GetTransHistoryByDevSubDCSExtraCriteria
             {
                 DeviceID = param.DeviceID,
                 FromDate = param.FromDate,
@@ -385,28 +385,28 @@
                 Take = param.Take,
             };
 
-            return new TransactionHistoryDcsResultModel()
+            return new TransactionHistoryDCSExtraResultModel()
             {
-                Items = repository.Fetch<TransactionHistoryDcsItemModel>(criteria),
+                Items = repository.Fetch<TransactionHistoryDCSExtraItemModel>(criteria),
                 TotalItem = criteria.TotalItem
             };
         }
 
-        public TransactionResultModel GetTransactionHistoryDcs(TransactionParamModel param)
+        public TransactionResultModel GetTransactionHistory_DCSExtra(TransactionParamModel param)
         {
             if (param.CTSCustID != null && param.CTSCustID > 0)
             {
-                return GetTransactionByCustSubscriberDcs(param);
+                return GetTransactionByCustSubscriber_DCSExtra(param);
             }
 
-            return GetTransactionBySubscriberDcs(param);
+            return GetTransactionBySubscriber_DCSExtra(param);
         }
 
-        private TransactionResultModel GetTransactionByCustSubscriberDcs(TransactionParamModel param)
+        private TransactionResultModel GetTransactionByCustSubscriber_DCSExtra(TransactionParamModel param)
         {
             var data = new TransactionResultModel();
 
-            var criteria = new GetTransactionHistoryByCustSubscriberDcsCriteria
+            var criteria = new GetTransactionHistoryByCustSubscriberDCSExtraCriteria
             {
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
@@ -416,7 +416,7 @@
                 Take = param.Take
             };
 
-            data.Items = repository.Fetch<TransactionDcsItemModel>(criteria).Select(x => new TransactionItemModel()
+            data.Items = repository.Fetch<TransactionDCSExtraItemModel>(criteria).Select(x => new TransactionItemModel()
             {
                 Action = x.Action,
                 ActionResult = x.ActionResult,
@@ -437,11 +437,11 @@
             return data;
         }
 
-        private TransactionResultModel GetTransactionBySubscriberDcs(TransactionParamModel param)
+        private TransactionResultModel GetTransactionBySubscriber_DCSExtra(TransactionParamModel param)
         {
             var data = new TransactionResultModel();
 
-            var criteria = new GetTransactionHistoryBySubscriberDcsCriteria
+            var criteria = new GetTransactionHistoryBySubscriberDCSExtraCriteria
             {
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
@@ -452,7 +452,7 @@
                 Take = param.Take
             };
 
-            data.Items = repository.Fetch<TransactionDcsItemModel>(criteria).Select(x => new TransactionItemModel()
+            data.Items = repository.Fetch<TransactionDCSExtraItemModel>(criteria).Select(x => new TransactionItemModel()
             {
                 Action = x.Action,
                 ActionResult = x.ActionResult,
@@ -473,11 +473,11 @@
             return data;
         }
 
-        public LastestTransactionResultModel GetLastestTransactionBySubscriberDcs(LastestTransactionParamModel param)
+        public LastestTransactionResultModel GetLastestTransactionBySubscriber_DCSExtra(LastestTransactionParamModel param)
         {
             var data = new LastestTransactionResultModel();
 
-            var criteria = new GetLastestTransactionDcsCriteria
+            var criteria = new GetLastestTransactionDCSExtraCriteria
             {
                 SubscriberID = param.SubscriberID,
                 Length = param.Length,

@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class TransactionDcsItemModel
+    public class TransactionDCSExtraItemModel
     {
         public DateTime TransTime { get; set; }
 

@@ -10,55 +10,55 @@
     public interface IFpsService
     {
         #region cts
-        SearchAccountResultModel SearchAccountCts(SearchAccountParamModel param);
+        SearchAccountResultModel SearchAccount_DCSCenter(SearchAccountParamModel param);
 
-        GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriberCts(GetAssAccountInfoByCustSubscriberParamModel param);
+        GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriber_DCSCenter(GetAssAccountInfoByCustSubscriberParamModel param);
 
-        TransactionResultModel GetTransactionHistoryCts(TransactionParamModel param);
+        TransactionResultModel GetTransactionHistory_DCSCenter(TransactionParamModel param);
 
-        GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriberCts(GetAssAccountsByCustSubscriberParamModel param);
+        GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriber_DCSCenter(GetAssAccountsByCustSubscriberParamModel param);
 
-        GetAssDevicesByCustSubscriberResultModel GetAssDevicesByCustSubscriberCts(GetAssDevicesByCustSubscriberParamModel param);
+        GetAssDevicesByCustSubscriberResultModel GetAssDevicesByCustSubscriber_DCSCenter(GetAssDevicesByCustSubscriberParamModel param);
 
-        GetAssMatrixAccountByCustSubscriberResultModel GetAssMatrixAccountByCustSubscriberCts(GetAssMatrixAccountByCustSubscriberParamModel param);
+        GetAssMatrixAccountByCustSubscriberResultModel GetAssMatrixAccountByCustSubscriber_DCSCenter(GetAssMatrixAccountByCustSubscriberParamModel param);
 
-        LastestTransactionResultModel GetLastestTransactionBySubscriberCts(LastestTransactionParamModel param);
+        LastestTransactionResultModel GetLastestTransactionBySubscriber_DCSCenter(LastestTransactionParamModel param);
         #endregion cts
 
         #region dcs
 
         #region search
-        SearchAccountResultModel SearchAccountDcs(SearchAccountParamModel param);
+        SearchAccountResultModel SearchAccount_DCSExtra(SearchAccountParamModel param);
 
-        IEnumerable<SearchDeviceItemDcsModel> SearchDeviceDcs(SearchDeviceParamModel param);
+        IEnumerable<SearchDeviceItemDCSExtraModel> SearchDevice_DCSExtra(SearchDeviceParamModel param);
         #endregion
 
         #region account
-        GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriberDcs(GetAssAccountInfoByCustSubscriberParamModel param);
+        GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriber_DCSExtra(GetAssAccountInfoByCustSubscriberParamModel param);
 
-        GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriberDcs(GetAssAccountsByCustSubscriberParamModel param);
+        GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriber_DCSExtra(GetAssAccountsByCustSubscriberParamModel param);
 
-        GetAssDevicesByCustSubscriberResultModel GetAssDevicesByCustSubscriberDcs(GetAssDevicesByCustSubscriberParamModel param);
+        GetAssDevicesByCustSubscriberResultModel GetAssDevicesByCustSubscriber_DCSExtra(GetAssDevicesByCustSubscriberParamModel param);
 
-        GetAssMatrixAccountByCustSubscriberResultModel GetAssMatrixAccountByCustSubscriberDcs(GetAssMatrixAccountByCustSubscriberParamModel param);
+        GetAssMatrixAccountByCustSubscriberResultModel GetAssMatrixAccountByCustSubscriber_DCSExtra(GetAssMatrixAccountByCustSubscriberParamModel param);
         #endregion
 
         #region device
-        GetAssDeviceInfoByIDSubscriberModel GetAssDeviceInfoByIDSubscriberDcs(GetAssDeviceInfoByIDSubscriberParamModel param);
+        GetAssDeviceInfoByIDSubscriberModel GetAssDeviceInfoByIDSubscriber_DCSExtra(GetAssDeviceInfoByIDSubscriberParamModel param);
 
-        IEnumerable<GetAssAccByDevSubscriberItemModel> GetAssAccByDevSubscriberDcs(GetAssAccByDevSubscriberParamModel param);
+        IEnumerable<GetAssAccByDevSubscriberItemModel> GetAssAccByDevSubscriber_DCSExtra(GetAssAccByDevSubscriberParamModel param);
 
-        IEnumerable<GetAssDevByDevSubscriberItemModel> GetAssDevByDevSubscriberDcs(GetAssDevByDevSubscriberParamModel param);
+        IEnumerable<GetAssDevByDevSubscriberItemModel> GetAssDevByDevSubscriber_DCSExtra(GetAssDevByDevSubscriberParamModel param);
 
-        IEnumerable<GetAssMatrixByDeviceSubscriberItemModel> GetAssMatrixByDeviceSubscriberDcs(GetAssMatrixByDeviceSubscriberParamModel param);
+        IEnumerable<GetAssMatrixByDeviceSubscriberItemModel> GetAssMatrixByDeviceSubscriber_DCSExtra(GetAssMatrixByDeviceSubscriberParamModel param);
         #endregion
 
         #region report
-        TransactionHistoryDcsResultModel GetTransactionHistoryByDeviceDcs(TransactionHistoryByDeviceParamModel param);
+        TransactionHistoryDCSExtraResultModel GetTransactionHistoryByDevice_DCSExtra(TransactionHistoryByDeviceParamModel param);
 
-        TransactionResultModel GetTransactionHistoryDcs(TransactionParamModel param);
+        TransactionResultModel GetTransactionHistory_DCSExtra(TransactionParamModel param);
 
-        LastestTransactionResultModel GetLastestTransactionBySubscriberDcs(LastestTransactionParamModel param);
+        LastestTransactionResultModel GetLastestTransactionBySubscriber_DCSExtra(LastestTransactionParamModel param);
         #endregion
 
         #endregion dcs

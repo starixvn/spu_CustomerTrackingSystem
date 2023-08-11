@@ -1,22 +1,15 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Api.FPS.Transaction
+﻿namespace Fanex.NAP.CTS.Criteria.Api.FPS.SearchAccount
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using System;
 
-    public class GetTransactionHistoryByCustSubscriberDcsCriteria : CriteriaBase
+    public class GetListAccountByUserNameSubscriberDCSExtraCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_SubscriberID")]
         public int SubscriberID { get; set; }
 
-        [SpParam(SqlParamName = "ip_AccountID")]
-        public long? CTSCustID { get; set; }
-
-        [SpParam(SqlParamName = "ip_FromDate")]
-        public DateTime FromDate { get; set; }
-
-        [SpParam(SqlParamName = "ip_ToDate")]
-        public DateTime ToDate { get; set; }
+        [SpParam(SqlParamName = "ip_LoginName")]
+        public string UserName { get; set; }
 
         [SpParam(SqlParamName = "ip_Skip")]
         public int Skip { get; set; }
@@ -29,7 +22,7 @@
 
         public override string GetSettingKey()
         {
-            return "DCS_ET_Transaction_GetHistoryByAccountSubscriber";
+            return "DCS_ET_AccountInfo_GetPartialByLoginNameSubscriber";
         }
 
         public override bool IsValid()

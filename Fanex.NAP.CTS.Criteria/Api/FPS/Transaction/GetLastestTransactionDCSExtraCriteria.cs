@@ -2,21 +2,14 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using System;
 
-    public class GetTransactionHistoryByCustSubscriberCtsCriteria : CriteriaBase
+    public class GetLastestTransactionDCSExtraCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_SubscriberID")]
         public int SubscriberID { get; set; }
 
-        [SpParam(SqlParamName = "ip_CTSCustID")]
-        public long? CTSCustID { get; set; }      
-
-        [SpParam(SqlParamName = "ip_FromDate")]
-        public DateTime FromDate { get; set; }
-
-        [SpParam(SqlParamName = "ip_ToDate")]
-        public DateTime ToDate { get; set; }
+        [SpParam(SqlParamName = "ip_Length")]
+        public int Length { get; set; }
 
         [SpParam(SqlParamName = "ip_Skip")]
         public int Skip { get; set; }
@@ -29,7 +22,7 @@
 
         public override string GetSettingKey()
         {
-            return "DCS_DC_Transaction_GetHistoryByCustSubscriber";
+            return "DCS_ET_Transaction_GetLatestBySubscriber";
         }
 
         public override bool IsValid()

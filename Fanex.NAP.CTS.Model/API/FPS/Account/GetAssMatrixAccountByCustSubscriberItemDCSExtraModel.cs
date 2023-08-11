@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class GetAssMatrixAccountByCustSubscriberItemDcsModel
+    public class GetAssMatrixAccountByCustSubscriberItemDCSExtraModel
     {
         public int ID { get; set; }
 
