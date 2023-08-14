@@ -12,6 +12,21 @@
         [SpParam(SqlParamName = "ip_LoginName")]
         public string UserName { get; set; }
 
+        [SpParam(SqlParamName = "ip_DeviceCode")]
+        public string DeviceCode { get; set; }
+
+        [SpParam(SqlParamName = "ip_IP")]
+        public string IP { get; set; }
+
+        [SpParam(SqlParamName = "ip_Country")]
+        public string Country { get; set; }
+
+        [SpParam(SqlParamName = "ip_Region")]
+        public string Region { get; set; }
+
+        [SpParam(SqlParamName = "ip_City")]
+        public string City { get; set; }
+
         [SpParam(SqlParamName = "ip_IsPartial")]
         public bool IsPartial { get; set; }
 

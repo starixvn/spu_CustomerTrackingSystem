@@ -54,7 +54,9 @@
         #endregion
 
         #region report
-        TransactionHistoryDCSExtraResultModel GetTransactionHistoryByDevice_DCSExtra(TransactionHistoryByDeviceParamModel param);
+        TransactionHistoryByDeviceDCSExtraResultModel GetTransactionHistoryByDevice_DCSExtra(TransactionHistoryByDeviceParamModel param);
+
+        TransactionHistoryByAccountDCSExtraResultModel GetTransactionHistoryByAccount_DCSExtra(TransactionHistoryByAccountParamModel param);
 
         TransactionResultModel GetTransactionHistory_DCSExtra(TransactionParamModel param);
 

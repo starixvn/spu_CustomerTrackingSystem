@@ -389,7 +389,7 @@
         #endregion
 
         #region report
-        public TransactionHistoryDCSExtraResultModel GetTransactionHistoryByDevice_DCSExtra(TransactionHistoryByDeviceParamModel param)
+        public TransactionHistoryByDeviceDCSExtraResultModel GetTransactionHistoryByDevice_DCSExtra(TransactionHistoryByDeviceParamModel param)
         {
             var criteria = new GetTransHistoryByDevSubDCSExtraCriteria
             {
@@ -401,59 +401,33 @@
                 Take = param.Take,
             };
 
-            return new TransactionHistoryDCSExtraResultModel()
+            return new TransactionHistoryByDeviceDCSExtraResultModel()
             {
-                Items = repository.Fetch<TransactionHistoryDCSExtraItemModel>(criteria),
+                Items = repository.Fetch<TransactionHistoryByDeviceDCSExtraItemModel>(criteria),
+                TotalItem = criteria.TotalItem
+            };
+        }
+
+        public TransactionHistoryByAccountDCSExtraResultModel GetTransactionHistoryByAccount_DCSExtra(TransactionHistoryByAccountParamModel param)
+        {
+            var criteria = new GetTransactionHistoryByCustSubscriberDCSExtraCriteria
+            {
+                CTSCustID = param.CTSCustID,
+                FromDate = param.FromDate,
+                SubscriberID = param.SubscriberID,
+                ToDate = param.ToDate,
+                Skip = param.Skip,
+                Take = param.Take,
+            };
+
+            return new TransactionHistoryByAccountDCSExtraResultModel()
+            {
+                Items = repository.Fetch<TransactionHistoryByAccountDCSExtraItemModel>(criteria),
                 TotalItem = criteria.TotalItem
             };
         }
 
         public TransactionResultModel GetTransactionHistory_DCSExtra(TransactionParamModel param)
-        {
-            if (param.CTSCustID != null && param.CTSCustID > 0)
-            {
-                return GetTransactionByCustSubscriber_DCSExtra(param);
-            }
-
-            return GetTransactionBySubscriber_DCSExtra(param);
-        }
-
-        private TransactionResultModel GetTransactionByCustSubscriber_DCSExtra(TransactionParamModel param)
-        {
-            var data = new TransactionResultModel();
-
-            var criteria = new GetTransactionHistoryByCustSubscriberDCSExtraCriteria
-            {
-                FromDate = param.FromDate,
-                ToDate = param.ToDate,
-                SubscriberID = param.SubscriberID,
-                CTSCustID = param.CTSCustID,
-                Skip = param.Skip,
-                Take = param.Take
-            };
-
-            data.Items = repository.Fetch<TransactionDCSExtraItemModel>(criteria).Select(x => new TransactionItemModel()
-            {
-                Action = x.Action,
-                ActionResult = x.ActionResult,
-                Browser = x.Browser,
-                CTSCustID = x.AccountID,
-                FirstDeviceCode = x.FirstDeviceCode,
-                IP = x.IP,
-                OS = x.OS,
-                UserName = x.LoginName,
-                RobotTracking = x.RobotTracking,
-                SubscriberID = x.SubscriberID,
-                TransID = x.TransID,
-                TransTime = x.TransTime,
-                URLDetails = x.URLDetails
-            });
-            data.TotalItem = criteria.TotalItem;
-
-            return data;
-        }
-
-        private TransactionResultModel GetTransactionBySubscriber_DCSExtra(TransactionParamModel param)
         {
             var data = new TransactionResultModel();
 
@@ -462,7 +436,12 @@
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
                 SubscriberID = param.SubscriberID,
-                UserName = param.UserName,
+                UserName = string.IsNullOrEmpty(param.UserName) ? null : param.UserName,
+                City = string.IsNullOrEmpty(param.City) ? null : param.City,
+                Country = string.IsNullOrEmpty(param.Country) ? null : param.Country,
+                DeviceCode = string.IsNullOrEmpty(param.DeviceCode) ? null : param.DeviceCode,
+                IP = string.IsNullOrEmpty(param.IP) ? null : param.IP,
+                Region = string.IsNullOrEmpty(param.Region) ? null : param.Region,
                 IsPartial = param.IsPartial,
                 Skip = param.Skip,
                 Take = param.Take
@@ -482,7 +461,12 @@
                 SubscriberID = x.SubscriberID,
                 TransID = x.TransID,
                 TransTime = x.TransTime,
-                URLDetails = x.URLDetails
+                URLDetails = x.URLDetails,
+                City = x.City,
+                Country = x.Country,
+                ISP = x.ISP,
+                Region = x.Region,
+                UserAgent = x.UserAgent,
             });
             data.TotalItem = criteria.TotalItem;
 

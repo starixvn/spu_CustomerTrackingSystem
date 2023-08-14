@@ -355,7 +355,7 @@
 
         #region report
         [HttpPost]
-        public JsonResult<TransactionHistoryDCSExtraResultModel> GetTransactionHistoryByDeviceDCSExtra(TransactionHistoryByDeviceParamModel param)
+        public JsonResult<TransactionHistoryByDeviceDCSExtraResultModel> GetTransactionHistoryByDeviceDCSExtra(TransactionHistoryByDeviceParamModel param)
         {
             try
             {
@@ -369,10 +369,32 @@
 
                 if (!string.IsNullOrEmpty(ex.Message) && ex.Message.ToLower().Contains("timeout expired"))
                 {
-                    return Json(new TransactionHistoryDCSExtraResultModel() { IsTimeout = true });
+                    return Json(new TransactionHistoryByDeviceDCSExtraResultModel() { IsTimeout = true });
                 }
 
-                return Json(new TransactionHistoryDCSExtraResultModel());
+                return Json(new TransactionHistoryByDeviceDCSExtraResultModel());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult<TransactionHistoryByAccountDCSExtraResultModel> GetTransactionHistoryByAccountDCSExtra(TransactionHistoryByAccountParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetTransactionHistoryByAccount_DCSExtra(param);
+
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Transaction History By Account DCS Extra exception: " + ex.Message);
+
+                if (!string.IsNullOrEmpty(ex.Message) && ex.Message.ToLower().Contains("timeout expired"))
+                {
+                    return Json(new TransactionHistoryByAccountDCSExtraResultModel() { IsTimeout = true });
+                }
+
+                return Json(new TransactionHistoryByAccountDCSExtraResultModel());
             }
         }
 

@@ -213,7 +213,10 @@
     <Compile Include="API\FPS\Device\GetAssMatrixByDeviceSubscriberItemModel.cs" />
     <Compile Include="API\FPS\Device\GetAssMatrixByDeviceSubscriberParamModel.cs" />
     <Compile Include="API\FPS\Transaction\LatestTransactionDCSCenterItemModel.cs" />
-    <Compile Include="API\FPS\Transaction\TransactionHistoryDCSExtraItemModel.cs" />
+    <Compile Include="API\FPS\Transaction\TransactionHistoryByAccountDCSExtraItemModel.cs" />
+    <Compile Include="API\FPS\Transaction\TransactionHistoryByAccountDCSExtraResultModel.cs" />
+    <Compile Include="API\FPS\Transaction\TransactionHistoryByAccountParamModel.cs" />
+    <Compile Include="API\FPS\Transaction\TransactionHistoryByDeviceDCSExtraItemModel.cs" />
     <Compile Include="API\FPS\Transaction\TransactionHistoryByDeviceParamModel.cs" />
     <Compile Include="API\FPS\Search\SearchAccountItemDCSExtraModel.cs" />
     <Compile Include="API\FPS\Search\SearchAccountParamModel.cs" />
@@ -227,7 +230,7 @@
     <Compile Include="API\FPS\Transaction\LatestTransactionParamModel.cs" />
     <Compile Include="API\FPS\Transaction\LatestTransactionResultModel.cs" />
     <Compile Include="API\FPS\Transaction\TransactionDCSExtraItemModel.cs" />
-    <Compile Include="API\FPS\Transaction\TransactionHistoryDCSExtraResultModel.cs" />
+    <Compile Include="API\FPS\Transaction\TransactionHistoryByDeviceDCSExtraResultModel.cs" />
     <Compile Include="API\FPS\Transaction\TransactionItemModel.cs" />
     <Compile Include="API\FPS\Transaction\TransactionParamModel.cs" />
     <Compile Include="API\FPS\Transaction\TransactionResultModel.cs" />
