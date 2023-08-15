@@ -1001,8 +1001,8 @@ function MatchMonitorDetail() {
                 const data = response?.data;
                 if (data) {
                     RenderFilter(data, isRefreshcbbSite);
-
-                    if (maxSequenceId == 1 && data.MaxSequenceId > 0 && currentType == MatchMonitorDetailViewType.TicketAll) {
+                  
+                    if (data.MaxSequenceId > 0 && currentType == MatchMonitorDetailViewType.TicketAll) {
                         maxSequenceId = data.MaxSequenceId;
                     }
                 }
@@ -1959,15 +1959,16 @@ function MatchMonitorDetail() {
                 CacheSelectDataFilter();
                 domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);                
 
-                if (!cacheMGroup.isActive) {
-                    FetchMatchMonitorDetail(currentType);                   
-                }
-                else {
-                    domElements.inputHomeSelectAll.prop('checked', false);
-                    domElements.inputAwaySelectAll.prop('checked', false);
-                    //FilterUIGrid();         
-                    FilterUIGridByMGr();
-                }                
+                FetchMatchMonitorDetail(currentType);
+                //if (!cacheMGroup.isActive) {
+                //    FetchMatchMonitorDetail(currentType);                   
+                //}
+                //else {
+                //    domElements.inputHomeSelectAll.prop('checked', false);
+                //    domElements.inputAwaySelectAll.prop('checked', false);
+                //    //FilterUIGrid();         
+                //    FilterUIGridByMGr();
+                //}                
             }
         })
 

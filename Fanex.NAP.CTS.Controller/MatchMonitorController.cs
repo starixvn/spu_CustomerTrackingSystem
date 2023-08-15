@@ -567,18 +567,22 @@
                     {
                         //filter.IsValidFilterTicketLatest(Task.Run(() => GetAllMMFilterFromCache(para)).Result);
 
-                        var allTicketFromCache = GetAllMMDetailFromCache(para, filter);
+                        //var allTicketFromCache = GetAllMMDetailFromCache(para, filter);
 
-                        if (allTicketFromCache != null)
-                        {
-                            mdResult = allTicketFromCache.Clone();
+                        //if (allTicketFromCache != null)
+                        //{
+                        //    mdResult = allTicketFromCache.Clone();
 
-                            if (filter.ReasonList != null || filter.AGroupList != null)
-                            {
-                                mdResult.FilterItemMMDetailByReasonAGroup(filter);
-                            }
-                        }
+                        //    if (filter.ReasonList != null || filter.AGroupList != null)
+                        //    {
+                        //        mdResult.FilterItemMMDetailByReasonAGroup(filter);
+                        //    }
+                        //}
 
+                        mdResult = GetAllMMDetailFromCache(para, filter).Clone();
+
+                        mdResult.FilterItemMMDetail(filter, para.Sites);
+                        
                         break;
                     }
             }

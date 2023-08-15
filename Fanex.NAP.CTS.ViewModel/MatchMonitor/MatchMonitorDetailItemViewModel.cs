@@ -256,14 +256,14 @@
                 filter.Danger5List == null;
 
             if (isPass) 
-                return isPass;
-           
-            isPass = (filter.Danger1List?.Contains(Danger1) ?? false) ||
-                (filter.Danger2List?.Contains(Danger2) ?? false) ||
-                (filter.Danger3List?.Contains(Danger3) ?? false) ||
-                (filter.Danger4List?.Contains(Danger4) ?? false) ||
-                (filter.Danger5List?.Contains(Danger5) ?? false) ||
-                (filter.IsDangerNone ? DangerToString == "-" : true);
+                return isPass;           
+
+            isPass = (filter.Danger1List?.Any(x => x == Danger1) ?? false) ||
+                (filter.Danger2List?.Any(x => x == Danger2) ?? false) ||
+                (filter.Danger3List?.Any(x => x == Danger3) ?? false) ||
+                (filter.Danger4List?.Any(x => x == Danger4) ?? false) ||
+                (filter.Danger5List?.Any(x => x == Danger5) ?? false) ||
+                (filter.IsDangerNone ? DangerToString == "-" : false);
 
             return isPass;
         }
