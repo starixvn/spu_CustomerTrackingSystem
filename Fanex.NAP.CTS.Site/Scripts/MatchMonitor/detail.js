@@ -1405,7 +1405,7 @@ function MatchMonitorDetail() {
             }
             else {
                 domElements.inputHomeSelectAll.prop('checked', false);
-                domElements.inputAwaySelectAll.prop('checked', false);                               
+                domElements.inputAwaySelectAll.prop('checked', false);
             }
 
             FilterUIGridByMGr();
@@ -1757,7 +1757,7 @@ function MatchMonitorDetail() {
             }
             domElements.cbbAGroup.multiselect("refresh");     
 
-            AGrOnChange();
+            AGrOnChange(true);
         }
     }
 
