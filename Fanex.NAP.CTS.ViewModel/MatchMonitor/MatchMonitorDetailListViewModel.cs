@@ -140,7 +140,11 @@
                                 CurrencyItems = g.Select(x =>
                                 {
                                     var isNotValid = string.IsNullOrEmpty(x.CurrencyName) || x.CurrencyId == 0;
-                                    return new ScoreCurrencyItemViewModel { CurrencyId = isNotValid ? -1 : x.CurrencyId, CurrencyName = isNotValid ? "-" : x.CurrencyName };
+                                    return new ScoreCurrencyItemViewModel
+                                    {
+                                        CurrencyId = isNotValid ? -1 : x.CurrencyId,
+                                        CurrencyName = isNotValid ? "-" : x.CurrencyName,                                     
+                                    };
                                 }).Distinct(x => x.CurrencyId)
                             });
                         #endregion
@@ -225,10 +229,11 @@
                     Task.Run(() =>
                     {
                         #region Currency - Reason
-                        DropdownList.CurrencyReasonList = mdItemList.GroupBy(x => x.CurrencyId)
+                        DropdownList.CurrencyReasonList = mdItemList.GroupBy(x => new { x.CurrencyId })
                             .Select(g => new CurrencyReasonViewModel
                             {
-                                CurrencyId = g.Key,
+                                CurrencyId = g.Key.CurrencyId,
+                                ScoreList = g.Select(x=>x.Score).Distinct(),
                                 ReasonItems = g.Select(x => new CurrencyReasonItemViewModel { ReasonList = x.ReasonList }).Distinct(x=>x.ReasonList)
                             });
                         #endregion

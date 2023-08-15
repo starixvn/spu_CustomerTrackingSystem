@@ -11,6 +11,8 @@
 
         public int CurrencyId { get; set; }
 
+        public IEnumerable<string> ScoreList { get; set; }
+
         public IEnumerable<CurrencyReasonItemViewModel> ReasonItems { get; set; }
     }
 }

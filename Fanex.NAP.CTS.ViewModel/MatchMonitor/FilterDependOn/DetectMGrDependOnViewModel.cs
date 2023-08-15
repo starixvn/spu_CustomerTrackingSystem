@@ -32,7 +32,7 @@
                 .Select(g => new AGrMGrViewModel
                 {
                     AGr = g.Key,
-                    MGrItems = g.Select(x => new AGrMGrItemViewModel { MGr = x.MGr.ToString() }).Distinct(x=>x.MGr)
+                    MGrItems = g.Select(x => new AGrMGrItemViewModel { MGr = x.MGr.ToString() }).Distinct(x => x.MGr)
                 });
             
         }

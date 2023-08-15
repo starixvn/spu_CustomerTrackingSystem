@@ -1613,8 +1613,9 @@ function MatchMonitorDetail() {
                 $.each(cacheFilterDependOn.ScoreCurrencyList, function (idx, item) {
                     if (item["Score"] == currentScore) {
                         item["CurrencyItems"].map(function (curr) {                           
-                            if (currencyItems.findIndex(y => y.CurrencyId == curr.CurrencyId) == -1)
-                                currencyItems.push(curr);
+                            if (currencyItems.findIndex(y => y.CurrencyId == curr.CurrencyId) == -1) {
+                                currencyItems.push(curr);                               
+                            }                                
                         });
                         return false;
                     }
@@ -1687,26 +1688,29 @@ function MatchMonitorDetail() {
     function CurrencyOnChange() {       
         if (cacheFilterDependOn.CurrencyReasonList) {
             let reasonItems = [];
-
+            
             $("option:selected", domElements.cbbCurrency).each(function () {
                 let currencyId = $(this).val();
 
                 $.each(cacheFilterDependOn.CurrencyReasonList, function (idx, item) {                    
                     if (item["CurrencyId"] == 0) {
-                        if (reasonItems.findIndex((obj) => obj == "-") == -1)
+                        if (reasonItems.findIndex((obj) => obj == "-") == -1) {
                             reasonItems.push("-");
+                        }                            
                     }
 
                     if (item["CurrencyId"] == currencyId) {
-                        item["ReasonItems"].map(function (reason) {
-                            if (reason.ReasonList) {                               
-                                reason.ReasonList.split(',').forEach(x => {
-                                    if (reasonItems.findIndex((obj) => obj == x) == -1)
-                                        reasonItems.push(x);
-                                }) 
-                            }
-                        
-                        });
+                        if(CheckExistScores(item["ScoreList"])){
+                            item["ReasonItems"].map(function (reason) {
+                                if (reason.ReasonList) {
+                                    reason.ReasonList.split(',').forEach(x => {
+                                        if (reasonItems.findIndex((obj) => obj == x) == -1)
+                                            reasonItems.push(x);
+                                    })
+                                }
+
+                            });
+                        }
                         return false;
                     }
                 });
@@ -1723,6 +1727,15 @@ function MatchMonitorDetail() {
             ReasonOnChange();
         }
     }  
+
+    function CheckExistScores(scores) {
+        let selectedScores = [];
+        $("option:selected", domElements.cbbMatchScore).each(function () {
+            selectedScores.push($(this).val())
+        })
+
+        return selectedScores.some(item => scores.includes(item));
+    }
 
     function ReasonOnChange() {
         if (cacheFilterDependOn.ReasonAGroupList) {
@@ -1789,6 +1802,7 @@ function MatchMonitorDetail() {
         }
 
         if (mGrItems.length > 0) {
+            mGrItems.sort((a, b) => a - b);
             mGrItems.forEach(item => {
                 domElements.cbbMGroup.append(`<option selected value='${item}'>${item}</option>`);
             });
@@ -1875,7 +1889,7 @@ function MatchMonitorDetail() {
     //#endregion Event Toggle
     
     function Resize() {
-        domElements.groupTable.width($(window).width() - 25);
+        domElements.groupTable.width($(window).width() - 38);
 
         let detailpageHeight = domElements.detailpage.outerHeight();
         let breadcrumbButtonHeight = domElements.breadcrumbButton.outerHeight();

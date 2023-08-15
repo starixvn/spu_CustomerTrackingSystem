@@ -404,28 +404,28 @@
 
                                     _memoryCacheService.PushValueAsync(keySite, typeOfAllTicketAllSiteCache);
                                 });
-                                _ = Task.Run(() =>
-                                {
-                                    var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.Licensee);
-                                    var fraudTicketLicensee = GetFraudMMFilterFromCache(para, MMSites.Licensee);
-                                    var typeOfAllTicketAllLicenseeCache = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketLicensee, MMSites.Licensee, para.LiveIndicator);
+                                //_ = Task.Run(() =>
+                                //{
+                                //    var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.Licensee);
+                                //    var fraudTicketLicensee = GetFraudMMFilterFromCache(para, MMSites.Licensee);
+                                //    var typeOfAllTicketAllLicenseeCache = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketLicensee, MMSites.Licensee, para.LiveIndicator);
 
-                                    typeOfAllTicketAllLicenseeCache.BindDropdownListByMainTicketInfo(mmticketDetailInfo.TicketInfoList.Where(x => x.IsLicensee), para.LiveIndicator);
-                                    typeOfAllTicketAllLicenseeCache.BindDropdownListByFraudTicket(fraudTicketLicensee);
+                                //    typeOfAllTicketAllLicenseeCache.BindDropdownListByMainTicketInfo(mmticketDetailInfo.TicketInfoList.Where(x => x.IsLicensee), para.LiveIndicator);
+                                //    typeOfAllTicketAllLicenseeCache.BindDropdownListByFraudTicket(fraudTicketLicensee);
 
-                                    _memoryCacheService.PushValueAsync(keySite, typeOfAllTicketAllLicenseeCache);
-                                });
-                                _ = Task.Run(() =>
-                                {
-                                    var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.Credit);
-                                    var fraudTicketCredit = GetFraudMMFilterFromCache(para, MMSites.Credit);
+                                //    _memoryCacheService.PushValueAsync(keySite, typeOfAllTicketAllLicenseeCache);
+                                //});
+                                //_ = Task.Run(() =>
+                                //{
+                                //    var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.Credit);
+                                //    var fraudTicketCredit = GetFraudMMFilterFromCache(para, MMSites.Credit);
 
-                                    var typeOfAllTicketAllCreditCache = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketCredit, MMSites.Credit, para.LiveIndicator);
-                                    typeOfAllTicketAllCreditCache.BindDropdownListByMainTicketInfo(mmticketDetailInfo.TicketInfoList.Where(x => !x.IsLicensee), para.LiveIndicator);
-                                    typeOfAllTicketAllCreditCache.BindDropdownListByFraudTicket(fraudTicketCredit);
+                                //    var typeOfAllTicketAllCreditCache = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketCredit, MMSites.Credit, para.LiveIndicator);
+                                //    typeOfAllTicketAllCreditCache.BindDropdownListByMainTicketInfo(mmticketDetailInfo.TicketInfoList.Where(x => !x.IsLicensee), para.LiveIndicator);
+                                //    typeOfAllTicketAllCreditCache.BindDropdownListByFraudTicket(fraudTicketCredit);
 
-                                    _memoryCacheService.PushValueAsync(keySite, typeOfAllTicketAllCreditCache);
-                                });
+                                //    _memoryCacheService.PushValueAsync(keySite, typeOfAllTicketAllCreditCache);
+                                //});
                             }
                         }
 
@@ -552,36 +552,27 @@
             {
                 case MatchMonitorQueryType.TicketFraud:
                     {
-                        mdResult = GetFraudMMDetailFromCache(para, para.Sites).Clone();
+                        var tickets = GetFraudMMDetailFromCache(para, para.Sites);
 
-                        mdResult.FilterItemMMDetail(filter, para.Sites);
+                        if (tickets != null)
+                        {
+                            mdResult = tickets.Clone();
 
-                        //if (filter.IsValidFilterTicketLatest(GetFraudMMFilterFromCache(para)))
-                        //{
-                        //    mdResult.FilterItemMMDetail(filter, para.Sites);
-                        //}
-
+                            mdResult.FilterItemMMDetail(filter, para.Sites);
+                        }
+                       
                         break;
                     }
                 case MatchMonitorQueryType.TicketAll when para.IsSupportShowAllTickets:
                     {
-                        //filter.IsValidFilterTicketLatest(Task.Run(() => GetAllMMFilterFromCache(para)).Result);
+                        var tickets = GetAllMMDetailFromCache(para, filter);
 
-                        //var allTicketFromCache = GetAllMMDetailFromCache(para, filter);
+                        if (tickets != null)
+                        {
+                            mdResult = tickets.Clone();
 
-                        //if (allTicketFromCache != null)
-                        //{
-                        //    mdResult = allTicketFromCache.Clone();
-
-                        //    if (filter.ReasonList != null || filter.AGroupList != null)
-                        //    {
-                        //        mdResult.FilterItemMMDetailByReasonAGroup(filter);
-                        //    }
-                        //}
-
-                        mdResult = GetAllMMDetailFromCache(para, filter).Clone();
-
-                        mdResult.FilterItemMMDetail(filter, para.Sites);
+                            mdResult.FilterItemMMDetail(filter, para.Sites);
+                        }
                         
                         break;
                     }

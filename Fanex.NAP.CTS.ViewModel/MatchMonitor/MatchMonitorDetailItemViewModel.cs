@@ -255,17 +255,19 @@
                 filter.Danger4List == null &&
                 filter.Danger5List == null;
 
-            if (isPass) 
-                return isPass;           
-
-            isPass = (filter.Danger1List?.Any(x => x == Danger1) ?? false) ||
+            if (isPass)
+            {
+                return filter.IsDangerNone ? DangerToString == "-" : false;
+            }
+            else
+            {
+                return (filter.Danger1List?.Any(x => x == Danger1) ?? false) ||
                 (filter.Danger2List?.Any(x => x == Danger2) ?? false) ||
                 (filter.Danger3List?.Any(x => x == Danger3) ?? false) ||
                 (filter.Danger4List?.Any(x => x == Danger4) ?? false) ||
                 (filter.Danger5List?.Any(x => x == Danger5) ?? false) ||
                 (filter.IsDangerNone ? DangerToString == "-" : false);
-
-            return isPass;
+            }
         }
        
         public bool FilterItem(MMDetailFilterViewModel filter, IEnumerable<string> reasonGroupIDDic, string site)
