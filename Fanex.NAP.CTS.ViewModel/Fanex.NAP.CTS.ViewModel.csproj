@@ -174,6 +174,8 @@
     <Compile Include="MatchMonitor\DetectGroup\DetectGroupAssFilterViewModel.cs" />
     <Compile Include="MatchMonitor\DetectGroup\DetectGroupAssociationListViewModel.cs" />
     <Compile Include="MatchMonitor\DetectGroup\DetectGroupAssociationItemViewModel.cs" />
+    <Compile Include="MatchMonitor\DetectGroup\MGrItemViewModel.cs" />
+    <Compile Include="MatchMonitor\DetectGroup\MGrListViewModel.cs" />
     <Compile Include="MatchMonitor\DetectGroup\TicketSelectForMGrViewModel.cs" />
     <Compile Include="MatchMonitor\ExExcelTicketInfoViewModel.cs" />
     <Compile Include="MatchMonitor\ExExlMatchInfoViewModel.cs" />
