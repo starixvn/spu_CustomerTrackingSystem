@@ -508,6 +508,17 @@
 
             var transIdsRemove = new List<string>();
 
+            if ((filter.ReasonList.Count > 0 && !filter.ReasonList.Any(x => x.Equals("-")))
+                || (filter.AGroupList.Count > 0 && !filter.AGroupList.Any(x => x.Equals("-") || x.Equals("0"))))
+            {
+                var fraudTicket = GetFraudMMDetailFromCache(info, info.Sites);
+
+                var fraudTicketRAFilter = fraudTicket.Clone();
+                fraudTicketRAFilter.FilterItemMMDetail(filter, info.Sites);
+
+                return fraudTicketRAFilter.RecordsTotal;
+            }
+
             if (filter.ReasonList != null || filter.AGroupList != null)
             {
                 var fraudTicket = GetFraudMMDetailFromCache(info, info.Sites);

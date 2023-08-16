@@ -142,6 +142,7 @@
             this.AmountList = filter.AmountList;
             this.TicketStatusList = filter.TicketStatusList;
             this.SubscriberTypeList = filter.SubscriberTypeList;
+            this.IsDangerNone = filter.IsDangerNone;
         }
 
         public bool IsFilter { get; set; }
