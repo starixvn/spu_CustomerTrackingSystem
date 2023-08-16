@@ -758,8 +758,8 @@ function MatchMonitorDetail() {
             cacheFilterDependOn.ReasonAGroupList = data.DropdownList.ReasonAGroupList;   
             cacheFilterDependOn.AGrMGrBlankList = data.DropdownList.AGrMGrBlankList;
             cacheFilterDependOn.AGrMGrList = [];
-            cacheMGroup.allMGroup = [];
-            cacheMGroup.selectMgroup = [];            
+            cacheMGroup.allMGroup = {};
+            cacheMGroup.selectMgroup = {};            
             cacheFilterDependOn.TicketStatusList = data.DropdownList.TicketStatusList;
         }
         
@@ -1175,6 +1175,11 @@ function MatchMonitorDetail() {
         }
 
         cacheMGroup.selectMgroup = {};
+        cacheFilterDependOn.AGrMGrList = [];
+        cacheMGroup.allMGroup = {};
+        cacheMGroup.selectMgroup = {};
+        cacheMGroup.itemMMAwayTeam = [];
+        cacheMGroup.itemMMHomeTeam = [];
 
         let params = {
             CTSCustIDs: domElements.hdSelectedCTSCustIDs.val(),
@@ -1214,7 +1219,7 @@ function MatchMonitorDetail() {
 
                     RefreshBreadcrumbTotalTickets(totalItem, recordsTotalGlobal); 
 
-                    FilterUIGridByMGr();
+                    // FilterUIGridByMGr();
                 }
             },
             complete: function (response) {
@@ -1386,7 +1391,7 @@ function MatchMonitorDetail() {
         domElements.tblMMAwayTeam.DataTable().clear().rows.add(itemMMAwayTeamFilter).draw();
         totalItem = itemMMHomeTeamFilter.length + itemMMAwayTeamFilter.length;
 
-        RefreshBreadcrumbTotalTickets(totalItem, totalItem); 
+        RefreshBreadcrumbTotalTickets(totalItem, recordsTotalGlobal);
     }
 
     function FilterUIGrid() {
@@ -1796,7 +1801,7 @@ function MatchMonitorDetail() {
         }
 
         let mGrBlankItems = [];        
-        if (isGetDependMGrBlank && cacheFilterDependOn.AGrMGrBlankList.length > 0) {
+        if (cacheFilterDependOn.AGrMGrBlankList.length > 0) {
             mGrBlankItems = GetDependOnAGrMGr(cacheFilterDependOn.AGrMGrBlankList);
         }
 
@@ -1809,7 +1814,7 @@ function MatchMonitorDetail() {
 
         if (mGrBlankItems.length > 0) {
             mGrBlankItems.forEach(item => {
-                domElements.cbbMGroup.append(`<option selected value='${item}'>${item}</option>`);
+                domElements.cbbMGroup.append(`<option ${isGetDependMGrBlank ? 'selected' : '' } value='${item}'>${item}</option>`);
             });
         }
 
