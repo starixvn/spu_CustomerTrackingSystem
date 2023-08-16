@@ -124,17 +124,23 @@
             this.IsFilter = filter.IsFilter;
             this.MaxSequenceId = filter.MaxSequenceId;
             this.RecordsTotal = filter.RecordsTotal;
+            this.ScoreList = filter.ScoreList;
+            this.Danger1List = filter.Danger1List;
+            this.Danger2List = filter.Danger2List;
+            this.Danger3List = filter.Danger3List;
+            this.Danger4List = filter.Danger4List;
+            this.Danger5List = filter.Danger5List;
             this.CurrencyList = filter.CurrencyList;
             this.CurrencyIdList = filter.CurrencyIdList;
-            this.HDPList = filter.HDPList;
-            this.BetTeamList = filter.BetTeamList;
-            this.ScoreList = filter.ScoreList;
-            this.ReasonList = filter.ReasonList;
-            this.AmountList = filter.AmountList;
-            this.GroupList = filter.GroupList;
             this.ReasonInfos = filter.ReasonInfos;
             this.ReasonGroupIDDic = filter.ReasonGroupIDDic;
             this.AGroupList = filter.AGroupList;
+            this.ReasonList = filter.ReasonList;
+            this.GroupList = filter.GroupList;
+            this.HDPList = filter.HDPList;
+            this.BetTeamList = filter.BetTeamList;
+            this.AmountList = filter.AmountList;
+            this.TicketStatusList = filter.TicketStatusList;
             this.SubscriberTypeList = filter.SubscriberTypeList;
         }
 

@@ -746,7 +746,10 @@ function MatchMonitorDetail() {
             cacheFilterDependOn.Danger = data.DropdownList.Danger;
             cacheFilterDependOn.CurrencyReasonList = data.DropdownList.CurrencyReasonList;
             cacheFilterDependOn.ReasonAGroupList = data.DropdownList.ReasonAGroupList;   
-            cacheFilterDependOn.AGrMGrBlankList = data.DropdownList.AGrMGrBlankList;            
+            cacheFilterDependOn.AGrMGrBlankList = data.DropdownList.AGrMGrBlankList;
+            cacheFilterDependOn.AGrMGrList = [];
+            cacheMGroup.allMGroup = [];
+            cacheMGroup.selectMgroup = [];            
             cacheFilterDependOn.TicketStatusList = data.DropdownList.TicketStatusList;
         }
         
@@ -1032,13 +1035,12 @@ function MatchMonitorDetail() {
         let data = response?.data;
 
         if (data) {
-            if (typeOfTickets == MatchMonitorDetailViewType.TicketFraud ||
-                (typeOfTickets == MatchMonitorDetailViewType.TicketAll && data.IsFilter == true)) {
+            if (typeOfTickets == MatchMonitorDetailViewType.TicketFraud) {
                 recordsTotalGlobal = recordsFilteredGlobal = response.recordsFiltered;
             }
-            if (typeOfTickets == MatchMonitorDetailViewType.TicketAll && data.IsFilter == false) {
+            if (typeOfTickets == MatchMonitorDetailViewType.TicketAll) {
                 recordsFilteredGlobal += response?.recordsFiltered ?? 0;
-                recordsTotalGlobal = recordsFilteredGlobal;
+                // recordsTotalGlobal = recordsFilteredGlobal;
                 //if (recordsFilteredGlobal > recordsTotalGlobal) {
                 //    recordsTotalGlobal = recordsFilteredGlobal;
                 //}
@@ -1200,7 +1202,7 @@ function MatchMonitorDetail() {
                     //FilterUIGrid();
                     let totalItem = cacheMGroup.itemMMHomeTeam.length + cacheMGroup.itemMMAwayTeam.length;
 
-                    RefreshBreadcrumbTotalTickets(totalItem, totalItem); 
+                    RefreshBreadcrumbTotalTickets(totalItem, recordsTotalGlobal); 
 
                     FilterUIGridByMGr();
                 }

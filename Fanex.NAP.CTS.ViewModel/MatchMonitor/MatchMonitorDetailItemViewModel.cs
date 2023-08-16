@@ -272,16 +272,19 @@
        
         public bool FilterItem(MMDetailFilterViewModel filter, IEnumerable<string> reasonGroupIDDic, string site)
         {
+            var isFilterScore = filter.ScoreList?.Contains(Score ?? "-") ?? true;
+            var isFilterSite = FilterBySite(site);
+            var isFilterDanger = FilterByDanger(filter);
+            var isFilterCurrency = filter.CurrencyIdList?.Contains(CurrencyId) ?? true;
+            var isFilterReasonAGroup = FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic);
+            var isFilterHDPList = filter.HDPList?.Contains(BallHeadHDP()) ?? true;
+            var isFilterBetTeam = filter.BetTeamList?.Contains(BallHeadBetTeam()) ?? true;
+            var isFilterAmount = filter.AmountList == null || filter.AmountList.Count() < 2 ? true : Stake >= filter.AmountList[0] && Stake <= filter.AmountList[1];
+            var isFilterTicketStatus = filter.TicketStatusList?.Contains(TicketStatus) == null ? TicketStatus != 101 : filter.TicketStatusList.Contains(TicketStatus);
             var filterData =
-                (filter.ScoreList?.Contains(Score ?? "-") ?? true) &&
-                FilterBySite(site) &&
-                FilterByDanger(filter) &&
-                (filter.CurrencyIdList?.Contains(CurrencyId) ?? true) &&
-                FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic) &&              
-               (filter.HDPList?.Contains(BallHeadHDP()) ?? true) &&
-               (filter.BetTeamList?.Contains(BallHeadBetTeam()) ?? true) &&
-               (filter.AmountList == null || filter.AmountList.Count() < 2 ? true : Stake >= filter.AmountList[0] && Stake <= filter.AmountList[1]) &&
-               (filter.TicketStatusList?.Contains(TicketStatus) ?? false);
+                isFilterScore && isFilterSite && isFilterDanger && isFilterCurrency
+                && isFilterReasonAGroup && isFilterHDPList & isFilterBetTeam
+                && isFilterAmount && isFilterTicketStatus;
 
             return filterData;
         }
