@@ -516,7 +516,7 @@
                 var fraudTicketRAFilter = fraudTicket.Clone();
                 fraudTicketRAFilter.FilterItemMMDetail(filter, info.Sites);
 
-                return fraudTicketRAFilter.RecordsTotal;
+                return (fraudTicketRAFilter?.AwayMatchItemList?.Count() ?? 0) + (fraudTicketRAFilter?.HomeMatchItemList?.Count() ?? 0);
             }
 
             if (filter.ReasonList != null || filter.AGroupList != null)
