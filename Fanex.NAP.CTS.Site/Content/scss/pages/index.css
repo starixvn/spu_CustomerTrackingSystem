@@ -589,7 +589,7 @@ select {
   border-radius: 2px;
   outline: none;
   height: 28px;
-  line-height: 28px;
+ /* line-height: 28px;*/
   padding-left: 6px;
   padding-right: 10px;
   background-color: #fff;
