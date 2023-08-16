@@ -299,6 +299,8 @@ function MatchMonitorDetail() {
             for (var i = 0; i < data.length; i++) {
                 element.append(`<option selected value='${data[i]}'>${data[i]}</option>`);
             }
+
+            element.parent().find('button').removeClass('border-error');
         }
 
         element.multiselect("refresh");
@@ -323,6 +325,8 @@ function MatchMonitorDetail() {
             data.forEach(item => {
                 element.append(`<option selected value='${item.Key}'>${item.Value}</option>`);
             });
+
+            element.parent().find('button').removeClass('border-error');
         }
 
         element.multiselect("refresh");
@@ -338,6 +342,8 @@ function MatchMonitorDetail() {
             for (var i = 0; i < data.length; i++) {
                 domElements.cbbAGroup.append(`<option selected value='${data[i].GroupID}'>${data[i].GroupName}</option>`);
             }
+
+            domElements.cbbAGroup.parent().find('button').removeClass('border-error');
         }
 
         domElements.cbbAGroup.multiselect("refresh");
@@ -373,7 +379,9 @@ function MatchMonitorDetail() {
             if (data.Danger4.DangerItems.length > 0) siteSelector.append(BuildOptgroup(4, "Basketball", data.Danger4.DangerItems));
 
             if (data.Danger5.DangerItems.length > 0) siteSelector.append(BuildOptgroup(5, "E-Sports", data.Danger5.DangerItems));
-         
+
+            domElements.cbbDanger.parent().find('button').removeClass('border-error');
+
             domElements.cbbDanger.multiselect('refresh');
         }               
     }
@@ -414,6 +422,8 @@ function MatchMonitorDetail() {
                     domElements.cbbTicketsStatus.append(`<option selected value='${item.TicketStatus}'>${item.TicketStatusName}</option>`);
                 }                
             });
+
+            domElements.cbbTicketsStatus.parent().find('button').removeClass('border-error');
         }
 
         domElements.cbbTicketsStatus.multiselect("refresh");
@@ -753,9 +763,9 @@ function MatchMonitorDetail() {
             cacheFilterDependOn.TicketStatusList = data.DropdownList.TicketStatusList;
         }
         
-        if (cacheFilter[MatchMonitorDetailViewType.TicketFraud]) {
-            LoadSelectDataFilter();
-        }
+        //if (cacheFilter[MatchMonitorDetailViewType.TicketFraud]) {
+        //    LoadSelectDataFilter();
+        //}
     }
 
     //#endregion Render
