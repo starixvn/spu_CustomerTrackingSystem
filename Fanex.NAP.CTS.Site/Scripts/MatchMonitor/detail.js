@@ -351,13 +351,22 @@ function MatchMonitorDetail() {
 
     function SetupMGroupFilter(data) {
         domElements.cbbMGroup.multiselect().empty();
-
+        let totalTicketDetect = domElements.divPopupAssDetect.attr('data-total-ticket-detect');
         if (data) {
-            if (data.length == 0)
-                domElements.cbbMGroup.append(`<option selected value='0'>-</option>`);
+            let isExistedBlank = false;
+            if (totalTicketDetect < recordsTotalGlobal) {
+                domElements.cbbMGroup.append(`<option value='0'>-</option>`);
+                isExistedBlank = true;
+            }
 
             data.forEach(element => {
-                domElements.cbbMGroup.append(`<option selected value='${element}'>${element == "0" ? "-" : element}</option>`);
+                if (element.MDetectGroupID == 0) {
+                    if (!isExistedBlank) {
+                        domElements.cbbMGroup.append(`<option value='0'>-</option>`);
+                    }                    
+                } else {
+                    domElements.cbbMGroup.append(`<option selected value='${element.MDetectGroupID}'>${ element.MDetectGroup }</option>`);
+                }                
             });
         }
 
@@ -612,14 +621,10 @@ function MatchMonitorDetail() {
         return false;
     }
 
-    function CheckSelectedFull(element) {
-        let opt = $("option", element).length;
-        let optSelect = $("option:selected", element).length;
-
-        if (opt > 0 && opt == optSelect) {
-            return true;
-        }
-        return false;
+    function CheckExitedFilterMGr() {
+        let opt = $("option", domElements.cbbMGroup).length;
+       
+        return opt > 1;
     }
 
     function CheckSelected(element) {
@@ -1056,19 +1061,20 @@ function MatchMonitorDetail() {
                 //}
             }
 
-            if (data?.HomeMatchItemList) {
-                domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw(false);
+            if ($('option', domElements.cbbMGroup).length > 1) {
+                FilterUIGridByMGr(data?.HomeMatchItemList, data?.AwayMatchItemList);
             }
+            else {
+                if (data?.HomeMatchItemList) {
+                    domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw(false);
+                }
 
-            if (data?.AwayMatchItemList) {
-                domElements.tblMMAwayTeam.DataTable().rows.add(data.AwayMatchItemList).draw(false);
+                if (data?.AwayMatchItemList) {
+                    domElements.tblMMAwayTeam.DataTable().rows.add(data.AwayMatchItemList).draw(false);
+                }
+
+                RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsTotalGlobal);        
             }
-
-            RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsTotalGlobal);
-
-            //SetupMGroupFilter(cacheFilterDependOn.AGrMGrList);
-
-            FilterUIGridByMGr();
         }
     }
 
@@ -1205,8 +1211,8 @@ function MatchMonitorDetail() {
                 let itemList = response?.data?.ItemList;
                 if (response?.data?.ItemList) {
                     cacheMGroup.isActive = true;
-                    cacheFilterDependOn.AGrMGrList = response.dependOnMGr.AGrMGrList;
-                    AGrOnChange(false);
+                   
+                    SetupMGroupFilter(response.mGrList.MGrItems);
 
                     BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam.DataTable(), itemList);
                     BindChangeGroupAssWithOptions(domElements.tblMMAwayTeam.DataTable(), itemList);
@@ -1214,12 +1220,9 @@ function MatchMonitorDetail() {
                     cacheMGroup.itemMMHomeTeam = domElements.tblMMHomeTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
                     cacheMGroup.itemMMAwayTeam = domElements.tblMMAwayTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
 
-                    //FilterUIGrid();
                     let totalItem = cacheMGroup.itemMMHomeTeam.length + cacheMGroup.itemMMAwayTeam.length;
 
                     RefreshBreadcrumbTotalTickets(totalItem, recordsTotalGlobal);
-
-                    // FilterUIGridByMGr();
                 }
             },
             complete: function (response) {
@@ -1242,6 +1245,7 @@ function MatchMonitorDetail() {
     function ShowPopupAssDetection() {
         let ctsCustIDs = [];
         let custIDs = [];
+        
         domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
             if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
                 ctsCustIDs.push(data.CTSCustID);
@@ -1255,10 +1259,12 @@ function MatchMonitorDetail() {
             }
         });
 
+        domElements.divPopupAssDetect.attr('data-total-ticket-detect', custIDs.length);
+
         ctsCustIDs = ctsCustIDs.filter(OnlyUnique);
         custIDs = custIDs.filter(OnlyUnique);
 
-        if (IsValidAssDetection(custIDs.length)) {
+        if (IsValidAssDetection(custIDs.length)) {           
             let homeDetectMGr = GetDataSelectedInGridForDetectMGr(domElements.tblMMHomeTeam.DataTable());
             let awayDetectMGr = GetDataSelectedInGridForDetectMGr(domElements.tblMMAwayTeam.DataTable());
 
@@ -1366,29 +1372,33 @@ function MatchMonitorDetail() {
         })
     }
 
-    function FilterUIGridByMGr() {
-        if (CheckSelectedFull(domElements.cbbMGroup)) {
-            return;
-        }
-
+    function FilterUIGridByMGr(dataHome, dataAway) {  
         let totalItem = 0;
+       
+        let arrMGr = domElements.cbbMGroup.val();
+        let isExistedBlank = arrMGr.indexOf("0") != -1;
 
-        //let itemMMHomeTeamFilter = cacheMGroup.itemMMHomeTeam.filter(function (item) {
-        //    return domElements.cbbMGroup.val().find(x => x == item.MDetectGroup);
-        //});
-        //let itemMMAwayTeamFilter = cacheMGroup.itemMMAwayTeam.filter(function (item) {
-        //    return domElements.cbbMGroup.val().find(x => x == item.MDetectGroup);
-        //});
-
-        let itemMMHomeTeamFilter = domElements.tblMMHomeTeam.DataTable().data().filter(function (item) {
-            return domElements.cbbMGroup.val().find(x => x == item.MDetectGroup);
-        });
-        let itemMMAwayTeamFilter = domElements.tblMMAwayTeam.DataTable().data().filter(function (item) {
-            return domElements.cbbMGroup.val().find(x => x == item.MDetectGroup);
+        let itemMMHomeTeamFilter = dataHome.filter(function (item) {
+            let assDetectionItem = cacheMGroup.allMGroup[item.BetID];
+            if (assDetectionItem) {
+                return arrMGr.indexOf(assDetectionItem.GroupName) != -1;       
+            } else {
+                return isExistedBlank;
+            }
         });
 
-        domElements.tblMMHomeTeam.DataTable().clear().rows.add(itemMMHomeTeamFilter).draw();
-        domElements.tblMMAwayTeam.DataTable().clear().rows.add(itemMMAwayTeamFilter).draw();
+        let itemMMAwayTeamFilter = dataAway.filter(function (item) {
+            let assDetectionItem = cacheMGroup.allMGroup[item.BetID];
+            if (assDetectionItem) {
+                return arrMGr.indexOf(assDetectionItem.GroupName) != -1;
+            } else {
+                return isExistedBlank;
+            }
+        });
+
+        domElements.tblMMHomeTeam.DataTable().clear().rows.add(itemMMHomeTeamFilter).draw(false);
+        domElements.tblMMAwayTeam.DataTable().clear().rows.add(itemMMAwayTeamFilter).draw(false);
+
         totalItem = itemMMHomeTeamFilter.length + itemMMAwayTeamFilter.length;
 
         RefreshBreadcrumbTotalTickets(totalItem, recordsTotalGlobal);
@@ -1418,14 +1428,14 @@ function MatchMonitorDetail() {
             if (!cacheMGroup.isActive) {
                 FetchMatchMonitorDetail(currentType);
 
-                AGrOnChange(true);
+                //AGrOnChange(true);
             }
             else {
                 domElements.inputHomeSelectAll.prop('checked', false);
                 domElements.inputAwaySelectAll.prop('checked', false);
             }
 
-            FilterUIGridByMGr();
+            //FilterUIGridByMGr();
         }
     }
 
@@ -1791,7 +1801,7 @@ function MatchMonitorDetail() {
             }
             domElements.cbbAGroup.multiselect("refresh");
 
-            AGrOnChange(true);
+            //AGrOnChange(true);
         }
     }
 
@@ -1882,8 +1892,8 @@ function MatchMonitorDetail() {
 
     function ToggleGridSelectAll(input, table) {
         var nodes = table.rows({ 'search': 'applied' }).nodes();
-
-        $('input[type="checkbox"][name="chkbx"]', nodes).prop('checked', input.is(":checked"));
+       
+        $('input[type="checkbox"][name="chkbx"]:not(:hidden)', nodes).prop('checked', input.is(":checked"));
     }
 
     function ToggleBetID(tblElement, isExpand) {
@@ -1944,8 +1954,7 @@ function MatchMonitorDetail() {
         domElements.cbbDanger.change(function () { DangerOnChange(); });
         domElements.cbbCurrency.change(function () { CurrencyOnChange(); });
         domElements.cbbReason.change(function () { ReasonOnChange(); });
-        domElements.cbbAGroup.change(function () { AGrOnChange(true); });
-
+        
         try {
             isSupportShowAllTickets = JSON.parse(domElements?.isSupportShowAllTickets?.toLowerCase());
         }
@@ -1991,7 +2000,10 @@ function MatchMonitorDetail() {
                 return;
             }
             if (ValidationFilter()) {
-                CacheSelectDataFilter();
+                //if (cacheMGroup.isActive()) {
+                //    CacheSelectDataFilter();
+                //}
+                
                 domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
 
                 FetchMatchMonitorDetail(currentType);

@@ -16,6 +16,7 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
+    using Fanex.NAP.CTS.ViewModel.MatchMonitor.DetectGroup;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn;
     using Newtonsoft.Json;
     using System;
@@ -924,19 +925,19 @@
           
             result.ItemList = this.RearrangeAssGroup(data, true);
 
-             var dependOnMGr = BuildDependOnMGr(result.ItemList, model.HomeDetectMGr, model.AwayDetectMGr);
+            var mGrList = BuildMGrList(result.ItemList, model.HomeDetectMGr, model.AwayDetectMGr);
 
             return Json(new
             {
                 data = result,
-                dependOnMGr = dependOnMGr
+                mGrList = mGrList
             }, JsonRequestBehavior.AllowGet);
         }
-        
-        private DetectMGrDependOnViewModel BuildDependOnMGr(IEnumerable<DetectGroupAssociationItemViewModel> itemDetectMGr
-            , string homeTicket
-            , string awayTicket)
-        {            
+
+        private MGrListViewModel BuildMGrList(IEnumerable<DetectGroupAssociationItemViewModel> itemDetectMGr
+           , string homeTicket
+           , string awayTicket)
+        {
             var mGrItems = new List<TicketSelectForMGrViewModel>();
             var serializer = new JavaScriptSerializer();
             serializer.MaxJsonLength = Int32.MaxValue;
@@ -944,10 +945,13 @@
             mGrItems.AddRange(serializer.Deserialize<List<TicketSelectForMGrViewModel>>(homeTicket));
             mGrItems.AddRange(serializer.Deserialize<List<TicketSelectForMGrViewModel>>(awayTicket));
 
-            var mGrDependOn = new DetectMGrDependOnViewModel();
-            mGrDependOn.BuildDependOnMGr(itemDetectMGr, mGrItems);
+            //var mGrDependOn = new DetectMGrDependOnViewModel();
+            //mGrDependOn.BuildDependOnMGr(itemDetectMGr, mGrItems);
 
-            return mGrDependOn;
+            var mGrList = new MGrListViewModel();
+            mGrList.BuildMGrList(itemDetectMGr, mGrItems);
+
+            return mGrList;
         }
 
         #endregion Association Detect
