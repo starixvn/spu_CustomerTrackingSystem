@@ -685,7 +685,7 @@
             var ticketDetailGroup = default(TicketDetailViewModel);
 
             matchDetailInfo = _matchMonitorService.GetMatchMonitorDetail(para);
-
+           
             if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
             {
                 var tasks = new Task[]
@@ -708,6 +708,10 @@
 
                 mdItemList = DrawColorAllMMDetailAndUpdateValue(matchDetailInfo.VerifiedTrans, custInfo, ticketDetailGroup.TicketDetails, para.BetTypeID);
                 result = MergeFraudToAllMMDetail(mdItemList, fraudTicketDetail, ticketDetailGroup.MinSequenceIDTotalAll);
+            }
+            else if(para.TypeOfTickets == MatchMonitorQueryType.TicketAll)
+            {
+                result = GetTicketsFromMainDb(para, filter, isLoop);
             }
 
             return result;
@@ -842,8 +846,24 @@
             return result;
         }
 
+        private MatchMonitorDetailListViewModel GetTicketsFromMainDb(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, bool isLoop)
+        {
+            var verifiedTrans = new List<MatchMonitorDetailVerifyTransResultModel>();
+            var fraudTicketDetail = new MatchMonitorDetailListViewModel();
+
+            var ticketDetailGroup = GetAllMMTicketDetail(para, filter, isLoop);
+
+            var custInfo = GetCustInfoByCustID(ticketDetailGroup.TicketDetails.Select(ticket => ticket.CustId).Distinct());
+
+            var mdItemList = DrawColorAllMMDetailAndUpdateValue(verifiedTrans, custInfo, ticketDetailGroup.TicketDetails, para.BetTypeID);
+
+            var result = MergeFraudToAllMMDetail(mdItemList, fraudTicketDetail, ticketDetailGroup.MinSequenceIDTotalAll);
+
+            return result;
+        }
+
         #endregion Detail Tickets
-        
+
         #region Association Detect
 
         [HttpPost]
@@ -1199,6 +1219,7 @@
 
             return result;
         }
+
         #endregion Private Methods
 
     }
