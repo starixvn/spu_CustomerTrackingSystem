@@ -197,6 +197,7 @@
     <Compile Include="MatchMonitor\FilterDependOn\DetectMGrDependOnViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\MGrHDPItemViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\MGrHDPViewModel.cs" />
+    <Compile Include="MatchMonitor\FilterDependOn\MMFilterItemViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\ReasonAGroupItemViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\ReasonAGroupViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\ScoreCurrencyItemViewModel.cs" />

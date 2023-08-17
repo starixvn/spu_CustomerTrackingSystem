@@ -3,6 +3,7 @@
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -17,6 +18,7 @@
             this.AwayMatchItemList = new List<MatchMonitorDetailItemViewModel>();
             //this.ItemList = new List<MatchMonitorDetailItemViewModel>();
             this.DropdownList = new MMDetailFilterDropdownListViewModel();
+            this.DropdownFilterList = new List<MMFilterItemViewModel>();
         }
 
         private MatchMonitorDetailListViewModel(MatchMonitorDetailListViewModel matchMonitorDetailList) : base(matchMonitorDetailList)
@@ -27,6 +29,7 @@
             this.AwayMatchItemList = matchMonitorDetailList.AwayMatchItemList.ToList();
             //this.ItemList = new List<MatchMonitorDetailItemViewModel>();
             this.DropdownList = matchMonitorDetailList.DropdownList;
+            this.DropdownFilterList = matchMonitorDetailList.DropdownFilterList;
         }
 
         public void FilterItemMMDetail(MMDetailFilterViewModel filter, string site)
@@ -59,9 +62,9 @@
             CurrencyList = mdItemList.Select(x =>
             {
                 return new { CurrencyId = string.IsNullOrEmpty(x.CurrencyName) ? -1 : x.CurrencyId, CurrencyName = string.IsNullOrEmpty(x.CurrencyName) ? "-" : x.CurrencyName };
-            }).Distinct(x=>x.CurrencyId)
+            }).Distinct(x => x.CurrencyId)
             .OrderBy(x => x.CurrencyName)
-            .Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName)).ToList();            
+            .Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName)).ToList();
 
             HDPList = mdItemList.Select(x => x.BallHeadHDP()).Distinct().OrderBy(x => x).ToList();
 
@@ -76,11 +79,11 @@
             GroupList = GroupList?.Where(x => x.GroupID != null ? agroup.Contains(x.GroupID ?? 0) : false).ToList();
 
             TicketStatusList = mdItemList.Select(x => x.TicketStatus).Distinct().ToList();
-        }       
+        }
 
         public bool IsLive { get; set; }
 
-        public int BetTypeID { get; set; }        
+        public int BetTypeID { get; set; }
 
         public long? LastSequenceID { get; set; }
 
@@ -143,7 +146,7 @@
                                     return new ScoreCurrencyItemViewModel
                                     {
                                         CurrencyId = isNotValid ? -1 : x.CurrencyId,
-                                        CurrencyName = isNotValid ? "-" : x.CurrencyName,                                     
+                                        CurrencyName = isNotValid ? "-" : x.CurrencyName,
                                     };
                                 }).Distinct(x => x.CurrencyId)
                             });
@@ -153,7 +156,7 @@
                     {
                         #region SubscriberType - Currency                         
                         var subscriberTypeCurrency = new List<SubscriberTypeCurrencyViewModel>();
-                        
+
                         subscriberTypeCurrency.AddRange(mdItemList.GroupBy(x => x.SubscriberType)
                             .Select(g => new SubscriberTypeCurrencyViewModel
                             {
@@ -232,7 +235,7 @@
                         DropdownList.CurrencyReasonList = mdItemList.GroupBy(x => new { x.CurrencyId })
                             .Select(g => new CurrencyReasonViewModel
                             {
-                                CurrencyId = g.Key.CurrencyId,                               
+                                CurrencyId = g.Key.CurrencyId,
                                 ReasonItems = g.Select(x => new CurrencyReasonItemViewModel { ReasonList = x.ReasonList }).Distinct(x=>x.ReasonList)
                             });
                         #endregion
@@ -317,6 +320,36 @@
                 };
 
             Task.WhenAll(tasks).Wait();
+        }
+
+        public void BindDropdownFilterList(IEnumerable<MatchMonitorDetailItemViewModel> mdItemList)
+        {
+            var hashSet = new HashSet<string>();
+
+            foreach (var item in mdItemList)
+            {
+                var reasonsList = item.ReasonList.Split(';');
+                foreach (var reason in reasonsList)
+                {
+                    hashSet.Add(JsonConvert.SerializeObject(new MMFilterItemViewModel
+                    {
+                        ADetectGroup = item.ADetectGroup,
+                        ADetectGroupID = item.ADetectGroupID,
+                        CurrencyId = item.CurrencyId,
+                        CurrencyName = item.CurrencyName,
+                        Danger1 = item.Danger1,
+                        Danger2 = item.Danger2,
+                        Danger3 = item.Danger3,
+                        Danger4 = item.Danger4,
+                        Danger5 = item.Danger5,
+                        Score = item.Score,
+                        SubscriberType = item.SubscriberType,
+                        ReasonItem = reason
+                    }));
+                }
+            }
+
+            DropdownFilterList = hashSet.Select(JsonConvert.DeserializeObject<MMFilterItemViewModel>).ToList();
         }
     }
 }

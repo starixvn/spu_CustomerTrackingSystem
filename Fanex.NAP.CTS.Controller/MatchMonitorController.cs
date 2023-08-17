@@ -393,6 +393,9 @@
                             result.BindDropdownListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);
                             result.BindDropdownListByFraudTicket(fraudTicketDetail);
 
+                            result.BindDropdownFilterListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);
+                            result.BindDropdownFilterListByFraudTicket(fraudTicketDetail);
+
                             if (isCache)
                             {
                                 _ = Task.Run(() =>
@@ -402,6 +405,9 @@
 
                                     typeOfAllTicketAllSiteCache.BindDropdownListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);
                                     typeOfAllTicketAllSiteCache.BindDropdownListByFraudTicket(fraudTicketSiteAll);
+
+                                    typeOfAllTicketAllSiteCache.BindDropdownFilterListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);
+                                    typeOfAllTicketAllSiteCache.BindDropdownFilterListByFraudTicket(fraudTicketDetail);
 
                                     _memoryCacheService.PushValueAsync(keySite, typeOfAllTicketAllSiteCache);
                                 });
@@ -789,6 +795,8 @@
                 mdResult.RecordsTotal = mdItemList?.Count() ?? 0;
                 mdResult.BindReasons(mdItemList.Select(x => x.ReasonList).Distinct());
                 mdResult.BindDropdownList(mdItemList);
+
+                mdResult.BindDropdownFilterList(mdItemList);
             }
 
             return mdResult;

@@ -10,7 +10,7 @@
        
         public int TicketStatus { get; set; }
 
-        public int CurrencyId { get; set; }
+        public short CurrencyId { get; set; }
 
         public string CurrencyName { get; set; }
 

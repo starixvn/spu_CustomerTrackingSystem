@@ -4,6 +4,7 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -15,7 +16,7 @@
         public MMDetailFilterViewModel()
         {
             this.ReasonInfos = string.Empty;
-        }       
+        }
 
         public MMDetailFilterViewModel(MMTicketDetailInfoModel mMTicket
             , MMDetailFilterViewModel fraudFilter
@@ -48,10 +49,10 @@
             var mtFilterBySite = mMTicket.TicketInfoList;
 
             if (mtFilterBySite.Any())
-            {               
+            {
                 if (isFilterBySite)
                 {
-                    mtFilterBySite = mtFilterBySite.Where(x => x.IsLicensee == isFilterLicensee);                                  
+                    mtFilterBySite = mtFilterBySite.Where(x => x.IsLicensee == isFilterLicensee);
                 }
 
                 this.CurrencyList = mtFilterBySite.Select(x =>
@@ -60,19 +61,19 @@
                 }).Distinct(x => x.CurrencyId)
                     .OrderBy(x => x.CurrencyName)
                     .Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName))
-                    .ToList();               
-              
+                    .ToList();
+
                 this.HDPList = mtFilterBySite.Select(x => x.Hdp).Distinct().OrderBy(x => x).ToList();
 
                 this.BetTeamList = mtFilterBySite.Select(x => x.BetTeam).Distinct().OrderBy(x => x).ToList();
 
-                this.ScoreList = mtFilterBySite.Select(x => 
+                this.ScoreList = mtFilterBySite.Select(x =>
                 {
                     return isLiveIndicator ? string.Format($"{x.LiveHomeScore} - {x.LiveAwayScore}") : "-";
-                }).Distinct(x=>x).OrderBy(x => x).ToList();
+                }).Distinct(x => x).OrderBy(x => x).ToList();
 
                 //this.SubscriberTypeList = mtFilterBySite.Select(x => { return x.IsLicensee ? "L" : "C"; }).Distinct().ToList();
-                
+
                 var groupList = fraudFilter.GroupList?.ToList() ?? new List<GroupInfoViewModel>();
                 //var reasonGroupIDDic = fraudFilter?.ReasonGroupIDDic ?? new Dictionary<string, List<int>>();
 
@@ -84,7 +85,7 @@
 
                 if (fraudFilter.RecordsTotal < RecordsTotal)
                 {
-                    if (!this.GroupList.Any(x=> x.GroupName == "-"))
+                    if (!this.GroupList.Any(x => x.GroupName == "-"))
                         this.GroupList.Insert(0, new GroupInfoViewModel { GroupID = 0, GroupName = "-" });
                     if (!this.ReasonList.Any(x => x == "-"))
                         this.ReasonList.Insert(0, "-");
@@ -109,16 +110,16 @@
             else
             {
                 this.SubscriberTypeList = new List<string>();
-                this.CurrencyList = new List<KeyValuePair<int, string>>();               
+                this.CurrencyList = new List<KeyValuePair<int, string>>();
                 this.HDPList = new List<decimal>();
                 this.BetTeamList = new List<string>();
                 this.ScoreList = new List<string>();
                 this.ReasonList = new List<string>();
-                this.GroupList = new List<GroupInfoViewModel>();              
+                this.GroupList = new List<GroupInfoViewModel>();
             }
-           
+
         }
-       
+
         protected MMDetailFilterViewModel(MMDetailFilterViewModel filter)
         {
             this.IsFilter = filter.IsFilter;
@@ -143,6 +144,7 @@
             this.TicketStatusList = filter.TicketStatusList;
             this.SubscriberTypeList = filter.SubscriberTypeList;
             this.IsDangerNone = filter.IsDangerNone;
+            this.DropdownFilterList = filter.DropdownFilterList;
         }
 
         public bool IsFilter { get; set; }
@@ -160,7 +162,7 @@
         public List<decimal> HDPList { get; set; }
 
         public List<string> BetTeamList { get; set; }
-     
+
         public List<string> ScoreList { get; set; }
 
         public bool IsDangerNone { get; set; }
@@ -210,6 +212,8 @@
         public List<int> TicketStatusList { get; set; }
 
         public MMDetailFilterDropdownListViewModel DropdownList { get; set; }
+
+        public List<MMFilterItemViewModel> DropdownFilterList { get; set; }
 
         public MMDetailFilterViewModel Clone() => new MMDetailFilterViewModel(this);
 
@@ -304,7 +308,7 @@
                 {
                     #region SubscriberType - Currency                         
                         var subscriberTypeCurrency = new List<SubscriberTypeCurrencyViewModel>();
-                        
+
                         subscriberTypeCurrency.AddRange(tiItemViewList.GroupBy(x => x.IsLicensee)
                             .Select(g => new SubscriberTypeCurrencyViewModel
                             {
@@ -325,7 +329,7 @@
                                         var isNotValid = string.IsNullOrEmpty(x.CurrencyName) || x.CurrencyId == 0;
                                         return new SubscriberTypeCurrencyItemViewModel { CurrencyId = isNotValid ? -1 : x.CurrencyId, CurrencyName = isNotValid ? "-" : x.CurrencyName };
                                     }).Distinct(x => x.CurrencyId)
-                            });                            
+                            });
                         }
 
                         DropdownList.SubscriberTypeCurrencyList = subscriberTypeCurrency;
@@ -377,7 +381,7 @@
                     DropdownList.DangerCurrencyList = dangerList;
                     #endregion
                 }),
-                Task.Run(() => 
+                Task.Run(() =>
                 {
                     #region Score - Currency
                     this.DropdownList.ScoreCurrencyList = tiItemViewList.GroupBy(x => x.Score)
@@ -390,24 +394,24 @@
                                     return new ScoreCurrencyItemViewModel
                                     {
                                         CurrencyId = isNotValid ? -1 : x.CurrencyId,
-                                        CurrencyName = isNotValid ? "-" : x.CurrencyName,                                       
+                                        CurrencyName = isNotValid ? "-" : x.CurrencyName,
                                     };
                                 }).Distinct(x => x.CurrencyId)
                             });
                     #endregion
-                }),              
+                }),
                 Task.Run(() =>
                 {
                     #region Currency - Reason
                    DropdownList.CurrencyReasonList = tiItemViewList.GroupBy(x => new { x.CurrencyId })
                             .Select(g => new CurrencyReasonViewModel
                             {
-                                CurrencyId = g.Key.CurrencyId,                            
+                                CurrencyId = g.Key.CurrencyId,
                                 ReasonItems = g.Select(x => new CurrencyReasonItemViewModel { ReasonList = string.Empty}).Distinct(x=>x.ReasonList)
                             });
                     #endregion
-                }),                 
-                Task.Run(() => 
+                }),
+                Task.Run(() =>
                 {
                     #region Danger                       
                     var dangerList = tiItemViewList.Where(x=> x.IsDanger);
@@ -443,7 +447,7 @@
                     }
                     #endregion
                 }),
-                Task.Run(() => 
+                Task.Run(() =>
                 {
                     #region Ticket Status
                     this.DropdownList.TicketStatusList = tiItemViewList.Select(x=>x.TicketStatus).Distinct()
@@ -453,10 +457,35 @@
                         }).OrderBy(x=>x.StatusOrderIdx);
                     
                     #endregion
-                })                
+                })
             };
 
             Task.WhenAll(tasks).Wait();
+        }
+
+        public void BindDropdownFilterListByMainTicketInfo(IEnumerable<MMDetailFilterTicketInfoModel> tiItemList, bool liveIndicator)
+        {
+            var tiItemViewList = tiItemList.Select(x => new MMDetailFilterTicketInfoViewModel(x, liveIndicator));
+
+            var hashSet = new HashSet<string>();
+
+            foreach (var item in tiItemList)
+            {
+                hashSet.Add(JsonConvert.SerializeObject(new MMFilterItemViewModel
+                {
+                    CurrencyId = item.CurrencyId,
+                    CurrencyName = item.CurrencyName,
+                    Danger1 = item.Danger1,
+                    Danger2 = item.Danger2,
+                    Danger3 = item.Danger3,
+                    Danger4 = item.Danger4,
+                    Danger5 = item.Danger5,
+                    Score = liveIndicator ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : "-",
+                    SubscriberType = item.IsLicensee ? "L" : "C",
+                }));
+            }
+
+            DropdownFilterList = hashSet.Select(JsonConvert.DeserializeObject<MMFilterItemViewModel>).ToList();
         }
 
         public void BindDropdownListByFraudTicket(MMDetailFilterViewModel fraudTicketModel)
@@ -465,12 +494,12 @@
             {
                 this.DropdownList = new MMDetailFilterDropdownListViewModel();
             }
-         
+
             if (fraudTicketModel.RecordsTotal < RecordsTotal && fraudTicketModel.DropdownList.CurrencyReasonList != null)
             {
-                this.DropdownList.CurrencyReasonList = new List<CurrencyReasonViewModel>(){ new CurrencyReasonViewModel { CurrencyId = 0 } }.Union(fraudTicketModel.DropdownList.CurrencyReasonList);
+                this.DropdownList.CurrencyReasonList = new List<CurrencyReasonViewModel>() { new CurrencyReasonViewModel { CurrencyId = 0 } }.Union(fraudTicketModel.DropdownList.CurrencyReasonList);
                 this.DropdownList.CurrencyAGroupList = new List<CurrencyAGroupViewModel>() { new CurrencyAGroupViewModel { CurrencyId = 0 } }.Union(fraudTicketModel.DropdownList.CurrencyAGroupList);
-                this.DropdownList.ReasonAGroupList = new List<ReasonAGroupViewModel>() { new ReasonAGroupViewModel {  Reason = "-" } }.Union(fraudTicketModel.DropdownList.ReasonAGroupList);
+                this.DropdownList.ReasonAGroupList = new List<ReasonAGroupViewModel>() { new ReasonAGroupViewModel { Reason = "-" } }.Union(fraudTicketModel.DropdownList.ReasonAGroupList);
                 this.DropdownList.AGrMGrBlankList = new List<AGrMGrViewModel>()
                 {
                     new AGrMGrViewModel { AGr = 0, MGrItems = new List<AGrMGrItemViewModel>() { new AGrMGrItemViewModel {  MGr = "-" } }}
@@ -483,6 +512,21 @@
                 this.DropdownList.ReasonAGroupList = fraudTicketModel.DropdownList.ReasonAGroupList;
                 this.DropdownList.AGrMGrBlankList = fraudTicketModel.DropdownList.AGrMGrBlankList;
             }
+        }
+
+        public void BindDropdownFilterListByFraudTicket(MMDetailFilterViewModel fraudTicketModel)
+        {
+            DropdownFilterList.ForEach(item =>
+            {
+                var filter =
+                    fraudTicketModel.DropdownFilterList
+                    .Where(x => x.Score == item.Score &&
+                        x.SubscriberType == item.SubscriberType &&
+                        x.CurrencyId == item.CurrencyId);
+                
+                item.FraudADetectGroupID = filter.Select(x => x.ADetectGroupID).Distinct().ToList();
+                item.FraudReasonList = filter.Select(x => x.ReasonItem).Distinct().ToList();
+            });
         }
     }
 }
