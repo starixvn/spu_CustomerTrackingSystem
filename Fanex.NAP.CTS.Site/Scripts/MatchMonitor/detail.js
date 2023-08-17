@@ -1631,7 +1631,9 @@ function MatchMonitorDetail() {
 
         currentType = Number(domElements.cbbTypeOfTickets.val());
 
-        FetchFilterMatchMonitorDetail(isRefreshcbbSite);
+        domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
+
+        FetchFilterMatchMonitorDetail(isRefreshcbbSite);        
 
         RemoveFilterLoading();
     }
