@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Resource.Consts
 {
+    using System.Collections.Generic;
     using System.ComponentModel;
 
     public static class Consts
@@ -466,5 +467,16 @@
             [Description("Saba Basketball")]
             SabaBasketball = 912
         }
+
+        public static readonly Dictionary<CustomerCategorySportType, int> CustomerCategorySportOrder = new Dictionary<CustomerCategorySportType, int>
+        {
+            { CustomerCategorySportType.Soccer          ,     1 },
+            { CustomerCategorySportType.Basketball      ,     2 },
+            { CustomerCategorySportType.ESports         ,     3 },
+            { CustomerCategorySportType.OtherSports     ,     4 },
+            { CustomerCategorySportType.NonSport        ,     5 },
+            { CustomerCategorySportType.SabaSoccer      ,     6 },
+            { CustomerCategorySportType.SabaBasketball  ,     7 },
+        };
     }
 }

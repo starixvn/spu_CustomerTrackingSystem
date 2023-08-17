@@ -14,7 +14,6 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
-    using Fanex.NAP.CTS.Model.Account.AssociatedAccount;
     using Fanex.NAP.CTS.Model.Account.RobotBetting;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.Common;
@@ -2299,7 +2298,7 @@
 
             if (data != null && data.Any())
             {
-                custs = data.Select(x => new GetCustomerCategoryBySportViewModel(x));
+                custs = data.Select(x => new GetCustomerCategoryBySportViewModel(x)).OrderBy(x => CustomerCategorySportOrder.TryGetValue((CustomerCategorySportType)x.SportID, out var order) ? order : 999);
             }
 
             return Json(new { data = custs }, JsonRequestBehavior.AllowGet);
