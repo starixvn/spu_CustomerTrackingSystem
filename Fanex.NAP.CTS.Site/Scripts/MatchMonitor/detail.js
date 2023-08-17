@@ -368,6 +368,8 @@ function MatchMonitorDetail() {
                     domElements.cbbMGroup.append(`<option selected value='${element.MDetectGroupID}'>${ element.MDetectGroup }</option>`);
                 }                
             });
+
+            domElements.cbbMGroup.parent().find('button').removeClass('border-error');
         }
 
         domElements.cbbMGroup.multiselect("refresh");
@@ -619,13 +621,7 @@ function MatchMonitorDetail() {
         domElements.tblMMAwayTeam.DataTable().clear().draw(false);
 
         return false;
-    }
-
-    function CheckExitedFilterMGr() {
-        let opt = $("option", domElements.cbbMGroup).length;
-       
-        return opt > 1;
-    }
+    }   
 
     function CheckSelected(element) {
         let opt = $("option", element).length;
@@ -663,6 +659,9 @@ function MatchMonitorDetail() {
             result = false;
         }
         if (!ValidateCbb(domElements.cbbAGroup)) {
+            result = false;
+        }
+        if (!ValidateCbb(domElements.cbbMGroup)) {
             result = false;
         }
         if (!ValidateCbb(domElements.cbbHDPBetTeam)) {
@@ -746,6 +745,7 @@ function MatchMonitorDetail() {
         } else {
             domElements.cbbMGroup.append(`<option selected value='0'>-</option>`);
             domElements.cbbMGroup.multiselect("refresh");
+            domElements.cbbMGroup.parent().find('button').removeClass('border-error');
         }
 
         if (data.DropdownList) {

@@ -104,7 +104,7 @@
                     </div>
                 </div>
 
-                <div class="group-info filter-group" style="padding: 0px;">
+                <div class="group-info filter-group border" style="padding: 0px;">
                     <div class="form-filter">                       
                         <div class="group width-160 second-row-depend-1 start-box" @(ViewBag.IsDisableScoreFilter ? "hidden" : "")>
                             <label class="text">Score</label>
@@ -146,19 +146,19 @@
                             </select>
                         </div>
 
-                        <div class="group width-160 second-row-depend-2">
+                        <div class="group width-160 second-row-depend-2 end-depend">
                             <label class="text">A.Gr.</label>
                             <select class="control width-select" id="cbbAGroup" multiple="multiple">
                             </select>
                         </div>
 
-                        <div class="group width-160 second-row-depend-2 end-depend">
+                        <div class="group width-160 second-row-depend-1 start-depend">
                             <label class="text">M.Gr.</label>
                             <select class="control width-select" id="cbbMGroup" multiple="multiple">
                             </select>
                         </div>
 
-                        <div class="group width-160 second-row-depend-1 start-depend">
+                        <div class="group width-160 second-row-depend-1">
                             <label class="text">HDP/Choice</label>
                             <select class="control width-select" id="cbbHDPBetTeam" multiple="multiple">
                             </select>
@@ -187,8 +187,7 @@
                                 <option selected value=1>Waiting</option>*@
                             </select>
                         </div>
-                        <div class="group second-row-depend-1 end-box">
-                            <label class="text" style="height:13px"></label>
+                        <div class="group second-row-depend-1">                         
                             <div class="group-button">
                                 <button class="button button-generate" id="btnGenerate-detail">Generate</button>
                             </div>
