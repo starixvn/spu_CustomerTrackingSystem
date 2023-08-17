@@ -232,11 +232,20 @@
                         DropdownList.CurrencyReasonList = mdItemList.GroupBy(x => new { x.CurrencyId })
                             .Select(g => new CurrencyReasonViewModel
                             {
-                                CurrencyId = g.Key.CurrencyId,
-                                ScoreList = g.Select(x=>x.Score).Distinct(),
+                                CurrencyId = g.Key.CurrencyId,                               
                                 ReasonItems = g.Select(x => new CurrencyReasonItemViewModel { ReasonList = x.ReasonList }).Distinct(x=>x.ReasonList)
                             });
                         #endregion
+                    }),
+                    Task.Run(() => {
+                        #region Currency - AGr
+                        DropdownList.CurrencyAGroupList = mdItemList.GroupBy(x => x.CurrencyId)
+                            .Select(g => new CurrencyAGroupViewModel
+                            {
+                                CurrencyId = g.Key,
+                                AGroupItems = g.Select(x => new CurrencyAGroupItemViewModel { AGroupID = x.ADetectGroupID }).Distinct()
+                            });
+                        #endregion Currency - AGr
                     }),
                     Task.Run(() =>
                     {

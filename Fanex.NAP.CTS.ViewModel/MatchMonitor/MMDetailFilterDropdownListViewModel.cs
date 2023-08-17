@@ -11,8 +11,8 @@
             this.SubscriberTypeCurrencyList = new List<SubscriberTypeCurrencyViewModel>();
             this.DangerCurrencyList = new List<DangerCurrencyViewModel>();
             this.CurrencyReasonList = new List<CurrencyReasonViewModel>();
+            this.CurrencyAGroupList = new List<CurrencyAGroupViewModel>();
             this.ReasonAGroupList = new List<ReasonAGroupViewModel>();
-            //this.AGrHDPList = new List<AGrHDPViewModel>();
             this.AGrMGrBlankList = new List<AGrMGrViewModel>();
             this.Danger = new DangerViewModel();
             this.TicketStatusList = new List<TicketStatusViewModel>();
@@ -26,10 +26,10 @@
 
         public IEnumerable<CurrencyReasonViewModel> CurrencyReasonList { get; set; }
 
+        public IEnumerable<CurrencyAGroupViewModel> CurrencyAGroupList { get; set; }
+
         public IEnumerable<ReasonAGroupViewModel> ReasonAGroupList { get; set; }
-
-        //public IEnumerable<AGrHDPViewModel> AGrHDPList { get; set; }
-
+       
         public IEnumerable<AGrMGrViewModel> AGrMGrBlankList { get; set; }
 
         public DangerViewModel Danger { get; set; }

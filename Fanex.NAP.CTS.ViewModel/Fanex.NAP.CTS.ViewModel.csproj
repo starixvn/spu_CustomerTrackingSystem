@@ -183,6 +183,8 @@
     <Compile Include="MatchMonitor\FilterDependOn\AGrHDPViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\AGrMGrItemViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\AGrMGrViewModel.cs" />
+    <Compile Include="MatchMonitor\FilterDependOn\CurrencyAGroupItemViewModel.cs" />
+    <Compile Include="MatchMonitor\FilterDependOn\CurrencyAGroupViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\CurrencyReasonItemViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\CurrencyReasonViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\CurrencyDangerItemViewModel.cs" />

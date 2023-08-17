@@ -402,12 +402,11 @@
                    DropdownList.CurrencyReasonList = tiItemViewList.GroupBy(x => new { x.CurrencyId })
                             .Select(g => new CurrencyReasonViewModel
                             {
-                                CurrencyId = g.Key.CurrencyId,
-                                ScoreList = g.Select(x=>x.Score).Distinct(),
+                                CurrencyId = g.Key.CurrencyId,                            
                                 ReasonItems = g.Select(x => new CurrencyReasonItemViewModel { ReasonList = string.Empty}).Distinct(x=>x.ReasonList)
                             });
                     #endregion
-                }),                
+                }),                 
                 Task.Run(() => 
                 {
                     #region Danger                       
@@ -469,7 +468,8 @@
          
             if (fraudTicketModel.RecordsTotal < RecordsTotal && fraudTicketModel.DropdownList.CurrencyReasonList != null)
             {
-                this.DropdownList.CurrencyReasonList = new List<CurrencyReasonViewModel>(){ new CurrencyReasonViewModel{ CurrencyId = 0 } }.Union(fraudTicketModel.DropdownList.CurrencyReasonList);
+                this.DropdownList.CurrencyReasonList = new List<CurrencyReasonViewModel>(){ new CurrencyReasonViewModel { CurrencyId = 0 } }.Union(fraudTicketModel.DropdownList.CurrencyReasonList);
+                this.DropdownList.CurrencyAGroupList = new List<CurrencyAGroupViewModel>() { new CurrencyAGroupViewModel { CurrencyId = 0 } }.Union(fraudTicketModel.DropdownList.CurrencyAGroupList);
                 this.DropdownList.ReasonAGroupList = new List<ReasonAGroupViewModel>() { new ReasonAGroupViewModel {  Reason = "-" } }.Union(fraudTicketModel.DropdownList.ReasonAGroupList);
                 this.DropdownList.AGrMGrBlankList = new List<AGrMGrViewModel>()
                 {
@@ -479,6 +479,7 @@
             else
             {
                 this.DropdownList.CurrencyReasonList = fraudTicketModel.DropdownList.CurrencyReasonList;
+                this.DropdownList.CurrencyAGroupList = fraudTicketModel.DropdownList.CurrencyAGroupList;
                 this.DropdownList.ReasonAGroupList = fraudTicketModel.DropdownList.ReasonAGroupList;
                 this.DropdownList.AGrMGrBlankList = fraudTicketModel.DropdownList.AGrMGrBlankList;
             }

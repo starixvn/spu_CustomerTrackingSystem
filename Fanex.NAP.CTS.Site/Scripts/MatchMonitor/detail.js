@@ -95,6 +95,7 @@ function MatchMonitorDetail() {
         SubscriberTypeCurrencyList: [],
         DangerCurrencyList: [],
         CurrencyReasonList: [],
+        CurrencyAGroupList: [],
         ReasonAGroupList: [],
         AGrMGrBlankList: [],
         AGrMGrList: [],
@@ -760,6 +761,7 @@ function MatchMonitorDetail() {
             cacheFilterDependOn.DangerCurrencyList = data.DropdownList.DangerCurrencyList;
             cacheFilterDependOn.Danger = data.DropdownList.Danger;
             cacheFilterDependOn.CurrencyReasonList = data.DropdownList.CurrencyReasonList;
+            cacheFilterDependOn.CurrencyAGroupList = data.DropdownList.CurrencyAGroupList;
             cacheFilterDependOn.ReasonAGroupList = data.DropdownList.ReasonAGroupList;
             cacheFilterDependOn.AGrMGrBlankList = data.DropdownList.AGrMGrBlankList;
             cacheFilterDependOn.AGrMGrList = [];
@@ -1634,10 +1636,36 @@ function MatchMonitorDetail() {
         RemoveFilterLoading();
     }
 
-    function MatchScoreOnChange() {
-        if (cacheFilterDependOn.ScoreCurrencyList) {
-            let currencyItems = [];
+    function DependOnMainchange() {
+        let currencyMatchScore = MatchScoreOnChange();
+            
+        let currencySite = SiteOnChange();
 
+        let currencyDanger = DangerOnChange();
+      
+        let innerJoinCurrency = [];
+
+        for (let curr1 of currencyMatchScore) {
+            let matchingCurr2 = currencySite.find(item2 => item2.CurrencyId === curr1.CurrencyId);
+            if (matchingCurr2) {
+                let matchingCurr3 = currencyDanger.find(item3 => item3.CurrencyId === curr1.CurrencyId);
+                if (matchingCurr3) {
+                    innerJoinCurrency.push({
+                        CurrencyId: curr1.CurrencyId,
+                        CurrencyName: curr1.CurrencyName,
+                    });
+                }
+            }
+        }
+        
+        RefreshCurrency(innerJoinCurrency);
+
+        CurrencyOnChange();
+    }
+
+    function MatchScoreOnChange() {
+        let currencyItems = [];
+        if (cacheFilterDependOn.ScoreCurrencyList) {            
             $("option:selected", domElements.cbbMatchScore).each(function () {
                 let currentScore = $(this).text();
 
@@ -1653,35 +1681,40 @@ function MatchMonitorDetail() {
                 });
             });
 
-            RefreshCurrency(currencyItems);
-
-            CurrencyOnChange();
+            //RefreshCurrency(currencyItems);
+            //CurrencyOnChange();
         }
+
+        return currencyItems;
     }
 
     function SiteOnChange() {
+        let currencyItems = [];
         if (cacheFilterDependOn.SubscriberTypeCurrencyList) {
-            let currencyItems = [];
-
             let currentSubscriberType = domElements.cbbSites.val();
 
             $.each(cacheFilterDependOn.SubscriberTypeCurrencyList, function (idx, item) {
-                if (item["SubscriberType"] == currentSubscriberType) {
-                    item["CurrencyItems"].map(function (curr) { currencyItems.push(curr); });
+                if (item["SubscriberType"] == currentSubscriberType) {                    
+                    item["CurrencyItems"].map(function (curr) {
+                        if (currencyItems.findIndex(y => y.CurrencyId == curr.CurrencyId) == -1) {
+                            currencyItems.push(curr);
+                        }
+                    });
                     return false;
                 }
             });
 
-            RefreshCurrency(currencyItems);
+            //RefreshCurrency(currencyItems);
 
-            CurrencyOnChange();
+            //CurrencyOnChange();
         }
+
+        return currencyItems;
     }
 
     function DangerOnChange() {
-        if (cacheFilterDependOn.DangerCurrencyList) {
-            let currencyItems = [];
-
+        let currencyItems = [];
+        if (cacheFilterDependOn.DangerCurrencyList) {          
             domElements.cbbDanger.find('optgroup').each(function () {
                 let currentDangerType = $(this).attr("DangerType");
 
@@ -1700,10 +1733,10 @@ function MatchMonitorDetail() {
                 })
             });
 
-            RefreshCurrency(currencyItems);
-
-            CurrencyOnChange();
+            //RefreshCurrency(currencyItems);
+            //CurrencyOnChange();
         }
+        return currencyItems;
     }
 
     function RefreshCurrency(currencyItems) {
@@ -1714,37 +1747,73 @@ function MatchMonitorDetail() {
             });
         }
         domElements.cbbCurrency.multiselect("refresh");
+    }  
+
+    function DependOnCtschange() {
+        CurrencyOnChange();
+
+    }
+
+    function CurrencyReasonOnChange(currencyId, reasonItems) {       
+        $.each(cacheFilterDependOn.CurrencyReasonList, function (idx, item) {
+            if (item["CurrencyId"] == 0) {
+                if (reasonItems.findIndex((obj) => obj == "-") == -1) {
+                    reasonItems.push("-");
+                }
+            }
+
+            if (item["CurrencyId"] == currencyId) {
+                item["ReasonItems"].map(function (reason) {
+                    if (reason.ReasonList) {
+                        reason.ReasonList.split(',').forEach(x => {
+                            if (reasonItems.findIndex((obj) => obj == x) == -1)
+                                reasonItems.push(x);
+                        })
+                    }
+
+                });
+                return false;
+            }
+        });
+
+        return reasonItems;
+    }
+
+    function CurrencyAGrOnChange(currencyId, aGrItems) {
+        $.each(cacheFilterDependOn.CurrencyAGroupList, function (idx, item) {
+            if (item["CurrencyId"] == 0) {
+                if (aGrItems.findIndex((obj) => obj == "-") == -1) {
+                    aGrItems.push("-");
+                }
+            }
+
+            if (item["CurrencyId"] == currencyId) {
+                item["AGroupItems"].forEach(x => {
+                    let aGr = x.AGroupID;
+                    if (aGr == 0) {
+                        aGr = "-";
+                    }
+                    if (aGrItems.findIndex(y => y == aGr) == -1)
+                        aGrItems.push(aGr);
+                })
+                return false;
+            }
+        });
+
+        return aGrItems;
     }
 
     function CurrencyOnChange() {
         if (cacheFilterDependOn.CurrencyReasonList) {
             let reasonItems = [];
+            let currencyAGrItems = [];
 
             $("option:selected", domElements.cbbCurrency).each(function () {
                 let currencyId = $(this).val();
 
-                $.each(cacheFilterDependOn.CurrencyReasonList, function (idx, item) {
-                    if (item["CurrencyId"] == 0) {
-                        if (reasonItems.findIndex((obj) => obj == "-") == -1) {
-                            reasonItems.push("-");
-                        }
-                    }
+                reasonItems = CurrencyReasonOnChange(currencyId, reasonItems);
 
-                    if (item["CurrencyId"] == currencyId) {
-                        if (CheckExistScores(item["ScoreList"])) {
-                            item["ReasonItems"].map(function (reason) {
-                                if (reason.ReasonList) {
-                                    reason.ReasonList.split(',').forEach(x => {
-                                        if (reasonItems.findIndex((obj) => obj == x) == -1)
-                                            reasonItems.push(x);
-                                    })
-                                }
-
-                            });
-                        }
-                        return false;
-                    }
-                });
+                currencyAGrItems = CurrencyAGrOnChange(currencyId, currencyAGrItems);               
             })
 
             domElements.cbbReason.multiselect().empty();
@@ -1753,22 +1822,13 @@ function MatchMonitorDetail() {
                     domElements.cbbReason.append(`<option selected value='${item}'>${item}</option>`);
                 });
             }
-            domElements.cbbReason.multiselect("refresh");
+            domElements.cbbReason.multiselect("refresh");            
 
-            ReasonOnChange();
+            ReasonOnChange(currencyAGrItems);
         }
     }
-
-    function CheckExistScores(scores) {
-        let selectedScores = [];
-        $("option:selected", domElements.cbbMatchScore).each(function () {
-            selectedScores.push($(this).val())
-        })
-
-        return selectedScores.some(item => scores.includes(item));
-    }
-
-    function ReasonOnChange() {
+   
+    function ReasonOnChange(currencyAGrItems) {
         if (cacheFilterDependOn.ReasonAGroupList) {
             let aGrItems = [];
             $("option:selected", domElements.cbbReason).each(function () {
@@ -1795,14 +1855,36 @@ function MatchMonitorDetail() {
 
             domElements.cbbAGroup.multiselect().empty();
             if (aGrItems.length > 0) {
-                aGrItems.forEach(item => {
+                let innerJoinedAGrItems = [];
+
+                if (currencyAGrItems.length > 0) {
+                    for (let aGr of aGrItems) {
+                        let matchingAGr = currencyAGrItems.find(item2 => item2 === aGr);
+                        if (matchingAGr) {
+                            innerJoinedAGrItems.push(aGr)
+                        }
+                    }
+                } else {
+                    innerJoinedAGrItems = aGrItems;
+                }
+
+                innerJoinedAGrItems = innerJoinedAGrItems.sort();
+
+                innerJoinedAGrItems.forEach(item => {
                     domElements.cbbAGroup.append(`<option selected value='${item}'>${item}</option>`);
                 });
             }
             domElements.cbbAGroup.multiselect("refresh");
-
-            //AGrOnChange(true);
         }
+    }
+
+    function CheckExistScores(scores) {
+        let selectedScores = [];
+        $("option:selected", domElements.cbbMatchScore).each(function () {
+            selectedScores.push($(this).val())
+        });
+
+        return selectedScores.some(item => scores.includes(item));
     }
 
     function AGrOnChange(isGetDependMGrBlank) {
@@ -1949,11 +2031,11 @@ function MatchMonitorDetail() {
 
         domElements.cbbMarket.change(function () { MarketOnChange(); });
         domElements.cbbBetType.change(function () { BetTypeOnChange(); });
-        domElements.cbbMatchScore.change(function () { MatchScoreOnChange(); });
-        domElements.cbbSites.change(function () { SiteOnChange(); })
-        domElements.cbbDanger.change(function () { DangerOnChange(); });
+        domElements.cbbMatchScore.change(function () { DependOnMainchange(); });
+        domElements.cbbSites.change(function () { DependOnMainchange(); })
+        domElements.cbbDanger.change(function () { DependOnMainchange(); });
         domElements.cbbCurrency.change(function () { CurrencyOnChange(); });
-        domElements.cbbReason.change(function () { ReasonOnChange(); });
+        domElements.cbbReason.change(function () { ReasonOnChange([]); });
         
         try {
             isSupportShowAllTickets = JSON.parse(domElements?.isSupportShowAllTickets?.toLowerCase());
@@ -2023,18 +2105,18 @@ function MatchMonitorDetail() {
 
         domElements.tickUncheckAll.on('click', function () { ToggleTickCheckAll(false); });
 
-        domElements.btnShowAll.on('click', function () {
-            if (cacheMGroup.isActive) {
-                cacheMGroup.isActive = false;
-                domElements.inputHomeSelectAll.prop('checked', false);
-                domElements.inputAwaySelectAll.prop('checked', false);
+        //domElements.btnShowAll.on('click', function () {
+        //    if (cacheMGroup.isActive) {
+        //        cacheMGroup.isActive = false;
+        //        domElements.inputHomeSelectAll.prop('checked', false);
+        //        domElements.inputAwaySelectAll.prop('checked', false);
 
-                //domElements.btnGenerateDetail.click();
-                ShowAllDataGrid();
+        //        //domElements.btnGenerateDetail.click();
+        //        ShowAllDataGrid();
 
-                cacheMGroup.selectMgroup = {};
-            }
-        })
+        //        cacheMGroup.selectMgroup = {};
+        //    }
+        //})
 
         domElements.btnShowPopupAssDetection.on('click', function () { ShowPopupAssDetection(); })
 
