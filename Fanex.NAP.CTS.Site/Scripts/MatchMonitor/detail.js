@@ -91,6 +91,7 @@ function MatchMonitorDetail() {
     let cacheFilter = {};
     let cacheFilterScore = undefined;
     let cacheFilterDependOn = {
+        DropdownFilterList: [],
         ScoreCurrencyList: [],
         SubscriberTypeCurrencyList: [],
         DangerCurrencyList: [],
@@ -768,6 +769,10 @@ function MatchMonitorDetail() {
             cacheMGroup.allMGroup = {};
             cacheMGroup.selectMgroup = {};
             cacheFilterDependOn.TicketStatusList = data.DropdownList.TicketStatusList;
+        }
+
+        if (data.DropdownFilterList) {
+            cacheFilterDependOn.DropdownFilterList = data.DropdownFilterList;
         }
 
         //if (cacheFilter[MatchMonitorDetailViewType.TicketFraud]) {
@@ -1665,7 +1670,18 @@ function MatchMonitorDetail() {
         CurrencyOnChange();
     }
 
-    function MatchScoreOnChange() {
+    function GetFilterSelected() {
+        let scoreSelected = $("option:selected", domElements.cbbMatchScore);
+        let subscriberTypeSelected = domElements.cbbSites.val();
+        //let danger1Selected = $()
+        //let danger2Selected = $()
+        let currencySelected = $("option:selected", domElements.cbbCurrency);
+        let reasonSelected = $("option:selected", domElements.cbbReason);
+
+        
+    }
+
+    function MatchScoreOnChange_Old() {
         let currencyItems = [];
         if (cacheFilterDependOn.ScoreCurrencyList) {            
             $("option:selected", domElements.cbbMatchScore).each(function () {
@@ -1690,7 +1706,11 @@ function MatchMonitorDetail() {
         return currencyItems;
     }
 
-    function SiteOnChange() {
+    function MatchScoreOnChange() {
+
+    }
+
+    function SiteOnChange_Old() {
         let currencyItems = [];
         if (cacheFilterDependOn.SubscriberTypeCurrencyList) {
             let currentSubscriberType = domElements.cbbSites.val();
@@ -1714,7 +1734,11 @@ function MatchMonitorDetail() {
         return currencyItems;
     }
 
-    function DangerOnChange() {
+    function SiteOnChange() {
+
+    }
+
+    function DangerOnChange_Old() {
         let currencyItems = [];
         if (cacheFilterDependOn.DangerCurrencyList) {          
             domElements.cbbDanger.find('optgroup').each(function () {
@@ -1741,6 +1765,10 @@ function MatchMonitorDetail() {
         return currencyItems;
     }
 
+    function DangerOnChange() {
+
+    }
+
     function RefreshCurrency(currencyItems) {
         domElements.cbbCurrency.multiselect().empty();
         if (currencyItems.length > 0) {
@@ -1749,12 +1777,7 @@ function MatchMonitorDetail() {
             });
         }
         domElements.cbbCurrency.multiselect("refresh");
-    }  
-
-    function DependOnCtschange() {
-        CurrencyOnChange();
-
-    }
+    }    
 
     function CurrencyReasonOnChange(currencyId, reasonItems) {       
         $.each(cacheFilterDependOn.CurrencyReasonList, function (idx, item) {
@@ -1830,7 +1853,7 @@ function MatchMonitorDetail() {
         }
     }
    
-    function ReasonOnChange(currencyAGrItems) {
+    function ReasonOnChange_Old(currencyAGrItems) {
         if (cacheFilterDependOn.ReasonAGroupList) {
             let aGrItems = [];
             $("option:selected", domElements.cbbReason).each(function () {
@@ -1878,6 +1901,10 @@ function MatchMonitorDetail() {
             }
             domElements.cbbAGroup.multiselect("refresh");
         }
+    }
+
+    function ReasonOnChange() {
+
     }
 
     function CheckExistScores(scores) {
