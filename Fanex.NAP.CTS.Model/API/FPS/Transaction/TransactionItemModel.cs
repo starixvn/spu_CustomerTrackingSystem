@@ -31,5 +31,15 @@
         public string IP { get; set; }
 
         public string RobotTracking { get; set; }
+
+        public string Country { get; set; }
+
+        public string City { get; set; }
+
+        public string Region { get; set; }
+
+        public string ISP { get; set; }
+
+        public string UserAgent { get; set; }
     }
 }

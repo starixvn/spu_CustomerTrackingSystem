@@ -13,7 +13,7 @@ namespace Fanex.NAP.CTS.Service.Interface
     {
         SubscriberInfo GetSubscriberBySubscriberName(string subscriberName);
 
-        SubscriberFpsInfo GetSubscriberDcsExBySubscriberName(string subscriberName);
+        SubscriberFpsInfo GetSubscriberBySubscriberName_DCSExtra(string subscriberName);
 
     }
 }

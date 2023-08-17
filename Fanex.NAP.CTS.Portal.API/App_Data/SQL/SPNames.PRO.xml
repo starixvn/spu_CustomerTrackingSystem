@@ -117,5 +117,11 @@
 		<Setting Key="DCS_ET_Association_GetAssociationListByAccountSubscriber" SpName="DCS_ET_Association_GetAssociationListByAccountSubscriber" DbName="MySQL.DCS_Extra.Reporter" />
 		<Setting Key="DCS_ET_Association_GetAssociationDeviceByAccountSubscriber" SpName="DCS_ET_Association_GetAssociationDeviceByAccountSubscriber" DbName="MySQL.DCS_Extra.Reporter" />
 		<Setting Key="DCS_ET_Association_GetAssociationMatrixByAccountSubscriber" SpName="DCS_ET_Association_GetAssociationMatrixByAccountSubscriber" DbName="MySQL.DCS_Extra.Reporter" />
+		<Setting Key="DCS_ET_DeviceInfo_GetByDeviceSubscriber" SpName="DCS_ET_DeviceInfo_GetByDeviceSubscriber" DbName="MySQL.DCS_Extra.Reporter" />
+		<Setting Key="DCS_ET_Association_GetDeviceInfoByDeviceSubscriber" SpName="DCS_ET_Association_GetDeviceInfoByDeviceSubscriber" DbName="MySQL.DCS_Extra.Reporter" />
+		<Setting Key="DCS_ET_Association_GetAssociationAccountByDeviceSubscriber" SpName="DCS_ET_Association_GetAssociationAccountByDeviceSubscriber" DbName="MySQL.DCS_Extra.Reporter" />
+		<Setting Key="DCS_ET_Association_GetAssociationDeviceByDeviceSubscriber" SpName="DCS_ET_Association_GetAssociationDeviceByDeviceSubscriber" DbName="MySQL.DCS_Extra.Reporter" />
+		<Setting Key="DCS_ET_Association_GetAssociationMatrixByDeviceSubscriber" SpName="DCS_ET_Association_GetAssociationMatrixByDeviceSubscriber" DbName="MySQL.DCS_Extra.Reporter" />
+		<Setting Key="DCS_ET_Transaction_GetHistoryByDeviceSubscriber" SpName="DCS_ET_Transaction_GetHistoryByDeviceSubscriber" DbName="MySQL.DCS_Extra.Reporter" />
 	</Function>
 </Functions>
