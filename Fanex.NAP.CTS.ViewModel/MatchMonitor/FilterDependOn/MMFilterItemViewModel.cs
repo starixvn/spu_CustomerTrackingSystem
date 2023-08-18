@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn
 {
@@ -9,15 +10,15 @@ namespace Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn
         public string SubscriberType { get; set; }
 
         public int Danger1 { get; set; }
-        
+
         public int Danger2 { get; set; }
-        
+
         public int Danger3 { get; set; }
-        
+
         public int Danger4 { get; set; }
-        
+
         public int Danger5 { get; set; }
-        
+
         public string DangerToString
         {
             get
@@ -89,24 +90,39 @@ namespace Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn
                 return (danger == string.Empty) ? "-" : danger;
             }
         }
-        
+
         public string CurrencyName { get; set; }
-        
+
         public short CurrencyId { get; set; }
-        
+
         public string ReasonItem { get; set; }
-        
+
         public string ADetectGroup { get; set; }
-        
+
         public int ADetectGroupID { get; set; }
-
-        public IEnumerable<string> FraudReasonList { get; set; }
-
-        public IEnumerable<int> FraudADetectGroupID { get; set; }
 
         private string AddSpaceDanger(int commaCount)
         {
             return commaCount % 2 == 0 ? " " : string.Empty;
+        }
+
+        public string BuildStringCompareExcludeReasonAgroup()
+        {
+            this.GetType().GetProperties();
+
+            var t = this.GetType();
+            var props = t.GetProperties();
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            foreach (var prp in props)
+            {
+                if (!prp.Name.Equals(nameof(ReasonItem)) && !prp.Name.Equals(nameof(ADetectGroup)) && !prp.Name.Equals(nameof(ADetectGroupID)))
+                {
+                    object value = prp.GetValue(this, new object[] { });
+                    dict.Add(prp.Name, value);
+                }
+            }
+
+            return JsonConvert.SerializeObject(dict);
         }
     }
 }

@@ -328,7 +328,7 @@
 
             foreach (var item in mdItemList)
             {
-                var reasonsList = item.ReasonList.Split(';');
+                var reasonsList = item.ReasonList.Split(',');
                 foreach (var reason in reasonsList)
                 {
                     hashSet.Add(JsonConvert.SerializeObject(new MMFilterItemViewModel

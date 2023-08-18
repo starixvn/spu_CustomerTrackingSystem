@@ -516,27 +516,17 @@
 
         public void BindDropdownFilterListByFraudTicket(MMDetailFilterViewModel fraudTicketModel)
         {
-            var dictionary = new Dictionary<string, Tuple<IEnumerable<int>, IEnumerable<string>>>();
-            DropdownFilterList.ForEach(item =>
+            DropdownFilterList = DropdownFilterList.SelectMany(itemAll =>
             {
-                if (dictionary.TryGetValue($"{item.Score}_{item.SubscriberType}_{item.CurrencyId}", out var tuple))
-                {
-                    item.FraudADetectGroupID = tuple.Item1;
-                    item.FraudReasonList = tuple.Item2;
-                }
-                else
-                {
-                    var filter = fraudTicketModel.DropdownFilterList
-                    .Where(x => x.Score == item.Score &&
-                        x.SubscriberType == item.SubscriberType &&
-                        x.CurrencyId == item.CurrencyId);
+                var result = fraudTicketModel.DropdownFilterList.Where(itemFraud => itemAll.BuildStringCompareExcludeReasonAgroup().Equals(itemFraud.BuildStringCompareExcludeReasonAgroup()));
 
-                    item.FraudADetectGroupID = filter.Select(x => x.ADetectGroupID).Distinct();
-                    item.FraudReasonList = filter.Select(x => x.ReasonItem).Distinct();
-
-                    dictionary[$"{item.Score}_{item.SubscriberType}_{item.CurrencyId}"] = Tuple.Create(item.FraudADetectGroupID, item.FraudReasonList);
+                if (result.Any())
+                {
+                    return result;
                 }
-            });
+
+                return new List<MMFilterItemViewModel>() { itemAll };
+            }).ToList();
         }
     }
 }
