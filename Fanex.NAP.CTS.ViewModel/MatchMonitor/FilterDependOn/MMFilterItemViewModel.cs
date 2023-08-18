@@ -100,9 +100,9 @@ namespace Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn
         
         public int ADetectGroupID { get; set; }
 
-        public List<string> FraudReasonList { get; set; }
+        public IEnumerable<string> FraudReasonList { get; set; }
 
-        public List<int> FraudADetectGroupID { get; set; }
+        public IEnumerable<int> FraudADetectGroupID { get; set; }
 
         private string AddSpaceDanger(int commaCount)
         {
