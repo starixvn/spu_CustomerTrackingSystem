@@ -344,7 +344,10 @@
                         Danger5 = item.Danger5,
                         Score = item.Score,
                         SubscriberType = item.SubscriberType,
-                        ReasonItem = reason
+                        ReasonItem = reason,
+                        BallHeadHDP = item.BallHeadHDP(),
+                        BallHeadBetTeam = item.BallHeadBetTeam(),
+                        TicketStatus = item.TicketStatus,
                     }));
                 }
             }

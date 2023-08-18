@@ -482,6 +482,9 @@
                     Danger5 = item.Danger5,
                     Score = liveIndicator ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : "-",
                     SubscriberType = item.IsLicensee ? "L" : "C",
+                    BallHeadHDP = item.Hdp,
+                    BallHeadBetTeam = item.BetTeam,
+                    TicketStatus = item.TicketStatus,
                 }));
             }
 
