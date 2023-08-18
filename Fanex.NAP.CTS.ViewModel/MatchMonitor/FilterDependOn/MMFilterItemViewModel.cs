@@ -95,7 +95,7 @@ namespace Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn
 
         public short CurrencyId { get; set; }
 
-        public string ReasonItem { get; set; }
+        public string ReasonItem { get; set; } = "-";
 
         public string ADetectGroup { get; set; }
 
@@ -104,25 +104,6 @@ namespace Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn
         private string AddSpaceDanger(int commaCount)
         {
             return commaCount % 2 == 0 ? " " : string.Empty;
-        }
-
-        public string BuildStringCompareExcludeReasonAgroup()
-        {
-            this.GetType().GetProperties();
-
-            var t = this.GetType();
-            var props = t.GetProperties();
-            Dictionary<string, object> dict = new Dictionary<string, object>();
-            foreach (var prp in props)
-            {
-                if (!prp.Name.Equals(nameof(ReasonItem)) && !prp.Name.Equals(nameof(ADetectGroup)) && !prp.Name.Equals(nameof(ADetectGroupID)))
-                {
-                    object value = prp.GetValue(this, new object[] { });
-                    dict.Add(prp.Name, value);
-                }
-            }
-
-            return JsonConvert.SerializeObject(dict);
         }
     }
 }

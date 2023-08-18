@@ -94,7 +94,7 @@
                     if (para.DateType == 1)
                         matchFromCTSInfos = GetMMByScanDate(para);
                     else
-                        matchFromCTSInfos = GetMMByEventDate(para);                   
+                        matchFromCTSInfos = GetMMByEventDate(para);
 
                     matchMonitors = matchFromCTSInfos?.Select(x => new GetMatchMonitorViewModel(x, mmStatic)).OrderBy(c => c.MatchSection);
 
@@ -379,7 +379,9 @@
 
                             if (mmticketDetailInfo == null)
                             {
-                                mmticketDetailInfo = _matchMonitorService.GetMMTicketDetailInfo(para);
+                                var fraudTicket = GetFraudMMDetailFromCache(para);
+                                var listTransId = fraudTicket.HomeMatchItemList.Select(x => x.TransId.ToString()).Union(fraudTicket.AwayMatchItemList.Select(x => x.TransId.ToString()));
+                                mmticketDetailInfo = _matchMonitorService.GetMMTicketDetailInfo(para, listTransId);
 
                                 if (isCache)
                                     await _memoryCacheService.PushValueAsync(key, mmticketDetailInfo);
@@ -578,7 +580,7 @@
 
                             mdResult.FilterItemMMDetail(filter, para.Sites);
                         }
-                       
+
                         break;
                     }
                 case MatchMonitorQueryType.TicketAll when para.IsSupportShowAllTickets:
@@ -591,7 +593,7 @@
 
                             mdResult.FilterItemMMDetail(filter, para.Sites);
                         }
-                        
+
                         break;
                     }
             }
@@ -703,7 +705,7 @@
             var ticketDetailGroup = default(TicketDetailViewModel);
 
             matchDetailInfo = _matchMonitorService.GetMatchMonitorDetail(para);
-           
+
             if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
             {
                 var tasks = new Task[]
@@ -727,7 +729,7 @@
                 mdItemList = DrawColorAllMMDetailAndUpdateValue(matchDetailInfo.VerifiedTrans, custInfo, ticketDetailGroup.TicketDetails, para.BetTypeID);
                 result = MergeFraudToAllMMDetail(mdItemList, fraudTicketDetail, ticketDetailGroup.MinSequenceIDTotalAll);
             }
-            else if(para.TypeOfTickets == MatchMonitorQueryType.TicketAll)
+            else if (para.TypeOfTickets == MatchMonitorQueryType.TicketAll)
             {
                 result = GetTicketsFromMainDb(para, filter, isLoop);
             }
@@ -890,9 +892,9 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailManualDetectRpt)]
         public ActionResult DetectGroupAssWithOptions(DetectGroupAssFilterViewModel model)
         {
-            var result = new DetectGroupAssociationListViewModel();            
+            var result = new DetectGroupAssociationListViewModel();
             var mergeGroupInfo = new MergeGroupInfoModel { CTSCustIDs = model.CTSCustIDs };
-            
+
             var custInfo = _matchMonitorService.GetCustInfoByCustID(model.CustIDs);
 
             Parallel.Invoke(() =>
@@ -930,7 +932,7 @@
             });
 
             var data = _associationDetectionService.DetectGroupDetectAssociation(mergeGroupInfo).Select(x => new DetectGroupAssociationItemViewModel(x));
-          
+
             result.ItemList = this.RearrangeAssGroup(data, true);
 
             var mGrList = BuildMGrList(result.ItemList, model.HomeDetectMGr, model.AwayDetectMGr);

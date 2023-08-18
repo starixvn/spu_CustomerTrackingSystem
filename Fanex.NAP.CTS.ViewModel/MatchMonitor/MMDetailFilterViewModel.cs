@@ -213,7 +213,7 @@
 
         public MMDetailFilterDropdownListViewModel DropdownList { get; set; }
 
-        public List<MMFilterItemViewModel> DropdownFilterList { get; set; }
+        public IEnumerable<MMFilterItemViewModel> DropdownFilterList { get; set; }
 
         public MMDetailFilterViewModel Clone() => new MMDetailFilterViewModel(this);
 
@@ -485,7 +485,7 @@
                 }));
             }
 
-            DropdownFilterList = hashSet.Select(JsonConvert.DeserializeObject<MMFilterItemViewModel>).ToList();
+            DropdownFilterList = hashSet.Select(JsonConvert.DeserializeObject<MMFilterItemViewModel>);
         }
 
         public void BindDropdownListByFraudTicket(MMDetailFilterViewModel fraudTicketModel)
@@ -516,17 +516,7 @@
 
         public void BindDropdownFilterListByFraudTicket(MMDetailFilterViewModel fraudTicketModel)
         {
-            DropdownFilterList = DropdownFilterList.SelectMany(itemAll =>
-            {
-                var result = fraudTicketModel.DropdownFilterList.Where(itemFraud => itemAll.BuildStringCompareExcludeReasonAgroup().Equals(itemFraud.BuildStringCompareExcludeReasonAgroup()));
-
-                if (result.Any())
-                {
-                    return result;
-                }
-
-                return new List<MMFilterItemViewModel>() { itemAll };
-            }).ToList();
+            DropdownFilterList = DropdownFilterList.Union(fraudTicketModel.DropdownFilterList);
         }
     }
 }

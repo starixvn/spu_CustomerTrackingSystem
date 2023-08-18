@@ -349,7 +349,7 @@
                 }
             }
 
-            DropdownFilterList = hashSet.Select(JsonConvert.DeserializeObject<MMFilterItemViewModel>).ToList();
+            DropdownFilterList = hashSet.Select(JsonConvert.DeserializeObject<MMFilterItemViewModel>);
         }
     }
 }
