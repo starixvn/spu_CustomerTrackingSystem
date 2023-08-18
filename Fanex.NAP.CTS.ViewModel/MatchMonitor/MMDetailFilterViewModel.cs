@@ -71,12 +71,9 @@
                 {
                     return isLiveIndicator ? string.Format($"{x.LiveHomeScore} - {x.LiveAwayScore}") : "-";
                 }).Distinct(x => x).OrderBy(x => x).ToList();
-
-                //this.SubscriberTypeList = mtFilterBySite.Select(x => { return x.IsLicensee ? "L" : "C"; }).Distinct().ToList();
-
+              
                 var groupList = fraudFilter.GroupList?.ToList() ?? new List<GroupInfoViewModel>();
-                //var reasonGroupIDDic = fraudFilter?.ReasonGroupIDDic ?? new Dictionary<string, List<int>>();
-
+                
                 // Group List
                 this.GroupList = fraudFilter.GroupList?.ToList() ?? new List<GroupInfoViewModel>();
 
@@ -88,24 +85,8 @@
                     if (!this.GroupList.Any(x => x.GroupName == "-"))
                         this.GroupList.Insert(0, new GroupInfoViewModel { GroupID = 0, GroupName = "-" });
                     if (!this.ReasonList.Any(x => x == "-"))
-                        this.ReasonList.Insert(0, "-");
-
-                    //if (!reasonList.Any(x => x == "-")) reasonList.Insert(0, "-");
-                    //if (!reasonGroupIDDic.Any(x => x.Key == "-")) reasonGroupIDDic.Add("-", new List<int>() { 0 });
-                    //if (!groupList.Any(x => x.GroupName == "-")) groupList.Insert(0, new GroupInfoViewModel
-                    //{
-                    //    GroupID = 0,
-                    //    GroupName = "-"
-                    //});
-                }
-
-                //ReasonInfos = string.Join(", ", ReasonList.Where(x => !x.Contains("-")));
-                //ReasonGroupIDDic = reasonGroupIDDic.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
-
-                //var agroup = ReasonGroupIDDic.Where(x => ReasonList.Contains(x.Key)).SelectMany(x => x.Value).Distinct();
-
-                // Group List
-                //this.GroupList = groupList?.Where(x => x.GroupID != null ? agroup.Contains(x.GroupID ?? 0) : false).ToList();
+                        this.ReasonList.Insert(0, "-");                  
+                }              
             }
             else
             {
@@ -275,23 +256,7 @@
             }
 
             return IsFilter;
-        }
-
-        //public bool IsOnlyFraudTicket()
-        //{           
-        //    return (!ReasonList?.Contains("-") ?? false) || !((AGroupList?.Contains("-") ?? true) || (AGroupList?.Contains("0") ?? true));
-        //}
-
-        //private bool FilterBySite(MMdetailFilterInforTypeBaseModel x, string site)
-        //{
-        //    if (site == MMSites.All) return true;
-
-        //    if (site == MMSites.Credit) return x.IsCredit == 1;
-
-        //    if (site == MMSites.Licensee) return x.IsLicensee == 1;
-
-        //    return false;
-        //}       
+        }       
 
         public void BindDropdownListByMainTicketInfo(IEnumerable<MMDetailFilterTicketInfoModel> tiItemList, bool liveIndicator)
         {
@@ -334,81 +299,6 @@
 
                         DropdownList.SubscriberTypeCurrencyList = subscriberTypeCurrency;
 
-                    #endregion
-                }),
-                Task.Run(() =>
-                {
-                    #region  Danger - Currency                        
-                    var dangerList = new List<DangerCurrencyViewModel>();
-
-                    dangerList.AddRange(tiItemViewList.Where(x=> x.Danger1 == 0 && x.Danger2 == 0 && x.Danger3 == 0 && x.Danger4 == 0 && x.Danger5 == 0).GroupBy(x=>x.Danger1)
-                        .Select(g => new DangerCurrencyViewModel {
-                                DangerType = 0,
-                                DangerValue = 0,
-                                CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
-                            }));
-                    dangerList.AddRange(tiItemViewList.Where(x=> x.Danger1 > 0).GroupBy(x=> new { x.Danger1 })
-                        .Select(g => new DangerCurrencyViewModel {
-                            DangerType = 1,
-                            DangerValue = g.Key.Danger1,
-                            CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
-                        }));
-                    dangerList.AddRange(tiItemViewList.Where(x=> x.Danger2 > 0).GroupBy(x=> new { x.Danger2 })
-                        .Select(g => new DangerCurrencyViewModel {
-                            DangerType = 2,
-                            DangerValue = g.Key.Danger2,
-                            CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
-                        }));
-                    dangerList.AddRange(tiItemViewList.Where(x=> x.Danger3 > 0).GroupBy(x=> new { x.Danger3 })
-                        .Select(g => new DangerCurrencyViewModel {
-                            DangerType = 3,
-                            DangerValue = g.Key.Danger3,
-                            CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
-                        }));
-                    dangerList.AddRange(tiItemViewList.Where(x=> x.Danger4 > 0).GroupBy(x=> new { x.Danger4 })
-                        .Select(g => new DangerCurrencyViewModel {
-                            DangerType = 4,
-                            DangerValue = g.Key.Danger4,
-                            CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
-                        }));
-                    dangerList.AddRange(tiItemViewList.Where(x=> x.Danger5 > 0).GroupBy(x=> new { x.Danger5 })
-                        .Select(g => new DangerCurrencyViewModel {
-                            DangerType = 5,
-                            DangerValue = g.Key.Danger5,
-                            CurrencyItems = g.Select(x=> new DangerCurrencyItemViewModel { CurrencyId = x.CurrencyId, CurrencyName = x.CurrencyName}).Distinct(x=>x.CurrencyId)
-                        }));
-
-                    DropdownList.DangerCurrencyList = dangerList;
-                    #endregion
-                }),
-                Task.Run(() =>
-                {
-                    #region Score - Currency
-                    this.DropdownList.ScoreCurrencyList = tiItemViewList.GroupBy(x => x.Score)
-                            .Select(g => new ScoreCurrencyViewModel
-                            {
-                                Score = g.Key,
-                                CurrencyItems = g.Select(x =>
-                                {
-                                    var isNotValid = string.IsNullOrEmpty(x.CurrencyName) || x.CurrencyId == 0;
-                                    return new ScoreCurrencyItemViewModel
-                                    {
-                                        CurrencyId = isNotValid ? -1 : x.CurrencyId,
-                                        CurrencyName = isNotValid ? "-" : x.CurrencyName,
-                                    };
-                                }).Distinct(x => x.CurrencyId)
-                            });
-                    #endregion
-                }),
-                Task.Run(() =>
-                {
-                    #region Currency - Reason
-                   DropdownList.CurrencyReasonList = tiItemViewList.GroupBy(x => new { x.CurrencyId })
-                            .Select(g => new CurrencyReasonViewModel
-                            {
-                                CurrencyId = g.Key.CurrencyId,
-                                ReasonItems = g.Select(x => new CurrencyReasonItemViewModel { ReasonList = string.Empty}).Distinct(x=>x.ReasonList)
-                            });
                     #endregion
                 }),
                 Task.Run(() =>
@@ -482,40 +372,11 @@
                     Danger5 = item.Danger5,
                     Score = liveIndicator ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : "-",
                     SubscriberType = item.IsLicensee ? "L" : "C",
-                    BallHeadHDP = item.Hdp,
-                    BallHeadBetTeam = item.BetTeam,
-                    TicketStatus = item.TicketStatus,
                 }));
             }
 
             DropdownFilterList = hashSet.Select(JsonConvert.DeserializeObject<MMFilterItemViewModel>);
-        }
-
-        public void BindDropdownListByFraudTicket(MMDetailFilterViewModel fraudTicketModel)
-        {
-            if (this.DropdownList == null)
-            {
-                this.DropdownList = new MMDetailFilterDropdownListViewModel();
-            }
-
-            if (fraudTicketModel.RecordsTotal < RecordsTotal && fraudTicketModel.DropdownList.CurrencyReasonList != null)
-            {
-                this.DropdownList.CurrencyReasonList = new List<CurrencyReasonViewModel>() { new CurrencyReasonViewModel { CurrencyId = 0 } }.Union(fraudTicketModel.DropdownList.CurrencyReasonList);
-                this.DropdownList.CurrencyAGroupList = new List<CurrencyAGroupViewModel>() { new CurrencyAGroupViewModel { CurrencyId = 0 } }.Union(fraudTicketModel.DropdownList.CurrencyAGroupList);
-                this.DropdownList.ReasonAGroupList = new List<ReasonAGroupViewModel>() { new ReasonAGroupViewModel { Reason = "-" } }.Union(fraudTicketModel.DropdownList.ReasonAGroupList);
-                this.DropdownList.AGrMGrBlankList = new List<AGrMGrViewModel>()
-                {
-                    new AGrMGrViewModel { AGr = 0, MGrItems = new List<AGrMGrItemViewModel>() { new AGrMGrItemViewModel {  MGr = "-" } }}
-                }.Union(fraudTicketModel.DropdownList.AGrMGrBlankList);
-            }
-            else
-            {
-                this.DropdownList.CurrencyReasonList = fraudTicketModel.DropdownList.CurrencyReasonList;
-                this.DropdownList.CurrencyAGroupList = fraudTicketModel.DropdownList.CurrencyAGroupList;
-                this.DropdownList.ReasonAGroupList = fraudTicketModel.DropdownList.ReasonAGroupList;
-                this.DropdownList.AGrMGrBlankList = fraudTicketModel.DropdownList.AGrMGrBlankList;
-            }
-        }
+        }        
 
         public void BindDropdownFilterListByFraudTicket(MMDetailFilterViewModel fraudTicketModel)
         {

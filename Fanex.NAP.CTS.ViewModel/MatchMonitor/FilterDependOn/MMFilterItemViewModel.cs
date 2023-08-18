@@ -101,12 +101,6 @@ namespace Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn
 
         public int ADetectGroupID { get; set; }
 
-        public decimal BallHeadHDP { get; set; }
-
-        public string BallHeadBetTeam { get; set; }
-
-        public int TicketStatus { get; set; }
-
         private string AddSpaceDanger(int commaCount)
         {
             return commaCount % 2 == 0 ? " " : string.Empty;

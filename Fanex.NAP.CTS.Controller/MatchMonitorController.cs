@@ -392,8 +392,7 @@
                             var fraudTicketDetail = site != MMSites.All ? GetFraudMMFilterFromCache(para, site) : fraudTicketSiteAll;
 
                             result = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketDetail, site, para.LiveIndicator);
-                            result.BindDropdownListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);
-                            result.BindDropdownListByFraudTicket(fraudTicketDetail);
+                            result.BindDropdownListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);                            
 
                             result.BindDropdownFilterListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);
                             result.BindDropdownFilterListByFraudTicket(fraudTicketDetail);
@@ -405,36 +404,13 @@
                                     var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.All);
                                     var typeOfAllTicketAllSiteCache = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketSiteAll, MMSites.All, para.LiveIndicator);
 
-                                    typeOfAllTicketAllSiteCache.BindDropdownListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);
-                                    typeOfAllTicketAllSiteCache.BindDropdownListByFraudTicket(fraudTicketSiteAll);
+                                    typeOfAllTicketAllSiteCache.BindDropdownListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);                                   
 
                                     typeOfAllTicketAllSiteCache.BindDropdownFilterListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);
                                     typeOfAllTicketAllSiteCache.BindDropdownFilterListByFraudTicket(fraudTicketDetail);
 
                                     _memoryCacheService.PushValueAsync(keySite, typeOfAllTicketAllSiteCache);
-                                });
-                                //_ = Task.Run(() =>
-                                //{
-                                //    var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.Licensee);
-                                //    var fraudTicketLicensee = GetFraudMMFilterFromCache(para, MMSites.Licensee);
-                                //    var typeOfAllTicketAllLicenseeCache = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketLicensee, MMSites.Licensee, para.LiveIndicator);
-
-                                //    typeOfAllTicketAllLicenseeCache.BindDropdownListByMainTicketInfo(mmticketDetailInfo.TicketInfoList.Where(x => x.IsLicensee), para.LiveIndicator);
-                                //    typeOfAllTicketAllLicenseeCache.BindDropdownListByFraudTicket(fraudTicketLicensee);
-
-                                //    _memoryCacheService.PushValueAsync(keySite, typeOfAllTicketAllLicenseeCache);
-                                //});
-                                //_ = Task.Run(() =>
-                                //{
-                                //    var keySite = para.BuildCacheKeyWithSite(nameof(GetAllMMFilterFromCache), MMDetailRegion, MMSites.Credit);
-                                //    var fraudTicketCredit = GetFraudMMFilterFromCache(para, MMSites.Credit);
-
-                                //    var typeOfAllTicketAllCreditCache = new MMDetailFilterViewModel(mmticketDetailInfo, fraudTicketCredit, MMSites.Credit, para.LiveIndicator);
-                                //    typeOfAllTicketAllCreditCache.BindDropdownListByMainTicketInfo(mmticketDetailInfo.TicketInfoList.Where(x => !x.IsLicensee), para.LiveIndicator);
-                                //    typeOfAllTicketAllCreditCache.BindDropdownListByFraudTicket(fraudTicketCredit);
-
-                                //    _memoryCacheService.PushValueAsync(keySite, typeOfAllTicketAllCreditCache);
-                                //});
+                                });                                
                             }
                         }
 

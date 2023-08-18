@@ -628,6 +628,14 @@
         text-shadow: none;
         color: #396EF8;
         border: 1px solid #2053D9; }
+        .detailpage .monitor-container .monitor-table .breadcrumb-button .button-primary-outline-1:hover {
+          background: rgba(32, 83, 217, 0.2); }
+      .detailpage .monitor-container .monitor-table .breadcrumb-button .button-primary-outline-1:not(:disabled) {
+        cursor: pointer; }
+      .detailpage .monitor-container .monitor-table .breadcrumb-button .button-primary-outline-1[disabled] {
+        background-color: #c9cdd1;
+        color: #fff;
+        cursor: not-allowed; }
     .detailpage .monitor-container .monitor-table .group-info {
       display: flex;
       padding: 1rem 0 0 0;
