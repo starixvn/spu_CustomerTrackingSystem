@@ -1699,16 +1699,16 @@ function MatchMonitorDetail() {
                     if (danger1Selected.length > 0 && danger1Selected.find(x => x == item.Danger1)) {
                         countDangerType += 1;
                     }
-                    if (danger2Selected.length > 0 && !danger2Selected.find(x => x == item.Danger2)) {
+                    if (danger2Selected.length > 0 && danger2Selected.find(x => x == item.Danger2)) {
                         countDangerType += 1;
                     }
-                    if (danger3Selected.length > 0 && !danger3Selected.find(x => x == item.Danger4)) {
+                    if (danger3Selected.length > 0 && danger3Selected.find(x => x == item.Danger4)) {
                         countDangerType += 1;
                     }
-                    if (danger4Selected.length > 0 && !danger4Selected.find(x => x == item.Danger4)) {
+                    if (danger4Selected.length > 0 && danger4Selected.find(x => x == item.Danger4)) {
                         countDangerType += 1;
                     }
-                    if (danger5Selected.length > 0 && !danger5Selected.find(x => x == item.Danger5)) {
+                    if (danger5Selected.length > 0 && danger5Selected.find(x => x == item.Danger5)) {
                         countDangerType += 1;
                     }
                     if (countDangerType == 0) {
@@ -1726,8 +1726,6 @@ function MatchMonitorDetail() {
 
                 return true;
             });
-
-            console.log(dependOnFilter);
 
             BindEffectFilterDependOn(indexFilterSelected, dependOnFilter);
         }
