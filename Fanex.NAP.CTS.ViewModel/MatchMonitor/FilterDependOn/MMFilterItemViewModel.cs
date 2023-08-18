@@ -97,9 +97,15 @@ namespace Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn
 
         public string ReasonItem { get; set; } = "-";
 
-        public string ADetectGroup { get; set; }
+        public string ADetectGroup { get; set; } = "-";
 
         public int ADetectGroupID { get; set; }
+
+        public decimal BallHeadHDP { get; set; }
+
+        public string BallHeadBetTeam { get; set; }
+
+        public int TicketStatus { get; set; }
 
         private string AddSpaceDanger(int commaCount)
         {

@@ -7,14 +7,14 @@
     {
         public MMDetailFilterDropdownListViewModel()
         {            
-            this.SubscriberTypeCurrencyList = new List<SubscriberTypeCurrencyViewModel>();          
-            this.Danger = new DangerViewModel();
+            this.SubscriberTypeList = new List<string>();          
+            this.DangerList = new DangerViewModel();
             this.TicketStatusList = new List<TicketStatusViewModel>();
-        }     
+        }
 
-        public IEnumerable<SubscriberTypeCurrencyViewModel> SubscriberTypeCurrencyList { get; set; }      
+        public IEnumerable<string> SubscriberTypeList { get; set; }      
       
-        public DangerViewModel Danger { get; set; }
+        public DangerViewModel DangerList { get; set; }
 
         public IEnumerable<TicketStatusViewModel> TicketStatusList { get; set; }
 

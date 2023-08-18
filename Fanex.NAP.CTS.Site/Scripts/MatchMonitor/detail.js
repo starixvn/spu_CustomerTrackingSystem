@@ -101,17 +101,7 @@ function MatchMonitorDetail() {
     let cacheFilterScore = undefined;
     let cacheFilterDependOn = {
         DropdownFilterList: [],
-        ScoreCurrencyList: [],
-        SubscriberTypeCurrencyList: [],
-        DangerCurrencyList: [],
-        CurrencyReasonList: [],
-        CurrencyAGroupList: [],
-        ReasonAGroupList: [],
-        AGrMGrBlankList: [],
-        AGrMGrList: [],
-        Danger: null,
-        HDPList: [],
-        TicketStatusList: []
+        AGrMGrList: []
     };
     let cacheMGroup = {
         itemMMHomeTeam: [],
@@ -120,8 +110,6 @@ function MatchMonitorDetail() {
         selectMgroup: {},
         isActive: false
     };
-
-    let cacheReasonGroupIDDic = {};
 
     let posClickGlobal = 0;
     let xhr;
@@ -423,12 +411,12 @@ function MatchMonitorDetail() {
         if (data) {
             data.forEach(item => {
                 let subName = "All";
-                if (item.SubscriberType == "C") {
+                if (item == "C") {
                     subName = "Credit";
-                } else if (item.SubscriberType == "L") {
+                } else if (item == "L") {
                     subName = "Licensee";
                 }
-                domElements.cbbSites.append(`<option value='${item.SubscriberType}'>${subName}</option>`);
+                domElements.cbbSites.append(`<option value='${item}'>${subName}</option>`);
             });
         }
     }
@@ -728,17 +716,14 @@ function MatchMonitorDetail() {
 
     function RenderFilter(data, isRefreshcbbSite) {
         recordsTotalGlobal = data.RecordsTotal;
-        isSingleGrid = data.IsSingleGrid;
-        //cacheReasonGroupIDDic = data.ReasonGroupIDDic;
+        isSingleGrid = data.IsSingleGrid;     
 
         SetupFilterFromDictinary(domElements.cbbCurrency, data.CurrencyList);
 
         if (data.IsSingleGrid) {
-            SetupFilter(domElements.cbbHDPBetTeam, data.BetTeamList);
-            cacheFilterDependOn.HDPList = data.BetTeamList;
+            SetupFilter(domElements.cbbHDPBetTeam, data.BetTeamList);           
         } else {
             SetupFilter(domElements.cbbHDPBetTeam, data.HDPList);
-            cacheFilterDependOn.HDPList = data.HDPList;
         }
 
         SetupFilterScore(domElements.cbbMatchScore, data.ScoreList);
@@ -749,40 +734,23 @@ function MatchMonitorDetail() {
 
         RefreshReasonInfo(data.ReasonList);
 
-        domElements.cbbMGroup.multiselect().empty();
-
-        if (data.RecordsTotal <= 0) {
-            domElements.cbbMGroup.multiselect("refresh");
-        } else {
-            domElements.cbbMGroup.append(`<option selected value='0'>-</option>`);
-            domElements.cbbMGroup.multiselect("refresh");
-            domElements.cbbMGroup.parent().find('button').removeClass('border-error');
-        }
+        SetupFilter(domElements.cbbMGroup, data.MGroupList);
 
         if (data.DropdownList) {
-            SetupDanger(data.DropdownList.Danger);
+            SetupDanger(data.DropdownList.DangerList);
             SetupTicketStatusFilter(data.DropdownList.TicketStatusList);
 
             if (data.RecordsTotal > 0 && isRefreshcbbSite) {
-                SetupSubscriberTypeFilter(data.DropdownList.SubscriberTypeCurrencyList);
-            }
-            cacheFilterDependOn.SubscriberTypeCurrencyList = data.DropdownList.SubscriberTypeCurrencyList;
-            cacheFilterDependOn.ScoreCurrencyList = data.DropdownList.ScoreCurrencyList;
-            cacheFilterDependOn.DangerCurrencyList = data.DropdownList.DangerCurrencyList;
-            cacheFilterDependOn.Danger = data.DropdownList.Danger;
-            cacheFilterDependOn.CurrencyReasonList = data.DropdownList.CurrencyReasonList;
-            cacheFilterDependOn.CurrencyAGroupList = data.DropdownList.CurrencyAGroupList;
-            cacheFilterDependOn.ReasonAGroupList = data.DropdownList.ReasonAGroupList;
-            cacheFilterDependOn.AGrMGrBlankList = data.DropdownList.AGrMGrBlankList;
-            cacheFilterDependOn.AGrMGrList = [];
-            cacheMGroup.allMGroup = {};
-            cacheMGroup.selectMgroup = {};
-            cacheFilterDependOn.TicketStatusList = data.DropdownList.TicketStatusList;
+                SetupSubscriberTypeFilter(data.DropdownList.SubscriberTypeList);
+            }                                         
         }
 
         if (data.DropdownFilterList) {
             cacheFilterDependOn.DropdownFilterList = data.DropdownFilterList;
         }
+
+        cacheMGroup.allMGroup = {};
+        cacheMGroup.selectMgroup = {};
 
         //if (cacheFilter[MatchMonitorDetailViewType.TicketFraud]) {
         //    LoadSelectDataFilter();
@@ -1664,8 +1632,8 @@ function MatchMonitorDetail() {
         let reasonSelected = domElements.cbbReason.val();
 
         let isNoDangerSelect = !isDangerNone && danger1Selected.length == 0 && danger2Selected.length == 0 &&
-            danger3Selected.length == 0 &&danger4Selected.length == 0 && danger5Selected.length == 0;
-
+            danger3Selected.length == 0 && danger4Selected.length == 0 && danger5Selected.length == 0;
+       
         if (cacheFilterDependOn.DropdownFilterList) {
             let dependOnFilter = cacheFilterDependOn.DropdownFilterList.filter(function (item) {
                 if (scoresSelected.length == 0 || isNoDangerSelect) {
@@ -1687,33 +1655,27 @@ function MatchMonitorDetail() {
                     }
                 }
            
-                if (isDangerNone) {
-                    if (item.Danger1 != 0 || item.Danger2 != 0 || item.Danger3 != 0 || item.Danger4 != 0 || item.Danger5 != 0) {
-                        return false;
-                    }
-                } else {
-                    let countDangerType = 0;
-                    if (isDangerNone && item.DangerToString == '-') {
-                        countDangerType += 1;
-                    }
-                    if (danger1Selected.length > 0 && danger1Selected.find(x => x == item.Danger1)) {
-                        countDangerType += 1;
-                    }
-                    if (danger2Selected.length > 0 && danger2Selected.find(x => x == item.Danger2)) {
-                        countDangerType += 1;
-                    }
-                    if (danger3Selected.length > 0 && danger3Selected.find(x => x == item.Danger4)) {
-                        countDangerType += 1;
-                    }
-                    if (danger4Selected.length > 0 && danger4Selected.find(x => x == item.Danger4)) {
-                        countDangerType += 1;
-                    }
-                    if (danger5Selected.length > 0 && danger5Selected.find(x => x == item.Danger5)) {
-                        countDangerType += 1;
-                    }
-                    if (countDangerType == 0) {
-                        return false;
-                    }
+                let countDangerType = 0;
+                if (isDangerNone && item.DangerToString == '-') {
+                    countDangerType += 1;
+                }
+                if (danger1Selected.length > 0 && danger1Selected.find(x => x == item.Danger1)) {
+                    countDangerType += 1;
+                }
+                if (danger2Selected.length > 0 && danger2Selected.find(x => x == item.Danger2)) {
+                    countDangerType += 1;
+                }
+                if (danger3Selected.length > 0 && danger3Selected.find(x => x == item.Danger4)) {
+                    countDangerType += 1;
+                }
+                if (danger4Selected.length > 0 && danger4Selected.find(x => x == item.Danger4)) {
+                    countDangerType += 1;
+                }
+                if (danger5Selected.length > 0 && danger5Selected.find(x => x == item.Danger5)) {
+                    countDangerType += 1;
+                }
+                if (countDangerType == 0) {
+                    return false;
                 }
 
                 if (siteSelected != SiteViewType.SiteAll && siteSelected != item.SubscriberType) {
@@ -1729,31 +1691,36 @@ function MatchMonitorDetail() {
 
             BindEffectFilterDependOn(indexFilterSelected, dependOnFilter);
         }
-
     }   
 
     function BindEffectFilterDependOn(indexFilterSelected, dependOnFilter) {
-        if (indexFilterSelected == IndexFilterSelected.Reason) {
-            let aGrItems = DistinctByAGr(dependOnFilter);
-            RefreshAGr(aGrItems);
+        let aGrItems = [];
+        let reasonItems = [];
+        let currencyItems = [];
 
-        } else if (indexFilterSelected == IndexFilterSelected.Currency) {
-            let reasonItems = DistinctByReason(dependOnFilter);
-            RefreshReason(reasonItems);
+        switch (indexFilterSelected) {
+            case IndexFilterSelected.Reason:
+                aGrItems = DistinctByAGr(dependOnFilter);
+                RefreshAGr(aGrItems);
+                break;
+            case IndexFilterSelected.Currency:
+                reasonItems = DistinctByReason(dependOnFilter);
+                RefreshReason(reasonItems);
 
-            let aGrItems = DistinctByAGr(dependOnFilter);
-            RefreshAGr(aGrItems);
+                aGrItems = DistinctByAGr(dependOnFilter);
+                RefreshAGr(aGrItems);
+                break;
+            default:
+                currencyItems = DistinctByCurrency(dependOnFilter);
+                RefreshCurrency(currencyItems);
 
-        } else {
-            let currencyItems = DistinctByCurrency(dependOnFilter);
-            RefreshCurrency(currencyItems);
+                reasonItems = DistinctByReason(dependOnFilter);
+                RefreshReason(reasonItems);
 
-            let reasonItems = DistinctByReason(dependOnFilter);
-            RefreshReason(reasonItems);
-
-            let aGrItems = DistinctByAGr(dependOnFilter);
-            RefreshAGr(aGrItems);
-        }
+                aGrItems = DistinctByAGr(dependOnFilter);
+                RefreshAGr(aGrItems);
+                break;
+        }        
     }
 
     function DistinctByCurrency(dependOnFilter) {       
@@ -1777,7 +1744,7 @@ function MatchMonitorDetail() {
                 distinct.add(obj.ReasonItem);
                 return true;
             }
-            return false;
+            return false;   
         }).map(function (reason) {
             if (reason.ReasonItem) {
                 reason.ReasonItem.split(',').forEach(x => {
@@ -1786,16 +1753,16 @@ function MatchMonitorDetail() {
                 })
             }
         });
-        
-        return reasonItems;
+
+        return reasonItems.sort();
     }
 
     function DistinctByAGr(dependOnFilter) {
         let distinct = new Set();
         let aGrItems = [];
         dependOnFilter.filter(obj => {
-            if (!distinct.has(obj.CurrencyId)) {
-                distinct.add(obj.CurrencyId);
+            if (!distinct.has(obj.ADetectGroupID)) {
+                distinct.add(obj.ADetectGroupID);
                 return true;
             }
             return false;

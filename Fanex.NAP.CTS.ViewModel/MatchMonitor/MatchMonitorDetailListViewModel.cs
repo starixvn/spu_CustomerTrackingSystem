@@ -40,13 +40,13 @@
             AwayMatchItemList = AwayMatchItemList.Where(x => x.FilterItem(filter, reasonGroupIDDic, site)).ToList();
         }
 
-        public void FilterItemMMDetailByReasonAGroup(MMDetailFilterViewModel filter)
-        {
-            var reasonGroupIDDic = filter.AGroupList?.Select(x => x.Contains("-") ? "0" : x);
+        //public void FilterItemMMDetailByReasonAGroup(MMDetailFilterViewModel filter)
+        //{
+        //    var reasonGroupIDDic = filter.AGroupList?.Select(x => x.Contains("-") ? "0" : x);
 
-            HomeMatchItemList = HomeMatchItemList.Where(x => x.FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic)).ToList();
-            AwayMatchItemList = AwayMatchItemList.Where(x => x.FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic)).ToList();
-        }
+        //    HomeMatchItemList = HomeMatchItemList.Where(x => x.FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic)).ToList();
+        //    AwayMatchItemList = AwayMatchItemList.Where(x => x.FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic)).ToList();
+        //}
 
         public void FilterItemMMDetailBySite(string site)
         {
@@ -127,94 +127,7 @@
                 this.ReasonGroupIDDic.Add(reason, reasonGroupIDList.Distinct().ToList());
             }
 
-        }
-
-        public void BindDropdownList(IEnumerable<MatchMonitorDetailItemViewModel> mdItemList)
-        {
-            var tasks = new Task[]
-                {
-                    Task.Run(() =>
-                    {
-                        #region SubscriberType - Currency                         
-                        var subscriberTypeCurrency = new List<SubscriberTypeCurrencyViewModel>();
-
-                        subscriberTypeCurrency.AddRange(mdItemList.GroupBy(x => x.SubscriberType)
-                            .Select(g => new SubscriberTypeCurrencyViewModel
-                            {
-                                SubscriberType = g.Key,
-                                CurrencyItems = g.Select(x=>
-                                {
-                                    var isNotValid = string.IsNullOrEmpty(x.CurrencyName) || x.CurrencyId == 0;
-                                    return new SubscriberTypeCurrencyItemViewModel { CurrencyId = isNotValid ? -1 : x.CurrencyId, CurrencyName = isNotValid ? "-" : x.CurrencyName };
-                                }).Distinct(x => x.CurrencyId)
-                            }));
-
-                        if (subscriberTypeCurrency.Count == 2)
-                        {
-                            subscriberTypeCurrency.Insert(0, new SubscriberTypeCurrencyViewModel {
-                                SubscriberType = "A",
-                                CurrencyItems = mdItemList.Select(x=>
-                                    {
-                                        var isNotValid = string.IsNullOrEmpty(x.CurrencyName) || x.CurrencyId == 0;
-                                        return new SubscriberTypeCurrencyItemViewModel { CurrencyId = isNotValid ? -1 : x.CurrencyId, CurrencyName = isNotValid ? "-" : x.CurrencyName };
-                                    }).Distinct(x => x.CurrencyId)
-                            });
-                        }
-
-                        DropdownList.SubscriberTypeCurrencyList = subscriberTypeCurrency;
-
-                        #endregion
-                    }),
-                    Task.Run(() =>
-                    {
-                        #region Danger                       
-                        var dangerList = mdItemList.Where(x=> !string.IsNullOrEmpty(x.DangerToString));
-                        var currency1 = dangerList.Where(x=>x.Danger1 > 0).Select(x=>x.CurrencyName).Distinct();
-                        var currency2 = dangerList.Where(x=>x.Danger2 > 0).Select(x=>x.CurrencyName).Distinct();
-                        var currency3 = dangerList.Where(x=>x.Danger3 > 0).Select(x=>x.CurrencyName).Distinct();
-                        var currency4 = dangerList.Where(x=>x.Danger4 > 0).Select(x=>x.CurrencyName).Distinct();
-                        var currency5 = dangerList.Where(x=>x.Danger5 > 0).Select(x=>x.CurrencyName).Distinct();
-
-                         DropdownList.Danger.Danger1.DangerItems = dangerList.Where(x=>x.Danger1 > 0).Select(x=>x.Danger1).Distinct()
-                            .Select(x=> new DangerItemViewModel{ Danger = x, DangerName = "Original " + x })
-                            .OrderBy(x=>x.Danger);
-
-                        DropdownList.Danger.Danger2.DangerItems = dangerList.Where(x=>x.Danger2 > 0).Select(x=>x.Danger2).Distinct()
-                            .Select(x=> new DangerItemViewModel{ Danger = x, DangerName = "ABI " + x })
-                            .OrderBy(x=>x.Danger);
-
-                        DropdownList.Danger.Danger3.DangerItems = dangerList.Where(x=>x.Danger3 > 0).Select(x=>x.Danger3).Distinct()
-                            .Select(x=> new DangerItemViewModel{ Danger = x, DangerName = "Other Sports " + x })
-                            .OrderBy(x=>x.Danger);
-
-                        DropdownList.Danger.Danger4.DangerItems = dangerList.Where(x=>x.Danger4 > 0).Select(x=>x.Danger4).Distinct()
-                            .Select(x=> new DangerItemViewModel{ Danger = x, DangerName = "Basketball " + x })
-                            .OrderBy(x=>x.Danger);
-
-                        DropdownList.Danger.Danger5.DangerItems = dangerList.Where(x=>x.Danger5 > 0).Select(x=>x.Danger5).Distinct()
-                            .Select(x=> new DangerItemViewModel{ Danger = x, DangerName = "E-Sports " + x })
-                            .OrderBy(x=>x.Danger);
-
-                        if (mdItemList.Any(x=>x.DangerToString == "-"))
-                        {
-                             DropdownList.Danger.NoneDanger.DangerItems = new List<DangerItemViewModel> { new DangerItemViewModel {  Danger = 0, DangerName = "-"} };
-                        }
-                        #endregion
-                    }),
-                    Task.Run(() =>
-                    {
-                        #region Ticket Status
-                        DropdownList.TicketStatusList = mdItemList.Select(x=>x.TicketStatus).Distinct()
-                            .Select(x=> new TicketStatusViewModel {
-                                 TicketStatus = x,
-                                 TicketStatusName = Enum.GetName(typeof(StatusTicket), x)
-                            }).OrderBy(x=>x.StatusOrderIdx);
-                        #endregion
-                    })
-                };
-
-            Task.WhenAll(tasks).Wait();
-        }
+        }       
 
         public void BindDropdownFilterList(IEnumerable<MatchMonitorDetailItemViewModel> mdItemList)
         {
@@ -238,12 +151,87 @@
                         Danger5 = item.Danger5,
                         Score = item.Score,
                         SubscriberType = item.SubscriberType,
-                        ReasonItem = reason
+                        ReasonItem = reason,
+                        BallHeadHDP = item.BallHeadHDP(),
+                        BallHeadBetTeam = item.BallHeadBetTeam(),
+                        TicketStatus = item.TicketStatus
                     }));
                 }
             }
 
-            DropdownFilterList = hashSet.Select(JsonConvert.DeserializeObject<MMFilterItemViewModel>);
+            DropdownFilterList = hashSet.Select(JsonConvert.DeserializeObject<MMFilterItemViewModel>);                              
+          
+            this.CurrencyList = DropdownFilterList.Select(x =>
+            {
+                return new { CurrencyId = string.IsNullOrEmpty(x.CurrencyName) ? -1 : x.CurrencyId, CurrencyName = string.IsNullOrEmpty(x.CurrencyName) ? "-" : x.CurrencyName };
+            }).Distinct(x => x.CurrencyId)
+                  .OrderBy(x => x.CurrencyName)
+                  .Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName))
+                  .ToList();
+
+            this.HDPList = DropdownFilterList.Select(x => x.BallHeadHDP).Distinct().OrderBy(x => x).ToList();
+
+            this.BetTeamList = DropdownFilterList.Select(x => x.BallHeadBetTeam).Distinct().OrderBy(x => x).ToList();
+
+            this.ScoreList = DropdownFilterList.Select(x => x.Score).Distinct(x => x).OrderBy(x => x).ToList();
+
+            this.GroupList = DropdownFilterList.Select(x => new GroupInfoViewModel
+            {
+                GroupID = x.ADetectGroupID,
+                GroupName = x.ADetectGroup
+            }).Distinct(x => x.GroupID).OrderBy(x => x.GroupID).ToList();
+
+            if (DropdownFilterList.Any())
+                this.MGroupList = new List<string>() { "-" };
+
+            var subscriberTypeList = DropdownFilterList.Select(x => x.SubscriberType).Distinct().ToList();
+
+            if (subscriberTypeList.Count() == 2)
+                subscriberTypeList.Insert(0, "A");
+
+            DropdownList.SubscriberTypeList = subscriberTypeList;
+
+            DropdownList.TicketStatusList = DropdownFilterList.Select(x => x.TicketStatus).Distinct()
+                            .Select(x => new TicketStatusViewModel
+                            {
+                                TicketStatus = x,
+                                TicketStatusName = Enum.GetName(typeof(StatusTicket), x)
+                            }).OrderBy(x => x.StatusOrderIdx);
+
+            #region Danger List
+            var dangerList = DropdownFilterList.Where(x => !string.IsNullOrEmpty(x.DangerToString));
+            var currency1 = dangerList.Where(x => x.Danger1 > 0).Select(x => x.CurrencyName).Distinct();
+            var currency2 = dangerList.Where(x => x.Danger2 > 0).Select(x => x.CurrencyName).Distinct();
+            var currency3 = dangerList.Where(x => x.Danger3 > 0).Select(x => x.CurrencyName).Distinct();
+            var currency4 = dangerList.Where(x => x.Danger4 > 0).Select(x => x.CurrencyName).Distinct();
+            var currency5 = dangerList.Where(x => x.Danger5 > 0).Select(x => x.CurrencyName).Distinct();
+
+            DropdownList.DangerList.Danger1.DangerItems = dangerList.Where(x => x.Danger1 > 0).Select(x => x.Danger1).Distinct()
+               .Select(x => new DangerItemViewModel { Danger = x, DangerName = "Original " + x })
+               .OrderBy(x => x.Danger);
+
+            DropdownList.DangerList.Danger2.DangerItems = dangerList.Where(x => x.Danger2 > 0).Select(x => x.Danger2).Distinct()
+                .Select(x => new DangerItemViewModel { Danger = x, DangerName = "ABI " + x })
+                .OrderBy(x => x.Danger);
+
+            DropdownList.DangerList.Danger3.DangerItems = dangerList.Where(x => x.Danger3 > 0).Select(x => x.Danger3).Distinct()
+                .Select(x => new DangerItemViewModel { Danger = x, DangerName = "Other Sports " + x })
+                .OrderBy(x => x.Danger);
+
+            DropdownList.DangerList.Danger4.DangerItems = dangerList.Where(x => x.Danger4 > 0).Select(x => x.Danger4).Distinct()
+                .Select(x => new DangerItemViewModel { Danger = x, DangerName = "Basketball " + x })
+                .OrderBy(x => x.Danger);
+
+            DropdownList.DangerList.Danger5.DangerItems = dangerList.Where(x => x.Danger5 > 0).Select(x => x.Danger5).Distinct()
+                .Select(x => new DangerItemViewModel { Danger = x, DangerName = "E-Sports " + x })
+                .OrderBy(x => x.Danger);
+
+            if (mdItemList.Any(x => x.DangerToString == "-"))
+            {
+                DropdownList.DangerList.NoneDanger.DangerItems = new List<DangerItemViewModel> { new DangerItemViewModel { Danger = 0, DangerName = "-" } };
+            }
+            #endregion
+            
         }
     }
 }
