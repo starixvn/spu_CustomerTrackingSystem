@@ -1672,17 +1672,17 @@ function MatchMonitorDetail() {
                     return false;
                 }
                 if (indexFilterSelected == IndexFilterSelected.Reason) {
-                    if (!reasonSelected.find(x => x == "-" || item.ReasonList.indexOf(x) > -1)) {
+                    if (!reasonSelected.find(x => x == "-" || item.ReasonItem.indexOf(x) > -1)) {
                         return false;
                     }
 
-                    if (!currencySelected.find(x => x.CurrencyId == item.CurrencyId)) {
+                    if (!currencySelected.find(x => x == item.CurrencyId)) {
                         return false;
                     }                    
                 }
 
                 if (indexFilterSelected == IndexFilterSelected.Currency) {
-                    if (!currencySelected.find(x => x.CurrencyId == item.CurrencyId)) {
+                    if (!currencySelected.find(x => x == item.CurrencyId)) {
                         return false;
                     }
                 }
