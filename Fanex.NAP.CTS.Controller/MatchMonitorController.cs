@@ -426,9 +426,9 @@
             catch (Exception ex)
             {
                 await _memoryCacheService.RemoveValueAsync(flagKey);
-                //LogService.Error("Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
-                //     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                //     + ex.InnerException.StackTrace);
+                LogService.Error("Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
+                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                     + ex.InnerException.StackTrace);
             }
 
             return result;
@@ -487,8 +487,7 @@
         }
 
         private long GetTotalAllTicketDetailByFilter(MMDetailInfoViewModel info, MMDetailFilterViewModel filter)
-        {
-                        
+        {                        
             var transIdsRemove = new List<string>();
 
             if ((filter.ReasonList.Count > 0 && !filter.ReasonList.Any(x => x.Equals("-")))
@@ -529,6 +528,7 @@
             }
 
             return (long)_matchMonitorService.GetAllTicketDetail(info, filter, 0, transIdsRemove.Count > 0 ? string.Join(",", transIdsRemove) : null).MinSequenceIDTotalAll;
+
             #region Delete
 
             //var transIdsAll = new List<string>();
@@ -940,8 +940,9 @@
             var data = _associationDetectionService.DetectGroupDetectAssociation(mergeGroupInfo).Select(x => new DetectGroupAssociationItemViewModel(x));
 
             result.ItemList = this.RearrangeAssGroup(data, true);
-
-            var mGrList = BuildMGrList(result.ItemList, model.HomeDetectMGr, model.AwayDetectMGr);
+        
+            var mGrList = new MGrListViewModel();
+            mGrList.BuildMGrList(result.ItemList, model.CustIDs);
 
             return Json(new
             {
@@ -949,27 +950,7 @@
                 mGrList = mGrList
             }, JsonRequestBehavior.AllowGet);
         }
-
-        private MGrListViewModel BuildMGrList(IEnumerable<DetectGroupAssociationItemViewModel> itemDetectMGr
-           , string homeTicket
-           , string awayTicket)
-        {
-            var mGrItems = new List<TicketSelectForMGrViewModel>();
-            var serializer = new JavaScriptSerializer();
-            serializer.MaxJsonLength = Int32.MaxValue;
-
-            mGrItems.AddRange(serializer.Deserialize<List<TicketSelectForMGrViewModel>>(homeTicket));
-            mGrItems.AddRange(serializer.Deserialize<List<TicketSelectForMGrViewModel>>(awayTicket));
-
-            //var mGrDependOn = new DetectMGrDependOnViewModel();
-            //mGrDependOn.BuildDependOnMGr(itemDetectMGr, mGrItems);
-
-            var mGrList = new MGrListViewModel();
-            mGrList.BuildMGrList(itemDetectMGr, mGrItems);
-
-            return mGrList;
-        }
-
+       
         #endregion Association Detect
 
         #region Verify Trans

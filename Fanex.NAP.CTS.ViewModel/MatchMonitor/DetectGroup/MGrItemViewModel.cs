@@ -5,5 +5,7 @@
         public int MDetectGroupID { get; set; }
 
         public string MDetectGroup { get; set; }
+
+        public bool Checked { get; set; }
     }
 }

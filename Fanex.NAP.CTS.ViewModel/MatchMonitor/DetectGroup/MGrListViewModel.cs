@@ -16,19 +16,19 @@
 
         public int TotalTicketHasGroup { get; set; }
 
-        public void BuildMGrList(IEnumerable<DetectGroupAssociationItemViewModel> mGrDetectItems
-            , IEnumerable<TicketSelectForMGrViewModel> mGrOriItems)
+        public void BuildMGrList(IEnumerable<DetectGroupAssociationItemViewModel> mGrDetectItems, string custIDs)
         {
             var mGrItems = new List<MGrItemViewModel>();
             var countCustDetecteds = mGrDetectItems.Select(x => x.CustID).Distinct().Count();
-            var countCusts = mGrOriItems.Select(x => x.CustID).Distinct().Count();
+            var countCusts = custIDs.Split(',').Length;
 
             if (countCusts > countCustDetecteds)
             {
                 mGrItems.Add(new MGrItemViewModel
                 {
                     MDetectGroupID = 0,
-                    MDetectGroup = "-"
+                    MDetectGroup = "-",
+                    Checked = false
                 });
             }
 
@@ -36,7 +36,8 @@
                .Select(g => new MGrItemViewModel
                {
                    MDetectGroupID = g.Key.GroupID.HasValue ? g.Key.GroupID.Value : 0,
-                   MDetectGroup = g.Key.GroupName
+                   MDetectGroup = g.Key.GroupName,
+                   Checked = true
                }).OrderBy(x => x.MDetectGroupID));
 
             this.MGrItems = mGrItems;

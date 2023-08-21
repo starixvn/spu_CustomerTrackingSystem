@@ -19,9 +19,6 @@ namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
         public bool IsOpt3MatchesLast7Days { get; set; }
 
         public bool IsOptIPLast3Days { get; set; }
-
-        public string HomeDetectMGr { get; set; }
-
-        public string AwayDetectMGr { get; set; }
+       
     }
 }

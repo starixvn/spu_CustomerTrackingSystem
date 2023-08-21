@@ -505,6 +505,56 @@
     this.renderCategoryName = function (categoryNames) {      
         return categoryNames;
     };
+
+    this.CompareObjects = function (obj1, obj2) {
+        let keys1 = Object.keys(obj1);
+        let keys2 = Object.keys(obj2);
+
+        if (keys1.length !== keys2.length) {
+            return false;
+        }
+
+        for (let key of keys1) {
+            if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])) {
+                if (!$this.CompareArraysOfObjects(obj1[key], obj2[key])) {
+                    return false;
+                }
+            }
+            else {
+                if (obj1[key] !== obj2[key]) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    this.CompareArraysOfObjects = function (array1, array2) {
+        if (array1.length !== array2.length) {
+            return false;
+        }
+
+        for (let i = 0; i < array1.length; i++) {
+            let obj1 = array1[i];
+            let obj2 = array2[i];
+
+            let keys1 = Object.keys(obj1);
+            let keys2 = Object.keys(obj2);
+
+            if (keys1.length != keys2.length) {
+                return false;
+            }
+
+            for (let key of keys1) {
+                if (obj1[key] !== obj2[key]) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
 }
 
 var common = new UICommon();

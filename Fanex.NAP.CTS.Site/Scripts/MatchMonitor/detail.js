@@ -82,9 +82,7 @@ function MatchMonitorDetail() {
         inputOptIPLast3Days: $('#inputOptIPLast3Days'),
         inputOpt3MatchesLast7Days: $('#inputOpt3MatchesLast7Days'),
         hdSelectedCTSCustIDs: $('#hdSelectedCTSCustIDs'),
-        hdSelectedCustIDs: $('#hdSelectedCustIDs'),
-        hdSelectedHomeDetectMGr: $('#hdSelectedHomeDetectMGr'),
-        hdSelectedAwayDetectMGr: $('#hdSelectedAwayDetectMGr'),
+        hdSelectedCustIDs: $('#hdSelectedCustIDs'),       
         btnRefresh: $('#btnRefresh'),
         btnGenerateDetail: $('#btnGenerate-detail'),
         btnShowAll: $('#btnShowAll'),
@@ -101,7 +99,7 @@ function MatchMonitorDetail() {
     let cacheFilterScore = undefined;
     let cacheFilterDependOn = {
         DropdownFilterList: [],
-        AGrMGrList: []
+        MGrList: []
     };
     let cacheMGroup = {
         itemMMHomeTeam: [],
@@ -114,6 +112,7 @@ function MatchMonitorDetail() {
     let posClickGlobal = 0;
     let xhr;
     let currentType = MatchMonitorDetailViewType.TicketFraud;
+    let associationDetection = "AssociationDetection";
     let isRefresh = false;
     let isSupportShowAllTickets = false;
     let isSingleGrid = false;
@@ -334,10 +333,7 @@ function MatchMonitorDetail() {
     function SetupAGroupFilter(data) {
         domElements.cbbAGroup.multiselect().empty();
 
-        if (data) {
-            //if (data.length == 0)
-            //    domElements.cbbAGroup.append(`<option selected value='0'>-</option>`);
-
+        if (data) {           
             for (var i = 0; i < data.length; i++) {
                 domElements.cbbAGroup.append(`<option selected value='${data[i].GroupID}'>${data[i].GroupName}</option>`);
             }
@@ -355,13 +351,15 @@ function MatchMonitorDetail() {
             let isExistedBlank = false;
             if (totalTicketDetect < recordsTotalGlobal) {
                 domElements.cbbMGroup.append(`<option value='0'>-</option>`);
+                cacheFilterDependOn.MGrList = ReUnshiftBlankMGr(cacheFilterDependOn.MGrList);              
                 isExistedBlank = true;
             }
 
             data.forEach(element => {
                 if (element.MDetectGroupID == 0) {
                     if (!isExistedBlank) {
-                        domElements.cbbMGroup.append(`<option value='0'>-</option>`);
+                        domElements.cbbMGroup.append(`<option value='0'>-</option>`);                       
+                        cacheFilterDependOn.MGrList = ReUnshiftBlankMGr(cacheFilterDependOn.MGrList);
                     }                    
                 } else {
                     domElements.cbbMGroup.append(`<option selected value='${element.MDetectGroupID}'>${ element.MDetectGroup }</option>`);
@@ -747,6 +745,8 @@ function MatchMonitorDetail() {
 
         if (data.DropdownFilterList) {
             cacheFilterDependOn.DropdownFilterList = data.DropdownFilterList;
+
+            FilterDependOnSelected(IndexFilterSelected.Score);
         }
 
         cacheMGroup.allMGroup = {};
@@ -782,7 +782,81 @@ function MatchMonitorDetail() {
         else {
             cacheFilter = {};
         }
+    }   
+
+    function CheckChangeFilterByAssociationDetection() { 
+        let mGrList = cacheFilterDependOn.MGrList.map(obj => ({ ...obj }));
+
+        if (mGrList.length > 0) {
+            // check blank in M.Gr
+            let blankItems = $.grep(mGrList, function (item) {
+                return item.MDetectGroupID == 0;
+            });
+
+            if (blankItems.length != 0) {
+                RefreshMGr(mGrList);
+                return;
+            }
+
+            let selectedFilterCache = cacheFilter[associationDetection];
+
+            if (selectedFilterCache != undefined) {
+                let selectedFilter = GetForCacheByAssociationDetection();
+
+                let equal = common.CompareObjects(selectedFilterCache, selectedFilter);
+
+                if (equal) {
+                    let newMGrList = $.grep(mGrList, function (item) {
+                        return item.MDetectGroupID != 0;
+                    });
+                    RefreshMGr(newMGrList);
+                } else {
+                    mGrList.unshift({ "MDetectGroupID": 0, "MDetectGroup": "-", "Checked": true });
+                    RefreshMGr(mGrList);
+                }
+            }
+        }        
     }
+
+    function RefreshMGr(items) {
+        domElements.cbbMGroup.multiselect().empty();
+
+        for (var i = 0; i < items.length; i++) {
+            domElements.cbbMGroup.append(`<option selected value='${items[i].MDetectGroupID}'>${items[i].MDetectGroup}</option>`);                    
+        }
+
+        domElements.cbbMGroup.multiselect("refresh");
+    }
+
+    function ReUnshiftBlankMGr(items) {
+        let newMGrList = $.grep(items, function (item) {
+            return item.MDetectGroupID != 0;
+        });
+
+        newMGrList.unshift({ "MDetectGroupID": 0, "MDetectGroup": "-", "Checked": false });
+
+        return newMGrList;
+    }
+
+    function GetForCacheByAssociationDetection() {
+        let selectedFilter = {};
+        selectedFilter.cbbMatchScore = GetSelectDataFilter(domElements.cbbMatchScore, true);
+        selectedFilter.cbbDanger = GetSelectDataFilter(domElements.cbbDanger, true);
+        selectedFilter.cbbSites = domElements.cbbSites.val();
+        selectedFilter.cbbCurrency = GetSelectDataFilter(domElements.cbbCurrency, true);
+        selectedFilter.cbbReason = GetSelectDataFilter(domElements.cbbReason, true);
+        selectedFilter.cbbAGroup = GetSelectDataFilter(domElements.cbbAGroup, true);
+
+        return selectedFilter;
+    }
+
+    function SetCacheByAssociationDetection() {
+        let selectedFilter = GetForCacheByAssociationDetection();
+
+        if (selectedFilter != undefined) {
+            cacheFilter[associationDetection] = selectedFilter;
+        }
+    }   
 
     function IsFilterOptionServerSide() {
         if (GetSelectDataFilter(domElements.cbbCurrency))
@@ -1165,11 +1239,13 @@ function MatchMonitorDetail() {
         }
 
         cacheMGroup.selectMgroup = {};
-        cacheFilterDependOn.AGrMGrList = [];
+        cacheFilterDependOn.MGrList = [];
         cacheMGroup.allMGroup = {};
         cacheMGroup.selectMgroup = {};
         cacheMGroup.itemMMAwayTeam = [];
         cacheMGroup.itemMMHomeTeam = [];
+
+        SetCacheByAssociationDetection();
 
         let params = {
             CTSCustIDs: domElements.hdSelectedCTSCustIDs.val(),
@@ -1179,9 +1255,7 @@ function MatchMonitorDetail() {
             IsOptIP: domElements.inputOptIP.is(":checked"),
             IsOptAgent: domElements.inputOptAgent.is(":checked"),
             IsOpt3MatchesLast7Days: domElements.inputOpt3MatchesLast7Days.is(":checked"),
-            IsOptIPLast3Days: domElements.inputOptIPLast3Days.is(":checked"),
-            HomeDetectMGr: domElements.hdSelectedHomeDetectMGr.val(),
-            AwayDetectMGr: domElements.hdSelectedAwayDetectMGr.val()
+            IsOptIPLast3Days: domElements.inputOptIPLast3Days.is(":checked")           
         }
 
         xhr = $.ajax(common.modifyRelativeUrl('MatchMonitor/DetectGroupAssWithOptions'), {
@@ -1195,9 +1269,11 @@ function MatchMonitorDetail() {
                 let itemList = response?.data?.ItemList;
                 if (response?.data?.ItemList) {
                     cacheMGroup.isActive = true;
-                   
-                    SetupMGroupFilter(response.mGrList.MGrItems);
 
+                    cacheFilterDependOn.MGrList = response.mGrList.MGrItems;
+
+                    SetupMGroupFilter(response.mGrList.MGrItems);
+                    
                     BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam.DataTable(), itemList);
                     BindChangeGroupAssWithOptions(domElements.tblMMAwayTeam.DataTable(), itemList);
 
@@ -1248,14 +1324,9 @@ function MatchMonitorDetail() {
         ctsCustIDs = ctsCustIDs.filter(OnlyUnique);
         custIDs = custIDs.filter(OnlyUnique);
 
-        if (IsValidAssDetection(custIDs.length)) {           
-            let homeDetectMGr = GetDataSelectedInGridForDetectMGr(domElements.tblMMHomeTeam.DataTable());
-            let awayDetectMGr = GetDataSelectedInGridForDetectMGr(domElements.tblMMAwayTeam.DataTable());
-
+        if (IsValidAssDetection(custIDs.length)) {                       
             domElements.hdSelectedCTSCustIDs.val(ctsCustIDs.join());
-            domElements.hdSelectedCustIDs.val(custIDs.join());
-            domElements.hdSelectedHomeDetectMGr.val(homeDetectMGr);
-            domElements.hdSelectedAwayDetectMGr.val(awayDetectMGr);
+            domElements.hdSelectedCustIDs.val(custIDs.join());           
             domElements.divPopupAssDetect.dialog({
                 modal: true,
                 width: '800px',
@@ -1533,6 +1604,8 @@ function MatchMonitorDetail() {
     //#region Event OnChange
 
     function ChangeCbbTypeOfTickets() {
+        RemoveAllFilerError();
+
         let betTypeSelected = $("option:selected", domElements.cbbBetType);
 
         if (betTypeSelected.attr('data-is-support-suspicious') == 'false') {
@@ -1557,6 +1630,8 @@ function MatchMonitorDetail() {
     function MarketOnChange() {
         cacheFilterScore = undefined;
 
+        RemoveAllFilerError();
+
         AddFilterLoading();
 
         RestoreDefaulCbbSite();
@@ -1578,6 +1653,8 @@ function MatchMonitorDetail() {
 
     function BetTypeOnChange() {
         cacheFilterScore = undefined;
+
+        RemoveAllFilerError();
 
         AddFilterLoading();
 
@@ -1610,8 +1687,6 @@ function MatchMonitorDetail() {
         RestoreDefaulCbbSite();
 
         currentType = Number(domElements.cbbTypeOfTickets.val());
-
-        domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
 
         FetchFilterMatchMonitorDetail(isRefreshcbbSite);        
 
@@ -1690,6 +1765,8 @@ function MatchMonitorDetail() {
             });
 
             BindEffectFilterDependOn(indexFilterSelected, dependOnFilter);
+
+            CheckChangeFilterByAssociationDetection();
         }
     }   
 
@@ -1760,6 +1837,8 @@ function MatchMonitorDetail() {
     function DistinctByAGr(dependOnFilter) {
         let distinct = new Set();
         let aGrItems = [];
+        let isBlank = false;
+
         dependOnFilter.filter(obj => {
             if (!distinct.has(obj.ADetectGroupID)) {
                 distinct.add(obj.ADetectGroupID);
@@ -1767,11 +1846,22 @@ function MatchMonitorDetail() {
             }
             return false;
         }).map(function (aGr) {
-            if (aGrItems.findIndex((obj) => obj == aGr.ADetectGroup) == -1)
-                aGrItems.push(aGr.ADetectGroup);
-        });
+            if (aGrItems.findIndex((obj) => obj == aGr.ADetectGroup) == -1) {
+                if (aGr.ADetectGroup == "-") {
+                    isBlank = true;
+                } else {
+                    aGrItems.push(parseInt(aGr.ADetectGroup));
+                }     
+            }                
+        });     
 
-        return aGrItems.sort();
+        let aGrItemsInt = aGrItems.map(str => parseInt(str));
+
+        aGrItemsInt.sort((a, b) => a - b);      
+
+        if (isBlank) aGrItemsInt.unshift("-");
+   
+        return aGrItemsInt;
     }
 
     function RefreshCurrency(currencyItems) {
@@ -1794,7 +1884,7 @@ function MatchMonitorDetail() {
         domElements.cbbReason.multiselect("refresh");
     }
 
-    function RefreshAGr(aGrItems) {
+    function RefreshAGr(aGrItems) {        
         domElements.cbbAGroup.multiselect().empty();
         if (aGrItems.length > 0) {
             aGrItems.forEach(item => {
@@ -1802,7 +1892,7 @@ function MatchMonitorDetail() {
             });
         }
         domElements.cbbAGroup.multiselect("refresh");
-    }            
+    }
 
     function AddFilterLoading() {
         domElements.divFilterMonitor.addClass('loading-background');
@@ -1812,6 +1902,17 @@ function MatchMonitorDetail() {
     function RemoveFilterLoading() {
         domElements.divFilterMonitor.removeClass('loading-background');
         domElements.divFilterLoading.css('display', 'none');
+    }
+
+    function RemoveAllFilerError() {
+        domElements.cbbMatchScore.parent().find('button').removeClass('border-error');
+        domElements.cbbDanger.parent().find('button').removeClass('border-error');
+        domElements.cbbCurrency.parent().find('button').removeClass('border-error');
+        domElements.cbbReason.parent().find('button').removeClass('border-error');
+        domElements.cbbAGroup.parent().find('button').removeClass('border-error');
+        domElements.cbbMGroup.parent().find('button').removeClass('border-error');
+        domElements.cbbHDPBetTeam.parent().find('button').removeClass('border-error');
+        domElements.cbbTicketsStatus.parent().find('button').removeClass('border-error');
     }
 
     //#endregion Event OnChange
@@ -1889,14 +1990,15 @@ function MatchMonitorDetail() {
         domElements.cbbSites.change(function () { FilterDependOnSelected(IndexFilterSelected.Site); })
         domElements.cbbDanger.change(function () { FilterDependOnSelected(IndexFilterSelected.Danger); });
         domElements.cbbCurrency.change(function () { FilterDependOnSelected(IndexFilterSelected.Currency); });
-        domElements.cbbReason.change(function () { FilterDependOnSelected(IndexFilterSelected.Reason); });
-        
+        domElements.cbbReason.change(function () { FilterDependOnSelected(IndexFilterSelected.Reason); });        
+
         try {
             isSupportShowAllTickets = JSON.parse(domElements?.isSupportShowAllTickets?.toLowerCase());
         }
         catch { }
 
-        domElements.cbbTypeOfTickets.prop('disabled', !isSupportShowAllTickets);
+        domElements.cbbTypeOfTickets.prop('disabled', !isSupportShowAllTickets);      
+
         if (isSupportShowAllTickets) {
             domElements.cbbTypeOfTickets.change(function () {
                 cacheMGroup.isActive = false;
@@ -1925,8 +2027,11 @@ function MatchMonitorDetail() {
             cacheMGroup.allMGroup = {};
             cacheMGroup.selectMgroup = {};
             cacheMGroup.isActive = false;
+            cacheFilterDependOn.MGrList = [];
+
             domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
-            RestoreDefaulCbbSite();
+            RestoreDefaulCbbSite();    
+
             TypeOfTicketsOnChange(true, true);
             FetchMatchMonitorDetail();
         })
