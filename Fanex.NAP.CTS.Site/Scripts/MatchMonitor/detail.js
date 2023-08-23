@@ -630,6 +630,36 @@ function MatchMonitorDetail() {
         return false;
     }
 
+    function CheckAllSelectedExistBlankAfterAssDetect(element) {
+        let isAllAssDetectSelected = false;
+        let isExistBlank = false;
+        let opt = $("option", element).length;
+        let optSelect = $("option:selected", element).length;    
+        
+        if (element.val().indexOf("-") > -1) {
+            isExistBlank = true;
+        } 
+        if (opt > 1 && opt == optSelect) {
+            isAllAssDetectSelected = true;
+        }
+        return isAllAssDetectSelected && isExistBlank;
+    }
+
+    function CheckSelectAfterAssDetect(element) {
+        let isAssDetectSelected = false;
+        let isExistBlank = false;       
+        let optSelect = $("option:selected", element);
+      
+        if (optSelect.val().indexOf("-") > -1) {
+            isExistBlank = true;
+        } 
+
+        if (optSelect.length > 0) {
+            isAssDetectSelected = true;
+        }
+        return isAssDetectSelected && !isExistBlank;
+    }
+
     function ValidateCbb(element) {
         if (!CheckSelected(element)) {
             element.parent().find('button').addClass('border-error');
@@ -1119,7 +1149,8 @@ function MatchMonitorDetail() {
                 //}
             }
 
-            if ($('option', domElements.cbbMGroup).length > 1) {
+            if (CheckAllSelectedExistBlankAfterAssDetect(domElements.cbbMGroup)
+                || CheckSelectAfterAssDetect(domElements.cbbMGroup)) {
                 FilterUIGridByMGr(data?.HomeMatchItemList, data?.AwayMatchItemList);
             }
             else {
