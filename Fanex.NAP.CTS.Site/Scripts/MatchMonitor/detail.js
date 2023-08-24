@@ -1476,7 +1476,7 @@ function MatchMonitorDetail() {
     }
 
     function FilterUIGridByMGr(dataHome, dataAway) {  
-        let totalItem = 0;
+        let totalNewItem = 0;
        
         let arrMGr = domElements.cbbMGroup.val();
         let isExistedBlank = arrMGr.indexOf("0") != -1;
@@ -1507,12 +1507,16 @@ function MatchMonitorDetail() {
             }
         });
 
-        domElements.tblMMHomeTeam.DataTable().clear().rows.add(itemMMHomeTeamFilter).draw(false);
-        domElements.tblMMAwayTeam.DataTable().clear().rows.add(itemMMAwayTeamFilter).draw(false);
+        //domElements.tblMMHomeTeam.DataTable().clear().rows.add(itemMMHomeTeamFilter).draw(false);
+        //domElements.tblMMAwayTeam.DataTable().clear().rows.add(itemMMAwayTeamFilter).draw(false);
+        let totalOldItem = domElements.tblMMHomeTeam.DataTable().data().length + domElements.tblMMAwayTeam.DataTable().data().length;
 
-        totalItem = itemMMHomeTeamFilter.length + itemMMAwayTeamFilter.length;
+        domElements.tblMMHomeTeam.DataTable().rows.add(itemMMHomeTeamFilter).draw(false);
+        domElements.tblMMAwayTeam.DataTable().rows.add(itemMMAwayTeamFilter).draw(false);
 
-        RefreshBreadcrumbTotalTickets(totalItem, recordsTotalGlobal);
+        totalNewItem = totalOldItem + itemMMHomeTeamFilter.length + itemMMAwayTeamFilter.length;
+
+        RefreshBreadcrumbTotalTickets(totalNewItem, recordsTotalGlobal);
     }
 
     function FilterUIGrid() {
