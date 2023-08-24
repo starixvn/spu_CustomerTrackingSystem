@@ -653,7 +653,7 @@ function MatchMonitorDetail() {
         let isExistBlank = false;
         let opt = $("option", element).length;
         let optSelect = $("option:selected", element).length;
-        console.log(element.val());
+        
         if (element.val().indexOf("0") > -1) {
             isExistBlank = true;
         } 
@@ -667,7 +667,7 @@ function MatchMonitorDetail() {
         let isAssDetectSelected = false;
         let isExistBlank = false;       
         let optSelect = $("option:selected", element);
-        console.log(optSelect.val());
+     
         if (optSelect.val().indexOf("0") > -1) {
             isExistBlank = true;
         } 
@@ -1167,8 +1167,7 @@ function MatchMonitorDetail() {
                 //}
             }
 
-            if (CheckAllSelectedExistBlankAfterAssDetect(domElements.cbbMGroup)
-                || CheckSelectAfterAssDetect(domElements.cbbMGroup)) {
+            if ($('option', domElements.cbbMGroup).length > 1) {
                 FilterUIGridByMGr(data?.HomeMatchItemList, data?.AwayMatchItemList);
             }
             else {
@@ -1487,7 +1486,11 @@ function MatchMonitorDetail() {
             if (assDetectionItem) {
                 return arrMGr.indexOf(assDetectionItem.GroupName) != -1;       
             } else {
-                return isExistedBlank;
+                if (isExistedBlank) {
+                    return item.MDetectGroup == "-";
+                } else {
+                    return false;
+                }               
             }
         });
 
@@ -1496,7 +1499,11 @@ function MatchMonitorDetail() {
             if (assDetectionItem) {
                 return arrMGr.indexOf(assDetectionItem.GroupName) != -1;
             } else {
-                return isExistedBlank;
+                if (isExistedBlank) {
+                    return item.MDetectGroup == "-";
+                } else {
+                    return false;
+                }
             }
         });
 
@@ -1736,6 +1743,8 @@ function MatchMonitorDetail() {
         RestoreDefaulCbbSite();
 
         currentType = Number(domElements.cbbTypeOfTickets.val());
+
+        cacheFilterDependOn.MGrList = [];
 
         FetchFilterMatchMonitorDetail(isRefreshcbbSite);        
 
