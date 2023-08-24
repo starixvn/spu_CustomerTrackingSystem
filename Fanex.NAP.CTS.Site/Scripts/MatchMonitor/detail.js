@@ -372,6 +372,24 @@ function MatchMonitorDetail() {
         domElements.cbbMGroup.multiselect("refresh");
     }
 
+    function SetupDefaultMGroupFilter(data) {
+        domElements.cbbMGroup.multiselect().empty();
+
+        if (data) {
+            for (var i = 0; i < data.length; i++) {
+                if (data[i] == "-") {
+                    domElements.cbbMGroup.append(`<option selected value='0'>${data[i]}</option>`);
+                } else {
+                    domElements.cbbMGroup.append(`<option selected value='${data[i]}'>${data[i]}</option>`);
+                }                
+            }            
+
+            domElements.cbbMGroup.parent().find('button').removeClass('border-error');
+        }
+
+        domElements.cbbMGroup.multiselect("refresh");
+    }
+
     function SetupDanger(data) {
         if (data) {
             let siteSelector = domElements.cbbDanger.empty();
@@ -634,9 +652,9 @@ function MatchMonitorDetail() {
         let isAllAssDetectSelected = false;
         let isExistBlank = false;
         let opt = $("option", element).length;
-        let optSelect = $("option:selected", element).length;    
-        
-        if (element.val().indexOf("-") > -1) {
+        let optSelect = $("option:selected", element).length;
+        console.log(element.val());
+        if (element.val().indexOf("0") > -1) {
             isExistBlank = true;
         } 
         if (opt > 1 && opt == optSelect) {
@@ -649,8 +667,8 @@ function MatchMonitorDetail() {
         let isAssDetectSelected = false;
         let isExistBlank = false;       
         let optSelect = $("option:selected", element);
-      
-        if (optSelect.val().indexOf("-") > -1) {
+        console.log(optSelect.val());
+        if (optSelect.val().indexOf("0") > -1) {
             isExistBlank = true;
         } 
 
@@ -762,7 +780,7 @@ function MatchMonitorDetail() {
 
         RefreshReasonInfo(data.ReasonList);
 
-        SetupFilter(domElements.cbbMGroup, data.MGroupList);
+        SetupDefaultMGroupFilter(data.MGroupList);
 
         if (data.DropdownList) {
             SetupDanger(data.DropdownList.DangerList);
