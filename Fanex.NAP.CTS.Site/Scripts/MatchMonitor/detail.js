@@ -347,6 +347,7 @@ function MatchMonitorDetail() {
     function SetupMGroupFilter(data) {
         domElements.cbbMGroup.multiselect().empty();
         let totalTicketDetect = domElements.divPopupAssDetect.attr('data-total-ticket-detect');
+      
         if (data) {
             let isExistedBlank = false;
             if (totalTicketDetect < recordsTotalGlobal) {
@@ -646,37 +647,7 @@ function MatchMonitorDetail() {
             return true;
         }
         return false;
-    }
-
-    function CheckAllSelectedExistBlankAfterAssDetect(element) {
-        let isAllAssDetectSelected = false;
-        let isExistBlank = false;
-        let opt = $("option", element).length;
-        let optSelect = $("option:selected", element).length;
-        
-        if (element.val().indexOf("0") > -1) {
-            isExistBlank = true;
-        } 
-        if (opt > 1 && opt == optSelect) {
-            isAllAssDetectSelected = true;
-        }
-        return isAllAssDetectSelected && isExistBlank;
-    }
-
-    function CheckSelectAfterAssDetect(element) {
-        let isAssDetectSelected = false;
-        let isExistBlank = false;       
-        let optSelect = $("option:selected", element);
-     
-        if (optSelect.val().indexOf("0") > -1) {
-            isExistBlank = true;
-        } 
-
-        if (optSelect.length > 0) {
-            isAssDetectSelected = true;
-        }
-        return isAssDetectSelected && !isExistBlank;
-    }
+    }      
 
     function ValidateCbb(element) {
         if (!CheckSelected(element)) {
@@ -722,8 +693,8 @@ function MatchMonitorDetail() {
         }
 
         return result;
-    }
-
+    }    
+    
     function GetDangerSelectDataFilter(dangerType) {
         let dangerValues = [];
         domElements.cbbDanger.find('optgroup').each(function () {
@@ -743,23 +714,7 @@ function MatchMonitorDetail() {
     //#endregion Get Filter Params Selected
 
     //#region Render Filter
-
-    function LoadSelectDataFilter() {
-        if (currentType == MatchMonitorDetailViewType.TicketAll) {
-            var selectedFilter = cacheFilter[MatchMonitorDetailViewType.TicketFraud];
-            if (selectedFilter) {
-                RefreshFilterSelected(domElements.cbbCurrency, selectedFilter.cbbCurrency);
-                RefreshFilterSelected(domElements.cbbHDPBetTeam, selectedFilter.cbbHDPBetTeam);
-                RefreshFilterSelected(domElements.cbbReason, selectedFilter.cbbReason);
-                RefreshFilterSelected(domElements.cbbAGroup, selectedFilter.cbbAGroup);
-                if (selectedFilter.inputAmount) {
-                    domElements.inputAmountFrom.val(selectedFilter.inputAmount[0]);
-                    domElements.inputAmountTo.val(selectedFilter.inputAmount[1]);
-                }
-            }
-        }
-    }
-
+   
     function RenderFilter(data, isRefreshcbbSite) {
         recordsTotalGlobal = data.RecordsTotal;
         isSingleGrid = data.IsSingleGrid;     
@@ -798,11 +753,7 @@ function MatchMonitorDetail() {
         }
 
         cacheMGroup.allMGroup = {};
-        cacheMGroup.selectMgroup = {};
-
-        //if (cacheFilter[MatchMonitorDetailViewType.TicketFraud]) {
-        //    LoadSelectDataFilter();
-        //}
+        cacheMGroup.selectMgroup = {};       
     }
 
     //#endregion Render
@@ -1218,7 +1169,7 @@ function MatchMonitorDetail() {
 
         if (data?.length > 0) {
             let filteredReasons = data.filter(item => !item.includes('-'));
-            domElements.spanReasonInfo.text(filteredReasons.join()); return;
+            domElements.spanReasonInfo.text(filteredReasons.sort().join()); return;
         }
         domElements.spanReasonInfo.text('');
     }
@@ -1605,27 +1556,7 @@ function MatchMonitorDetail() {
         datas += `,&quot;EventDateStr&quot;:&quot;${domElements.eventDataToString}&quot;`;
         datas += `,&quot;BetTypeName&quot;:&quot;${domElements.betTypeName}&quot;}`;
         return datas;
-    }
-
-    function GetDataSelectedInGridForDetectMGr(table) {
-        let datas = [];
-        table.rows(function (idx, data, node) {
-            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
-                if (!$(node).is(':hidden')) {
-                    let item = {
-                        CustID: data.CustID,
-                        BetID: data.BetID,
-                        HDP: data.HDP,
-                        AGr: data.ADetectGroup == "-" ? 0 : data.ADetectGroup,
-                        MGr: data.MDetectGroup == "-" ? 0 : data.MDetectGroup
-                    }
-                    datas.push(item);
-                }
-            }
-        });
-
-        return JSON.stringify(datas);
-    }
+    }    
 
     function GetDataSelectedInGrid(table) {
         let datas = '';
@@ -1664,12 +1595,15 @@ function MatchMonitorDetail() {
     //#region Event OnChange
 
     function ChangeCbbTypeOfTickets() {
-        RemoveAllFilerError();
+        RemoveAllFilterError();
 
         let betTypeSelected = $("option:selected", domElements.cbbBetType);
 
         if (betTypeSelected.attr('data-is-support-suspicious') == 'false') {
             domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketAll);
+            domElements.cbbTypeOfTickets.prop('disabled', true);
+        } else if (!isSupportShowAllTickets) {
+            domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
             domElements.cbbTypeOfTickets.prop('disabled', true);
         } else {
             domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
@@ -1690,7 +1624,7 @@ function MatchMonitorDetail() {
     function MarketOnChange() {
         cacheFilterScore = undefined;
 
-        RemoveAllFilerError();
+        RemoveAllFilterError();
 
         AddFilterLoading();
 
@@ -1714,7 +1648,7 @@ function MatchMonitorDetail() {
     function BetTypeOnChange() {
         cacheFilterScore = undefined;
 
-        RemoveAllFilerError();
+        RemoveAllFilterError();
 
         AddFilterLoading();
 
@@ -1755,7 +1689,7 @@ function MatchMonitorDetail() {
         RemoveFilterLoading();
     }   
 
-    function FilterDependOnSelected(indexFilterSelected) {
+    function FilterDependOnSelected(indexFilterSelected) {        
         let scoresSelected = domElements.cbbMatchScore.val();
         let siteSelected = domElements.cbbSites.val();
         let isDangerNone = GetDangerSelectDataFilter(0).length > 0;
@@ -1966,7 +1900,7 @@ function MatchMonitorDetail() {
         domElements.divFilterLoading.css('display', 'none');
     }
 
-    function RemoveAllFilerError() {
+    function RemoveAllFilterError() {
         domElements.cbbMatchScore.parent().find('button').removeClass('border-error');
         domElements.cbbDanger.parent().find('button').removeClass('border-error');
         domElements.cbbCurrency.parent().find('button').removeClass('border-error');
@@ -2052,7 +1986,10 @@ function MatchMonitorDetail() {
         domElements.cbbSites.change(function () { FilterDependOnSelected(IndexFilterSelected.Site); })
         domElements.cbbDanger.change(function () { FilterDependOnSelected(IndexFilterSelected.Danger); });
         domElements.cbbCurrency.change(function () { FilterDependOnSelected(IndexFilterSelected.Currency); });
-        domElements.cbbReason.change(function () { FilterDependOnSelected(IndexFilterSelected.Reason); });        
+        domElements.cbbReason.change(function () { FilterDependOnSelected(IndexFilterSelected.Reason); });
+        domElements.cbbAGroup.change(function () {
+            CheckChangeFilterByAssociationDetection();
+        });
 
         try {
             isSupportShowAllTickets = JSON.parse(domElements?.isSupportShowAllTickets?.toLowerCase());
