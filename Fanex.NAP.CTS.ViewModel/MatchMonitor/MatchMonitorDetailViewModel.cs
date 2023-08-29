@@ -92,7 +92,7 @@
                     case (int)MatchMonitorBetType.FirstHDP:
                         return ReasonName + " - " + MatchMonitorBetType_1stHDP;
 
-                    case (int)MatchMonitorBetType.FirsttOU:
+                    case (int)MatchMonitorBetType.FirstOU:
                         return ReasonName + " - " + MatchMonitorBetType_1stOU;
 
                     case (int)MatchMonitorBetType.Moneyline:
@@ -203,7 +203,7 @@
                             return new List<MatchMonitorBetChoiceId>();
                         }
                     case (int)MatchMonitorBetType.OU:
-                    case (int)MatchMonitorBetType.FirsttOU:
+                    case (int)MatchMonitorBetType.FirstOU:
                         return betchoiceOption2;
 
                     case (int)MatchMonitorBetType.QuarterXOU:

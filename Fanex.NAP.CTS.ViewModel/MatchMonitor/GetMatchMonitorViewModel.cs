@@ -125,7 +125,7 @@
                         return ReasonName + " - " + MatchMonitorBetType_OU;
                     case (int)MatchMonitorBetType.FirstHDP:
                         return ReasonName + " - " + MatchMonitorBetType_1stHDP;
-                    case (int)MatchMonitorBetType.FirsttOU:
+                    case (int)MatchMonitorBetType.FirstOU:
                         return ReasonName + " - " + MatchMonitorBetType_1stOU;
                     case (int)MatchMonitorBetType.Moneyline:
                         return ReasonName + " - " + MatchMonitorBetType_Moneyline;

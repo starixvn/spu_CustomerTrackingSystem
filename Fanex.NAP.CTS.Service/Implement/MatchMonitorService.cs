@@ -132,19 +132,25 @@
         }
 
         public IEnumerable<TicketDetailModel> GetFraudTicketDetail(MMDetailInfoViewModel para, string transIds)
-        {
+        {            
             var criteria = new TicketDetailGetCriteria()
             {
                 QueryType = (int)MatchMonitorQueryType.TicketFraud,
                 EventDate = para.EventDate,
-                ListTransId = transIds
+                ListTransId = transIds,
+                MatchID = para.MatchID,
+                BetType = para.BetTypeID,
+                BetID = para.BetID,
+                IsLive = para.LiveIndicator ? 1 : 0
             };
 
             return repository.Fetch<TicketDetailModel>(criteria);
         }
 
         public TicketDetailViewModel GetAllTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int batchSize = 1000, string transIds = null)
-        {
+        {                                   
+            var scoreList = (filter.ScoreList == null || !para.LiveIndicator) ? null : string.Join(",", filter.ScoreList);
+
             var criteria = new TicketDetailGetCriteria()
             {
                 QueryType = (int)MatchMonitorQueryType.TicketAll,
@@ -156,11 +162,24 @@
                 BetID = para.BetID,
                 BatchSize = batchSize,
                 IsLicensee = para.Sites == MMSites.All ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
-                ListCurrency = filter?.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList),
-                ListHDP = filter?.HDPList == null ? null : string.Join(",", filter.HDPList),
-                ListScore = filter?.ScoreList == null ? null : string.Join(",", filter.ScoreList),
+                ListCurrency = filter?.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList),              
+                ListScore = scoreList,
+                ListDanger = GenerateDangerJson(filter),
+                ListStatus = filter?.TicketStatusList == null ? null : string.Join(",", filter.TicketStatusList),
                 ListTransId = transIds
             };
+
+            if (para.BetTypeID == (int)MatchMonitorBetType.TotalGoal
+                || para.BetTypeID == (int)MatchMonitorBetType.FirstTotalGoal
+                || para.BetTypeID == (int)MatchMonitorBetType.CorrectScore
+                || para.BetTypeID == (int)MatchMonitorBetType.FirstCorrectScore)
+            {                
+                criteria.ListHDPBetTeam = filter?.BetTeamList == null ? null : string.Join(",", filter.BetTeamList);
+            }
+            else
+            {
+                criteria.ListHDPBetTeam = filter?.HDPList == null ? null : string.Join(",", filter.HDPList);
+            }
 
             if (filter?.AmountList?.Count >= 2)
             {
@@ -177,7 +196,22 @@
             };
         }
 
-        public MMTicketDetailInfoModel GetMMTicketDetailInfo(MMDetailInfoViewModel para)
+        private string GenerateDangerJson(MMDetailFilterViewModel filter)
+        {           
+            var jsonDanger = new List<MMDetailDangerModel>();
+
+            if (filter.IsDangerNone)
+                jsonDanger.Add(new MMDetailDangerModel { Danger1 = 0, Danger2 = 0, Danger3 = 0, Danger4 = 0, Danger5 = 0 });
+            filter.Danger1List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger1 = x }); });
+            filter.Danger2List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger2 = x }); });
+            filter.Danger3List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger3 = x }); });
+            filter.Danger4List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger4 = x }); });
+            filter.Danger5List?.ForEach(x => { jsonDanger.Add(new MMDetailDangerModel { Danger5 = x }); });
+
+            return JsonConvert.SerializeObject(jsonDanger);
+        }
+       
+        public MMTicketDetailInfoModel GetMMTicketDetailInfo(MMDetailInfoViewModel para, IEnumerable<string> transIds)
         {
             var criteria = new MMTicketDetailInfoCriteria()
             {
@@ -185,9 +219,10 @@
                 BetType = para.BetTypeID,
                 BetID = para.BetID,
                 IsLive = para.LiveIndicator ? 1 : 0,
+                ListTransId = string.Join(",", transIds)
             };
-
-            var result = repository.FetchMultiple<MMDetailFilterInforHdpModel, MMDetailFilterInforScoreModel, MMDetailFilterInforCurrencyModel>(criteria);
+            
+            var result = repository.Fetch<MMDetailFilterTicketInfoModel>(criteria);
 
             return new MMTicketDetailInfoModel
             {
@@ -195,12 +230,7 @@
                 TotalTicketAll = criteria.TotalTicketAll,
                 TotalTicketCredit = criteria.TotalTicketCredit,
                 TotalTicketLicensee = criteria.TotalTicketLicensee,
-                FilterDetail = new MMDetailFilterInfoModel
-                {
-                    HDPList = result.firstResultSet,
-                    ScoreList = result.secondResultSet,
-                    CurrencyList = result.thirdResultSet
-                }
+                TicketInfoList = result               
             };
         }
 
@@ -298,6 +328,7 @@
                     itemH.HDP,
                     itemH.Score,
                     itemH.TransTimeToString,
+                    itemH.BetFrom,
                     itemH.ADetectGroup,
                     itemH.MDetectGroup,
                     itemH.ReasonList,
@@ -305,7 +336,7 @@
                     null, null, null, null,
                     null, null, null,
                     null, null, null,
-                    null, null, null,
+                    null, null, null, null,
                     null, null, null, null
                 };
         }
@@ -317,7 +348,7 @@
                     null, null, null, null,
                     null, null, null,
                     null, null, null,
-                    null, null, null,
+                    null, null, null, null,
                     null, null, null, null,
                     itemA.SubscriberType,
                     itemA.Username,
@@ -331,6 +362,7 @@
                     itemA.HDP,
                     itemA.Score,
                     itemA.TransTimeToString,
+                    itemA.BetFrom,
                     itemA.ADetectGroup,
                     itemA.MDetectGroup,
                     itemA.ReasonList,
@@ -354,6 +386,7 @@
                     itemH.HDP,
                     itemH.Score,
                     itemH.TransTimeToString,
+                    itemH.BetFrom,
                     itemH.ADetectGroup,
                     itemH.MDetectGroup,
                     itemH.ReasonList,
@@ -371,6 +404,7 @@
                     itemA.HDP,
                     itemA.Score,
                     itemA.TransTimeToString,
+                    itemA.BetFrom,
                     itemA.ADetectGroup,
                     itemA.MDetectGroup,
                     itemA.ReasonList,

@@ -46,9 +46,9 @@
 	</Function>
 
 	<Function name="MatchMonitor">
-		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails_xpre" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_Rpt_MatchMonitor_MatchInfo" SpName="CTS_Rpt_MatchMonitor_MatchInfo_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_TicketDetails_Info" SpName="CTS_TicketDetails_Info_xpre" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_Rpt_MatchMonitor_MatchInfo" SpName="CTS_Rpt_MatchMonitor_MatchInfo" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_TicketDetails_Info" SpName="CTS_TicketDetails_Info" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 
 	<Function name="RobotBetting">
@@ -63,12 +63,12 @@
 	</Function>
 
 	<Function Name="DailyProblemClassification">
-		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" TimeOut="1200" />
+		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" TimeOut="1200" />
 	</Function>
 
 	<Function Name="AssociationDetection">
 		<Setting Key="CTS_Association_GetBySharedMatches" SpName="CTS_Association_GetBySharedMatches" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="Acc_Rpt_CTS_GetCustStatisticsInfo" SpName="Acc_Rpt_CTS_GetCustStatisticsInfo_xtest" DbName="DBDW.bodb_dwrs.bodbSPUNet" />
+		<Setting Key="Acc_Rpt_CTS_GetCustStatisticsInfo" SpName="Acc_Rpt_CTS_GetCustStatisticsInfo" DbName="DBDW.bodb_dwrs.bodbSPUNet" />
 		<Setting Key="CTS_Association_IpSharedLast3Days" SpName="CTS_Association_IpSharedLast3Days" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 </Functions>

@@ -32,6 +32,8 @@
 
         public string BetTeam { get; set; }
 
+        public string BetFrom { get; set; }
+
         public Decimal Stake { get; set; }
 
         public Decimal OrgStake { get; set; }

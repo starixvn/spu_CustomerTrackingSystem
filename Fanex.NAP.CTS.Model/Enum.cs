@@ -189,4 +189,16 @@
         Round3 = 3
     }
 
+    public enum StatusTicket
+    {
+        Reject = 101,
+        Void = 102,
+        Running = 0,
+        Waiting = 1,
+        Won = 112,
+        Draw = 111,
+        Lose = 113,
+        Refund = 103,
+        Completed = 131
+    }
 }

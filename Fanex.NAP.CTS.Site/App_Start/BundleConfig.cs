@@ -314,7 +314,7 @@
         private static void RegisterMatchMonitorBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/match-monitor-scripts").Include(
-               "~/Scripts/select2.min.js",
+               "~/Scripts/select2.min.js",              
                "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
                "~/Scripts/MatchMonitor/index.js"));
 

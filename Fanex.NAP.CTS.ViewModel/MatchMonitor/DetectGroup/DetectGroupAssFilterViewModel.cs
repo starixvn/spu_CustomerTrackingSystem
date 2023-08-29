@@ -1,4 +1,6 @@
-﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
+﻿using System;
+
+namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {   
     public class DetectGroupAssFilterViewModel
     {
@@ -17,5 +19,6 @@
         public bool IsOpt3MatchesLast7Days { get; set; }
 
         public bool IsOptIPLast3Days { get; set; }
+       
     }
 }
