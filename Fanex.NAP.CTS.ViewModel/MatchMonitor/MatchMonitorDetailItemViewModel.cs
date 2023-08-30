@@ -236,9 +236,9 @@
         }
 
         public bool FilterBySite(string site)
-        {
+        {            
             return !string.IsNullOrWhiteSpace(site) ? site.Contains("A") || site.Contains(SubscriberType) : false;
-        }
+        }        
 
         public bool FilterByReasonAGroup(List<string> reasonList, IEnumerable<string> reasonGroupIDDic)
         {
@@ -273,7 +273,7 @@
         public bool FilterItem(MMDetailFilterViewModel filter, IEnumerable<string> reasonGroupIDDic, string site)
         {
             var isFilterScore = filter.ScoreList?.Contains(Score ?? "-") ?? true;
-            var isFilterSite = FilterBySite(site);
+            var isFilterSite = FilterBySite(site);           
             var isFilterDanger = FilterByDanger(filter);
             var isFilterCurrency = filter.CurrencyIdList?.Contains(CurrencyId) ?? true;
             var isFilterReasonAGroup = FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic);

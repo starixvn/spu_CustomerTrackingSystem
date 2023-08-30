@@ -529,34 +529,62 @@
         {
             var mdResult = default(MatchMonitorDetailListViewModel);
 
-            switch (para.TypeOfTickets)
+            try
             {
-                case MatchMonitorQueryType.TicketFraud:
-                    {
-                        var tickets = GetFraudMMDetailFromCache(para, para.Sites);
-
-                        if (tickets != null)
+                switch (para.TypeOfTickets)
+                {
+                    case MatchMonitorQueryType.TicketFraud:
                         {
-                            mdResult = tickets.Clone();
+                            var tickets = GetFraudMMDetailFromCache(para, para.Sites);
 
-                            mdResult.FilterItemMMDetail(filter, para.Sites);
+                            if (tickets != null)
+                            {
+                                mdResult = tickets.Clone();
+
+                                mdResult.FilterItemMMDetail(filter, para.Sites);
+                            }
+
+                            break;
                         }
-
-                        break;
-                    }
-                case MatchMonitorQueryType.TicketAll when para.IsSupportShowAllTickets:
-                    {
-                        var tickets = GetAllMMDetailFromCache(para, filter);
-
-                        if (tickets != null)
+                    case MatchMonitorQueryType.TicketAll when para.IsSupportShowAllTickets:
                         {
-                            mdResult = tickets.Clone();
+                            var tickets = GetAllMMDetailFromCache(para, filter);
 
-                            mdResult.FilterItemMMDetail(filter, para.Sites);
+                            if (tickets != null)
+                            {
+                                mdResult = tickets.Clone();
+                                
+                                var subscriberTypeHomeIsNull = mdResult.HomeMatchItemList.Where(x => x.SubscriberType == null).Select(x => x);
+                                var subscriberTypeAwayIsNull = mdResult.AwayMatchItemList.Where(x => x.SubscriberType == null).Select(x => x);
+
+                                if (subscriberTypeHomeIsNull != null && subscriberTypeHomeIsNull.Any())
+                                {
+                                    LogService.Error($"Get Match Monitor Detail with subscriberTypeHomeIsNull: { JsonConvert.SerializeObject(subscriberTypeHomeIsNull)}");
+                                }
+
+                                if (subscriberTypeAwayIsNull != null && subscriberTypeAwayIsNull.Any())
+                                {
+                                    LogService.Error($"Get Match Monitor Detail with subscriberTypeAwayIsNull: { JsonConvert.SerializeObject(subscriberTypeAwayIsNull)}");
+                                }
+
+                                mdResult.FilterItemMMDetail(filter, para.Sites);
+                            }
+
+                            break;
                         }
+                }               
+            }
+            catch (Exception ex)
+            {
+                var errMsg = "Get Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n";
 
-                        break;
-                    }
+                if (ex.InnerException != null)
+                {
+                    errMsg += "\n" + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                     + ex.InnerException.StackTrace;
+                }
+
+                LogService.Info(errMsg);
             }
 
             return Json(new
@@ -809,7 +837,7 @@
             {
                 result = _matchMonitorService.GetAllTicketDetail(info, filter, batchSize);
 
-                result.TicketDetails = result.TicketDetails.OrderByDescending(x => x.SequenceID);
+                result.TicketDetails = result.TicketDetails.OrderByDescending(x => x.SequenceID);                             
 
                 info.LastScannedSequenceID = result.MinSequenceIDTotalAll;
 
@@ -823,6 +851,7 @@
                     result.TicketDetails = ticketDetails.ToList();
                     break;
                 }
+                
             } while (isLoop);
 
             return result;
