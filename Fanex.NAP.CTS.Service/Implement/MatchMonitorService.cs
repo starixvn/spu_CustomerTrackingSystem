@@ -185,7 +185,7 @@
             {
                 criteria.FromStakeRM = filter.AmountList[0];
                 criteria.ToStakeRM = filter.AmountList[1];
-            }
+            }           
 
             var result = repository.Fetch<TicketDetailModel>(criteria);
 
