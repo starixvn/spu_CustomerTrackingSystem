@@ -10,6 +10,7 @@
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationDetection;
+    using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
@@ -35,6 +36,7 @@
         private const string MMDetailTemplate = "~/App_Data/Excel Template/MatchMonitor/Template.xlsx";
         private readonly IMatchMonitorService _matchMonitorService;
         private readonly IAssociationDetectionService _associationDetectionService;
+        private readonly ICommonService _commonService;
         private readonly IMemoryCacheService _memoryCacheService;
         private readonly string MMDetailRegion = "MMDetail";
         private readonly string FlagRunningTask = "FlagRunningTask";
@@ -42,8 +44,9 @@
         public override string BaseControllerName { get => Consts.MenuItemMonitor; }
 
         public MatchMonitorController()
-        {
+        {           
             _matchMonitorService = new MatchMonitorService();
+            _commonService = new CommonService();
             _associationDetectionService = new AssociationDetectionService();
             _memoryCacheService = new MemoryCacheService();
             MMDetailRegion = CurrentSession.UserId.ToString();
@@ -882,18 +885,35 @@
         public ActionResult DetectGroupAssWithOptions(DetectGroupAssFilterViewModel model)
         {
             var result = new DetectGroupAssociationListViewModel();
-            var mergeGroupInfo = new MergeGroupInfoModel { CTSCustIDs = model.CTSCustIDs };
+            var userNames = model.RawUserNames.Split(',');
+            var userNameList = string.Join(",", userNames.Select(x => x.ToUpper()).Distinct());
 
-            var custInfo = _matchMonitorService.GetCustInfoByCustID(model.CustIDs);
+            var orgUserList = userNames.Select(x => new ValidateUserNameModel { UserName = x });
+
+            var validatedList = _commonService.ValidateUsernames(userNameList, out bool isException);
+
+            orgUserList = orgUserList.Join(validatedList, c1 => c1.UserName.ToLower(), c2 => c2.UserName.ToLower(),
+                       (c1, c2) => new ValidateUserNameModel
+                       {
+                           UserName = c2.UserName,
+                           CustID = c2.CustID,
+                           CTSCustID = c2.CTSCustID,
+                           IsInternal = c2.IsInternal
+                       });
+            var custIgnoreInternals = orgUserList.Where(x => !x.IsInternal);
+            var custIDIgnoreInternals = string.Join(",", custIgnoreInternals.Select(x => x.CustID));
+            var ctsCustIDIgnoreInternals = string.Join(",", custIgnoreInternals.Select(x => x.CTSCustID));
+            var custInfo = _matchMonitorService.GetCustInfoByCustID(custIDIgnoreInternals);
+            var mergeGroupInfo = new MergeGroupInfoModel { CTSCustIDs = ctsCustIDIgnoreInternals };
 
             Parallel.Invoke(() =>
-            {
-                var detectAssByIP = model.IsOptIPLast3Days ? _associationDetectionService.DetectAssociationByIP(model.CustIDs) : Enumerable.Empty<DetectAssociationBySharedIPModel>();
+            {                
+                var detectAssByIP = model.IsOptIPLast3Days ? _associationDetectionService.DetectAssociationByIP(custIDIgnoreInternals) : Enumerable.Empty<DetectAssociationBySharedIPModel>();
 
                 mergeGroupInfo.AssociationByIPJson = this.GetAssociationCustByIP(detectAssByIP, custInfo);
             }, () =>
             {
-                var detectAssByAssMatches = model.IsOpt3MatchesLast7Days ? _associationDetectionService.DetectAssociationBySharedMatches(model.CustIDs) : Enumerable.Empty<DetectAssociationBySharedIPMatchesModel>();
+                var detectAssByAssMatches = model.IsOpt3MatchesLast7Days ? _associationDetectionService.DetectAssociationBySharedMatches(custIDIgnoreInternals) : Enumerable.Empty<DetectAssociationBySharedIPMatchesModel>();
 
                 mergeGroupInfo.AssociationByMatchesJson = this.GetAssociationCustByMatch(detectAssByAssMatches, custInfo);
             },
@@ -903,11 +923,12 @@
                 {
                     var assByPrimary = _associationDetectionService.DetectAssociationByPrimary(new DetectAssociationByPrimaryFilterModel
                     {
-                        CTSCustIDs = model.CTSCustIDs,
+                        CTSCustIDs = ctsCustIDIgnoreInternals,
                         IsBP = model.IsOptBP,
                         IsDevice = model.IsOptDevice,
                         IsIP = model.IsOptIP
                     });
+
                     mergeGroupInfo.AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary);
                 }
             }, () =>
@@ -915,7 +936,7 @@
                 var assByAgent = Enumerable.Empty<DetectAssociationByPrimaryModel>();
 
                 if (model.IsOptAgent)
-                    assByAgent = _associationDetectionService.DetectAssociationByAgent(model.CTSCustIDs);
+                    assByAgent = _associationDetectionService.DetectAssociationByAgent(ctsCustIDIgnoreInternals);
 
                 mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);
             });
@@ -925,7 +946,7 @@
             result.ItemList = this.RearrangeAssGroup(data, true);
         
             var mGrList = new MGrListViewModel();
-            mGrList.BuildMGrList(result.ItemList, model.CustIDs);
+            mGrList.BuildMGrList(result.ItemList, model.RawCustIDs);
 
             return Json(new
             {

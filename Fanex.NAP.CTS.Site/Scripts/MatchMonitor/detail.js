@@ -80,9 +80,9 @@ function MatchMonitorDetail() {
         inputOptIP: $('#inputOptIP'),
         inputOptAgent: $('#inputOptAgent'),
         inputOptIPLast3Days: $('#inputOptIPLast3Days'),
-        inputOpt3MatchesLast7Days: $('#inputOpt3MatchesLast7Days'),
-        hdSelectedCTSCustIDs: $('#hdSelectedCTSCustIDs'),
-        hdSelectedCustIDs: $('#hdSelectedCustIDs'),       
+        inputOpt3MatchesLast7Days: $('#inputOpt3MatchesLast7Days'),       
+        hdSelectedCustIDs: $('#hdSelectedCustIDs'),
+        hdSelectedUsernames: $('#hdSelectedUsernames'),
         btnRefresh: $('#btnRefresh'),
         btnGenerateDetail: $('#btnGenerate-detail'),
         btnShowAll: $('#btnShowAll'),
@@ -1246,9 +1246,9 @@ function MatchMonitorDetail() {
 
         SetCacheByAssociationDetection();
 
-        let params = {
-            CTSCustIDs: domElements.hdSelectedCTSCustIDs.val(),
-            CustIDs: domElements.hdSelectedCustIDs.val(),
+        let params = {           
+            RawCustIDs: domElements.hdSelectedCustIDs.val(),
+            RawUserNames: domElements.hdSelectedUsernames.val(),
             IsOptBP: domElements.inputOptBP.is(":checked"),
             IsOptDevice: domElements.inputOptDevice.is(":checked"),
             IsOptIP: domElements.inputOptIP.is(":checked"),
@@ -1304,17 +1304,18 @@ function MatchMonitorDetail() {
     function ShowPopupAssDetection() {
         let ctsCustIDs = [];
         let custIDs = [];
+        let userNames = [];
         
         domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
-            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
-                ctsCustIDs.push(data.CTSCustID);
+            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {              
                 custIDs.push(data.CustID);
+                userNames.push(data.Username);
             }
         });
         domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
-            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
-                ctsCustIDs.push(data.CTSCustID);
+            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {             
                 custIDs.push(data.CustID);
+                userNames.push(data.Username);
             }
         });
 
@@ -1322,10 +1323,12 @@ function MatchMonitorDetail() {
 
         ctsCustIDs = ctsCustIDs.filter(OnlyUnique);
         custIDs = custIDs.filter(OnlyUnique);
+        userNames = userNames.filter(OnlyUnique);
 
-        if (IsValidAssDetection(custIDs.length)) {                       
-            domElements.hdSelectedCTSCustIDs.val(ctsCustIDs.join());
-            domElements.hdSelectedCustIDs.val(custIDs.join());           
+        if (IsValidAssDetection(custIDs.length)) {                                   
+            domElements.hdSelectedCustIDs.val(custIDs.join());
+            domElements.hdSelectedUsernames.val(userNames.join());
+
             domElements.divPopupAssDetect.dialog({
                 modal: true,
                 width: '800px',
