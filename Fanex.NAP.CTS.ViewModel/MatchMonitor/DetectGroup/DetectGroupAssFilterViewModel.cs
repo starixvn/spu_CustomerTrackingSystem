@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
+﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {   
     public class DetectGroupAssFilterViewModel
-    {
-        public string CTSCustIDs { get; set; }
+    {       
+        public string RawCustIDs { get; set; }
 
-        public string CustIDs { get; set; }
+        public string RawUserNames { get; set; }
 
         public bool IsOptBP { get; set; }
 
