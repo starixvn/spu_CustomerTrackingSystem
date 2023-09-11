@@ -15,6 +15,9 @@ namespace Fanex.NAP.CTS.Criteria.ManageSubscriber
         [SpParam(SqlParamName = "ip_SubscriberType")]
         public int SubscriberType { get; set; }
 
+        [SpParam(SqlParamName = "ip_SubscriberSourceID")]
+        public int SubscriberSourceID { get; set; }
+
         [SpParam(SqlParamName = "ip_SubscriberPrefix")]
         public string SubscriberPrefix { get; set; }
 

@@ -26,6 +26,7 @@
                     <th>Subscriber Name</th>
                     <th>IBCUserName_Prefix</th>
                     <th>Subscriber Group</th>
+                    <th>Subscriber Source</th>
                     <th>Role Mapping</th>
                     <th>Site ID</th>
                     <th>Site</th>
@@ -73,11 +74,20 @@
             </div>
             <div class="form-control mbform">
                 <div class="ischeckInput">
-                    <div class="group-input">
+                    <div class="group-input" style="width: 49%">
                         <div class="label">Subscriber Type</div>
                         <select class="control full-width" id="txtSubscriberType">
-                            <option value="0" selected="">Credit Site</option>
-                            <option value="1">Licensees</option>
+                            <option value="0">Credit Site</option>
+                            <option value="1" selected="">Licensees</option>
+                        </select>
+                    </div>
+
+                     <div class="group-input" style="width: 49%">
+                        <div class="label">Subscriber Source</div>
+                        <select class="control full-width" id="txtSubscriberSource">
+                            <option value="0" selected="">Others</option>
+                            <option value="1">Direct API</option>
+                            <option value="2">Oddsfeed</option>
                         </select>
                     </div>
                 </div>

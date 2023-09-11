@@ -12,6 +12,10 @@
 
         public string SubscriberGroupName { get; set; }
 
+        public string SubscriberSourceName { get; set; }
+
+        public int SubscriberSourceID { get; set; }
+
         public int? RoleMapping { get; set; }
 
         public int? SiteID { get; set; }

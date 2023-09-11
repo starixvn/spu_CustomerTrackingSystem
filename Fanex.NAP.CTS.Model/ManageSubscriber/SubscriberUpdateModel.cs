@@ -12,6 +12,8 @@
 
         public int SubscriberType { get; set; }
 
+        public int SubscriberSourceID { get; set; }
+
         public string IBCUserNamePrefix { get; set; }
 
         public int IsTest { get; set; }

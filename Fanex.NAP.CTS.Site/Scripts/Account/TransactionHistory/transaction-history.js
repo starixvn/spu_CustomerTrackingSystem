@@ -5,6 +5,7 @@
     var formIPInformation = new form_ip_information();
     var _ctsCustId = 0;
     var _subscriberId = 0;
+    var _subscriberSourceID = 0;
     var isSkipTracking = true;
     var dataTable;
 
@@ -46,7 +47,7 @@
                 },
                 info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
                 infoEmpty: "",
-                zeroRecords: "There's no data"
+                zeroRecords: _subscriberSourceID > 0 ? "There's no data because this Subscriber doesn't integrate with FPS/CTS" : "There's no data"
             },
             pagingType: "full_numbers",
             ordering: false,
@@ -121,9 +122,10 @@
             : dataTable = RenderGrid();
     }
 
-    this.Initial = function (ctsCustId, subscriberId, isViewIP) {
+    this.Initial = function (ctsCustId, subscriberId, subscriberSourceID, isViewIP) {
         _ctsCustId = ctsCustId;
         _subscriberId = subscriberId;
+        _subscriberSourceID = subscriberSourceID;
         dataTable = RenderGrid(isViewIP);
 
         btnSearch.on('click', function () {
