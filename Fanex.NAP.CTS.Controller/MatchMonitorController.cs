@@ -783,7 +783,7 @@
                     }).Distinct(x => x.CurrencyId).OrderBy(x => x.CurrencyName).Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName)).ToList(),
                     HDPList = mdItemList.Select(x => x.BallHeadHDP()).Distinct().OrderBy(x => x).ToList(),
                     BetTeamList = mdItemList.Select(x => x.BallHeadBetTeam()).Distinct().OrderBy(x => x).ToList(),
-                    SubscriberTypeList = mdItemList.Select(x => x.SubscriberType).Distinct().ToList(),
+                    SubscriberTypeList = mdItemList.Select(x => x.SubscriberType).Distinct().ToList()
                 };
 
                 mdResult.RecordsTotal = mdItemList?.Count() ?? 0;

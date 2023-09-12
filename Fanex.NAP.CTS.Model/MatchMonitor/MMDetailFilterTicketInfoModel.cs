@@ -14,6 +14,8 @@
 
         public string CurrencyName { get; set; }
 
+        public int CC { get; set; }
+
         public decimal Hdp { get; set; }
 
         public string BetTeam { get; set; }

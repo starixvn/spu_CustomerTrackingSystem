@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
-
-namespace Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn
+﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn
 {
     public class MMFilterItemViewModel
     {
         public string Score { get; set; }
 
         public string SubscriberType { get; set; }
+
+        public int CC { get; set; }
 
         public int Danger1 { get; set; }
 

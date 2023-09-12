@@ -219,7 +219,8 @@
                 BetType = para.BetTypeID,
                 BetID = para.BetID,
                 IsLive = para.LiveIndicator ? 1 : 0,
-                ListTransId = string.Join(",", transIds)
+                //ListTransId = string.Join(",", transIds)
+                ListSuspiciousTransId = JsonConvert.SerializeObject(transIds)
             };
             
             var result = repository.Fetch<MMDetailFilterTicketInfoModel>(criteria);

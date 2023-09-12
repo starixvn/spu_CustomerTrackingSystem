@@ -109,5 +109,16 @@
                 return db.Query<MainTicketDetailModel>(criteria);
             }
         }
+
+        public IEnumerable<CommonCustomerClassModel> GetCommonCustomerClass()
+        {
+            var criteria = new GetCommonCustomerClassCriteria();
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<CommonCustomerClassModel>(criteria);
+            }
+        }
+
     }
 }

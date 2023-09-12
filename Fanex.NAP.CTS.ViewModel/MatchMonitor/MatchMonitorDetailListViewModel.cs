@@ -57,6 +57,8 @@
             mdItemList.AddRange(HomeMatchItemList);
             mdItemList.AddRange(AwayMatchItemList);
 
+            RecordsTotal = (HomeMatchItemList?.Count() ?? 0) + (AwayMatchItemList?.Count() ?? 0);
+
             ScoreList = mdItemList.Select(x => x.Score).Distinct().OrderBy(x => x).ToList();
 
             CurrencyList = mdItemList.Select(x =>
@@ -68,9 +70,7 @@
 
             HDPList = mdItemList.Select(x => x.BallHeadHDP()).Distinct().OrderBy(x => x).ToList();
 
-            BetTeamList = mdItemList.Select(x => x.BallHeadBetTeam()).Distinct().OrderBy(x => x).ToList();
-
-            RecordsTotal = (HomeMatchItemList?.Count() ?? 0) + (AwayMatchItemList?.Count() ?? 0);
+            BetTeamList = mdItemList.Select(x => x.BallHeadBetTeam()).Distinct().OrderBy(x => x).ToList();            
 
             BindReasons(mdItemList.Select(x => x.ReasonList).Distinct());
 
@@ -151,6 +151,7 @@
                         Danger5 = item.Danger5,
                         Score = item.Score,
                         SubscriberType = item.SubscriberType,
+                        CC = item.CustomerClass,
                         ReasonItem = reason,
                         BallHeadHDP = item.BallHeadHDP(),
                         BallHeadBetTeam = item.BallHeadBetTeam(),
@@ -190,6 +191,8 @@
                 subscriberTypeList.Insert(0, "A");
 
             DropdownList.SubscriberTypeList = subscriberTypeList;
+
+            DropdownList.CCGroupList = CCGroupGenerate_DataTest();
 
             DropdownList.TicketStatusList = DropdownFilterList.Select(x => x.TicketStatus).Distinct()
                             .Select(x => new TicketStatusViewModel
@@ -232,6 +235,33 @@
             }
             #endregion
             
+        }
+        
+        public List<CCGroupViewModel> CCGroupGenerate_DataTest()
+        {
+            var listCCGroup = new List<CCGroupViewModel>();
+            listCCGroup.Add(new CCGroupViewModel
+            {
+                 CCGroupName = "PA",
+                 CCList = new List<int>() { 300, 301, 302, 303, 304, 3000, 3001, 3002, 3003, 3004 }
+            });
+            listCCGroup.Add(new CCGroupViewModel
+            {
+                CCGroupName = "Associated PA",
+                CCList = new List<int>() { 2000, 2001, 2002, 2003, 2004, 2100, 2101, 2102, 2103, 2104, 2105, 2200, 2201, 2202, 2203, 2204, 2205, 2303, 2304, 2305, 2403, 2404, 2405, 2500, 2503, 2504, 2505 }
+            });
+            listCCGroup.Add(new CCGroupViewModel
+            {
+                CCGroupName = "Normal",
+                CCList = new List<int>() { 200, 201, 202, 203, 204, 205 }
+            });
+            listCCGroup.Add(new CCGroupViewModel
+            {
+                CCGroupName = "Others",
+                CCList = new List<int>() { 400, 401, 901, 902, 951, 952, 953, 4000, 0 }
+            });
+
+            return listCCGroup;
         }
     }
 }

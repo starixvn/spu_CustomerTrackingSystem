@@ -12,10 +12,11 @@ const SiteViewType = {
 const IndexFilterSelected = {
     Score: 1,
     Site: 2,
-    Danger: 3,
-    Currency: 4,
-    Reason: 5,
-    AGr: 6
+    CC: 3,
+    Danger: 4,
+    Currency: 5,
+    Reason: 6,
+    AGr: 7
 }
 
 function ConvertNumberToThousandsString(x) {
@@ -61,6 +62,7 @@ function MatchMonitorDetail() {
         cbbHDPBetTeam: $('#cbbHDPBetTeam'),
         inputAmountFrom: $('#inputAmountFrom'),
         inputAmountTo: $('#inputAmountTo'),
+        iconClearUsnAmt: $('#iconClearUsnAmt'),
         cbbTicketsStatus: $('#cbbTicketsStatus'),
         tblMMHomeTeam: $('#tblMMHomeTeam'),
         tblMMAwayTeam: $('#tblMMAwayTeam'),
@@ -395,19 +397,19 @@ function MatchMonitorDetail() {
 
     function SetupDanger(data) {
         if (data) {
-            let siteSelector = domElements.cbbDanger.empty();
+            let dangerSelector = domElements.cbbDanger.empty();
 
-            if (data.NoneDanger.DangerItems.length > 0) siteSelector.append(BuildOptgroup(0, "None", data.NoneDanger.DangerItems));
+            if (data.NoneDanger.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(0, "None", data.NoneDanger.DangerItems));
 
-            if (data.Danger1.DangerItems.length > 0) siteSelector.append(BuildOptgroup(1, "Original", data.Danger1.DangerItems));
+            if (data.Danger1.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(1, "Original", data.Danger1.DangerItems));
 
-            if (data.Danger2.DangerItems.length > 0) siteSelector.append(BuildOptgroup(2, "ABI", data.Danger2.DangerItems));
+            if (data.Danger2.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(2, "ABI", data.Danger2.DangerItems));
 
-            if (data.Danger3.DangerItems.length > 0) siteSelector.append(BuildOptgroup(3, "Other Sports", data.Danger3.DangerItems));
+            if (data.Danger3.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(3, "Other Sports", data.Danger3.DangerItems));
 
-            if (data.Danger4.DangerItems.length > 0) siteSelector.append(BuildOptgroup(4, "Basketball", data.Danger4.DangerItems));
+            if (data.Danger4.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(4, "Basketball", data.Danger4.DangerItems));
 
-            if (data.Danger5.DangerItems.length > 0) siteSelector.append(BuildOptgroup(5, "E-Sports", data.Danger5.DangerItems));
+            if (data.Danger5.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(5, "E-Sports", data.Danger5.DangerItems));
 
             domElements.cbbDanger.parent().find('button').removeClass('border-error');
 
@@ -423,6 +425,33 @@ function MatchMonitorDetail() {
         optgroup += "</optgroup>";
 
         return optgroup;
+    }
+
+    function SetupCC(data) {
+        if (data) {
+            let ccSelector = domElements.cbbCC.empty();
+
+            data.map(function (x) {
+                let optgroup = `<optgroup label="${x.CCGroupName}">`;
+
+                if (x.CCList.length > 0) {
+                    x.CCList.map(function (y) {
+                        if (y == 0) {
+                            optgroup += `<option selected value=${y}>-</option>`;
+                        } else {
+                            optgroup += `<option selected value=${y}>${y}</option>`;
+                        }                        
+                    })
+                }
+                optgroup += "</optgroup>";
+
+                ccSelector.append(optgroup);
+            });
+
+            domElements.cbbCC.parent().find('button').removeClass('border-error');
+
+            domElements.cbbCC.multiselect('refresh');
+        }
     }
 
     function SetupSubscriberTypeFilter(data) {
@@ -575,10 +604,14 @@ function MatchMonitorDetail() {
 
     //#region Get Filter Params Selected
     function GetInputAmount() {
-        if (regexValidAmount.test(domElements.inputAmountFrom.val()) && regexValidAmount.test(domElements.inputAmountTo.val())) {
-            if (Number(domElements.inputAmountFrom.val()) <= Number(domElements.inputAmountTo.val())) {
-                return [domElements.inputAmountFrom.val(), domElements.inputAmountTo.val()];
-            }
+        //if (regexValidAmount.test(domElements.inputAmountFrom.val()) && regexValidAmount.test(domElements.inputAmountTo.val())) {
+        //    if (Number(domElements.inputAmountFrom.val()) <= Number(domElements.inputAmountTo.val())) {
+        //        return [domElements.inputAmountFrom.val(), domElements.inputAmountTo.val()];
+        //    }
+        //}
+
+        if (regexValidAmount.test(domElements.inputAmountFrom.val()) && Number(domElements.inputAmountFrom.val())) {
+            return [domElements.inputAmountFrom.val()];
         }
 
         return undefined;
@@ -689,10 +722,10 @@ function MatchMonitorDetail() {
             result = false;
         }
 
-        if (!((domElements.inputAmountFrom.val() == '' && domElements.inputAmountTo.val() == '') || GetInputAmount())) {
-            common.showError("Please input a valid range (Ex: 500 - 1000).");
-            result = false;
-        }
+        //if (!((domElements.inputAmountFrom.val() == '' && domElements.inputAmountTo.val() == '') || GetInputAmount())) {
+        //    common.showError("Please input a valid range (Ex: 500 - 1000).");
+        //    result = false;
+        //}
 
         return result;
     }    
@@ -740,6 +773,7 @@ function MatchMonitorDetail() {
         SetupDefaultMGroupFilter(data.MGroupList);
 
         if (data.DropdownList) {
+            SetupCC(data.DropdownList.CCGroupList);
             SetupDanger(data.DropdownList.DangerList);
             SetupTicketStatusFilter(data.DropdownList.TicketStatusList);
 
@@ -1711,6 +1745,7 @@ function MatchMonitorDetail() {
     function FilterDependOnSelected(indexFilterSelected) {        
         let scoresSelected = domElements.cbbMatchScore.val();
         let siteSelected = domElements.cbbSites.val();
+        let ccSelected = domElements.cbbCC.val();
         let isDangerNone = GetDangerSelectDataFilter(0).length > 0;
         let danger1Selected = GetDangerSelectDataFilter(1);
         let danger2Selected = GetDangerSelectDataFilter(2);
@@ -1765,6 +1800,10 @@ function MatchMonitorDetail() {
                     countDangerType += 1;
                 }
                 if (countDangerType == 0) {
+                    return false;
+                }
+
+                if (!ccSelected.find(x => x == item.CC)) {
                     return false;
                 }
 
@@ -1987,7 +2026,7 @@ function MatchMonitorDetail() {
     }
 
     function Initial() {
-        SetupMultiselect(domElements.cbbCC, "CC");
+        SetupMultiselectFilter(domElements.cbbCC, "CC");
         SetupMultiselectFilter(domElements.cbbDanger, "Danger");
         SetupMultiselectFilter(domElements.cbbCurrency, "Currency");
         SetupMultiselect(domElements.cbbHDPBetTeam, "HDP");
@@ -1997,13 +2036,16 @@ function MatchMonitorDetail() {
         SetupMultiselect(domElements.cbbReason, "Reason");
         SetupMultiselect(domElements.cbbTicketsStatus, "Status");
 
+        domElements.cbbBetType.select2();
+
         domElements.cbbMarket.val(domElements.liveIndicator);
         domElements.cbbBetType.val(`${domElements.betTypeID}_${domElements.betIDToString}`);
 
         domElements.cbbMarket.change(function () { MarketOnChange(); });
         domElements.cbbBetType.change(function () { BetTypeOnChange(); });
         domElements.cbbMatchScore.change(function () { FilterDependOnSelected(IndexFilterSelected.Score); });
-        domElements.cbbSites.change(function () { FilterDependOnSelected(IndexFilterSelected.Site); })
+        domElements.cbbSites.change(function () { FilterDependOnSelected(IndexFilterSelected.Site); });
+        domElements.cbbCC.change(function () { FilterDependOnSelected(IndexFilterSelected.CC); });
         domElements.cbbDanger.change(function () { FilterDependOnSelected(IndexFilterSelected.Danger); });
         domElements.cbbCurrency.change(function () { FilterDependOnSelected(IndexFilterSelected.Currency); });
         domElements.cbbReason.change(function () { FilterDependOnSelected(IndexFilterSelected.Reason); });
@@ -2030,12 +2072,20 @@ function MatchMonitorDetail() {
         SetupDataTable();
 
         domElements.inputAmountFrom.on('input', function () {
-            domElements.inputAmountFrom.val(domElements.inputAmountFrom.val().replace(regexInvalidAmount, ""));
+            let validAmount = domElements.inputAmountFrom.val().replace(regexInvalidAmount, "");
+            
+            domElements.inputAmountFrom.val(validAmount);
+
+            if (validAmount > 0) {
+                domElements.iconClearUsnAmt.removeClass("hide");
+            } else {
+                domElements.iconClearUsnAmt.addClass("hide");
+            }
         });
 
-        domElements.inputAmountTo.on('input', function () {
-            domElements.inputAmountTo.val(domElements.inputAmountTo.val().replace(regexInvalidAmount, ""));
-        });
+        //domElements.inputAmountTo.on('input', function () {
+        //    domElements.inputAmountTo.val(domElements.inputAmountTo.val().replace(regexInvalidAmount, ""));
+        //});
 
         domElements.btnRefresh.on('click', function () {
             isRefresh = true;
@@ -2049,10 +2099,14 @@ function MatchMonitorDetail() {
             cacheFilterDependOn.MGrList = [];
 
             domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
-            RestoreDefaulCbbSite();    
+            RestoreDefaulCbbSite();
 
             TypeOfTicketsOnChange(true, true);
             FetchMatchMonitorDetail();
+        });
+
+        domElements.iconClearUsnAmt.on('click', function () {
+            domElements.inputAmountFrom.val('');
         })
 
         domElements.btnGenerateDetail.on('click', function () {

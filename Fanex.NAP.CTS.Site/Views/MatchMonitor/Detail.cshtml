@@ -48,18 +48,16 @@
                         <div class="first-row-line"></div>
 
                         <div class="first-row-info">
-                            <label class="text info-text">Bet Type</label>
-                            <select class="control info-select" id="cbbBetType">
+                            <label class="info-text">Bet Type</label>
+                            <select class="control info-select" id="cbbBetType" name="state">
                                 @if (ViewBag.SportType == (int)Consts.MatchMonitorSportType.Soccer)
                                 {
                                     <option value="1_0" data-bettypeid="1">HDP</option>
                                     <option value="7_0" data-bettypeid="7">1st HDP</option>
                                     <option value="3_0" data-bettypeid="3">O/U</option>
                                     <option value="8_0" data-bettypeid="8">1st O/U</option>
-
                                     <option value="5_0" data-bettypeid="5">1X2</option>
                                     <option value="15_0" data-bettypeid="8">1st 1X2</option>
-
                                     <option value="2_0" data-bettypeid="2" data-is-support-suspicious="false">O/E</option>
                                     <option value="12_0" data-bettypeid="12" data-is-support-suspicious="false">1st O/E</option>
                                     <option value="413_0" data-bettypeid="413" data-is-support-suspicious="false">Correct Score</option>
@@ -175,11 +173,17 @@
                         </div>
 
                         <div class="group width-160 second-row-depend-1">
-                            <label class="text">Amount</label>
-                            <div class="ui-multiselect width-amount">
+                            <label class="text">Username's Amt (RM)</label>
+                            @*
+                                <div class="ui-multiselect width-amount">
                                 <input class="width-amount-item" placeholder="from" id="inputAmountFrom" maxlength="15" />
                                 <label>-</label>
                                 <input class="width-amount-item" placeholder="to" id="inputAmountTo" maxlength="15" />
+                            </div>
+                            *@
+                            <div class="ui-multiselect width-amount">
+                                <input class="width-amount-item" placeholder=">= please input amount" id="inputAmountFrom" maxlength="15" />
+                                <span class="icon-cross-brow clear-amount hide" id="iconClearUsnAmt"></span>
                             </div>
                         </div>
 

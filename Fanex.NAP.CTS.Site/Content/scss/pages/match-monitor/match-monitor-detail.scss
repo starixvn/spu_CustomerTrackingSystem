@@ -193,13 +193,15 @@
 
                         .width-amount-item {
                             color: #474747;
-                            width: 47%;
+                            width: 85%;
                             font-style: italic;
                             border: aliceblue;
                             border: 0px;
                             background-color: #f0f8ff00;
                             -moz-appearance: textfield;
-                            text-align: center;
+                            padding-left: 8px;
+                            font-size: 12px;
+                            /* text-align: center;*/
                         }
 
                         .text-box {
@@ -209,6 +211,16 @@
                             justify-content: center;
                             width: auto;
                             padding: 0 1rem;
+                        }
+
+                        .clear-amount {
+                            margin-right: 5px;
+                            cursor: pointer;
+                        }
+
+                        .clear-amount:hover {
+                            background-color: rgba(57, 110, 248, 0.2);
+                            border-radius: 5px;
                         }
                     }
 
@@ -326,7 +338,18 @@
                         }
 
                         .info-select {
-                            width: 149px;
+                            width: 149px !important;
+                            padding-left: 12px;
+                        }
+
+                        .select2-container {
+                            width: 151px !important;
+                        }
+
+                        .select2-container .select2-selection--single {
+                            height: 28px !important;
+                            border: 1px solid #d6d6d6;
+                            border-radius: 2px !important;
                         }
                     }
 
