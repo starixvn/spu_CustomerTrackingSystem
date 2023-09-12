@@ -53,15 +53,19 @@
                                 @if (ViewBag.SportType == (int)Consts.MatchMonitorSportType.Soccer)
                                 {
                                     <option value="1_0" data-bettypeid="1">HDP</option>
-                                    <option value="3_0" data-bettypeid="3">O/U</option>
                                     <option value="7_0" data-bettypeid="7">1st HDP</option>
+                                    <option value="3_0" data-bettypeid="3">O/U</option>
                                     <option value="8_0" data-bettypeid="8">1st O/U</option>
-                                    @*<option value="2_0" data-bettypeid="2" data-is-support-suspicious="false">O/E</option>
-                    <option value="12_0" data-bettypeid="12" data-is-support-suspicious="false">1st O/E</option>
-                    <option value="413_0" data-bettypeid="413" data-is-support-suspicious="false">Correct Score</option>
-                    <option value="414_0" data-bettypeid="414" data-is-support-suspicious="false">1st Correct Score</option>
-                    <option value="6_0" data-bettypeid="6" data-is-support-suspicious="false">Total Goal</option>
-                    <option value="126_0" data-bettypeid="126" data-is-support-suspicious="false">1st Total Goal</option>*@
+
+                                    <option value="5_0" data-bettypeid="5">1X2</option>
+                                    <option value="15_0" data-bettypeid="8">1st 1X2</option>
+
+                                    <option value="2_0" data-bettypeid="2" data-is-support-suspicious="false">O/E</option>
+                                    <option value="12_0" data-bettypeid="12" data-is-support-suspicious="false">1st O/E</option>
+                                    <option value="413_0" data-bettypeid="413" data-is-support-suspicious="false">Correct Score</option>
+                                    <option value="414_0" data-bettypeid="414" data-is-support-suspicious="false">1st Correct Score</option>
+                                    <option value="6_0" data-bettypeid="6" data-is-support-suspicious="false">Total Goal</option>
+                                    <option value="126_0" data-bettypeid="126" data-is-support-suspicious="false">1st Total Goal</option>
                                 }
                                 else if (ViewBag.SportType == (int)Consts.MatchMonitorSportType.Basketball)
                                 {
@@ -125,6 +129,12 @@
                                 <option value="A">All</option>
                                 <option value="C">Credit</option>
                                 <option value="L">Licensee</option>
+                            </select>
+                        </div>
+
+                        <div class="group width-160 second-row-depend-1">
+                            <label class="text">CC</label>
+                            <select class="control width-select" id="cbbCC" multiple="multiple">
                             </select>
                         </div>
 

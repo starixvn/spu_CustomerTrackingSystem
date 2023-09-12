@@ -52,6 +52,7 @@ function MatchMonitorDetail() {
         cbbTypeOfTickets: $('#cbbTypeOfTickets'),
         cbbMatchScore: $('#cbbMatchScore'),
         cbbSites: $('#cbbSites'),
+        cbbCC: $('#cbbCC'),
         cbbDanger: $('#cbbDanger'),
         cbbCurrency: $('#cbbCurrency'),
         cbbReason: $('#cbbReason'),
@@ -1986,6 +1987,7 @@ function MatchMonitorDetail() {
     }
 
     function Initial() {
+        SetupMultiselect(domElements.cbbCC, "CC");
         SetupMultiselectFilter(domElements.cbbDanger, "Danger");
         SetupMultiselectFilter(domElements.cbbCurrency, "Currency");
         SetupMultiselect(domElements.cbbHDPBetTeam, "HDP");
