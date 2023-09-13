@@ -53,7 +53,7 @@
             ordering: false,
             searching: false,
             lengthMenu: [50, 100, 200, 500],
-            pageLength: 100,
+            pageLength: 500,
             scrollX: false,
             scrollCollapse: false,
             columnDefs: [
