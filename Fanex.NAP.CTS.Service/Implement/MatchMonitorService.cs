@@ -211,16 +211,15 @@
             return JsonConvert.SerializeObject(jsonDanger);
         }
        
-        public MMTicketDetailInfoModel GetMMTicketDetailInfo(MMDetailInfoViewModel para, IEnumerable<string> transIds)
+        public MMTicketDetailInfoModel GetMMTicketDetailInfo(MMDetailInfoViewModel para, IEnumerable<SuspiciousTransInfoModel> suspiciousTranInfos)
         {
             var criteria = new MMTicketDetailInfoCriteria()
             {
                 MatchID = para.MatchID,
                 BetType = para.BetTypeID,
                 BetID = para.BetID,
-                IsLive = para.LiveIndicator ? 1 : 0,
-                //ListTransId = string.Join(",", transIds)
-                ListSuspiciousTransId = JsonConvert.SerializeObject(transIds)
+                IsLive = para.LiveIndicator ? 1 : 0,               
+                ListSuspiciousTransId = JsonConvert.SerializeObject(suspiciousTranInfos)
             };
             
             var result = repository.Fetch<MMDetailFilterTicketInfoModel>(criteria);

@@ -36,7 +36,7 @@
             }
 
             this.MaxSequenceId = mMTicket.MaxSequenceId;
-           
+
             this.SubscriberTypeList = new List<string>();
             this.CurrencyList = new List<KeyValuePair<int, string>>();
             this.HDPList = new List<decimal>();
@@ -189,8 +189,8 @@
                   .ToList();
 
             this.HDPList = DropdownFilterList.Select(x => x.BallHeadHDP).Distinct().OrderBy(x => x).ToList();
-
-            this.BetTeamList = DropdownFilterList.Select(x => x.BallHeadBetTeam).Distinct().OrderBy(x => x).ToList();
+            
+            this.BetTeamList = OrderBetTeams(DropdownFilterList.Select(x => x.BallHeadBetTeam).Distinct());
 
             this.ScoreList = DropdownFilterList.Select(x => x.Score).Distinct(x => x).OrderBy(x => x).ToList();
 
@@ -211,6 +211,8 @@
                 subscriberTypeList.Insert(0, "A");
 
             DropdownList.SubscriberTypeList = subscriberTypeList;
+
+            DropdownList.CCList = DropdownFilterList.Select(x => x.CC).Distinct();
 
             this.DropdownList.TicketStatusList = DropdownFilterList.Select(x => x.TicketStatus).Distinct()
                         .Select(x => new TicketStatusViewModel
@@ -254,5 +256,39 @@
             #endregion
                        
         }
+
+        protected List<string> OrderBetTeams(IEnumerable<string> betTeamList)
+        {
+            var resultList = new List<string>();
+            var betTeamOrderList = new List<BetTeamOrderViewModel>();
+            var betTeamOrderOtherList = new List<BetTeamOrderViewModel>();
+
+            foreach (var betTeam in betTeamList)
+            {
+                var arr = betTeam.Split(':');
+
+                if (arr.Length > 1)
+                {
+                    betTeamOrderList.Add(new BetTeamOrderViewModel
+                    {
+                        ChoiceA = arr[0],
+                        ChoiceB = arr[1]
+                    });
+                }
+                else
+                {
+                    betTeamOrderOtherList.Add(new BetTeamOrderViewModel
+                    {
+                        Other = betTeam
+                    });
+                }
+            }
+
+            resultList.AddRange(betTeamOrderList.OrderBy(x => x.ChoiceA).ThenBy(x => x.ChoiceB).Select(x => x.ChoiceA + ":" + x.ChoiceB));
+            resultList.AddRange(betTeamOrderOtherList.OrderBy(x => x.Other).Select(x => x.Other));
+
+            return resultList;
+        }
+
     }
 }

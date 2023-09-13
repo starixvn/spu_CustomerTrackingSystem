@@ -290,6 +290,7 @@
     <Compile Include="Association\CoupleIPFraudDetailModel.cs" />
     <Compile Include="Association\FraudDetailModel.cs" />
     <Compile Include="Association\StakeIpPatternDetailModel.cs" />
+    <Compile Include="Common\CCGroupModel.cs" />
     <Compile Include="Common\CommonCustomerClassModel.cs" />
     <Compile Include="Common\MainMatchModel.cs" />
     <Compile Include="Common\SiteModel.cs" />
@@ -381,6 +382,7 @@
     <Compile Include="MatchMonitor\MMDetailMergeGroupModel.cs" />
     <Compile Include="MatchMonitor\MMTicketDetailInfoModel.cs" />
     <Compile Include="MatchMonitor\RobotStatusModel.cs" />
+    <Compile Include="MatchMonitor\SuspiciousTransInfoModel.cs" />
     <Compile Include="MatchMonitor\TransGroupModel.cs" />
     <Compile Include="MatchMonitor\CustInfoModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailModel.cs" />

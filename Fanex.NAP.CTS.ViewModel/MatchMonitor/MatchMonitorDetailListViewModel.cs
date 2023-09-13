@@ -2,6 +2,7 @@
 {
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn;
     using Newtonsoft.Json;
     using System;
@@ -39,15 +40,7 @@
             HomeMatchItemList = HomeMatchItemList.Where(x => x.FilterItem(filter, reasonGroupIDDic, site)).ToList();
             AwayMatchItemList = AwayMatchItemList.Where(x => x.FilterItem(filter, reasonGroupIDDic, site)).ToList();
         }
-
-        //public void FilterItemMMDetailByReasonAGroup(MMDetailFilterViewModel filter)
-        //{
-        //    var reasonGroupIDDic = filter.AGroupList?.Select(x => x.Contains("-") ? "0" : x);
-
-        //    HomeMatchItemList = HomeMatchItemList.Where(x => x.FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic)).ToList();
-        //    AwayMatchItemList = AwayMatchItemList.Where(x => x.FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic)).ToList();
-        //}
-
+   
         public void FilterItemMMDetailBySite(string site)
         {
             HomeMatchItemList = HomeMatchItemList.Where(x => x.FilterBySite(site)).ToList();
@@ -98,6 +91,38 @@
         //public List<MatchMonitorDetailItemViewModel> ItemList { get; set; }
 
         public new MatchMonitorDetailListViewModel Clone() => new MatchMonitorDetailListViewModel(this);
+
+        public IEnumerable<SuspiciousTransInfoModel> GetSuspiciousTransInfo()
+        {
+            var suspiciousTransInfos = new List<SuspiciousTransInfoModel>();
+
+            suspiciousTransInfos.AddRange(GetSuspiciousTransInfoByTeam(this.HomeMatchItemList));
+            suspiciousTransInfos.AddRange(GetSuspiciousTransInfoByTeam(this.AwayMatchItemList));
+
+            return suspiciousTransInfos;
+        }
+
+        private IEnumerable<SuspiciousTransInfoModel> GetSuspiciousTransInfoByTeam(List<MatchMonitorDetailItemViewModel> ticketByTeam)
+        {
+            var suspiciousTransInfos = new List<SuspiciousTransInfoModel>();
+
+            foreach (var ticket in ticketByTeam)
+            {
+                var arrReasons = ticket.ReasonList.Split(',');
+
+                foreach (var reason in arrReasons)
+                {
+                    suspiciousTransInfos.Add(new SuspiciousTransInfoModel
+                    {
+                        TransId = ticket.TransId,
+                        Reason = reason,
+                        GroupId = ticket.ADetectGroupID
+                    });
+                }
+            }
+
+            return suspiciousTransInfos;
+        }
 
         public void BindReasons(IEnumerable<string> rawReasons)
         {
@@ -172,7 +197,7 @@
 
             this.HDPList = DropdownFilterList.Select(x => x.BallHeadHDP).Distinct().OrderBy(x => x).ToList();
 
-            this.BetTeamList = DropdownFilterList.Select(x => x.BallHeadBetTeam).Distinct().OrderBy(x => x).ToList();
+            this.BetTeamList = OrderBetTeams(DropdownFilterList.Select(x => x.BallHeadBetTeam).Distinct());
 
             this.ScoreList = DropdownFilterList.Select(x => x.Score).Distinct(x => x).OrderBy(x => x).ToList();
 
@@ -192,7 +217,7 @@
 
             DropdownList.SubscriberTypeList = subscriberTypeList;
 
-            DropdownList.CCGroupList = CCGroupGenerate_DataTest();
+            DropdownList.CCList = DropdownFilterList.Select(x => x.CC).Distinct();
 
             DropdownList.TicketStatusList = DropdownFilterList.Select(x => x.TicketStatus).Distinct()
                             .Select(x => new TicketStatusViewModel
@@ -237,31 +262,5 @@
             
         }
         
-        public List<CCGroupViewModel> CCGroupGenerate_DataTest()
-        {
-            var listCCGroup = new List<CCGroupViewModel>();
-            listCCGroup.Add(new CCGroupViewModel
-            {
-                 CCGroupName = "PA",
-                 CCList = new List<int>() { 300, 301, 302, 303, 304, 3000, 3001, 3002, 3003, 3004 }
-            });
-            listCCGroup.Add(new CCGroupViewModel
-            {
-                CCGroupName = "Associated PA",
-                CCList = new List<int>() { 2000, 2001, 2002, 2003, 2004, 2100, 2101, 2102, 2103, 2104, 2105, 2200, 2201, 2202, 2203, 2204, 2205, 2303, 2304, 2305, 2403, 2404, 2405, 2500, 2503, 2504, 2505 }
-            });
-            listCCGroup.Add(new CCGroupViewModel
-            {
-                CCGroupName = "Normal",
-                CCList = new List<int>() { 200, 201, 202, 203, 204, 205 }
-            });
-            listCCGroup.Add(new CCGroupViewModel
-            {
-                CCGroupName = "Others",
-                CCList = new List<int>() { 400, 401, 901, 902, 951, 952, 953, 4000, 0 }
-            });
-
-            return listCCGroup;
-        }
     }
 }

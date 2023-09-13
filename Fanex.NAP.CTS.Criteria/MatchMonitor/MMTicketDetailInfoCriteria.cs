@@ -15,7 +15,7 @@
         [SpParam(SqlParamName = "BetID")]
         public long BetID { get; set; }
 
-        [SpParam(SqlParamName = "ListSuspiciousTransId ")]
+        [SpParam(SqlParamName = "ListSuspiciousTransId")]
         public string ListSuspiciousTransId { get; set; }
 
         [SpParam(SqlParamName = "IsLive")]

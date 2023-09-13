@@ -18,6 +18,6 @@
 
         IEnumerable<MainTicketDetailModel> GetMainTicketDetails(string transIds, int? transSize, int? matchSize);
 
-        IEnumerable<CommonCustomerClassModel> GetCommonCustomerClass();
+        IEnumerable<CCGroupModel> GetGroupCustomerClass();
     }
 }

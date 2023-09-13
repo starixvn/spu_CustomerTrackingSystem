@@ -311,6 +311,20 @@
         </div>
 
         <div class="hide">
+            <div>
+                <label class="text">CC</label>
+                <select class="control" id="cbbCCHidden" multiple="multiple">
+                    @foreach (var group in ViewBag.GroupCCList)
+                    {
+                        <optgroup label="@group.CCGroupName">
+                            @foreach (var cc in group.CCList)
+                            {
+                                <option selected value=@cc>@cc</option>
+                            }
+                        </optgroup>
+                    }
+                </select>
+            </div>
             <input id="hdEventDataToString" type="hidden" value="@ViewBag.EventDateToString" />
             <input id="hdMatchID" type="hidden" value="@ViewBag.MatchID" />
             <input id="hdMatchName" type="hidden" value="@ViewBag.MatchName" />

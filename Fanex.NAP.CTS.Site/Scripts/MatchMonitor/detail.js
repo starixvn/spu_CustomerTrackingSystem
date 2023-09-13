@@ -54,6 +54,7 @@ function MatchMonitorDetail() {
         cbbMatchScore: $('#cbbMatchScore'),
         cbbSites: $('#cbbSites'),
         cbbCC: $('#cbbCC'),
+        cbbCCHidden: $('#cbbCCHidden'),
         cbbDanger: $('#cbbDanger'),
         cbbCurrency: $('#cbbCurrency'),
         cbbReason: $('#cbbReason'),
@@ -430,28 +431,49 @@ function MatchMonitorDetail() {
     function SetupCC(data) {
         if (data) {
             let ccSelector = domElements.cbbCC.empty();
+            let ccHiddenVal = domElements.cbbCCHidden.val();
 
-            data.map(function (x) {
-                let optgroup = `<optgroup label="${x.CCGroupName}">`;
+            let ccByGrOther = ccHiddenVal.filter(item => data.includes(item));
 
-                if (x.CCList.length > 0) {
-                    x.CCList.map(function (y) {
-                        if (y == 0) {
-                            optgroup += `<option selected value=${y}>-</option>`;
-                        } else {
-                            optgroup += `<option selected value=${y}>${y}</option>`;
-                        }                        
-                    })
+            domElements.cbbCCHidden.find('optgroup').each(function () {
+                let optGroup = $(this);
+                let groupName = optGroup.attr("label");                
+                let ccItems = [];
+                optGroup.find('option:selected').each(function (idx, opItem) {
+                    ccItems.push(parseInt($(opItem).val()));
+                });
+
+                let ccMatched = ccItems.filter(item => data.includes(item));
+
+                if (ccMatched.length > 0) {
+                    ccSelector.append(BuildCCGroup(ccMatched, groupName));
                 }
-                optgroup += "</optgroup>";
-
-                ccSelector.append(optgroup);
             });
+
+            if (ccByGrOther.length > 0) {
+                ccSelector.append(BuildCCGroup(ccByGrOther, "Others"));
+            }
 
             domElements.cbbCC.parent().find('button').removeClass('border-error');
 
             domElements.cbbCC.multiselect('refresh');
         }
+    }
+
+    function BuildCCGroup(ccItems, groupName) {
+        let optgroup = `<optgroup label="${groupName}">`;
+
+        ccItems.map(function (item) {
+            if (item == 0) {
+                optgroup += `<option selected value=${item}>-</option>`;
+            } else {
+                optgroup += `<option selected value=${item}>${item}</option>`;
+            }
+        });
+
+        optgroup += "</optgroup>";
+
+        return optgroup;
     }
 
     function SetupSubscriberTypeFilter(data) {
@@ -773,7 +795,7 @@ function MatchMonitorDetail() {
         SetupDefaultMGroupFilter(data.MGroupList);
 
         if (data.DropdownList) {
-            SetupCC(data.DropdownList.CCGroupList);
+            SetupCC(data.DropdownList.CCList);
             SetupDanger(data.DropdownList.DangerList);
             SetupTicketStatusFilter(data.DropdownList.TicketStatusList);
 
@@ -1742,6 +1764,36 @@ function MatchMonitorDetail() {
         RemoveFilterLoading();
     }   
 
+    function ScoreOnChange() {
+        $('option', domElements.cbbSites).each(function (_, siteItem) {
+            if ($(siteItem).val() == 'A') {
+                domElements.cbbSites.val('A');
+            }
+        });      
+
+        $('option', domElements.cbbCC).prop("selected", true);
+        domElements.cbbCC.multiselect('refresh');
+
+        $('option', domElements.cbbDanger).prop("selected", true);
+        domElements.cbbDanger.multiselect('refresh');
+
+        $("option", domElements.cbbHDPBetTeam).prop("selected", true);
+        domElements.cbbHDPBetTeam.multiselect('refresh');
+
+        domElements.inputAmountFrom.val('');
+
+        $("option", domElements.cbbTicketsStatus).each(function (_, itemStatus) {
+            if ($(itemStatus).val() == 101) { // Reject
+                $(itemStatus).prop("selected", false);
+            } else {
+                $(itemStatus).prop("selected", true);
+            }
+        });
+        domElements.cbbTicketsStatus.multiselect('refresh');
+
+        FilterDependOnSelected(IndexFilterSelected.Score);
+    }
+
     function FilterDependOnSelected(indexFilterSelected) {        
         let scoresSelected = domElements.cbbMatchScore.val();
         let siteSelected = domElements.cbbSites.val();
@@ -2043,7 +2095,7 @@ function MatchMonitorDetail() {
 
         domElements.cbbMarket.change(function () { MarketOnChange(); });
         domElements.cbbBetType.change(function () { BetTypeOnChange(); });
-        domElements.cbbMatchScore.change(function () { FilterDependOnSelected(IndexFilterSelected.Score); });
+        domElements.cbbMatchScore.change(function () { ScoreOnChange(); });
         domElements.cbbSites.change(function () { FilterDependOnSelected(IndexFilterSelected.Site); });
         domElements.cbbCC.change(function () { FilterDependOnSelected(IndexFilterSelected.CC); });
         domElements.cbbDanger.change(function () { FilterDependOnSelected(IndexFilterSelected.Danger); });
@@ -2098,7 +2150,7 @@ function MatchMonitorDetail() {
             cacheMGroup.isActive = false;
             cacheFilterDependOn.MGrList = [];
 
-            domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
+            //domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
             RestoreDefaulCbbSite();
 
             TypeOfTicketsOnChange(true, true);
@@ -2107,6 +2159,7 @@ function MatchMonitorDetail() {
 
         domElements.iconClearUsnAmt.on('click', function () {
             domElements.inputAmountFrom.val('');
+            domElements.iconClearUsnAmt.addClass("hide");
         })
 
         domElements.btnGenerateDetail.on('click', function () {

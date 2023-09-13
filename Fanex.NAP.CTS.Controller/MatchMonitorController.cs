@@ -18,7 +18,6 @@
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.DetectGroup;
-    using Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
@@ -236,7 +235,7 @@
                     matchScore = _matchMonitorService.GetMatchScore(para.MatchID, para.BetTypeID, para.LiveIndicator, para.BetID, para.Reason) ?? new List<MatchScoreModel>();
                 }
 
-                var betTypeList = this.GetFilterBetTypeBySportID(para.SportType.ToString());
+                ViewBag.GroupCCList = _commonService.GetGroupCustomerClass();
             }
             catch (Exception ex)
             {
@@ -263,7 +262,7 @@
             ViewBag.IsDisableScoreFilter = para?.SportType != null && para.SportType == (int)MatchMonitorSportType.Basketball;
             ViewBag.SportType = para?.SportType ?? 0;
             ViewBag.SportName = para?.SportName ?? string.Empty;
-            ViewBag.KOTime = para?.KOTime;
+            ViewBag.KOTime = para?.KOTime;            
             ViewBag.IsSupportShowAllTickets = para?.IsSupportShowAllTickets;
             ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                                                                         NapSettings.Settings.SiteId,
@@ -383,8 +382,10 @@
                             if (mmticketDetailInfo == null)
                             {
                                 var fraudTicket = GetFraudMMDetailFromCache(para);
-                                var listTransId = fraudTicket.HomeMatchItemList.Select(x => x.TransId.ToString()).Union(fraudTicket.AwayMatchItemList.Select(x => x.TransId.ToString()));                               
-                                mmticketDetailInfo = _matchMonitorService.GetMMTicketDetailInfo(para, listTransId);
+
+                                var suspiciousTransInfos = fraudTicket.GetSuspiciousTransInfo();
+
+                                mmticketDetailInfo = _matchMonitorService.GetMMTicketDetailInfo(para, suspiciousTransInfos);
 
                                 if (isCache)
                                     await _memoryCacheService.PushValueAsync(key, mmticketDetailInfo);
@@ -787,8 +788,12 @@
                 };
 
                 mdResult.RecordsTotal = mdItemList?.Count() ?? 0;
-                mdResult.BindReasons(mdItemList.Select(x => x.ReasonList).Distinct());                
+                mdResult.BindReasons(mdItemList.Select(x => x.ReasonList).Distinct());
+                
+                var suspiciousTransInfos = mdResult.GetSuspiciousTransInfo();
+                var mmticketDetailInfo = _matchMonitorService.GetMMTicketDetailInfo(para, suspiciousTransInfos);
 
+                mdResult.BindDropdownFilterListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);                
                 mdResult.BindDropdownFilterList(mdItemList);
             }
 
