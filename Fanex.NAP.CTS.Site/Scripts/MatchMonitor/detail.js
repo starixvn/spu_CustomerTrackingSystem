@@ -33,6 +33,7 @@ function MatchMonitorDetail() {
         divFilterLoading: $('#divFilterLoading'),
         breadcrumbButton: $('#breadcrumbButton'),
         breadcrumbTotalTickets: $(".breadcrumb-totaltickets"),
+        hdbreadcrumTotalTickets: $("#hdbreadcrumTotalTickets"),
         groupTable: $('#groupTable'),
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
         eventDataToString: $("#hdEventDataToString").val(),
@@ -821,7 +822,12 @@ function MatchMonitorDetail() {
         domElements.cbbMGroup.multiselect().empty();
 
         for (var i = 0; i < items.length; i++) {
-            domElements.cbbMGroup.append(`<option selected value='${items[i].MDetectGroupID}'>${items[i].MDetectGroup}</option>`);                    
+            if (items[i].MDetectGroupID == 0) {
+                domElements.cbbMGroup.append(`<option value='${items[i].MDetectGroupID}'>${items[i].MDetectGroup}</option>`);       
+            }
+            else {
+                domElements.cbbMGroup.append(`<option selected value='${items[i].MDetectGroupID}'>${items[i].MDetectGroup}</option>`);
+            }        
         }
 
         domElements.cbbMGroup.multiselect("refresh");
@@ -886,7 +892,7 @@ function MatchMonitorDetail() {
     function FetchMatchMonitorDetail(typeOfTickets = MatchMonitorDetailViewType.TicketFraud, lastScannedSequenceID = maxSequenceId) {
         recordsFilteredGlobal = 0;
 
-        RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsTotalGlobal);
+        RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsFilteredGlobal);
 
         SetupDataTable();
 
@@ -968,10 +974,14 @@ function MatchMonitorDetail() {
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(data),
-                success: function (response) {
-                    if (response?.recordsTotal >= 0) {
+                success: function (response) {                    
+                    if (response?.recordsTotal >= 0) {                        
                         recordsTotalGlobal = response?.recordsTotal;
-                        RefreshBreadcrumbTotalTickets(0, recordsTotalGlobal);
+                        if ($('option', domElements.cbbMGroup).length > 1) {
+                            domElements.breadcrumbTotalTickets.html(`Total Tickets: -/-`);
+                        } else {
+                            RefreshBreadcrumbTotalTickets(0, recordsTotalGlobal);
+                        }                        
                     }
                 },
                 error: function (xhr, textStatus, error) {
@@ -1016,6 +1026,12 @@ function MatchMonitorDetail() {
 
                         if (response?.data?.LastSequenceID == null) {
                             RefreshLengthPage(-1, false);
+
+                            let hdTotalTicketTxt = domElements.hdbreadcrumTotalTickets.text();
+                            if (hdTotalTicketTxt != "0") {
+                                RefreshBreadcrumbTotalTickets(hdTotalTicketTxt, hdTotalTicketTxt);
+                                domElements.hdbreadcrumTotalTickets.text("0");
+                            }
                         }
                     }
                 },
@@ -1111,14 +1127,10 @@ function MatchMonitorDetail() {
                 recordsTotalGlobal = recordsFilteredGlobal = response.recordsFiltered;
             }
             if (typeOfTickets == MatchMonitorDetailViewType.TicketAll) {
-                recordsFilteredGlobal += response?.recordsFiltered ?? 0;
-                // recordsTotalGlobal = recordsFilteredGlobal;
-                //if (recordsFilteredGlobal > recordsTotalGlobal) {
-                //    recordsTotalGlobal = recordsFilteredGlobal;
-                //}
+                recordsFilteredGlobal += response?.recordsFiltered ?? 0;                
             }
 
-            if ($('option', domElements.cbbMGroup).length > 1) {
+            if ($('option', domElements.cbbMGroup).length > 1) {                             
                 FilterUIGridByMGr(data?.HomeMatchItemList, data?.AwayMatchItemList);
             }
             else {
@@ -1281,7 +1293,7 @@ function MatchMonitorDetail() {
 
                     let totalItem = cacheMGroup.itemMMHomeTeam.length + cacheMGroup.itemMMAwayTeam.length;
 
-                    RefreshBreadcrumbTotalTickets(totalItem, recordsTotalGlobal);
+                    RefreshBreadcrumbTotalTickets(totalItem, totalItem);
                 }
             },
             complete: function (response) {
@@ -1460,17 +1472,16 @@ function MatchMonitorDetail() {
                 }
             }
         });
-
-        //domElements.tblMMHomeTeam.DataTable().clear().rows.add(itemMMHomeTeamFilter).draw(false);
-        //domElements.tblMMAwayTeam.DataTable().clear().rows.add(itemMMAwayTeamFilter).draw(false);
+      
         let totalOldItem = domElements.tblMMHomeTeam.DataTable().data().length + domElements.tblMMAwayTeam.DataTable().data().length;
 
         domElements.tblMMHomeTeam.DataTable().rows.add(itemMMHomeTeamFilter).draw(false);
         domElements.tblMMAwayTeam.DataTable().rows.add(itemMMAwayTeamFilter).draw(false);
 
         totalNewItem = totalOldItem + itemMMHomeTeamFilter.length + itemMMAwayTeamFilter.length;
-
-        RefreshBreadcrumbTotalTickets(totalNewItem, recordsTotalGlobal);
+        
+        //RefreshBreadcrumbTotalTickets(totalNewItem, totalNewItem);
+        domElements.hdbreadcrumTotalTickets.text(totalNewItem);
     }
 
     function FilterUIGrid() {
@@ -1641,6 +1652,8 @@ function MatchMonitorDetail() {
 
         currentType = Number(domElements.cbbTypeOfTickets.val());
 
+        cacheFilterDependOn.MGrList = [];
+
         isRefresh = true;
 
         FetchFilterMatchMonitorDetail(true);
@@ -1664,6 +1677,8 @@ function MatchMonitorDetail() {
         domElements.spanSportBetTypeInfo.text(`${domElements.sportName} - ${txtBetType} -`);
 
         currentType = Number(domElements.cbbTypeOfTickets.val());
+
+        cacheFilterDependOn.MGrList = [];
 
         isRefresh = true;
 

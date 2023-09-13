@@ -555,20 +555,20 @@
 
                             if (tickets != null)
                             {
-                                mdResult = tickets.Clone();
-                                
-                                var subscriberTypeHomeIsNull = mdResult.HomeMatchItemList.Where(x => x.SubscriberType == null).Select(x => x);
-                                var subscriberTypeAwayIsNull = mdResult.AwayMatchItemList.Where(x => x.SubscriberType == null).Select(x => x);
+                                var ctsCustIDHomeIsZero = tickets.HomeMatchItemList.Where(x => x.CTSCustID == 0).Select(x => x);
+                                var ctsCustIDAwayIsZero = tickets.AwayMatchItemList.Where(x => x.CTSCustID == 0).Select(x => x);
 
-                                if (subscriberTypeHomeIsNull != null && subscriberTypeHomeIsNull.Any())
+                                if (ctsCustIDHomeIsZero != null && ctsCustIDHomeIsZero.Any())
                                 {
-                                    LogService.Error($"Get Match Monitor Detail with subscriberTypeHomeIsNull: { JsonConvert.SerializeObject(subscriberTypeHomeIsNull)}");
+                                    LogService.Error($"Get Match Monitor Detail with CTSCustIDHome=0: { JsonConvert.SerializeObject(ctsCustIDHomeIsZero)}");
                                 }
 
-                                if (subscriberTypeAwayIsNull != null && subscriberTypeAwayIsNull.Any())
+                                if (ctsCustIDAwayIsZero != null && ctsCustIDAwayIsZero.Any())
                                 {
-                                    LogService.Error($"Get Match Monitor Detail with subscriberTypeAwayIsNull: { JsonConvert.SerializeObject(subscriberTypeAwayIsNull)}");
+                                    LogService.Error($"Get Match Monitor Detail with CTSCustIDAway=0: { JsonConvert.SerializeObject(ctsCustIDAwayIsZero)}");
                                 }
+
+                                mdResult = tickets.Clone();                                                               
 
                                 mdResult.FilterItemMMDetail(filter, para.Sites);
                             }
