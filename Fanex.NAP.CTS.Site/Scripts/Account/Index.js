@@ -4,6 +4,7 @@
     var ctsCustId = $("#hdCTSCustId").val();
     var subscriberId = $("#hdSubscriberId").val();
     var subscriber = $("#hdSubscriber").val();
+    var subscriberSourceID = $("#hdSubscriberSourceID").val();
     var isHostPermission = $("#hdIsHostPermission").attr("IsHostPermission");
     var isBettingStatisticPermission = $("#hdIsBettingStatisticPermission").attr("IsBettingStatisticPermission");
     var isViewIPTransactionPermission = $("#hdIsViewIPTransactionPermission").attr("IsViewIPTransactionPermission");
@@ -150,7 +151,7 @@
             },
             complete: function () {
                 var transHistory = new transaction_history();
-                transHistory.Initial(ctsCustId, subscriberId, isViewIP);
+                transHistory.Initial(ctsCustId, subscriberId, subscriberSourceID, isViewIP);
             },
             error: function (errMsg) {
                 console.log(errMsg);

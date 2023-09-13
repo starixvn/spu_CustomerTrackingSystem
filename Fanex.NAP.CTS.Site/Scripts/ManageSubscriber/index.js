@@ -70,7 +70,7 @@
             scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], className: "text-center" },
                 { targets: [0], width: "2%" },
                 { targets: [1], width: "9%" },
                 { targets: [2], width: "9%" },
@@ -81,7 +81,8 @@
                 { targets: [7], width: "9%"},
                 { targets: [8], width: "9%" },
                 { targets: [9], width: "9%" },
-                { targets: [10], width: "10%" }
+                { targets: [10], width: "9%" },
+                { targets: [11], width: "10%" },
             ],
             columns: [
                 {
@@ -91,6 +92,7 @@
                 { data: obj => obj.SubscriberNameValidation },
                 { data: obj => obj.SubscriberPrefixValidation },
                 { data: obj => obj.SubscriberGroupName },
+                { data: obj => obj.SubscriberSourceName },
                 { data: obj => obj.RoleMapping },
                 { data: obj => obj.SiteID },
                 {
@@ -311,6 +313,7 @@
             SubscriberName: rowInfo.SubscriberNameValidation,
             IsTest: rowInfo.IsTest === 1 ? true : false,
             SubscriberType: rowInfo.SubscriberGroupName,
+            SubscriberSourceID: rowInfo.SubscriberSourceID,
             IBCUserNamePrefix: rowInfo.SubscriberPrefixValidation,
             SiteListJson: null,
             Message: null
@@ -319,6 +322,7 @@
         $('#txtSubscriberId').val(rowInfo.SubscriberID);
         $('#txtSubscriberName').val(rowInfo.SubscriberNameValidation);
         $('#txtSubscriberType').val(rowInfo.SubscriberGroupName === "Credit" ? 0 : 1);
+        $('#txtSubscriberSource').val(rowInfo.SubscriberSourceID);
         $('#txtIBCUserNamePrefix').val(rowInfo.SubscriberPrefixValidation);
         $('#overwriteCheckbox').prop('checked', rowInfo.IsTest === 1 ? true : false);  
 
@@ -398,7 +402,8 @@
 
     function RefreshInputData() {
         $('#txtSubscriberName').val("");
-        $('#txtSubscriberType').val("");
+        $('#txtSubscriberType').val(1);
+        $('#txtSubscriberSource').val(0);
         $('#txtIBCUserNamePrefix').val(""); 
         $('#txtSubscriberId').val(0);
         $('#overwriteCheckbox').prop('checked', false);
@@ -512,6 +517,7 @@
             SubscriberName: $('#txtSubscriberName').val().trim(),
             IsTest: $('#overwriteCheckbox').prop('checked') ? "1" : "0",
             SubscriberType: $('#txtSubscriberType').val(),
+            SubscriberSourceID: $('#txtSubscriberSource').val(),
             IBCUserNamePrefix: $('#txtIBCUserNamePrefix').val().trim(),
             SiteListJson: JSON.stringify(rawSiteList)                     
         };

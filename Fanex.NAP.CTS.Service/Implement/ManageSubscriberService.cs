@@ -50,6 +50,7 @@
                 SubscriberID = subscriberInsertModel.SubscriberID,
                 SubscriberPrefix = subscriberInsertModel.IBCUserNamePrefix,
                 SubscriberType = subscriberInsertModel.SubscriberType,
+                SubscriberSourceID = subscriberInsertModel.SubscriberSourceID,
                 IsTest = subscriberInsertModel.IsTest,
                 UserID=userId,
                 SiteList = subscriberInsertModel.SiteListJson

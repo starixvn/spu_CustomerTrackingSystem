@@ -54,6 +54,8 @@
 
         public int SubscriberId { get; set; }
 
+        public int SubscriberSourceID { get; set; }
+
         public string SiteName { get; set; }
 
         public bool IsHostPermission { get; set; }
@@ -104,6 +106,7 @@
                 this.Subscriber = string.IsNullOrEmpty(customerInfoByCTSCustIdModel.SubscriberName) ? "N/A" : customerInfoByCTSCustIdModel.SubscriberName;
                 this.SiteName = string.IsNullOrEmpty(customerInfoByCTSCustIdModel.SiteName) ? "N/A" : customerInfoByCTSCustIdModel.SiteName;
                 this.SubscriberId = customerInfoByCTSCustIdModel.SubscriberID;
+                this.SubscriberSourceID = customerInfoByCTSCustIdModel.SubscriberSourceID;
                 this.CustStatusID = customerInfoByCTSCustIdModel.CustStatusID;
                 this.StatusName = string.IsNullOrEmpty(customerInfoByCTSCustIdModel.CustStatusName) ? "N/A" : customerInfoByCTSCustIdModel.CustStatusName;
                 this.IsLicensee = customerInfoByCTSCustIdModel.IsLicensee;

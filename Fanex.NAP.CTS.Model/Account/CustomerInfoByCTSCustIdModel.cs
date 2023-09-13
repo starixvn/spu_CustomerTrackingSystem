@@ -10,6 +10,8 @@
 
         public string SubscriberName { get; set; }
 
+        public int SubscriberSourceID { get; set; }
+
         public string SiteName { get; set; }
 
         public int CustSubID { get; set; }
