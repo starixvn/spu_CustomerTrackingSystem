@@ -178,7 +178,10 @@
             if (this.DropdownList == null)
                 this.DropdownList = new MMDetailFilterDropdownListViewModel();
 
-            DropdownFilterList = DropdownFilterList.Union(fraudTicketModel.DropdownFilterList);            
+            if (this.DropdownFilterList == null)
+                this.DropdownFilterList = new List<MMFilterItemViewModel>();
+
+            //DropdownFilterList = DropdownFilterList.Union(fraudTicketModel.DropdownFilterList);            
 
             this.CurrencyList = DropdownFilterList.Select(x =>
             {
@@ -257,7 +260,7 @@
                        
         }
 
-        protected List<string> OrderBetTeams(IEnumerable<string> betTeamList)
+        public List<string> OrderBetTeams(IEnumerable<string> betTeamList)
         {
             var resultList = new List<string>();
             var betTeamOrderList = new List<BetTeamOrderViewModel>();

@@ -298,13 +298,13 @@
 
                             result = GetFraudMMFilterFromCache(para, para.Sites);
 
-                            if (para.IsSupportShowAllTickets)
-                            {
-                                Task.Run(() =>
-                                {
-                                    _ = GetAllMMFilterFromCache(para);
-                                });
-                            }
+                            //if (para.IsSupportShowAllTickets)
+                            //{
+                            //    Task.Run(() =>
+                            //    {
+                            //        _ = GetAllMMFilterFromCache(para);
+                            //    });
+                            //}
 
                             break;
                         }
@@ -312,15 +312,15 @@
             }
             catch (Exception ex)
             {
-                var errMsg = "Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n";
+                //var errMsg = "Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n";
 
-                if (ex.InnerException != null)
-                {
-                    errMsg += "\n" + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                     + ex.InnerException.StackTrace;
-                }
+                //if (ex.InnerException != null)
+                //{
+                //    errMsg += "\n" + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                //     + ex.InnerException.StackTrace;
+                //}
 
-                LogService.Info(errMsg);
+                //LogService.Info(errMsg);
             }
 
             return Json(new
@@ -335,26 +335,29 @@
             para.TypeOfTickets = MatchMonitorQueryType.TicketFraud;
 
             var key = para.BuildCacheKeyWithSite(nameof(GetFraudMMFilterFromCache), MMDetailRegion, site);
-            var result = new MMDetailFilterViewModel();
+            var fraudFilter = new MMDetailFilterViewModel();
 
             lock (key)
             {
-                result = _memoryCacheService.GetValue<MMDetailFilterViewModel>(key);
+                fraudFilter = _memoryCacheService.GetValue<MMDetailFilterViewModel>(key);
 
-                if (result == null)
+                if (fraudFilter == null)
                 {
                     var fraudTicketFromCache = GetFraudMMDetailFromCache(para, site);
 
                     if (fraudTicketFromCache != null)
                     {
-                        result = fraudTicketFromCache.Clone();
+                        var suspiciousTransInfos = fraudTicketFromCache.GetSuspiciousTransInfo();
+                        var mmticketDetailInfo = _matchMonitorService.GetMMTicketDetailInfo(para, suspiciousTransInfos);
 
-                        _memoryCacheService.PushValueAsync(key, result);
+                        fraudFilter = fraudTicketFromCache.BuildFilterByFraudTickets(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);
+
+                        _memoryCacheService.PushValueAsync(key, fraudFilter);
                     }
                 }
             }
 
-            return result;
+            return fraudFilter;
         }
 
         private async Task<MMDetailFilterViewModel> GetAllMMFilterFromCache(MMDetailInfoViewModel para, string site = MMSites.All, bool isCache = true)
@@ -531,7 +534,7 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailRpt)]
         public ActionResult GetMatchMonitorDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter)
         {
-            var mdResult = default(MatchMonitorDetailListViewModel);
+            var mdResult = default(MMDetailFraudListViewModel);
 
             try
             {
@@ -598,11 +601,11 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private MatchMonitorDetailListViewModel GetAllMMDetailFromCache(MMDetailInfoViewModel info, MMDetailFilterViewModel filter)
+        private MMDetailFraudListViewModel GetAllMMDetailFromCache(MMDetailInfoViewModel info, MMDetailFilterViewModel filter)
         {
             var para = info.Clone();
             para.TypeOfTickets = MatchMonitorQueryType.TicketAll;
-            var result = new MatchMonitorDetailListViewModel();
+            var result = new MMDetailFraudListViewModel();
 
             try
             {
@@ -618,12 +621,12 @@
             return result;
         }
 
-        private MatchMonitorDetailListViewModel GetFraudMMDetailFromCache(MMDetailInfoViewModel info, string site = MMSites.All)
+        private MMDetailFraudListViewModel GetFraudMMDetailFromCache(MMDetailInfoViewModel info, string site = MMSites.All)
         {
             var para = info.Clone();
             para.TypeOfTickets = MatchMonitorQueryType.TicketFraud;
 
-            var result = new MatchMonitorDetailListViewModel();
+            var result = new MMDetailFraudListViewModel();
 
             var flagKey = para.BuildCacheKeyWithSite(nameof(GetFraudMMDetailFromCache), MMDetailRegion, FlagRunningTask);
 
@@ -634,9 +637,9 @@
                 lock (key)
                 {
                     var keySiteAll = para.BuildCacheKeyWithSite(nameof(GetFraudMMDetailFromCache), MMDetailRegion, MMSites.All);
-                    var fraudMMSiteAll = new MatchMonitorDetailListViewModel();
+                    var fraudMMSiteAll = new MMDetailFraudListViewModel();
 
-                    result = _memoryCacheService.GetValue<MatchMonitorDetailListViewModel>(key);
+                    result = _memoryCacheService.GetValue<MMDetailFraudListViewModel>(key);
 
                     if (result == null)
                     {
@@ -646,7 +649,7 @@
                             {
                                 _memoryCacheService.PushValueAsync(flagKey, new { });
 
-                                fraudMMSiteAll = _memoryCacheService.GetValue<MatchMonitorDetailListViewModel>(keySiteAll);
+                                fraudMMSiteAll = _memoryCacheService.GetValue<MMDetailFraudListViewModel>(keySiteAll);
 
                                 if (fraudMMSiteAll == null)
                                 {
@@ -657,12 +660,12 @@
 
                                 result = fraudMMSiteAll.Clone();
 
-                                if (site != MMSites.All)
-                                {
-                                    result.FilterItemMMDetailBySite(site);
+                                //if (site != MMSites.All)
+                                //{
+                                //    result.FilterItemMMDetailBySite(site);
 
-                                    _ = _memoryCacheService.PushValueAsync(key, result);
-                                }
+                                //    _ = _memoryCacheService.PushValueAsync(key, result);
+                                //}
 
                                 _memoryCacheService.RemoveValueAsync(flagKey);
 
@@ -687,14 +690,14 @@
             return result;
         }
 
-        private async Task<MatchMonitorDetailListViewModel> GetAllTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, bool isLoop = false)
+        private async Task<MMDetailFraudListViewModel> GetAllTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, bool isLoop = false)
         {
-            var result = default(MatchMonitorDetailListViewModel);
+            var result = default(MMDetailFraudListViewModel);
 
             var mdItemList = Enumerable.Empty<MatchMonitorDetailItemViewModel>();
             var matchDetailInfo = new MMDetailResultModel();
             var custInfo = Enumerable.Empty<CustInfoModel>();
-            var fraudTicketDetail = new MatchMonitorDetailListViewModel();
+            var fraudTicketDetail = new MMDetailFraudListViewModel();
             var ticketDetailGroup = default(TicketDetailViewModel);
 
             matchDetailInfo = _matchMonitorService.GetMatchMonitorDetail(para);
@@ -730,9 +733,9 @@
             return result;
         }
 
-        private async Task<MatchMonitorDetailListViewModel> GetFraudMMDetailSiteAll(MMDetailInfoViewModel para)
+        private async Task<MMDetailFraudListViewModel> GetFraudMMDetailSiteAll(MMDetailInfoViewModel para)
         {
-            var mdResult = new MatchMonitorDetailListViewModel();
+            var mdResult = new MMDetailFraudListViewModel();
             var mdItemList = Enumerable.Empty<MatchMonitorDetailItemViewModel>();
 
             var isSingleGrid = para.BetTypeID == (int)MatchMonitorBetType.CorrectScore
@@ -767,7 +770,7 @@
 
                 mdItemList = MappingRobotStatus(mergeInfo, para.BetTypeID);
 
-                mdResult = new MatchMonitorDetailListViewModel
+                mdResult = new MMDetailFraudListViewModel
                 {
                     HomeMatchItemList = !isSingleGrid ? mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)
                         || string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.O), StringComparison.OrdinalIgnoreCase))
@@ -776,25 +779,26 @@
                         || string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.U), StringComparison.OrdinalIgnoreCase))
                             .OrderByDescending(x => x.TransTime).ToList() : new List<MatchMonitorDetailItemViewModel>(),
                     IsSingleGrid = isSingleGrid,
-                    ScoreList = mdItemList.Select(x => x.Score).Distinct().OrderBy(x => x).ToList(),
-                    GroupList = mergeGroup.Groups.ToList(),
-                    CurrencyList = mdItemList.Select(x =>
-                    {
-                        return new { CurrencyId = string.IsNullOrEmpty(x.CurrencyName) ? -1 : x.CurrencyId, CurrencyName = string.IsNullOrEmpty(x.CurrencyName) ? "-" : x.CurrencyName };
-                    }).Distinct(x => x.CurrencyId).OrderBy(x => x.CurrencyName).Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName)).ToList(),
-                    HDPList = mdItemList.Select(x => x.BallHeadHDP()).Distinct().OrderBy(x => x).ToList(),
-                    BetTeamList = mdItemList.Select(x => x.BallHeadBetTeam()).Distinct().OrderBy(x => x).ToList(),
-                    SubscriberTypeList = mdItemList.Select(x => x.SubscriberType).Distinct().ToList()
+                    //ScoreList = mdItemList.Select(x => x.Score).Distinct().OrderBy(x => x).ToList(),
+                    //GroupList = mergeGroup.Groups.ToList(),
+                    //CurrencyList = mdItemList.Select(x =>
+                    //{
+                    //    return new { CurrencyId = string.IsNullOrEmpty(x.CurrencyName) ? -1 : x.CurrencyId, CurrencyName = string.IsNullOrEmpty(x.CurrencyName) ? "-" : x.CurrencyName };
+                    //}).Distinct(x => x.CurrencyId).OrderBy(x => x.CurrencyName).Select(x => new KeyValuePair<int, string>(x.CurrencyId, x.CurrencyName)).ToList(),
+                    //HDPList = mdItemList.Select(x => x.BallHeadHDP()).Distinct().OrderBy(x => x).ToList(),
+                    //BetTeamList = mdItemList.Select(x => x.BallHeadBetTeam()).Distinct().OrderBy(x => x).ToList(),
+                    //SubscriberTypeList = mdItemList.Select(x => x.SubscriberType).Distinct().ToList()
                 };
 
                 mdResult.RecordsTotal = mdItemList?.Count() ?? 0;
-                mdResult.BindReasons(mdItemList.Select(x => x.ReasonList).Distinct());
+                //mdResult.BindReasons(mdItemList.Select(x => x.ReasonList).Distinct());
                 
                 var suspiciousTransInfos = mdResult.GetSuspiciousTransInfo();
                 var mmticketDetailInfo = _matchMonitorService.GetMMTicketDetailInfo(para, suspiciousTransInfos);
 
-                mdResult.BindDropdownFilterListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);                
-                mdResult.BindDropdownFilterList(mdItemList);
+                //mdResult.BindDropdownFilterListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);
+                var allTicketFilter = mdResult.BuildFilterByFraudTickets(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);
+                mdResult.BindDropdownFilterList(allTicketFilter);
             }
 
             return mdResult;
@@ -865,10 +869,10 @@
             return result;
         }
 
-        private MatchMonitorDetailListViewModel GetTicketsFromMainDb(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, bool isLoop)
+        private MMDetailFraudListViewModel GetTicketsFromMainDb(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, bool isLoop)
         {
             var verifiedTrans = new List<MatchMonitorDetailVerifyTransResultModel>();
-            var fraudTicketDetail = new MatchMonitorDetailListViewModel();
+            var fraudTicketDetail = new MMDetailFraudListViewModel();
 
             var ticketDetailGroup = GetAllMMTicketDetail(para, filter, isLoop);
 
@@ -1063,12 +1067,12 @@
             return ticketResult;
         }
 
-        public MatchMonitorDetailListViewModel MergeFraudToAllMMDetail(IEnumerable<MatchMonitorDetailItemViewModel> mdItemList, MatchMonitorDetailListViewModel fraudMMDetailModel, long? lastSequenceID)
+        public MMDetailFraudListViewModel MergeFraudToAllMMDetail(IEnumerable<MatchMonitorDetailItemViewModel> mdItemList, MMDetailFraudListViewModel fraudMMDetailModel, long? lastSequenceID)
         {
             var fraudHomeMatchItemDictionary = fraudMMDetailModel?.HomeMatchItemList?.ToDictionary(x => x.TransId, x => x);
             var fraudAwayMatchItemDictionary = fraudMMDetailModel?.AwayMatchItemList?.ToDictionary(x => x.TransId, x => x);
 
-            return new MatchMonitorDetailListViewModel
+            return new MMDetailFraudListViewModel
             {
                 HomeMatchItemList = mdItemList.Where(c => c.FilterByHomeAway(new string[] { nameof(MatchMonitorBetChoiceId.H), nameof(MatchMonitorBetChoiceId.O) }))
                     .Select(x => x.MappingFraudTicketToAllTicket(fraudHomeMatchItemDictionary)).ToList(),

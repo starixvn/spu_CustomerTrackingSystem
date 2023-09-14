@@ -216,10 +216,13 @@
             var criteria = new MMTicketDetailInfoCriteria()
             {
                 MatchID = para.MatchID,
+                EventDate = para.EventDate,
                 BetType = para.BetTypeID,
-                BetID = para.BetID,
-                IsLive = para.LiveIndicator ? 1 : 0,               
-                ListSuspiciousTransId = JsonConvert.SerializeObject(suspiciousTranInfos)
+                IsLive = para.LiveIndicator ? 1 : 0,
+                ListSuspiciousTransId = JsonConvert.SerializeObject(suspiciousTranInfos),               
+                TicketType = para.TypeOfTickets == MatchMonitorQueryType.TicketAll ? 0 : 1,
+                IsExclTestCurr = false,
+                BetID = para.BetID
             };
             
             var result = repository.Fetch<MMDetailFilterTicketInfoModel>(criteria);
