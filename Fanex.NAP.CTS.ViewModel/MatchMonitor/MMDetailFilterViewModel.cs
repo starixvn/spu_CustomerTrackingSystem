@@ -77,6 +77,8 @@
 
         public bool IsFilter { get; set; }
 
+        public bool IsDisplaySingleGrid { get; set; }
+
         public long? MaxSequenceId { get; set; }
 
         public long RecordsTotal { get; set; }
@@ -152,18 +154,22 @@
             var hashSet = new HashSet<string>();
 
             foreach (var item in tiItemList)
-            {
+            {              
                 hashSet.Add(JsonConvert.SerializeObject(new MMFilterItemViewModel
                 {
-                    CurrencyId = item.CurrencyId,
-                    CurrencyName = item.CurrencyName,
+                    Score = liveIndicator ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : "-",
+                    SubscriberType = item.IsLicensee ? "L" : "C",
+                    CC = item.CustomerClass,
                     Danger1 = item.Danger1,
                     Danger2 = item.Danger2,
                     Danger3 = item.Danger3,
                     Danger4 = item.Danger4,
                     Danger5 = item.Danger5,
-                    Score = liveIndicator ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : "-",
-                    SubscriberType = item.IsLicensee ? "L" : "C",
+                    CurrencyId = item.CurrencyId,
+                    CurrencyName = item.CurrencyName,
+                    ReasonItem = item.SuspiciousReason,
+                    ADetectGroup = item.SuspiciousGroupId.ToString(),
+                    ADetectGroupID = item.SuspiciousGroupId,
                     BallHeadHDP = item.Hdp,
                     BallHeadBetTeam = item.BetTeam,
                     TicketStatus = item.TicketStatus
@@ -173,15 +179,13 @@
             DropdownFilterList = hashSet.Select(JsonConvert.DeserializeObject<MMFilterItemViewModel>);           
         }        
 
-        public void BindDropdownFilterListByFraudTicket(MMDetailFilterViewModel fraudTicketModel)
+        public void BindDropdownFilterListByFraudTicket()
         {
             if (this.DropdownList == null)
                 this.DropdownList = new MMDetailFilterDropdownListViewModel();
 
             if (this.DropdownFilterList == null)
-                this.DropdownFilterList = new List<MMFilterItemViewModel>();
-
-            //DropdownFilterList = DropdownFilterList.Union(fraudTicketModel.DropdownFilterList);            
+                this.DropdownFilterList = new List<MMFilterItemViewModel>();         
 
             this.CurrencyList = DropdownFilterList.Select(x =>
             {
@@ -203,7 +207,10 @@
                 GroupName = x.ADetectGroup
             }).Distinct(x=>x.GroupID).OrderBy(x => x.GroupID).ToList();
 
-            this.ReasonList = DropdownFilterList.Select(x => x.ReasonItem).Distinct().OrderBy(x => x).ToList();
+            this.ReasonList = DropdownFilterList.Select(x =>
+            {
+                return x.ReasonItem == null ? "-" : x.ReasonItem;
+            }).Distinct().OrderBy(x => x).ToList();            
 
             if (DropdownFilterList.Any()) 
                 this.MGroupList = new List<string>() { "-" };            
@@ -214,6 +221,8 @@
                 subscriberTypeList.Insert(0, "A");
 
             DropdownList.SubscriberTypeList = subscriberTypeList;
+
+            var reasonList = this.DropdownFilterList.Where(x => x.ReasonItem == null);
 
             DropdownList.CCList = DropdownFilterList.Select(x => x.CC).Distinct();
 

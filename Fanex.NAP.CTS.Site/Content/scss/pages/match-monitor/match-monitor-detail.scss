@@ -204,6 +204,10 @@
                             /* text-align: center;*/
                         }
 
+                        .width-amount-item:focus {
+                            display: none;
+                        }
+
                         .text-box {
                             height: 2.8rem;
                             display: flex;

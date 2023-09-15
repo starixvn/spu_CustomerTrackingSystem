@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
+    using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.MatchMonitor;
@@ -10,28 +11,28 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class MMDetailFraudListViewModel// : MMDetailFilterViewModel
+    public class MMDetailTicketListViewModel// : MMDetailFilterViewModel
     {
-        public MMDetailFraudListViewModel() : base()
+        public MMDetailTicketListViewModel() : base()
         {
             this.CTSCustIDList = string.Empty;
             this.HomeMatchItemList = new List<MatchMonitorDetailItemViewModel>();
             this.AwayMatchItemList = new List<MatchMonitorDetailItemViewModel>();
-            //this.ItemList = new List<MatchMonitorDetailItemViewModel>();
+            this.ItemList = new List<MatchMonitorDetailItemViewModel>();
             //this.DropdownList = new MMDetailFilterDropdownListViewModel();
             //this.DropdownFilterList = new List<MMFilterItemViewModel>();
         }
 
-        private MMDetailFraudListViewModel(MMDetailFraudListViewModel matchMonitorDetailList) : base()
+        private MMDetailTicketListViewModel(MMDetailTicketListViewModel matchMonitorDetailList) : base()
         {
             this.LastSequenceID = matchMonitorDetailList.LastSequenceID;
             this.CTSCustIDList = matchMonitorDetailList.CTSCustIDList;
             this.HomeMatchItemList = matchMonitorDetailList.HomeMatchItemList.ToList();
             this.AwayMatchItemList = matchMonitorDetailList.AwayMatchItemList.ToList();
-            //this.ItemList = new List<MatchMonitorDetailItemViewModel>();
+            this.ItemList = matchMonitorDetailList.ItemList.ToList();
             //this.DropdownList = matchMonitorDetailList.DropdownList;
             //this.DropdownFilterList = matchMonitorDetailList.DropdownFilterList;
-        }
+        }        
 
         public void FilterItemMMDetail(MMDetailFilterViewModel filter, string site)
         {
@@ -90,9 +91,9 @@
 
         public List<MatchMonitorDetailItemViewModel> AwayMatchItemList { get; set; }
 
-        //public List<MatchMonitorDetailItemViewModel> ItemList { get; set; }
+        public List<MatchMonitorDetailItemViewModel> ItemList { get; set; }
 
-        public MMDetailFraudListViewModel Clone() => new MMDetailFraudListViewModel(this);
+        public MMDetailTicketListViewModel Clone() => new MMDetailTicketListViewModel(this);
 
         public IEnumerable<SuspiciousTransInfoModel> GetSuspiciousTransInfo()
         {
@@ -126,6 +127,29 @@
             return suspiciousTransInfos;
         }
 
+        public string GetTranIDsByFilterSuspicous(MMDetailFilterViewModel filter)
+        {
+            var tranIDList = new List<long>();
+
+            var home = this.HomeMatchItemList.Where(x => 
+            {
+                var equals = filter.ReasonList.Any(y => (x.ReasonList ?? "-").Contains(y))
+                && filter.AGroupList.Contains(x.ADetectGroupID.ToString());
+
+                return equals;
+            }).Select(x=>x.TransId);
+
+            var away = this.AwayMatchItemList.Where(x =>
+            {
+                var equals = filter.ReasonList.Any(y => (x.ReasonList ?? "-").Contains(y))
+                && filter.AGroupList.Contains(x.ADetectGroupID.ToString());
+
+                return equals;
+            }).Select(x => x.TransId);
+           
+            return string.Join(",", tranIDList.Distinct());
+        }
+
         public void BindReasons(IEnumerable<string> rawReasons, MMDetailFilterViewModel filter)
         {
             var reasons = new List<string>();
@@ -156,7 +180,6 @@
 
         }
 
-        //public MMDetailFilterViewModel BindDropdownFilterList(IEnumerable<MatchMonitorDetailItemViewModel> mdItemList, MMDetailFilterViewModel filter)
         public MMDetailFilterViewModel BindDropdownFilterList(MMDetailFilterViewModel filter)
         {
             if (filter.DropdownList == null)
@@ -269,31 +292,32 @@
             return filter;
         }
 
-        public MMDetailFilterViewModel BuildFilterByFraudTickets(IEnumerable<MMDetailFilterTicketInfoModel> tiItemList, bool liveIndicator)
+        public MMDetailFilterViewModel BuildFilterByFraudTickets(IEnumerable<MMDetailFilterTicketInfoModel> infoList, bool liveIndicator)
         {
             var filter = new MMDetailFilterViewModel();
 
             var hashSet = new HashSet<string>();
 
-            foreach (var item in tiItemList)
+            foreach (var item in infoList)
             {
                 hashSet.Add(JsonConvert.SerializeObject(new MMFilterItemViewModel
                 {
-                    CurrencyId = item.CurrencyId,
-                    CurrencyName = item.CurrencyName,
+                    Score = liveIndicator ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : "-",
+                    SubscriberType = item.IsLicensee ? "L" : "C",
+                    CC = item.CustomerClass,
                     Danger1 = item.Danger1,
                     Danger2 = item.Danger2,
                     Danger3 = item.Danger3,
                     Danger4 = item.Danger4,
                     Danger5 = item.Danger5,
-                    Score = liveIndicator ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : "-",
-                    SubscriberType = item.IsLicensee ? "L" : "C",
-                    BallHeadHDP = item.Hdp,
-                    BallHeadBetTeam = item.BetTeam,
+                    CurrencyId = item.CurrencyId,
+                    CurrencyName = item.CurrencyName,
                     ReasonItem = item.SuspiciousReason,
                     ADetectGroup = item.SuspiciousGroupId.ToString(),
                     ADetectGroupID = item.SuspiciousGroupId,
-                    TicketStatus = item.TicketStatus
+                    BallHeadHDP = item.Hdp,
+                    BallHeadBetTeam = item.BetTeam,
+                    TicketStatus = item.TicketStatus                   
                 }));
             }
 

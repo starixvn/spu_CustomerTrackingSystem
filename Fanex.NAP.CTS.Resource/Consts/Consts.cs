@@ -164,6 +164,8 @@
             FirstOU = 8,
             FirstOE = 12,
             Moneyline = 20,
+            Full1X2 = 5,
+            First1X2 = 15,
             FirstTotalGoal = 126,
             CorrectScore = 413,
             FirstCorrectScore = 414,

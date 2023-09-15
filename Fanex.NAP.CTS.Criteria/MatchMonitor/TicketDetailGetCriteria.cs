@@ -12,26 +12,23 @@
         [SpParam(SqlParamName = "LastScannedSequenceID")]
         public Int64? LastScannedSequenceID { get; set; }
 
+        [SpParam(SqlParamName = "IsLive")]
+        public int IsLive { get; set; }
+
         [SpParam(SqlParamName = "BatchSize")]
-        public int BatchSize { get; set; }
+        public int? BatchSize { get; set; }
 
         [SpParam(SqlParamName = "ListTransId")]
         public string ListTransId { get; set; }
 
         [SpParam(SqlParamName = "EventDate")]
-        public DateTime EventDate { get; set; }
-
-        [SpParam(SqlParamName = "IsLive")]
-        public int IsLive { get; set; }
+        public DateTime EventDate { get; set; }       
 
         [SpParam(SqlParamName = "MatchID")]
         public long MatchID { get; set; }
 
         [SpParam(SqlParamName = "BetType")]
         public int BetType { get; set; }
-
-        [SpParam(SqlParamName = "BetID")]
-        public long BetID { get; set; }
 
         [SpParam(SqlParamName = "IsLicensee")]
         public int? IsLicensee { get; set; }
@@ -45,20 +42,26 @@
         [SpParam(SqlParamName = "ListScore")]
         public string ListScore { get; set; }
 
+        [SpParam(SqlParamName = "CustAmountRM")]
+        public decimal? CustAmountRM { get; set; }
+
+        [SpParam(SqlParamName = "BetID")]
+        public long BetID { get; set; }
+
         [SpParam(SqlParamName = "ListDanger")]
         public string ListDanger { get; set; }
 
         [SpParam(SqlParamName = "ListStatus")]
-        public string ListStatus { get; set; }        
+        public string ListStatus { get; set; }
 
-        [SpParam(SqlParamName = "FromStakeRM")]
-        public decimal? FromStakeRM { get; set; }
+        [SpParam(SqlParamName = "ListCustomerClass")]
+        public string ListCustomerClass { get; set; }      
 
-        [SpParam(SqlParamName = "ToStakeRM")]
-        public decimal? ToStakeRM { get; set; }
+        [SpParam(SqlParamName = "MinSequenceId")]
+        public long? MinSequenceId { get; set; }
 
-        [SpParam(SqlParamName = "MinSequenceIDTotalAll")]
-        public Int64? MinSequenceIDTotalAll { get; set; }
+        [SpParam(SqlParamName = "TotalTicket")]
+        public int? TotalTicket { get; set; }
 
         public override string GetSettingKey()
                 => "CTS_Rpt_MatchMonitor_TicketDetails";

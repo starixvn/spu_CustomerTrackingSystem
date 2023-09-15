@@ -131,29 +131,46 @@
             return repository.Fetch<CustInfoModel>(criteria);
         }
 
-        public IEnumerable<TicketDetailModel> GetFraudTicketDetail(MMDetailInfoViewModel para, string transIds)
-        {            
-            var criteria = new TicketDetailGetCriteria()
-            {
-                QueryType = (int)MatchMonitorQueryType.TicketFraud,
-                EventDate = para.EventDate,
-                ListTransId = transIds,
-                MatchID = para.MatchID,
-                BetType = para.BetTypeID,
-                BetID = para.BetID,
-                IsLive = para.LiveIndicator ? 1 : 0
-            };
-
-            return repository.Fetch<TicketDetailModel>(criteria);
+        public TicketDetailViewModel GetFraudTicketDetail(MMDetailInfoViewModel para, string transIds)
+        {           
+            return this.GetAllTicketDetail(para, null, null, transIds);
         }
 
-        public TicketDetailViewModel GetAllTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int batchSize = 1000, string transIds = null)
-        {                                   
-            var scoreList = (filter.ScoreList == null || !para.LiveIndicator) ? null : string.Join(",", filter.ScoreList);
+        public TicketDetailViewModel GetAllMMTicketDetail(MMDetailInfoViewModel info, MMDetailFilterViewModel filter, bool isLoop = false)
+        {
+            var batchSize = 5000;
+            var ticketDetails = new List<TicketDetailModel>();
+            var result = new TicketDetailViewModel();
 
-            var criteria = new TicketDetailGetCriteria()
+            do
             {
-                QueryType = (int)MatchMonitorQueryType.TicketAll,
+                result = this.GetAllTicketDetail(info, filter, batchSize);
+
+                result.TicketDetails = result.TicketDetails.OrderByDescending(x => x.SequenceID);
+
+                info.LastScannedSequenceID = result.MinSequenceId;
+
+                if (result.MinSequenceId != null && result.TicketDetails.Count() > 0)
+                {
+                    ticketDetails.AddRange(result.TicketDetails);
+                }
+           
+                if (result.MinSequenceId == null || ticketDetails.Count() >= batchSize)
+                {
+                    result.TicketDetails = ticketDetails.ToList();
+                    break;
+                }
+
+            } while (isLoop);
+
+            return result;
+        }
+
+        public TicketDetailViewModel GetAllTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int? batchSize, string transIds = null)
+        {
+            var criteria = new TicketDetailGetCriteria()
+            {               
+                QueryType = 2, // Get ticket for view MM report
                 EventDate = para.EventDate,
                 LastScannedSequenceID = para.LastScannedSequenceID,
                 IsLive = para.LiveIndicator ? 1 : 0,
@@ -162,18 +179,11 @@
                 BetID = para.BetID,
                 BatchSize = batchSize,
                 IsLicensee = para.Sites == MMSites.All ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
-                ListCurrency = filter?.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList),              
-                ListScore = scoreList,
-                ListDanger = GenerateDangerJson(filter),
-                ListStatus = filter?.TicketStatusList == null ? null : string.Join(",", filter.TicketStatusList),
                 ListTransId = transIds
             };
 
-            if (para.BetTypeID == (int)MatchMonitorBetType.TotalGoal
-                || para.BetTypeID == (int)MatchMonitorBetType.FirstTotalGoal
-                || para.BetTypeID == (int)MatchMonitorBetType.CorrectScore
-                || para.BetTypeID == (int)MatchMonitorBetType.FirstCorrectScore)
-            {                
+            if (IsDisplaySingleGrid(para.BetTypeID))
+            {
                 criteria.ListHDPBetTeam = filter?.BetTeamList == null ? null : string.Join(",", filter.BetTeamList);
             }
             else
@@ -183,17 +193,32 @@
 
             if (filter?.AmountList?.Count >= 2)
             {
-                criteria.FromStakeRM = filter.AmountList[0];
-                criteria.ToStakeRM = filter.AmountList[1];
-            }           
+                criteria.CustAmountRM = filter.AmountList[0];
+            }
+
+            if (filter != null)
+            {
+                criteria.ListScore = (filter.ScoreList == null || !para.LiveIndicator) ? null : string.Join(",", filter.ScoreList);
+                criteria.ListCurrency = filter?.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList);
+                criteria.ListDanger = GenerateDangerJson(filter);
+                criteria.ListStatus = filter?.TicketStatusList == null ? null : string.Join(",", filter.TicketStatusList);
+            }
 
             var result = repository.Fetch<TicketDetailModel>(criteria);
 
             return new TicketDetailViewModel
             {
                 TicketDetails = result,
-                MinSequenceIDTotalAll = criteria.MinSequenceIDTotalAll
+                MinSequenceId = criteria.MinSequenceId,
+                TotalTicket = criteria.TotalTicket
             };
+        }
+
+        public int GetTotalTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int? batchSize, string transIds)
+        {
+            var ticketResult = this.GetAllTicketDetail(para, filter, batchSize, transIds);
+
+            return (int)ticketResult.TotalTicket;
         }
 
         private string GenerateDangerJson(MMDetailFilterViewModel filter)
@@ -271,6 +296,17 @@
                 Sports = result.secondResultSet,
                 BetTypes = result.thirdResultSet
             };
+        }
+
+        public bool IsDisplaySingleGrid(int betTypeID)
+        {
+            return betTypeID == (int)MatchMonitorBetType.Full1X2
+                || betTypeID == (int)MatchMonitorBetType.First1X2
+                || betTypeID == (int)MatchMonitorBetType.CorrectScore
+                || betTypeID == (int)MatchMonitorBetType.FirstCorrectScore
+                || betTypeID == (int)MatchMonitorBetType.TotalGoal
+                || betTypeID == (int)MatchMonitorBetType.FirstTotalGoal
+                || betTypeID == (int)MatchMonitorBetType.FirstTotalGoal;
         }
 
         public byte[] ExportExcelMMDetail(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems

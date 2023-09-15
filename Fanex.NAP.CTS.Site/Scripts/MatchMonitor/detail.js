@@ -67,13 +67,16 @@ function MatchMonitorDetail() {
         cbbTicketsStatus: $('#cbbTicketsStatus'),
         tblMMHomeTeam: $('#tblMMHomeTeam'),
         tblMMAwayTeam: $('#tblMMAwayTeam'),
+        tblMMSG: $('#tblMMSG'),
         divHomeMonitor: $('#first-monitor-datatable'),
         divAwayMonitor: $('#second-monitor-datatable'),
+        divSGMonitor: $('#monitor-datatable'),
         spanSportBetTypeInfo: $('#spanSportBetTypeInfo'),
         spanMarketInfo: $('#spanMarketInfo'),
         spanReasonInfo: $('#spanReasonInfo'),
         inputHomeSelectAll: $('#inputHomeSelectAll'),
         inputAwaySelectAll: $('#inputAwaySelectAll'),
+        inputSGSelectAll: $('#inputSGSelectAll'),
         iconHToggleBetID: $('#iconHToggleBetID'),
         iconAToggleBetID: $('#iconAToggleBetID'),
         divPopupAssDetect: $('#divPopupAssDetect'),
@@ -120,7 +123,7 @@ function MatchMonitorDetail() {
     let associationDetection = "AssociationDetection";
     let isRefresh = false;
     let isSupportShowAllTickets = false;
-    let isSingleGrid = false;
+    let isDisplaySingleGrid = false;
     let timeoutRenderTicketDetail = undefined;
 
     const regexValidAmount = /^[0-9]{1,15}/;
@@ -203,7 +206,7 @@ function MatchMonitorDetail() {
                 { data: obj => obj.Odds },
                 {
                     data: obj => {
-                        if (obj.TransIdToString.length > 6) {
+                        if (!isDisplaySingleGrid && obj.TransIdToString.length > 6) {
                             let halfBetID = '...' + obj.TransIdToString.substring(obj.TransIdToString.length - 6);
 
                             return `<span class='span-betid' data-bet-id=${obj.TransIdToString}>${halfBetID}</span>`;
@@ -509,7 +512,7 @@ function MatchMonitorDetail() {
         domElements.cbbTicketsStatus.multiselect("refresh");
     }
 
-    function SetupDataTable() {
+    function SetupDoubleDataTable() {
         $("#tbrMMHomeTeam").html(`
                                 <table id="tblMMHomeTeam" class="table table-striped table-monitor-detail">
                                 <thead>
@@ -622,6 +625,46 @@ function MatchMonitorDetail() {
         });
     }
 
+    function SetupSingleTable() {
+        $('#tbrMMSG').html(`
+                                <table id="tblMMSG" class="table table-striped table-monitor-detail">
+                                <thead>
+                                    <tr>
+                                        <th><input name="select_all" value="1" id="inputSGSelectAll" type="checkbox" class="col-checkbox" /></th>
+                                        <th>Username</th>
+                                        <th>CC</th>
+                                        <th>Bot</th>
+                                        <th>Dgr</th>
+                                        <th>Odds</th>
+                                        <th>
+                                            <div class="type-outer">
+                                                <span class="col-title">BetID</span>                                                                                               
+                                            </div>
+                                        </th>
+                                        <th>Cur</th>
+                                        <th>Amt</th>
+                                        <th>Choice</th>
+                                        <th>Score</th>
+                                        <th>Transtime</th>
+                                        <th>B.f.</th>
+                                        <th title="Auto-detected Association Group">
+                                            A.Gr.
+                                        </th>
+                                        <th title="Manual-detected Association Group: max. 5000 Usernames">
+                                            M.Gr.<sup style="vertical-align: super; font-size: smaller;">i</sup>
+                                        </th>
+                                        <th>Reason</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>`);
+
+        domElements.tblMMSG = $("#tblMMSG");
+
+        InitialDetailGird(domElements.tblMMSG);
+    }
+
     //#endregion Setup Filter & Grid
 
     //#region Get Filter Params Selected
@@ -657,11 +700,11 @@ function MatchMonitorDetail() {
     }
 
     function GetHDPSelected(dom_ccb, isGetAllValue = false) {
-        return isSingleGrid ? undefined : GetSelectDataFilter(dom_ccb, isGetAllValue);
+        return isDisplaySingleGrid ? undefined : GetSelectDataFilter(dom_ccb, isGetAllValue);
     }
 
     function GetBetTeamSelected(dom_ccb, isGetAllValue = false) {
-        return isSingleGrid ? GetSelectDataFilter(dom_ccb, isGetAllValue) : undefined;
+        return isDisplaySingleGrid ? GetSelectDataFilter(dom_ccb, isGetAllValue) : undefined;
     }
 
     function GetBetTypeSelected() {
@@ -774,14 +817,20 @@ function MatchMonitorDetail() {
    
     function RenderFilter(data, isRefreshcbbSite) {
         recordsTotalGlobal = data.RecordsTotal;
-        isSingleGrid = data.IsSingleGrid;     
+        isDisplaySingleGrid = data.IsDisplaySingleGrid;     
 
         SetupFilterFromDictinary(domElements.cbbCurrency, data.CurrencyList);
 
-        if (data.IsSingleGrid) {
-            SetupFilter(domElements.cbbHDPBetTeam, data.BetTeamList);           
+        if (data.IsDisplaySingleGrid) {
+            SetupFilter(domElements.cbbHDPBetTeam, data.BetTeamList);
+            domElements.divHomeMonitor.addClass('hide');
+            domElements.divAwayMonitor.addClass('hide');
+            domElements.divSGMonitor.removeClass('hide');
         } else {
             SetupFilter(domElements.cbbHDPBetTeam, data.HDPList);
+            domElements.divHomeMonitor.removeClass('hide');
+            domElements.divAwayMonitor.removeClass('hide');
+            domElements.divSGMonitor.addClass('hide');
         }
 
         SetupFilterScore(domElements.cbbMatchScore, data.ScoreList);
@@ -951,7 +1000,9 @@ function MatchMonitorDetail() {
 
         RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsFilteredGlobal);
 
-        SetupDataTable();
+        SetupDoubleDataTable();
+
+        SetupSingleTable();
 
         setTimeout(() => {
             RefreshLengthPage(500, true);
@@ -1187,21 +1238,37 @@ function MatchMonitorDetail() {
                 recordsFilteredGlobal += response?.recordsFiltered ?? 0;                
             }
 
-            if ($('option', domElements.cbbMGroup).length > 1) {                             
-                FilterUIGridByMGr(data?.HomeMatchItemList, data?.AwayMatchItemList);
-            }
-            else {
-                if (data?.HomeMatchItemList) {
-                    domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw(false);
-                }
-
-                if (data?.AwayMatchItemList) {
-                    domElements.tblMMAwayTeam.DataTable().rows.add(data.AwayMatchItemList).draw(false);
-                }
-
-                RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsTotalGlobal);        
-            }
+            if (isDisplaySingleGrid) {
+                RenderSingleGrid(data, recordsFilteredGlobal, recordsTotalGlobal);
+            } else {
+                RenderDoubleGrid(data, recordsFilteredGlobal, recordsTotalGlobal);
+            }                      
         }
+    }
+
+    function RenderDoubleGrid(data, recordsFilteredGlobal, recordsTotalGlobal) {
+        if ($('option', domElements.cbbMGroup).length > 1) {
+            FilterUIGridByMGr(data?.HomeMatchItemList, data?.AwayMatchItemList);
+        }
+        else {
+            if (data?.HomeMatchItemList) {
+                domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw(false);
+            }
+
+            if (data?.AwayMatchItemList) {
+                domElements.tblMMAwayTeam.DataTable().rows.add(data.AwayMatchItemList).draw(false);
+            }
+
+            RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsTotalGlobal);
+        }
+    }
+
+    function RenderSingleGrid(data, recordsFilteredGlobal, recordsTotalGlobal) {
+        if (data?.ItemList) {
+            domElements.tblMMSG.DataTable().rows.add(data.ItemList).draw(false);
+        }
+
+        RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsTotalGlobal);
     }
 
     function RenderBotIcon(robotType, isRobot) {
@@ -2091,7 +2158,7 @@ function MatchMonitorDetail() {
         domElements.cbbBetType.select2();
 
         domElements.cbbMarket.val(domElements.liveIndicator);
-        domElements.cbbBetType.val(`${domElements.betTypeID}_${domElements.betIDToString}`);
+        domElements.cbbBetType.val(`${domElements.betTypeID}_${domElements.betIDToString}`).trigger('change');
 
         domElements.cbbMarket.change(function () { MarketOnChange(); });
         domElements.cbbBetType.change(function () { BetTypeOnChange(); });
@@ -2121,7 +2188,9 @@ function MatchMonitorDetail() {
             });
         }
 
-        SetupDataTable();
+        SetupDoubleDataTable();
+
+        SetupSingleTable();
 
         domElements.inputAmountFrom.on('input', function () {
             let validAmount = domElements.inputAmountFrom.val().replace(regexInvalidAmount, "");
