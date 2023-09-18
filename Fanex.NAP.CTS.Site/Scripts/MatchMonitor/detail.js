@@ -61,8 +61,7 @@ function MatchMonitorDetail() {
         cbbAGroup: $('#cbbAGroup'),
         cbbMGroup: $('#cbbMGroup'),
         cbbHDPBetTeam: $('#cbbHDPBetTeam'),
-        inputAmountFrom: $('#inputAmountFrom'),
-        inputAmountTo: $('#inputAmountTo'),
+        inputCustAmountRM: $('#inputCustAmountRM'),      
         iconClearUsnAmt: $('#iconClearUsnAmt'),
         cbbTicketsStatus: $('#cbbTicketsStatus'),
         tblMMHomeTeam: $('#tblMMHomeTeam'),
@@ -91,9 +90,8 @@ function MatchMonitorDetail() {
         inputOpt3MatchesLast7Days: $('#inputOpt3MatchesLast7Days'),       
         hdSelectedCustIDs: $('#hdSelectedCustIDs'),
         hdSelectedUsernames: $('#hdSelectedUsernames'),
-        btnRefresh: $('#btnRefresh'),
-        btnGenerateDetail: $('#btnGenerate-detail'),
-        btnShowAll: $('#btnShowAll'),
+        btnImportNewTicket: $('#btnImportNewTicket'),
+        btnGenerateDetail: $('#btnGenerate-detail'),     
         btnAssDetection: $('#btnAssDetection'),
         btnExportExcel: $('#btnExportExcel'),
         btnVerifyAndClose: $('#btnVerifyAndClose')
@@ -106,12 +104,16 @@ function MatchMonitorDetail() {
     let cacheFilter = {};
     let cacheFilterScore = undefined;
     let cacheFilterDependOn = {
-        DropdownFilterList: [],
+        DropdownListFilterDependOn: [],
         MGrList: []
+    };
+    let cacheFilterDefault = {
+        ReasonList: [],
+        AGrList: []
     };
     let cacheMGroup = {
         itemMMHomeTeam: [],
-        itemMMAwayTeam: [],
+        itemMMAwayTeam: [],       
         allMGroup: {},
         selectMgroup: {},
         isActive: false
@@ -121,7 +123,7 @@ function MatchMonitorDetail() {
     let xhr;
     let currentType = MatchMonitorDetailViewType.TicketFraud;
     let associationDetection = "AssociationDetection";
-    let isRefresh = false;
+    let isImportNewTicket = false;
     let isSupportShowAllTickets = false;
     let isDisplaySingleGrid = false;
     let timeoutRenderTicketDetail = undefined;
@@ -223,7 +225,11 @@ function MatchMonitorDetail() {
                         }
                     }
                 },
-                { data: obj => obj.HDP },
+                {
+                    data: obj => {
+                        return isDisplaySingleGrid ? obj.BetTeam : obj.HDP;
+                    }
+                },
                 { data: obj => obj.Score },
                 { data: obj => obj.TransTimeToString },
                 { data: obj => obj.BetFrom },
@@ -434,10 +440,7 @@ function MatchMonitorDetail() {
     function SetupCC(data) {
         if (data) {
             let ccSelector = domElements.cbbCC.empty();
-            let ccHiddenVal = domElements.cbbCCHidden.val();
-
-            let ccByGrOther = ccHiddenVal.filter(item => data.includes(item));
-
+            
             domElements.cbbCCHidden.find('optgroup').each(function () {
                 let optGroup = $(this);
                 let groupName = optGroup.attr("label");                
@@ -452,11 +455,7 @@ function MatchMonitorDetail() {
                     ccSelector.append(BuildCCGroup(ccMatched, groupName));
                 }
             });
-
-            if (ccByGrOther.length > 0) {
-                ccSelector.append(BuildCCGroup(ccByGrOther, "Others"));
-            }
-
+          
             domElements.cbbCC.parent().find('button').removeClass('border-error');
 
             domElements.cbbCC.multiselect('refresh');
@@ -480,8 +479,8 @@ function MatchMonitorDetail() {
     }
 
     function SetupSubscriberTypeFilter(data) {
-        domElements.cbbSites.empty();
-        if (data) {
+        if (data && data.length > 0) {
+            domElements.cbbSites.empty();
             data.forEach(item => {
                 let subName = "All";
                 if (item == "C") {
@@ -491,7 +490,7 @@ function MatchMonitorDetail() {
                 }
                 domElements.cbbSites.append(`<option value='${item}'>${subName}</option>`);
             });
-        }
+        } 
     }
 
     function SetupTicketStatusFilter(data) {
@@ -663,20 +662,24 @@ function MatchMonitorDetail() {
         domElements.tblMMSG = $("#tblMMSG");
 
         InitialDetailGird(domElements.tblMMSG);
+
+        domElements.inputSGSelectAll = $('#inputSGSelectAll');
+        domElements.inputSGSelectAll.on('click', function () { ToggleGridSelectAll(domElements.inputSGSelectAll, domElements.tblMMSG.DataTable()) });
     }
 
     //#endregion Setup Filter & Grid
 
     //#region Get Filter Params Selected
-    function GetInputAmount() {
-        //if (regexValidAmount.test(domElements.inputAmountFrom.val()) && regexValidAmount.test(domElements.inputAmountTo.val())) {
-        //    if (Number(domElements.inputAmountFrom.val()) <= Number(domElements.inputAmountTo.val())) {
-        //        return [domElements.inputAmountFrom.val(), domElements.inputAmountTo.val()];
-        //    }
-        //}
-
-        if (regexValidAmount.test(domElements.inputAmountFrom.val()) && Number(domElements.inputAmountFrom.val())) {
-            return [domElements.inputAmountFrom.val()];
+    function GetInputAmount() {       
+        let amount = domElements.inputCustAmountRM.val();
+        if (regexValidAmount.test(amount) && Number(amount)) {
+            if (amount < 0) {
+                amount = 0;
+            }
+            if (amount > 922337203685477) {
+                amount = 922337203685477;
+            }
+            return amount;
         }
 
         return undefined;
@@ -726,6 +729,14 @@ function MatchMonitorDetail() {
             }
         }
         return domElements.betIDToString;
+    }
+
+    function IsFilterSuspicious(params) {
+        if (params.AGroupList.length == cacheFilterDefault.AGrList.length
+            && params.ReasonList.length == cacheFilterDefault.ReasonList.length) {
+            return false;
+        }
+        return true;
     }
 
     function ValidateTicketStatus() {
@@ -786,12 +797,7 @@ function MatchMonitorDetail() {
         if (!ValidateCbb(domElements.cbbTicketsStatus)) {
             result = false;
         }
-
-        //if (!((domElements.inputAmountFrom.val() == '' && domElements.inputAmountTo.val() == '') || GetInputAmount())) {
-        //    common.showError("Please input a valid range (Ex: 500 - 1000).");
-        //    result = false;
-        //}
-
+      
         return result;
     }    
     
@@ -815,9 +821,9 @@ function MatchMonitorDetail() {
 
     //#region Render Filter
    
-    function RenderFilter(data, isRefreshcbbSite) {
+    function RenderFilter(data) {
         recordsTotalGlobal = data.RecordsTotal;
-        isDisplaySingleGrid = data.IsDisplaySingleGrid;     
+        isDisplaySingleGrid = data.IsDisplaySingleGrid;
 
         SetupFilterFromDictinary(domElements.cbbCurrency, data.CurrencyList);
 
@@ -835,7 +841,10 @@ function MatchMonitorDetail() {
 
         SetupFilterScore(domElements.cbbMatchScore, data.ScoreList);
 
-        SetupFilter(domElements.cbbReason, data.ReasonList);
+        cacheFilterDefault.AGrList = data.GroupList;
+        cacheFilterDefault.ReasonList = data.ReasonList;
+
+        SetupFilter(domElements.cbbReason, data.ReasonList);       
 
         SetupAGroupFilter(data.GroupList);
 
@@ -843,22 +852,20 @@ function MatchMonitorDetail() {
 
         SetupDefaultMGroupFilter(data.MGroupList);
 
-        if (data.DropdownList) {
-            SetupCC(data.DropdownList.CCList);
-            SetupDanger(data.DropdownList.DangerList);
-            SetupTicketStatusFilter(data.DropdownList.TicketStatusList);
+        if (data.DropdownListFilter) {
+            SetupCC(data.DropdownListFilter.CCList);
+            SetupDanger(data.DropdownListFilter.DangerList);
+            SetupTicketStatusFilter(data.DropdownListFilter.TicketStatusList);
 
-            if (data.RecordsTotal > 0 && isRefreshcbbSite) {
-                SetupSubscriberTypeFilter(data.DropdownList.SubscriberTypeList);
-            }                                         
+            SetupSubscriberTypeFilter(data.DropdownListFilter.SubscriberTypeList);                                       
         }
 
-        if (data.DropdownFilterList) {
-            cacheFilterDependOn.DropdownFilterList = data.DropdownFilterList;
+        if (data.DropdownListFilterDependOn) {
+            cacheFilterDependOn.DropdownListFilterDependOn = data.DropdownListFilterDependOn;
 
             FilterDependOnSelected(IndexFilterSelected.Score);
         }
-
+        
         cacheMGroup.allMGroup = {};
         cacheMGroup.selectMgroup = {};       
     }
@@ -1017,15 +1024,16 @@ function MatchMonitorDetail() {
         if (lastScannedSequenceID || typeOfTickets == MatchMonitorDetailViewType.TicketFraud) {
             domElements.tblMMHomeTeam.find('tbody').addClass('loading');
             domElements.tblMMAwayTeam.find('tbody').addClass('loading');
+            domElements.tblMMSG.find('tbody').addClass('loading');
 
             if (timeoutRenderTicketDetail) {
                 clearTimeout(timeoutRenderTicketDetail);
             }
 
             domElements.breadcrumbTotalTickets.html('');
-
+           
             timeoutRenderTicketDetail = setTimeout(() => {
-                let data = {
+                let params = {
                     EventDateToString: domElements.eventDataToString,
                     MatchID: domElements.matchID,
                     BetTypeID: GetBetTypeSelected(),
@@ -1037,6 +1045,7 @@ function MatchMonitorDetail() {
                     TypeOfTickets: typeOfTickets,
                     ScoreList: domElements.sportType == 1 ? GetSelectDataFilter(domElements.cbbMatchScore, true) : undefined,
                     Sites: domElements.cbbSites.val(),
+                    CustomerClassList: GetSelectDataFilter(domElements.cbbCC, true),
                     IsDangerNone: GetDangerSelectDataFilter(0).length > 0,
                     Danger1List: GetDangerSelectDataFilter(1),
                     Danger2List: GetDangerSelectDataFilter(2),
@@ -1045,25 +1054,28 @@ function MatchMonitorDetail() {
                     Danger5List: GetDangerSelectDataFilter(5),
                     CurrencyIdList: GetSelectDataFilter(domElements.cbbCurrency, true),
                     ReasonList: GetSelectDataFilter(domElements.cbbReason, true),
-                    Reason: domElements.reason,
+                    Reason: domElements.reason,                    
                     AGroupList: GetSelectDataFilter(domElements.cbbAGroup, true),
                     MGroupList: GetSelectDataFilter(domElements.cbbMGroup, true),
                     HDPList: GetHDPSelected(domElements.cbbHDPBetTeam, true),
                     BetTeamList: GetBetTeamSelected(domElements.cbbHDPBetTeam, true),
-                    AmountList: GetInputAmount()?.map(str => {
-                        return Number(str);
-                    }) ?? undefined,
-                    TicketStatusList: GetSelectDataFilter(domElements.cbbTicketsStatus, true)
+                    CustAmountRM: GetInputAmount(),
+                    TicketStatusList: GetSelectDataFilter(domElements.cbbTicketsStatus, true),
+                    MGrTranIDListFiltered: GetTranIDsByFilterMGr()
                 };
 
-                GetMatchMonitorTotalTicket(data, lastScannedSequenceID);
+                params.IsFilterSuspicious = IsFilterSuspicious(params);
+
+                GetMatchMonitorTotalTicket(params, lastScannedSequenceID);
 
                 if (recordsTotalGlobal > 0) {
-                    GetMatchMonitorDetail(data, lastScannedSequenceID, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
+                    GetMatchMonitorDetail(params, lastScannedSequenceID, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
                 }
                 else {
                     domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
                     domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
+                    domElements.tblMMSG.find('tbody').removeClass('loading');
+                    
                 }
             }, 10)
         }
@@ -1146,6 +1158,7 @@ function MatchMonitorDetail() {
                 complete: function (response) {
                     domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
                     domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
+                    domElements.tblMMSG.find('tbody').removeClass('loading');
                 },
                 error: function (xhr, textStatus, error) {
                     if (textStatus == 'timeout') {
@@ -1164,7 +1177,7 @@ function MatchMonitorDetail() {
         }
     }
 
-    function FetchFilterMatchMonitorDetail(isRefreshcbbSite) {
+    function FetchFilterMatchMonitorDetail() {
         recordsTotalGlobal = 0;
 
         posClickGlobal++;
@@ -1173,10 +1186,10 @@ function MatchMonitorDetail() {
             xhr.abort();
         }
 
-        GetFilterMatchMonitorDetail(isRefreshcbbSite);
+        GetFilterMatchMonitorDetail();
     }
 
-    function GetFilterMatchMonitorDetail(isRefreshcbbSite) {
+    function GetFilterMatchMonitorDetail() {
         var paramFilter = {
             EventDateToString: domElements.eventDataToString,
             MatchID: domElements.matchID,
@@ -1186,7 +1199,7 @@ function MatchMonitorDetail() {
             Reason: domElements.reason,
             LiveIndicator: domElements.cbbMarket.val(),
             TypeOfTickets: currentType,
-            IsRefresh: isRefresh,
+            IsImportNewTicket: isImportNewTicket,
             IsSupportShowAllTickets: isSupportShowAllTickets
         };
 
@@ -1199,7 +1212,7 @@ function MatchMonitorDetail() {
             success: function (response) {
                 const data = response?.data;
                 if (data) {
-                    RenderFilter(data, isRefreshcbbSite);
+                    RenderFilter(data);
 
                     if (data.MaxSequenceId > 0 && currentType == MatchMonitorDetailViewType.TicketAll) {
                         maxSequenceId = data.MaxSequenceId;
@@ -1221,7 +1234,7 @@ function MatchMonitorDetail() {
             timeout: 5000
         });
 
-        isRefresh = false;
+        isImportNewTicket = false;
     }
 
     //#endregion Fetch Match Monitor Detail
@@ -1247,20 +1260,30 @@ function MatchMonitorDetail() {
     }
 
     function RenderDoubleGrid(data, recordsFilteredGlobal, recordsTotalGlobal) {
-        if ($('option', domElements.cbbMGroup).length > 1) {
-            FilterUIGridByMGr(data?.HomeMatchItemList, data?.AwayMatchItemList);
-        }
-        else {
-            if (data?.HomeMatchItemList) {
-                domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw(false);
-            }
+        //if ($('option', domElements.cbbMGroup).length > 1) {            
+        //    FilterUIGridByMGr(data?.HomeMatchItemList, data?.AwayMatchItemList);            
+        //}
+        //else {
+        //    if (data?.HomeMatchItemList) {
+        //        domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw(false);
+        //    }
 
-            if (data?.AwayMatchItemList) {
-                domElements.tblMMAwayTeam.DataTable().rows.add(data.AwayMatchItemList).draw(false);
-            }
+        //    if (data?.AwayMatchItemList) {
+        //        domElements.tblMMAwayTeam.DataTable().rows.add(data.AwayMatchItemList).draw(false);
+        //    }
 
-            RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsTotalGlobal);
+        //    RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsTotalGlobal);
+        //}
+
+        if (data?.HomeMatchItemList) {
+            domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw(false);
         }
+
+        if (data?.AwayMatchItemList) {
+            domElements.tblMMAwayTeam.DataTable().rows.add(data.AwayMatchItemList).draw(false);
+        }
+
+        RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsTotalGlobal);
     }
 
     function RenderSingleGrid(data, recordsFilteredGlobal, recordsTotalGlobal) {
@@ -1372,13 +1395,13 @@ function MatchMonitorDetail() {
             xhr.onreadystatechange = null;
             xhr.abort();
         }
-
-        cacheMGroup.selectMgroup = {};
+       
         cacheFilterDependOn.MGrList = [];
         cacheMGroup.allMGroup = {};
-        cacheMGroup.selectMgroup = {};
+        //cacheMGroup.selectMgroup = {};
         cacheMGroup.itemMMAwayTeam = [];
         cacheMGroup.itemMMHomeTeam = [];
+        cacheMGroup.itemMM = [];
 
         SetCacheByAssociationDetection();
 
@@ -1408,14 +1431,18 @@ function MatchMonitorDetail() {
                     cacheFilterDependOn.MGrList = response.mGrList.MGrItems;
 
                     SetupMGroupFilter(response.mGrList.MGrItems);
+
+                    if (isDisplaySingleGrid) {
+                        BindChangeGroupAssWithOptions(domElements.tblMMSG.DataTable(), itemList);
+                    } else {
+                        BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam.DataTable(), itemList);
+                        BindChangeGroupAssWithOptions(domElements.tblMMAwayTeam.DataTable(), itemList);
+                    }
                     
-                    BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam.DataTable(), itemList);
-                    BindChangeGroupAssWithOptions(domElements.tblMMAwayTeam.DataTable(), itemList);
-
-                    cacheMGroup.itemMMHomeTeam = domElements.tblMMHomeTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
-                    cacheMGroup.itemMMAwayTeam = domElements.tblMMAwayTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
-
-                    let totalItem = cacheMGroup.itemMMHomeTeam.length + cacheMGroup.itemMMAwayTeam.length;
+                    let itemMMHomeTeam = domElements.tblMMHomeTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
+                    let itemMMAwayTeam = domElements.tblMMAwayTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
+                  
+                    let totalItem = itemMMHomeTeam.length + itemMMAwayTeam.length;
 
                     RefreshBreadcrumbTotalTickets(totalItem, totalItem);
                 }
@@ -1441,20 +1468,29 @@ function MatchMonitorDetail() {
         let ctsCustIDs = [];
         let custIDs = [];
         let userNames = [];
-        
-        domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
-            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {              
-                custIDs.push(data.CustID);
-                userNames.push(data.Username);
-            }
-        });
-        domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
-            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {             
-                custIDs.push(data.CustID);
-                userNames.push(data.Username);
-            }
-        });
 
+        if (isDisplaySingleGrid) {
+            domElements.tblMMSG.DataTable().rows(function (idx, data, node) {
+                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                    custIDs.push(data.CustID);
+                    userNames.push(data.Username);
+                }
+            });
+        } else {
+            domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
+                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                    custIDs.push(data.CustID);
+                    userNames.push(data.Username);
+                }
+            });
+            domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
+                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                    custIDs.push(data.CustID);
+                    userNames.push(data.Username);
+                }
+            });
+        }
+        
         domElements.divPopupAssDetect.attr('data-total-ticket-detect', custIDs.length);
 
         ctsCustIDs = ctsCustIDs.filter(OnlyUnique);
@@ -1496,57 +1532,7 @@ function MatchMonitorDetail() {
     function OnlyUnique(value, index, self) {
         return self.indexOf(value) == index;
     }
-
-    function FilterAssociationDetection(item) {
-        if (!(domElements.cbbTypeOfTickets.val() == MatchMonitorDetailViewType.TicketAll || domElements.cbbTypeOfTickets.val() == item.TypeOfTicket)) {
-            return false;
-        }
-
-        if (!domElements.cbbMatchScore.val().find(x => x == "-" || x == item.Score)) {
-            return false;
-        }
-
-        if (!(domElements.cbbSites.val() == SiteViewType.SiteAll || domElements.cbbSites.val() == item.SubscriberType)) {
-            return false;
-        }
-
-        // Danger
-
-        if (!domElements.cbbCurrency.val().find(x => x == item.CurrencyId)) {
-            return false;
-        }
-
-        if (!domElements.cbbReason.val().find(x => x == "-" || item.ReasonList.indexOf(x) > -1)) {
-            return false;
-        }
-
-        if (!domElements.cbbAGroup.val().find(x => x == item.ADetectGroupID)) {
-            return false;
-        }
-
-        if (!domElements.cbbMGroup.val().find(x => x == item.MDetectGroupID)) {
-            return false;
-        }
-
-        if (!domElements.cbbHDPBetTeam.val().find(x => x == Math.abs(item.HDP))) {
-            return false;
-        }
-
-        let amountList = GetInputAmount()?.map(str => {
-            return Number(str);
-        }) ?? undefined;
-
-        if (amountList && !(item.Stake >= amountList[0] && item.Stake <= amountList[1])) {
-            return false;
-        }
-
-        if (!domElements.cbbTicketsStatus.val().find(x => x == item.TicketStatus)) {
-            return false;
-        }
-
-        return true;
-    }
-
+   
     function BindChangeGroupAssWithOptions(table, itemList) {
         table.rows().every(function () {
             let rowData = this.data();
@@ -1608,37 +1594,20 @@ function MatchMonitorDetail() {
         domElements.hdbreadcrumTotalTickets.text(totalNewItem);
     }
 
-    function FilterUIGrid() {
-        let totalItem = 0;
-
-        let itemMMHomeTeamFilter = cacheMGroup.itemMMHomeTeam.filter(FilterAssociationDetection);
-        let itemMMAwayTeamFilter = cacheMGroup.itemMMAwayTeam.filter(FilterAssociationDetection);
-
-        domElements.tblMMHomeTeam.DataTable().clear().rows.add(itemMMHomeTeamFilter).draw();
-        domElements.tblMMAwayTeam.DataTable().clear().rows.add(itemMMAwayTeamFilter).draw();
-        totalItem = itemMMHomeTeamFilter.length + itemMMAwayTeamFilter.length;
-
-        RefreshBreadcrumbTotalTickets(totalItem, totalItem);
-    }
-
-    function ShowAllDataGrid() {
-        if (!ValidateTicketStatus()) {
-            return;
+    function GetTranIDsByFilterMGr() {       
+        let arrMGrTranIDs = [];
+        let arrMGr = domElements.cbbMGroup.val();
+        let isExistedBlank = arrMGr.indexOf("0") != -1;
+        if (!isExistedBlank) {           
+            Object.keys(cacheMGroup.allMGroup).forEach((betID) => {
+                if (arrMGr.indexOf(cacheMGroup.allMGroup[betID].GroupName) != -1) {
+                    arrMGrTranIDs.push(betID);
+                }
+            })
+        } else {
+            arrMGrTranIDs.push("-");     
         }
-        if (ValidationFilter()) {
-            CacheSelectDataFilter();
-            domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
-
-            if (!cacheMGroup.isActive) {
-                FetchMatchMonitorDetail(currentType);
-            }
-            else {
-                domElements.inputHomeSelectAll.prop('checked', false);
-                domElements.inputAwaySelectAll.prop('checked', false);
-            }
-
-            //FilterUIGridByMGr();
-        }
+        return arrMGrTranIDs;
     }
 
     //#endregion Detect Association
@@ -1647,16 +1616,20 @@ function MatchMonitorDetail() {
     function ExportToExcel() {
         if (IsValidExportExcel()) {
             let mmDetails = {
+                isDisplaySingleGrid: isDisplaySingleGrid,
                 matchInfo: GetDataMatchInfo(),
-                homeMItems: GetDataSelectedInGrid(domElements.tblMMHomeTeam.DataTable()),
-                awayMItems: GetDataSelectedInGrid(domElements.tblMMAwayTeam.DataTable())
+                homeMItems: isDisplaySingleGrid ? null : GetDataSelectedInGrid(domElements.tblMMHomeTeam.DataTable()),
+                awayMItems: isDisplaySingleGrid ? null : GetDataSelectedInGrid(domElements.tblMMAwayTeam.DataTable()),
+                mItems: isDisplaySingleGrid ? GetDataSelectedInGrid(domElements.tblMMSG.DataTable()) : null
             }
             let url = common.modifyRelativeUrl('MatchMonitor/ExportToExcelMMDetail');
 
             $('body').append('<form action="' + url + '" method="post" target="output_frame" id="postToIframe"></form>');
+            $('#postToIframe').append('<input type="hidden" asp-for="isDisplaySingleGridf" name=isDisplaySingleGrid value="' + mmDetails.isDisplaySingleGrid + '" />');
             $('#postToIframe').append('<input type="hidden" asp-for="matchf" name=match value="' + mmDetails.matchInfo + '" />');
             $('#postToIframe').append('<input type="hidden" asp-for="homef" name=homes value="[' + mmDetails.homeMItems + ']" />');
             $('#postToIframe').append('<input type="hidden" asp-for="awayf" name=aways value="[' + mmDetails.awayMItems + ']" />');
+            $('#postToIframe').append('<input type="hidden" asp-for="itemf" name=items value="[' + mmDetails.mItems + ']" />');
             $('body').append('<iframe  name="output_frame" width="0" height="0" class="display-none"></iframe>');
             $('#postToIframe').submit().remove();
 
@@ -1666,21 +1639,31 @@ function MatchMonitorDetail() {
 
     function IsValidExportExcel() {
         let homeCheckedL = 0,
-            awayCheckedL = 0;
-        domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
-            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked'))
-                homeCheckedL = homeCheckedL + 1;
-        })
-        domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
-            if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked'))
-                awayCheckedL = awayCheckedL + 1;
-        })
+            awayCheckedL = 0,
+            itemCheckL = 0;
 
-        if (homeCheckedL + awayCheckedL < 2) {
+        if (isDisplaySingleGrid) {
+            domElements.tblMMSG.DataTable().rows(function (idx, data, node) {
+                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked'))
+                    itemCheckL = itemCheckL + 1;
+            })
+        } else {
+            domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
+                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked'))
+                    homeCheckedL = homeCheckedL + 1;
+            })
+            domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
+                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked'))
+                    awayCheckedL = awayCheckedL + 1;
+            })
+        }
+        
+
+        if (homeCheckedL + awayCheckedL + itemCheckL < 2) {
             common.showError("Please select at least 2 records to proceed!")
             return false;
         }
-        if (homeCheckedL + awayCheckedL > 40000) {
+        if (homeCheckedL + awayCheckedL + itemCheckL > 40000) {
             common.showError("Export fail due to size limitation, please contact Administrator for further support.")
             return false;
         }
@@ -1690,9 +1673,11 @@ function MatchMonitorDetail() {
 
     function GetDataMatchInfo() {
         let datas = '';
+        let betTypeName = $('option:selected', domElements.cbbBetType).text();
+
         datas += `{&quot;MatchName&quot;:&quot;${domElements.matchName}&quot;`;
         datas += `,&quot;EventDateStr&quot;:&quot;${domElements.eventDataToString}&quot;`;
-        datas += `,&quot;BetTypeName&quot;:&quot;${domElements.betTypeName}&quot;}`;
+        datas += `,&quot;BetTypeName&quot;:&quot;${betTypeName}&quot;}`;
         return datas;
     }    
 
@@ -1749,7 +1734,7 @@ function MatchMonitorDetail() {
         }
     }
 
-    function RestoreDefaulCbbSite() {
+    function ResetDefaulCbbSite() {
         domElements.cbbSites.prop('disabled', false);
         domElements.cbbSites.empty();
         domElements.cbbSites.append(`<option selected value='A'>All</option>`);
@@ -1760,39 +1745,15 @@ function MatchMonitorDetail() {
     }
 
     function MarketOnChange() {
-        cacheFilterScore = undefined;
-
-        RemoveAllFilterError();
-
-        AddFilterLoading();
-
-        RestoreDefaulCbbSite();
-
-        let txtMarket = $("option:selected", domElements.cbbMarket).text();
-
-        domElements.spanMarketInfo.text(txtMarket);
-
-        ChangeCbbTypeOfTickets();
-
-        currentType = Number(domElements.cbbTypeOfTickets.val());
-
-        cacheFilterDependOn.MGrList = [];
-
-        isRefresh = true;
-
-        FetchFilterMatchMonitorDetail(true);
-
-        RemoveFilterLoading();
+        BetTypeOnChange();
     }
 
     function BetTypeOnChange() {
         cacheFilterScore = undefined;
 
-        RemoveAllFilterError();
+        AddFilterLoading();        
 
-        AddFilterLoading();
-
-        RestoreDefaulCbbSite();
+        ResetDefaulCbbSite();        
 
         ChangeCbbTypeOfTickets();
 
@@ -1804,14 +1765,21 @@ function MatchMonitorDetail() {
 
         cacheFilterDependOn.MGrList = [];
 
-        isRefresh = true;
+        isImportNewTicket = true;
 
-        FetchFilterMatchMonitorDetail(true);
+        RefreshBreadcrumbTotalTickets(0, 0);                
+        domElements.tblMMHomeTeam.DataTable().clear().draw(false);
+        domElements.tblMMAwayTeam.DataTable().clear().draw(false);
+        domElements.tblMMSG.DataTable().clear().draw(false);
+
+        FetchFilterMatchMonitorDetail();    
+
+        domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
 
         RemoveFilterLoading();
     }
 
-    function TypeOfTicketsOnChange(isClear, isRefreshcbbSite) {
+    function TypeOfTicketsOnChange(isClear) {
         AddFilterLoading();
 
         if (isClear || cacheFilterScore?.length <= 0) {
@@ -1820,13 +1788,15 @@ function MatchMonitorDetail() {
 
         domElements.cbbSites.prop('disabled', false);
 
-        RestoreDefaulCbbSite();
+        ResetDefaulCbbSite();
 
         currentType = Number(domElements.cbbTypeOfTickets.val());
 
         cacheFilterDependOn.MGrList = [];
 
-        FetchFilterMatchMonitorDetail(isRefreshcbbSite);        
+        FetchFilterMatchMonitorDetail(); 
+
+        domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
 
         RemoveFilterLoading();
     }   
@@ -1847,7 +1817,7 @@ function MatchMonitorDetail() {
         $("option", domElements.cbbHDPBetTeam).prop("selected", true);
         domElements.cbbHDPBetTeam.multiselect('refresh');
 
-        domElements.inputAmountFrom.val('');
+        domElements.inputCustAmountRM.val('');
 
         $("option", domElements.cbbTicketsStatus).each(function (_, itemStatus) {
             if ($(itemStatus).val() == 101) { // Reject
@@ -1878,16 +1848,15 @@ function MatchMonitorDetail() {
         let isNoDangerSelect = !isDangerNone && danger1Selected.length == 0 && danger2Selected.length == 0 &&
             danger3Selected.length == 0 && danger4Selected.length == 0 && danger5Selected.length == 0;
        
-        if (cacheFilterDependOn.DropdownFilterList) {
-            let dependOnFilter = cacheFilterDependOn.DropdownFilterList.filter(function (item) {
+        if (cacheFilterDependOn.DropdownListFilterDependOn) {
+            let dependOnFilter = cacheFilterDependOn.DropdownListFilterDependOn.filter(function (item) {
                 if (scoresSelected.length == 0 || isNoDangerSelect) {
                     return false;
                 }
-                if (indexFilterSelected == IndexFilterSelected.Reason) {
-                    if (!reasonSelected.find(x => x == "-" || item.ReasonItem.indexOf(x) > -1)) {
+                if (indexFilterSelected == IndexFilterSelected.Reason) {                   
+                    if (!reasonSelected.find(x => item.ReasonItem.indexOf(x) > -1)) {
                         return false;
                     }
-
                     if (!currencySelected.find(x => x == item.CurrencyId)) {
                         return false;
                     }                    
@@ -2192,10 +2161,10 @@ function MatchMonitorDetail() {
 
         SetupSingleTable();
 
-        domElements.inputAmountFrom.on('input', function () {
-            let validAmount = domElements.inputAmountFrom.val().replace(regexInvalidAmount, "");
+        domElements.inputCustAmountRM.on('input', function () {
+            let validAmount = domElements.inputCustAmountRM.val().replace(regexInvalidAmount, "");
             
-            domElements.inputAmountFrom.val(validAmount);
+            domElements.inputCustAmountRM.val(validAmount);
 
             if (validAmount > 0) {
                 domElements.iconClearUsnAmt.removeClass("hide");
@@ -2203,15 +2172,10 @@ function MatchMonitorDetail() {
                 domElements.iconClearUsnAmt.addClass("hide");
             }
         });
-
-        //domElements.inputAmountTo.on('input', function () {
-        //    domElements.inputAmountTo.val(domElements.inputAmountTo.val().replace(regexInvalidAmount, ""));
-        //});
-
-        domElements.btnRefresh.on('click', function () {
-            isRefresh = true;
-            domElements.inputAmountFrom.val('');
-            domElements.inputAmountTo.val('');
+    
+        domElements.btnImportNewTicket.on('click', function () {
+            isImportNewTicket = true;
+            domElements.inputCustAmountRM.val('');           
             maxSequenceId = 1;
             cacheFilter = {};
             cacheMGroup.allMGroup = {};
@@ -2219,15 +2183,14 @@ function MatchMonitorDetail() {
             cacheMGroup.isActive = false;
             cacheFilterDependOn.MGrList = [];
 
-            //domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
-            RestoreDefaulCbbSite();
+            ResetDefaulCbbSite();
 
             TypeOfTicketsOnChange(true, true);
-            FetchMatchMonitorDetail();
+            FetchMatchMonitorDetail(currentType);
         });
 
         domElements.iconClearUsnAmt.on('click', function () {
-            domElements.inputAmountFrom.val('');
+            domElements.inputCustAmountRM.val('');
             domElements.iconClearUsnAmt.addClass("hide");
         })
 
@@ -2235,38 +2198,14 @@ function MatchMonitorDetail() {
             if (!ValidateTicketStatus()) {
                 return;
             }
-            if (ValidationFilter()) {              
-                domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
-
-                FetchMatchMonitorDetail(currentType);
-                //if (!cacheMGroup.isActive) {
-                //    FetchMatchMonitorDetail(currentType);                   
-                //}
-                //else {
-                //    domElements.inputHomeSelectAll.prop('checked', false);
-                //    domElements.inputAwaySelectAll.prop('checked', false);
-                //    //FilterUIGrid();
-                //    FilterUIGridByMGr();
-                //}
+            if (ValidationFilter()) {                              
+                FetchMatchMonitorDetail(currentType);                
             }
         })
 
         domElements.tickCheckAll.on('click', function () { ToggleTickCheckAll(true); });
 
-        domElements.tickUncheckAll.on('click', function () { ToggleTickCheckAll(false); });
-
-        //domElements.btnShowAll.on('click', function () {
-        //    if (cacheMGroup.isActive) {
-        //        cacheMGroup.isActive = false;
-        //        domElements.inputHomeSelectAll.prop('checked', false);
-        //        domElements.inputAwaySelectAll.prop('checked', false);
-
-        //        //domElements.btnGenerateDetail.click();
-        //        ShowAllDataGrid();
-
-        //        cacheMGroup.selectMgroup = {};
-        //    }
-        //})
+        domElements.tickUncheckAll.on('click', function () { ToggleTickCheckAll(false); });     
 
         domElements.btnShowPopupAssDetection.on('click', function () { ShowPopupAssDetection(); })
 
@@ -2293,7 +2232,7 @@ function MatchMonitorDetail() {
     $(document).ready(function () {
         Initial();
 
-        domElements.btnRefresh.click();
+        domElements.btnImportNewTicket.click();
     });
 }
 

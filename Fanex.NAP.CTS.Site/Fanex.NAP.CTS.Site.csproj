@@ -469,7 +469,10 @@
     <Content Include="App_Data\Excel Template\AssociationDetection\Template.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\Excel Template\MatchMonitor\Template.xlsx">
+    <Content Include="App_Data\Excel Template\MatchMonitor\SingleGridTemplate.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Excel Template\MatchMonitor\DoubleGridTemplate.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Content\scss\components\_notification.scss" />

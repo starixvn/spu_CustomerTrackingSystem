@@ -30,6 +30,9 @@
         [SpParam(SqlParamName = "BetType")]
         public int BetType { get; set; }
 
+        [SpParam(SqlParamName = "TicketType")]
+        public int TicketType { get; set; } // (0:All, 1: Suspicious)
+
         [SpParam(SqlParamName = "IsLicensee")]
         public int? IsLicensee { get; set; }
 
@@ -55,7 +58,16 @@
         public string ListStatus { get; set; }
 
         [SpParam(SqlParamName = "ListCustomerClass")]
-        public string ListCustomerClass { get; set; }      
+        public string ListCustomerClass { get; set; }
+
+        [SpParam(SqlParamName = "ListReason")]
+        public string ListReason { get; set; }
+
+        [SpParam(SqlParamName = "ListAGroup")]
+        public string ListAGroup { get; set; }
+
+        [SpParam(SqlParamName = "ListMGroup")]
+        public string ListMGroup { get; set; }
 
         [SpParam(SqlParamName = "MinSequenceId")]
         public long? MinSequenceId { get; set; }

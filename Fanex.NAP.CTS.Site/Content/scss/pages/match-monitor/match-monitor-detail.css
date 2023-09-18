@@ -492,8 +492,6 @@
         padding-left: 8px;
         font-size: 12px;
         /* text-align: center;*/ }
-      .detailpage .monitor-container .monitor-table .group-control .form-filter .group .width-amount-item:focus {
-        display: none; }
       .detailpage .monitor-container .monitor-table .group-control .form-filter .group .text-box {
         height: 2.8rem;
         display: flex;

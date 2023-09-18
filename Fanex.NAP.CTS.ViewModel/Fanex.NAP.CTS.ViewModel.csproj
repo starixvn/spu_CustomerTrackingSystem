@@ -183,7 +183,7 @@
     <Compile Include="MatchMonitor\FilterDependOn\DangerViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\DangerTypeViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\DangerItemViewModel.cs" />
-    <Compile Include="MatchMonitor\FilterDependOn\MMFilterItemViewModel.cs" />
+    <Compile Include="MatchMonitor\FilterDependOn\DependOnFilterItemViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\SubscriberTypeCurrencyItemViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\SubscriberTypeCurrencyViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\TicketStatusViewModel.cs" />

@@ -37,7 +37,7 @@
 
         public bool LiveIndicator { get; set; }
 
-        public bool IsRefresh { get; set; }
+        public bool IsImportNewTicket { get; set; }
 
         public DateTime EventDate
         {
@@ -56,15 +56,9 @@
 
         public MMDetailInfoViewModel Clone() => new MMDetailInfoViewModel(this);
 
-        public string BuildCacheKey(string nameOfFuntion, string region = "")
+        public string BuildCacheKey(string nameOfFuntion, string region, string ticketType)
         {
-            return $"{nameOfFuntion}_{region}_{EventDateToString}_{MatchID}_{BetTypeID}_{BetID}_{LiveIndicator}";
-        }
-
-        public string BuildCacheKeyWithSite(string nameOfFunction, string region = "", string site = "")
-        {
-            var value = string.IsNullOrWhiteSpace(site) ? Sites?.ToString() ?? string.Empty : site;
-            return BuildCacheKey(nameOfFunction, region) + $"_{value}";
-        }
+            return $"{nameOfFuntion}_{region}_{ticketType}_{EventDateToString}_{MatchID}_{BetTypeID}_{BetID}_{LiveIndicator}";
+        }       
     }
 }

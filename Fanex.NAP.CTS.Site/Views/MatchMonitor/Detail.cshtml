@@ -57,7 +57,7 @@
                                     <option value="3_0" data-bettypeid="3">O/U</option>
                                     <option value="8_0" data-bettypeid="8">1st O/U</option>
                                     <option value="5_0" data-bettypeid="5" data-is-support-suspicious="false">1X2</option>
-                                    <option value="15_0" data-bettypeid="8" data-is-support-suspicious="false">1st 1X2</option>
+                                    <option value="15_0" data-bettypeid="15" data-is-support-suspicious="false">1st 1X2</option>
                                     <option value="2_0" data-bettypeid="2" data-is-support-suspicious="false">O/E</option>
                                     <option value="12_0" data-bettypeid="12" data-is-support-suspicious="false">1st O/E</option>
                                     <option value="413_0" data-bettypeid="413" data-is-support-suspicious="false">Correct Score</option>
@@ -173,16 +173,9 @@
                         </div>
 
                         <div class="group width-160 second-row-depend-1">
-                            <label class="text">Username's Amt (RM)</label>
-                            @*
-                                <div class="ui-multiselect width-amount">
-                                <input class="width-amount-item" placeholder="from" id="inputAmountFrom" maxlength="15" />
-                                <label>-</label>
-                                <input class="width-amount-item" placeholder="to" id="inputAmountTo" maxlength="15" />
-                            </div>
-                            *@
+                            <label class="text">Username's Amt (RM)</label>                           
                             <div class="ui-multiselect width-amount">
-                                <input class="width-amount-item" placeholder=">= please input amount" id="inputAmountFrom" maxlength="15" />
+                                <input class="width-amount-item" placeholder=">= please input amount" id="inputCustAmountRM" maxlength="15" />
                                 <span class="icon-cross-brow clear-amount hide" id="iconClearUsnAmt"></span>
                             </div>
                         </div>
@@ -213,8 +206,7 @@
                     <div class="breadcrumb-totaltickets"></div>
                     <div id="hdbreadcrumTotalTickets" style="display: none">0</div>
                     <div>
-                        <button class="button-primary-outline-1" id="btnRefresh">Import New Tickets</button>
-                        <button class="button-primary-outline-1" id="btnShowAll" style="display: none">Show All</button>
+                        <button class="button-primary-outline-1" id="btnImportNewTicket">Import New Tickets</button>                        
                         <button class="button-primary-outline-1" id="btnShowPopupAssDetection">Association Detection</button>
                         <button class="button-primary-outline-1" id="btnExportExcel">Export Excel</button>
                         <button class="button-primary-outline-1" id="btnVerifyAndClose">Verify and Close</button>
@@ -353,12 +345,16 @@
                 <select class="control" id="cbbCCHidden" multiple="multiple">
                     @foreach (var group in ViewBag.GroupCCList)
                     {
-                        <optgroup label="@group.CCGroupName">
-                            @foreach (var cc in group.CCList)
-                            {
-                                <option selected value=@cc>@cc</option>
-                            }
-                        </optgroup>
+                    <optgroup label="@group.CCGroupName">
+                        @foreach (var cc in group.CCList)
+                        {
+                            <option selected value=@cc>@cc</option>
+                        }
+                        @if (group.CCGroupName.ToLower().Contains("other"))
+                        {
+                            <option selected value=0>-</option>
+                        }
+                    </optgroup>
                     }
                 </select>
             </div>

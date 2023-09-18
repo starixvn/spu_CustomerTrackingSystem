@@ -20,15 +20,33 @@
 
         MMDetailResultModel GetMatchMonitorDetail(MMDetailInfoViewModel filter);
 
-        IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);
+        IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);        
 
-        TicketDetailViewModel GetFraudTicketDetail(MMDetailInfoViewModel para, string transIds);
+        TicketDetailViewModel GetTicketDetailFraud(MMDetailResultModel matchDetailInfo, MMDetailInfoViewModel para);
 
-        TicketDetailViewModel GetAllMMTicketDetail(MMDetailInfoViewModel info, MMDetailFilterViewModel filter, bool isLoop = false);
+        TicketDetailViewModel GetTicketDetailByFraudTranIDs(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, string transIds);
 
-        TicketDetailViewModel GetAllTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int? batchSize, string transIds = null);
+        TicketDetailViewModel GetTicketDetailAll(MMDetailInfoViewModel info, MMDetailFilterViewModel filter, string transJson);
+
+        TicketDetailViewModel GetMainTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int? batchSize, string transIds = null);
 
         int GetTotalTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int? batchSize, string transIds);
+
+        IEnumerable<MatchMonitorDetailItemViewModel> MergeFraudToAllMMDetail(IEnumerable<MatchMonitorDetailItemViewModel> mdItemList, IEnumerable<MatchMonitorDetailItemViewModel> fraudMDItemList);
+
+        IEnumerable<MatchMonitorDetailItemViewModel> MergeFraudReasonAGroup(TicketDetailViewModel fraudTicket);
+
+        IEnumerable<MatchMonitorDetailItemViewModel> DrawColorFraudMMDetailWithMergeReasonAGroup(IEnumerable<MatchMonitorDetailVerifyTransResultModel> verifiedTrans,
+            IEnumerable<CustInfoModel> custInfo,
+            IEnumerable<TicketDetailModel> ticket,
+            MMDetailMergeGroupViewModel mergeGroup,
+            IEnumerable<MatchMonitorReasonModel> reasons);
+
+        string GetReasonName(IEnumerable<MatchMonitorReasonModel> reasonList, string reasonNameList);
+
+        MMDetailFilterViewModel GetFraudFilterInfoDetail(MMDetailInfoViewModel para, TicketDetailViewModel fraudTicket);
+
+        MMDetailFilterViewModel GetAllFilterInfoDetail(MMDetailInfoViewModel para);
 
         MMTicketDetailInfoModel GetMMTicketDetailInfo(MMDetailInfoViewModel para, IEnumerable<SuspiciousTransInfoModel> suspiciousTranInfos);
 
@@ -40,7 +58,9 @@
 
         bool IsDisplaySingleGrid(int betType);
 
-        byte[] ExportExcelMMDetail(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems
-            , string fileName, string templatePath);
+        byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath);
+
+        byte[] ExportExcelMMDetailDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems
+            , string fileName, string templatePath);       
     }
 }
