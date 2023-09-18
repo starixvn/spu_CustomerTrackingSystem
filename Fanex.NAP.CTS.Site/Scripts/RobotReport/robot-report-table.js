@@ -42,7 +42,19 @@ class RobotReportTable {
                 { targets: [4], width: "25%" }
             ],
             columns: [
-                { data: obj => obj.DateRange },
+                {
+                    data: obj => {
+                        if (this.dateTimeType == DateTimeType.Montly) {
+                            return obj.GetMonthlyTime;
+                        }
+
+                        if (this.dateTimeType == DateTimeType.Daily) {
+                            return obj.GetDailyTime;
+                        }
+
+                        return "N/A";
+                    }
+                },
                 { data: obj => obj.AI },
                 { data: obj => obj.IMPERVA },
                 { data: obj => obj.COUNTER },
@@ -127,9 +139,9 @@ class RobotReportTable {
 
         if (data) {
             var nCells = this.domElements.tblFootRobotReport.getElementsByTagName('th');
-            nCells[1].innerHTML = data.find(x => x.RobotType == "AI")?.TotalAccount ?? 0;
-            nCells[2].innerHTML = data.find(x => x.RobotType == "IMPERVA")?.TotalAccount ?? 0;
-            nCells[3].innerHTML = data.find(x => x.RobotType == "COUNTER")?.TotalAccount ?? 0;
+            nCells[1].innerHTML = data.AI;
+            nCells[2].innerHTML = data.IMPERVA;
+            nCells[3].innerHTML = data.COUNTER;
         }
 
         $(`#tblRobot${this.dateTimeType}Report_wrapper .dataTables_scrollFoot`).height(height);

@@ -1,8 +1,26 @@
 ﻿namespace Fanex.NAP.CTS.Model.RobotReport
 {
+    using System;
+
     public class AIRobotReportModel
     {
-        public string DateRange { get; set; }
+        public DateTime DateRange { get; set; }
+
+        public string GetMonthlyTime
+        {
+            get
+            {
+                return DateRange.ToString("yyyy/MM");
+            }
+        }
+
+        public string GetDailyTime
+        {
+            get
+            {
+                return DateRange.ToString("yyyy/MM/dd");
+            }
+        }
 
         public int TI { get; set; }
 

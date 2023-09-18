@@ -7,6 +7,6 @@
     {
         public IEnumerable<RobotReportModel> Items { get; set; }
 
-        public IEnumerable<RobotReportTotalAccountModel> TFoot { get; set; }
+        public RobotReportModel TFoot { get; set; }
     }
 }

@@ -413,10 +413,9 @@
     <Compile Include="ProblemCaseMonitor\ProblemCasesFilterModel.cs" />
     <Compile Include="CustomerClassification\PushDataToExternal\DangerLevelModel.cs" />
     <Compile Include="RobotReport\AIRobotReportModel.cs" />
-    <Compile Include="RobotReport\AIRobotReportTotalAccountModel.cs" />
+    <Compile Include="RobotReport\RobotReportCounterView.cs" />
     <Compile Include="RobotReport\RobotReportModel.cs" />
     <Compile Include="RobotReport\RobotReportParamModel.cs" />
-    <Compile Include="RobotReport\RobotReportTotalAccountModel.cs" />
     <Compile Include="SpecialCustomerClass\CustomerClassModel.cs" />
     <Compile Include="SpecialCustomerClass\ResultInsertCustomerClass.cs" />
     <Compile Include="DTO\CustomerCategory.cs" />

@@ -84,42 +84,18 @@ function RobotReport() {
             .change(SetRestrictFromDate);
 
         domElements.dpkFromMonth
-            .datepicker({
-                dateFormat: "M yy",
-                changeMonth: true,
-                changeYear: true,
-                onChangeMonthYear: function (year, month, inst) {
-                    $(this).val($.datepicker.formatDate('M yy', new Date(year, month - 1, 1)));
-                },
-                onClose: function (dateText, inst) {
-                    var month = $(".ui-datepicker-month :selected").val();
-                    var year = $(".ui-datepicker-year :selected").val();
-                    $(this).val($.datepicker.formatDate('M yy', new Date(year, month, 1)));
-                }
-            }).focus(function () {
-                $(".ui-datepicker-calendar").hide();
-            })
-            .datepicker("setDate", fromMonth)
-            .change(SetRestrictFromMonth);
+            .datepicker( {
+                format: "mm-yyyy",
+                startView: "months", 
+                minViewMode: "months"
+            });
 
         domElements.dpkToMonth
-            .datepicker({
-                dateFormat: "M yy",
-                changeMonth: true,
-                changeYear: true,
-                onChangeMonthYear: function (year, month, inst) {
-                    $(this).val($.datepicker.formatDate('M yy', new Date(year, month - 1, 1)));
-                },
-                onClose: function (dateText, inst) {
-                    var month = $(".ui-datepicker-month :selected").val();
-                    var year = $(".ui-datepicker-year :selected").val();
-                    $(this).val($.datepicker.formatDate('M yy', new Date(year, month, 1)));
-                }
-            }).focus(function () {
-                $(".ui-datepicker-calendar").hide();
-            })
-            .datepicker("setDate", toMonth)
-            .change(SetRestrictToMonth);
+            .datepicker( {
+                format: "mm-yyyy",
+                startView: "months", 
+                minViewMode: "months"
+            });
 
         domElements.btnGenerateMonthly.on("click", function () {
             GenerateMonthly(domElements.cbbRobotType.val());

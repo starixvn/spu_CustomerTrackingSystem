@@ -43,7 +43,19 @@ class AIRobotReportTable {
                 { targets: [5], width: "25%" }
             ],
             columns: [
-                { data: obj => obj.DateRange },
+                {
+                    data: obj => {
+                        if (this.dateTimeType == DateTimeType.Montly) {
+                            return obj.GetMonthlyTime;
+                        }
+
+                        if (this.dateTimeType == DateTimeType.Daily) {
+                            return obj.GetDailyTime;
+                        }
+
+                        return "N/A";
+                    }
+                },
                 { data: obj => obj.TI },
                 { data: obj => obj.SCE },
                 { data: obj => obj.TD },
@@ -129,10 +141,10 @@ class AIRobotReportTable {
 
         if (data) {
             var nCells = this.domElements.tblFootRobotReport.getElementsByTagName('th');
-            nCells[1].innerHTML = data.find(x => x.AIType == "TI")?.TotalAccount ?? 0;
-            nCells[2].innerHTML = data.find(x => x.AIType == "SCE")?.TotalAccount ?? 0;
-            nCells[3].innerHTML = data.find(x => x.AIType == "TD")?.TotalAccount ?? 0;
-            nCells[4].innerHTML = data.find(x => x.AIType == "ORCD")?.TotalAccount ?? 0;
+            nCells[1].innerHTML = data.TI;
+            nCells[2].innerHTML = data.SCE;
+            nCells[3].innerHTML = data.TD;
+            nCells[4].innerHTML = data.ORCD;
         }
         $(`#tblAIRobot${this.dateTimeType}Report_wrapper .dataTables_scrollFoot`).height(height);
     }

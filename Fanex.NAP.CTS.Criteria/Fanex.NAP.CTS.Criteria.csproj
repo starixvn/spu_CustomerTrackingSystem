@@ -252,6 +252,7 @@
     <Compile Include="ManageSubscriber\SubscriberRemoveCriteria.cs" />
     <Compile Include="ManageSubscriber\SubscriberUpdateCriteria.cs" />
     <Compile Include="RobotReport\GetAIRobotReportCriteria.cs" />
+    <Compile Include="RobotReport\GetRobotReportCounterCriteria.cs" />
     <Compile Include="RobotReport\GetRobotReportCriteria.cs" />
     <Compile Include="SpecialCustomerClass\InsertSpecialCustomerClassCriteria.cs" />
     <Compile Include="SpecialCustomerClass\GetAllSpecialCustomerClassCriteria.cs" />
