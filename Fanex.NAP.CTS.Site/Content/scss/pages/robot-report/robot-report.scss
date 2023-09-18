@@ -1,0 +1,318 @@
+﻿@import "../../abstracts/variables";
+@import "../../abstracts/mixins";
+
+body {
+    font-family: $font-family;
+
+    #ui-datepicker-div {
+        z-index: 999999999999999 !important;
+    }
+}
+
+.robot-report-header {
+    margin: 0rem 1.6rem 0rem 1.6rem;
+
+    .group-control {
+        position: sticky;
+        top: 6rem;
+        z-index: 99;
+        background: $page-bg;
+        padding: 1rem 0 0 0;
+
+        .title-robot-report {
+            margin-bottom: -1.3rem;
+        }
+
+        .form-filter {
+            align-items: center;
+
+            .title-text {
+                font-size: 1.3rem;
+                color: #474747;
+            }
+
+            .calendar {
+                display: flex;
+                align-items: center;
+                width: auto;
+
+                .icon-calendar-text {
+                    right: 2.2rem;
+                    bottom: 1.7rem;
+                }
+
+                .text {
+                    margin-right: .7rem;
+                    margin-bottom: 0;
+                }
+            }
+
+            .group {
+                .width-select {
+                    width: 15.5rem;
+                }
+            }
+
+            .button-generate {
+                background-color: #396ef8;
+                border-radius: 2px;
+                color: $page-bg;
+                height: auto !important;
+                padding: .7rem 2rem;
+            }
+        }
+    }
+}
+
+.robot-report-body {
+    height: 81vh;
+
+    .control {
+        background-color: aliceblue;
+
+        .group-control {
+            position: sticky;
+            top: 6rem;
+            z-index: 99;
+            padding: 1rem 1.6rem 0rem 1.6rem;
+
+            .title-robot-report {
+                margin-bottom: -1.3rem;
+            }
+
+            .form-filter {
+                align-items: center;
+
+                .title-text {
+                    font-size: 1.3rem;
+                    color: #474747;
+                }
+
+                .calendar {
+                    display: flex;
+                    align-items: center;
+                    width: auto;
+
+                    .icon-calendar-text {
+                        right: 2.2rem;
+                        bottom: 1.7rem;
+                    }
+
+                    .text {
+                        margin-right: .7rem;
+                        margin-bottom: 0;
+                    }
+                }
+
+                .group {
+                    .width-select {
+                        width: 15.5rem;
+                    }
+                }
+
+                .button-generate {
+                    background-color: #396ef8;
+                    border-radius: 2px;
+                    color: $page-bg;
+                    height: auto !important;
+                    padding: .7rem 2rem;
+                }
+            }
+        }
+
+        .report-cont {
+            width: 50%;
+        }
+
+        .robot-report-datatable {
+            font-family: $font-family;
+            padding: 1rem 1.6rem 1rem 1.6rem;
+
+            .fixed-header {
+                padding-top: 0rem !important;
+
+                .top-header {
+                    justify-content: space-between;
+                }
+            }
+
+            .group {
+                padding-right: 0;
+                margin-right: .6rem;
+            }
+
+            .fixed-header {
+                padding-top: 1.6rem;
+                position: sticky;
+                position: -webkit-sticky;
+                top: 6rem;
+                z-index: 9;
+            }
+
+            .top-header {
+                padding-bottom: 1rem;
+
+                .button-primary-outline {
+                    font-size: 1.3rem !important;
+                    line-height: 1.230769;
+                    padding: 0 1rem;
+                    text-transform: none;
+                }
+            }
+
+            .wrapper-info-table {
+                position: -webkit-sticky;
+                position: sticky;
+                top: 13.2rem;
+                z-index: 11;
+
+                .dataTables_length {
+                    position: absolute;
+                    left: 0;
+                }
+
+                .dataTables_paginate {
+                    position: absolute !important;
+                    padding-top: 4rem !important;
+                    right: 50%;
+                    transform: translate(50%, -50%);
+                    text-align: center;
+                }
+
+                .table-robot-report {
+                    width: 100% !important;
+
+                    .loading {
+                        position: relative;
+
+                        &:after {
+                            content: '';
+                            position: absolute;
+                            left: 50%;
+                            top: 75%;
+                            border-radius: 50%;
+                            width: 2.4rem;
+                            height: 2.4rem;
+                            border: 0.25rem solid rgba(57, 110, 248, 0.2);
+                            border-top-color: rgba(57, 110, 248, 1);
+                            -webkit-animation: spin 1s infinite linear;
+                            animation: spin 1s infinite linear;
+                        }
+
+                        tr {
+                            opacity: .3;
+                        }
+                    }
+
+                    thead {
+                        tr {
+                            th {
+                                position: sticky;
+                                top: 17.2rem;
+                                font-weight: 300;
+                            }
+                        }
+                    }
+
+                    tbody {
+                        tr {
+                            td {
+
+                                .click-view-details,
+                                .click-view-name {
+                                    cursor: pointer;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            tfoot {
+                tr {
+                    th {
+                        border: 1px solid white;
+                        line-height: 17px;
+                        padding: 7px;
+                        vertical-align: middle;
+                        background-color: #1D2E4F;
+                        color: #fff;
+                        text-align: center;
+                        font-weight: normal;
+                        border-top: 0 !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.background {
+    height: 30px !important;
+    padding: 0;
+    margin: 0;
+}
+
+.line {
+    width: 190px;
+    height: 43px;
+    border-bottom: 1px solid white;
+    transform: translateY(-26px) translateX(-5px) rotate(12deg);
+    position: absolute;
+}
+
+.background>div {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+.bottom {
+    position: absolute;
+    bottom: 1px;
+    left: 1px;
+}
+
+.top {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+}
+
+.dataTables_scrollBody thead tr[role="row"] {
+    visibility: collapse !important;
+}
+
+.export-excel {
+    right: 0px;
+    position: absolute;
+
+    .btnExcel {
+        display: inline-block;
+        font-family: "Lato", Tahoma, sans-serif !important;
+        height: 26px;
+        font-size: 1.3rem !important;
+        font-weight: bold;
+        line-height: 1.230769;
+        border-radius: 3px;
+        outline: none;
+        text-transform: capitalize;
+        text-align: center;
+        text-shadow: none;
+        font-size: 3rem;
+        margin: 0 0.2rem;
+        overflow: visible;
+        padding: 0.5rem 0rem;
+        background: transparent !important;
+
+        .icon-excel {
+            font-size: 3rem;
+        }
+    }
+}
+
+.form-filter .control {
+    background-color: white;
+}

@@ -1,0 +1,141 @@
+class RobotReportTable {
+    dateTimeType = null;
+    dataTable = null;
+    domElements = {
+        tblRobotReport: null,
+        tblFootRobotReport: null,
+        divRobotReport: null
+    };
+
+    GenerateGrid() {
+        return this.domElements.tblRobotReport.DataTable({
+            serverSide: false,
+            dom: '<"wrapper-info-table">t',
+            pagingType: "full_numbers",
+            language: {
+                lengthMenu: "Page size _MENU_",
+                paginate: {
+                    first: "<span class=\"icon-chevron-left\"></span><span class=\"icon-chevron-left\"></span>",
+                    last: "<span class=\"icon-chevron-right\"></span><span class=\"icon-chevron-right\"></span>",
+                    next: "",
+                    previous: ""
+                },
+                info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
+                infoEmpty: "",
+                zeroRecords: "There's no data"
+            },
+            ordering: false,
+            searching: false,
+            lengthMenu: [20, 50, 100, 200],
+            pageLength: 50,
+            scrollX: false,
+            scrollCollapse: true,
+            scrollY: '20vh',
+            paging: false,
+            columnDefs: [
+                { targets: "_all", defaultContent: "-" },
+                { targets: [0, 1, 2, 3, 4], className: "text-center" },
+                { targets: [0], width: "10%" },
+                { targets: [1], width: "5%" },
+                { targets: [2], width: "5%" },
+                { targets: [3], width: "5%" },
+                { targets: [4], width: "25%" }
+            ],
+            columns: [
+                { data: obj => obj.DateRange },
+                { data: obj => obj.AI },
+                { data: obj => obj.IMPERVA },
+                { data: obj => obj.COUNTER },
+                { data: obj => obj.TotalAccount }
+            ]
+        });
+    }
+
+    Initial() {
+        this.dataTable = this.GenerateGrid();
+        this.SetTFootHidden(null);
+    }
+
+    SetHidden(isHidden) {
+        this.domElements.divRobotReport.attr("hidden", isHidden);
+    }
+
+    constructor(type) {
+        this.dateTimeType = type;
+        this.domElements.tblRobotReport = $(`#tblRobot${type}Report`);
+        this.domElements.divRobotReport = $(`#Robot${type}ReportDatatable`);
+        this.domElements.tblFootRobotReport = $(`#tblRobot${type}Report > tfoot > tr`)[0];
+        this.Initial();
+    }
+
+    RenderData(site, fromDate, toDate) {
+        this.SetHidden(false);
+
+        let data = {
+            isMonthly: this.dateTimeType == DateTimeType.Montly,
+            isDaily: this.dateTimeType == DateTimeType.Daily,
+            fromDate: fromDate,
+            toDate: toDate,
+            sites: site
+        };
+
+        var myclass = this;
+
+        $.ajax(common.modifyRelativeUrl('RobotReport/GetRobotReport'), {
+            async: false,
+            type: 'POST',
+            tryCount: 0,
+            retryLimit: 3,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data),
+            beforeSend: function () {
+                myclass.domElements.tblRobotReport.find('tbody').addClass('loading');
+                myclass.dataTable.clear().draw();
+                myclass.SetTFootHidden(null);
+            },
+            success: function (response) {
+                if (response?.data?.Items) {
+                    myclass.dataTable.rows.add(response?.data.Items).draw();
+
+                    let tFootData = response?.data.Items && response?.data.Items.length > 0 ? response.data.TFoot : null;
+                    myclass.SetTFootHidden(tFootData);
+                }
+            },
+            complete: function (response) {
+                myclass.domElements.tblRobotReport.find('tbody').removeClass('loading');
+            },
+            error: function (xhr, textStatus, error) {
+                if (textStatus == 'timeout') {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        //try again
+                        $.ajax(this);
+                        return;
+                    }
+                }
+
+                console.log(error);
+            }
+        });
+
+        $(".dataTables_scrollBody thead").attr("hidden", true);
+    }
+
+    SetTFootHidden(data) {
+        let height = data ? 32 : 0;
+
+        if (data) {
+            var nCells = this.domElements.tblFootRobotReport.getElementsByTagName('th');
+            nCells[1].innerHTML = data.find(x => x.RobotType == "AI")?.TotalAccount ?? 0;
+            nCells[2].innerHTML = data.find(x => x.RobotType == "IMPERVA")?.TotalAccount ?? 0;
+            nCells[3].innerHTML = data.find(x => x.RobotType == "COUNTER")?.TotalAccount ?? 0;
+        }
+
+        $(`#tblRobot${this.dateTimeType}Report_wrapper .dataTables_scrollFoot`).height(height);
+    }
+
+    // $(document).ready(function () {
+    //     Initial();
+    // });
+}

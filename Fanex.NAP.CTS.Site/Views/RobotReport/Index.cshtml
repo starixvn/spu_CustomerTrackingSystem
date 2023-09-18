@@ -1,0 +1,235 @@
+﻿
+@{
+    ViewBag.Title = "ROBOT REPORT";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    @Styles.Render("~/robot-report-styles")
+}
+
+<section class="robot-report">
+    <div class="content">
+        <h2 class="page-title">Robot Report</h2>
+    </div>
+
+     <div class="robot-report-header">
+        <div class="group-control">
+            <div class="form-filter">
+                
+                <label class="group title-text">Robot Type:</label>
+                <div class="group width-180">
+                    <select class="control width-select" id="cbbRobotType">
+                        <option selected value="0">All</option>
+                        <option value="1">Robot</option>
+                        <option value="2">AI Robot</option>
+                    </select>
+                </div>
+
+                <label class="group title-text">Site:</label>
+                <div class="group width-180">
+                    <select class="control width-select" id="cbbSite">
+                        <option selected value="A">All</option>
+                        <option value="C">Credit</option>
+                        <option value="L">Licensee</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="robot-report-body">
+        <div class="control">
+            <div class="group-control">
+                <div class="form-filter">
+                    <label class="group title-text" style="min-width: 65px">Months:</label>
+                    <div class="group calendar width-180">
+                        <input type="text" id="dpkFromMonth" class="control" readonly>
+                        <span class="icon-calendar-text"></span>
+                    </div>
+                    <div class="group calendar width-180">
+                        <input type="text" id="dpkToMonth" class="control" readonly>
+                        <span class="icon-calendar-text"></span>
+                    </div>
+
+                    <button class="button button-generate" id="btnGenerateMonthly">Generate</button>
+                </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; width: 100%">
+                
+                <div id="Robot1ReportDatatable" class="report-cont">
+                    <div class="robot-report-datatable">
+                        <div class="fixed-header">
+                            <div class="top-header">
+                                <div>Robot Monthly Statistic</div>
+                                <div class="export-excel">
+                                    <button class="button btnExcel" id="btnExportExcel" title="Export to Excel">
+                                        <i class="icon icon-excel"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <table id="tblRobot1Report" class="table table-striped table-robot-report" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th style="width:70px">AI</th>
+                                    <th style="width:70px">Imperva</th>
+                                    <th style="width:70px">Counter</th>
+                                    <th>Total Distinct Account</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Total Distinct Account</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="AIRobot1ReportDatatable" class="report-cont">
+                    <div class="robot-report-datatable">
+                        <div class="fixed-header">
+                            <div class="top-header">
+                                <div>AI Robot Monthly Statistic</div>
+                                <div class="export-excel">
+                                    <button class="button btnExcel" id="btnExportExcel" title="Export to Excel">
+                                        <i class="icon icon-excel"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <table id="tblAIRobot1Report" class="table table-striped table-robot-report" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th style="width:70px">TI</th>
+                                    <th style="width:70px">SCE</th>
+                                    <th style="width:70px">TD</th>
+                                    <th style="width:70px">ORCD</th>
+                                    <th>Total Distinct Account</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Total Distinct Account</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <div style="height: 2%"></div>
+        <div class="control">
+            <div class="group-control">
+                <div class="form-filter">
+                    <label class="group title-text" style="min-width: 65px">Days:</label>
+                    <div class="group calendar width-180">
+                        <input type="text" id="dpkFromDate" class="control" readonly>
+                        <span class="icon-calendar-text"></span>
+                    </div>
+                    <div class="group calendar width-180">
+                        <input type="text" id="dpkToDate" class="control" readonly>
+                        <span class="icon-calendar-text"></span>
+                    </div>
+
+                    <button class="button button-generate" id="btnGenerateDaily">Generate</button>
+                </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between">
+               
+                <div id="Robot0ReportDatatable" class="report-cont">
+                    <div class="robot-report-datatable">
+                        <div class="fixed-header">
+                            <div class="top-header">
+                                <div>Robot Daily Statistic</div>
+                                <div class="export-excel">
+                                    <button class="button btnExcel" id="btnExportExcel" title="Export to Excel">
+                                        <i class="icon icon-excel"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <table id="tblRobot0Report" class="table table-striped table-robot-report" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th style="width:70px">AI</th>
+                                    <th style="width:70px">Imperva</th>
+                                    <th style="width:70px">Counter</th>
+                                    <th>Total Distinct Account</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Total Distinct Account</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="AIRobot0ReportDatatable" class="report-cont">
+                    <div class="robot-report-datatable">
+                        <div class="fixed-header">
+                            <div class="top-header">
+                                <div>AI Robot Daily Statistic</div>
+                                <div class="export-excel">
+                                    <button class="button btnExcel" id="btnExportExcel" title="Export to Excel">
+                                        <i class="icon icon-excel"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <table id="tblAIRobot0Report" class="table table-striped table-robot-report" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th style="width:70px">TI</th>
+                                    <th style="width:70px">SE</th>
+                                    <th style="width:70px">TD</th>
+                                    <th style="width:70px">ORCD</th>
+                                    <th>Total Distinct Account</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Total Distinct Account</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+    @Scripts.Render("~/robot-report-scripts")
+}

@@ -370,6 +370,7 @@
             AssociationDetectionDetailIP = 71,
             AssociationDetectionDetailMatch = 72,
             AssociationDetectionDetailAgent = 73,
+            RobotReport = 74,
 
             //PlaceEvidenceForMultipleCustAPI = 200,
             GetFlaggedCustomersByLevelAPI = 201,
@@ -448,6 +449,12 @@
         {
             TicketFraud = 2,
             TicketAll = 3
+        }
+
+        public enum RobotType
+        {
+            Robot,
+            AIRobot
         }
 
         public enum CustomerCategorySportType

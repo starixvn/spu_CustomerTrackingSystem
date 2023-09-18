@@ -225,4 +225,9 @@
 	<Function name="LogData">
 		<Setting Key="CTS_Archive_Log_Insert" SpName="CTS_Archive_Log_Insert" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />
 	</Function>
+
+	<Function name="RobotReport">
+		<Setting Key="CTS_DC_RPT_RobotStatistic" SpName="CTS_DC_RPT_RobotStatistic" DbName="MySQL.CTS_DataCenter.Reporter"/>
+		<Setting Key="CTS_DC_RPT_RobotStatistic_AI" SpName="CTS_DC_RPT_RobotStatistic_AI" DbName="MySQL.CTS_DataCenter.Reporter"/>
+	</Function>
 </Functions>

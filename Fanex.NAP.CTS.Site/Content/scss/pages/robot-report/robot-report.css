@@ -1,0 +1,256 @@
+﻿body {
+  font-family: "Lato", Arial, Tahoma, sans-serif;
+}
+body #ui-datepicker-div {
+  z-index: 999999999999999 !important;
+}
+
+.robot-report-header {
+  margin: 0rem 1.6rem 0rem 1.6rem;
+}
+.robot-report-header .group-control {
+  position: sticky;
+  top: 6rem;
+  z-index: 99;
+  background: #fff;
+  padding: 1rem 0 0 0;
+}
+.robot-report-header .group-control .title-robot-report {
+  margin-bottom: -1.3rem;
+}
+.robot-report-header .group-control .form-filter {
+  align-items: center;
+}
+.robot-report-header .group-control .form-filter .title-text {
+  font-size: 1.3rem;
+  color: #474747;
+}
+.robot-report-header .group-control .form-filter .calendar {
+  display: flex;
+  align-items: center;
+  width: auto;
+}
+.robot-report-header .group-control .form-filter .calendar .icon-calendar-text {
+  right: 2.2rem;
+  bottom: 1.7rem;
+}
+.robot-report-header .group-control .form-filter .calendar .text {
+  margin-right: 0.7rem;
+  margin-bottom: 0;
+}
+.robot-report-header .group-control .form-filter .group .width-select {
+  width: 15.5rem;
+}
+.robot-report-header .group-control .form-filter .button-generate {
+  background-color: #396ef8;
+  border-radius: 2px;
+  color: #fff;
+  height: auto !important;
+  padding: 0.7rem 2rem;
+}
+
+.robot-report-body {
+  height: 81vh;
+}
+.robot-report-body .control {
+  background-color: aliceblue;
+}
+.robot-report-body .control .group-control {
+  position: sticky;
+  top: 6rem;
+  z-index: 99;
+  padding: 1rem 1.6rem 0rem 1.6rem;
+}
+.robot-report-body .control .group-control .title-robot-report {
+  margin-bottom: -1.3rem;
+}
+.robot-report-body .control .group-control .form-filter {
+  align-items: center;
+}
+.robot-report-body .control .group-control .form-filter .title-text {
+  font-size: 1.3rem;
+  color: #474747;
+}
+.robot-report-body .control .group-control .form-filter .calendar {
+  display: flex;
+  align-items: center;
+  width: auto;
+}
+.robot-report-body .control .group-control .form-filter .calendar .icon-calendar-text {
+  right: 2.2rem;
+  bottom: 1.7rem;
+}
+.robot-report-body .control .group-control .form-filter .calendar .text {
+  margin-right: 0.7rem;
+  margin-bottom: 0;
+}
+.robot-report-body .control .group-control .form-filter .group .width-select {
+  width: 15.5rem;
+}
+.robot-report-body .control .group-control .form-filter .button-generate {
+  background-color: #396ef8;
+  border-radius: 2px;
+  color: #fff;
+  height: auto !important;
+  padding: 0.7rem 2rem;
+}
+.robot-report-body .control .report-cont {
+  width: 50%;
+}
+.robot-report-body .control .robot-report-datatable {
+  font-family: "Lato", Arial, Tahoma, sans-serif;
+  padding: 1rem 1.6rem 1rem 1.6rem;
+}
+.robot-report-body .control .robot-report-datatable .fixed-header {
+  padding-top: 0rem !important;
+}
+.robot-report-body .control .robot-report-datatable .fixed-header .top-header {
+  justify-content: space-between;
+}
+.robot-report-body .control .robot-report-datatable .group {
+  padding-right: 0;
+  margin-right: 0.6rem;
+}
+.robot-report-body .control .robot-report-datatable .fixed-header {
+  padding-top: 1.6rem;
+  position: sticky;
+  position: -webkit-sticky;
+  top: 6rem;
+  z-index: 9;
+}
+.robot-report-body .control .robot-report-datatable .top-header {
+  padding-bottom: 1rem;
+}
+.robot-report-body .control .robot-report-datatable .top-header .button-primary-outline {
+  font-size: 1.3rem !important;
+  line-height: 1.230769;
+  padding: 0 1rem;
+  text-transform: none;
+}
+.robot-report-body .control .robot-report-datatable .wrapper-info-table {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 13.2rem;
+  z-index: 11;
+}
+.robot-report-body .control .robot-report-datatable .wrapper-info-table .dataTables_length {
+  position: absolute;
+  left: 0;
+}
+.robot-report-body .control .robot-report-datatable .wrapper-info-table .dataTables_paginate {
+  position: absolute !important;
+  padding-top: 4rem !important;
+  right: 50%;
+  transform: translate(50%, -50%);
+  text-align: center;
+}
+.robot-report-body .control .robot-report-datatable .wrapper-info-table .table-robot-report {
+  width: 100% !important;
+}
+.robot-report-body .control .robot-report-datatable .wrapper-info-table .table-robot-report .loading {
+  position: relative;
+}
+.robot-report-body .control .robot-report-datatable .wrapper-info-table .table-robot-report .loading:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 75%;
+  border-radius: 50%;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 0.25rem solid rgba(57, 110, 248, 0.2);
+  border-top-color: rgb(57, 110, 248);
+  -webkit-animation: spin 1s infinite linear;
+  animation: spin 1s infinite linear;
+}
+.robot-report-body .control .robot-report-datatable .wrapper-info-table .table-robot-report .loading tr {
+  opacity: 0.3;
+}
+.robot-report-body .control .robot-report-datatable .wrapper-info-table .table-robot-report thead tr th {
+  position: sticky;
+  top: 17.2rem;
+  font-weight: 300;
+}
+.robot-report-body .control .robot-report-datatable .wrapper-info-table .table-robot-report tbody tr td .click-view-details,
+.robot-report-body .control .robot-report-datatable .wrapper-info-table .table-robot-report tbody tr td .click-view-name {
+  cursor: pointer;
+}
+.robot-report-body .control .robot-report-datatable tfoot tr th {
+  border: 1px solid white;
+  line-height: 17px;
+  padding: 7px;
+  vertical-align: middle;
+  background-color: #1D2E4F;
+  color: #fff;
+  text-align: center;
+  font-weight: normal;
+  border-top: 0 !important;
+}
+
+.background {
+  height: 30px !important;
+  padding: 0;
+  margin: 0;
+}
+
+.line {
+  width: 190px;
+  height: 43px;
+  border-bottom: 1px solid white;
+  transform: translateY(-26px) translateX(-5px) rotate(12deg);
+  position: absolute;
+}
+
+.background > div {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+.bottom {
+  position: absolute;
+  bottom: 1px;
+  left: 1px;
+}
+
+.top {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+}
+
+.dataTables_scrollBody thead tr[role=row] {
+  visibility: collapse !important;
+}
+
+.export-excel {
+  right: 0px;
+  position: absolute;
+}
+.export-excel .btnExcel {
+  display: inline-block;
+  font-family: "Lato", Tahoma, sans-serif !important;
+  height: 26px;
+  font-size: 1.3rem !important;
+  font-weight: bold;
+  line-height: 1.230769;
+  border-radius: 3px;
+  outline: none;
+  text-transform: capitalize;
+  text-align: center;
+  text-shadow: none;
+  font-size: 3rem;
+  margin: 0 0.2rem;
+  overflow: visible;
+  padding: 0.5rem 0rem;
+  background: transparent !important;
+}
+.export-excel .btnExcel .icon-excel {
+  font-size: 3rem;
+}
+
+.form-filter .control {
+  background-color: white;
+}

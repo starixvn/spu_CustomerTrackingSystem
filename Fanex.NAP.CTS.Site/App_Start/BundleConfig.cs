@@ -85,6 +85,8 @@
             RegisterProblemAccountManagementBundles(bundles);
 
             RegisterAssociatedGroupMonitor(bundles);
+
+            RegisterRobotReport(bundles);
         }
 
         private static void RegisterCTSCoreBundles(BundleCollection bundles)
@@ -400,6 +402,22 @@
                 "~/Content/scss/MultipleSelect/jquery.multiselect.css",
                 "~/Content/scss/vendors/select2.min.css",
                 "~/Content/scss/pages/associated-group-monitor/associated-group-monitor.css"));           
+        }
+
+        private static void RegisterRobotReport(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/robot-report-scripts").Include(
+                "~/Scripts/select2.min.js",
+                "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
+                "~/Scripts/RobotReport/index.js",
+                "~/Scripts/RobotReport/ai-robot-report-table.js",
+                "~/Scripts/RobotReport/robot-report-table.js"));
+
+            bundles.Add(new StyleBundle("~/robot-report-styles").Include(
+               "~/Content/scss/vendors/select2.min.css",
+                "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
+               "~/Content/scss/MultipleSelect/jquery.multiselect.css",
+               "~/Content/scss/pages/robot-report/robot-report.css"));
         }
     }
 }

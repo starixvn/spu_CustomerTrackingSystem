@@ -75,6 +75,7 @@
     <Compile Include="Implement\CustomerClassification\CustomerClassificationService.cs" />
     <Compile Include="Implement\RobotBettingService.cs" />
     <Compile Include="Implement\RobotClassificationService.cs" />
+    <Compile Include="Implement\RobotReportService.cs" />
     <Compile Include="Implement\SpecialCustomerClassService.cs" />
     <Compile Include="Implement\FlaggedAccountService.cs" />
     <Compile Include="Implement\GraphService.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Interface\CustomerClassification\IRescanCustomerClassificationService.cs" />
     <Compile Include="Interface\IRobotBettingService.cs" />
     <Compile Include="Interface\IRobotClassificationService.cs" />
+    <Compile Include="Interface\IRobotReportService.cs" />
     <Compile Include="Interface\ISpecialCustomerClassService.cs" />
     <Compile Include="Interface\ISubscriberService.cs" />
     <Compile Include="Interface\ITransactionReportService.cs" />

@@ -134,5 +134,9 @@
   {
     "outputFile": "Content/scss/pages/associated-group-monitor/associated-group-monitor.css",
     "inputFile": "Content/scss/pages/associated-group-monitor/associated-group-monitor.scss"
+  },
+  {
+    "outputFile": "Content/scss/pages/robot-report/robot-report.css",
+    "inputFile": "Content/scss/pages/robot-report/robot-report.scss"
   }
 ]
