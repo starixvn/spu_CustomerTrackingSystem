@@ -27,7 +27,7 @@
 
             var rowDatas = data.Items.Select(item => new object[]
             {
-                item.GetMonthlyTime,
+                param.IsMonthly ? item.GetMonthlyTime : item.GetDailyTime,
                 item.AI,
                 item.IMPERVA,
                 item.COUNTER,
@@ -60,7 +60,7 @@
 
             var rowDatas = data.Items.Select(item => new object[]
             {
-                item.GetMonthlyTime,
+                param.IsMonthly ? item.GetMonthlyTime : item.GetDailyTime,
                 item.TI,
                 item.SCE,
                 item.TD,
