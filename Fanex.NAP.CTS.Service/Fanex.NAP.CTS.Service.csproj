@@ -60,6 +60,7 @@
     <Compile Include="Implement\CustomerClassification\DataLogTrackingServices.cs" />
     <Compile Include="Implement\CustomerClassification\RescanCustomerClassificationService.cs" />
     <Compile Include="Implement\CustomerEvidenceService.cs" />
+    <Compile Include="Implement\ExportExcel\ExportExcelService.cs" />
     <Compile Include="Implement\MemoryCacheService.cs" />
     <Compile Include="Implement\MonitorCtsFunctionService.cs" />
     <Compile Include="Implement\CommonService.cs" />
@@ -75,7 +76,8 @@
     <Compile Include="Implement\CustomerClassification\CustomerClassificationService.cs" />
     <Compile Include="Implement\RobotBettingService.cs" />
     <Compile Include="Implement\RobotClassificationService.cs" />
-    <Compile Include="Implement\RobotReportService.cs" />
+    <Compile Include="Implement\RobotReport\ExportRobotReportService.cs" />
+    <Compile Include="Implement\RobotReport\RobotReportService.cs" />
     <Compile Include="Implement\SpecialCustomerClassService.cs" />
     <Compile Include="Implement\FlaggedAccountService.cs" />
     <Compile Include="Implement\GraphService.cs" />
@@ -96,6 +98,7 @@
     <Compile Include="Interface\IAssociationReportService.cs" />
     <Compile Include="Interface\ICategoryService.cs" />
     <Compile Include="Interface\ICustomerEvidenceService.cs" />
+    <Compile Include="Interface\ExportExcel\IExportExcelService.cs" />
     <Compile Include="Interface\IMemoryCacheService.cs" />
     <Compile Include="Interface\IMonitorCtsFunctionService.cs" />
     <Compile Include="Interface\ICommonService.cs" />
@@ -116,7 +119,8 @@
     <Compile Include="Interface\CustomerClassification\IRescanCustomerClassificationService.cs" />
     <Compile Include="Interface\IRobotBettingService.cs" />
     <Compile Include="Interface\IRobotClassificationService.cs" />
-    <Compile Include="Interface\IRobotReportService.cs" />
+    <Compile Include="Interface\RobotReport\IExportRobotReportService.cs" />
+    <Compile Include="Interface\RobotReport\IRobotReportService.cs" />
     <Compile Include="Interface\ISpecialCustomerClassService.cs" />
     <Compile Include="Interface\ISubscriberService.cs" />
     <Compile Include="Interface\ITransactionReportService.cs" />

@@ -454,6 +454,8 @@
     <Content Include="Content\images\maintenance.jpeg" />
     <Content Include="Content\images\maintenance.png" />
     <Content Include="Content\images\statistic_empty.png" />
+    <Content Include="Content\MonthPicker.css" />
+    <Content Include="Content\MonthPicker.min.css" />
     <Content Include="Content\scss\components\_charts.scss" />
     <Content Include="Content\images\logo.webp" />
     <Content Include="Content\images\maintenance.webp" />
@@ -1040,6 +1042,8 @@
     <Content Include="Scripts\LatestTransaction\index.js" />
     <Content Include="Scripts\ManageSubscriber\index.js" />
     <Content Include="Scripts\MatchMonitor\detail.js" />
+    <Content Include="Scripts\MonthPicker.js" />
+    <Content Include="Scripts\MonthPicker.min.js" />
     <Content Include="Scripts\NotificationSetting\notification-setting.js" />
     <Content Include="Scripts\popoto\d3.min.js" />
     <Content Include="Scripts\popoto\d3.v3.min.js" />
@@ -1104,6 +1108,10 @@
     <Content Include="Views\AssociatedGroupMonitor\Index.cshtml" />
     <Content Include="Views\AssociationDetection\Index_old.cshtml" />
     <Content Include="Views\RobotReport\Index.cshtml" />
+    <Content Include="Template\RobotReport\AIRobotReportDailyTemplate.xls" />
+    <Content Include="Template\RobotReport\AIRobotReportMonthlyTemplate.xls" />
+    <Content Include="Template\RobotReport\RobotReportDailyTemplate.xls" />
+    <Content Include="Template\RobotReport\RobotReportMonthlyTemplate.xls" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

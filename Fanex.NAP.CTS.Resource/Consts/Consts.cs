@@ -222,6 +222,14 @@
             EXPORT_POINT_PIXEL = 225
         }
 
+        public enum ROBOT_REPORT
+        {
+            ROBOT_EXPORT_NUMBER_COLUMN = 5,
+            AIROBOT_EXPORT_NUMBER_COLUMN = 6,
+            EXPORT_NUMBER_CHAR_PER_LINE = 180,
+            EXPORT_POINT_PIXEL = 225
+        }
+
         public enum FunctionId
         {
             RealtimeJob = 1,
@@ -371,6 +379,7 @@
             AssociationDetectionDetailMatch = 72,
             AssociationDetectionDetailAgent = 73,
             RobotReport = 74,
+            RobotReportExport = 75,
 
             //PlaceEvidenceForMultipleCustAPI = 200,
             GetFlaggedCustomersByLevelAPI = 201,

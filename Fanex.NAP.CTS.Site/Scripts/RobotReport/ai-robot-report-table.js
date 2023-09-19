@@ -4,8 +4,11 @@ class AIRobotReportTable {
     domElements = {
         tblRobotReport: null,
         tblFootRobotReport: null,
-        robotReport: null
+        robotReport: null,
+        btnExportExcel: null
     };
+    data = null;
+    common = null;
 
     GenerateGrid() {
         return this.domElements.tblRobotReport.DataTable({
@@ -66,7 +69,11 @@ class AIRobotReportTable {
     }
 
     Initial() {
+        var myclass = this;
         this.dataTable = this.GenerateGrid();
+        this.domElements.btnExportExcel.on("click", function () {
+            myclass.common.downloadFilePostMethod(common.modifyRelativeUrl("RobotReport/ExportAIRobotReport"), myclass.data);
+        });
         this.SetTFootHidden(null);
     }
 
@@ -74,18 +81,20 @@ class AIRobotReportTable {
         this.domElements.robotReport.attr("hidden", isHidden);
     }
 
-    constructor(type) {
+    constructor(common, type) {
+        this.common = common;
         this.dateTimeType = type;
         this.domElements.tblRobotReport = $(`#tblAIRobot${type}Report`);
         this.domElements.tblFootRobotReport = $(`#tblAIRobot${type}Report > tfoot > tr`)[0];
         this.domElements.robotReport = $(`#AIRobot${type}ReportDatatable`);
+        this.domElements.btnExportExcel = $(`#btnExportExcelAIRobot${type}`);
         this.Initial();
     }
 
     RenderData(site, fromDate, toDate) {
         this.SetHidden(false);
 
-        let data = {
+        this.data = {
             isMonthly: this.dateTimeType == DateTimeType.Montly,
             isDaily: this.dateTimeType == DateTimeType.Daily,
             fromDate: fromDate,
@@ -102,7 +111,7 @@ class AIRobotReportTable {
             retryLimit: 3,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data),
+            data: JSON.stringify(this.data),
             beforeSend: function () {
                 myclass.domElements.tblRobotReport.find('tbody').addClass('loading');
                 myclass.dataTable.clear().draw();

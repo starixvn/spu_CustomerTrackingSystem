@@ -1,24 +1,27 @@
-﻿namespace Fanex.NAP.CTS.Service.Implement
+﻿namespace Fanex.NAP.CTS.Service.Implement.RobotReport
 {
     using Fanex.NAP.CTS.Model.RobotReport;
-    using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.RobotReport;
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Criteria.RobotReport;
     using System.Collections.Generic;
-    using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using Newtonsoft.Json;
     using System.Linq;
+    using Fanex.NAP.CTS.Service.Interface.RobotReport;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class RobotReportService : IRobotReportService
     {
         private readonly IDynamicRepository _repository;
+        private readonly IExportRobotReportService _exportExcelService;
 
         public RobotReportService()
         {
             _repository = new DynamicRepository();
+            _exportExcelService = new ExportRobotReportService();
         }
 
+        #region public method
         public AIRobotReportViewModel GetAIRobotReport(RobotReportParamModel param)
         {
             var criteria = new GetAIRobotReportCriteria
@@ -62,6 +65,20 @@
             };
         }
 
+        public byte[] ExportRobotReport(string templatePath, string fileName, RobotReportParamModel param)
+        {
+            var data = GetRobotReport(param);
+            return _exportExcelService.ExportRobotReport(templatePath, fileName, data, param);
+        }
+
+        public byte[] ExportAIRobotReport(string templatePath, string fileName, RobotReportParamModel param)
+        {
+            var data = GetAIRobotReport(param);
+            return _exportExcelService.ExportAIRobotReport(templatePath, fileName, data, param);
+        }
+        #endregion
+
+        #region private method
         private IEnumerable<RobotReportCounterView> GetRobotReportCounter(RobotReportParamModel param)
         {
             var criteria = new GetRobotReportCounterCriteria
@@ -73,5 +90,6 @@
 
             return _repository.Fetch<RobotReportCounterView>(criteria);
         }
+        #endregion
     }
 }

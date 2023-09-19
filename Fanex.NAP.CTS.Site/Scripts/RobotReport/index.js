@@ -22,10 +22,10 @@ function RobotReport() {
     };
 
     let robots = {
-        RobotMonthly: new RobotReportTable(DateTimeType.Montly),
-        RobotDaily: new RobotReportTable(DateTimeType.Daily),
-        AIRobotMonthly: new AIRobotReportTable(DateTimeType.Montly),
-        AIRobotDaily: new AIRobotReportTable(DateTimeType.Daily)
+        RobotMonthly: new RobotReportTable(common, DateTimeType.Montly),
+        RobotDaily: new RobotReportTable(common, DateTimeType.Daily),
+        AIRobotMonthly: new AIRobotReportTable(common, DateTimeType.Montly),
+        AIRobotDaily: new AIRobotReportTable(common, DateTimeType.Daily)
     }
 
     function SetRestrictFromDate() {
@@ -42,34 +42,18 @@ function RobotReport() {
             .datepicker("option", "maxDate", moment(fromDateValue).add(30, "day").toDate());
     }
 
-    function SetRestrictFromMonth() {
-        let toDateValue = domElements.dpkToMonth.datepicker("getDate");
-
-        domElements.dpkFromMonth.datepicker("option", "maxDate", toDateValue);
-    }
-
-    function SetRestrictToMonth() {
-        let fromDateValue = domElements.dpkFromMonth.datepicker("getDate");
-
-        domElements.dpkToMonth
-            .datepicker("option", "minDate", fromDateValue)
-            .datepicker("option", "maxDate", moment(fromDateValue).add(1, "year").toDate());
-    }
-
     function Initial() {
         var toDate, toMonth;
         toDate = toMonth = new Date();
 
-        var fromDate = new Date(toDate);
-        fromDate.setDate(toDate.getDate() - 7);
-        var fromMonth = new Date(toMonth);
-        fromMonth.setMonth(toMonth.getMonth() - 6);
+        var fromDate = moment(toDate).add(-7, "day").toDate();
+        var fromMonth = moment(toDate).add(-6, "month").toDate();
 
         domElements.dpkFromDate
             .datepicker({
                 dateFormat: "M dd, yy",
                 changeMonth: true,
-                changeYear: true
+                changeYear: true,
             })
             .datepicker("setDate", fromDate)
             .change(SetRestrictToDate);
@@ -78,23 +62,55 @@ function RobotReport() {
             .datepicker({
                 dateFormat: "M dd, yy",
                 changeMonth: true,
-                changeYear: true
+                changeYear: true,
             })
             .datepicker("setDate", toDate)
             .change(SetRestrictFromDate);
 
         domElements.dpkFromMonth
-            .datepicker( {
-                format: "mm-yyyy",
-                startView: "months", 
-                minViewMode: "months"
+            .MonthPicker({
+                SelectedMonth: fromMonth,
+                Button: false,
+                MonthFormat: 'M, yy',
+                AltFormat: 'yy/mm/dd',
+                AltField: '#dpkFromMonthServer',
+                OnAfterChooseMonth: function (selectedDate) {
+                    // Do something with selected JavaScript date.
+                    domElements.dpkToMonth.MonthPicker('option', 'MinMonth', selectedDate);
+                    domElements.dpkToMonth.MonthPicker('option', 'MaxMonth', moment(selectedDate).add(1, "year").toDate())
+
+                    var dateToMonthYearVal = new Date($("#dpkToMonthServer").val());
+                    if (selectedDate > dateToMonthYearVal) {
+                        domElements.dpkToMonth.MonthPicker('option', 'SelectedMonth', selectedDate);
+                    }
+
+                    if (selectedDate < moment(dateToMonthYearVal).add(-1, "year").toDate()) {
+                        domElements.dpkToMonth.MonthPicker('option', 'SelectedMonth', moment(selectedDate).add(1, "year").toDate());
+                    }
+                }
             });
 
         domElements.dpkToMonth
-            .datepicker( {
-                format: "mm-yyyy",
-                startView: "months", 
-                minViewMode: "months"
+            .MonthPicker({
+                SelectedMonth: toMonth,
+                Button: false,
+                MonthFormat: 'M, yy',
+                AltFormat: 'yy/mm/dd',
+                AltField: '#dpkToMonthServer',
+                OnAfterChooseMonth: function (selectedDate) {
+                    // Do something with selected JavaScript date.
+                    domElements.dpkFromMonth.MonthPicker('option', 'MinMonth', moment(selectedDate).add(-1, "year").toDate());
+                    domElements.dpkFromMonth.MonthPicker('option', 'MaxMonth', selectedDate)
+
+                    var dateFromMonthYearVal = new Date($("#dpkFromMonthServer").val());
+                    if (selectedDate < dateFromMonthYearVal) {
+                        domElements.dpkFromMonth.MonthPicker('option', 'SelectedMonth', selectedDate);
+                    }
+
+                    if (selectedDate > moment(dateFromMonthYearVal).add(1, "year").toDate()) {
+                        domElements.dpkFromMonth.MonthPicker('option', 'SelectedMonth', moment(selectedDate).add(-1, "year").toDate());
+                    }
+                }
             });
 
         domElements.btnGenerateMonthly.on("click", function () {
@@ -104,6 +120,11 @@ function RobotReport() {
         domElements.btnGenerateDaily.on("click", function () {
             GenerateDaily(domElements.cbbRobotType.val());
         })
+
+        // $('#NoIconDemo').MonthPicker({
+        //     Button: false,
+        //     MonthFormat: 'M, yy'
+        // });
     }
 
     $(document).ready(function () {

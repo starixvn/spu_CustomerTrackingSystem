@@ -4,8 +4,11 @@ class RobotReportTable {
     domElements = {
         tblRobotReport: null,
         tblFootRobotReport: null,
-        divRobotReport: null
+        divRobotReport: null,
+        btnExportExcel: null
     };
+    data = null;
+    common = null;
 
     GenerateGrid() {
         return this.domElements.tblRobotReport.DataTable({
@@ -64,7 +67,11 @@ class RobotReportTable {
     }
 
     Initial() {
+        var myclass = this;
         this.dataTable = this.GenerateGrid();
+        this.domElements.btnExportExcel.on("click", function () {
+            myclass.common.downloadFilePostMethod(common.modifyRelativeUrl("RobotReport/ExportRobotReport"), myclass.data);
+        });
         this.SetTFootHidden(null);
     }
 
@@ -72,18 +79,20 @@ class RobotReportTable {
         this.domElements.divRobotReport.attr("hidden", isHidden);
     }
 
-    constructor(type) {
+    constructor(common, type) {
+        this.common = common;
         this.dateTimeType = type;
         this.domElements.tblRobotReport = $(`#tblRobot${type}Report`);
         this.domElements.divRobotReport = $(`#Robot${type}ReportDatatable`);
         this.domElements.tblFootRobotReport = $(`#tblRobot${type}Report > tfoot > tr`)[0];
+        this.domElements.btnExportExcel = $(`#btnExportExcelRobot${type}`);
         this.Initial();
     }
 
     RenderData(site, fromDate, toDate) {
         this.SetHidden(false);
 
-        let data = {
+        this.data = {
             isMonthly: this.dateTimeType == DateTimeType.Montly,
             isDaily: this.dateTimeType == DateTimeType.Daily,
             fromDate: fromDate,
@@ -100,7 +109,7 @@ class RobotReportTable {
             retryLimit: 3,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data),
+            data: JSON.stringify(this.data),
             beforeSend: function () {
                 myclass.domElements.tblRobotReport.find('tbody').addClass('loading');
                 myclass.dataTable.clear().draw();
