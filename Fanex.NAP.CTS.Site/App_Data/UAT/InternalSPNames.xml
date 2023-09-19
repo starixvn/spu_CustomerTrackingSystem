@@ -233,7 +233,7 @@
 	</Function>
 
 	<Function name="RobotReport">
-		<Setting Key="CTS_DC_RPT_RobotStatistic" SpName="CTS_DC_RPT_RobotStatistic" DbName="MySQL.CTS_DataCenter.Reporter"/>
-		<Setting Key="CTS_DC_RPT_RobotStatistic_AI" SpName="CTS_DC_RPT_RobotStatistic_AI" DbName="MySQL.CTS_DataCenter.Reporter"/>
+		<Setting Key="CTS_DC_RPT_RobotStatistic" SpName="CTS_DC_RPT_RobotStatistic_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
+		<Setting Key="CTS_DC_RPT_RobotStatistic_AI" SpName="CTS_DC_RPT_RobotStatistic_AI_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
 	</Function>
 </Functions>

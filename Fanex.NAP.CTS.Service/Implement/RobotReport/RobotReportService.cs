@@ -9,6 +9,7 @@
     using System.Linq;
     using Fanex.NAP.CTS.Service.Interface.RobotReport;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
+    using System;
 
     public class RobotReportService : IRobotReportService
     {
@@ -35,9 +36,26 @@
 
             var result = _repository.FetchMultiple<AIRobotReportModel, AIRobotReportModel>(criteria);
 
+            var items = default(IEnumerable<AIRobotReportModel>);
+
+            if (param.IsMonthly)
+            {
+                items = from months in EachMonth(param.FromDate, param.ToDate)
+                        join rs in result.firstResultSet on months.ToString("yyyy/MM") equals rs.GetMonthlyTime into rs1
+                        from p in rs1.DefaultIfEmpty()
+                        select p != null ? p : new AIRobotReportModel { DateRange = months };
+            }
+            else
+            {
+                items = from months in EachDay(param.FromDate, param.ToDate)
+                        join rs in result.firstResultSet on months.ToString("yyyy/MM/dd") equals rs.GetDailyTime into rs1
+                        from p in rs1.DefaultIfEmpty()
+                        select p != null ? p : new AIRobotReportModel { DateRange = months };
+            }
+
             return new AIRobotReportViewModel
             {
-                Items = result.firstResultSet,
+                Items = items,
                 TFoot = result.secondResultSet?.Any() ?? false ? result.secondResultSet.ElementAt(0) : new AIRobotReportModel()
             };
         }
@@ -58,9 +76,25 @@
 
             var result = _repository.FetchMultiple<RobotReportModel, RobotReportModel>(criteria);
 
+            var items = default(IEnumerable<RobotReportModel>);
+
+            if (param.IsMonthly)
+            {
+                items = from months in EachMonth(param.FromDate, param.ToDate)
+                        join rs in result.firstResultSet on months.ToString("yyyy/MM") equals rs.GetMonthlyTime into rs1
+                        from p in rs1.DefaultIfEmpty()
+                        select p != null ? p : new RobotReportModel { DateRange = months };
+            }
+            else
+            {
+                items = from months in EachDay(param.FromDate, param.ToDate)
+                        join rs in result.firstResultSet on months.ToString("yyyy/MM/dd") equals rs.GetDailyTime into rs1
+                        from p in rs1.DefaultIfEmpty()
+                        select p != null ? p : new RobotReportModel { DateRange = months };
+            }
             return new RobotReportViewModel
             {
-                Items = result.firstResultSet,
+                Items = items,
                 TFoot = result.secondResultSet?.Any() ?? false ? result.secondResultSet.ElementAt(0) : new RobotReportModel()
             };
         }
@@ -89,6 +123,18 @@
             };
 
             return _repository.Fetch<RobotReportCounterView>(criteria);
+        }
+
+        private IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
+        {
+            for (var day = thru.Date; day.Date >= from.Date; day = day.AddDays(-1))
+                yield return day;
+        }
+
+        private IEnumerable<DateTime> EachMonth(DateTime from, DateTime thru)
+        {
+            for (var day = thru.Date; day.Date >= from.Date; day = day.AddMonths(-1))
+                yield return day;
         }
         #endregion
     }

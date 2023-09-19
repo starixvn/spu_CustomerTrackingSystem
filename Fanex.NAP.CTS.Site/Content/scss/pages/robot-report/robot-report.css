@@ -96,6 +96,7 @@ body #ui-datepicker-div {
 }
 .robot-report-body .control .report-cont {
   width: 50%;
+  max-width: 900px;
 }
 .robot-report-body .control .robot-report-datatable {
   font-family: "Lato", Arial, Tahoma, sans-serif;

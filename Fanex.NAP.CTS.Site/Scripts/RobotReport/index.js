@@ -51,7 +51,7 @@ function RobotReport() {
 
         domElements.dpkFromDate
             .datepicker({
-                dateFormat: "M dd, yy",
+                dateFormat: 'yy/mm/dd',
                 changeMonth: true,
                 changeYear: true,
             })
@@ -60,7 +60,7 @@ function RobotReport() {
 
         domElements.dpkToDate
             .datepicker({
-                dateFormat: "M dd, yy",
+                dateFormat: 'yy/mm/dd',
                 changeMonth: true,
                 changeYear: true,
             })
@@ -71,7 +71,7 @@ function RobotReport() {
             .MonthPicker({
                 SelectedMonth: fromMonth,
                 Button: false,
-                MonthFormat: 'M, yy',
+                MonthFormat: 'yy/mm',
                 AltFormat: 'yy/mm/dd',
                 AltField: '#dpkFromMonthServer',
                 OnAfterChooseMonth: function (selectedDate) {
@@ -94,7 +94,7 @@ function RobotReport() {
             .MonthPicker({
                 SelectedMonth: toMonth,
                 Button: false,
-                MonthFormat: 'M, yy',
+                MonthFormat: 'yy/mm',
                 AltFormat: 'yy/mm/dd',
                 AltField: '#dpkToMonthServer',
                 OnAfterChooseMonth: function (selectedDate) {

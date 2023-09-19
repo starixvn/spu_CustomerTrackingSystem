@@ -33,7 +33,7 @@ class AIRobotReportTable {
             pageLength: 50,
             scrollX: false,
             scrollCollapse: true,
-            scrollY: '20vh',
+            scrollY: '22vh',
             paging: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
@@ -146,7 +146,7 @@ class AIRobotReportTable {
     }
 
     SetTFootHidden(data) {
-        let height = data ? 32 : 0;
+        let height = data ? 'auto' : 0;
 
         if (data) {
             var nCells = this.domElements.tblFootRobotReport.getElementsByTagName('th');

@@ -1054,7 +1054,9 @@
     <Content Include="Scripts\ProblemAccountMonitor\detail.js" />
     <Content Include="Scripts\ProblemAccountMonitor\index.js" />
     <Content Include="Scripts\ProblemCaseMonitor\index.js" />
+    <Content Include="Scripts\RobotReport\ai-robot-report-table.js" />
     <Content Include="Scripts\RobotReport\index.js" />
+    <Content Include="Scripts\RobotReport\robot-report-table.js" />
     <Content Include="Scripts\search.js" />
     <Content Include="Scripts\SpecialCustomerClass\index.js" />
     <Compile Include="Properties\Settings.Designer.cs">
