@@ -155,8 +155,4 @@ class RobotReportTable {
 
         $(`#tblRobot${this.dateTimeType}Report_wrapper .dataTables_scrollFoot`).height(height);
     }
-
-    // $(document).ready(function () {
-    //     Initial();
-    // });
 }
