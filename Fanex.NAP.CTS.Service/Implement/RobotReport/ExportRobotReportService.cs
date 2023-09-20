@@ -76,7 +76,7 @@
                 item.TI,
                 item.SCE,
                 item.TD,
-                item.ORCD,
+                item.OCRD,
                 item.TotalAccount,
             });
         }
@@ -100,7 +100,7 @@
                 data.TFoot.TI,
                 data.TFoot.SCE,
                 data.TFoot.TD,
-                data.TFoot.ORCD,
+                data.TFoot.OCRD,
             };
         }
 

@@ -62,7 +62,7 @@ class AIRobotReportTable {
                 { data: obj => obj.TI },
                 { data: obj => obj.SCE },
                 { data: obj => obj.TD },
-                { data: obj => obj.ORCD },
+                { data: obj => obj.OCRD },
                 { data: obj => obj.TotalAccount }
             ]
         });
@@ -153,7 +153,7 @@ class AIRobotReportTable {
             nCells[1].innerHTML = data.TI;
             nCells[2].innerHTML = data.SCE;
             nCells[3].innerHTML = data.TD;
-            nCells[4].innerHTML = data.ORCD;
+            nCells[4].innerHTML = data.OCRD;
         }
         $(`#tblAIRobot${this.dateTimeType}Report_wrapper .dataTables_scrollFoot`).height(height);
     }

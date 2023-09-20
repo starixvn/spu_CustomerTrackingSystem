@@ -28,7 +28,7 @@
 
         public int TD { get; set; }
 
-        public int ORCD { get; set; }
+        public int OCRD { get; set; }
 
         public int TotalAccount { get; set; }
     }
