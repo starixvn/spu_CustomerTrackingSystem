@@ -733,7 +733,8 @@ function MatchMonitorDetail() {
 
     function IsFilterSuspicious(params) {
         if (params.AGroupList.length == cacheFilterDefault.AGrList.length
-            && params.ReasonList.length == cacheFilterDefault.ReasonList.length) {
+            && params.ReasonList.length == cacheFilterDefault.ReasonList.length
+            && params.MGroupList.length == cacheFilterDependOn.MGrList.length) {
             return false;
         }
         return true;
@@ -1601,13 +1602,19 @@ function MatchMonitorDetail() {
         if (!isExistedBlank) {           
             Object.keys(cacheMGroup.allMGroup).forEach((betID) => {
                 if (arrMGr.indexOf(cacheMGroup.allMGroup[betID].GroupName) != -1) {
-                    arrMGrTranIDs.push(betID);
+                    arrMGrTranIDs.push({
+                        BetID: betID,
+                        MGrName: cacheMGroup.allMGroup[betID].GroupName
+                    });
                 }
             })
         } else {
-            arrMGrTranIDs.push("-");     
+            arrMGrTranIDs.push({
+                BetID: 0,
+                MGrName: "-"
+            });
         }
-        return arrMGrTranIDs;
+        return JSON.stringify(arrMGrTranIDs);
     }
 
     //#endregion Detect Association

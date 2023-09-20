@@ -1,5 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.Model.MatchMonitor
-{
+{    
     public class FraudTransModel
     {
         public long TransID { get; set; }

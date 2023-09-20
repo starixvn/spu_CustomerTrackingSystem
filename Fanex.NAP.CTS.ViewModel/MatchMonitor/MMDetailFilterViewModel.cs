@@ -24,7 +24,7 @@
             this.ReasonList = new List<string>();
             this.GroupList = new List<GroupInfoViewModel>();
             this.MGroupList = new List<string>();
-            this.MGrTranIDListFiltered = new List<string>();
+            this.MGrTranIDListFiltered = "";
             this.DropdownListFilter = new MMDetailFilterDropdownListViewModel();
             this.DropdownListFilterDependOn = new List<DependOnFilterItemViewModel>();
             this.DropdownListFilter = new MMDetailFilterDropdownListViewModel();
@@ -113,7 +113,7 @@
 
         public List<int> TicketStatusList { get; set; }
 
-        public List<string> MGrTranIDListFiltered { get; set; }
+        public string MGrTranIDListFiltered { get; set; }
 
         public MMDetailFilterDropdownListViewModel DropdownListFilter { get; set; }
 

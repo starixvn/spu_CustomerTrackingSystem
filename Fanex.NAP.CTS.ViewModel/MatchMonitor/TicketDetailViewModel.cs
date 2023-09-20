@@ -23,23 +23,19 @@
 
         public long? MinSequenceId { get; set; }
 
-        public string GetTransByFilterSuspicous(MMDetailFilterViewModel filter, IEnumerable<MatchMonitorDetailItemViewModel> ticketMergeGroups)
+        public string GetTransByFilterIncludeSuspicous(MMDetailFilterViewModel filter, IEnumerable<MatchMonitorDetailItemViewModel> ticketMergeGroups)
         {
-            //var isApplyMGrFillter = filter.MGrTranIDListFiltered != null && !filter.MGrTranIDListFiltered.Contains("-");
-
-            //var tranIDs = ticketMergeGroups.Where(x =>
-            //{
-            //    var equals = filter.ReasonList.Any(y => (x.ReasonList ?? "-").Contains(y))
-            //                && filter.AGroupList.Contains(x.ADetectGroup);
-
-            //    if (equals && isApplyMGrFillter)
-            //        equals = filter.MGrTranIDListFiltered.Contains(x.BetID);
-            //    return equals;
-            //}).Select(x => x.TransId).Distinct();
-
-            //return string.Join(",", tranIDs);
-
             var transList = new List<FraudTransModel>();
+           
+            var mGrTranIDListFiltereDic = new Dictionary<long, MGrTranIDListFilteredModel>();
+
+            if (!string.IsNullOrEmpty(filter.MGrTranIDListFiltered))
+            {
+                var mGrTranIDListFiltered = JsonConvert.DeserializeObject<IEnumerable<MGrTranIDListFilteredModel>>(filter.MGrTranIDListFiltered)
+                    .Where(x => filter.MGroupList.Contains(x.MGrName));
+
+                mGrTranIDListFiltereDic = mGrTranIDListFiltered.ToDictionary(x => x.TransID, x => x);                
+            }
           
             foreach (var ticket in ticketMergeGroups)
             {
@@ -47,6 +43,8 @@
                             && filter.AGroupList.Contains(ticket.ADetectGroup);
                 if (equals)
                 {
+                    mGrTranIDListFiltereDic.TryGetValue(ticket.TransId, out var value);                   
+
                     if (!string.IsNullOrEmpty(ticket.ReasonIDList))
                     {
                         var arrReason = ticket.ReasonIDList.Split(',');
@@ -58,12 +56,23 @@
                                 TransID = ticket.TransId,
                                 Reason = int.Parse(item),
                                 AGroup = ticket.ADetectGroupID,
-                                MGroup = 0
+                                MGroup = value != null ? value.MGr : 0
                             });
                         }
                     }
                 }                
             }
+
+            var trandsIDs = transList.Select(x => x.TransID);          
+            var trandsExcept = mGrTranIDListFiltereDic.Where(d => !trandsIDs.Contains(d.Key)).Select(x => new FraudTransModel
+            {
+                TransID = x.Value.TransID,
+                Reason = 0,
+                AGroup = 0,
+                MGroup = x.Value.MGr
+            });
+
+            transList.AddRange(trandsExcept);
 
             if (transList.Any())
             {
@@ -72,6 +81,66 @@
 
             return string.Empty;
         }
+
+        public string GetTransByFilterExcludeSuspicous(MMDetailFilterViewModel filter, IEnumerable<MatchMonitorDetailItemViewModel> ticketMergeGroups)
+        {
+            var transList = new List<FraudTransModel>();
+
+            var mGrTranIDListFiltereDic = new Dictionary<long, MGrTranIDListFilteredModel>();
+
+            if (!string.IsNullOrEmpty(filter.MGrTranIDListFiltered))
+            {
+                var mGrTranIDListFiltered = JsonConvert.DeserializeObject<IEnumerable<MGrTranIDListFilteredModel>>(filter.MGrTranIDListFiltered)
+                    .Where(x => filter.MGroupList.Contains(x.MGrName));
+
+                mGrTranIDListFiltereDic = mGrTranIDListFiltered.ToDictionary(x => x.TransID, x => x);
+            }
+
+            foreach (var ticket in ticketMergeGroups)
+            {
+                var equals = !filter.ReasonList.Any(y => (ticket.ReasonList ?? "-").Contains(y))
+                            && !filter.AGroupList.Contains(ticket.ADetectGroup);
+                if (equals)
+                {
+                    mGrTranIDListFiltereDic.TryGetValue(ticket.TransId, out var value);
+
+                    if (!string.IsNullOrEmpty(ticket.ReasonIDList))
+                    {
+                        var arrReason = ticket.ReasonIDList.Split(',');
+
+                        foreach (var item in arrReason)
+                        {
+                            transList.Add(new FraudTransModel
+                            {
+                                TransID = ticket.TransId,
+                                Reason = int.Parse(item),
+                                AGroup = ticket.ADetectGroupID,
+                                MGroup = value != null ? value.MGr : 0
+                            });
+                        }
+                    }
+                }
+            }
+
+            var trandsIDs = transList.Select(x => x.TransID);
+            var trandsExcept = mGrTranIDListFiltereDic.Where(d => !trandsIDs.Contains(d.Key)).Select(x => new FraudTransModel
+            {
+                TransID = x.Value.TransID,
+                Reason = 0,
+                AGroup = 0,
+                MGroup = x.Value.MGr
+            });
+
+            transList.AddRange(trandsExcept);
+
+            if (transList.Any())
+            {
+                return JsonConvert.SerializeObject(transList);
+            }
+
+            return string.Empty;
+        }
+
 
         public IEnumerable<SuspiciousTransInfoModel> GetSuspiciousTransInfo(IEnumerable<MatchMonitorDetailItemViewModel> tickets)
         {

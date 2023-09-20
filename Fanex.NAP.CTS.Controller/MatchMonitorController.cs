@@ -415,34 +415,28 @@
                 var transJson = string.Empty;
 
                 var isGetAll = (filter.ReasonList != null && filter.ReasonList.Any(x => x.Equals("-"))
-                       && (filter.AGroupList != null && filter.AGroupList.Any(x => x.Equals("-")))
-                       && (filter.MGroupList != null && filter.MGroupList.Any(x => x.Equals("-") || x.Equals("0"))));
+                       && (filter.MGroupList != null && filter.MGroupList.Any(x => x.Equals("-") || x.Equals("0")))
+                       && (filter.AGroupList != null && filter.AGroupList.Any(x => x.Equals("-"))));
 
                 if (!isGetAll || filter.IsFilterSuspicious)
                 {
                     if (fraudTicket != null)
                     {
-                        transJson = fraudTicket.GetTransByFilterSuspicous(filter, fraudTicket.AGroupReasonMerged);
+                        var isExclude = (filter.ReasonList != null && filter.ReasonList.Any(x => x.Equals("-"))) ||
+                            (filter.AGroupList != null && filter.AGroupList.Any(x => x.Equals("-")));
+
+                        if(isExclude)
+                        {
+                            transJson = fraudTicket.GetTransByFilterExcludeSuspicous(filter, fraudTicket.AGroupReasonMerged);
+                        }
+                        else
+                        {
+                            transJson = fraudTicket.GetTransByFilterIncludeSuspicous(filter, fraudTicket.AGroupReasonMerged);
+                        }                        
                     }
                 }
 
                 recordsTotal = _matchMonitorService.GetTotalTicketDetail(info, filter, 0, transJson);
-
-                //if (isGetAll && info.TypeOfTickets == MatchMonitorQueryType.TicketAll)
-                //{
-                //    recordsTotal = _matchMonitorService.GetTotalTicketDetail(info, filter, 0, null);
-                //}
-                //else
-                //{                   
-                //    var fraudTicket = GetFraudMMDetailForCache(info);
-
-                //    if (fraudTicket != null)
-                //    {                        
-                //        var transJson = fraudTicket.GetTransByFilterSuspicous(filter, fraudTicket.AGroupReasonMerged);
-
-                //        recordsTotal = _matchMonitorService.GetTotalTicketDetail(info, filter, 0, transJson);
-                //    }
-                //}
             }
             catch (Exception ex)
             {
@@ -549,15 +543,25 @@
                         var transJson = string.Empty;
 
                         var isGetAll = (filter.ReasonList != null && filter.ReasonList.Any(x => x.Equals("-"))
-                           && (filter.AGroupList != null && filter.AGroupList.Any(x => x.Equals("-")))
-                           && (filter.MGroupList != null && filter.MGroupList.Any(x => x.Equals("-") || x.Equals("0"))));
+                           && (filter.MGroupList != null && filter.MGroupList.Any(x => x.Equals("-") || x.Equals("0")))
+                           && (filter.AGroupList != null && filter.AGroupList.Any(x => x.Equals("-"))));
 
                         if (!isGetAll || filter.IsFilterSuspicious)
-                        {
+                        {                            
                             if (fraudTicket != null)
                             {
-                                transJson = fraudTicket.GetTransByFilterSuspicous(filter, fraudTicket.AGroupReasonMerged);                                
-                            }                            
+                                var isExclude = (filter.ReasonList != null && filter.ReasonList.Any(x => x.Equals("-"))) ||
+                                    (filter.AGroupList != null && filter.AGroupList.Any(x => x.Equals("-")));
+
+                                if (isExclude)
+                                {
+                                    transJson = fraudTicket.GetTransByFilterExcludeSuspicous(filter, fraudTicket.AGroupReasonMerged);
+                                }
+                                else
+                                {
+                                    transJson = fraudTicket.GetTransByFilterIncludeSuspicous(filter, fraudTicket.AGroupReasonMerged);
+                                }
+                            }
                         }                        
 
                         ticketDetailGroup = _matchMonitorService.GetTicketDetailAll(para, filter, transJson);
@@ -620,7 +624,7 @@
                
                 var ticketMergeGroups = fraudTicket.AGroupReasonMerged;
 
-                var transJson = fraudTicket.GetTransByFilterSuspicous(filter, ticketMergeGroups);
+                var transJson = fraudTicket.GetTransByFilterIncludeSuspicous(filter, ticketMergeGroups);
 
                 var ticketDetailGroup = _matchMonitorService.GetTicketDetailByFraudTranIDs(para, filter, transJson);
 
