@@ -46,6 +46,8 @@
         public const string FormatDecimalToString_Thousands = "#,##0";
         public const string FormatDecimalToString_Thousands2Places = "#,##0.00";
         public const string FormatDateToString_MMMddhhmmss = "MMM dd HH:mm:ss";
+        public const string FormatDateTimeToString_yyyyMMdd = "yyyy/MM/dd";
+        public const string FormatDateTimeToString_yyyyMM = "yyyy/MM";
 
         public const string CurrentSubscriberAssignmentsKey = "CurrentSubscriberAssignmentsKey";
         public const string IsMasterSubscriberAssignmentKey = "IsMasterSubscriberAssignmentKey";

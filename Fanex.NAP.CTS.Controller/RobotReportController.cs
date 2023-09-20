@@ -1,28 +1,33 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
+    using System;
+    using System.Web.Mvc;
+    using Newtonsoft.Json;
     using Fanex.Logging;
     using Fanex.Logging.Extensions.Database;
     using Fanex.Logging.Extensions;
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Model.RobotReport;
-    using Fanex.NAP.CTS.Resource.Consts;
-    using Fanex.NAP.CTS.ViewModel.RobotReport;
-    using System;
-    using System.Web.Mvc;
-    using Newtonsoft.Json;
-    using Fanex.NAP.CTS.Service.Interface.RobotReport;
     using Fanex.NAP.CTS.Service.Implement.RobotReport;
-    using static Fanex.NAP.CTS.Resource.Consts.Consts;
+    using Fanex.NAP.CTS.Service.Interface.RobotReport;
     using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Model.RobotReport;
+    using Fanex.NAP.CTS.ViewModel.RobotReport;
+    using Fanex.NAP.CTS.Resource.Consts;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.RobotReport, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class RobotReportController : BaseController
     {
-        private const string RobotReportDailyTemplate = @"~\Template\RobotReport\RobotReportDailyTemplate.xls";
-        private const string RobotReportMonthlyTemplate = @"~\Template\RobotReport\RobotReportMonthlyTemplate.xls";
-        private const string AIRobotReportDailyTemplate = @"~\Template\RobotReport\AIRobotReportDailyTemplate.xls";
-        private const string AIRobotReportMonthlyTemplate = @"~\Template\RobotReport\AIRobotReportMonthlyTemplate.xls";
+        private const string _robotReportDailyTemplate = @"~\Template\RobotReport\RobotReportDailyTemplate.xls";
+        private const string _robotReportMonthlyTemplate = @"~\Template\RobotReport\RobotReportMonthlyTemplate.xls";
+        private const string _aiRobotReportDailyTemplate = @"~\Template\RobotReport\AIRobotReportDailyTemplate.xls";
+        private const string _aiRobotReportMonthlyTemplate = @"~\Template\RobotReport\AIRobotReportMonthlyTemplate.xls";
+
+        private const string _robotReportDailyFileName = "RobotStatisticDailyReport_{0}_{1}.xlsx";
+        private const string _robotReportMonthlyFileName = "RobotStatisticMonthlyReport_{0}_{1}.xlsx";
+        private const string _aiRobotReportDailyFileName = "AIRobotStatisticDailyReport_{0}_{1}.xlsx";
+        private const string _aiRobotReportMonthlyFileName = "AIRobotStatisticMonthlyReport_{0}_{1}.xlsx";
         public override string BaseControllerName { get => Consts.MenuItemReport; }
 
         private readonly IRobotReportService _robotReportService;
@@ -92,11 +97,11 @@
         {
             try
             {
-                var templatePath = Server.MapPath(param.IsMonthly ? RobotReportMonthlyTemplate : RobotReportDailyTemplate);
+                var templatePath = Server.MapPath(param.IsMonthly ? _robotReportMonthlyTemplate : _robotReportDailyTemplate);
 
                 var dateTime = DateTime.Now;
                 var fileName = string.Format(
-                                param.IsMonthly ? "RobotStatisticMonthlyReport_{0}_{1}.xlsx" : "RobotStatisticDailyReport_{0}_{1}.xlsx",
+                                param.IsMonthly ? _robotReportMonthlyFileName : _robotReportDailyFileName,
                                 dateTime.ToString(FormatDateTimeToString_YYYYmmdd),
                                 dateTime.ToString(FormatTimeToString_hhmmss));
 
@@ -122,11 +127,11 @@
         {
             try
             {
-                var templatePath = Server.MapPath(param.IsMonthly ? AIRobotReportMonthlyTemplate : AIRobotReportDailyTemplate);
+                var templatePath = Server.MapPath(param.IsMonthly ? _aiRobotReportMonthlyTemplate : _aiRobotReportDailyTemplate);
 
                 var dateTime = DateTime.Now;
                 var fileName = string.Format(
-                                param.IsMonthly ? "AIRobotStatisticMonthlyReport_{0}_{1}.xlsx" : "AIRobotStatisticDailyReport_{0}_{1}.xlsx",
+                                param.IsMonthly ? _aiRobotReportMonthlyFileName : _aiRobotReportDailyFileName,
                                 dateTime.ToString(FormatDateTimeToString_YYYYmmdd),
                                 dateTime.ToString(FormatTimeToString_hhmmss));
 
