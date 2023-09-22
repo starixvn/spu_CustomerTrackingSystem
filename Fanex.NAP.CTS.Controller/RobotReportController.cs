@@ -24,10 +24,10 @@
         private const string _aiRobotReportDailyTemplate = @"~\Template\RobotReport\AIRobotReportDailyTemplate.xls";
         private const string _aiRobotReportMonthlyTemplate = @"~\Template\RobotReport\AIRobotReportMonthlyTemplate.xls";
 
-        private const string _robotReportDailyFileName = "RobotStatisticDailyReport_{0}_{1}.xlsx";
-        private const string _robotReportMonthlyFileName = "RobotStatisticMonthlyReport_{0}_{1}.xlsx";
-        private const string _aiRobotReportDailyFileName = "AIRobotStatisticDailyReport_{0}_{1}.xlsx";
-        private const string _aiRobotReportMonthlyFileName = "AIRobotStatisticMonthlyReport_{0}_{1}.xlsx";
+        private const string _robotReportDailyFileName = "RobotDailyStatisticReport_{0}_{1}.xlsx";
+        private const string _robotReportMonthlyFileName = "RobotMonthlyStatisticReport_{0}_{1}.xlsx";
+        private const string _aiRobotReportDailyFileName = "AIRobotDailyStatisticReport_{0}_{1}.xlsx";
+        private const string _aiRobotReportMonthlyFileName = "AIRobotMonthlyStatisticReport_{0}_{1}.xlsx";
         public override string BaseControllerName { get => Consts.MenuItemReport; }
 
         private readonly IRobotReportService _robotReportService;
