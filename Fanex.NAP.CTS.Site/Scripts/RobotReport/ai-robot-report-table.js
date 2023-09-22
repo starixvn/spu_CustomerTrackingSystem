@@ -105,7 +105,6 @@ class AIRobotReportTable {
         var myclass = this;
 
         $.ajax(common.modifyRelativeUrl('RobotReport/GetAIRobotReport'), {
-            async: false,
             type: 'POST',
             tryCount: 0,
             retryLimit: 3,
@@ -114,15 +113,16 @@ class AIRobotReportTable {
             data: JSON.stringify(this.data),
             beforeSend: function () {
                 myclass.domElements.tblRobotReport.find('tbody').addClass('loading');
-                myclass.dataTable.clear().draw();
-                myclass.SetTFootHidden(null);
             },
             success: function (response) {
                 if (response?.data) {
-                    myclass.dataTable.rows.add(response?.data.Items).draw();
+                    myclass.dataTable.clear().rows.add(response?.data.Items).draw();
 
                     let tFootData = response?.data.Items && response?.data.Items.length > 0 ? response.data.TFoot : null;
                     myclass.SetTFootHidden(tFootData);
+                }
+                else {
+                    myclass.SetTFootHidden(null);
                 }
             },
             complete: function (response) {

@@ -1,4 +1,12 @@
-﻿body {
+﻿@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+body {
   font-family: "Lato", Arial, Tahoma, sans-serif;
 }
 body #ui-datepicker-div {
@@ -128,34 +136,23 @@ body #ui-datepicker-div {
   padding: 0 1rem;
   text-transform: none;
 }
-.robot-report-body .control .robot-report-datatable .wrapper-info-table {
+.robot-report-body .control .robot-report-datatable .dataTables_scroll {
   position: -webkit-sticky;
   position: sticky;
   top: 13.2rem;
   z-index: 11;
 }
-.robot-report-body .control .robot-report-datatable .wrapper-info-table .dataTables_length {
-  position: absolute;
-  left: 0;
-}
-.robot-report-body .control .robot-report-datatable .wrapper-info-table .dataTables_paginate {
-  position: absolute !important;
-  padding-top: 4rem !important;
-  right: 50%;
-  transform: translate(50%, -50%);
-  text-align: center;
-}
-.robot-report-body .control .robot-report-datatable .wrapper-info-table .table-robot-report {
+.robot-report-body .control .robot-report-datatable .dataTables_scroll .table-robot-report {
   width: 100% !important;
 }
-.robot-report-body .control .robot-report-datatable .wrapper-info-table .table-robot-report .loading {
+.robot-report-body .control .robot-report-datatable .dataTables_scroll .table-robot-report .loading {
   position: relative;
 }
-.robot-report-body .control .robot-report-datatable .wrapper-info-table .table-robot-report .loading:after {
+.robot-report-body .control .robot-report-datatable .dataTables_scroll .table-robot-report .loading:after {
   content: "";
   position: absolute;
   left: 50%;
-  top: 75%;
+  top: 15%;
   border-radius: 50%;
   width: 2.4rem;
   height: 2.4rem;
@@ -164,19 +161,25 @@ body #ui-datepicker-div {
   -webkit-animation: spin 1s infinite linear;
   animation: spin 1s infinite linear;
 }
-.robot-report-body .control .robot-report-datatable .wrapper-info-table .table-robot-report .loading tr {
+.robot-report-body .control .robot-report-datatable .dataTables_scroll .table-robot-report .loading tr {
   opacity: 0.3;
 }
-.robot-report-body .control .robot-report-datatable .wrapper-info-table .table-robot-report thead tr th {
+.robot-report-body .control .robot-report-datatable .dataTables_scroll .table-robot-report thead tr th {
   position: sticky;
   top: 17.2rem;
   font-weight: 300;
+  border-bottom-width: 1px;
+  background-color: #1d2e4f;
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+  border-top: 0 !important;
 }
-.robot-report-body .control .robot-report-datatable .wrapper-info-table .table-robot-report tbody tr td .click-view-details,
-.robot-report-body .control .robot-report-datatable .wrapper-info-table .table-robot-report tbody tr td .click-view-name {
+.robot-report-body .control .robot-report-datatable .dataTables_scroll .table-robot-report tbody tr td .click-view-details,
+.robot-report-body .control .robot-report-datatable .dataTables_scroll .table-robot-report tbody tr td .click-view-name {
   cursor: pointer;
 }
-.robot-report-body .control .robot-report-datatable tfoot tr th {
+.robot-report-body .control .robot-report-datatable .dataTables_scroll .table-robot-report tfoot tr th {
   border: 1px solid white;
   line-height: 17px;
   padding: 7px;
@@ -184,7 +187,7 @@ body #ui-datepicker-div {
   background-color: #1D2E4F;
   color: #fff;
   text-align: center;
-  font-weight: normal;
+  font-weight: bold;
   border-top: 0 !important;
 }
 
@@ -224,6 +227,11 @@ body #ui-datepicker-div {
 
 .dataTables_scrollBody thead tr[role=row] {
   visibility: collapse !important;
+}
+
+.dataTables_scrollFootInner {
+  background-color: #1D2E4F;
+  width: 100% !important;
 }
 
 .export-excel {
