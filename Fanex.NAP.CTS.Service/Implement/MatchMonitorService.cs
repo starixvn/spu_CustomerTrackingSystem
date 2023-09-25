@@ -283,7 +283,7 @@
                 new FraudTransModel
                 {
                     TransID = x.TransID,
-                    Reason = x.Reason,                  
+                    Reason = x.Reason.ToString(),                  
                     AGroup = 0,
                     MGroup = 0
                 }));
@@ -381,7 +381,8 @@
                 criteria.ListDanger = GenerateDangerJson(filter);
                 criteria.ListStatus = filter.TicketStatusList == null ? null : string.Join(",", filter.TicketStatusList);
                 criteria.ListCustomerClass = filter.CustomerClassList == null ? null : string.Join(",", filter.CustomerClassList);
-                criteria.ListReason = filter.ReasonList == null ? null : GetReasonID(null, filter.ReasonList);
+                //criteria.ListReason = filter.ReasonList == null ? null : GetReasonID(null, filter.ReasonList);
+                criteria.ListReason = filter.ReasonList == null ? null : string.Join(",", filter.ReasonList).Replace('-', '0');
                 criteria.ListAGroup = filter.AGroupList == null ? null : string.Join(",", filter.AGroupList).Replace('-', '0');
                 criteria.ListMGroup = filter.MGroupList == null ? null : string.Join(",", filter.MGroupList).Replace('-', '0');
             }

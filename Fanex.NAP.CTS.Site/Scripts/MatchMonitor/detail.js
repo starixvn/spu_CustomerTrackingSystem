@@ -111,9 +111,7 @@ function MatchMonitorDetail() {
         ReasonList: [],
         AGrList: []
     };
-    let cacheMGroup = {
-        itemMMHomeTeam: [],
-        itemMMAwayTeam: [],       
+    let cacheMGroup = {      
         allMGroup: {},
         selectMgroup: {},
         isActive: false
@@ -875,27 +873,22 @@ function MatchMonitorDetail() {
 
     //#region Cache Filter
 
-    function CacheSelectDataFilter() {
-        if (currentType == MatchMonitorDetailViewType.TicketFraud && IsFilterOptionServerSide()) {
-            var selectedFilter = cacheFilter[currentType];
-            if (selectedFilter == undefined) {
-                selectedFilter = {};
-            }
-
-            selectedFilter.cbbCurrency = GetSelectDataFilter(domElements.cbbCurrency);
-            selectedFilter.cbbHDPBetTeam = GetSelectDataFilter(domElements.cbbHDPBetTeam);
-
-            cacheFilterScore = GetSelectDataFilter(domElements.cbbMatchScore);
-
-            selectedFilter.cbbReason = GetSelectDataFilter(domElements.cbbReason);
-            selectedFilter.cbbAGroup = GetSelectDataFilter(domElements.cbbAGroup);
-            selectedFilter.inputAmount = GetInputAmount();
-
-            cacheFilter[currentType] = selectedFilter;
+    function CacheSelectDataFilter() {       
+        var selectedFilter = cacheFilter[currentType];
+        if (selectedFilter == undefined) {
+            selectedFilter = {};
         }
-        else {
-            cacheFilter = {};
-        }
+
+        selectedFilter.cbbCurrency = GetSelectDataFilter(domElements.cbbCurrency);
+        selectedFilter.cbbHDPBetTeam = GetSelectDataFilter(domElements.cbbHDPBetTeam);
+
+        cacheFilterScore = GetSelectDataFilter(domElements.cbbMatchScore);
+
+        selectedFilter.cbbReason = GetSelectDataFilter(domElements.cbbReason);
+        selectedFilter.cbbAGroup = GetSelectDataFilter(domElements.cbbAGroup);
+        selectedFilter.inputAmount = GetInputAmount();
+
+        cacheFilter[currentType] = selectedFilter;
     }   
 
     function CheckChangeFilterByAssociationDetection() { 
@@ -1399,10 +1392,7 @@ function MatchMonitorDetail() {
        
         cacheFilterDependOn.MGrList = [];
         cacheMGroup.allMGroup = {};
-        //cacheMGroup.selectMgroup = {};
-        cacheMGroup.itemMMAwayTeam = [];
-        cacheMGroup.itemMMHomeTeam = [];
-        cacheMGroup.itemMM = [];
+        cacheMGroup.selectMgroup = {};       
 
         SetCacheByAssociationDetection();
 
@@ -1425,28 +1415,32 @@ function MatchMonitorDetail() {
                 domElements.tblMMAwayTeam.find('tbody').addClass('loading');
             },
             success: function (response) {
+                let totalItem = 0;
                 let itemList = response?.data?.ItemList;
                 if (response?.data?.ItemList) {
                     cacheMGroup.isActive = true;
-
+                                        
                     cacheFilterDependOn.MGrList = response.mGrList.MGrItems;
 
                     SetupMGroupFilter(response.mGrList.MGrItems);
 
                     if (isDisplaySingleGrid) {
                         BindChangeGroupAssWithOptions(domElements.tblMMSG.DataTable(), itemList);
+                        let itemSG = domElements.tblMMSG.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
+                        
+                        totalItem = itemSG.length;
                     } else {
                         BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam.DataTable(), itemList);
                         BindChangeGroupAssWithOptions(domElements.tblMMAwayTeam.DataTable(), itemList);
-                    }
-                    
-                    let itemMMHomeTeam = domElements.tblMMHomeTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
-                    let itemMMAwayTeam = domElements.tblMMAwayTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
-                  
-                    let totalItem = itemMMHomeTeam.length + itemMMAwayTeam.length;
 
-                    RefreshBreadcrumbTotalTickets(totalItem, totalItem);
+                        let itemMMHomeTeam = domElements.tblMMHomeTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
+                        let itemMMAwayTeam = domElements.tblMMAwayTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
+
+                        totalItem = itemMMHomeTeam.length + itemMMAwayTeam.length;
+                    }                                                           
                 }
+
+                RefreshBreadcrumbTotalTickets(totalItem, totalItem);
             },
             complete: function (response) {
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
@@ -1454,6 +1448,7 @@ function MatchMonitorDetail() {
 
                 domElements.inputHomeSelectAll.prop('checked', false);
                 domElements.inputAwaySelectAll.prop('checked', false);
+                domElements.inputSGSelectAll.prop('checked', false);
             },
             error: function (error) {
                 domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
@@ -1596,24 +1591,14 @@ function MatchMonitorDetail() {
     }
 
     function GetTranIDsByFilterMGr() {       
-        let arrMGrTranIDs = [];
-        let arrMGr = domElements.cbbMGroup.val();
-        let isExistedBlank = arrMGr.indexOf("0") != -1;
-        if (!isExistedBlank) {           
-            Object.keys(cacheMGroup.allMGroup).forEach((betID) => {
-                if (arrMGr.indexOf(cacheMGroup.allMGroup[betID].GroupName) != -1) {
-                    arrMGrTranIDs.push({
-                        BetID: betID,
-                        MGrName: cacheMGroup.allMGroup[betID].GroupName
-                    });
-                }
-            })
-        } else {
+        let arrMGrTranIDs = [];       
+        Object.keys(cacheMGroup.allMGroup).forEach((betID) => {
             arrMGrTranIDs.push({
-                BetID: 0,
-                MGrName: "-"
+                BetID: betID,
+                MGrName: cacheMGroup.allMGroup[betID].GroupName
             });
-        }
+        })
+
         return JSON.stringify(arrMGrTranIDs);
     }
 
@@ -2160,7 +2145,7 @@ function MatchMonitorDetail() {
                 cacheMGroup.isActive = false;
                 cacheMGroup.selectMgroup = {};
                 CacheSelectDataFilter();
-                TypeOfTicketsOnChange(currentType == MatchMonitorDetailViewType.TicketAll, true);
+                TypeOfTicketsOnChange(currentType == MatchMonitorDetailViewType.TicketAll);
             });
         }
 
@@ -2185,14 +2170,16 @@ function MatchMonitorDetail() {
             domElements.inputCustAmountRM.val('');           
             maxSequenceId = 1;
             cacheFilter = {};
+            cacheMGroup.isActive = false;
             cacheMGroup.allMGroup = {};
             cacheMGroup.selectMgroup = {};
-            cacheMGroup.isActive = false;
+            
+            CacheSelectDataFilter();
             cacheFilterDependOn.MGrList = [];
-
+            
             ResetDefaulCbbSite();
 
-            TypeOfTicketsOnChange(true, true);
+            TypeOfTicketsOnChange(false);
             FetchMatchMonitorDetail(currentType);
         });
 

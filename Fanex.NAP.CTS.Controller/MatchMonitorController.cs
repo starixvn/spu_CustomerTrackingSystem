@@ -422,7 +422,7 @@
                 {
                     if (fraudTicket != null)
                     {
-                        var isExclude = (filter.ReasonList != null && filter.ReasonList.Any(x => x.Equals("-"))) ||
+                        var isExclude = (filter.ReasonList != null && filter.ReasonList.Any(x => x.Equals("-"))) &&
                             (filter.AGroupList != null && filter.AGroupList.Any(x => x.Equals("-")));
 
                         if(isExclude)
@@ -550,7 +550,7 @@
                         {                            
                             if (fraudTicket != null)
                             {
-                                var isExclude = (filter.ReasonList != null && filter.ReasonList.Any(x => x.Equals("-"))) ||
+                                var isExclude = (filter.ReasonList != null && filter.ReasonList.Any(x => x.Equals("-"))) &&
                                     (filter.AGroupList != null && filter.AGroupList.Any(x => x.Equals("-")));
 
                                 if (isExclude)
