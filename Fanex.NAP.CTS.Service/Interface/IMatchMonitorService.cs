@@ -20,7 +20,9 @@
 
         MMDetailResultModel GetMatchMonitorDetail(MMDetailInfoViewModel filter);
 
-        IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);        
+        IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);
+
+        string GetTransFilterSuspicousMGr(MMDetailFilterViewModel filter, TicketDetailViewModel fraudTicket);
 
         TicketDetailViewModel GetTicketDetailFraud(MMDetailResultModel matchDetailInfo, MMDetailInfoViewModel para);
 

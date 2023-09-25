@@ -277,6 +277,47 @@
             return string.Join(",", reasonIDs);            
         }
 
+        public string GetTransFilterSuspicousMGr(MMDetailFilterViewModel filter, TicketDetailViewModel fraudTicket)
+        {
+            var transJson = string.Empty;
+
+            var isGetAll = (filter.ReasonList != null && filter.ReasonList.Any(x => x.Equals("-"))
+               && (filter.MGroupList != null && filter.MGroupList.Any(x => x.Equals("-") || x.Equals("0")))
+               && (filter.AGroupList != null && filter.AGroupList.Any(x => x.Equals("-"))));
+
+            if (!isGetAll || filter.IsFilterSuspicious)
+            {
+                var isExclude = (filter.ReasonList != null && filter.ReasonList.Any(x => x.Equals("-"))) &&
+                        (filter.AGroupList != null && filter.AGroupList.Any(x => x.Equals("-")));
+
+                if (fraudTicket != null)
+                {
+                    if (isExclude)
+                    {
+                        transJson = fraudTicket.GetTransByFilterExcludeSuspicous(filter, fraudTicket.AGroupReasonMerged);
+                    }
+                    else
+                    {
+                        transJson = fraudTicket.GetTransByFilterIncludeSuspicous(filter, fraudTicket.AGroupReasonMerged);
+                    }
+                }
+                else
+                {
+                    fraudTicket = new TicketDetailViewModel();
+                    if (isExclude)
+                    {
+                        transJson = fraudTicket.GetTransByFilterExcludeMGr(filter);
+                    }
+                    else
+                    {
+                        transJson = fraudTicket.GetTransByFilterIncludeMGr(filter);
+                    }
+                }
+            }
+
+            return transJson;
+        }
+
         public TicketDetailViewModel GetTicketDetailFraud(MMDetailResultModel matchDetailInfo, MMDetailInfoViewModel para)
         {            
             var transJsons = JsonConvert.SerializeObject(matchDetailInfo.MatchDetails.Select(x =>

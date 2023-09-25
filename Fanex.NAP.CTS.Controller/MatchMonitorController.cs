@@ -412,29 +412,8 @@
             try
             {
                 var fraudTicket = GetFraudMMDetailForCache(info);
-                var transJson = string.Empty;
 
-                var isGetAll = (filter.ReasonList != null && filter.ReasonList.Any(x => x.Equals("-"))
-                       && (filter.MGroupList != null && filter.MGroupList.Any(x => x.Equals("-") || x.Equals("0")))
-                       && (filter.AGroupList != null && filter.AGroupList.Any(x => x.Equals("-"))));
-
-                if (!isGetAll || filter.IsFilterSuspicious)
-                {
-                    if (fraudTicket != null)
-                    {
-                        var isExclude = (filter.ReasonList != null && filter.ReasonList.Any(x => x.Equals("-"))) &&
-                            (filter.AGroupList != null && filter.AGroupList.Any(x => x.Equals("-")));
-
-                        if(isExclude)
-                        {
-                            transJson = fraudTicket.GetTransByFilterExcludeSuspicous(filter, fraudTicket.AGroupReasonMerged);
-                        }
-                        else
-                        {
-                            transJson = fraudTicket.GetTransByFilterIncludeSuspicous(filter, fraudTicket.AGroupReasonMerged);
-                        }                        
-                    }
-                }
+                var transJson = _matchMonitorService.GetTransFilterSuspicousMGr(filter, fraudTicket);
 
                 recordsTotal = _matchMonitorService.GetTotalTicketDetail(info, filter, 0, transJson);
             }
@@ -540,33 +519,13 @@
                     if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
                     {
                         var fraudTicket = GetFraudMMDetailForCache(para);
-                        var transJson = string.Empty;
 
-                        var isGetAll = (filter.ReasonList != null && filter.ReasonList.Any(x => x.Equals("-"))
-                           && (filter.MGroupList != null && filter.MGroupList.Any(x => x.Equals("-") || x.Equals("0")))
-                           && (filter.AGroupList != null && filter.AGroupList.Any(x => x.Equals("-"))));
-
-                        if (!isGetAll || filter.IsFilterSuspicious)
-                        {                            
-                            if (fraudTicket != null)
-                            {
-                                var isExclude = (filter.ReasonList != null && filter.ReasonList.Any(x => x.Equals("-"))) &&
-                                    (filter.AGroupList != null && filter.AGroupList.Any(x => x.Equals("-")));
-
-                                if (isExclude)
-                                {
-                                    transJson = fraudTicket.GetTransByFilterExcludeSuspicous(filter, fraudTicket.AGroupReasonMerged);
-                                }
-                                else
-                                {
-                                    transJson = fraudTicket.GetTransByFilterIncludeSuspicous(filter, fraudTicket.AGroupReasonMerged);
-                                }
-                            }
-                        }                        
+                        var transJson = _matchMonitorService.GetTransFilterSuspicousMGr(filter, fraudTicket);
 
                         ticketDetailGroup = _matchMonitorService.GetTicketDetailAll(para, filter, transJson);
 
                         mdResult.LastSequenceID = para.LastScannedSequenceID;
+
                         var custIDs = ticketDetailGroup.TicketDetails.Select(ticket => ticket.CustId).Distinct();
 
                         var custInfo = GetCustInfoByCustID(custIDs);
@@ -708,7 +667,9 @@
             var verifiedTrans = new List<MatchMonitorDetailVerifyTransResultModel>();
             var ticketFromMainDb = new MMDetailTicketListViewModel();
 
-            var ticketDetailGroup = _matchMonitorService.GetTicketDetailAll(para, filter, string.Empty);
+            var transJson = _matchMonitorService.GetTransFilterSuspicousMGr(filter, null);
+
+            var ticketDetailGroup = _matchMonitorService.GetTicketDetailAll(para, filter, transJson);
 
             var custInfo = GetCustInfoByCustID(ticketDetailGroup.TicketDetails.Select(ticket => ticket.CustId).Distinct());
 

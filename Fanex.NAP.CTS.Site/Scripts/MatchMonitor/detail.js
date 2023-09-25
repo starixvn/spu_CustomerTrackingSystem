@@ -103,6 +103,7 @@ function MatchMonitorDetail() {
 
     let cacheFilter = {};
     let cacheFilterScore = undefined;
+    let cacheFilterForImportNew = {};
     let cacheFilterDependOn = {
         DropdownListFilterDependOn: [],
         MGrList: []
@@ -317,18 +318,19 @@ function MatchMonitorDetail() {
     }
 
     function SetupFilterScore(element, data) {
-        if (cacheFilterScore) {
-            data = [...new Set([...data, ...cacheFilterScore])];
+        let cacheSelected = cacheFilterForImportNew[currentType];
+        if (cacheSelected != undefined && cacheSelected.cbbMatchScore) {
+            data = [...new Set([...data, ...cacheSelected.cbbMatchScore])];
         }
-
+        
         SetupFilter(element, data);
 
-        if (cacheFilterScore) {
-            setTimeout(RefreshFilterSelected(element, cacheFilterScore), 10);
+        if (cacheSelected != undefined && cacheSelected.cbbMatchScore) {
+            setTimeout(RefreshFilterSelected(element, cacheSelected.cbbMatchScore), 10);
         }
     }
 
-    function SetupFilterFromDictinary(element, data) {
+    function SetupFilterFromDictinary(element, data) {        
         element.multiselect().empty();
 
         if (data) {
@@ -404,38 +406,60 @@ function MatchMonitorDetail() {
     }
 
     function SetupDanger(data) {
+        let cacheSelectedCC = [];
+        let cacheSelected = cacheFilterForImportNew[currentType];
+        if (cacheSelected != undefined && cacheSelected.cbbDanger) {
+            cacheSelectedCC = cacheSelected.cbbDanger;
+        }
+
         if (data) {
             let dangerSelector = domElements.cbbDanger.empty();
 
-            if (data.NoneDanger.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(0, "None", data.NoneDanger.DangerItems));
+            if (data.NoneDanger.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(0, "None", data.NoneDanger.DangerItems, cacheSelectedCC));
 
-            if (data.Danger1.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(1, "Original", data.Danger1.DangerItems));
+            if (data.Danger1.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(1, "Original", data.Danger1.DangerItems, cacheSelectedCC));
 
-            if (data.Danger2.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(2, "ABI", data.Danger2.DangerItems));
+            if (data.Danger2.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(2, "ABI", data.Danger2.DangerItems, cacheSelectedCC));
 
-            if (data.Danger3.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(3, "Other Sports", data.Danger3.DangerItems));
+            if (data.Danger3.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(3, "Other Sports", data.Danger3.DangerItems, cacheSelectedCC));
 
-            if (data.Danger4.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(4, "Basketball", data.Danger4.DangerItems));
+            if (data.Danger4.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(4, "Basketball", data.Danger4.DangerItems, cacheSelectedCC));
 
-            if (data.Danger5.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(5, "E-Sports", data.Danger5.DangerItems));
+            if (data.Danger5.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(5, "E-Sports", data.Danger5.DangerItems, cacheSelectedCC));
 
             domElements.cbbDanger.parent().find('button').removeClass('border-error');
-
+            
             domElements.cbbDanger.multiselect('refresh');
         }
     }
 
-    function BuildOptgroup(optgroupValue, optgroupName, items) {
+    function BuildOptgroup(optgroupValue, optgroupName, items, cacheSelectedCC) {
         let optgroup = `<optgroup label="${optgroupName}" DangerType=${optgroupValue}>`;
-        items.map(function (x) {
-            optgroup += `<option selected value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
-        })
+        if (cacheSelectedCC.length > 0) {
+            items.map(function (x) {
+                if (cacheSelectedCC.indexOf(optgroupValue + '-' + x.Danger) != -1) {
+                    optgroup += `<option selected value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
+                } else {
+                    optgroup += `<option value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
+                }                
+            })
+        } else {
+            items.map(function (x) {
+                optgroup += `<option selected value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
+            })
+        }
+        
         optgroup += "</optgroup>";
 
         return optgroup;
     }
 
     function SetupCC(data) {
+        let cacheSelected = cacheFilterForImportNew[currentType];
+        if (cacheSelected != undefined && cacheSelected.cbbCC) {
+            data = [...new Set([...data, ...cacheSelected.cbbCC])];
+        }
+
         if (data) {
             let ccSelector = domElements.cbbCC.empty();
             
@@ -455,9 +479,13 @@ function MatchMonitorDetail() {
             });
           
             domElements.cbbCC.parent().find('button').removeClass('border-error');
-
-            domElements.cbbCC.multiselect('refresh');
-        }
+            if (cacheSelected != undefined && cacheSelected.cbbCC) {
+                setTimeout(RefreshFilterSelected(domElements.cbbCC, cacheSelected.cbbCC), 10);
+            } else {
+                domElements.cbbCC.multiselect('refresh');
+            }
+            
+        }        
     }
 
     function BuildCCGroup(ccItems, groupName) {
@@ -476,7 +504,7 @@ function MatchMonitorDetail() {
         return optgroup;
     }
 
-    function SetupSubscriberTypeFilter(data) {
+    function SetupSubscriberTypeFilter(data) {        
         if (data && data.length > 0) {
             domElements.cbbSites.empty();
             data.forEach(item => {
@@ -488,25 +516,46 @@ function MatchMonitorDetail() {
                 }
                 domElements.cbbSites.append(`<option value='${item}'>${subName}</option>`);
             });
+
+            let cacheSelected = cacheFilterForImportNew[currentType];
+            if (cacheSelected != undefined && cacheSelected.cbbSites) {
+                domElements.cbbSites.val(cacheSelected.cbbSites);
+            }
         } 
     }
 
     function SetupTicketStatusFilter(data) {
+        let cacheTicketStatus = [];
+        let cacheSelected = cacheFilterForImportNew[currentType];
+        if (cacheSelected != undefined && cacheSelected.cbbTicketsStatus) {
+            cacheTicketStatus = cacheSelected.cbbTicketsStatus;
+        }
+
         domElements.cbbTicketsStatus.multiselect().empty();
 
         if (data) {
-            data.forEach(item => {
-                if (item.TicketStatus == 101) { // untick "Reject"
-                    domElements.cbbTicketsStatus.append(`<option value='${item.TicketStatus}'>${item.TicketStatusName}</option>`);
-                } else {
-                    domElements.cbbTicketsStatus.append(`<option selected value='${item.TicketStatus}'>${item.TicketStatusName}</option>`);
-                }
-            });
+            if (cacheTicketStatus.length > 0) {
+                data.forEach(item => {
+                    if (cacheTicketStatus.indexOf(item.TicketStatus.toString()) != -1) {
+                        domElements.cbbTicketsStatus.append(`<option selected value='${item.TicketStatus}'>${item.TicketStatusName}</option>`);
+                    } else {
+                        domElements.cbbTicketsStatus.append(`<option value='${item.TicketStatus}'>${item.TicketStatusName}</option>`);
+                    }
+                });
+            } else {
+                data.forEach(item => {
+                    if (item.TicketStatus == 101) {// untick "Reject"
+                        domElements.cbbTicketsStatus.append(`<option value='${item.TicketStatus}'>${item.TicketStatusName}</option>`);
+                    } else {
+                        domElements.cbbTicketsStatus.append(`<option selected value='${item.TicketStatus}'>${item.TicketStatusName}</option>`);
+                    }
+                });
+            }           
 
             domElements.cbbTicketsStatus.parent().find('button').removeClass('border-error');
         }
 
-        domElements.cbbTicketsStatus.multiselect("refresh");
+        domElements.cbbTicketsStatus.multiselect("refresh");    
     }
 
     function SetupDoubleDataTable() {
@@ -827,15 +876,9 @@ function MatchMonitorDetail() {
         SetupFilterFromDictinary(domElements.cbbCurrency, data.CurrencyList);
 
         if (data.IsDisplaySingleGrid) {
-            SetupFilter(domElements.cbbHDPBetTeam, data.BetTeamList);
-            domElements.divHomeMonitor.addClass('hide');
-            domElements.divAwayMonitor.addClass('hide');
-            domElements.divSGMonitor.removeClass('hide');
+            SetupFilter(domElements.cbbHDPBetTeam, data.BetTeamList);         
         } else {
-            SetupFilter(domElements.cbbHDPBetTeam, data.HDPList);
-            domElements.divHomeMonitor.removeClass('hide');
-            domElements.divAwayMonitor.removeClass('hide');
-            domElements.divSGMonitor.addClass('hide');
+            SetupFilter(domElements.cbbHDPBetTeam, data.HDPList);           
         }
 
         SetupFilterScore(domElements.cbbMatchScore, data.ScoreList);
@@ -866,7 +909,8 @@ function MatchMonitorDetail() {
         }
         
         cacheMGroup.allMGroup = {};
-        cacheMGroup.selectMgroup = {};       
+        cacheMGroup.selectMgroup = {};
+        cacheFilterForImportNew[currentType] = undefined;
     }
 
     //#endregion Render
@@ -925,6 +969,24 @@ function MatchMonitorDetail() {
         }        
     }
 
+    function CacheSelectFilterForImportNew() {
+        var selectedFilter = cacheFilterForImportNew[currentType];
+        if (selectedFilter == undefined) {
+            selectedFilter = {};
+        }
+        selectedFilter.cbbSites = domElements.cbbSites.val();
+        selectedFilter.cbbCC = GetSelectDataFilter(domElements.cbbCC);
+        selectedFilter.cbbDanger = GetSelectDataFilter(domElements.cbbDanger);
+        selectedFilter.cbbMatchScore = GetSelectDataFilter(domElements.cbbMatchScore);
+        selectedFilter.cbbCurrency = domElements.cbbCurrency.val();
+        selectedFilter.cbbReason = domElements.cbbReason.val();
+        selectedFilter.cbbAGroup = domElements.cbbAGroup.val();
+        selectedFilter.cbbHDPBetTeam = GetSelectDataFilter(domElements.cbbHDPBetTeam);
+        selectedFilter.cbbTicketsStatus = GetSelectDataFilter(domElements.cbbTicketsStatus);
+
+        cacheFilterForImportNew[currentType] = selectedFilter;
+    }
+
     function RefreshMGr(items) {
         domElements.cbbMGroup.multiselect().empty();
 
@@ -970,28 +1032,6 @@ function MatchMonitorDetail() {
         }
     }   
 
-    function IsFilterOptionServerSide() {
-        if (GetSelectDataFilter(domElements.cbbCurrency))
-            return true;
-
-        if (GetSelectDataFilter(domElements.cbbHDPBetTeam))
-            return true;
-
-        if (GetSelectDataFilter(domElements.cbbMatchScore))
-            return true;
-
-        if (GetSelectDataFilter(domElements.cbbReason))
-            return true;
-
-        if (GetSelectDataFilter(domElements.cbbAGroup))
-            return true;
-
-        if (GetInputAmount() != undefined) {
-            return true;
-        }
-
-        return false;
-    }
     //#endregion Cache Filter
 
     //#region Fetch Match Monitor Detail
@@ -1025,6 +1065,16 @@ function MatchMonitorDetail() {
             }
 
             domElements.breadcrumbTotalTickets.html('');
+
+            if (isDisplaySingleGrid) {              
+                domElements.divHomeMonitor.addClass('hide');
+                domElements.divAwayMonitor.addClass('hide');
+                domElements.divSGMonitor.removeClass('hide');
+            } else {                
+                domElements.divHomeMonitor.removeClass('hide');
+                domElements.divAwayMonitor.removeClass('hide');
+                domElements.divSGMonitor.addClass('hide');
+            }
            
             timeoutRenderTicketDetail = setTimeout(() => {
                 let params = {
@@ -1069,7 +1119,6 @@ function MatchMonitorDetail() {
                     domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
                     domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
                     domElements.tblMMSG.find('tbody').removeClass('loading');
-                    
                 }
             }, 10)
         }
@@ -1253,22 +1302,7 @@ function MatchMonitorDetail() {
         }
     }
 
-    function RenderDoubleGrid(data, recordsFilteredGlobal, recordsTotalGlobal) {
-        //if ($('option', domElements.cbbMGroup).length > 1) {            
-        //    FilterUIGridByMGr(data?.HomeMatchItemList, data?.AwayMatchItemList);            
-        //}
-        //else {
-        //    if (data?.HomeMatchItemList) {
-        //        domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw(false);
-        //    }
-
-        //    if (data?.AwayMatchItemList) {
-        //        domElements.tblMMAwayTeam.DataTable().rows.add(data.AwayMatchItemList).draw(false);
-        //    }
-
-        //    RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsTotalGlobal);
-        //}
-
+    function RenderDoubleGrid(data, recordsFilteredGlobal, recordsTotalGlobal) {       
         if (data?.HomeMatchItemList) {
             domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw(false);
         }
@@ -1547,49 +1581,6 @@ function MatchMonitorDetail() {
         })
     }
 
-    function FilterUIGridByMGr(dataHome, dataAway) {  
-        let totalNewItem = 0;
-       
-        let arrMGr = domElements.cbbMGroup.val();
-        let isExistedBlank = arrMGr.indexOf("0") != -1;
-
-        let itemMMHomeTeamFilter = dataHome.filter(function (item) {
-            let assDetectionItem = cacheMGroup.allMGroup[item.BetID];
-            if (assDetectionItem) {
-                return arrMGr.indexOf(assDetectionItem.GroupName) != -1;       
-            } else {
-                if (isExistedBlank) {
-                    return item.MDetectGroup == "-";
-                } else {
-                    return false;
-                }               
-            }
-        });
-
-        let itemMMAwayTeamFilter = dataAway.filter(function (item) {
-            let assDetectionItem = cacheMGroup.allMGroup[item.BetID];
-            if (assDetectionItem) {
-                return arrMGr.indexOf(assDetectionItem.GroupName) != -1;
-            } else {
-                if (isExistedBlank) {
-                    return item.MDetectGroup == "-";
-                } else {
-                    return false;
-                }
-            }
-        });
-      
-        let totalOldItem = domElements.tblMMHomeTeam.DataTable().data().length + domElements.tblMMAwayTeam.DataTable().data().length;
-
-        domElements.tblMMHomeTeam.DataTable().rows.add(itemMMHomeTeamFilter).draw(false);
-        domElements.tblMMAwayTeam.DataTable().rows.add(itemMMAwayTeamFilter).draw(false);
-
-        totalNewItem = totalOldItem + itemMMHomeTeamFilter.length + itemMMAwayTeamFilter.length;
-        
-        //RefreshBreadcrumbTotalTickets(totalNewItem, totalNewItem);
-        domElements.hdbreadcrumTotalTickets.text(totalNewItem);
-    }
-
     function GetTranIDsByFilterMGr() {       
         let arrMGrTranIDs = [];       
         Object.keys(cacheMGroup.allMGroup).forEach((betID) => {
@@ -1748,9 +1739,11 @@ function MatchMonitorDetail() {
         ResetDefaulCbbSite();        
 
         ChangeCbbTypeOfTickets();
+        
+        let txtMarket = $("option:selected", domElements.cbbMarket).text();        
+        domElements.spanMarketInfo.text(`${txtMarket}`);
 
         let txtBetType = $("option:selected", domElements.cbbBetType).text();
-
         domElements.spanSportBetTypeInfo.text(`${domElements.sportName} - ${txtBetType} -`);
 
         currentType = Number(domElements.cbbTypeOfTickets.val());
@@ -1758,12 +1751,7 @@ function MatchMonitorDetail() {
         cacheFilterDependOn.MGrList = [];
 
         isImportNewTicket = true;
-
-        RefreshBreadcrumbTotalTickets(0, 0);                
-        domElements.tblMMHomeTeam.DataTable().clear().draw(false);
-        domElements.tblMMAwayTeam.DataTable().clear().draw(false);
-        domElements.tblMMSG.DataTable().clear().draw(false);
-
+     
         FetchFilterMatchMonitorDetail();    
 
         domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
@@ -1923,13 +1911,16 @@ function MatchMonitorDetail() {
                 break;
             default:
                 currencyItems = DistinctByCurrency(dependOnFilter);
-                RefreshCurrency(currencyItems);
+                let isRefreshDependCurrency = RefreshCurrency(currencyItems);
 
-                reasonItems = DistinctByReason(dependOnFilter);
-                RefreshReason(reasonItems);
+                if (!isRefreshDependCurrency) {
+                    reasonItems = DistinctByReason(dependOnFilter);
+                    RefreshReason(reasonItems);
 
-                aGrItems = DistinctByAGr(dependOnFilter);
-                RefreshAGr(aGrItems);
+                    aGrItems = DistinctByAGr(dependOnFilter);
+                    RefreshAGr(aGrItems);
+                }
+               
                 break;
         }        
     }
@@ -1999,31 +1990,83 @@ function MatchMonitorDetail() {
     }
 
     function RefreshCurrency(currencyItems) {
+        let cacheSelectedCurrency = [];
+        let isRefreshDependCurrency = false;
+        let cacheSelected = cacheFilterForImportNew[currentType];
+        if (cacheSelected != undefined && cacheSelected.cbbCurrency) {
+            cacheSelectedCurrency = cacheSelected.cbbCurrency;
+        }
         domElements.cbbCurrency.multiselect().empty();
         if (currencyItems.length > 0) {
-            currencyItems.forEach(item => {
-                domElements.cbbCurrency.append(`<option selected value='${item.CurrencyId}'>${item.CurrencyName}</option>`);
-            });
+            if (cacheSelectedCurrency.length > 0) {
+                currencyItems.forEach(item => {
+                    if ($.inArray(item.CurrencyId.toString(), cacheSelectedCurrency) != -1) {
+                        domElements.cbbCurrency.append(`<option selected value='${item.CurrencyId}'>${item.CurrencyName}</option>`);
+                    } else {
+                        domElements.cbbCurrency.append(`<option value='${item.CurrencyId}'>${item.CurrencyName}</option>`);
+                        isRefreshDependCurrency = true;
+                    }
+                });
+            } else {
+                currencyItems.forEach(item => {
+                    domElements.cbbCurrency.append(`<option selected value='${item.CurrencyId}'>${item.CurrencyName}</option>`);
+                });
+            }
         }
         domElements.cbbCurrency.multiselect("refresh");
-    }    
+        if (isRefreshDependCurrency) {
+            FilterDependOnSelected(IndexFilterSelected.Currency);
+        }
+        return isRefreshDependCurrency;
+    }
 
     function RefreshReason(reasonItems) {
+        let cacheSelectedReason = [];
+        let cacheSelected = cacheFilterForImportNew[currentType];
+        if (cacheSelected != undefined && cacheSelected.cbbReason) {
+            cacheSelectedReason = cacheSelected.cbbReason;
+        }
+
         domElements.cbbReason.multiselect().empty();
         if (reasonItems.length > 0) {
-            reasonItems.forEach(item => {
-                domElements.cbbReason.append(`<option selected value='${item}'>${item}</option>`);
-            });
+            if (cacheSelectedReason.length > 0) {
+                reasonItems.forEach(item => {
+                    if ($.inArray(item.toString(), cacheSelectedReason) != -1) {
+                        domElements.cbbReason.append(`<option selected value='${item}'>${item}</option>`);
+                    } else {
+                        domElements.cbbReason.append(`<option value='${item}'>${item}</option>`);
+                    }   
+                });                 
+            } else {
+                reasonItems.forEach(item => {
+                    domElements.cbbReason.append(`<option selected value='${item}'>${item}</option>`);
+                });
+            }              
         }
         domElements.cbbReason.multiselect("refresh");
     }
 
-    function RefreshAGr(aGrItems) {        
+    function RefreshAGr(aGrItems) {  
+        let cacheSelectedAGr = [];
+        let cacheSelected = cacheFilterForImportNew[currentType];
+        if (cacheSelected != undefined && cacheSelected.cbbAGroup) {
+            cacheSelectedAGr = cacheSelected.cbbAGroup;
+        }
         domElements.cbbAGroup.multiselect().empty();
         if (aGrItems.length > 0) {
-            aGrItems.forEach(item => {
-                domElements.cbbAGroup.append(`<option selected value='${item}'>${item}</option>`);
-            });
+            if (cacheSelectedAGr.length > 0) {
+                aGrItems.forEach(item => {
+                    if ($.inArray(item.toString(), cacheSelectedAGr) != -1) {
+                        domElements.cbbAGroup.append(`<option selected value='${item}'>${item}</option>`);
+                    } else {
+                        domElements.cbbAGroup.append(`<option  value='${item}'>${item}</option>`);
+                    }                    
+                });
+            } else {
+                aGrItems.forEach(item => {
+                    domElements.cbbAGroup.append(`<option selected value='${item}'>${item}</option>`);
+                });
+            }            
         }
         domElements.cbbAGroup.multiselect("refresh");
     }
@@ -2174,7 +2217,7 @@ function MatchMonitorDetail() {
             cacheMGroup.allMGroup = {};
             cacheMGroup.selectMgroup = {};
             
-            CacheSelectDataFilter();
+            CacheSelectFilterForImportNew();
             cacheFilterDependOn.MGrList = [];
             
             ResetDefaulCbbSite();

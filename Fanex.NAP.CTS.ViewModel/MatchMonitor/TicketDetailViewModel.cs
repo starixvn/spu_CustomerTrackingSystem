@@ -67,16 +67,8 @@
                     }
                 }
             }
-
-            var trandsIDs = transList.Select(x => x.TransID);          
-            var trandsExcept = mGrTranIDListFilteredDic.Where(d => !trandsIDs.Contains(d.Key)).Select(x => new FraudTransModel
-            {
-                TransID = x.Value.TransID,
-                Reason = "0",
-                MGroup = x.Value.MGr
-            });
-
-            transList.AddRange(trandsExcept);
+           
+            transList = GetTranByFilterMGr(transList, mGrTranIDListFilteredDic);
 
             if (transList.Any())
             {
@@ -136,17 +128,32 @@
                     }
                 }
             }
+           
+            transList = GetTranByFilterMGr(transList, mGrTranIDListFilteredDic);
 
-            var trandsIDs = transList.Select(x => x.TransID);
-            var trandsExcept = mGrTranIDListFilteredDic.Where(d => !trandsIDs.Contains(d.Key))
-                .Select(x => new FraudTransModel
+            if (transList.Any())
             {
-                TransID = x.Value.TransID,
-                Reason = "0",
-                MGroup = x.Value.MGr
-            });
+                return JsonConvert.SerializeObject(transList);
+            }
 
-            transList.AddRange(trandsExcept);
+            return string.Empty;
+        }        
+
+        public string GetTransByFilterIncludeMGr(MMDetailFilterViewModel filter)
+        {
+            var transList = new List<FraudTransModel>();
+           
+            var mGrTranIDListFilteredDic = new Dictionary<long, MGrTranIDListFilteredModel>();
+
+            if (!string.IsNullOrEmpty(filter.MGrTranIDListFiltered))
+            {
+                var mGrTranIDListFiltered = JsonConvert.DeserializeObject<IEnumerable<MGrTranIDListFilteredModel>>(filter.MGrTranIDListFiltered)
+                    .Where(x => filter.MGroupList.Contains(x.MGrName));
+
+                mGrTranIDListFilteredDic = mGrTranIDListFiltered.ToDictionary(x => x.TransID, x => x);
+            }
+
+            transList = GetTranByFilterMGr(transList, mGrTranIDListFilteredDic);
 
             if (transList.Any())
             {
@@ -156,6 +163,53 @@
             return string.Empty;
         }
 
+        public string GetTransByFilterExcludeMGr(MMDetailFilterViewModel filter)
+        {
+            var transList = new List<FraudTransModel>();
+
+            var mGrTranIDListFiltered = Enumerable.Empty<MGrTranIDListFilteredModel>();
+            var mGrTranIDListFilteredDic = new Dictionary<long, MGrTranIDListFilteredModel>();
+
+            if (!string.IsNullOrEmpty(filter.MGrTranIDListFiltered))
+            {
+                if (filter.MGroupList.Contains("-") || filter.MGroupList.Contains("0"))
+                {
+                    mGrTranIDListFiltered = JsonConvert.DeserializeObject<IEnumerable<MGrTranIDListFilteredModel>>(filter.MGrTranIDListFiltered)
+                  .Where(x => !filter.MGroupList.Contains(x.MGrName));
+                    mGrTranIDListFilteredDic = mGrTranIDListFiltered.ToDictionary(x => x.TransID, x => x);
+                }
+                else
+                {
+                    mGrTranIDListFiltered = JsonConvert.DeserializeObject<IEnumerable<MGrTranIDListFilteredModel>>(filter.MGrTranIDListFiltered)
+                  .Where(x => filter.MGroupList.Contains(x.MGrName));
+                    mGrTranIDListFilteredDic = mGrTranIDListFiltered.ToDictionary(x => x.TransID, x => x);
+                }
+            }
+
+            transList = GetTranByFilterMGr(transList, mGrTranIDListFilteredDic);
+
+            if (transList.Any())
+            {
+                return JsonConvert.SerializeObject(transList);
+            }
+
+            return string.Empty;
+        }
+
+        private List<FraudTransModel> GetTranByFilterMGr(List<FraudTransModel> transList, Dictionary<long, MGrTranIDListFilteredModel> mGrTranIDListFilteredDic)
+        {
+            var trandsIDs = transList.Select(x => x.TransID);
+            var trandsExcept = mGrTranIDListFilteredDic.Where(d => !trandsIDs.Contains(d.Key)).Select(x => new FraudTransModel
+            {
+                TransID = x.Value.TransID,
+                Reason = "0",
+                MGroup = x.Value.MGr
+            });
+
+            transList.AddRange(trandsExcept);
+
+            return transList;           
+        }
 
         public IEnumerable<SuspiciousTransInfoModel> GetSuspiciousTransInfo(IEnumerable<MatchMonitorDetailItemViewModel> tickets)
         {
