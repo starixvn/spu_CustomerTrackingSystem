@@ -101,8 +101,7 @@ function MatchMonitorDetail() {
     let recordsTotalGlobal = 0;
     let maxSequenceId = 1;
 
-    let cacheFilter = {};
-    let cacheFilterScore = undefined;
+    let cacheFilter = {};    
     let cacheFilterForImportNew = {};
     let cacheFilterDependOn = {
         DropdownListFilterDependOn: [],
@@ -792,8 +791,13 @@ function MatchMonitorDetail() {
         if (opt > 0) {
             return true;
         }
-        domElements.tblMMHomeTeam.DataTable().clear().draw(false);
-        domElements.tblMMAwayTeam.DataTable().clear().draw(false);
+        if (isDisplaySingleGrid) {
+            domElements.tblMMSG.DataTable().clear().draw(false);
+        } else {
+            domElements.tblMMHomeTeam.DataTable().clear().draw(false);
+            domElements.tblMMAwayTeam.DataTable().clear().draw(false);
+        }
+        RefreshBreadcrumbTotalTickets(0, 0);
 
         return false;
     }   
@@ -915,25 +919,7 @@ function MatchMonitorDetail() {
 
     //#endregion Render
 
-    //#region Cache Filter
-
-    function CacheSelectDataFilter() {       
-        var selectedFilter = cacheFilter[currentType];
-        if (selectedFilter == undefined) {
-            selectedFilter = {};
-        }
-
-        selectedFilter.cbbCurrency = GetSelectDataFilter(domElements.cbbCurrency);
-        selectedFilter.cbbHDPBetTeam = GetSelectDataFilter(domElements.cbbHDPBetTeam);
-
-        cacheFilterScore = GetSelectDataFilter(domElements.cbbMatchScore);
-
-        selectedFilter.cbbReason = GetSelectDataFilter(domElements.cbbReason);
-        selectedFilter.cbbAGroup = GetSelectDataFilter(domElements.cbbAGroup);
-        selectedFilter.inputAmount = GetInputAmount();
-
-        cacheFilter[currentType] = selectedFilter;
-    }   
+    //#region Cache Filter   
 
     function CheckChangeFilterByAssociationDetection() { 
         let mGrList = cacheFilterDependOn.MGrList.map(obj => ({ ...obj }));
@@ -974,10 +960,11 @@ function MatchMonitorDetail() {
         if (selectedFilter == undefined) {
             selectedFilter = {};
         }
+
+        selectedFilter.cbbMatchScore = GetSelectDataFilter(domElements.cbbMatchScore);
         selectedFilter.cbbSites = domElements.cbbSites.val();
         selectedFilter.cbbCC = GetSelectDataFilter(domElements.cbbCC);
-        selectedFilter.cbbDanger = GetSelectDataFilter(domElements.cbbDanger);
-        selectedFilter.cbbMatchScore = GetSelectDataFilter(domElements.cbbMatchScore);
+        selectedFilter.cbbDanger = GetSelectDataFilter(domElements.cbbDanger);       
         selectedFilter.cbbCurrency = domElements.cbbCurrency.val();
         selectedFilter.cbbReason = domElements.cbbReason.val();
         selectedFilter.cbbAGroup = domElements.cbbAGroup.val();
@@ -1731,9 +1718,7 @@ function MatchMonitorDetail() {
         BetTypeOnChange();
     }
 
-    function BetTypeOnChange() {
-        cacheFilterScore = undefined;
-
+    function BetTypeOnChange() {     
         AddFilterLoading();        
 
         ResetDefaulCbbSite();        
@@ -1759,12 +1744,8 @@ function MatchMonitorDetail() {
         RemoveFilterLoading();
     }
 
-    function TypeOfTicketsOnChange(isClear) {
+    function TypeOfTicketsOnChange() {
         AddFilterLoading();
-
-        if (isClear || cacheFilterScore?.length <= 0) {
-            cacheFilterScore = undefined;
-        }
 
         domElements.cbbSites.prop('disabled', false);
 
@@ -2187,8 +2168,8 @@ function MatchMonitorDetail() {
             domElements.cbbTypeOfTickets.change(function () {
                 cacheMGroup.isActive = false;
                 cacheMGroup.selectMgroup = {};
-                CacheSelectDataFilter();
-                TypeOfTicketsOnChange(currentType == MatchMonitorDetailViewType.TicketAll);
+               
+                TypeOfTicketsOnChange();
             });
         }
 
@@ -2222,7 +2203,7 @@ function MatchMonitorDetail() {
             
             ResetDefaulCbbSite();
 
-            TypeOfTicketsOnChange(false);
+            TypeOfTicketsOnChange();
             FetchMatchMonitorDetail(currentType);
         });
 
