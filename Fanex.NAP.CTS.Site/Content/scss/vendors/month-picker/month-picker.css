@@ -1,0 +1,114 @@
+﻿.month-picker {
+  padding: 10px;
+}
+.month-picker table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.month-picker .ui-widget-header {
+  border: 0;
+  background: transparent;
+}
+.month-picker .ui-state-default,
+.month-picker .ui-widget-content .ui-state-default,
+.month-picker .ui-widget-header .ui-state-default,
+.month-picker .ui-button,
+.month-picker html .ui-button.ui-state-disabled:hover,
+.month-picker html .ui-button.ui-state-disabled:active {
+  font-family: Lato;
+  background: transparent;
+}
+.month-picker .ui-state-highlight,
+.month-picker .ui-widget-content .ui-state-highlight,
+.month-picker .ui-widget-header .ui-state-highlight {
+  color: #396EF8 !important;
+  font-family: Lato;
+  font-weight: 700;
+  background: transparent;
+  border: 1px solid #c5c5c5;
+}
+.month-picker .ui-state-active,
+.month-picker .ui-widget-content .ui-state-active,
+.month-picker .ui-widget-header .ui-state-active,
+.month-picker a.ui-button:active,
+.month-picker .ui-button:active,
+.month-picker .ui-button.ui-state-active:hover {
+  border: 1px solid #003eff;
+  background: #007fff;
+  font-weight: normal;
+  color: #fff !important;
+}
+.month-picker .ui-state-hover a,
+.month-picker .ui-state-hover a:hover,
+.month-picker .ui-state-hover a:link,
+.month-picker .ui-state-hover a:visited,
+.month-picker .ui-state-focus a,
+.month-picker .ui-state-focus a:hover,
+.month-picker .ui-state-focus a:link,
+.month-picker .ui-state-focus a:visited,
+.month-picker a.ui-button:hover,
+.month-picker a.ui-button:focus {
+  background: #ededed;
+}
+.month-picker .ui-corner-all,
+.month-picker .ui-corner-bottom,
+.month-picker .ui-corner-right,
+.month-picker .ui-corner-br {
+  border-bottom-right-radius: 2px;
+}
+.month-picker .ui-corner-all,
+.month-picker .ui-corner-bottom,
+.month-picker .ui-corner-left,
+.month-picker .ui-corner-bl {
+  border-bottom-left-radius: 2px;
+}
+.month-picker .ui-corner-all,
+.month-picker .ui-corner-top,
+.month-picker .ui-corner-right,
+.month-picker .ui-corner-tr {
+  border-top-right-radius: 2px;
+}
+.month-picker .ui-corner-all,
+.month-picker .ui-corner-top,
+.month-picker .ui-corner-left,
+.month-picker .ui-corner-tl {
+  border-top-left-radius: 2px;
+}
+.month-picker .month-picker-month-table .ui-button {
+  width: 6.6rem;
+  margin: 0.2em;
+  height: 2.9rem;
+}
+.month-picker .month-picker-header {
+  margin: 0 3px;
+}
+.month-picker .month-picker-year-table a.ui-button:hover {
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0) !important;
+  border: 1px solid transparent !important;
+}
+.month-picker .month-picker-year-table tbody tr {
+  height: 24px;
+}
+.month-picker .month-picker-year-table tbody tr td {
+  font-size: 16px;
+  vertical-align: middle;
+}
+.month-picker .month-picker-year-table .ui-button .ui-icon::before {
+  display: inline-block;
+  color: #454545 !important;
+  font-size: 20px;
+  padding-bottom: 5px;
+}
+.month-picker .month-picker-previous .ui-icon {
+  margin-left: -20px;
+}
+.month-picker .month-picker-previous .ui-button .ui-icon::before {
+  content: "\e998";
+}
+.month-picker .month-picker-next .ui-icon {
+  margin-left: 0;
+}
+.month-picker .month-picker-next .ui-button .ui-icon::before {
+  content: "\e999";
+}

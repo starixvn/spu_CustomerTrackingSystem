@@ -178,7 +178,7 @@ along with this program.  If not, see
             buttonText: 'Open Month Chooser',
             jumpYears: 'Jump Years',
             backTo: 'Back to',
-            months: ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.']
+            months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         }
     };
 

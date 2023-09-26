@@ -32,6 +32,9 @@ function RobotReport() {
         var toDate, toMonth;
         toDate = toMonth = new Date();
 
+        var minMonth = moment(Date.parse(`01/01/${toMonth.getFullYear()}`)).add(-10, 'year').toDate();
+        var maxMonth = moment(Date.parse(`12/01/${toMonth.getFullYear()}`)).add(10, 'year').toDate();
+
         var fromDate = moment(toDate).add(-6, "day").toDate();
         var fromMonth = moment(toDate).add(-5, "month").toDate();
 
@@ -58,6 +61,8 @@ function RobotReport() {
                 MonthFormat: 'yy/mm',
                 AltFormat: 'yy/mm/dd',
                 AltField: '#dpkFromMonthServer',
+                MinMonth: minMonth,
+                MaxMonth: maxMonth
             });
 
         domElements.dpkToMonth
@@ -67,6 +72,8 @@ function RobotReport() {
                 MonthFormat: 'yy/mm',
                 AltFormat: 'yy/mm/dd',
                 AltField: '#dpkToMonthServer',
+                MinMonth: minMonth,
+                MaxMonth: maxMonth
             });
 
         domElements.btnGenerateMonthly.on("click", function () {
@@ -130,15 +137,13 @@ function RobotReport() {
 
         let dateFromMonthYearVal = new Date($("#dpkFromMonthServer").val());
         let dateToMonthYearVal = new Date($("#dpkToMonthServer").val());
-        
-        if (dateFromMonthYearVal > dateToMonthYearVal)
-        {
+
+        if (dateFromMonthYearVal > dateToMonthYearVal) {
             common.showError("Please select a valid range within 12 months with the end month must not be smaller than the start month.");
             return false;
         }
 
-        if (dateFromMonthYearVal < moment(dateToMonthYearVal).add(-11, "month").toDate())
-        {
+        if (dateFromMonthYearVal < moment(dateToMonthYearVal).add(-11, "month").toDate()) {
             common.showError("Please select a valid range within 12 months with the end month must not be smaller than the start month.");
             return false;
         }
@@ -150,14 +155,12 @@ function RobotReport() {
         let dateToDateVal = domElements.dpkToDate.datepicker("getDate");
         let dateFromDateVal = domElements.dpkFromDate.datepicker("getDate");
 
-        if (dateFromDateVal > dateToDateVal)
-        {
+        if (dateFromDateVal > dateToDateVal) {
             common.showError("Please select a valid range within 30 days with the end date must not be smaller than the start date.");
             return false;
         }
 
-        if (dateFromDateVal < moment(dateToDateVal).add(-29, "day").toDate())
-        {
+        if (dateFromDateVal < moment(dateToDateVal).add(-29, "day").toDate()) {
             common.showError("Please select a valid range within 30 days with the end date must not be smaller than the start date.");
             return false;
         }
@@ -168,6 +171,8 @@ function RobotReport() {
     $(document).ready(function () {
         Initial();
 
+        domElements.cbbRobotType.val('1');
+        domElements.cbbSite.val('A');
         domElements.btnGenerateMonthly.click();
         domElements.btnGenerateDaily.click();
     });

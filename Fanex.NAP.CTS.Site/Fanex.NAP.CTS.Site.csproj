@@ -638,6 +638,12 @@
       <DependentUpon>highcharts.css</DependentUpon>
     </Content>
     <Content Include="Content\scss\vendors\jquery-ui\base\tagify.css" />
+    <Content Include="Content\scss\vendors\month-picker\month-picker.css">
+      <DependentUpon>month-picker.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\vendors\month-picker\month-picker.min.css">
+      <DependentUpon>month-picker.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\vendors\MultipleSelect\jquery.multiselect.css" />
     <Content Include="Content\scss\vendors\MultipleSelect\jquery.multiselect.filter.css" />
     <Content Include="Content\scss\vendors\popoto\font-icon-list.html" />
@@ -1588,6 +1594,7 @@
     <Content Include="Content\scss\pages\account\account-fps.scss" />
     <Content Include="Content\scss\vendors\highcharts\highcharts.scss" />
     <Content Include="Content\scss\pages\special-customer-class\special-customer-class.scss" />
+    <Content Include="Content\scss\vendors\month-picker\month-picker.scss" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />

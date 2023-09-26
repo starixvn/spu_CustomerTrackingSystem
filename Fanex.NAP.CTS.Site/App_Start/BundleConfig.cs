@@ -419,7 +419,8 @@
                 "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
                "~/Content/scss/MultipleSelect/jquery.multiselect.css",
                "~/Content/scss/pages/robot-report/robot-report.css",
-               "~/Content/MonthPicker.min.css"));
+               "~/Content/MonthPicker.min.css",
+               "~/Content/scss/vendors/month-picker/month-picker.min.css"));
         }
     }
 }
