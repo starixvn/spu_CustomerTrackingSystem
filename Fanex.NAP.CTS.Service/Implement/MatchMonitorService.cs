@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core;
@@ -233,7 +234,7 @@
                     return nTicket;
                 });
 
-            return ticketResult;
+            return ticketResult.Distinct(x=>x.TransId);
         }
 
         public string GetReasonName(IEnumerable<MatchMonitorReasonModel> reasonList, string reasonIDList)
@@ -319,22 +320,26 @@
         }
 
         public TicketDetailViewModel GetTicketDetailFraud(MMDetailResultModel matchDetailInfo, MMDetailInfoViewModel para)
-        {            
-            var transJsons = JsonConvert.SerializeObject(matchDetailInfo.MatchDetails.Select(x =>
+        {
+            //para.TypeOfTickets = MatchMonitorQueryType.TicketFraud;
+
+            var ticketMD = matchDetailInfo.MatchDetails.Select(x =>
                 new FraudTransModel
                 {
                     TransID = x.TransID,
-                    Reason = x.Reason.ToString(),                  
-                    AGroup = 0,
-                    MGroup = 0
-                }));
+                    Reason = x.Reason.ToString(),
+                    AGroup = x.GroupID
+                });
+
+            var transJsons = JsonConvert.SerializeObject(ticketMD);
 
             var result = this.GetTicketDetailByFraudTranIDs(para, null, transJsons);
 
             var mergeGroup = new MMDetailMergeGroupViewModel();
-            var mMDetailBetTeams = matchDetailInfo.MatchDetails.Join(result.TicketDetails,
+            var mMDetailBetTeams = matchDetailInfo.MatchDetails.Join(result.TicketDetails.Distinct(x => x.TransId),
                 m => m.TransID,
                 t => t.TransId, (m, t) => new MMDetailBetTeamModel(m, t));
+        
             if (mMDetailBetTeams.Any())
             {
                 var ticketMergeGroups = this.GetMMDetailMergeGroup(mMDetailBetTeams);
@@ -421,8 +426,7 @@
                 criteria.ListCurrency = filter.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList);
                 criteria.ListDanger = GenerateDangerJson(filter);
                 criteria.ListStatus = filter.TicketStatusList == null ? null : string.Join(",", filter.TicketStatusList);
-                criteria.ListCustomerClass = filter.CustomerClassList == null ? null : string.Join(",", filter.CustomerClassList);
-                //criteria.ListReason = filter.ReasonList == null ? null : GetReasonID(null, filter.ReasonList);
+                criteria.ListCustomerClass = filter.CustomerClassList == null ? null : string.Join(",", filter.CustomerClassList);             
                 criteria.ListReason = filter.ReasonList == null ? null : string.Join(",", filter.ReasonList).Replace('-', '0');
                 criteria.ListAGroup = filter.AGroupList == null ? null : string.Join(",", filter.AGroupList).Replace('-', '0');
                 criteria.ListMGroup = filter.MGroupList == null ? null : string.Join(",", filter.MGroupList).Replace('-', '0');

@@ -4,6 +4,8 @@
 
     public class MMDetailBetTeamModel
     {
+        public MMDetailBetTeamModel() { }
+
         public MMDetailBetTeamModel(MatchMonitorDetailModel m, TicketDetailModel t)
         {
             this.TransID = m.TransID;
