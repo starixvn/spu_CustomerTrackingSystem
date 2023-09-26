@@ -15,9 +15,8 @@
      <div class="robot-report-header">
         <div class="group-control">
             <div class="form-filter">
-                
-                <label class="group title-text">Report Type:</label>
-                <div class="group width-180">
+                <div class="group">
+                    <label class="group title-text">Report Type</label>
                     <select class="control width-select" id="cbbRobotType">
                         <option value="0">All</option>
                         <option selected value="1">Robot</option>
@@ -25,8 +24,8 @@
                     </select>
                 </div>
 
-                <label class="group title-text">Site:</label>
-                <div class="group width-180">
+                <div class="group">
+                    <label class="group title-text">Site</label>
                     <select class="control width-select" id="cbbSite">
                         <option selected value="A">All</option>
                         <option value="C">Credit</option>
@@ -39,15 +38,20 @@
     <div class="robot-report-body">
         <div class="control">
             <div class="group-control">
+                <div class="title-robot-report title-text">
+                    <div class="label">Month</div>
+                </div>
+
                 <div class="form-filter">
-                    <label class="group title-text" style="min-width: 65px">Month:</label>
-                    <div class="group calendar width-180">
-                        <input type="text" id="dpkFromMonth" class="control" readonly>
+                    <div class="group calendar">
+                        <label class="text">From</label>
+                        <input type="text" id="dpkFromMonth" class="input" readonly>
                         <span class="icon-calendar-text"></span>
                         <input type="text" id="dpkFromMonthServer" hidden>
                     </div>
-                    <div class="group calendar width-180">
-                        <input type="text" id="dpkToMonth" class="control" readonly>
+                    <div class="group calendar">
+                        <label class="text">To</label>
+                        <input type="text" id="dpkToMonth" class="input" readonly>
                         <span class="icon-calendar-text"></span>
                         <input type="text" id="dpkToMonthServer" hidden>
                     </div>
@@ -56,13 +60,13 @@
                 </div>
             </div>
 
-            <div style="display:flex; justify-content:space-between; width: 100%; min-height: 35vh">
+            <div style="display:flex; justify-content:space-between; width: 100%; min-height: 35vh; margin-top: 5px;">
                 
                 <div id="Robot1ReportDatatable" class="report-cont">
                     <div class="robot-report-datatable">
                         <div class="fixed-header">
                             <div class="top-header">
-                                <div>Robot Monthly Statistic</div>
+                                <div class="title-text">Robot Monthly Statistic</div>
                                 <div class="export-excel">
                                     <button class="button btnExcel" id="btnExportExcelRobot1" title="Export to Excel">
                                         <i class="icon icon-excel"></i>
@@ -98,7 +102,7 @@
                     <div class="robot-report-datatable">
                         <div class="fixed-header">
                             <div class="top-header">
-                                <div>AI Robot Monthly Statistic</div>
+                                <div class="title-text">AI Robot Monthly Statistic</div>
                                 <div class="export-excel">
                                     <button class="button btnExcel" id="btnExportExcelAIRobot1" title="Export to Excel">
                                         <i class="icon icon-excel"></i>
@@ -134,17 +138,22 @@
                 
             </div>
         </div>
-        <div style="height: 2%"></div>
+        <div style="height: 1.2%"></div>
         <div class="control">
             <div class="group-control">
+                <div class="title-robot-report title-text">
+                    <div class="label">Date</div>
+                </div>
+
                 <div class="form-filter">
-                    <label class="group title-text" style="min-width: 65px">Date:</label>
-                    <div class="group calendar width-180">
-                        <input type="text" id="dpkFromDate" class="control" readonly>
+                    <div class="group calendar">
+                        <label class="text">From</label>
+                        <input type="text" id="dpkFromDate" class="input" readonly>
                         <span class="icon-calendar-text"></span>
                     </div>
-                    <div class="group calendar width-180">
-                        <input type="text" id="dpkToDate" class="control" readonly>
+                    <div class="group calendar">
+                        <label class="text">To</label>
+                        <input type="text" id="dpkToDate" class="input" readonly>
                         <span class="icon-calendar-text"></span>
                     </div>
 
@@ -152,13 +161,13 @@
                 </div>
             </div>
 
-            <div style="display:flex; justify-content:space-between; width: 100%; min-height: 35vh">
+            <div style="display:flex; justify-content:space-between; width: 100%; min-height: 35vh; margin-top: 5px;">
                
                 <div id="Robot0ReportDatatable" class="report-cont">
                     <div class="robot-report-datatable">
                         <div class="fixed-header">
                             <div class="top-header">
-                                <div>Robot Daily Statistic</div>
+                                <div class="title-text">Robot Daily Statistic</div>
                                 <div class="export-excel">
                                     <button class="button btnExcel" id="btnExportExcelRobot0" title="Export to Excel">
                                         <i class="icon icon-excel"></i>
@@ -194,7 +203,7 @@
                     <div class="robot-report-datatable">
                         <div class="fixed-header">
                             <div class="top-header">
-                                <div>AI Robot Daily Statistic</div>
+                                <div class="title-text">AI Robot Daily Statistic</div>
                                 <div class="export-excel">
                                     <button class="button btnExcel" id="btnExportExcelAIRobot0" title="Export to Excel">
                                         <i class="icon icon-excel"></i>

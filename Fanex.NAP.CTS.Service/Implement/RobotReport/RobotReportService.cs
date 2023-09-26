@@ -38,7 +38,7 @@
 
             return new AIRobotReportViewModel
             {
-                Items = MergeAIRobotReportListWithCalendar(result.firstResultSet, param),
+                Items = result.firstResultSet?.Any() ?? false ? MergeAIRobotReportListWithCalendar(result.firstResultSet, param) : result.firstResultSet,
                 TFoot = result.secondResultSet?.Any() ?? false ? result.secondResultSet.ElementAt(0) : new AIRobotReportModel()
             };
         }
@@ -61,7 +61,7 @@
 
             return new RobotReportViewModel
             {
-                Items = MergeRobotReportListWithCalendar(result.firstResultSet, param),
+                Items = result.firstResultSet?.Any() ?? false ? MergeRobotReportListWithCalendar(result.firstResultSet, param) : result.firstResultSet,
                 TFoot = result.secondResultSet?.Any() ?? false ? result.secondResultSet.ElementAt(0) : new RobotReportModel()
             };
         }
