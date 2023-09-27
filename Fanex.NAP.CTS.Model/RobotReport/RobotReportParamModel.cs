@@ -32,10 +32,10 @@
             {
                 if (IsMonthly)
                 {
-                    return new DateTime(_toDate.Year, _toDate.Month, 1).AddMonths(1).AddDays(-1);
+                    return new DateTime(_toDate.Year, _toDate.Month, 1).AddMonths(1).AddSeconds(-1);
                 }
 
-                return _toDate;
+                return new DateTime(_toDate.Year, _toDate.Month, _toDate.Day).AddDays(1).AddSeconds(-1);
             }
             set { _toDate = value; }
         }
