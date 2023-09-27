@@ -67,6 +67,8 @@
 
         public bool IsDisplaySingleGrid { get; set; }
 
+        public int SportType { get; set; }
+
         public long? MaxSequenceId { get; set; }
 
         public long RecordsTotal { get; set; }

@@ -320,9 +320,7 @@
         }
 
         public TicketDetailViewModel GetTicketDetailFraud(MMDetailResultModel matchDetailInfo, MMDetailInfoViewModel para)
-        {
-            //para.TypeOfTickets = MatchMonitorQueryType.TicketFraud;
-
+        {            
             var ticketMD = matchDetailInfo.MatchDetails.Select(x =>
                 new FraudTransModel
                 {
@@ -402,7 +400,7 @@
                 BetID = para.BetID,
                 TicketType = para.TypeOfTickets == MatchMonitorQueryType.TicketAll ? 0 : 1,
                 BatchSize = batchSize,
-                IsLicensee = para.Sites == MMSites.All ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
+                IsLicensee = (para.Sites == MMSites.All || para.Sites == null) ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
                 ListTransId = transJson
             };
 
@@ -422,7 +420,7 @@
 
             if (filter != null)
             {
-                criteria.ListScore = (filter.ScoreList == null || !para.LiveIndicator) ? null : string.Join(",", filter.ScoreList);
+                criteria.ListScore = (filter.ScoreList == null || !para.LiveIndicator || filter.SportType == 2) ? null : string.Join(",", filter.ScoreList);
                 criteria.ListCurrency = filter.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList);
                 criteria.ListDanger = GenerateDangerJson(filter);
                 criteria.ListStatus = filter.TicketStatusList == null ? null : string.Join(",", filter.TicketStatusList);
