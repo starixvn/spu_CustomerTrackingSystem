@@ -202,81 +202,86 @@ body {
                 margin-right: .6rem;
             }
 
-            .dataTables_scroll {
-                position: -webkit-sticky;
-                position: sticky;
-                top: 13.2rem;
-                z-index: 11;
+            .dataTables_wrapper {
+                height: 22vmin;
 
-                .table-robot-report {
-                    width: 100% !important;
+                .dataTables_scroll {
+                    border: 1px solid #C4C4C4;
+                    position: -webkit-sticky;
+                    position: sticky;
+                    top: 13.2rem;
+                    z-index: 11;
 
-                    .loading {
-                        position: relative;
+                    .table-robot-report {
+                        width: 100% !important;
 
-                        &:after {
-                            content: '';
-                            position: absolute;
-                            left: 50%;
-                            top: 15%;
-                            border-radius: 50%;
-                            width: 2.4rem;
-                            height: 2.4rem;
-                            border: 0.25rem solid rgba(57, 110, 248, 0.2);
-                            border-top-color: rgba(57, 110, 248, 1);
-                            -webkit-animation: spin 1s infinite linear;
-                            animation: spin 1s infinite linear;
-                        }
+                        .loading {
+                            position: relative;
 
-                        tr {
-                            opacity: .3;
-                        }
-                    }
+                            &:after {
+                                content: '';
+                                position: absolute;
+                                left: 50%;
+                                top: 15%;
+                                border-radius: 50%;
+                                width: 2.4rem;
+                                height: 2.4rem;
+                                border: 0.25rem solid rgba(57, 110, 248, 0.2);
+                                border-top-color: rgba(57, 110, 248, 1);
+                                -webkit-animation: spin 1s infinite linear;
+                                animation: spin 1s infinite linear;
+                            }
 
-                    thead {
-                        tr {
-                            th {
-                                position: sticky;
-                                top: 17.2rem;
-                                font-weight: 300;
-                                border-bottom-width: 1px;
-                                background-color: #1d2e4f;
-                                color: #fff;
-                                text-align: center;
-                                font-weight: bold;
-                                border-top: 0 !important;
+                            tr {
+                                opacity: .3;
                             }
                         }
-                    }
 
-                    tbody {
-                        tr {
-                            td {
-
-                                .click-view-details,
-                                .click-view-name {
-                                    cursor: pointer;
+                        thead {
+                            tr {
+                                th {
+                                    position: sticky;
+                                    top: 17.2rem;
+                                    font-weight: 300;
+                                    border-bottom-width: 1px;
+                                    background-color: #1d2e4f;
+                                    color: #fff;
+                                    text-align: center;
+                                    font-weight: bold;
+                                    border-top: 0 !important;
                                 }
                             }
                         }
 
-                        .even {
-                            background-color: #F4F4F4;
-                        }
-                    }
+                        tbody {
+                            tr {
+                                td {
 
-                    tfoot {
-                        tr {
-                            th {
-                                border: 1px solid #C4C4C4;
-                                line-height: 17px;
-                                padding: 7px;
-                                vertical-align: middle;
-                                background-color: #DDE0E5;
-                                color: #333;
-                                text-align: center;
-                                font-weight: bold;
-                                border-top: 0 !important;
+                                    .click-view-details,
+                                    .click-view-name {
+                                        cursor: pointer;
+                                    }
+                                }
+                            }
+
+                            .even {
+                                background-color: #F4F4F4;
+                            }
+                        }
+
+                        tfoot {
+                            tr {
+                                th {
+                                    border: 1px solid #C4C4C4;
+                                    line-height: 17px;
+                                    padding: 7px;
+                                    vertical-align: middle;
+                                    background-color: #DDE0E5;
+                                    color: #333;
+                                    text-align: center;
+                                    font-weight: bold;
+                                    border-top: 0 !important;
+                                }
                             }
                         }
                     }
@@ -320,13 +325,28 @@ body {
     right: 1px;
 }
 
-.dataTables_scrollBody thead tr[role="row"] {
-    visibility: collapse !important;
+.dataTables_scrollBody {
+    max-height: 22vmin;
+
+    thead tr[role="row"] {
+        visibility: collapse !important;
+    }
 }
 
-.dataTables_scrollFootInner {
+.dataTables_scrollFoot {
     background-color: #DDE0E5;
-    width: 100% !important;
+
+    .dataTables_scrollFootInner {
+        padding-right: 0 !important;
+    }
+}
+
+.dataTables_scrollHead {
+    background-color: #1d2e4f;
+}
+
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody {
+    overflow-y: scroll !important;
 }
 
 .export-excel {

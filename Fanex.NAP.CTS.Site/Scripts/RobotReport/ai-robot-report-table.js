@@ -33,7 +33,7 @@ class AIRobotReportTable {
             pageLength: 50,
             scrollX: false,
             scrollCollapse: true,
-            scrollY: '22vh',
+            scrollY: true,
             paging: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },

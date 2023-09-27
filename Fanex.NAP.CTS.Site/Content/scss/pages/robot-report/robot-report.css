@@ -171,19 +171,23 @@ body #ui-datepicker-div {
   padding-right: 0;
   margin-right: 0.6rem;
 }
-.robot-report-body .control .robot-report-datatable .dataTables_scroll {
+.robot-report-body .control .robot-report-datatable .dataTables_wrapper {
+  height: 22vmin;
+}
+.robot-report-body .control .robot-report-datatable .dataTables_wrapper .dataTables_scroll {
+  border: 1px solid #C4C4C4;
   position: -webkit-sticky;
   position: sticky;
   top: 13.2rem;
   z-index: 11;
 }
-.robot-report-body .control .robot-report-datatable .dataTables_scroll .table-robot-report {
+.robot-report-body .control .robot-report-datatable .dataTables_wrapper .dataTables_scroll .table-robot-report {
   width: 100% !important;
 }
-.robot-report-body .control .robot-report-datatable .dataTables_scroll .table-robot-report .loading {
+.robot-report-body .control .robot-report-datatable .dataTables_wrapper .dataTables_scroll .table-robot-report .loading {
   position: relative;
 }
-.robot-report-body .control .robot-report-datatable .dataTables_scroll .table-robot-report .loading:after {
+.robot-report-body .control .robot-report-datatable .dataTables_wrapper .dataTables_scroll .table-robot-report .loading:after {
   content: "";
   position: absolute;
   left: 50%;
@@ -196,10 +200,10 @@ body #ui-datepicker-div {
   -webkit-animation: spin 1s infinite linear;
   animation: spin 1s infinite linear;
 }
-.robot-report-body .control .robot-report-datatable .dataTables_scroll .table-robot-report .loading tr {
+.robot-report-body .control .robot-report-datatable .dataTables_wrapper .dataTables_scroll .table-robot-report .loading tr {
   opacity: 0.3;
 }
-.robot-report-body .control .robot-report-datatable .dataTables_scroll .table-robot-report thead tr th {
+.robot-report-body .control .robot-report-datatable .dataTables_wrapper .dataTables_scroll .table-robot-report thead tr th {
   position: sticky;
   top: 17.2rem;
   font-weight: 300;
@@ -210,14 +214,14 @@ body #ui-datepicker-div {
   font-weight: bold;
   border-top: 0 !important;
 }
-.robot-report-body .control .robot-report-datatable .dataTables_scroll .table-robot-report tbody tr td .click-view-details,
-.robot-report-body .control .robot-report-datatable .dataTables_scroll .table-robot-report tbody tr td .click-view-name {
+.robot-report-body .control .robot-report-datatable .dataTables_wrapper .dataTables_scroll .table-robot-report tbody tr td .click-view-details,
+.robot-report-body .control .robot-report-datatable .dataTables_wrapper .dataTables_scroll .table-robot-report tbody tr td .click-view-name {
   cursor: pointer;
 }
-.robot-report-body .control .robot-report-datatable .dataTables_scroll .table-robot-report tbody .even {
+.robot-report-body .control .robot-report-datatable .dataTables_wrapper .dataTables_scroll .table-robot-report tbody .even {
   background-color: #F4F4F4;
 }
-.robot-report-body .control .robot-report-datatable .dataTables_scroll .table-robot-report tfoot tr th {
+.robot-report-body .control .robot-report-datatable .dataTables_wrapper .dataTables_scroll .table-robot-report tfoot tr th {
   border: 1px solid #C4C4C4;
   line-height: 17px;
   padding: 7px;
@@ -263,13 +267,26 @@ body #ui-datepicker-div {
   right: 1px;
 }
 
+.dataTables_scrollBody {
+  max-height: 22vmin;
+}
 .dataTables_scrollBody thead tr[role=row] {
   visibility: collapse !important;
 }
 
-.dataTables_scrollFootInner {
+.dataTables_scrollFoot {
   background-color: #DDE0E5;
-  width: 100% !important;
+}
+.dataTables_scrollFoot .dataTables_scrollFootInner {
+  padding-right: 0 !important;
+}
+
+.dataTables_scrollHead {
+  background-color: #1d2e4f;
+}
+
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody {
+  overflow-y: scroll !important;
 }
 
 .export-excel .btnExcel {
