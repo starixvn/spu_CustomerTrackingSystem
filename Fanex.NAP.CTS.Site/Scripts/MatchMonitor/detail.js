@@ -2142,6 +2142,15 @@ function MatchMonitorDetail() {
         domElements.cbbTicketsStatus.parent().find('button').removeClass('border-error');
     }
 
+    function ResetDefault() {
+        cacheMGroup.isActive = false;
+        cacheFilterDependOn.MGrList = [];
+        cacheMGroup.allMGroup = {};
+        cacheMGroup.selectMgroup = {};
+        domElements.inputCustAmountRM.val('');
+        domElements.iconClearUsnAmt.addClass("hide");
+    }
+
     //#endregion Event OnChange
 
     //#region Event Toggle
@@ -2214,8 +2223,14 @@ function MatchMonitorDetail() {
         domElements.cbbMarket.val(domElements.liveIndicator);
         domElements.cbbBetType.val(`${domElements.betTypeID}_${domElements.betIDToString}`).trigger('change');
 
-        domElements.cbbMarket.change(function () { MarketOnChange(); });
-        domElements.cbbBetType.change(function () { BetTypeOnChange(); });
+        domElements.cbbMarket.change(function () {
+            ResetDefault();
+            MarketOnChange();
+        });
+        domElements.cbbBetType.change(function () {
+            ResetDefault();
+            BetTypeOnChange();
+        });
         domElements.cbbMatchScore.change(function () { ScoreOnChange(); });
         domElements.cbbSites.change(function () { FilterDependOnSelected(IndexFilterSelected.Site); });
         domElements.cbbCC.change(function () { FilterDependOnSelected(IndexFilterSelected.CC); });
@@ -2233,8 +2248,7 @@ function MatchMonitorDetail() {
 
         if (isSupportShowAllTickets) {
             domElements.cbbTypeOfTickets.change(function () {
-                cacheMGroup.isActive = false;
-                cacheMGroup.selectMgroup = {};
+                ResetDefault();
                
                 TypeOfTicketsOnChange();
             });
