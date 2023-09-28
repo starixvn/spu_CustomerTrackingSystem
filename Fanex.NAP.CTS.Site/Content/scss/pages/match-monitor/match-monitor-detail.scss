@@ -202,7 +202,7 @@
                             padding-left: 8px;
                             font-size: 12px;
                             /* text-align: center;*/
-                        }                       
+                        }
 
                         .text-box {
                             height: 2.8rem;
@@ -484,6 +484,8 @@
 
                         .table-monitor, .table-monitor-detail {
                             /*  width: 100% !important;*/
+                            border-bottom: 1px solid #c4c4c4 !important;
+
                             .loading {
                                 position: relative;
 

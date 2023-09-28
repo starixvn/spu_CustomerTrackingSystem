@@ -111,13 +111,13 @@
                         <div class="group width-160 second-row-depend-1 start-box" @(ViewBag.IsDisableScoreFilter ? "hidden" : "")>
                             <label class="text">Score</label>
                             <select class="control width-select" id="cbbMatchScore" multiple="multiple">
-                                @if (ViewBag.MatchScore != null)
+                                @*@if (ViewBag.MatchScore != null)
                                 {
                                     foreach (var item in ViewBag.MatchScore)
                                     {
                                         <option value="@item.ScoreDiff" selected>@item.LiveHomeScore - @item.LiveAwayScore </option>
                                     }
-                                }
+                                }*@
                             </select>
                         </div>
 

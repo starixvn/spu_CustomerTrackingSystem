@@ -318,13 +318,13 @@ function MatchMonitorDetail() {
 
     function SetupFilterScore(element, data) {
         let cacheSelected = cacheFilterForImportNew[currentType];
-        if (cacheSelected != undefined && cacheSelected.cbbMatchScore) {
+        if (cacheSelected != undefined && cacheSelected.cbbMatchScore.length > 0) {
             data = [...new Set([...data, ...cacheSelected.cbbMatchScore])];
         }
         
         SetupFilter(element, data);
 
-        if (cacheSelected != undefined && cacheSelected.cbbMatchScore) {
+        if (cacheSelected != undefined && cacheSelected.cbbMatchScore.length > 0) {
             setTimeout(RefreshFilterSelected(element, cacheSelected.cbbMatchScore), 10);
         }
     }
@@ -1019,15 +1019,15 @@ function MatchMonitorDetail() {
             selectedFilter = {};
         }
 
-        selectedFilter.cbbMatchScore = GetSelectDataFilter(domElements.cbbMatchScore);
+        selectedFilter.cbbMatchScore = domElements.cbbMatchScore.val();
         selectedFilter.cbbSites = domElements.cbbSites.val();
-        selectedFilter.cbbCC = GetSelectDataFilter(domElements.cbbCC);
-        selectedFilter.cbbDanger = GetSelectDataFilter(domElements.cbbDanger);       
+        selectedFilter.cbbCC = domElements.cbbCC.val();
+        selectedFilter.cbbDanger = domElements.cbbDanger.val();       
         selectedFilter.cbbCurrency = domElements.cbbCurrency.val();
         selectedFilter.cbbReason = domElements.cbbReason.val();
         selectedFilter.cbbAGroup = domElements.cbbAGroup.val();
-        selectedFilter.cbbHDPBetTeam = GetSelectDataFilter(domElements.cbbHDPBetTeam);
-        selectedFilter.cbbTicketsStatus = GetSelectDataFilter(domElements.cbbTicketsStatus);
+        selectedFilter.cbbHDPBetTeam = domElements.cbbHDPBetTeam.val();
+        selectedFilter.cbbTicketsStatus = domElements.cbbTicketsStatus.val();
 
         cacheFilterForImportNew[currentType] = selectedFilter;
     }
@@ -1388,6 +1388,7 @@ function MatchMonitorDetail() {
     function RefreshLengthPage(length, isDraw = true) {
         domElements.tblMMHomeTeam.DataTable().page.len(length).draw(isDraw);
         domElements.tblMMAwayTeam.DataTable().page.len(length).draw(isDraw);
+        domElements.tblMMSG.DataTable().page.len(length).draw(isDraw);
     }
 
     function RefreshFilterSelected(element, data) {

@@ -40,8 +40,7 @@
         private readonly IAssociationDetectionService _associationDetectionService;
         private readonly ICommonService _commonService;
         private readonly IMemoryCacheService _memoryCacheService;
-        private readonly string MMDetailRegion = "MMDetail";
-        private readonly string FlagRunningTask = "FlagRunningTask";
+        private readonly string MMDetailRegion = "MMDetail";     
 
         public override string BaseControllerName { get => Consts.MenuItemMonitor; }
 
@@ -267,7 +266,7 @@
             ViewBag.LiveIndicator = para?.LiveIndicator ?? true;
             ViewBag.Reason = para?.Reason;
             ViewBag.ReasonName = para?.ReasonName ?? string.Empty;
-            ViewBag.MatchScore = matchScore?.OrderBy(c => c.ScoreDiff).ThenBy(c => c.LiveHomeScore).ThenBy(c => c.LiveAwayScore);
+            //ViewBag.MatchScore = matchScore?.OrderBy(c => c.ScoreDiff).ThenBy(c => c.LiveHomeScore).ThenBy(c => c.LiveAwayScore);
             ViewBag.LeagueName = para?.LeagueName.ToUpper() ?? string.Empty;
             ViewBag.ReasonGroup = para?.ReasonGroup ?? string.Empty;
             ViewBag.MarketName = para?.MarketName ?? string.Empty;
