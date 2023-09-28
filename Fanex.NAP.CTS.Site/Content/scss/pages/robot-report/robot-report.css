@@ -171,8 +171,16 @@ body #ui-datepicker-div {
   padding-right: 0;
   margin-right: 0.6rem;
 }
+.robot-report-body .control .robot-report-datatable #tblRobot1Report_wrapper,
+.robot-report-body .control .robot-report-datatable #tblAIRobot1Report_wrapper {
+  max-height: 470px;
+}
+.robot-report-body .control .robot-report-datatable #tblRobot0Report_wrapper,
+.robot-report-body .control .robot-report-datatable #tblAIRobot0Report_wrapper {
+  max-height: 650px;
+}
 .robot-report-body .control .robot-report-datatable .dataTables_wrapper {
-  height: 22vmin;
+  height: 30vh;
 }
 .robot-report-body .control .robot-report-datatable .dataTables_wrapper .dataTables_scroll {
   border: 1px solid #C4C4C4;
@@ -268,7 +276,7 @@ body #ui-datepicker-div {
 }
 
 .dataTables_scrollBody {
-  max-height: 22vmin;
+  max-height: 22vh;
 }
 .dataTables_scrollBody thead tr[role=row] {
   visibility: collapse !important;

@@ -92,7 +92,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.RobotReportExport)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.RobotReport_ExportToExcel)]
         public ActionResult ExportRobotReport(RobotReportParamModel param)
         {
             try
@@ -122,7 +122,7 @@
             return new EmptyResult();
         }
 
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.RobotReportExport)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.RobotReport_ExportToExcel)]
         public ActionResult ExportAIRobotReport(RobotReportParamModel param)
         {
             try

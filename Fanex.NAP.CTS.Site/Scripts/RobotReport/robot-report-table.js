@@ -42,7 +42,7 @@ class RobotReportTable {
                 { targets: [1], width: "5%" },
                 { targets: [2], width: "5%" },
                 { targets: [3], width: "5%" },
-                { targets: [4], width: "10%" }
+                { targets: [4], width: "11%" }
             ],
             columns: [
                 {

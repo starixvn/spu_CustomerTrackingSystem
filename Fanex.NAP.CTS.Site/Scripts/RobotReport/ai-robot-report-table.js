@@ -43,7 +43,7 @@ class AIRobotReportTable {
                 { targets: [2], width: "5%" },
                 { targets: [3], width: "5%" },
                 { targets: [4], width: "5%" },
-                { targets: [5], width: "10%" }
+                { targets: [5], width: "11%" }
             ],
             columns: [
                 {

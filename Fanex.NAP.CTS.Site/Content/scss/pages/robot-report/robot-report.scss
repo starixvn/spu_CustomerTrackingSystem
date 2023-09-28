@@ -202,8 +202,18 @@ body {
                 margin-right: .6rem;
             }
 
+            #tblRobot1Report_wrapper,
+            #tblAIRobot1Report_wrapper {
+                max-height: 470px;
+            }
+
+            #tblRobot0Report_wrapper,
+            #tblAIRobot0Report_wrapper {
+                max-height: 650px;
+            }
+
             .dataTables_wrapper {
-                height: 22vmin;
+                height: 30vh;
 
                 .dataTables_scroll {
                     border: 1px solid #C4C4C4;
@@ -326,7 +336,7 @@ body {
 }
 
 .dataTables_scrollBody {
-    max-height: 22vmin;
+    max-height: 22vh;
 
     thead tr[role="row"] {
         visibility: collapse !important;
