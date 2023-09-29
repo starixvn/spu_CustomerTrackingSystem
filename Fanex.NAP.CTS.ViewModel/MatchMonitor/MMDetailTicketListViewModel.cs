@@ -1,10 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
-{   
-    using Fanex.NAP.CTS.Core.Extentions;
-    using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.MatchMonitor;
-    using Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn;
-    using System;
+{      
     using System.Collections.Generic;
     using System.Linq;
 
@@ -46,36 +41,6 @@
         public List<MatchMonitorDetailItemViewModel> ItemList { get; set; }
 
         public MMDetailTicketListViewModel Clone() => new MMDetailTicketListViewModel(this);
-               
-        public void BindReasons(IEnumerable<string> rawReasons, MMDetailFilterViewModel filter)
-        {
-            var reasons = new List<string>();
-
-            foreach (var reason in rawReasons)
-            {
-                if (!string.IsNullOrEmpty(reason))
-                    reasons.AddRange(reason.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries));
-            }
-
-            filter.ReasonList = reasons.Distinct().ToList();
-            filter.ReasonInfos = string.Join(", ", filter.ReasonList);
-            filter.ReasonGroupIDDic = new Dictionary<string, List<int>>();
-
-            var reasonGroupIDList = new List<int>();
-
-            foreach (var reason in filter.ReasonList)
-            {
-                var reasonGroupIDHs = this.HomeMatchItemList.Where(x => x.ReasonList.Contains(reason)).Select(x => x.ADetectGroupID);
-                var reasonGroupIDAs = this.AwayMatchItemList.Where(x => x.ReasonList.Contains(reason)).Select(x => x.ADetectGroupID);
-
-                reasonGroupIDList.Clear();
-                reasonGroupIDList.AddRange(reasonGroupIDHs);
-                reasonGroupIDList.AddRange(reasonGroupIDAs);
-
-                filter.ReasonGroupIDDic.Add(reason, reasonGroupIDList.Distinct().ToList());
-            }
-
-        }     
-       
+                      
     }
 }

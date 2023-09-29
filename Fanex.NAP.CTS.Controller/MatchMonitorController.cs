@@ -232,17 +232,33 @@
         public ActionResult Detail(MatchMonitorDetailViewModel para)
         {
             IUserService userService = new UserService();
-            var matchGroup = Enumerable.Empty<MatchGroupModel>();
-            var matchScore = Enumerable.Empty<MatchScoreModel>();
-
+           
             try
-            {
-                if (para != null && para.SportType != (int)MatchMonitorSportType.Basketball)
-                {
-                    matchScore = _matchMonitorService.GetMatchScore(para.MatchID, para.BetTypeID, para.LiveIndicator, para.BetID, para.Reason) ?? new List<MatchScoreModel>();
-                }
-
+            {                
                 ViewBag.GroupCCList = _commonService.GetGroupCustomerClass();
+                ViewBag.EventDateToString = para?.EventDateToString;
+                ViewBag.MatchID = para?.MatchID;
+                ViewBag.BetTypeID = para?.BetTypeID;
+                ViewBag.BettypeName = para?.BettypeName ?? string.Empty;
+                ViewBag.BetIDToString = para?.BetID.ToString();
+                ViewBag.HomeName = para?.HomeName.ToUpper() ?? string.Empty;
+                ViewBag.AwayName = para?.AwayName.ToUpper() ?? string.Empty;
+                ViewBag.LiveIndicator = para?.LiveIndicator ?? true;
+                ViewBag.Reason = para?.Reason;
+                ViewBag.ReasonName = para?.ReasonName ?? string.Empty;
+                ViewBag.LeagueName = para?.LeagueName.ToUpper() ?? string.Empty;
+                ViewBag.ReasonGroup = para?.ReasonGroup ?? string.Empty;
+                ViewBag.MarketName = para?.MarketName ?? string.Empty;
+                ViewBag.BetChoice = para?.BetChoice;
+                ViewBag.IsDisableScoreFilter = para?.SportType != null && para.SportType == (int)MatchMonitorSportType.Basketball;
+                ViewBag.SportType = para?.SportType ?? 0;
+                ViewBag.SportName = para?.SportName ?? string.Empty;
+                ViewBag.KOTime = para?.KOTime;
+                ViewBag.IsSupportShowAllTickets = para?.IsSupportShowAllTickets;
+                ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
+                                                                            NapSettings.Settings.SiteId,
+                                                                            FSFunctionKeys.MatchMonitor,
+                                                                            NAP.Core.Business.Constant.Policy.Host);
             }
             catch (Exception ex)
             {                
@@ -255,31 +271,7 @@
 
                 LogService.Error(logMessage);
             }
-
-            ViewBag.EventDateToString = para?.EventDateToString;
-            ViewBag.MatchID = para?.MatchID;
-            ViewBag.BetTypeID = para?.BetTypeID;
-            ViewBag.BettypeName = para?.BettypeName ?? string.Empty;
-            ViewBag.BetIDToString = para?.BetID.ToString();
-            ViewBag.HomeName = para?.HomeName.ToUpper() ?? string.Empty;
-            ViewBag.AwayName = para?.AwayName.ToUpper() ?? string.Empty;
-            ViewBag.LiveIndicator = para?.LiveIndicator ?? true;
-            ViewBag.Reason = para?.Reason;
-            ViewBag.ReasonName = para?.ReasonName ?? string.Empty;
-            //ViewBag.MatchScore = matchScore?.OrderBy(c => c.ScoreDiff).ThenBy(c => c.LiveHomeScore).ThenBy(c => c.LiveAwayScore);
-            ViewBag.LeagueName = para?.LeagueName.ToUpper() ?? string.Empty;
-            ViewBag.ReasonGroup = para?.ReasonGroup ?? string.Empty;
-            ViewBag.MarketName = para?.MarketName ?? string.Empty;
-            ViewBag.BetChoice = para?.BetChoice;
-            ViewBag.IsDisableScoreFilter = para?.SportType != null && para.SportType == (int)MatchMonitorSportType.Basketball;
-            ViewBag.SportType = para?.SportType ?? 0;
-            ViewBag.SportName = para?.SportName ?? string.Empty;
-            ViewBag.KOTime = para?.KOTime;
-            ViewBag.IsSupportShowAllTickets = para?.IsSupportShowAllTickets;
-            ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
-                                                                        NapSettings.Settings.SiteId,
-                                                                        FSFunctionKeys.MatchMonitor,
-                                                                        NAP.Core.Business.Constant.Policy.Host);
+            
             return View();
         }
 
@@ -354,13 +346,13 @@
                         break;
                     }
                 case MatchMonitorQueryType.TicketAll:
-                    {                                               
+                    {
+                        para.TypeOfTickets = MatchMonitorQueryType.TicketFraud;
+
+                        GetFraudMMDetailForCache(para);
+
                         if (para.IsSupportShowAllTickets)
-                        {
-                            para.TypeOfTickets = MatchMonitorQueryType.TicketFraud;
-
-                            GetFraudMMDetailForCache(para);
-
+                        {                          
                             para.TypeOfTickets = MatchMonitorQueryType.TicketAll;
 
                             result = GetAllMMFilter(para);
@@ -690,7 +682,7 @@
 
                         fraudMMDetailResult.AGroupReasonMerged = _matchMonitorService.MergeFraudReasonAGroup(fraudMMDetailResult);
 
-                        _memoryCacheService.PushValueAsync(key, fraudMMDetailResult);
+                        _memoryCacheService.PushValue(key, fraudMMDetailResult);
                     }
                 }
             }
@@ -961,7 +953,7 @@
         {
             if (ticket.Any())
             {
-                var para = ticket.Select(c => new { TransID = c.TransId, TransDate = c.TransTime, CustID = c.CustID }).Distinct(x=>x.CustID);
+                var para = ticket.Select(c => new { TransID = c.TransId, TransDate = c.TransTime, CustID = c.CustID });
 
                 var robotStatus = _matchMonitorService.GetRobotStatus(JsonConvert.SerializeObject(para));
 

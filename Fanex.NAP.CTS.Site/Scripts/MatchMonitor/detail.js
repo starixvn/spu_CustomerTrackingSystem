@@ -537,10 +537,12 @@ function MatchMonitorDetail() {
                 domElements.cbbSites.append(`<option value='${item}'>${subName}</option>`);
             });            
 
-            let cacheSelected = cacheFilterForImportNew[currentType];
-            if (cacheSelected != undefined && cacheSelected.cbbSites) {
-                domElements.cbbSites.val(cacheSelected.cbbSites);
-            }
+            if (data.length > 1) {
+                let cacheSelected = cacheFilterForImportNew[currentType];
+                if (cacheSelected != undefined && cacheSelected.cbbSites) {
+                    domElements.cbbSites.val(cacheSelected.cbbSites);
+                }
+            }            
         } 
     }
 
@@ -1329,7 +1331,7 @@ function MatchMonitorDetail() {
     //#endregion Fetch Match Monitor Detail
 
     //#region Render Grid
-    function RenderMatchMonitorDetail(response, typeOfTickets = MatchMonitorDetailViewType.TicketFraud) {
+    function RenderMatchMonitorDetail(response, typeOfTickets) {
         let data = response?.data;
 
         if (data) {
