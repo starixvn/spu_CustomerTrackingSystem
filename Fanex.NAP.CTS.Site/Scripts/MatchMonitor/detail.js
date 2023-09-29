@@ -2264,7 +2264,7 @@ function MatchMonitorDetail() {
             
             domElements.inputCustAmountRM.val(validAmount);
 
-            if (validAmount > 0) {
+            if (validAmount >= 0) {
                 domElements.iconClearUsnAmt.removeClass("hide");
             } else {
                 domElements.iconClearUsnAmt.addClass("hide");

@@ -362,30 +362,38 @@
             var result = new TicketDetailViewModel();
             var isContinue = true;
 
-            do
+            if (filter.CustAmountRM > 0)
             {
-                result = this.GetMainTicketDetail(info, filter, batchSize, transJson);
-
-                result.TicketDetails = result.TicketDetails.OrderByDescending(x => x.SequenceID);
-
+                result = this.GetMainTicketDetail(info, filter, -1, transJson);
                 info.LastScannedSequenceID = result.MinSequenceId;
-
-                if (result.MinSequenceId != null && result.TicketDetails.Count() > 0)
+            }
+            else
+            {
+                do
                 {
-                    ticketDetails.AddRange(result.TicketDetails);
-                }
-           
-                if (result.MinSequenceId == null || ticketDetails.Count() >= batchSize)
-                {
-                    result.TicketDetails = ticketDetails.ToList();
+                    result = this.GetMainTicketDetail(info, filter, batchSize, transJson);
 
-                    isContinue = false;                   
-                }
+                    result.TicketDetails = result.TicketDetails.OrderByDescending(x => x.SequenceID);
 
-            } while (isContinue);
+                    info.LastScannedSequenceID = result.MinSequenceId;
 
+                    if (result.MinSequenceId != null && result.TicketDetails.Count() > 0)
+                    {
+                        ticketDetails.AddRange(result.TicketDetails);
+                    }
+
+                    if (result.MinSequenceId == null || ticketDetails.Count() >= batchSize)
+                    {
+                        result.TicketDetails = ticketDetails.ToList();
+
+                        isContinue = false;
+                    }
+
+                } while (isContinue);
+            }
+            
             return result;
-        }        
+        }
 
         public TicketDetailViewModel GetMainTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int? batchSize, string transJson = null)
         {

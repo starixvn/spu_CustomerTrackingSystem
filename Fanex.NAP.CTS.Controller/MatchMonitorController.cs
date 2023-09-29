@@ -293,37 +293,22 @@
             {
                 if (para.IsImportNewTicket)
                 {
-                    var ticketTypeName = Enum.GetName(typeof(MatchMonitorQueryType), para.TypeOfTickets);
-                    var removeKey = $"{para.TypeOfTickets}_{para.EventDateToString}_{para.MatchID}_{para.BetTypeID}_{para.BetID}_{para.LiveIndicator}";
-                    _memoryCacheService.RemoveKeyContainsValue(removeKey);
+                    result = GetMatchMonitorFilterImportNew(para);
                 }
-
-                switch (para.TypeOfTickets)
+                else
                 {
-                    case MatchMonitorQueryType.TicketAll when para.IsSupportShowAllTickets:
-                        {
-                            result = GetAllMMFilter(para);
-
-                            break;
-                        }                  
-                    case MatchMonitorQueryType.TicketFraud:
-                        {                           
-                            result = GetFraudMMFilter(para);
-
-                            //if (para.IsSupportShowAllTickets)
-                            //{
-                            //    Task.Run(() =>
-                            //    {
-                            //        _ = GetAllMMFilter(para);
-                            //    });
-                            //}
-
-                            break;
-                        }
+                    if (para.TypeOfTickets == MatchMonitorQueryType.TicketFraud)
+                    {
+                        result = GetFraudMMFilter(para);
+                    }
+                    else if(para.IsSupportShowAllTickets)
+                    {
+                        result = GetAllMMFilter(para);
+                    }
                 }
             }
             catch (Exception ex)
-            {             
+            {
                 var logMessage = new LogMessage(ex.Message)
                   .AddMessage("Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
@@ -338,6 +323,54 @@
             {
                 data = result
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        private MMDetailFilterViewModel GetMatchMonitorFilterImportNew(MMDetailInfoViewModel para)
+        {
+            var result = new MMDetailFilterViewModel();
+
+            var removeKeyFraud = $"{Enum.GetName(typeof(MatchMonitorQueryType), MatchMonitorQueryType.TicketFraud)}_{para.EventDateToString}_{para.MatchID}_{para.BetTypeID}_{para.BetID}_{para.LiveIndicator}";
+            _memoryCacheService.RemoveKeyContainsValue(removeKeyFraud);
+
+            var removeKeyAll = $"{Enum.GetName(typeof(MatchMonitorQueryType), MatchMonitorQueryType.TicketAll)}_{para.EventDateToString}_{para.MatchID}_{para.BetTypeID}_{para.BetID}_{para.LiveIndicator}";
+            _memoryCacheService.RemoveKeyContainsValue(removeKeyAll);
+
+            switch (para.TypeOfTickets)
+            {
+                case MatchMonitorQueryType.TicketFraud:
+                    {
+                        result = GetFraudMMFilter(para);
+
+                        if (para.IsSupportShowAllTickets)
+                        {
+                            Task.Run(() =>
+                            {
+                                para.TypeOfTickets = MatchMonitorQueryType.TicketAll;
+
+                                _ = GetAllMMFilter(para);
+                            });
+                        }
+
+                        break;
+                    }
+                case MatchMonitorQueryType.TicketAll:
+                    {                                               
+                        if (para.IsSupportShowAllTickets)
+                        {
+                            para.TypeOfTickets = MatchMonitorQueryType.TicketFraud;
+
+                            GetFraudMMDetailForCache(para);
+
+                            para.TypeOfTickets = MatchMonitorQueryType.TicketAll;
+
+                            result = GetAllMMFilter(para);
+                        }
+                      
+                        break;
+                    }
+            }
+
+            return result;
         }
 
         private MMDetailFilterViewModel GetFraudMMFilter(MMDetailInfoViewModel para)
