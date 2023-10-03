@@ -26,6 +26,7 @@
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.CTS.User.Helper;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Login controller.
@@ -135,6 +136,8 @@
                 {
                     var user = _userService.Get(username.Trim());
 
+                    LogService.Info("_userService user info: " + JsonConvert.SerializeObject(user));
+
                     try
                     {
                         if (user != null)
@@ -221,6 +224,8 @@
                 }
                 else
                 {
+                    LogService.Info("_userService loginToken: " + loginToken);
+
                     msg = "Invalid input!";
                 }
 
