@@ -9,6 +9,8 @@
     using Fanex.NAP.CTS.Model.RobotReport;
     using Fanex.NAP.CTS.ViewModel.RobotReport;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
+    using NPOI.XSSF.UserModel;
+    using NPOI.SS.UserModel;
 
     public class ExportRobotReportService : ExportExcelService, IExportRobotReportService
     {
@@ -127,8 +129,44 @@
 
         protected override void FilterBlock(ref ExcelTemplateWriter writer, List<(string, string)> items)
         {
-            base.FilterBlock(ref writer, items);
+            var contentRichTextString = new XSSFRichTextString();
+            IFont boldFont = writer.GetFont(10, 0);
+            IFont normalFont = writer.GetFont(11, 0);
+            _lineCountFilterBlock = 0;
+
+            items.ForEach(item =>
+            {
+                AppendBlockContent(ref contentRichTextString, ref _lineCountFilterBlock, item.Item1, boldFont, item.Item2, normalFont, "\n");
+            });
+
+            WriteRickText(contentRichTextString, ref writer, 1);
+
             writer.SetRowHeight(1, (int)ROBOT_REPORT.EXPORT_POINT_PIXEL * _lineCountFilterBlock);
+        }
+
+        private void AppendBlockContent(ref XSSFRichTextString content, ref int lineCount, string name, IFont nameFont, string value, IFont valueFont, string endString)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return;
+            }
+
+            content.Append(name + ":  ", (XSSFFont)nameFont);
+            content.Append(value, (XSSFFont)valueFont);
+
+            if (!string.IsNullOrEmpty(endString))
+            {
+                content.Append(endString);
+            }
+
+            lineCount += CountLine(name + value);
+        }
+
+        private void WriteRickText(XSSFRichTextString contentRichTextString, ref ExcelTemplateWriter writer, int idx)
+        {
+            XSSFRichTextString[] contentRichTextArray = new XSSFRichTextString[1];
+            contentRichTextArray[0] = contentRichTextString;
+            writer.WriteRow(idx, contentRichTextArray);
         }
 
         private string GetMonthlyTime(DateTime dateTime) => dateTime.ToString(FormatDateTimeToString_yyyyMM);

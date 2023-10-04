@@ -19,10 +19,10 @@
     [NapAuth(FunctionKey = FSFunctionKeys.RobotReport, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class RobotReportController : BaseController
     {
-        private const string _robotReportDailyTemplate = @"~\Template\RobotReport\RobotReportDailyTemplate.xls";
-        private const string _robotReportMonthlyTemplate = @"~\Template\RobotReport\RobotReportMonthlyTemplate.xls";
-        private const string _aiRobotReportDailyTemplate = @"~\Template\RobotReport\AIRobotReportDailyTemplate.xls";
-        private const string _aiRobotReportMonthlyTemplate = @"~\Template\RobotReport\AIRobotReportMonthlyTemplate.xls";
+        private const string _robotReportDailyTemplate = @"~\Template\RobotReport\RobotReportDailyTemplate.xlsx";
+        private const string _robotReportMonthlyTemplate = @"~\Template\RobotReport\RobotReportMonthlyTemplate.xlsx";
+        private const string _aiRobotReportDailyTemplate = @"~\Template\RobotReport\AIRobotReportDailyTemplate.xlsx";
+        private const string _aiRobotReportMonthlyTemplate = @"~\Template\RobotReport\AIRobotReportMonthlyTemplate.xlsx";
 
         private const string _robotReportDailyFileName = "RobotDailyStatisticReport_{0}_{1}.xlsx";
         private const string _robotReportMonthlyFileName = "RobotMonthlyStatisticReport_{0}_{1}.xlsx";

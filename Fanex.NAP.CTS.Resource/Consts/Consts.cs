@@ -229,7 +229,7 @@
             ROBOT_EXPORT_NUMBER_COLUMN = 5,
             AIROBOT_EXPORT_NUMBER_COLUMN = 6,
             EXPORT_NUMBER_CHAR_PER_LINE = 180,
-            EXPORT_POINT_PIXEL = 225
+            EXPORT_POINT_PIXEL = 300
         }
 
         public enum FunctionId

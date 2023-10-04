@@ -1116,10 +1116,10 @@
     <Content Include="Views\AssociatedGroupMonitor\Index.cshtml" />
     <Content Include="Views\AssociationDetection\Index_old.cshtml" />
     <Content Include="Views\RobotReport\Index.cshtml" />
-    <Content Include="Template\RobotReport\AIRobotReportDailyTemplate.xls" />
-    <Content Include="Template\RobotReport\AIRobotReportMonthlyTemplate.xls" />
-    <Content Include="Template\RobotReport\RobotReportDailyTemplate.xls" />
-    <Content Include="Template\RobotReport\RobotReportMonthlyTemplate.xls" />
+    <Content Include="Template\RobotReport\AIRobotReportDailyTemplate.xlsx" />
+    <Content Include="Template\RobotReport\AIRobotReportMonthlyTemplate.xlsx" />
+    <Content Include="Template\RobotReport\RobotReportDailyTemplate.xlsx" />
+    <Content Include="Template\RobotReport\RobotReportMonthlyTemplate.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />
