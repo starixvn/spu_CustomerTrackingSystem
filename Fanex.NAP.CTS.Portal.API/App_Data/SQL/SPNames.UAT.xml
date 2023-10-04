@@ -48,6 +48,7 @@
 
 	<Function name ="RobotUser">
 		<Setting Key="CTS_Customer_RobotCheckExist" SpName="CTS_Customer_RobotCheckExist_xtest" DbName="DBONUSER.ON_USER.bodbSPUNet"/>
+		<Setting Key="CTS_Customer_RobotListSelByDate" SpName="CTS_Customer_RobotListSelByDate_xtest" DbName="DBONUSER.ON_USER.bodbSPUNet"/>
 	</Function>
 
 	<Function name="MemberCheckList">

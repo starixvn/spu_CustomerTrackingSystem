@@ -84,3 +84,4 @@
 /// <reference path="toast/jquery.toast.js" />
 /// <reference path="umd/popper.js" />
 /// <reference path="umd/popper-utils.js" />
+/// <reference path="MonthPicker.min.js" />

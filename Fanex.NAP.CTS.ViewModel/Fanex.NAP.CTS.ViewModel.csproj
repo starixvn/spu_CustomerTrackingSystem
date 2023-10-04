@@ -234,6 +234,8 @@
     <Compile Include="ProblemAccountMonitor\SubscriberGroupViewModel.cs" />
     <Compile Include="ProblemCaseMonitor\ProblemCaseViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RobotReport\AIRobotReportViewModel.cs" />
+    <Compile Include="RobotReport\RobotReportViewModel.cs" />
     <Compile Include="SpecialCustomerClass\CustomerClassViewModel.cs" />
     <Compile Include="SpecialCustomerClass\ResultInsertRemoveViewModel.cs" />
     <Compile Include="Account\TransactionHistory\IPInformation.cs" />

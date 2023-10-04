@@ -454,6 +454,8 @@
     <Content Include="Content\images\maintenance.jpeg" />
     <Content Include="Content\images\maintenance.png" />
     <Content Include="Content\images\statistic_empty.png" />
+    <Content Include="Content\MonthPicker.css" />
+    <Content Include="Content\MonthPicker.min.css" />
     <Content Include="Content\scss\components\_charts.scss" />
     <Content Include="Content\images\logo.webp" />
     <Content Include="Content\images\maintenance.webp" />
@@ -609,12 +611,19 @@
     <Content Include="Content\scss\pages\problem-case-monitor\problem-case-monitor.min.css">
       <DependentUpon>problem-case-monitor.css</DependentUpon>
     </Content>
+    <Content Include="Content\scss\pages\robot-report\robot-report.css">
+      <DependentUpon>robot-report.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\robot-report\robot-report.min.css">
+      <DependentUpon>robot-report.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\pages\special-customer-class\special-customer-class.css">
       <DependentUpon>special-customer-class.scss</DependentUpon>
     </Content>
     <Content Include="Content\scss\pages\special-customer-class\special-customer-class.min.css">
       <DependentUpon>special-customer-class.css</DependentUpon>
     </Content>
+    <Content Include="Content\scss\pages\robot-report\robot-report.scss" />
     <None Include="Content\scss\pages\transaction-report\transaction-report.scss" />
     <Content Include="Content\scss\pages\transaction-report\transaction-report.css">
       <DependentUpon>transaction-report.scss</DependentUpon>
@@ -629,6 +638,12 @@
       <DependentUpon>highcharts.css</DependentUpon>
     </Content>
     <Content Include="Content\scss\vendors\jquery-ui\base\tagify.css" />
+    <Content Include="Content\scss\vendors\month-picker\month-picker.css">
+      <DependentUpon>month-picker.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\vendors\month-picker\month-picker.min.css">
+      <DependentUpon>month-picker.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\vendors\MultipleSelect\jquery.multiselect.css" />
     <Content Include="Content\scss\vendors\MultipleSelect\jquery.multiselect.filter.css" />
     <Content Include="Content\scss\vendors\popoto\font-icon-list.html" />
@@ -1033,6 +1048,8 @@
     <Content Include="Scripts\LatestTransaction\index.js" />
     <Content Include="Scripts\ManageSubscriber\index.js" />
     <Content Include="Scripts\MatchMonitor\detail.js" />
+    <Content Include="Scripts\MonthPicker.js" />
+    <Content Include="Scripts\MonthPicker.min.js" />
     <Content Include="Scripts\NotificationSetting\notification-setting.js" />
     <Content Include="Scripts\popoto\d3.min.js" />
     <Content Include="Scripts\popoto\d3.v3.min.js" />
@@ -1043,6 +1060,9 @@
     <Content Include="Scripts\ProblemAccountMonitor\detail.js" />
     <Content Include="Scripts\ProblemAccountMonitor\index.js" />
     <Content Include="Scripts\ProblemCaseMonitor\index.js" />
+    <Content Include="Scripts\RobotReport\ai-robot-report-table.js" />
+    <Content Include="Scripts\RobotReport\index.js" />
+    <Content Include="Scripts\RobotReport\robot-report-table.js" />
     <Content Include="Scripts\search.js" />
     <Content Include="Scripts\SpecialCustomerClass\index.js" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -1095,6 +1115,11 @@
     <Content Include="Views\Account\CustomerCategory\UnmarkCustomerCategory.cshtml" />
     <Content Include="Views\AssociatedGroupMonitor\Index.cshtml" />
     <Content Include="Views\AssociationDetection\Index_old.cshtml" />
+    <Content Include="Views\RobotReport\Index.cshtml" />
+    <Content Include="Template\RobotReport\AIRobotReportDailyTemplate.xlsx" />
+    <Content Include="Template\RobotReport\AIRobotReportMonthlyTemplate.xlsx" />
+    <Content Include="Template\RobotReport\RobotReportDailyTemplate.xlsx" />
+    <Content Include="Template\RobotReport\RobotReportMonthlyTemplate.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />
@@ -1569,6 +1594,7 @@
     <Content Include="Content\scss\pages\account\account-fps.scss" />
     <Content Include="Content\scss\vendors\highcharts\highcharts.scss" />
     <Content Include="Content\scss\pages\special-customer-class\special-customer-class.scss" />
+    <Content Include="Content\scss\vendors\month-picker\month-picker.scss" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />

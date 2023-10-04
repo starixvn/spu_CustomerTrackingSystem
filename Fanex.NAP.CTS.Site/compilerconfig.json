@@ -134,5 +134,13 @@
   {
     "outputFile": "Content/scss/pages/associated-group-monitor/associated-group-monitor.css",
     "inputFile": "Content/scss/pages/associated-group-monitor/associated-group-monitor.scss"
+  },
+  {
+    "outputFile": "Content/scss/pages/robot-report/robot-report.css",
+    "inputFile": "Content/scss/pages/robot-report/robot-report.scss"
+  },
+  {
+    "outputFile": "Content/scss/vendors/month-picker/month-picker.css",
+    "inputFile": "Content/scss/vendors/month-picker/month-picker.scss"
   }
 ]

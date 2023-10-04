@@ -107,4 +107,5 @@ public static class FSFunctionKeys
 
     public const string AssociatedGroupMonitor = "AssociatedGroupMonitor";
 
+    public const string RobotReport = "RobotReport";
 }

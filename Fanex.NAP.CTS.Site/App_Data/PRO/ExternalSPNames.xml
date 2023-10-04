@@ -72,4 +72,8 @@
 		<Setting Key="Acc_Rpt_CTS_GetCustStatisticsInfo" SpName="Acc_Rpt_CTS_GetCustStatisticsInfo" DbName="DBDW.bodb_dwrs.bodbSPUNet" TimeOut="300" />
 		<Setting Key="CTS_Association_IpSharedLast3Days" SpName="CTS_Association_IpSharedLast3Days" DbName="DBCTS.bodb02.bodbSPUNet" TimeOut="300" />
 	</Function>
+
+	<Function name="RobotReport">
+		<Setting Key="CTS_Customer_RobotListSelByDate" SpName="CTS_Customer_RobotListSelByDate" DbName="DBONUSER.ON_USER.bodbSPUNet"/>
+	</Function>
 </Functions>
