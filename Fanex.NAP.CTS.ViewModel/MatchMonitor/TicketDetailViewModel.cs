@@ -251,9 +251,9 @@
 
             filter.HDPList = filter.DropdownListFilterDependOn.Select(x => x.BallHeadHDP).Distinct().OrderBy(x => x).ToList();
 
-            filter.BetTeamList = filter.OrderBetTeams(filter.DropdownListFilterDependOn.Select(x => x.BallHeadBetTeam).Distinct());
+            filter.BetTeamList = filter.OrderByFormatScoreBetTeam(filter.DropdownListFilterDependOn.Select(x => x.BallHeadBetTeam).Distinct(), "-");
 
-            filter.ScoreList = filter.DropdownListFilterDependOn.Select(x => x.Score).Distinct(x => x).OrderBy(x => x).ToList();
+            filter.ScoreList = filter.OrderByFormatScoreBetTeam(filter.DropdownListFilterDependOn.Select(x => x.Score).Distinct(), " - ");
 
             filter.GroupList = filter.DropdownListFilterDependOn.Select(x => new GroupInfoViewModel
             {

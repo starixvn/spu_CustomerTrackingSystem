@@ -123,22 +123,30 @@
 
         public MMDetailFilterViewModel Clone() => new MMDetailFilterViewModel(this);              
        
-        public List<string> OrderBetTeams(IEnumerable<string> betTeamList)
+        public List<string> OrderByFormatScoreBetTeam(IEnumerable<string> betTeamList, string separator)
         {
             var resultList = new List<string>();
             var betTeamOrderList = new List<BetTeamOrderViewModel>();
-            var betTeamOrderOtherList = new List<BetTeamOrderViewModel>();
+            var betTeamOrderOtherList = new List<BetTeamOrderViewModel>();           
 
             foreach (var betTeam in betTeamList)
             {
-                var arr = betTeam.Split(':');
+                var arr = betTeam.Split('-');
+
+                if (arr.Length == 1)
+                {
+                    arr = betTeam.Split(':');
+                    separator = ":";
+                }
 
                 if (arr.Length > 1)
                 {
+                    int.TryParse(arr[0], out int choiceA);
+
                     betTeamOrderList.Add(new BetTeamOrderViewModel
                     {
-                        ChoiceA = arr[0],
-                        ChoiceB = arr[1]
+                        ChoiceA = choiceA,
+                        ChoiceB = arr[1].Trim()
                     });
                 }
                 else
@@ -150,7 +158,7 @@
                 }
             }
 
-            resultList.AddRange(betTeamOrderList.OrderBy(x => x.ChoiceA).ThenBy(x => x.ChoiceB).Select(x => x.ChoiceA + ":" + x.ChoiceB));
+            resultList.AddRange(betTeamOrderList.OrderBy(x => x.ChoiceA).ThenBy(x => x.ChoiceB).Select(x => x.ChoiceA + separator + x.ChoiceB));
             resultList.AddRange(betTeamOrderOtherList.OrderBy(x => x.Other).Select(x => x.Other));
 
             return resultList;
