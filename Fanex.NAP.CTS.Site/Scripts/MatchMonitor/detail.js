@@ -159,7 +159,7 @@ function MatchMonitorDetail() {
             autoWidth: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 5, 7, 9, 10, 12, 13, 14, 15, 16], className: "text-center" },
+                { targets: [0, 1, 2, 3, 5, 7, 9, 12, 13, 14, 15, 16], className: "text-center" },
                 {
                     targets: [0], width: "3%", render: function (data, type, full, meta) {
                         return '<input type="checkbox" class="col-checkbox" name="chkbx" value="' + $('<div/>').text(data).html() + '">';
@@ -174,7 +174,7 @@ function MatchMonitorDetail() {
                 { targets: [7], width: "5%" },
                 { targets: [8], width: "5%", className: "text-right col-amt" },
                 { targets: [9], width: "4%" },
-                { targets: [10], width: "5%" },
+                { targets: [10], width: "5%", className: "text-center col-score" },
                 { targets: [11], width: "13%", className: "text-center col-transtime" },
                 { targets: [12], width: "3%" },
                 { targets: [13], width: "5%" },
@@ -837,22 +837,23 @@ function MatchMonitorDetail() {
         return true;
     }
 
-    function ValidateTicketStatus() {
-        let opt = $("option", domElements.cbbTicketsStatus).length;
-        if (opt > 0) {
-            return true;
-        }
+    function ValidateTicketStatus() {        
         if (isDisplaySingleGrid) {
             domElements.tblMMSG.DataTable().clear().draw(false);
             domElements.divHomeMonitor.addClass('hide');
             domElements.divAwayMonitor.addClass('hide');
-            domElements.divSGMonitor.removeClass('hide');
+            domElements.divSGMonitor.removeClass('hide');           
         } else {
             domElements.tblMMHomeTeam.DataTable().clear().draw(false);
             domElements.tblMMAwayTeam.DataTable().clear().draw(false);
             domElements.divHomeMonitor.removeClass('hide');
             domElements.divAwayMonitor.removeClass('hide');
             domElements.divSGMonitor.addClass('hide');
+        }
+
+        let opt = $("option", domElements.cbbTicketsStatus).length;
+        if (opt > 0) {
+            return true;
         }
        
         RefreshBreadcrumbTotalTickets(0, 0);
@@ -938,9 +939,9 @@ function MatchMonitorDetail() {
         SetupFilterFromDictinary(domElements.cbbCurrency, data.CurrencyList);
 
         if (data.IsDisplaySingleGrid) {
-            SetupHDPBetTeam(data.BetTeamList);         
+            SetupHDPBetTeam(data.BetTeamList);                                
         } else {
-            SetupHDPBetTeam(data.HDPList);              
+            SetupHDPBetTeam(data.HDPList);    
         }
 
         SetupFilterScore(domElements.cbbMatchScore, data.ScoreList);
@@ -1350,7 +1351,7 @@ function MatchMonitorDetail() {
         }
     }
 
-    function RenderDoubleGrid(data, recordsFilteredGlobal, recordsTotalGlobal) {       
+    function RenderDoubleGrid(data, recordsFilteredGlobal, recordsTotalGlobal) {          
         if (data?.HomeMatchItemList) {
             domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw(false);
         }
@@ -1362,7 +1363,7 @@ function MatchMonitorDetail() {
         RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsTotalGlobal);
     }
 
-    function RenderSingleGrid(data, recordsFilteredGlobal, recordsTotalGlobal) {
+    function RenderSingleGrid(data, recordsFilteredGlobal, recordsTotalGlobal) {           
         if (data?.ItemList) {
             domElements.tblMMSG.DataTable().rows.add(data.ItemList).draw(false);
         }
@@ -2207,7 +2208,7 @@ function MatchMonitorDetail() {
         domElements.breadcrumbButton.css({ top: breadcrumbButtonTop });
         domElements.groupTable.css('top', groupTableTop);
 
-        domElements.groupTable.height($(window).height() - detailpageHeight - breadcrumbButtonHeight - 77);
+        domElements.groupTable.height($(window).height() - detailpageHeight - breadcrumbButtonHeight - 77);      
     }
 
     function Initial() {
