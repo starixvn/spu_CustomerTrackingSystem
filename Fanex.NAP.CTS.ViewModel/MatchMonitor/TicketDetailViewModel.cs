@@ -233,7 +233,7 @@
             return suspiciousTransInfos;
         }
 
-        public MMDetailFilterViewModel GenerateDropdownFilterListByMainTicketInfo(IEnumerable<MMDetailFilterTicketInfoModel> infoList, bool liveIndicator)
+        public MMDetailFilterViewModel GenerateDropdownFilterListByMainTicketInfo(IEnumerable<MMDetailFilterTicketInfoModel> infoList, bool liveIndicator, int sportType)
         {
             var filter = new MMDetailFilterViewModel();            
 
@@ -253,7 +253,15 @@
 
             filter.BetTeamList = filter.OrderByFormatScoreBetTeam(filter.DropdownListFilterDependOn.Select(x => x.BallHeadBetTeam).Distinct(), "-");
 
-            filter.ScoreList = filter.OrderByFormatScoreBetTeam(filter.DropdownListFilterDependOn.Select(x => x.Score).Distinct(), " - ");
+            var scoreList = filter.DropdownListFilterDependOn.Select(x => x.Score).Distinct();
+            if (sportType == 1 && liveIndicator)
+            {
+                filter.ScoreList = filter.OrderByFormatScoreBetTeam(scoreList, " - ");
+            }
+            else
+            {
+                filter.ScoreList = scoreList.ToList();
+            }            
 
             filter.GroupList = filter.DropdownListFilterDependOn.Select(x => new GroupInfoViewModel
             {

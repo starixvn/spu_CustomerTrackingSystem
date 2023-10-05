@@ -17,6 +17,7 @@
             this.BetID = para.BetID;
             this.Sites = para.Sites;
             this.LiveIndicator = para.LiveIndicator;
+            this.Sport = para.Sport;
         }
 
         public bool IsSupportShowAllTickets { get; set; }
@@ -38,6 +39,8 @@
         public bool LiveIndicator { get; set; }
 
         public bool IsImportNewTicket { get; set; }
+
+        public int Sport { get; set; }
 
         public DateTime EventDate
         {

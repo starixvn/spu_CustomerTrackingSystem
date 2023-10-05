@@ -1292,7 +1292,8 @@ function MatchMonitorDetail() {
             LiveIndicator: domElements.cbbMarket.val(),
             TypeOfTickets: currentType,
             IsImportNewTicket: isImportNewTicket,
-            IsSupportShowAllTickets: isSupportShowAllTickets
+            IsSupportShowAllTickets: isSupportShowAllTickets,
+            Sport: domElements.sportType
         };
 
         $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorFilter'), {

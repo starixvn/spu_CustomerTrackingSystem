@@ -151,7 +151,7 @@
 
             var mmticketDetailInfo = this.GetMMTicketDetailInfo(para, suspiciousTransInfos);
 
-            var allFilterResult = fraudTicket.GenerateDropdownFilterListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);
+            var allFilterResult = fraudTicket.GenerateDropdownFilterListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator, para.Sport);
             allFilterResult.MaxSequenceId = mmticketDetailInfo.MaxSequenceId;
             allFilterResult.RecordsTotal = mmticketDetailInfo.TotalTicketAll;
 
@@ -162,7 +162,7 @@
         {           
             var mmticketDetailInfo = this.GetMMTicketDetailInfo(para, null);
 
-            var allFilterResult = new TicketDetailViewModel().GenerateDropdownFilterListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator);
+            var allFilterResult = new TicketDetailViewModel().GenerateDropdownFilterListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator, para.Sport);
             allFilterResult.MaxSequenceId = mmticketDetailInfo.MaxSequenceId;
             allFilterResult.RecordsTotal = mmticketDetailInfo.TotalTicketAll;
 
