@@ -483,13 +483,15 @@
         align-items: center; }
       .detailpage .monitor-container .monitor-table .group-control .form-filter .group .width-amount-item {
         color: #474747;
-        width: 47%;
+        width: 85%;
         font-style: italic;
         border: aliceblue;
         border: 0px;
         background-color: #f0f8ff00;
         -moz-appearance: textfield;
-        text-align: center; }
+        padding-left: 8px;
+        font-size: 12px;
+        /* text-align: center;*/ }
       .detailpage .monitor-container .monitor-table .group-control .form-filter .group .text-box {
         height: 2.8rem;
         display: flex;
@@ -497,6 +499,12 @@
         justify-content: center;
         width: auto;
         padding: 0 1rem; }
+      .detailpage .monitor-container .monitor-table .group-control .form-filter .group .clear-amount {
+        margin-right: 5px;
+        cursor: pointer; }
+      .detailpage .monitor-container .monitor-table .group-control .form-filter .group .clear-amount:hover {
+        background-color: rgba(57, 110, 248, 0.2);
+        border-radius: 5px; }
       .detailpage .monitor-container .monitor-table .group-control .form-filter .width-110 {
         min-width: 110px; }
       .detailpage .monitor-container .monitor-table .group-control .form-filter .width-160 {
@@ -568,19 +576,30 @@
         padding: 8px;
         border-radius: 3px 3px 0px 0px; }
         .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info {
-          margin-right: 0px; }
+          height: 32px !important; }
           .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .info-text {
             font-weight: bold;
             color: black;
             padding-right: 5px; }
           .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .info-select {
-            width: 149px; }
+            width: 149px !important;
+            padding-left: 12px;
+            height: auto; }
+          .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .select2-container {
+            width: 151px !important;
+            height: 32px !important;
+            vertical-align: middle; }
+          .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .select2-container .select2-selection--single {
+            border: 1px solid #d6d6d6;
+            border-radius: 2px !important; }
+          .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .select2-selection .select2-selection--single {
+            height: 32px !important; }
         .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-line {
           color: #C4C4C4;
           margin-left: 10px;
           margin-right: 10px;
-          margin-bottom: 0.5px;
-          height: 26px;
+          margin-bottom: 1px;
+          height: 30px;
           border-right: 1px solid #c4c4c4; }
       .detailpage .monitor-container .monitor-table .group-control .second-row-depend-1 {
         padding: 8px 5px 8.8px 5px;
@@ -666,7 +685,8 @@
             z-index: 7;
             transition: top 0.01s linear; }
           .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail {
-            /*  width: 100% !important;*/ }
+            /*  width: 100% !important;*/
+            border-bottom: 1px solid #c4c4c4 !important; }
             .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor .loading, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .loading, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor .loading, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .loading, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor .loading, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .loading {
               position: relative; }
               .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor .loading:after, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .loading:after, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor .loading:after, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .loading:after, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor .loading:after, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .loading:after {
@@ -749,6 +769,8 @@
                   width: 6px; }
             .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .col-red, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-red, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-red, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-red, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-red, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-red {
               color: #C1272D; }
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .col-score, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-score, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-score, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-score, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-score, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-score {
+              white-space: nowrap !important; }
             .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .col-transtime, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-transtime, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-transtime, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-transtime, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-transtime, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-transtime {
               font-size: 12px !important;
               min-width: 86px; }

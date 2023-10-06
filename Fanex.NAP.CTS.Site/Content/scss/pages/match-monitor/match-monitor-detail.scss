@@ -193,13 +193,15 @@
 
                         .width-amount-item {
                             color: #474747;
-                            width: 47%;
+                            width: 85%;
                             font-style: italic;
                             border: aliceblue;
                             border: 0px;
                             background-color: #f0f8ff00;
                             -moz-appearance: textfield;
-                            text-align: center;
+                            padding-left: 8px;
+                            font-size: 12px;
+                            /* text-align: center;*/
                         }
 
                         .text-box {
@@ -209,6 +211,16 @@
                             justify-content: center;
                             width: auto;
                             padding: 0 1rem;
+                        }
+
+                        .clear-amount {
+                            margin-right: 5px;
+                            cursor: pointer;
+                        }
+
+                        .clear-amount:hover {
+                            background-color: rgba(57, 110, 248, 0.2);
+                            border-radius: 5px;
                         }
                     }
 
@@ -317,7 +329,7 @@
                     border-radius: 3px 3px 0px 0px;
 
                     .first-row-info {
-                        margin-right: 0px;
+                        height: 32px !important;
 
                         .info-text {
                             font-weight: bold;
@@ -326,7 +338,24 @@
                         }
 
                         .info-select {
-                            width: 149px;
+                            width: 149px !important;
+                            padding-left: 12px;
+                            height: auto;
+                        }
+
+                        .select2-container {
+                            width: 151px !important;
+                            height: 32px !important;
+                            vertical-align: middle;
+                        }
+
+                        .select2-container .select2-selection--single {
+                            border: 1px solid #d6d6d6;
+                            border-radius: 2px !important;
+                        }
+
+                        .select2-selection .select2-selection--single {
+                            height: 32px !important;
                         }
                     }
 
@@ -334,8 +363,8 @@
                         color: #C4C4C4;
                         margin-left: 10px;
                         margin-right: 10px;
-                        margin-bottom: 0.5px;
-                        height: 26px;
+                        margin-bottom: 1px;
+                        height: 30px;
                         border-right: 1px solid rgba(196, 196, 196, 1);
                     }
                 }
@@ -461,6 +490,8 @@
 
                         .table-monitor, .table-monitor-detail {
                             /*  width: 100% !important;*/
+                            border-bottom: 1px solid #c4c4c4 !important;
+
                             .loading {
                                 position: relative;
 
@@ -578,6 +609,10 @@
 
                                     .col-red {
                                         color: #C1272D;
+                                    }
+
+                                    .col-score {                                       
+                                        white-space: nowrap !important;
                                     }
 
                                     .col-transtime {

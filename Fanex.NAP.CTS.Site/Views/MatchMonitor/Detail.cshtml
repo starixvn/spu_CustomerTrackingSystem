@@ -48,20 +48,22 @@
                         <div class="first-row-line"></div>
 
                         <div class="first-row-info">
-                            <label class="text info-text">Bet Type</label>
-                            <select class="control info-select" id="cbbBetType">
+                            <label class="info-text">Bet Type</label>
+                            <select class="control info-select" id="cbbBetType" name="state">
                                 @if (ViewBag.SportType == (int)Consts.MatchMonitorSportType.Soccer)
                                 {
                                     <option value="1_0" data-bettypeid="1">HDP</option>
-                                    <option value="3_0" data-bettypeid="3">O/U</option>
                                     <option value="7_0" data-bettypeid="7">1st HDP</option>
+                                    <option value="3_0" data-bettypeid="3">O/U</option>
                                     <option value="8_0" data-bettypeid="8">1st O/U</option>
-                                    @*<option value="2_0" data-bettypeid="2" data-is-support-suspicious="false">O/E</option>
-                    <option value="12_0" data-bettypeid="12" data-is-support-suspicious="false">1st O/E</option>
-                    <option value="413_0" data-bettypeid="413" data-is-support-suspicious="false">Correct Score</option>
-                    <option value="414_0" data-bettypeid="414" data-is-support-suspicious="false">1st Correct Score</option>
-                    <option value="6_0" data-bettypeid="6" data-is-support-suspicious="false">Total Goal</option>
-                    <option value="126_0" data-bettypeid="126" data-is-support-suspicious="false">1st Total Goal</option>*@
+                                    <option value="5_0" data-bettypeid="5" data-is-support-suspicious="false" class="readOnly">1X2</option>
+                                    <option value="15_0" data-bettypeid="15" data-is-support-suspicious="false" class="readOnly">1st 1X2</option>
+                                    <option value="2_0" data-bettypeid="2" data-is-support-suspicious="false" class="readOnly">O/E</option>
+                                    <option value="12_0" data-bettypeid="12" data-is-support-suspicious="false" class="readOnly">1st O/E</option>
+                                    <option value="413_0" data-bettypeid="413" data-is-support-suspicious="false" class="readOnly">Correct Score</option>
+                                    <option value="414_0" data-bettypeid="414" data-is-support-suspicious="false" class="readOnly">1st Correct Score</option>
+                                    <option value="6_0" data-bettypeid="6" data-is-support-suspicious="false" class="readOnly">Total Goal</option>
+                                    <option value="126_0" data-bettypeid="126" data-is-support-suspicious="false" class="readOnly">1st Total Goal</option>
                                 }
                                 else if (ViewBag.SportType == (int)Consts.MatchMonitorSportType.Basketball)
                                 {
@@ -109,13 +111,13 @@
                         <div class="group width-160 second-row-depend-1 start-box" @(ViewBag.IsDisableScoreFilter ? "hidden" : "")>
                             <label class="text">Score</label>
                             <select class="control width-select" id="cbbMatchScore" multiple="multiple">
-                                @if (ViewBag.MatchScore != null)
+                                @*@if (ViewBag.MatchScore != null)
                                 {
                                     foreach (var item in ViewBag.MatchScore)
                                     {
                                         <option value="@item.ScoreDiff" selected>@item.LiveHomeScore - @item.LiveAwayScore </option>
                                     }
-                                }
+                                }*@
                             </select>
                         </div>
 
@@ -125,6 +127,12 @@
                                 <option value="A">All</option>
                                 <option value="C">Credit</option>
                                 <option value="L">Licensee</option>
+                            </select>
+                        </div>
+
+                        <div class="group width-160 second-row-depend-1">
+                            <label class="text">CC</label>
+                            <select class="control width-select" id="cbbCC" multiple="multiple">
                             </select>
                         </div>
 
@@ -165,11 +173,10 @@
                         </div>
 
                         <div class="group width-160 second-row-depend-1">
-                            <label class="text">Amount</label>
+                            <label class="text">Username's Amt (RM)</label>                           
                             <div class="ui-multiselect width-amount">
-                                <input class="width-amount-item" placeholder="from" id="inputAmountFrom" maxlength="15" />
-                                <label>-</label>
-                                <input class="width-amount-item" placeholder="to" id="inputAmountTo" maxlength="15" />
+                                <input class="width-amount-item" placeholder=">= please input amount" id="inputCustAmountRM" maxlength="15" />
+                                <span class="icon-cross-brow clear-amount hide" id="iconClearUsnAmt"></span>
                             </div>
                         </div>
 
@@ -199,8 +206,7 @@
                     <div class="breadcrumb-totaltickets"></div>
                     <div id="hdbreadcrumTotalTickets" style="display: none">0</div>
                     <div>
-                        <button class="button-primary-outline-1" id="btnRefresh">Import New Tickets</button>
-                        <button class="button-primary-outline-1" id="btnShowAll" style="display: none">Show All</button>
+                        <button class="button-primary-outline-1" id="btnImportNewTicket">Import New Tickets</button>                        
                         <button class="button-primary-outline-1" id="btnShowPopupAssDetection">Association Detection</button>
                         <button class="button-primary-outline-1" id="btnExportExcel">Export Excel</button>
                         <button class="button-primary-outline-1" id="btnVerifyAndClose">Verify and Close</button>
@@ -291,12 +297,67 @@
                             </table>
                         </div>
                     </div>
+
+                    <div id="monitor-datatable">
+                        <div id="tbrMMSG" class="table-report" style="width: 50%; padding-bottom: 8px;">
+                            <table id="tblMMSG" class="table table-striped table-monitor-detail">
+                                <thead>
+                                    <tr>
+                                        <th><input name="select_all" value="1" id="inputSGSelectAll" type="checkbox" class="col-checkbox" /></th>
+                                        <th>Username</th>
+                                        <th>CC</th>
+                                        <th>Bot</th>
+                                        <th>Dgr</th>
+                                        <th>Odds</th>
+                                        <th>
+                                            <div class="type-outer">
+                                                <span class="col-title">BetID</span>                                               
+                                            </div>
+                                        </th>
+                                        <th>Cur</th>
+                                        <th>Amt</th>
+                                        <th>Choice</th>
+                                        <th>Score</th>
+                                        <th>Transtime</th>
+                                        <th>B.f.</th>
+                                        <th title="Auto-detected Association Group">
+                                            A.Gr.
+                                        </th>
+                                        <th title="Manual-detected Association Group: max. 5000 Usernames">
+                                            M.Gr.<sup style="vertical-align: super; font-size: smaller;">i</sup>
+                                        </th>
+                                        <th>Reason</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
 
             </div>
         </div>
 
         <div class="hide">
+            <div>
+                <label class="text">CC</label>
+                <select class="control" id="cbbCCHidden" multiple="multiple">
+                    @foreach (var group in ViewBag.GroupCCList)
+                    {
+                    <optgroup label="@group.CCGroupName">
+                        @foreach (var cc in group.CCList)
+                        {
+                            <option selected value=@cc>@cc</option>
+                        }
+                        @if (group.CCGroupName.ToLower().Contains("other"))
+                        {
+                            <option selected value=0>-</option>
+                        }
+                    </optgroup>
+                    }
+                </select>
+            </div>
             <input id="hdEventDataToString" type="hidden" value="@ViewBag.EventDateToString" />
             <input id="hdMatchID" type="hidden" value="@ViewBag.MatchID" />
             <input id="hdMatchName" type="hidden" value="@ViewBag.MatchName" />

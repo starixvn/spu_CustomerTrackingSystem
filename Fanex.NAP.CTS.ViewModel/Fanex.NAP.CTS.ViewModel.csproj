@@ -179,14 +179,16 @@
     <Compile Include="MatchMonitor\DetectGroup\TicketSelectForMGrViewModel.cs" />
     <Compile Include="MatchMonitor\ExExcelTicketInfoViewModel.cs" />
     <Compile Include="MatchMonitor\ExExlMatchInfoViewModel.cs" />
+    <Compile Include="MatchMonitor\FilterDependOn\CCGroupViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\DangerViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\DangerTypeViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\DangerItemViewModel.cs" />
-    <Compile Include="MatchMonitor\FilterDependOn\MMFilterItemViewModel.cs" />
+    <Compile Include="MatchMonitor\FilterDependOn\DependOnFilterItemViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\SubscriberTypeCurrencyItemViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\SubscriberTypeCurrencyViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\TicketStatusViewModel.cs" />
     <Compile Include="MatchMonitor\GetMatchMonitorViewModel.cs" />
+    <Compile Include="MatchMonitor\BetTeamOrderViewModel.cs" />
     <Compile Include="MatchMonitor\MMDetailFilterDropdownListViewModel.cs" />
     <Compile Include="MatchMonitor\MMDetailFilterTicketInfoViewModel.cs" />
     <Compile Include="MatchMonitor\MMDetailFilterViewModel.cs" />
@@ -195,7 +197,7 @@
     <Compile Include="MatchMonitor\MatchMonitorBetTypeViewModel.cs" />
     <Compile Include="MatchMonitor\MMDetailInfoViewModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailItemViewModel.cs" />
-    <Compile Include="MatchMonitor\MatchMonitorDetailListViewModel.cs" />
+    <Compile Include="MatchMonitor\MMDetailTicketListViewModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailViewModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorSearchViewModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorViewModel.cs" />

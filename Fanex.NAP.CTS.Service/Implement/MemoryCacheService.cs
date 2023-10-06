@@ -37,6 +37,24 @@
             return result;
         }
 
+        public bool PushValue<T>(string key, T value, int hours = 1) where T : class
+        {
+            var result = false;
+
+            try
+            {
+                result = _memoryCache.Add(key, value, DateTimeOffset.UtcNow.AddHours(hours));
+            }
+            catch (Exception ex)
+            {
+                LogService.Info("Memory Cache Error: " + ex.Message + ex.StackTrace + "\n"
+                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                    + ex.InnerException.StackTrace);
+            }
+
+            return result;
+        }
+
         public async Task<bool> PushValueAsync<T>(string key, T value, int hours = 1) where T : class
         {
             return await Task.Run(() =>

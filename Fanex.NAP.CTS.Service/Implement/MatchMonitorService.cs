@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core;
@@ -121,6 +122,17 @@
             }
         }
 
+        private IEnumerable<CustInfoModel> GetCustInfoByCustID(IEnumerable<long> custIds)
+        {
+            var custIdsToString = string.Join(",", custIds);
+            if (!string.IsNullOrWhiteSpace(custIdsToString))
+            {
+                return this.GetCustInfoByCustID(custIdsToString);
+            }
+
+            return Enumerable.Empty<CustInfoModel>();
+        }
+
         public IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs)
         {
             var criteria = new CustInfoByCustIdGetCriteria()
@@ -131,49 +143,277 @@
             return repository.Fetch<CustInfoModel>(criteria);
         }
 
-        public IEnumerable<TicketDetailModel> GetFraudTicketDetail(MMDetailInfoViewModel para, string transIds)
+        public MMDetailFilterViewModel GetFraudFilterInfoDetail(MMDetailInfoViewModel para, TicketDetailViewModel fraudTicket)
         {            
-            var criteria = new TicketDetailGetCriteria()
-            {
-                QueryType = (int)MatchMonitorQueryType.TicketFraud,
-                EventDate = para.EventDate,
-                ListTransId = transIds,
-                MatchID = para.MatchID,
-                BetType = para.BetTypeID,
-                BetID = para.BetID,
-                IsLive = para.LiveIndicator ? 1 : 0
-            };
+            var fraudTicketMergeAGroup = MergeFraudReasonAGroup(fraudTicket);
 
-            return repository.Fetch<TicketDetailModel>(criteria);
+            var suspiciousTransInfos = fraudTicket.GetSuspiciousTransInfo(fraudTicketMergeAGroup);
+
+            var mmticketDetailInfo = this.GetMMTicketDetailInfo(para, suspiciousTransInfos);
+
+            var allFilterResult = fraudTicket.GenerateDropdownFilterListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator, para.Sport);
+            allFilterResult.MaxSequenceId = mmticketDetailInfo.MaxSequenceId;
+            allFilterResult.RecordsTotal = mmticketDetailInfo.TotalTicketAll;
+
+            return allFilterResult;
         }
 
-        public TicketDetailViewModel GetAllTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int batchSize = 1000, string transIds = null)
-        {                                   
-            var scoreList = (filter.ScoreList == null || !para.LiveIndicator) ? null : string.Join(",", filter.ScoreList);
+        public MMDetailFilterViewModel GetAllFilterInfoDetail(MMDetailInfoViewModel para)
+        {           
+            var mmticketDetailInfo = this.GetMMTicketDetailInfo(para, null);
 
-            var criteria = new TicketDetailGetCriteria()
+            var allFilterResult = new TicketDetailViewModel().GenerateDropdownFilterListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator, para.Sport);
+            allFilterResult.MaxSequenceId = mmticketDetailInfo.MaxSequenceId;
+            allFilterResult.RecordsTotal = mmticketDetailInfo.TotalTicketAll;
+
+            return allFilterResult;
+        }        
+
+        public IEnumerable<MatchMonitorDetailItemViewModel> MergeFraudToAllMMDetail(IEnumerable<MatchMonitorDetailItemViewModel> mdItemList, IEnumerable<MatchMonitorDetailItemViewModel> fraudMDItemList)
+        {
+            if (fraudMDItemList != null && fraudMDItemList.Any())
             {
-                QueryType = (int)MatchMonitorQueryType.TicketAll,
+                var fraudItemDic = fraudMDItemList.ToDictionary(x => x.TransId, x => x);
+
+                return mdItemList.Select(x => x.MappingFraudTicketToAllTicket(fraudItemDic));
+            }
+
+            return mdItemList;
+        }
+
+        public IEnumerable<MatchMonitorDetailItemViewModel> MergeFraudReasonAGroup(TicketDetailViewModel fraudTicket)
+        {
+            var mdResult = Enumerable.Empty<MatchMonitorDetailItemViewModel>();
+
+            var matchDetailInfo = fraudTicket.MatchDetailInfo;
+
+            if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
+            {
+                var mmStatic = new MatchMonitorStaticListModel();
+                var ticketDetail = fraudTicket.TicketDetails;
+                var mergeGroup = fraudTicket.MMDetailMergeGroup;
+
+                mmStatic = this.GetMMStaticList();
+
+                var custIDs = matchDetailInfo.Custs.Select(x => x.CustID).Distinct();
+                var custInfo = GetCustInfoByCustID(custIDs);
+
+                mdResult = DrawColorFraudMMDetailWithMergeReasonAGroup(matchDetailInfo.VerifiedTrans, custInfo, ticketDetail, mergeGroup, mmStatic.Reasons);
+            }
+
+            return mdResult;
+        }
+
+        public IEnumerable<MatchMonitorDetailItemViewModel> DrawColorFraudMMDetailWithMergeReasonAGroup(IEnumerable<MatchMonitorDetailVerifyTransResultModel> verifiedTrans,
+            IEnumerable<CustInfoModel> custInfo,
+            IEnumerable<TicketDetailModel> ticket,
+            MMDetailMergeGroupViewModel mergeGroup,
+            IEnumerable<MatchMonitorReasonModel> reasons)
+        {
+            var ticketResult = Enumerable.Empty<MatchMonitorDetailItemViewModel>();
+
+            if (custInfo == null || ticket == null || mergeGroup.TicketMergeGroups == null)
+                return ticketResult;
+
+            ticketResult = mergeGroup.TicketMergeGroups.Join(ticket, tg => tg.TransID, t => t.TransId,
+                (tg, t) => new { tg = tg, t = t })
+                .Join(custInfo, ttg => ttg.t.CustId, c => c.CustID,
+                (ttg, c) => new { ttg = ttg, c = c }).Select(x =>
+                {
+                    var nTicket = new MatchMonitorDetailItemViewModel(x.ttg.tg.MergeGroupID, x.ttg.t, x.c);
+                    var verifiedTransID = verifiedTrans.FirstOrDefault(y => y.VerifiedTransID == x.ttg.t.TransId)?.VerifiedTransID.ToString() ?? string.Empty;
+                    var group = mergeGroup.Groups.FirstOrDefault(y => y.GroupID == x.ttg.tg.MergeGroupID);
+
+                    nTicket.PICVerified = verifiedTransID;
+
+                    nTicket.ReasonList = GetReasonName(reasons, x.ttg.tg.ReasonList);
+                    nTicket.ReasonIDList = x.ttg.tg.ReasonList;
+                    nTicket.ADetectGroupID = group?.GroupID ?? 0;
+                    nTicket.ADetectGroup = group?.GroupName ?? "-";
+
+                    return nTicket;
+                });
+
+            return ticketResult.Distinct(x=>x.TransId);
+        }
+
+        public string GetReasonName(IEnumerable<MatchMonitorReasonModel> reasonList, string reasonIDList)
+        {
+            if (!string.IsNullOrEmpty(reasonIDList))
+            {
+                var arrReasons = reasonIDList.Split(',').Select(x => Convert.ToInt32(x));
+                var reasonNames = reasonList.Join(arrReasons,
+                    r1 => r1.ReasonID,
+                    r2 => r2,
+                    (r1, r2) => r1.ReasonName);
+
+                return string.Join(",", reasonNames);
+            }
+
+            return string.Empty;
+        }
+
+        public string GetReasonID(IEnumerable<MatchMonitorReasonModel> reasonList, IEnumerable<string> reasonNames)
+        {
+            var reasonIDs = new List<int>();
+            
+            if (reasonList == null)
+            {
+                var mmStatic = this.GetMMStaticList();
+                reasonList = mmStatic.Reasons;
+            }
+            if (reasonNames != null && reasonNames.Any())
+            {               
+                reasonIDs = reasonList.Join(reasonNames,
+                    r1 => r1.ReasonName,
+                    r2 => r2,
+                    (r1, r2) => r1.ReasonID).ToList();
+
+                if (reasonNames.Any(x => x == "-") && !reasonIDs.Any(x=>x == 0))
+                {
+                    reasonIDs.Add(0);
+                }
+            }
+
+            return string.Join(",", reasonIDs);            
+        }
+
+        public string GetTransFilterSuspicousMGr(MMDetailFilterViewModel filter, TicketDetailViewModel fraudTicket)
+        {
+            var transJson = string.Empty;
+
+            var isGetAll = (filter.ReasonList != null && filter.ReasonList.Any(x => x.Equals("-"))
+               && (filter.MGroupList != null && filter.MGroupList.Any(x => x.Equals("-") || x.Equals("0")))
+               && (filter.AGroupList != null && filter.AGroupList.Any(x => x.Equals("-"))));
+
+            if (!isGetAll || filter.IsFilterSuspicious)
+            {
+                var isExclude = (filter.ReasonList != null && filter.ReasonList.Any(x => x.Equals("-"))) &&
+                        (filter.AGroupList != null && filter.AGroupList.Any(x => x.Equals("-")));
+
+                if (fraudTicket != null)
+                {
+                    if (isExclude)
+                    {
+                        transJson = fraudTicket.GetTransByFilterExcludeSuspicous(filter, fraudTicket.AGroupReasonMerged);
+                    }
+                    else
+                    {
+                        transJson = fraudTicket.GetTransByFilterIncludeSuspicous(filter, fraudTicket.AGroupReasonMerged);
+                    }
+                }
+                else
+                {
+                    fraudTicket = new TicketDetailViewModel();
+                    if (isExclude)
+                    {
+                        transJson = fraudTicket.GetTransByFilterExcludeMGr(filter);
+                    }
+                    else
+                    {
+                        transJson = fraudTicket.GetTransByFilterIncludeMGr(filter);
+                    }
+                }
+            }
+
+            return transJson;
+        }
+
+        public TicketDetailViewModel GetTicketDetailFraud(MMDetailResultModel matchDetailInfo, MMDetailInfoViewModel para)
+        {            
+            var ticketMD = matchDetailInfo.MatchDetails.Select(x =>
+                new FraudTransModel
+                {
+                    TransID = x.TransID,
+                    Reason = x.Reason.ToString(),
+                    AGroup = x.GroupID
+                });
+
+            var transJsons = JsonConvert.SerializeObject(ticketMD);
+
+            var result = this.GetTicketDetailByFraudTranIDs(para, null, transJsons);
+
+            var mergeGroup = new MMDetailMergeGroupViewModel();
+            var mMDetailBetTeams = matchDetailInfo.MatchDetails.Join(result.TicketDetails.Distinct(x => x.TransId),
+                m => m.TransID,
+                t => t.TransId, (m, t) => new MMDetailBetTeamModel(m, t));
+        
+            if (mMDetailBetTeams.Any())
+            {
+                var ticketMergeGroups = this.GetMMDetailMergeGroup(mMDetailBetTeams);
+                mergeGroup.TicketMergeGroups = ticketMergeGroups;
+                mergeGroup.Groups = mergeGroup.GroupByGroupID();
+            }
+
+            result.MMDetailMergeGroup = mergeGroup;
+
+            return result;
+        }
+
+        public TicketDetailViewModel GetTicketDetailByFraudTranIDs(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, string transJson)
+        {
+            return this.GetMainTicketDetail(para, filter, null, transJson);
+        }       
+
+        public TicketDetailViewModel GetTicketDetailAll(MMDetailInfoViewModel info, MMDetailFilterViewModel filter, string transJson)
+        {
+            var batchSize = 5000;
+            var ticketDetails = new List<TicketDetailModel>();
+            var result = new TicketDetailViewModel();
+            var isContinue = true;
+
+            if (filter.CustAmountRM > 0)
+            {
+                result = this.GetMainTicketDetail(info, filter, -1, transJson);
+                info.LastScannedSequenceID = result.MinSequenceId;
+            }
+            else
+            {
+                do
+                {
+                    result = this.GetMainTicketDetail(info, filter, batchSize, transJson);
+
+                    result.TicketDetails = result.TicketDetails.OrderByDescending(x => x.SequenceID);
+
+                    info.LastScannedSequenceID = result.MinSequenceId;
+
+                    if (result.MinSequenceId != null && result.TicketDetails.Count() > 0)
+                    {
+                        ticketDetails.AddRange(result.TicketDetails);
+                    }
+
+                    if (result.MinSequenceId == null || ticketDetails.Count() >= batchSize)
+                    {
+                        result.TicketDetails = ticketDetails.ToList();
+
+                        isContinue = false;
+                    }
+
+                } while (isContinue);
+            }
+            
+            return result;
+        }
+
+        public TicketDetailViewModel GetMainTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int? batchSize, string transJson = null)
+        {
+            var criteria = new TicketDetailGetCriteria()
+            {               
+                QueryType = 2, // Get ticket for view MM report              
                 EventDate = para.EventDate,
                 LastScannedSequenceID = para.LastScannedSequenceID,
                 IsLive = para.LiveIndicator ? 1 : 0,
                 MatchID = para.MatchID,
                 BetType = para.BetTypeID,
                 BetID = para.BetID,
+                TicketType = para.TypeOfTickets == MatchMonitorQueryType.TicketAll ? 0 : 1,
                 BatchSize = batchSize,
-                IsLicensee = para.Sites == MMSites.All ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
-                ListCurrency = filter?.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList),              
-                ListScore = scoreList,
-                ListDanger = GenerateDangerJson(filter),
-                ListStatus = filter?.TicketStatusList == null ? null : string.Join(",", filter.TicketStatusList),
-                ListTransId = transIds
+                IsLicensee = (para.Sites == MMSites.All || para.Sites == null) ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
+                ListTransId = transJson
             };
 
-            if (para.BetTypeID == (int)MatchMonitorBetType.TotalGoal
-                || para.BetTypeID == (int)MatchMonitorBetType.FirstTotalGoal
-                || para.BetTypeID == (int)MatchMonitorBetType.CorrectScore
-                || para.BetTypeID == (int)MatchMonitorBetType.FirstCorrectScore)
-            {                
+            if (IsDisplaySingleGrid(para.BetTypeID))
+            {
                 criteria.ListHDPBetTeam = filter?.BetTeamList == null ? null : string.Join(",", filter.BetTeamList);
             }
             else
@@ -181,19 +421,38 @@
                 criteria.ListHDPBetTeam = filter?.HDPList == null ? null : string.Join(",", filter.HDPList);
             }
 
-            if (filter?.AmountList?.Count >= 2)
+            if (filter?.CustAmountRM > 0)
             {
-                criteria.FromStakeRM = filter.AmountList[0];
-                criteria.ToStakeRM = filter.AmountList[1];
-            }           
+                criteria.CustAmountRM = filter?.CustAmountRM;
+            }
+
+            if (filter != null)
+            {
+                criteria.ListScore = (filter.ScoreList == null || !para.LiveIndicator || filter.SportType == 2) ? null : string.Join(",", filter.ScoreList);
+                criteria.ListCurrency = filter.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList);
+                criteria.ListDanger = GenerateDangerJson(filter);
+                criteria.ListStatus = filter.TicketStatusList == null ? null : string.Join(",", filter.TicketStatusList);
+                criteria.ListCustomerClass = filter.CustomerClassList == null ? null : string.Join(",", filter.CustomerClassList);             
+                criteria.ListReason = filter.ReasonList == null ? null : string.Join(",", filter.ReasonList).Replace('-', '0');
+                criteria.ListAGroup = filter.AGroupList == null ? null : string.Join(",", filter.AGroupList).Replace('-', '0');
+                criteria.ListMGroup = filter.MGroupList == null ? null : string.Join(",", filter.MGroupList).Replace('-', '0');
+            }
 
             var result = repository.Fetch<TicketDetailModel>(criteria);
 
             return new TicketDetailViewModel
             {
                 TicketDetails = result,
-                MinSequenceIDTotalAll = criteria.MinSequenceIDTotalAll
+                MinSequenceId = criteria.MinSequenceId,
+                TotalTicket = criteria.TotalTicket
             };
+        }
+
+        public int GetTotalTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int? batchSize, string transIDsJson)
+        {
+            var ticketResult = this.GetMainTicketDetail(para, filter, batchSize, transIDsJson);
+
+            return (int)ticketResult.TotalTicket;
         }
 
         private string GenerateDangerJson(MMDetailFilterViewModel filter)
@@ -211,15 +470,18 @@
             return JsonConvert.SerializeObject(jsonDanger);
         }
        
-        public MMTicketDetailInfoModel GetMMTicketDetailInfo(MMDetailInfoViewModel para, IEnumerable<string> transIds)
+        public MMTicketDetailInfoModel GetMMTicketDetailInfo(MMDetailInfoViewModel para, IEnumerable<SuspiciousTransInfoModel> suspiciousTranInfos)
         {
             var criteria = new MMTicketDetailInfoCriteria()
             {
                 MatchID = para.MatchID,
+                EventDate = para.EventDate,
                 BetType = para.BetTypeID,
-                BetID = para.BetID,
                 IsLive = para.LiveIndicator ? 1 : 0,
-                ListTransId = string.Join(",", transIds)
+                ListSuspiciousTransId = suspiciousTranInfos != null ? JsonConvert.SerializeObject(suspiciousTranInfos) : null,               
+                TicketType = para.TypeOfTickets == MatchMonitorQueryType.TicketAll ? 0 : 1,
+                IsExclTestCurr = false,
+                BetID = para.BetID
             };
             
             var result = repository.Fetch<MMDetailFilterTicketInfoModel>(criteria);
@@ -270,20 +532,75 @@
             };
         }
 
-        public byte[] ExportExcelMMDetail(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems
+        public bool IsDisplaySingleGrid(int betTypeID)
+        {
+            return betTypeID == (int)MatchMonitorBetType.Full1X2
+                || betTypeID == (int)MatchMonitorBetType.First1X2
+                || betTypeID == (int)MatchMonitorBetType.CorrectScore
+                || betTypeID == (int)MatchMonitorBetType.FirstCorrectScore
+                || betTypeID == (int)MatchMonitorBetType.TotalGoal
+                || betTypeID == (int)MatchMonitorBetType.FirstTotalGoal
+                || betTypeID == (int)MatchMonitorBetType.FirstTotalGoal;
+        }
+
+        public byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath)
+        {
+            var writer = new ExcelTemplateWriter(templatePath, fileName, "Sheet1");
+            writer.CopyRows(0, 1);
+
+            FillRowDataSG(items, ref writer);
+
+            writer.SyncColumnsWidth(16);
+
+            return writer.ToBytes();
+        }
+
+        private void FillRowDataSG(IEnumerable<ExExcelTicketInfoViewModel> items, ref ExcelTemplateWriter writer)
+        {
+            var arrItems = items != null ? items.ToArray() : new ExExcelTicketInfoViewModel[0];           
+            var lengthItems = arrItems.Length;
+
+            for (int i = 0; i < lengthItems; i++)
+            {
+                var item = arrItems[i];
+                var obj = new object[] {
+                    item.SubscriberType,
+                    item.Username,
+                    item.CustomerClass == -1 ? "-" : item.CustomerClass.ToString(),
+                    (item.IsRobot ? "x" : "-"),
+                    item.DangerToString,
+                    item.Odds,
+                    item.BetID.ToString(),
+                    item.Currency,
+                    (item.Amount % 1 == 0 ? item.Amount.ToString(Consts.FormatDecimalToString_Thousands) : item.Amount.ToString()),
+                    item.BetTeam,
+                    item.Score,
+                    item.TransTimeToString,
+                    item.BetFrom,
+                    item.ADetectGroup,
+                    item.MDetectGroup,
+                    item.ReasonList,
+                    (!string.IsNullOrEmpty(item.PICVerified) ? "x" : "-")
+                };
+
+                writer.WriteRow(1, obj);
+            }
+        }      
+
+        public byte[] ExportExcelMMDetailDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems
             , string fileName, string templatePath)
         {
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Sheet1");
             writer.CopyRows(0, 1);
 
-            FillRowData(homeMItems, awayMItems, ref writer);
+            FillRowDataDG(homeMItems, awayMItems, ref writer);
 
             writer.SyncColumnsWidth(33);
 
             return writer.ToBytes();
         }
 
-        private void FillRowData(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems, ref ExcelTemplateWriter writer)
+        private void FillRowDataDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems, ref ExcelTemplateWriter writer)
         {
             var tblHome = homeMItems != null ? homeMItems.ToArray() : new ExExcelTicketInfoViewModel[0];
             var tblAway = awayMItems != null ? awayMItems.ToArray() : new ExExcelTicketInfoViewModel[0];
@@ -295,9 +612,9 @@
                 for (int i = 0; i < lengthH; i++)
                 {
                     if (i < lengthA)
-                        writer.WriteRow(1, NewRecordTblHomeAway(tblHome[i], tblAway[i]));
+                        writer.WriteRow(1, NewRecordTblHomeAwayDG(tblHome[i], tblAway[i]));
                     else
-                        writer.WriteRow(1, NewRecordTblHome(tblHome[i]));
+                        writer.WriteRow(1, NewRecordTblHomeDG(tblHome[i]));
                 }
             }
             else
@@ -305,14 +622,14 @@
                 for (int i = 0; i < lengthA; i++)
                 {
                     if (i < lengthH)
-                        writer.WriteRow(1, NewRecordTblHomeAway(tblHome[i], tblAway[i]));
+                        writer.WriteRow(1, NewRecordTblHomeAwayDG(tblHome[i], tblAway[i]));
                     else
-                        writer.WriteRow(1, NewRecordTblAway(tblAway[i]));
+                        writer.WriteRow(1, NewRecordTblAwayDG(tblAway[i]));
                 }
             }
         }
 
-        private object[] NewRecordTblHome(ExExcelTicketInfoViewModel itemH)
+        private object[] NewRecordTblHomeDG(ExExcelTicketInfoViewModel itemH)
         {
             return new object[]
                 {
@@ -341,7 +658,7 @@
                 };
         }
 
-        private object[] NewRecordTblAway(ExExcelTicketInfoViewModel itemA)
+        private object[] NewRecordTblAwayDG(ExExcelTicketInfoViewModel itemA)
         {
             return new object[]
                 {
@@ -370,7 +687,7 @@
                 };
         }
 
-        private object[] NewRecordTblHomeAway(ExExcelTicketInfoViewModel itemH, ExExcelTicketInfoViewModel itemA)
+        private object[] NewRecordTblHomeAwayDG(ExExcelTicketInfoViewModel itemH, ExExcelTicketInfoViewModel itemA)
         {
             return new object[]
                 {

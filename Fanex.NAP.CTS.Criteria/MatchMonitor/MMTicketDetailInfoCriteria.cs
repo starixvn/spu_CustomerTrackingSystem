@@ -9,17 +9,26 @@
         [SpParam(SqlParamName = "MatchID")]
         public Int64 MatchID { get; set; }
 
+        [SpParam(SqlParamName = "EventDate")]
+        public DateTime EventDate { get; set; }
+
         [SpParam(SqlParamName = "BetType")]
         public Int32 BetType { get; set; }
+
+        [SpParam(SqlParamName = "IsLive")]
+        public Int32 IsLive { get; set; }
+
+        [SpParam(SqlParamName = "ListSuspiciousTransId")]
+        public string ListSuspiciousTransId { get; set; }
+
+        [SpParam(SqlParamName = "TicketType")]
+        public int TicketType { get; set; }
 
         [SpParam(SqlParamName = "BetID")]
         public long BetID { get; set; }
 
-        [SpParam(SqlParamName = "ListTransId")]
-        public string ListTransId { get; set; }
-
-        [SpParam(SqlParamName = "IsLive")]
-        public Int32 IsLive { get; set; }
+        [SpParam(SqlParamName = "IsExclTestCurr")]
+        public bool IsExclTestCurr { get; set; }
 
         [SpParam(SqlParamName = "MaxSequenceId")]
         public Int64? MaxSequenceId { get; set; }

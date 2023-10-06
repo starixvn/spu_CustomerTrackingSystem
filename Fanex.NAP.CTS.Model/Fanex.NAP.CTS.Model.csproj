@@ -290,6 +290,8 @@
     <Compile Include="Association\CoupleIPFraudDetailModel.cs" />
     <Compile Include="Association\FraudDetailModel.cs" />
     <Compile Include="Association\StakeIpPatternDetailModel.cs" />
+    <Compile Include="Common\CCGroupModel.cs" />
+    <Compile Include="Common\CommonCustomerClassModel.cs" />
     <Compile Include="Common\MainMatchModel.cs" />
     <Compile Include="Common\SiteModel.cs" />
     <Compile Include="Common\SubscriberGroupModel.cs" />
@@ -364,9 +366,11 @@
     <Compile Include="ManageSubscriber\ReUpdateSubscribeBySiteIDModel.cs" />
     <Compile Include="ManageSubscriber\DetailedSiteModel.cs" />
     <Compile Include="ManageSubscriber\UpdateSubsciberResultModel.cs" />
+    <Compile Include="MatchMonitor\FraudTransModel.cs" />
     <Compile Include="MatchMonitor\MatchGroupKeyModel.cs" />
     <Compile Include="MatchMonitor\MatchFromMainInfoModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorBetTypeModel.cs" />
+    <Compile Include="MatchMonitor\MGrTranIDListFilteredModel.cs" />
     <Compile Include="MatchMonitor\MMDetailDangerModel.cs" />
     <Compile Include="MatchMonitor\MMDetailFilterTicketInfoModel.cs" />
     <Compile Include="MatchMonitor\MMDetailResultModel.cs" />
@@ -380,6 +384,7 @@
     <Compile Include="MatchMonitor\MMDetailMergeGroupModel.cs" />
     <Compile Include="MatchMonitor\MMTicketDetailInfoModel.cs" />
     <Compile Include="MatchMonitor\RobotStatusModel.cs" />
+    <Compile Include="MatchMonitor\SuspiciousTransInfoModel.cs" />
     <Compile Include="MatchMonitor\TransGroupModel.cs" />
     <Compile Include="MatchMonitor\CustInfoModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailModel.cs" />

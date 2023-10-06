@@ -109,5 +109,30 @@
                 return db.Query<MainTicketDetailModel>(criteria);
             }
         }
+
+        public IEnumerable<CCGroupModel> GetGroupCustomerClass()
+        {
+            var groupCCList = Enumerable.Empty<CCGroupModel>();
+            var criteria = new GetCommonCustomerClassCriteria();             
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var data = db.Query<CommonCustomerClassModel>(criteria);
+
+                if (data != null && data.Any())
+                {
+                    groupCCList = data.GroupBy(g => g.CustomerClassGroup)
+                         .Select(x => new { CCGroupName = x.Key, CCList = x.ToList() })
+                         .Select(x => new CCGroupModel
+                         {
+                             CCGroupName = x.CCGroupName,
+                             CCList = x.CCList.OrderBy(y => y.CustomerClass).Select(y => y.CustomerClass)
+                         });
+                }
+            }
+
+            return groupCCList;
+        }
+
     }
 }
