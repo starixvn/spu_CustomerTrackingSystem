@@ -328,13 +328,13 @@ function MatchMonitorDetail() {
         } else {
             let cacheSelected = cacheFilterForImportNew[currentType];
 
-            if (cacheSelected != undefined && cacheSelected.cbbMatchScore.length > 0) {
+            if (cacheSelected != undefined && cacheSelected.cbbMatchScore != undefined && cacheSelected.cbbMatchScore.length > 0) {
                 data = [...new Set([...data, ...cacheSelected.cbbMatchScore])];
             }
 
             SetupFilter(element, data);
 
-            if (cacheSelected != undefined && cacheSelected.cbbMatchScore.length > 0) {
+            if (cacheSelected != undefined && cacheSelected.cbbMatchScore != undefined && cacheSelected.cbbMatchScore.length > 0) {
                 setTimeout(RefreshFilterSelected(element, cacheSelected.cbbMatchScore), 10);
             }
         }        
@@ -1042,15 +1042,15 @@ function MatchMonitorDetail() {
             selectedFilter = {};
         }
 
-        selectedFilter.cbbMatchScore = domElements.cbbMatchScore.val();
+        selectedFilter.cbbMatchScore = GetSelectDataFilter(domElements.cbbMatchScore);
         selectedFilter.cbbSites = domElements.cbbSites.val();
-        selectedFilter.cbbCC = domElements.cbbCC.val();
-        selectedFilter.cbbDanger = domElements.cbbDanger.val();       
-        selectedFilter.cbbCurrency = domElements.cbbCurrency.val();
-        selectedFilter.cbbReason = domElements.cbbReason.val();
-        selectedFilter.cbbAGroup = domElements.cbbAGroup.val();
-        selectedFilter.cbbHDPBetTeam = domElements.cbbHDPBetTeam.val();
-        selectedFilter.cbbTicketsStatus = domElements.cbbTicketsStatus.val();
+        selectedFilter.cbbCC = GetSelectDataFilter(domElements.cbbCC);
+        selectedFilter.cbbDanger = GetSelectDataFilter(domElements.cbbDanger);
+        selectedFilter.cbbCurrency = GetSelectDataFilter(domElements.cbbCurrency);
+        selectedFilter.cbbReason = GetSelectDataFilter(domElements.cbbReason);
+        selectedFilter.cbbAGroup = GetSelectDataFilter(domElements.cbbAGroup);
+        selectedFilter.cbbHDPBetTeam = GetSelectDataFilter(domElements.cbbHDPBetTeam);
+        selectedFilter.cbbTicketsStatus = GetSelectDataFilter(domElements.cbbTicketsStatus);
 
         cacheFilterForImportNew[currentType] = selectedFilter;
     }
