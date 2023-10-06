@@ -810,6 +810,37 @@ function MatchMonitorDetail() {
         return undefined;
     }
 
+    function GetSelectDataFilterTicketStatus() {
+        let allVal = '';
+
+        let ticketStatus = domElements.cbbTicketsStatus[0];
+        let ticketStatusLength = domElements.cbbTicketsStatus[0].length;
+        let ticketStatusSelected = domElements.cbbTicketsStatus.val();
+
+        if (ticketStatusLength == 0) {
+            return allVal;
+        }
+
+        for (let i = 0; i < ticketStatusLength; i++) {            
+            if (ticketStatus[i].value != "101") { // ticket Reject
+                allVal += ticketStatus[i].value; 
+            }
+        }
+
+        let tRejectIdx = $.inArray("101", ticketStatusSelected);
+
+        if (tRejectIdx !== -1) {
+            // Remove the element using splice
+            ticketStatusSelected.splice(tRejectIdx, 1);
+        }
+
+        if (ticketStatusSelected.join('') != allVal) {
+            return ticketStatusSelected;
+        }
+
+        return undefined;
+    }
+
     function GetHDPSelected(dom_ccb, isGetAllValue = false) {
         return isDisplaySingleGrid ? undefined : GetSelectDataFilter(dom_ccb, isGetAllValue);
     }
@@ -1050,7 +1081,7 @@ function MatchMonitorDetail() {
         selectedFilter.cbbReason = GetSelectDataFilter(domElements.cbbReason);
         selectedFilter.cbbAGroup = GetSelectDataFilter(domElements.cbbAGroup);
         selectedFilter.cbbHDPBetTeam = GetSelectDataFilter(domElements.cbbHDPBetTeam);
-        selectedFilter.cbbTicketsStatus = GetSelectDataFilter(domElements.cbbTicketsStatus);
+        selectedFilter.cbbTicketsStatus = GetSelectDataFilterTicketStatus();
 
         cacheFilterForImportNew[currentType] = selectedFilter;
     }
