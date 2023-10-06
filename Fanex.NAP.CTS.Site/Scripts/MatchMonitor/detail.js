@@ -102,6 +102,7 @@ function MatchMonitorDetail() {
     let maxSequenceId = 1;
 
     let cacheFilter = {};    
+    let cacheFilterScore = undefined;
     let cacheFilterForImportNew = {};
     let cacheFilterDependOn = {
         DropdownListFilterDependOn: [],
@@ -316,17 +317,27 @@ function MatchMonitorDetail() {
         element.multiselect("refresh");
     }
 
-    function SetupFilterScore(element, data) {
-        let cacheSelected = cacheFilterForImportNew[currentType];
-        if (cacheSelected != undefined && cacheSelected.cbbMatchScore.length > 0) {
-            data = [...new Set([...data, ...cacheSelected.cbbMatchScore])];
-        }
-        
-        SetupFilter(element, data);
+    function SetupFilterScore(element, data) {        
+        if (cacheFilterScore != undefined) {
+            data = [...new Set([...data, ...cacheFilterScore])];
 
-        if (cacheSelected != undefined && cacheSelected.cbbMatchScore.length > 0) {
-            setTimeout(RefreshFilterSelected(element, cacheSelected.cbbMatchScore), 10);
-        }
+            SetupFilter(element, data);
+
+            setTimeout(RefreshFilterSelected(element, cacheFilterScore), 10);
+
+        } else {
+            let cacheSelected = cacheFilterForImportNew[currentType];
+
+            if (cacheSelected != undefined && cacheSelected.cbbMatchScore.length > 0) {
+                data = [...new Set([...data, ...cacheSelected.cbbMatchScore])];
+            }
+
+            SetupFilter(element, data);
+
+            if (cacheSelected != undefined && cacheSelected.cbbMatchScore.length > 0) {
+                setTimeout(RefreshFilterSelected(element, cacheSelected.cbbMatchScore), 10);
+            }
+        }        
     }
 
     function SetupFilterFromDictinary(element, data) {        
@@ -1015,6 +1026,15 @@ function MatchMonitorDetail() {
             }
         }        
     }
+
+    function CacheSelectDataFilter() {
+        if (currentType == MatchMonitorDetailViewType.TicketFraud) {
+            cacheFilterScore = GetSelectDataFilter(domElements.cbbMatchScore);
+        }
+        else {
+            cacheFilterScore = undefined;
+        }
+    } 
 
     function CacheSelectFilterForImportNew() {
         var selectedFilter = cacheFilterForImportNew[currentType];
@@ -1784,7 +1804,9 @@ function MatchMonitorDetail() {
     }
 
     function BetTypeOnChange() {     
-        AddFilterLoading();        
+        AddFilterLoading();     
+        
+        cacheFilterScore = undefined;
 
         ResetDefaulCbbSite();        
 
@@ -2254,6 +2276,8 @@ function MatchMonitorDetail() {
         if (isSupportShowAllTickets) {
             domElements.cbbTypeOfTickets.change(function () {
                 ResetDefault();
+
+                CacheSelectDataFilter();
                
                 TypeOfTicketsOnChange();
             });
@@ -2279,6 +2303,7 @@ function MatchMonitorDetail() {
             isImportNewTicket = true;           
             maxSequenceId = 1;
             cacheFilter = {};
+            cacheFilterScore = undefined;
             cacheMGroup.isActive = false;
             cacheMGroup.allMGroup = {};
             cacheMGroup.selectMgroup = {};
