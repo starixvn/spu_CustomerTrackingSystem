@@ -14,6 +14,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
+    using Fanex.Logging;
 
     public class MatchMonitorService : IMatchMonitorService
     {
@@ -331,6 +332,15 @@
 
             var transJsons = JsonConvert.SerializeObject(ticketMD);
 
+            // write log for trace issue
+            if (para.MatchID == 73893434)
+            {
+                LogService.Info($"Trace Issue - Get MM Detail para: {JsonConvert.SerializeObject(para)}");
+
+                LogService.Info($"Trace Issue - Get MM Detail transJsons: {transJsons}");
+            }
+            // write log for trace issue end
+
             var result = this.GetTicketDetailByFraudTranIDs(para, null, transJsons);
 
             var mergeGroup = new MMDetailMergeGroupViewModel();
@@ -341,8 +351,18 @@
             if (mMDetailBetTeams.Any())
             {
                 var ticketMergeGroups = this.GetMMDetailMergeGroup(mMDetailBetTeams);
-                mergeGroup.TicketMergeGroups = ticketMergeGroups;
+                mergeGroup.TicketMergeGroups = ticketMergeGroups;                
+
                 mergeGroup.Groups = mergeGroup.GroupByGroupID();
+
+                // write log for trace issue
+                if (para.MatchID == 73893434)
+                {
+                    LogService.Info($"Trace Issue - Get MM Detail TicketMergeGroups: {JsonConvert.SerializeObject(ticketMergeGroups)}");
+
+                    LogService.Info($"Trace Issue - Get MM Detail mergeGroup.Groups: {JsonConvert.SerializeObject(mergeGroup.Groups)}");
+                }
+                // write log for trace issue end
             }
 
             result.MMDetailMergeGroup = mergeGroup;

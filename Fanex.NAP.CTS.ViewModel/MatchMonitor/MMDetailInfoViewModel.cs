@@ -9,6 +9,7 @@
 
         private MMDetailInfoViewModel(MMDetailInfoViewModel para)
         {
+            this.IsSupportShowAllTickets = para.IsSupportShowAllTickets;
             this.TypeOfTickets = para.TypeOfTickets;
             this.LastScannedSequenceID = para.LastScannedSequenceID;
             this.EventDateToString = para.EventDateToString;
@@ -17,6 +18,7 @@
             this.BetID = para.BetID;
             this.Sites = para.Sites;
             this.LiveIndicator = para.LiveIndicator;
+            this.IsImportNewTicket = para.IsImportNewTicket;
             this.Sport = para.Sport;
         }
 
