@@ -333,12 +333,12 @@
             var transJsons = JsonConvert.SerializeObject(ticketMD);
 
             // write log for trace issue
-            if (para.MatchID == 73893434)
-            {
-                LogService.Info($"Trace Issue - Get MM Detail para: {JsonConvert.SerializeObject(para)}");
+            //if (para.MatchID == 73893434)
+            //{
+            //    LogService.Info($"Trace Issue - Get MM Detail para: {JsonConvert.SerializeObject(para)}");
 
-                LogService.Info($"Trace Issue - Get MM Detail transJsons: {transJsons}");
-            }
+            //    LogService.Info($"Trace Issue - Get MM Detail transJsons: {transJsons}");
+            //}
             // write log for trace issue end
 
             var result = this.GetTicketDetailByFraudTranIDs(para, null, transJsons);
@@ -356,12 +356,12 @@
                 mergeGroup.Groups = mergeGroup.GroupByGroupID();
 
                 // write log for trace issue
-                if (para.MatchID == 73893434)
-                {
-                    LogService.Info($"Trace Issue - Get MM Detail TicketMergeGroups: {JsonConvert.SerializeObject(ticketMergeGroups)}");
+                //if (para.MatchID == 73893434)
+                //{
+                //    LogService.Info($"Trace Issue - Get MM Detail TicketMergeGroups: {JsonConvert.SerializeObject(ticketMergeGroups)}");
 
-                    LogService.Info($"Trace Issue - Get MM Detail mergeGroup.Groups: {JsonConvert.SerializeObject(mergeGroup.Groups)}");
-                }
+                //    LogService.Info($"Trace Issue - Get MM Detail mergeGroup.Groups: {JsonConvert.SerializeObject(mergeGroup.Groups)}");
+                //}
                 // write log for trace issue end
             }
 

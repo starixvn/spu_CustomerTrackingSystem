@@ -45,8 +45,8 @@
             {
                 // hard code for trace issue
 
-                //result = _memoryCache.Add(key, value, DateTimeOffset.UtcNow.AddHours(hours));
-                result = _memoryCache.Add(key, value, DateTimeOffset.UtcNow.AddMinutes(3));
+                result = _memoryCache.Add(key, value, DateTimeOffset.UtcNow.AddHours(hours));
+                //result = _memoryCache.Add(key, value, DateTimeOffset.UtcNow.AddMinutes(3));
 
                 // hard code for trace issue end
             }

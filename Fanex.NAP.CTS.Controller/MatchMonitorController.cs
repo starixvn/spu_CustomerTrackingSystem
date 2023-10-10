@@ -686,10 +686,10 @@
                         fraudMMDetailResult.AGroupReasonMerged = _matchMonitorService.MergeFraudReasonAGroup(fraudMMDetailResult);
 
                         // write log for trace issue
-                        if (para.MatchID == 73893434)
-                        {
-                            LogService.Info($"Trace Issue - Get MM Detail AGroupReasonMerged: {JsonConvert.SerializeObject(fraudMMDetailResult.AGroupReasonMerged)}");                           
-                        }
+                        //if (para.MatchID == 73893434)
+                        //{
+                        //    LogService.Info($"Trace Issue - Get MM Detail AGroupReasonMerged: {JsonConvert.SerializeObject(fraudMMDetailResult.AGroupReasonMerged)}");                           
+                        //}
                         // write log for trace issue end
 
                         _memoryCacheService.PushValue(key, fraudMMDetailResult);
