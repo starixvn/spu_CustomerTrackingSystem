@@ -660,8 +660,9 @@
             return mdResult;
         }
 
-        private TicketDetailViewModel GetFraudMMDetailForCache(MMDetailInfoViewModel para)
+        private TicketDetailViewModel GetFraudMMDetailForCache(MMDetailInfoViewModel filter)
         {
+            var para = filter.Clone();
             var fraudMMDetailResult = new TicketDetailViewModel();
             var ticketTypeName = Enum.GetName(typeof(MatchMonitorQueryType), MatchMonitorQueryType.TicketFraud);
             var key = para.BuildCacheKey("TicketFraud", MMDetailRegion, ticketTypeName);
@@ -676,11 +677,20 @@
 
                     if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
                     {
+                        // para.TypeOfTickets = MatchMonitorQueryType.TicketFraud;
+
                         fraudMMDetailResult = _matchMonitorService.GetTicketDetailFraud(matchDetailInfo, para);
 
                         fraudMMDetailResult.MatchDetailInfo = matchDetailInfo;
 
                         fraudMMDetailResult.AGroupReasonMerged = _matchMonitorService.MergeFraudReasonAGroup(fraudMMDetailResult);
+
+                        // write log for trace issue
+                        //if (para.MatchID == 73893434)
+                        //{
+                        //    LogService.Info($"Trace Issue - Get MM Detail AGroupReasonMerged: {JsonConvert.SerializeObject(fraudMMDetailResult.AGroupReasonMerged)}");                           
+                        //}
+                        // write log for trace issue end
 
                         _memoryCacheService.PushValue(key, fraudMMDetailResult);
                     }

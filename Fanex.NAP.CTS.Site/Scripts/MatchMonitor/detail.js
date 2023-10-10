@@ -328,13 +328,13 @@ function MatchMonitorDetail() {
         } else {
             let cacheSelected = cacheFilterForImportNew[currentType];
 
-            if (cacheSelected != undefined && cacheSelected.cbbMatchScore.length > 0) {
+            if (cacheSelected != undefined && cacheSelected.cbbMatchScore != undefined && cacheSelected.cbbMatchScore.length > 0) {
                 data = [...new Set([...data, ...cacheSelected.cbbMatchScore])];
             }
 
             SetupFilter(element, data);
 
-            if (cacheSelected != undefined && cacheSelected.cbbMatchScore.length > 0) {
+            if (cacheSelected != undefined && cacheSelected.cbbMatchScore != undefined && cacheSelected.cbbMatchScore.length > 0) {
                 setTimeout(RefreshFilterSelected(element, cacheSelected.cbbMatchScore), 10);
             }
         }        
@@ -810,6 +810,37 @@ function MatchMonitorDetail() {
         return undefined;
     }
 
+    function GetSelectDataFilterTicketStatus() {
+        let allVal = '';
+
+        let ticketStatus = domElements.cbbTicketsStatus[0];
+        let ticketStatusLength = domElements.cbbTicketsStatus[0].length;
+        let ticketStatusSelected = domElements.cbbTicketsStatus.val();
+
+        if (ticketStatusLength == 0) {
+            return allVal;
+        }
+
+        for (let i = 0; i < ticketStatusLength; i++) {            
+            if (ticketStatus[i].value != "101") { // ticket Reject
+                allVal += ticketStatus[i].value; 
+            }
+        }
+
+        let tRejectIdx = $.inArray("101", ticketStatusSelected);
+
+        if (tRejectIdx !== -1) {
+            // Remove the element using splice
+            ticketStatusSelected.splice(tRejectIdx, 1);
+        }
+
+        if (ticketStatusSelected.join('') != allVal) {
+            return ticketStatusSelected;
+        }
+
+        return undefined;
+    }
+
     function GetHDPSelected(dom_ccb, isGetAllValue = false) {
         return isDisplaySingleGrid ? undefined : GetSelectDataFilter(dom_ccb, isGetAllValue);
     }
@@ -1042,15 +1073,15 @@ function MatchMonitorDetail() {
             selectedFilter = {};
         }
 
-        selectedFilter.cbbMatchScore = domElements.cbbMatchScore.val();
+        selectedFilter.cbbMatchScore = GetSelectDataFilter(domElements.cbbMatchScore);
         selectedFilter.cbbSites = domElements.cbbSites.val();
-        selectedFilter.cbbCC = domElements.cbbCC.val();
-        selectedFilter.cbbDanger = domElements.cbbDanger.val();       
-        selectedFilter.cbbCurrency = domElements.cbbCurrency.val();
-        selectedFilter.cbbReason = domElements.cbbReason.val();
-        selectedFilter.cbbAGroup = domElements.cbbAGroup.val();
-        selectedFilter.cbbHDPBetTeam = domElements.cbbHDPBetTeam.val();
-        selectedFilter.cbbTicketsStatus = domElements.cbbTicketsStatus.val();
+        selectedFilter.cbbCC = GetSelectDataFilter(domElements.cbbCC);
+        selectedFilter.cbbDanger = GetSelectDataFilter(domElements.cbbDanger);
+        selectedFilter.cbbCurrency = GetSelectDataFilter(domElements.cbbCurrency);
+        selectedFilter.cbbReason = GetSelectDataFilter(domElements.cbbReason);
+        selectedFilter.cbbAGroup = GetSelectDataFilter(domElements.cbbAGroup);
+        selectedFilter.cbbHDPBetTeam = GetSelectDataFilter(domElements.cbbHDPBetTeam);
+        selectedFilter.cbbTicketsStatus = GetSelectDataFilterTicketStatus();
 
         cacheFilterForImportNew[currentType] = selectedFilter;
     }
@@ -1935,7 +1966,7 @@ function MatchMonitorDetail() {
                 if (danger2Selected.length > 0 && danger2Selected.find(x => x == item.Danger2)) {
                     countDangerType += 1;
                 }
-                if (danger3Selected.length > 0 && danger3Selected.find(x => x == item.Danger4)) {
+                if (danger3Selected.length > 0 && danger3Selected.find(x => x == item.Danger3)) {
                     countDangerType += 1;
                 }
                 if (danger4Selected.length > 0 && danger4Selected.find(x => x == item.Danger4)) {
