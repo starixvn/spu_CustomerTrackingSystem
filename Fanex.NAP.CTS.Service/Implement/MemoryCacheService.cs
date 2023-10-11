@@ -43,12 +43,7 @@
 
             try
             {
-                // hard code for trace issue
-
-                //result = _memoryCache.Add(key, value, DateTimeOffset.UtcNow.AddHours(hours));
-                result = _memoryCache.Add(key, value, DateTimeOffset.UtcNow.AddMinutes(2));
-
-                // hard code for trace issue end
+                result = _memoryCache.Add(key, value, DateTimeOffset.UtcNow.AddHours(hours));
             }
             catch (Exception ex)
             {

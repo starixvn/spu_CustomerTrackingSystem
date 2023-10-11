@@ -20,7 +20,9 @@ const IndexFilterSelected = {
 }
 
 function ConvertNumberToThousandsString(x) {
-    return x ? x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0;
+    //return x ? x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0;
+
+    return x ? x.toLocaleString() : 0;
 }
 
 function MatchMonitorDetail() {
@@ -1205,7 +1207,8 @@ function MatchMonitorDetail() {
                     BetTeamList: GetBetTeamSelected(domElements.cbbHDPBetTeam, true),
                     CustAmountRM: GetInputAmount(),
                     TicketStatusList: GetSelectDataFilter(domElements.cbbTicketsStatus, true),
-                    MGrTranIDListFiltered: GetTranIDsByFilterMGr()
+                    MGrTranIDListFiltered: GetTranIDsByFilterMGr(),
+                    Sport: domElements.sportType
                 };
 
                 params.IsFilterSuspicious = IsFilterSuspicious(params);

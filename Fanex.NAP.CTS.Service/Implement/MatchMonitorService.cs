@@ -330,14 +330,7 @@
                     AGroup = x.GroupID
                 });
 
-            var transJsons = JsonConvert.SerializeObject(ticketMD);
-
-            // write log for trace issue
-            if (para.MatchID == 73172894)
-            {
-                LogService.Info($"Trace Issue - Get MM Detail para: {JsonConvert.SerializeObject(para)}");
-            }
-            // write log for trace issue end
+            var transJsons = JsonConvert.SerializeObject(ticketMD);            
 
             var result = this.GetTicketDetailByFraudTranIDs(para, null, transJsons);
 
