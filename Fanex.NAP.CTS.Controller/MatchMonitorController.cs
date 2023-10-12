@@ -673,24 +673,17 @@
 
                 if (fraudMMDetailResult == null)
                 {
+                    para.TypeOfTickets = MatchMonitorQueryType.TicketFraud;
+
                     var matchDetailInfo = _matchMonitorService.GetMatchMonitorDetail(para);
 
                     if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
-                    {
-                        // para.TypeOfTickets = MatchMonitorQueryType.TicketFraud;
-
+                    {                                           
                         fraudMMDetailResult = _matchMonitorService.GetTicketDetailFraud(matchDetailInfo, para);
 
-                        fraudMMDetailResult.MatchDetailInfo = matchDetailInfo;
+                        fraudMMDetailResult.MatchDetailInfo = matchDetailInfo;                        
 
-                        fraudMMDetailResult.AGroupReasonMerged = _matchMonitorService.MergeFraudReasonAGroup(fraudMMDetailResult);
-
-                        // write log for trace issue
-                        //if (para.MatchID == 73893434)
-                        //{
-                        //    LogService.Info($"Trace Issue - Get MM Detail AGroupReasonMerged: {JsonConvert.SerializeObject(fraudMMDetailResult.AGroupReasonMerged)}");                           
-                        //}
-                        // write log for trace issue end
+                        fraudMMDetailResult.AGroupReasonMerged = _matchMonitorService.MergeFraudReasonAGroup(fraudMMDetailResult);                       
 
                         _memoryCacheService.PushValue(key, fraudMMDetailResult);
                     }

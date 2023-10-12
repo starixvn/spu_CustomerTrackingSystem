@@ -330,16 +330,7 @@
                     AGroup = x.GroupID
                 });
 
-            var transJsons = JsonConvert.SerializeObject(ticketMD);
-
-            // write log for trace issue
-            //if (para.MatchID == 73893434)
-            //{
-            //    LogService.Info($"Trace Issue - Get MM Detail para: {JsonConvert.SerializeObject(para)}");
-
-            //    LogService.Info($"Trace Issue - Get MM Detail transJsons: {transJsons}");
-            //}
-            // write log for trace issue end
+            var transJsons = JsonConvert.SerializeObject(ticketMD);            
 
             var result = this.GetTicketDetailByFraudTranIDs(para, null, transJsons);
 
@@ -353,16 +344,7 @@
                 var ticketMergeGroups = this.GetMMDetailMergeGroup(mMDetailBetTeams);
                 mergeGroup.TicketMergeGroups = ticketMergeGroups;                
 
-                mergeGroup.Groups = mergeGroup.GroupByGroupID();
-
-                // write log for trace issue
-                //if (para.MatchID == 73893434)
-                //{
-                //    LogService.Info($"Trace Issue - Get MM Detail TicketMergeGroups: {JsonConvert.SerializeObject(ticketMergeGroups)}");
-
-                //    LogService.Info($"Trace Issue - Get MM Detail mergeGroup.Groups: {JsonConvert.SerializeObject(mergeGroup.Groups)}");
-                //}
-                // write log for trace issue end
+                mergeGroup.Groups = mergeGroup.GroupByGroupID();               
             }
 
             result.MMDetailMergeGroup = mergeGroup;
@@ -458,7 +440,7 @@
                 criteria.ListMGroup = filter.MGroupList == null ? null : string.Join(",", filter.MGroupList).Replace('-', '0');
             }
 
-            var result = repository.Fetch<TicketDetailModel>(criteria);
+            var result = repository.Fetch<TicketDetailModel>(criteria);          
 
             return new TicketDetailViewModel
             {
