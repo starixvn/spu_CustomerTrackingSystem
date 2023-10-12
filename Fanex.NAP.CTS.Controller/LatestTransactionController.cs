@@ -1,5 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
+    using Fanex.Logging;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
@@ -36,8 +39,8 @@
         {
             var subscribers = _commonService.GetSubscribers().OrderBy(x => x.SubscriberName).ToList();
 
-            subscribers.Insert(0, new SubscriberGroupModel {  SubscriberID = -1, SubscriberName = "All" });
-
+            subscribers.Insert(0, new SubscriberGroupModel { SubscriberID = -1, SubscriberName = "All" });
+          
             ViewBag.Subscribers = subscribers;
 
             return View();
@@ -49,30 +52,45 @@
         {
             var result = Enumerable.Empty<LatestTransactionViewModel>();
 
-            var data = _transService.GetLatestTransaction(subscriberId, length);
-            
-            if (data != null && data.Any())
+            try
             {
-                result = data.OrderByDescending(x=>x.TransTime)
-                    .ThenByDescending(x=>x.TransID)
-                    .Select(x => new LatestTransactionViewModel
-                    {
-                        TransID = x.TransID.ToString(),
-                        UserName = x.UserName,
-                        LoginID = x.LoginID,
-                        CTSCustID = x.CTSCustID,
-                        TransTimeString = x.TransTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                        Device = x.FirstDeviceCode,
-                        IP = x.IP,
-                        RobotTracking = string.IsNullOrEmpty(x.Flagged) ? "-" : x.Flagged,
-                        Action = x.Action,
-                        ActionResult = x.ActionResult,
-                        DeviceType = x.OS,
-                        Browser = x.Browser,
-                        Domain = x.URLDetails,                        
-                        SubscriberName = x.SubscriberName
-                    });
+                var data = _transService.GetLatestTransaction(subscriberId, length);
+
+                if (data != null && data.Any())
+                {
+                    result = data.OrderByDescending(x => x.TransTime)
+                        .ThenByDescending(x => x.TransID)
+                        .Select(x => new LatestTransactionViewModel
+                        {
+                            TransID = x.TransID.ToString(),
+                            UserName = x.UserName,
+                            LoginID = x.LoginID,
+                            CTSCustID = x.CTSCustID,
+                            TransTimeString = x.TransTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                            Device = x.FirstDeviceCode,
+                            IP = x.IP,
+                            RobotTracking = string.IsNullOrEmpty(x.Flagged) ? "-" : x.Flagged,
+                            Action = x.Action,
+                            ActionResult = x.ActionResult,
+                            DeviceType = x.OS,
+                            Browser = x.Browser,
+                            Domain = x.URLDetails,
+                            SubscriberName = x.SubscriberName
+                        });
+                }
             }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                  .AddMessage("Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
+                   + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                   + ex.InnerException.StackTrace)
+                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+            }
+          
 
             return Json(new
             {

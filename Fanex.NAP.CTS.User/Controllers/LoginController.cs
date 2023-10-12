@@ -132,11 +132,9 @@
                 Response.BufferOutput = true;
                 object msg = null;
 
-                if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password) && CheckValidToken(loginToken))
+                if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password) && CheckValidToken(loginToken))              
                 {
-                    var user = _userService.Get(username.Trim());
-
-                    LogService.Info("_userService user info: " + JsonConvert.SerializeObject(user));
+                    var user = _userService.Get(username.Trim());                                  
 
                     try
                     {
@@ -202,7 +200,7 @@
                             else
                             {
                                 // wrong password
-                                msg = ViewResources.Invalid_Username_or_Password;
+                                msg = ViewResources.Invalid_Username_or_Password;                               
                             }
                         }
                         else
@@ -223,9 +221,7 @@
                     }
                 }
                 else
-                {
-                    LogService.Info("_userService loginToken: " + loginToken);
-
+                {                   
                     msg = "Invalid input!";
                 }
 
