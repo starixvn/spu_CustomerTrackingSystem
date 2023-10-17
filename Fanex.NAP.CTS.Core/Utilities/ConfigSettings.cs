@@ -142,6 +142,8 @@
                         return "UAT";
                     case "3":
                         return "PRO";
+                    case "4":
+                        return "SIT";
                     default:
                         return "LOCAL";
                 }
