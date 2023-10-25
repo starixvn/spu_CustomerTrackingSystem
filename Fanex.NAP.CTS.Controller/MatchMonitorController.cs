@@ -869,7 +869,85 @@
 
         #endregion Verify Trans
 
-        #endregion
+        #region User Feedback
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailUserFeedback)]
+        public ActionResult GetUserFeedback(UserFeedbackViewModel para)
+        {
+            var result = Enumerable.Empty<GetMMUserFeedbackViewModel>();
+
+            var data = _matchMonitorService.GetUserFeedback(para);
+
+            result = data.GroupBy(g => g.MMUserCommentID)
+                .Select(g => new {
+                    MMUserCommentID = g.Key,
+                    IncorrectReason = g.Where(x => !string.IsNullOrEmpty(x.IncorrectReason)).Select(x => x.IncorrectReason),
+                    CorrectReason = g.Where(x => !string.IsNullOrEmpty(x.CorrectReason)).FirstOrDefault()?.CorrectReason ?? "-",
+                    Item = g.FirstOrDefault()
+                }).Select(x => new GetMMUserFeedbackViewModel
+                {
+                    MMUserCommentID = x.MMUserCommentID,
+                    UserComment = x.Item?.UserComment ?? "-",
+                    IncorrectReason = x.IncorrectReason.Any() ? string.Join(", ", x.IncorrectReason) : "-",
+                    IncorrectReasonRaw = string.Join(",", x.IncorrectReason),
+                    CorrectReason = x.CorrectReason,
+                    FromTransInfo = x.Item?.FromTransInfo ?? string.Empty,
+                    ToTransInfo = x.Item?.ToTransInfo ?? string.Empty,
+                    LastModifiedBy = x.Item?.LastModifiedBy,
+                    LastModifiedDate = x.Item?.LastModifiedDate.ToString(Consts.FormatDateTimeToString_yyyyMMdd)
+                });
+
+            return Json(new
+            {
+                data = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailUserFeedbackInsert)]
+        public ActionResult InsertUserFeedback(InsertUserFeedbackViewModel para)
+        {                        
+            para.UserID = CurrentSession.UserId;
+
+            var result = _matchMonitorService.InsertUserFeedback(para);
+
+            return Json(new
+            {
+                data = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailUserFeedbackInsert)]
+        public ActionResult UpdateUserFeedback(UpdateUserFeedbackViewModel para)
+        {
+            para.UserID = CurrentSession.UserId;
+
+            var result = _matchMonitorService.UpdateUserFeedback(para);
+
+            return Json(new
+            {
+                data = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailUserFeedbackInsert)]
+        public ActionResult DeleteUserFeedback(DeleteUserFeedbackViewModel para)
+        {
+            para.UserID = CurrentSession.UserId;
+
+            var result = _matchMonitorService.DeleteUserFeedback(para);
+
+            return Json(new
+            {
+                data = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion User Feedback
+
+        #endregion Detail Page
 
         #region Export to Excel
         [HttpPost]

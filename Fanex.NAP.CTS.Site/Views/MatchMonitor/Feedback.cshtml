@@ -1,0 +1,190 @@
+﻿@using Fanex.NAP.CTS.Model;
+
+@{
+    ViewBag.Title = "MATCH MONITOR - INCORRECT REASON FEEDBACK";
+}
+@model Fanex.NAP.CTS.ViewModel.Account.CustomerCategory.MarkCategoryViewModel
+
+<div id="divIncorrectReasonFeedback"style="display:none">  
+    <div class="float-container">
+        <div class="greeting">
+            <span>
+                Please take a few minutes to provide us with your feedback. / 请花几分钟时间向我们提供您的反馈。
+            </span>
+        </div>
+
+        <div class="group-two-column">
+            <div class="hidden">
+                <span id="hdMMUserCommentID"></span>
+            </div>
+            <div class="column left-column">
+                <div class="heading-column"><p>Incorrect Reason</p></div>
+                <div class="body-column" id="grpInCorrectReason">
+                    <div class="items">
+                        <div class="flex-item" reason="-1">
+                            <div class="form-control radio-button width-160"></div>
+                            <div class="form-control">
+                                <label class="text">Transtime/BetID</label>
+                            </div>
+                        </div>
+                        <div class="flex-item" reason="GB" reasonName ="Group Betting">
+                            <div class="form-control radio-button width-160">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="incorrectreason" incorrectreasonid="0">
+                                    <span class="checkmark"></span>
+                                    Group Betting
+                                </label>
+                            </div>
+                            <div class="form-control radio-button">
+                                <label class="text">From</label>
+                                <input id="fTranGB" name="from" maxlength="30" />
+                                <label class="text">To</label>
+                                <input id="tTranGB" name="to" maxlength="30" />
+                            </div>
+                        </div>
+
+                        <div class="flex-item" reason="HED" reasonName ="Hedging">
+                            <div class="form-control radio-button width-160">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="incorrectreason" incorrectreasonid="1">
+                                    <span class="checkmark"></span>
+                                    Hedging
+                                </label>
+                            </div>
+                            <div class="form-control radio-button">
+                                <label class="text">From</label>
+                                <input id="fTranHedging" name="from" maxlength="30" />
+                                <label class="text">To</label>
+                                <input id="tTranHedging" name="to" maxlength="30" />
+                            </div>
+                        </div>
+
+                        <div class="flex-item" reason="ARB" reasonName ="Arbitrage">
+                            <div class="form-control radio-button width-160">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="incorrectreason" incorrectreasonid="2">
+                                    <span class="checkmark"></span>
+                                    Arbitrage
+                                </label>
+                            </div>
+                            <div class="form-control radio-button">
+                                <label class="text">From</label>
+                                <input id="fTranArbitrage" name="from" maxlength="30" />
+                                <label class="text">To</label>
+                                <input id="tTranArbitrage" name="to" maxlength="30" />
+                            </div>
+                        </div>
+
+                        <div class="flex-item" reason="FG" reasonName ="Fixed Game">
+                            <div class="form-control radio-button width-160">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="incorrectreason" incorrectreasonid="3">
+                                    <span class="checkmark"></span>
+                                    Fixed Game
+                                </label>
+                            </div>
+                            <div class="form-control radio-button">
+                                <label class="text">From</label>
+                                <input id="fTranFixedGame" name="from" maxlength="30" />
+                                <label class="text">To</label>
+                                <input id="tTranFixedGame" name="to" maxlength="30" />
+                            </div>
+                        </div>
+
+                        <div class="flex-item" reason="IRR" reasonName ="Irrigation">
+                            <div class="form-control radio-button width-160">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="incorrectreason" incorrectreasonid="58">
+                                    <span class="checkmark"></span>
+                                    Irrigation
+                                </label>
+                            </div>
+                            <div class="form-control radio-button">
+                                <label class="text">From</label>
+                                <input id="fTranIrrigation" name="from" maxlength="30" />
+                                <label class="text">To</label>
+                                <input id="tTranIrrigation" name="to" maxlength="30" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column right-column">
+                <div class="heading-column"><p>Correct Reason</p></div>
+                <div class="body-column" id="grpRadioCorrectReason">
+                    <div class="items correct-reason-item">
+                        <div class="info-item">
+                            <div class="radio-button">                                
+                                <label for="CGB">
+                                    <input type="radio" id="CGB" name="CorrectReason" value="Group Betting" correctreasonid="0">
+                                    <span class="correct-reason">Group Betting</span>
+                                </label><br>
+
+                                <label for="CHedging">
+                                    <input type="radio" id="CHedging" name="CorrectReason" value="Hedging" correctreasonid="1">
+                                    <span class="correct-reason">Hedging</span>
+                                </label><br>
+                                
+                                <label for="CArbitrage"><input type="radio" id="CArbitrage" name="CorrectReason" value="Arbitrage" correctreasonid="2">
+                                    <span class="correct-reason">Arbitrage</span>
+                                </label><br>
+                                
+                                <label for="CFixedGame">
+                                    <input type="radio" id="CFixedGame" name="CorrectReason" value="Fixed Game" correctreasonid="3">
+                                    <span class="correct-reason">Fixed Game</span>
+                                </label><br>
+                                
+                                <label for="CIrrigation">
+                                    <input type="radio" id="CIrrigation" name="CorrectReason" value="Irrigation" correctreasonid="58">
+                                    <span class="correct-reason">Irrigation</span>
+                                </label><br>
+                                
+                                <label for="COthers">
+                                    <input type="radio" id="COthers" name="CorrectReason" value="Others" correctreasonid="-1" checked>
+                                    <span class="correct-reason">Others</span>
+                                </label><br>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="group-single-column">
+            <div class="column left-column" style="width: 100% !important">
+                <div class="heading-column"><p>Comment</p></div>
+                <div class="body-column">
+                    <textarea id="txtComment" class="comment-field full-width" maxlength="1000" rows="4"></textarea>
+                </div>
+
+                <div class="modal-footer float-right">
+                    <button id="btnCancel" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+                    <button id="btnSave" class="button -add" title="Save">Save</button>
+                    <button id="btnSaveAndClose" class="button -add" title="Save and Close">Save and Close</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="table-report" style="width:100%; background:#fff">
+            <table id="tblFeedback" class="table table-striped tblFeedback width-100per" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Incorrect <br/>Reason</th>
+                        <th>Correct <br />Reason</th>
+                        <th>Comment</th>
+                        <th>Transtime / <br/>BetID</th>
+                        <th>Last Modified <br />By</th>
+                        <th>Last Modified <br/>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+

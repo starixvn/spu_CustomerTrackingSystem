@@ -1051,6 +1051,7 @@
     <Content Include="Scripts\LatestTransaction\index.js" />
     <Content Include="Scripts\ManageSubscriber\index.js" />
     <Content Include="Scripts\MatchMonitor\detail.js" />
+    <Content Include="Scripts\MatchMonitor\feedback.js" />
     <Content Include="Scripts\MonthPicker.js" />
     <Content Include="Scripts\MonthPicker.min.js" />
     <Content Include="Scripts\NotificationSetting\notification-setting.js" />
@@ -1123,6 +1124,7 @@
     <Content Include="Template\RobotReport\AIRobotReportMonthlyTemplate.xlsx" />
     <Content Include="Template\RobotReport\RobotReportDailyTemplate.xlsx" />
     <Content Include="Template\RobotReport\RobotReportMonthlyTemplate.xlsx" />
+    <Content Include="Views\MatchMonitor\Feedback.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

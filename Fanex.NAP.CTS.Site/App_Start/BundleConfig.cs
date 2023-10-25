@@ -333,7 +333,8 @@
             bundles.Add(new ScriptBundle("~/match-monitor-detail-scripts").Include(
                "~/Scripts/select2.min.js",
                "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
-               "~/Scripts/MatchMonitor/detail.js"));
+               "~/Scripts/MatchMonitor/detail.js",
+               "~/Scripts/MatchMonitor/feedback.js"));
 
             bundles.Add(new StyleBundle("~/match-monitor-detail-styles").Include(
                 "~/Content/scss/vendors/select2.min.css",

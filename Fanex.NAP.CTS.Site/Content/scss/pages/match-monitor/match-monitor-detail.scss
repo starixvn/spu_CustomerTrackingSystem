@@ -446,6 +446,16 @@
                     color: $btn-disabled-color;
                     cursor: not-allowed;
                 }
+
+                .button-feedback {
+                    color: #FFFFFF;
+                    background-color: rgba(193, 39, 45, 0.5);
+                    border: 1px solid #C1272D;
+
+                    &:hover {
+                        background: rgba(193, 39, 45, 0.8);
+                    }
+                }
             }
 
             .group-info {
@@ -611,7 +621,7 @@
                                         color: #C1272D;
                                     }
 
-                                    .col-score {                                       
+                                    .col-score {
                                         white-space: nowrap !important;
                                     }
 
@@ -778,8 +788,7 @@
         margin-top: 12px;
 
         span {
-            &:before {
-                top: 1px;
+            &:before {             
                 height: 16px;
                 width: 16px;
             }
@@ -903,4 +912,250 @@
     .width-200 {
         min-width: 200px;
     }   
+}
+
+.ui-dialog {
+    top: 100px !important;
+}
+
+.float-container {
+    .greeting {
+        margin-bottom: 1rem;
+    }
+
+    .group-two-column {
+        display: flex;
+        margin: 0;
+    }
+
+    .group-single-column {
+        display: flex;
+        margin-top: 0.6rem;
+
+        .column {
+            width: 100%;
+            margin-right: 0 !important;
+        }
+
+        .modal-footer {
+            margin-top: 0.8rem;
+            margin-bottom: 0.8rem;
+
+            button {
+                margin-left: 0.8rem;
+            }
+        }
+
+        .float-right {
+            float: right;
+        }
+    }
+
+    .column {
+        width: 50%;
+        background: $page-bg;
+        border: 1px solid #E5E5E5;
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
+        border-radius: 2px;
+
+        .heading-column {
+            border-bottom: 1px solid #E5E5E5;
+            padding: 0.8rem;
+            font-weight: 700;
+            font-size: 13px;
+            line-height: 14px;
+            color: #545454;
+
+            p {
+                line-height: 1;
+            }
+        }
+
+        &.right-column {
+            .heading-column {
+                padding: 9px 0 !important;
+            }
+        }
+
+        .body-column {
+            border: 1px solid #E5E5E5;
+            overflow: hidden;
+
+            .items {
+                padding: 1rem;
+
+                .info-item {
+                    .form-control {
+                        margin-bottom: 5px;
+                    }
+
+                    .radio-button {
+                        padding: 2px;
+
+                        label {
+                            display: block;
+                            height: 1.6rem;
+
+                            &::before, &::after {
+                                top: 15px;
+                            }
+
+                            &:after {
+                                background: #686868;
+                            }
+
+                            &:before {
+                                border: 1px solid #686868;
+                            }
+
+                            .correct-reason {
+                                cursor: pointer;
+                            }
+                        }
+                    }
+                }
+
+                .flex-item {
+                    display: flex;
+                    align-items: center;
+
+                    .form-control {
+                        margin-right: 11px;
+                        margin-bottom: 1rem;
+
+                        label {
+                            margin-left: 1.6rem;
+                            margin-right: 0.6rem;
+                        }
+
+                        input {
+                            width: 14rem;
+                        }
+                    }
+
+                    .checkbox-container {
+                        margin-top: 11px;
+
+                        span {
+                            &:before {
+                                top: 1px;
+                                height: 16px;
+                                width: 16px;
+                            }
+
+                            &:after {
+                                top: 5px;
+                                left: 3px;
+                            }
+                        }
+                    }
+
+                    .width-160 {
+                        width: 160px;
+                    }
+                }
+            }
+
+            .correct-reason-item {
+                padding-top: 0 !important;
+            }
+        }
+
+        textarea {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: none;
+            padding: 0.4rem 1rem;
+            resize: none;
+
+            &:focus {
+                outline: none;
+                box-shadow: none;
+                border-color: #E5E5E5;
+            }
+        }
+
+        &.left-column {
+            margin-right: .6rem;
+            width: 80%;
+
+            .heading-column {
+                border: 1px solid #E5E5E5;
+                border-top: none;
+            }
+
+            .body-column {
+                border-top: none;
+            }
+        }
+
+        &.right-column {
+            margin-left: .6rem;
+
+            .heading-column {
+                padding: 1rem 0 1rem 1rem !important;
+                border-left: 1px solid #E5E5E5;
+                border-right: 1px solid #E5E5E5;
+                border-bottom: none;
+            }
+        }
+
+        .radio-button {
+            input[type="radio"] {
+                cursor: pointer;
+                width: 1.6rem;
+                height: 1.6rem;
+                margin-top: 1rem;
+            }
+        }
+    }
+
+    .tblFeedback {
+        thead {
+            tr:first-child {
+                th:nth-child(1) {
+                    width: 30px !important;
+
+                    &.sorting_asc, &.sorting {
+                        background-image: none;
+                    }
+                }
+            }
+        }
+
+        .sub-icon {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+
+            &:hover {
+                border-radius: 50%;
+                background: #E7EDFF;
+            }
+
+            .disabled {
+                cursor: not-allowed;
+            }
+        }
+
+        .icon-delete {
+            font-size: 1.4rem;
+            position: absolute;
+            top: .5rem;
+            left: .6rem;
+        }
+
+        .icon-delete:before {
+            color: #FF0000;
+        }
+    }
+
+    .hidden {
+        display: none !important;
+    }
 }

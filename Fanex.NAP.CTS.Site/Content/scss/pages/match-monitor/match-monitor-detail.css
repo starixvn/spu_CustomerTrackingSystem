@@ -655,6 +655,12 @@
         background-color: #c9cdd1;
         color: #fff;
         cursor: not-allowed; }
+      .detailpage .monitor-container .monitor-table .breadcrumb-button .button-feedback {
+        color: #FFFFFF;
+        background-color: rgba(193, 39, 45, 0.5);
+        border: 1px solid #C1272D; }
+        .detailpage .monitor-container .monitor-table .breadcrumb-button .button-feedback:hover {
+          background: rgba(193, 39, 45, 0.8); }
     .detailpage .monitor-container .monitor-table .group-info {
       display: flex;
       padding: 1rem 0 0 0;
@@ -867,7 +873,6 @@
   .detailpage .checkbox-container {
     margin-top: 12px; }
     .detailpage .checkbox-container span:before {
-      top: 1px;
       height: 16px;
       width: 16px; }
     .detailpage .checkbox-container span:after {
@@ -950,3 +955,151 @@
 
 .top-header .width-200 {
   min-width: 200px; }
+
+.ui-dialog {
+  top: 100px !important; }
+
+.float-container .greeting {
+  margin-bottom: 1rem; }
+
+.float-container .group-two-column {
+  display: flex;
+  margin: 0; }
+
+.float-container .group-single-column {
+  display: flex;
+  margin-top: 0.6rem; }
+  .float-container .group-single-column .column {
+    width: 100%;
+    margin-right: 0 !important; }
+  .float-container .group-single-column .modal-footer {
+    margin-top: 0.8rem;
+    margin-bottom: 0.8rem; }
+    .float-container .group-single-column .modal-footer button {
+      margin-left: 0.8rem; }
+  .float-container .group-single-column .float-right {
+    float: right; }
+
+.float-container .column {
+  width: 50%;
+  background: #fff;
+  border: 1px solid #E5E5E5;
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+  border-radius: 2px; }
+  .float-container .column .heading-column {
+    border-bottom: 1px solid #E5E5E5;
+    padding: 0.8rem;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 14px;
+    color: #545454; }
+    .float-container .column .heading-column p {
+      line-height: 1; }
+  .float-container .column.right-column .heading-column {
+    padding: 9px 0 !important; }
+  .float-container .column .body-column {
+    border: 1px solid #E5E5E5;
+    overflow: hidden; }
+    .float-container .column .body-column .items {
+      padding: 1rem; }
+      .float-container .column .body-column .items .info-item .form-control {
+        margin-bottom: 5px; }
+      .float-container .column .body-column .items .info-item .radio-button {
+        padding: 2px; }
+        .float-container .column .body-column .items .info-item .radio-button label {
+          display: block;
+          height: 1.6rem; }
+          .float-container .column .body-column .items .info-item .radio-button label::before, .float-container .column .body-column .items .info-item .radio-button label::after {
+            top: 15px; }
+          .float-container .column .body-column .items .info-item .radio-button label:after {
+            background: #686868; }
+          .float-container .column .body-column .items .info-item .radio-button label:before {
+            border: 1px solid #686868; }
+          .float-container .column .body-column .items .info-item .radio-button label .correct-reason {
+            cursor: pointer; }
+      .float-container .column .body-column .items .flex-item {
+        display: flex;
+        align-items: center; }
+        .float-container .column .body-column .items .flex-item .form-control {
+          margin-right: 11px;
+          margin-bottom: 1rem; }
+          .float-container .column .body-column .items .flex-item .form-control label {
+            margin-left: 1.6rem;
+            margin-right: 0.6rem; }
+          .float-container .column .body-column .items .flex-item .form-control input {
+            width: 14rem; }
+        .float-container .column .body-column .items .flex-item .checkbox-container {
+          margin-top: 11px; }
+          .float-container .column .body-column .items .flex-item .checkbox-container span:before {
+            top: 1px;
+            height: 16px;
+            width: 16px; }
+          .float-container .column .body-column .items .flex-item .checkbox-container span:after {
+            top: 5px;
+            left: 3px; }
+        .float-container .column .body-column .items .flex-item .width-160 {
+          width: 160px; }
+    .float-container .column .body-column .correct-reason-item {
+      padding-top: 0 !important; }
+  .float-container .column textarea {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border: none;
+    padding: 0.4rem 1rem;
+    resize: none; }
+    .float-container .column textarea:focus {
+      outline: none;
+      box-shadow: none;
+      border-color: #E5E5E5; }
+  .float-container .column.left-column {
+    margin-right: .6rem;
+    width: 80%; }
+    .float-container .column.left-column .heading-column {
+      border: 1px solid #E5E5E5;
+      border-top: none; }
+    .float-container .column.left-column .body-column {
+      border-top: none; }
+  .float-container .column.right-column {
+    margin-left: .6rem; }
+    .float-container .column.right-column .heading-column {
+      padding: 1rem 0 1rem 1rem !important;
+      border-left: 1px solid #E5E5E5;
+      border-right: 1px solid #E5E5E5;
+      border-bottom: none; }
+  .float-container .column .radio-button input[type="radio"] {
+    cursor: pointer;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-top: 1rem; }
+
+.float-container .tblFeedback thead tr:first-child th:nth-child(1) {
+  width: 30px !important; }
+  .float-container .tblFeedback thead tr:first-child th:nth-child(1).sorting_asc, .float-container .tblFeedback thead tr:first-child th:nth-child(1).sorting {
+    background-image: none; }
+
+.float-container .tblFeedback .sub-icon {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  position: relative;
+  cursor: pointer; }
+  .float-container .tblFeedback .sub-icon:hover {
+    border-radius: 50%;
+    background: #E7EDFF; }
+  .float-container .tblFeedback .sub-icon .disabled {
+    cursor: not-allowed; }
+
+.float-container .tblFeedback .icon-delete {
+  font-size: 1.4rem;
+  position: absolute;
+  top: .5rem;
+  left: .6rem; }
+
+.float-container .tblFeedback .icon-delete:before {
+  color: #FF0000; }
+
+.float-container .hidden {
+  display: none !important; }

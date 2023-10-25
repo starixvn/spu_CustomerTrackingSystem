@@ -19,9 +19,7 @@ const IndexFilterSelected = {
     AGr: 7
 }
 
-function ConvertNumberToThousandsString(x) {
-    //return x ? x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0;
-
+function ConvertNumberToThousandsString(x) {  
     return x ? x.toLocaleString() : 0;
 }
 
@@ -80,7 +78,7 @@ function MatchMonitorDetail() {
         inputSGSelectAll: $('#inputSGSelectAll'),
         iconHToggleBetID: $('#iconHToggleBetID'),
         iconAToggleBetID: $('#iconAToggleBetID'),
-        divPopupAssDetect: $('#divPopupAssDetect'),
+        divPopupAssDetect: $('#divPopupAssDetect'),        
         btnShowPopupAssDetection: $('#btnShowPopupAssDetection'),
         tickCheckAll: $('#tickCheckAll'),
         tickUncheckAll: $('#tickUncheckAll'),
@@ -96,7 +94,8 @@ function MatchMonitorDetail() {
         btnGenerateDetail: $('#btnGenerate-detail'),     
         btnAssDetection: $('#btnAssDetection'),
         btnExportExcel: $('#btnExportExcel'),
-        btnVerifyAndClose: $('#btnVerifyAndClose')
+        btnVerifyAndClose: $('#btnVerifyAndClose'),
+        btnReasonFeedback: $('#btnReasonFeedback')
     };
 
     let recordsFilteredGlobal = 0;
@@ -1801,7 +1800,7 @@ function MatchMonitorDetail() {
         return datas != '' ? datas.slice(0, -1) : datas;
     }
 
-    //#endregion Export To Excel
+    //#endregion Export To Excel  
 
     //#region Event OnChange
 
@@ -1862,6 +1861,8 @@ function MatchMonitorDetail() {
 
         domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
 
+        domElements.btnReasonFeedback.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
+
         RemoveFilterLoading();
     }
 
@@ -1879,6 +1880,8 @@ function MatchMonitorDetail() {
         FetchFilterMatchMonitorDetail(); 
 
         domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
+
+        domElements.btnReasonFeedback.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
 
         RemoveFilterLoading();
     }   
@@ -2384,10 +2387,23 @@ function MatchMonitorDetail() {
 
         domElements.inputHomeSelectAll.prop('checked', false);
         domElements.inputAwaySelectAll.prop('checked', false);
-
+       
         ChangeCbbTypeOfTickets();
 
         Resize();
+
+        $('#btnReasonFeedback').on('click', function () {
+            var reasonFeedback = new feedback();
+
+            let betTypeID = GetBetTypeSelected();
+            let betID = GetBetIDSelected();
+            let reasonList = cacheFilterDefault.ReasonList;
+
+            //reasonList.push("GB");
+            //reasonList.push("HED");
+
+            reasonFeedback.Initial(domElements.matchID, domElements.cbbMarket.val(), betTypeID, betID, domElements.sportType, reasonList);
+        });
     }
 
     $(window).resize(function () {

@@ -384,6 +384,10 @@
             AssociationDetectionDetailAgent = 73,
             RobotReport = 74,
             RobotReport_ExportToExcel = 75,
+            MatchMonitorDetailUserFeedback = 76,
+            MatchMonitorDetailUserFeedbackInsert = 77,
+            MatchMonitorDetailUserFeedbackUpdate = 78,
+            MatchMonitorDetailUserFeedbackDelete = 79,
 
             //PlaceEvidenceForMultipleCustAPI = 200,
             GetFlaggedCustomersByLevelAPI = 201,

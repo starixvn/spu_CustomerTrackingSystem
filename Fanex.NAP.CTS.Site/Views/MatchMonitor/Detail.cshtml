@@ -19,7 +19,7 @@
             </div>
             <div class="title-box-right">
                 <span class="title-sport-name">
-                    <span id="spanSportBetTypeInfo">@ViewBag.SportName - @ViewBag.BettypeName -</span> 
+                    <span id="spanSportBetTypeInfo">@ViewBag.SportName - @ViewBag.BettypeName -</span>
                     <span class="title-market" id="spanMarketInfo">@ViewBag.MarketName</span>
                     <span class="title-market-line"> | </span>
                     <span class="title-market" id="spanReasonInfo"> GB, FG</span>
@@ -107,17 +107,17 @@
                 </div>
 
                 <div class="group-info filter-group border" style="padding: 0px;">
-                    <div class="form-filter">                       
+                    <div class="form-filter">
                         <div class="group width-160 second-row-depend-1 start-box" @(ViewBag.IsDisableScoreFilter ? "hidden" : "")>
                             <label class="text">Score</label>
                             <select class="control width-select" id="cbbMatchScore" multiple="multiple">
                                 @*@if (ViewBag.MatchScore != null)
-                                {
-                                    foreach (var item in ViewBag.MatchScore)
                                     {
-                                        <option value="@item.ScoreDiff" selected>@item.LiveHomeScore - @item.LiveAwayScore </option>
-                                    }
-                                }*@
+                                        foreach (var item in ViewBag.MatchScore)
+                                        {
+                                            <option value="@item.ScoreDiff" selected>@item.LiveHomeScore - @item.LiveAwayScore </option>
+                                        }
+                                    }*@
                             </select>
                         </div>
 
@@ -173,7 +173,7 @@
                         </div>
 
                         <div class="group width-160 second-row-depend-1">
-                            <label class="text">Username's Amt (RM)</label>                           
+                            <label class="text">Username's Amt (RM)</label>
                             <div class="ui-multiselect width-amount">
                                 <input class="width-amount-item" placeholder=">= please input amount" id="inputCustAmountRM" maxlength="15" />
                                 <span class="icon-cross-brow clear-amount hide" id="iconClearUsnAmt"></span>
@@ -184,21 +184,21 @@
                             <label class="text">Tickets Status</label>
                             <select class="control width-select" id="cbbTicketsStatus" multiple="multiple">
                                 @*<option selected value=103>Refund</option>
-                                <option selected value=113>Lose</option>
-                                <option selected value=131>Completed</option>
-                                <option selected value=112>Won</option>
-                                <option selected value=101>Reject</option>
-                                <option selected value=111>Draw</option>
-                                <option selected value=0>Running</option>
-                                <option selected value=102>Void</option>
-                                <option selected value=1>Waiting</option>*@
+                                    <option selected value=113>Lose</option>
+                                    <option selected value=131>Completed</option>
+                                    <option selected value=112>Won</option>
+                                    <option selected value=101>Reject</option>
+                                    <option selected value=111>Draw</option>
+                                    <option selected value=0>Running</option>
+                                    <option selected value=102>Void</option>
+                                    <option selected value=1>Waiting</option>*@
                             </select>
                         </div>
-                        <div class="group second-row-depend-1">                         
+                        <div class="group second-row-depend-1">
                             <div class="group-button">
                                 <button class="button button-generate" id="btnGenerate-detail">Generate</button>
                             </div>
-                        </div>                       
+                        </div>
                     </div>
                 </div>
 
@@ -206,10 +206,11 @@
                     <div class="breadcrumb-totaltickets"></div>
                     <div id="hdbreadcrumTotalTickets" style="display: none">0</div>
                     <div>
-                        <button class="button-primary-outline-1" id="btnImportNewTicket">Import New Tickets</button>                        
+                        <button class="button-primary-outline-1" id="btnImportNewTicket">Import New Tickets</button>
                         <button class="button-primary-outline-1" id="btnShowPopupAssDetection">Association Detection</button>
                         <button class="button-primary-outline-1" id="btnExportExcel">Export Excel</button>
                         <button class="button-primary-outline-1" id="btnVerifyAndClose">Verify and Close</button>
+                        <button class="button-primary-outline-1 button-feedback" id="btnReasonFeedback">Incorrect Reason Feedback</button>
                     </div>
                 </div>
 
@@ -311,7 +312,7 @@
                                         <th>Odds</th>
                                         <th>
                                             <div class="type-outer">
-                                                <span class="col-title">BetID</span>                                               
+                                                <span class="col-title">BetID</span>
                                             </div>
                                         </th>
                                         <th>Cur</th>
@@ -345,16 +346,16 @@
                 <select class="control" id="cbbCCHidden" multiple="multiple">
                     @foreach (var group in ViewBag.GroupCCList)
                     {
-                    <optgroup label="@group.CCGroupName">
-                        @foreach (var cc in group.CCList)
-                        {
-                            <option selected value=@cc>@cc</option>
-                        }
-                        @if (group.CCGroupName.ToLower().Contains("other"))
-                        {
-                            <option selected value=0>-</option>
-                        }
-                    </optgroup>
+                        <optgroup label="@group.CCGroupName">
+                            @foreach (var cc in group.CCList)
+                            {
+                                <option selected value=@cc>@cc</option>
+                            }
+                            @if (group.CCGroupName.ToLower().Contains("other"))
+                            {
+                                <option selected value=0>-</option>
+                            }
+                        </optgroup>
                     }
                 </select>
             </div>
@@ -453,7 +454,7 @@
             <button id="btnAssDetection" class="button button-primary-outline" title="Association Detection">Detect</button>
         </div>
 
-        <div class="hide">          
+        <div class="hide">
             <input id="hdSelectedCustIDs" type="hidden" />
             <input id="hdSelectedUsernames" type="hidden" />
             <input id="hdSelectedHomeDetectMGr" type="hidden" />
@@ -461,6 +462,8 @@
         </div>
     </div>
 </div>
+
+@Html.Partial("Feedback")
 
 @section scripts{
     @Scripts.Render("~/match-monitor-detail-scripts")
