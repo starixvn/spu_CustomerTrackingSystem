@@ -232,11 +232,11 @@
             },
             success: function (response) {
                 if (response !== null) {
-                    domElements.spanDesktopUsage.html(response.DesktopUsage + " (" + response.DesktopUsagePercent +"%)");
-                    domElements.spanMobileUsage.html(response.MobileUsage + " (" + response.MobileUsagePercent + "%)");
-                    domElements.spanOthersUsage.html(response.OthersUsage + " (" + response.OthersUsagePercent + "%)");
-                    domElements.spanLoginCount.html(response.LoginCount);
-                    domElements.spanIPDeviceCount.html(response.IPCount + " / " + response.DeviceCount);
+                    domElements.spanBot.html(response.BotTrans + " (" + response.BotTransPercentage + "%)");
+                    domElements.spanInvalidBrowserInfo.html(response.InvalidBrowser + " (" + response.InvalidBrowserPercentage + "%)");
+                    domElements.spanDesktopMobileUsage.html(response.DesktopUsage + " / " + response.MobileUsage);
+                    domElements.spanIPDevice.html(response.IPCount + " / " + response.DeviceCount);
+                    domElements.spanTotalLogin.html(response.LoginCount);
                 }
             },
             error: function (errMsg) {

@@ -2,22 +2,23 @@
 {
     public class CustomerInfoLoginStatsViewModel
     {
+        public int BotTrans { get; set; }
+
+        public string BotTransPercentage { get; set; }
+
+        public int InvalidBrowser { get; set; }
+
+        public string InvalidBrowserPercentage { get; set; }
+
         public int DesktopUsage { get; set; }
 
-        public string DesktopUsagePercent { get; set; }
-
         public int MobileUsage { get; set; }
-
-        public string MobileUsagePercent { get; set; }
-
-        public int OthersUsage { get; set; }
-
-        public string OthersUsagePercent { get; set; }
-
-        public int LoginCount { get; set; }
 
         public int IPCount { get; set; }
 
         public int DeviceCount { get; set; }
+
+        public int LoginCount { get; set; }
+
     }
 }
