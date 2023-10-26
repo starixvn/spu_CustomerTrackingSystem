@@ -29,11 +29,11 @@
         spanFlagEvidence: $('#spanFlagEvidence'),
         spanLblAffectedEvidence: $('#spanLblAffectedEvidence'),
         spanAffectedEvidence: $('#spanAffectedEvidence'),        
-        spanDesktopUsage: $('#spanDesktopUsage'),
-        spanMobileUsage: $('#spanMobileUsage'),
-        spanOthersUsage: $('#spanOthersUsage'),
-        spanLoginCount: $('#spanLoginCount'),
-        spanIPDeviceCount: $('#spanIPDeviceCount'),
+        spanBot: $('#spanBot'),
+        spanInvalidBrowserInfo: $('#spanInvalidBrowserInfo'),
+        spanDesktopMobileUsage: $('#spanDesktopMobileUsage'),
+        spanIPDevice: $('#spanIPDevice'),
+        spanTotalLogin: $('#spanTotalLogin'),
         spanLblNextCategoryScanDate: $('#spanLblNextCategoryScanDate'),
         spanNextCategoryScanDate: $('#spanNextCategoryScanDate'),
         spanLblLastTicketDate: $('#spanLblLastTicketDate'),
@@ -232,17 +232,21 @@
             },
             success: function (response) {
                 if (response !== null) {
-                    domElements.spanBot.html(response.BotTrans + " (" + response.BotTransPercentage + "%)");
-                    domElements.spanInvalidBrowserInfo.html(response.InvalidBrowser + " (" + response.InvalidBrowserPercentage + "%)");
-                    domElements.spanDesktopMobileUsage.html(response.DesktopUsage + " / " + response.MobileUsage);
-                    domElements.spanIPDevice.html(response.IPCount + " / " + response.DeviceCount);
-                    domElements.spanTotalLogin.html(response.LoginCount);
+                    domElements.spanBot.html(numberWithCommas(response.BotTrans) + " (" + response.BotTransPercentage + "%)");
+                    domElements.spanInvalidBrowserInfo.html(numberWithCommas(response.InvalidBrowser) + " (" + response.InvalidBrowserPercentage + "%)");
+                    domElements.spanDesktopMobileUsage.html(numberWithCommas(response.DesktopUsage) + " / " + numberWithCommas(response.MobileUsage));
+                    domElements.spanIPDevice.html(numberWithCommas(response.IPCount) + " / " + numberWithCommas(response.DeviceCount));
+                    domElements.spanTotalLogin.html(numberWithCommas(response.LoginCount));
                 }
             },
             error: function (errMsg) {
                 console.log(errMsg);
             }
         });
+    }
+
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
     function GetCustProfileDates() {
