@@ -252,7 +252,7 @@
         }
 
         if (type == 2 && number1 != null && number2 != null) {
-            return FormatNumberUnit(number1) + "/" + FormatNumberUnit(number2);
+            return FormatNumberUnit(number1) + " / " + FormatNumberUnit(number2);
         }
 
         if (type == 3 && number1 != null) {
