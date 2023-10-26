@@ -232,11 +232,11 @@
             },
             success: function (response) {
                 if (response !== null) {
-                    domElements.spanBot.html(numberWithCommas(response.BotTrans) + " (" + response.BotTransPercentage + "%)");
-                    domElements.spanInvalidBrowserInfo.html(numberWithCommas(response.InvalidBrowser) + " (" + response.InvalidBrowserPercentage + "%)");
-                    domElements.spanDesktopMobileUsage.html(numberWithCommas(response.DesktopUsage) + " / " + numberWithCommas(response.MobileUsage));
-                    domElements.spanIPDevice.html(numberWithCommas(response.IPCount) + " / " + numberWithCommas(response.DeviceCount));
-                    domElements.spanTotalLogin.html(numberWithCommas(response.LoginCount));
+                    domElements.spanBot.html(FormatNumber(response.BotTrans, response.BotTransPercentage, 1));
+                    domElements.spanInvalidBrowserInfo.html(FormatNumber(response.InvalidBrowser, response.InvalidBrowserPercentage, 1));
+                    domElements.spanDesktopMobileUsage.html(FormatNumber(response.DesktopUsage, response.MobileUsage, 2));
+                    domElements.spanIPDevice.html(FormatNumber(response.IPCount, response.DeviceCount, 2));
+                    domElements.spanTotalLogin.html(FormatNumber(response.LoginCount, null, 3));
                 }
             },
             error: function (errMsg) {
@@ -245,7 +245,24 @@
         });
     }
 
-    function numberWithCommas(x) {
+
+    function FormatNumber(number1, number2, type) {
+        if (type == 1 && number1 != null) {
+            return FormatNumberUnit(number1) +  " (" + number2 + "%)";
+        }
+
+        if (type == 2 && number1 != null && number2 != null) {
+            return FormatNumberUnit(number1) + "/" + FormatNumberUnit(number2);
+        }
+
+        if (type == 3 && number1 != null) {
+            return FormatNumberUnit(number1);
+        }
+
+        return "-";
+    }
+
+    function FormatNumberUnit(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
