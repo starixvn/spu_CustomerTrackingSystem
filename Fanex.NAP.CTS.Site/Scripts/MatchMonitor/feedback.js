@@ -269,8 +269,8 @@
                 },
                 {
                     data: obj => {
-                        if (obj.FromTransInfo != '' || obj.ToTransInfo != '') {
-                            return obj.FromTransInfo + " -> " + obj.ToTransInfo
+                        if (obj.FromTransInfo != '' || obj.ToTransInfo != '') {                        
+                            return '<span>' + obj.FromTransInfo + '<br/>' + obj.ToTransInfo + '</span>';
                         } else {
                             return '-';
                         }
