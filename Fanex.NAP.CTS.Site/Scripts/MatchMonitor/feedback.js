@@ -24,7 +24,7 @@
     function LoadIncorrectReasonFeedback() {       
         domElementFeedbacks.divIncorrectReasonFeedback.dialog({
             modal: true,
-            width: '1060px',
+            width: '1250px',
             title: 'MATCH MONITOR - INCORRECT REASON FEEDBACK',
             resizable: false,
             draggable: true,
@@ -93,11 +93,12 @@
             },
             success: function (response) {
                 common.showSuccess("Thanks very much. We're grateful for your feedback.");
-
-                domElementFeedbacks.btnSave.removeClass('edit');
+                
                 if (!isClosePopup) {
                     ReloadGrid();
                     ResetInputFeedback();
+                } else {
+                    domElementFeedbacks.btnSave.removeClass('edit');
                 }                               
             },
             complete: function () {
@@ -158,14 +159,18 @@
             }
         });
 
-        if (obj.IncorrectReason.length > 0) {
-            let arrIncorrectReason = obj.IncorrectReasonRaw.split(',');
-            $('.flex-item', domElementFeedbacks.grpInCorrectReason).each(function (idx, ele) {
-                if (arrIncorrectReason.indexOf($(ele).attr('reasonName')) != -1) {
-                    $('input[name=incorrectreason]', ele).prop('checked', true);                    
-                    $('input[name=from]', ele).val(obj.FromTransInfo);
-                    $('input[name=to]', ele).val(obj.ToTransInfo);
-                }
+        if (obj.IncorrectReason.length > 0) {           
+            let arrIncorrectReason = JSON.parse(obj.IncorrectReasonRaw);
+                     
+            $('.flex-item', domElementFeedbacks.grpInCorrectReason).each(function (idx, ele) {             
+                $.each(arrIncorrectReason, function (index, obj) {
+                    if (obj.IncorrectReason == $(ele).attr('reasonName')) {
+                        $('input[name=incorrectreason]', ele).prop('checked', true);
+                        $('input[name=from]', ele).val(obj.FromTransInfo);
+                        $('input[name=to]', ele).val(obj.ToTransInfo);
+                        return false;
+                    }
+                });
             });
         }
     }
@@ -244,13 +249,12 @@
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0], width: "5%", className: "text-center", defaultContent: "-" },
-                { targets: [1], width: "12%", className: "text-center", defaultContent: "-" },
-                { targets: [2], width: "12%", className: "text-center", defaultContent: "-" },
-                { targets: [3], width: "30%", className: "text-center", defaultContent: "-" },
-                { targets: [4], width: "12%", className: "text-center", defaultContent: "-" },
-                { targets: [5], width: "12%", className: "text-center", defaultContent: "-" },
-                { targets: [6], width: "12%", className: "text-center", defaultContent: "-" },
-                { targets: [7], width: "5%", className: "text-center", defaultContent: "-" }
+                { targets: [1], width: "35%", className: "text-left", defaultContent: "-" },
+                { targets: [2], width: "10%", className: "text-center", defaultContent: "-" },
+                { targets: [3], width: "25%", className: "text-center", defaultContent: "-" },
+                { targets: [4], width: "12%", className: "text-center", defaultContent: "-" },             
+                { targets: [5], width: "10%", className: "text-center", defaultContent: "-" },
+                { targets: [6], width: "3%", className: "text-center", defaultContent: "-" }
             ],
             columns: [
                 { render: function (data, type, full, meta) { return meta.row + 1; } },
@@ -258,24 +262,15 @@
                 { data: obj => obj.CorrectReason },
                 {
                     data: obj => {
-                        if (obj.UserComment.length > 100) {
-                            let comment = obj.UserComment.substring(0, obj.UserComment.length - 100) + ' ...';
+                        if (obj.UserComment.length > 90) {
+                            let comment = obj.UserComment.substring(0, 90) + ' ...';
 
                             return `<span>${comment}</span>`;
                         } else {
                             return `<span>${obj.UserComment}</span>`;
                         }
                     }
-                },
-                {
-                    data: obj => {
-                        if (obj.FromTransInfo != '' || obj.ToTransInfo != '') {                        
-                            return '<span>' + obj.FromTransInfo + '<br/>' + obj.ToTransInfo + '</span>';
-                        } else {
-                            return '-';
-                        }
-                    }
-                },
+                },              
                 { data: obj => obj.LastModifiedBy },
                 { data: obj => obj.LastModifiedDate },
                 {
@@ -287,7 +282,7 @@
                     }, createdCell: (cell, _, row) => {
                         $('.icon-edit', cell).click(() => {
                             $('td #sub-icon').addClass('none-pointer');
-
+                            ResetInputFeedback();
                             LoadUpdateUserFeedback(row);
                         });
 
@@ -308,6 +303,7 @@
     }
 
     function ResetInputFeedback() {
+        domElementFeedbacks.btnSave.removeClass('edit');
         domElementFeedbacks.txtComment.val('');
 
         $('input[id=COthers]', domElementFeedbacks.grpRadioCorrectReason).prop('checked', true);

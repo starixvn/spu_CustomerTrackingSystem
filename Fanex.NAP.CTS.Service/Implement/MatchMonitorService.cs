@@ -755,7 +755,7 @@
                 BettypeID = para.BettypeID,
                 BetID = para.BetID,
                 UserID = para.UserID,
-                UserComment = para.UserComment,
+                UserComment = para.UserComment ?? string.Empty,
                 IncorrectReason = para.IncorrectReason,
                 CorrectReasonID = para.CorrectReasonID
             };
@@ -771,7 +771,7 @@
             {
                 UserID = para.UserID,
                 MMUserCommentID = para.MMUserCommentID,
-                UserComment = para.UserComment,
+                UserComment = para.UserComment ?? string.Empty,
                 IncorrectReason = para.IncorrectReason,
                 CorrectReasonID = para.CorrectReasonID
             };

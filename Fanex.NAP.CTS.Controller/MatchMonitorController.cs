@@ -879,17 +879,31 @@
             var data = _matchMonitorService.GetUserFeedback(para);
 
             result = data.GroupBy(g => g.MMUserCommentID)
-                .Select(g => new {
-                    MMUserCommentID = g.Key,
-                    IncorrectReason = g.Where(x => !string.IsNullOrEmpty(x.IncorrectReason)).Select(x => x.IncorrectReason),
-                    CorrectReason = g.Where(x => !string.IsNullOrEmpty(x.CorrectReason)).FirstOrDefault()?.CorrectReason ?? "-",
+                .Select(g => new
+                {
+                    MMUserCommentID = g.Key,                    
+                    IncorrectReasonTrans = g.Where(x => !string.IsNullOrEmpty(x.IncorrectReason)).Select(x => 
+                    {
+                        if (string.IsNullOrEmpty(x.FromTransInfo) && string.IsNullOrEmpty(x.ToTransInfo))
+                        {
+                            return "<span>" + x.IncorrectReason + "<br/></span>";
+                        }
+                        return "<span>" + x.IncorrectReason + " (" + x.FromTransInfo + " - " + x.ToTransInfo + ") <br/></span>";
+                    }),
+                    IncorrectReasonRaw = g.Where(x => !string.IsNullOrEmpty(x.IncorrectReason)).Select(x => new
+                    {
+                        IncorrectReason = x.IncorrectReason,
+                        FromTransInfo = x.FromTransInfo,
+                        ToTransInfo = x.ToTransInfo
+                    }),
+                    CorrectReason = g.Where(x => !string.IsNullOrEmpty(x.CorrectReason)).FirstOrDefault()?.CorrectReason ?? "Others",                 
                     Item = g.FirstOrDefault()
                 }).Select(x => new GetMMUserFeedbackViewModel
                 {
                     MMUserCommentID = x.MMUserCommentID,
                     UserComment = x.Item?.UserComment ?? "-",
-                    IncorrectReason = x.IncorrectReason.Any() ? string.Join(", ", x.IncorrectReason) : "-",
-                    IncorrectReasonRaw = string.Join(",", x.IncorrectReason),
+                    IncorrectReason = x.IncorrectReasonTrans.Any() ? string.Join(" ", x.IncorrectReasonTrans) : "-",
+                    IncorrectReasonRaw = JsonConvert.SerializeObject(x.IncorrectReasonRaw),
                     CorrectReason = x.CorrectReason,
                     FromTransInfo = x.Item?.FromTransInfo ?? string.Empty,
                     ToTransInfo = x.Item?.ToTransInfo ?? string.Empty,
