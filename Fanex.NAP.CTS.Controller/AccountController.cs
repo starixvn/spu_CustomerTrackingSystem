@@ -336,15 +336,15 @@
             {
                 var custProfileLoginStats = new CustomerInfoLoginStatsViewModel
                 {
+                    BotTrans = data.BotTrans,
+                    BotTransPercentage = data.BotTransPercentage.ToString("0.00"),
+                    InvalidBrowser = data.InvalidBrowser,
+                    InvalidBrowserPercentage = data.InvalidBrowserPercentage.ToString("0.00"),
                     DesktopUsage = data.DesktopUsage,
-                    DesktopUsagePercent = data.DesktopUsagePercent.ToString("0.00"),
                     MobileUsage = data.MobileUsage,
-                    MobileUsagePercent = data.MobileUsagePercent.ToString("0.00"),
-                    OthersUsage = data.OthersUsage,
-                    OthersUsagePercent = data.OthersUsagePercent.ToString("0.00"),
-                    LoginCount = data.Logins,
-                    IPCount = data.IPs,
-                    DeviceCount = data.Devices
+                    IPCount = data.IP,
+                    DeviceCount = data.Device,
+                    LoginCount = data.Login,
                 };
 
                 return Json(custProfileLoginStats, JsonRequestBehavior.AllowGet);

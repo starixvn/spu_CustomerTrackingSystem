@@ -29,11 +29,11 @@
         spanFlagEvidence: $('#spanFlagEvidence'),
         spanLblAffectedEvidence: $('#spanLblAffectedEvidence'),
         spanAffectedEvidence: $('#spanAffectedEvidence'),        
-        spanDesktopUsage: $('#spanDesktopUsage'),
-        spanMobileUsage: $('#spanMobileUsage'),
-        spanOthersUsage: $('#spanOthersUsage'),
-        spanLoginCount: $('#spanLoginCount'),
-        spanIPDeviceCount: $('#spanIPDeviceCount'),
+        spanBot: $('#spanBot'),
+        spanInvalidBrowserInfo: $('#spanInvalidBrowserInfo'),
+        spanDesktopMobileUsage: $('#spanDesktopMobileUsage'),
+        spanIPDevice: $('#spanIPDevice'),
+        spanTotalLogin: $('#spanTotalLogin'),
         spanLblNextCategoryScanDate: $('#spanLblNextCategoryScanDate'),
         spanNextCategoryScanDate: $('#spanNextCategoryScanDate'),
         spanLblLastTicketDate: $('#spanLblLastTicketDate'),
@@ -232,17 +232,38 @@
             },
             success: function (response) {
                 if (response !== null) {
-                    domElements.spanDesktopUsage.html(response.DesktopUsage + " (" + response.DesktopUsagePercent +"%)");
-                    domElements.spanMobileUsage.html(response.MobileUsage + " (" + response.MobileUsagePercent + "%)");
-                    domElements.spanOthersUsage.html(response.OthersUsage + " (" + response.OthersUsagePercent + "%)");
-                    domElements.spanLoginCount.html(response.LoginCount);
-                    domElements.spanIPDeviceCount.html(response.IPCount + " / " + response.DeviceCount);
+                    domElements.spanBot.html(FormatNumber(response.BotTrans, response.BotTransPercentage, 1));
+                    domElements.spanInvalidBrowserInfo.html(FormatNumber(response.InvalidBrowser, response.InvalidBrowserPercentage, 1));
+                    domElements.spanDesktopMobileUsage.html(FormatNumber(response.DesktopUsage, response.MobileUsage, 2));
+                    domElements.spanIPDevice.html(FormatNumber(response.IPCount, response.DeviceCount, 2));
+                    domElements.spanTotalLogin.html(FormatNumber(response.LoginCount, null, 3));
                 }
             },
             error: function (errMsg) {
                 console.log(errMsg);
             }
         });
+    }
+
+
+    function FormatNumber(number1, number2, type) {
+        if (type == 1 && number1 != null) {
+            return FormatNumberUnit(number1) +  " (" + number2 + "%)";
+        }
+
+        if (type == 2 && number1 != null && number2 != null) {
+            return FormatNumberUnit(number1) + " / " + FormatNumberUnit(number2);
+        }
+
+        if (type == 3 && number1 != null) {
+            return FormatNumberUnit(number1);
+        }
+
+        return "-";
+    }
+
+    function FormatNumberUnit(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
     function GetCustProfileDates() {
