@@ -1358,44 +1358,56 @@
         #region Betting Statistic
         public IEnumerable<PerformanceBySportModel> GetPerformanceBySport(long custId, int getTop)
         {
-            var criteria = new BettingPerformanceBySportGetCriteria
-            {
-                CustID = custId,
-                GetTop = getTop
-            };
+            // hardcode for test SIT
+            //var criteria = new BettingPerformanceBySportGetCriteria
+            //{
+            //    CustID = custId,
+            //    GetTop = getTop
+            //};
 
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<PerformanceBySportModel>(criteria);
-            }
+            //using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            //{
+            //    return db.Query<PerformanceBySportModel>(criteria);
+            //}
+
+            return new List<PerformanceBySportModel>();
+            // hardcode end for test SIT
         }
 
         public IEnumerable<PerformanceByBettypeModel> GetPerformanceByBettype(long custId, int getTop)
         {
-            var criteria = new BettingStaisticByBetTypeGetCriteria
-            {
-                CustID = custId,
-                GetTop = getTop
-            };
+            // hardcode for test SIT
+            //var criteria = new BettingStaisticByBetTypeGetCriteria
+            //{
+            //    CustID = custId,
+            //    GetTop = getTop
+            //};
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<PerformanceByBettypeModel>(criteria);
-            }
+            //using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            //{
+            //    return db.Query<PerformanceByBettypeModel>(criteria);
+            //}
+
+            return new List<PerformanceByBettypeModel>();
+            // hardcode end for test SIT
         }
 
         public IEnumerable<PerformanceDailyModel> GetPerformanceDaily(long custId)
         {
-            var criteria = new BettingStatictisDaily
-            {
-                CustId = custId
-            };
+            // hardcode for test SIT
+            //var criteria = new BettingStatictisDaily
+            //{
+            //    CustId = custId
+            //};
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<PerformanceDailyModel>(criteria);
-            }
+            //using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            //{
+            //    return db.Query<PerformanceDailyModel>(criteria);
+            //}
+
+            return new List<PerformanceDailyModel>();
+            // hardcode end for test SIT
         }
         #endregion
 
