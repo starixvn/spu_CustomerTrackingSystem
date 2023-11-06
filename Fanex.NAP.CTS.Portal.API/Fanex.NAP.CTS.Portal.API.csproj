@@ -402,6 +402,9 @@
     <Content Include="App_Data\SQL\SPNames.AWS.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="App_Data\SQL\SPNames.SIT.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="App_Data\SQL\SPNames.KLDR.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -521,7 +524,7 @@
     <Content Include="Web.UAT.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-	<Content Include="Web.SIT.config">
+    <Content Include="Web.SIT.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Web.ConnectionString.config">
@@ -544,7 +547,7 @@
     <Content Include="Web.ConnectionString.AWS.config">
       <DependentUpon>Web.ConnectionString.config</DependentUpon>
     </Content>
-	 <Content Include="Web.ConnectionString.SIT.config">
+    <Content Include="Web.ConnectionString.SIT.config">
     <Content Include="Web.ConnectionString.KLDR.config">
       <DependentUpon>Web.ConnectionString.config</DependentUpon>
     </Content>
