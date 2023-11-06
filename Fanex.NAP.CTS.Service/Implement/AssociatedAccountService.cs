@@ -7,14 +7,11 @@ using Fanex.NAP.CTS.Model.AssociatedAccountMonitor;
 using Fanex.NAP.CTS.Model.DTO;
 using Fanex.NAP.CTS.Resource.Consts;
 using Fanex.NAP.CTS.Service.Interface;
-using Fanex.NAP.CTS.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Fanex.NAP.SPU.Graph.Core;
 using Fanex.NAP.CTS.Criteria.Api;
-using Fanex.NAP.CTS.Model.GraphDB;
-using Fanex.NAP.CTS.Criteria.Account.Associated;
 using Fanex.NAP.CTS.Model.Account;
 
 namespace Fanex.NAP.CTS.Service.Implement
@@ -189,19 +186,6 @@ namespace Fanex.NAP.CTS.Service.Implement
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<AssociatedAccountModel>(criteria);
-            }
-        }
-
-        public IEnumerable<CustomerByGraphDB> GetAssociationByIP(string custIDs)
-        {
-            var criteria = new GetAssociationByIPByCustIdCriteria()
-            {
-                CustIDs = custIDs 
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<CustomerByGraphDB>(criteria);
             }
         }
     }

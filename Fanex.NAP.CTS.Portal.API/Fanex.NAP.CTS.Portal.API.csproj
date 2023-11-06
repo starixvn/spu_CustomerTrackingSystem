@@ -460,7 +460,6 @@
     <Content Include="App_Data\Graph\scripts\GetFlaggedAssociationByDeviceByCustIdLevel2.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetFlaggedAssociationByManualByCustIdLevel1.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetFlaggedAssociationByManualByCustIdLevel2.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetCustomerByCustId.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationByCustIdLevel1.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationByCustIdLevel2.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetDevicesIdByCustId.scrypt" />

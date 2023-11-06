@@ -51,7 +51,6 @@
     <Compile Include="Account\Associated\GetAssociationByIPTypeCriteria.cs" />
     <Compile Include="Account\Associated\GetAssociationByOTGBCriteria.cs" />
     <Compile Include="Account\Associated\GetCoupleFraudDetailCriteria.cs" />
-    <Compile Include="Account\Associated\GetAssociationByIPByCustIdCriteria.cs" />
     <Compile Include="Account\Associated\GetAssociationByIPInfoCriteria.cs" />
     <Compile Include="Account\Associated\GetAssociationProfileCriteria.cs" />
     <Compile Include="Account\Associated\GetCategoryInfoCriteria.cs" />

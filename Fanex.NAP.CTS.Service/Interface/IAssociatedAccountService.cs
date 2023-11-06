@@ -2,8 +2,6 @@
 using Fanex.NAP.CTS.Model.Account;
 using Fanex.NAP.CTS.Model.AssociatedAccountMonitor;
 using Fanex.NAP.CTS.Model.DTO;
-using Fanex.NAP.CTS.Model.GraphDB;
-using Fanex.NAP.CTS.ViewModel;
 using System.Collections.Generic;
 
 namespace Fanex.NAP.CTS.Service.Interface
@@ -25,7 +23,5 @@ namespace Fanex.NAP.CTS.Service.Interface
         IEnumerable<CustomerEvidenceForTW> GetFlaggedEvidenceByLevel2AssForAPI(string custIdList);
 
         IEnumerable<AssociatedAccountModel> GetAssociationForExtAcc(int custId);
-
-        IEnumerable<CustomerByGraphDB> GetAssociationByIP(string custIDs);
     }
 }
