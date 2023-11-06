@@ -18,7 +18,6 @@
 		<GraphSetting Key="GetFlaggedAssociationByManualByCustIdLevel1" SpName="GetFlaggedAssociationByManualByCustIdLevel1" DbName="GraphDB" TimeOut="300" />
 		<GraphSetting Key="GetFlaggedAssociationByManualByCustIdLevel2" SpName="GetFlaggedAssociationByManualByCustIdLevel2" DbName="GraphDB" TimeOut="300" />
 		<GraphSetting Key="GroupCustomerByAssociationOneLevel" SpName="GroupCustomerByAssociationOneLevel" DbName="GraphDB" />
-		<GraphSetting Key="GetCustomerByCustId" SpName="GetCustomerByCustId" DbName="GraphDB" />
 		<GraphSetting Key="GetAssociationByCustIdLevel1" SpName="GetAssociationByCustIdLevel1" DbName="GraphDB" />
 		<GraphSetting Key="GetAssociationByCustIdLevel2" SpName="GetAssociationByCustIdLevel2" DbName="GraphDB" />
 		<GraphSetting Key="GetAssociatedDevicesByCustId" SpName="GetAssociatedDevicesByCustId" DbName="GraphDB" />
