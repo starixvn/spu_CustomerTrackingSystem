@@ -3,6 +3,7 @@
     let domElementFeedbacks = {
         divIncorrectReasonFeedback: $('#divIncorrectReasonFeedback'),
         hdMMUserCommentID: $('#hdMMUserCommentID'),
+        hdSaveDraftTicked: $('#hdSaveDraftTicked'),
         btnReasonFeedback: $('#btnReasonFeedback'),
         grpInCorrectReason: $('#grpInCorrectReason'),
         grpRadioCorrectReason: $('#grpRadioCorrectReason'),
@@ -11,6 +12,11 @@
         btnSave: $('#btnSave'),
         btnSaveAndClose: $('#btnSaveAndClose'),
         tblFeedback: $('#tblFeedback')
+    }
+
+    let cacheParams = {
+        ReasonList: null,
+        ReasonCheckedList: null
     }
 
     let parameter = {
@@ -27,24 +33,28 @@
             width: '1250px',
             title: 'MATCH MONITOR - INCORRECT REASON FEEDBACK',
             resizable: false,
-            draggable: true,
-            close: function () {
-                ResetInputFeedback();
+            draggable: true,           
+            close: function () {                
+                if (domElementFeedbacks.hdSaveDraftTicked.val() == '') {
+                    ResetInputFeedback(false);
+                }
                 ClearElement();
-                $(this).dialog('close');           
+
+                $(this).dialog('close');
             }
         });
 
-        domElementFeedbacks.btnCancel.off('click').on('click', function () {            
+        domElementFeedbacks.btnCancel.off('click').on('click', function () {
+            domElementFeedbacks.hdSaveDraftTicked.val('1');
             domElementFeedbacks.divIncorrectReasonFeedback.dialog('close');
         });
 
         domElementFeedbacks.btnSave.off('click').on('click', function () {                       
-            SaveUserFeedback(false);           
+            SaveUserFeedback(false);              
         }); 
 
         domElementFeedbacks.btnSaveAndClose.off('click').on('click', function () {                     
-            SaveUserFeedback(true);           
+            SaveUserFeedback(true);                  
         }); 
       
         LoadGrid();
@@ -52,7 +62,7 @@
         ReloadGrid();
     }
 
-    function BuildGroupIncorrectReason(reasonList) {       
+    function BuildGroupIncorrectReason(reasonList, reasonCheckedList) {
         if (reasonList.length > 0) {
             $('.flex-item', domElementFeedbacks.grpInCorrectReason).each(function (idx, ele) {
                 let reason = $(ele).attr('reason');
@@ -61,8 +71,16 @@
                         $(ele).addClass('hidden');
                     } else {
                         $(ele).removeClass('hidden');
+
+                        if (domElementFeedbacks.hdSaveDraftTicked.val() == '') {
+                            if (reasonCheckedList.indexOf(reason) != -1) {
+                                $('input[name=incorrectreason]', ele).prop('checked', true);
+                            } else {
+                                $('input[name=incorrectreason]', ele).prop('checked', false);
+                            }
+                        }                        
                     }
-                }                
+                }
             });
         } else {
             $('.flex-item', domElementFeedbacks.grpInCorrectReason).each(function (idx, ele) {
@@ -93,13 +111,17 @@
             },
             success: function (response) {
                 common.showSuccess("Thanks very much. We're grateful for your feedback.");
-                
+                domElementFeedbacks.hdSaveDraftTicked.val('');
+
+                ResetInputFeedback(false);
+
                 if (!isClosePopup) {
-                    ReloadGrid();
-                    ResetInputFeedback();
+                    ReloadGrid();                    
                 } else {
                     domElementFeedbacks.btnSave.removeClass('edit');
-                }                               
+                }   
+                
+                BuildGroupIncorrectReason(cacheParams.ReasonList, cacheParams.ReasonCheckedList);
             },
             complete: function () {
                 domElementFeedbacks.tblFeedback.find('tbody').removeClass('loading');                
@@ -186,6 +208,7 @@
             },
             success: function (response) {
                 common.showSuccess("Thanks very much. We're grateful for your feedback.");
+                domElementFeedbacks.hdSaveDraftTicked.val('');
 
                 ReloadGrid();                
             },
@@ -282,7 +305,7 @@
                     }, createdCell: (cell, _, row) => {
                         $('.icon-edit', cell).click(() => {
                             $('td #sub-icon').addClass('none-pointer');
-                            ResetInputFeedback();
+                            ResetInputFeedback(true);
                             LoadUpdateUserFeedback(row);
                         });
 
@@ -302,14 +325,17 @@
         })
     }
 
-    function ResetInputFeedback() {
+    function ResetInputFeedback(isEdit) {
         domElementFeedbacks.btnSave.removeClass('edit');
         domElementFeedbacks.txtComment.val('');
 
         $('input[id=COthers]', domElementFeedbacks.grpRadioCorrectReason).prop('checked', true);
 
         $('.flex-item', domElementFeedbacks.grpInCorrectReason).each(function (idx, ele) {
-            $('input[name=incorrectreason]', ele).prop('checked', false);
+            if (isEdit) {
+                $('input[name=incorrectreason]', ele).prop('checked', false);
+            }
+            
             $('input[name=from]', ele).val('');
             $('input[name=to]', ele).val('');
         });
@@ -328,7 +354,7 @@
         }
     }
    
-    this.Initial = function (matchID, isLive, betTypeID, betID, sportType, reasonList) {
+    this.Initial = function (matchID, isLive, betTypeID, betID, sportType, reasonList, reasonCheckedList) {
 
         parameter.MatchID = matchID;
         parameter.IsLive = isLive;
@@ -337,7 +363,10 @@
         parameter.SportType = sportType;
         parameter.ReasonList = reasonList;
 
-        BuildGroupIncorrectReason(reasonList);
+        cacheParams.ReasonList = reasonList;
+        cacheParams.ReasonCheckedList = reasonCheckedList;
+
+        BuildGroupIncorrectReason(reasonList, reasonCheckedList);
 
         LoadIncorrectReasonFeedback();
         

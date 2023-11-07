@@ -71,7 +71,7 @@
             {
                 IsHostPermission = isHostPermission,
                 CustId = userId,
-                Reasons = mmStatic.Reasons,
+                Reasons = mmStatic.Reasons.OrderBy(x => x.ReasonName),
                 Sports = mmStatic.Sports
             });
         }
@@ -881,22 +881,22 @@
             result = data.GroupBy(g => g.MMUserCommentID)
                 .Select(g => new
                 {
-                    MMUserCommentID = g.Key,                    
-                    IncorrectReasonTrans = g.Where(x => !string.IsNullOrEmpty(x.IncorrectReason)).Select(x => 
-                    {
-                        if (string.IsNullOrEmpty(x.FromTransInfo) && string.IsNullOrEmpty(x.ToTransInfo))
-                        {
-                            return "<span>" + x.IncorrectReason + "<br/></span>";
-                        }
-                        return "<span>" + x.IncorrectReason + " (" + x.FromTransInfo + " - " + x.ToTransInfo + ") <br/></span>";
-                    }),
+                    MMUserCommentID = g.Key,
+                    IncorrectReasonTrans = g.Where(x => !string.IsNullOrEmpty(x.IncorrectReason)).OrderBy(x => x.IncorrectReason).Select(x =>
+                      {
+                          if (string.IsNullOrEmpty(x.FromTransInfo) && string.IsNullOrEmpty(x.ToTransInfo))
+                          {
+                              return "<span>" + x.IncorrectReason + "<br/></span>";
+                          }
+                          return "<span>" + x.IncorrectReason + " (" + x.FromTransInfo + " - " + x.ToTransInfo + ") <br/></span>";
+                      }),
                     IncorrectReasonRaw = g.Where(x => !string.IsNullOrEmpty(x.IncorrectReason)).Select(x => new
                     {
                         IncorrectReason = x.IncorrectReason,
                         FromTransInfo = x.FromTransInfo,
                         ToTransInfo = x.ToTransInfo
                     }),
-                    CorrectReason = g.Where(x => !string.IsNullOrEmpty(x.CorrectReason)).FirstOrDefault()?.CorrectReason ?? "Others",                 
+                    CorrectReason = g.Where(x => !string.IsNullOrEmpty(x.CorrectReason)).FirstOrDefault()?.CorrectReason ?? "Others",
                     Item = g.FirstOrDefault()
                 }).Select(x => new GetMMUserFeedbackViewModel
                 {

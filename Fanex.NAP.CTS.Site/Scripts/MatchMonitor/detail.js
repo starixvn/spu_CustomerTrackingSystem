@@ -2398,11 +2398,9 @@ function MatchMonitorDetail() {
             let betTypeID = GetBetTypeSelected();
             let betID = GetBetIDSelected();
             let reasonList = cacheFilterDefault.ReasonList;
+            let reasonCheckedList = GetSelectDataFilter(domElements.cbbReason, true);
 
-            //reasonList.push("GB");
-            //reasonList.push("HED");
-
-            reasonFeedback.Initial(domElements.matchID, domElements.cbbMarket.val(), betTypeID, betID, domElements.sportType, reasonList);
+            reasonFeedback.Initial(domElements.matchID, domElements.cbbMarket.val(), betTypeID, betID, domElements.sportType, reasonList, reasonCheckedList);
         });
     }
 
