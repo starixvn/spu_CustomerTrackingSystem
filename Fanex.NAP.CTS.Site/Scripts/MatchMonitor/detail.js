@@ -1802,6 +1802,70 @@ function MatchMonitorDetail() {
 
     //#endregion Export To Excel  
 
+    //#region Feedback
+    function GetRangeTransTime() {
+        let rangeTransTime = [];
+        let currentMinTime = '';
+        let currentMaxTime = '';
+
+        if (isDisplaySingleGrid) {
+            domElements.tblMMSG.DataTable().rows(function (idx, data, node) {
+                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                    if (currentMinTime == '') {
+                        currentMinTime = data.TransTimeToString;
+                        currentMaxTime = data.TransTimeToString;
+                    } else {
+                        if (currentMinTime > data.TransTimeToString) {
+                            currentMinTime = data.TransTimeToString;
+                        }
+                        if (currentMaxTime < data.TransTimeToString) {
+                            currentMaxTime = data.TransTimeToString;
+                        }
+                    }                 
+                }
+            })            
+        } else {
+            domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
+                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                    if (currentMinTime == '') {
+                        currentMinTime = data.TransTimeToString;
+                        currentMaxTime = data.TransTimeToString;
+                    } else {
+                        if (currentMinTime > data.TransTimeToString) {
+                            currentMinTime = data.TransTimeToString;
+                        }
+                        if (currentMaxTime < data.TransTimeToString) {
+                            currentMaxTime = data.TransTimeToString;
+                        }
+                    }
+                }
+            });
+
+            domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
+                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                    if (currentMinTime == '') {
+                        currentMinTime = data.TransTimeToString;
+                        currentMaxTime = data.TransTimeToString;
+                    } else {
+                        if (currentMinTime > data.TransTimeToString) {
+                            currentMinTime = data.TransTimeToString;
+                        }
+                        if (currentMaxTime < data.TransTimeToString) {
+                            currentMaxTime = data.TransTimeToString;
+                        }
+                    }
+                }
+            })
+        }
+
+        rangeTransTime.push(currentMinTime); 
+        rangeTransTime.push(currentMaxTime); 
+
+        return rangeTransTime;
+    }
+
+    //#endregion Feedback
+
     //#region Event OnChange
 
     function ChangeCbbTypeOfTickets() {
@@ -2399,8 +2463,9 @@ function MatchMonitorDetail() {
             let betID = GetBetIDSelected();
             let reasonList = cacheFilterDefault.ReasonList;
             let reasonCheckedList = GetSelectDataFilter(domElements.cbbReason, true);
+            let rangeTransTime = GetRangeTransTime();           
 
-            reasonFeedback.Initial(domElements.matchID, domElements.cbbMarket.val(), betTypeID, betID, domElements.sportType, reasonList, reasonCheckedList);
+            reasonFeedback.Initial(domElements.matchID, domElements.cbbMarket.val(), betTypeID, betID, domElements.sportType, reasonList, reasonCheckedList, rangeTransTime);
         });
     }
 

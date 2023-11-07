@@ -16,7 +16,8 @@
 
     let cacheParams = {
         ReasonList: null,
-        ReasonCheckedList: null
+        ReasonCheckedList: null,
+        RangeTransTime: null
     }
 
     let parameter = {
@@ -62,7 +63,7 @@
         ReloadGrid();
     }
 
-    function BuildGroupIncorrectReason(reasonList, reasonCheckedList) {
+    function BuildGroupIncorrectReason(reasonList, reasonCheckedList, rangeTransTime) {
         if (reasonList.length > 0) {
             $('.flex-item', domElementFeedbacks.grpInCorrectReason).each(function (idx, ele) {
                 let reason = $(ele).attr('reason');
@@ -75,6 +76,11 @@
                         if (domElementFeedbacks.hdSaveDraftTicked.val() == '') {
                             if (reasonCheckedList.indexOf(reason) != -1) {
                                 $('input[name=incorrectreason]', ele).prop('checked', true);
+                                if (rangeTransTime != undefined && rangeTransTime.length == 2) {
+                                    $('input[name=from]', ele).val(rangeTransTime[0]);
+                                    $('input[name=to]', ele).val(rangeTransTime[1]);
+                                }
+                                
                             } else {
                                 $('input[name=incorrectreason]', ele).prop('checked', false);
                             }
@@ -120,8 +126,8 @@
                 } else {
                     domElementFeedbacks.btnSave.removeClass('edit');
                 }   
-                
-                BuildGroupIncorrectReason(cacheParams.ReasonList, cacheParams.ReasonCheckedList);
+
+                BuildGroupIncorrectReason(cacheParams.ReasonList, cacheParams.ReasonCheckedList, cacheParams.RangeTransTime);
             },
             complete: function () {
                 domElementFeedbacks.tblFeedback.find('tbody').removeClass('loading');                
@@ -354,7 +360,7 @@
         }
     }
    
-    this.Initial = function (matchID, isLive, betTypeID, betID, sportType, reasonList, reasonCheckedList) {
+    this.Initial = function (matchID, isLive, betTypeID, betID, sportType, reasonList, reasonCheckedList, rangeTransTime) {
 
         parameter.MatchID = matchID;
         parameter.IsLive = isLive;
@@ -365,8 +371,9 @@
 
         cacheParams.ReasonList = reasonList;
         cacheParams.ReasonCheckedList = reasonCheckedList;
+        cacheParams.RangeTransTime = rangeTransTime;
 
-        BuildGroupIncorrectReason(reasonList, reasonCheckedList);
+        BuildGroupIncorrectReason(reasonList, reasonCheckedList, rangeTransTime);
 
         LoadIncorrectReasonFeedback();
         
