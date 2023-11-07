@@ -1278,9 +1278,9 @@
                         BetTypes = string.Join(", ", betTypeList),
                         IP = ip
                     };
-                });               
+                });
             }
-            
+
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
@@ -1303,9 +1303,9 @@
                     result = RearrangeAssByIPTicketStake(mainTickets);
                 }
             }
-           
+
             return Json(result, JsonRequestBehavior.AllowGet);
-        }        
+        }
 
         private IEnumerable<AssByIPTicketStakeViewModel> RearrangeAssByIPTicketStake(IEnumerable<MainTicketDetailModel> mainTickets)
         {
@@ -1610,7 +1610,7 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-#endregion Chain To Evidence
+        #endregion Chain To Evidence
 
         #region Transaciton History
 
@@ -1696,12 +1696,12 @@
             if (classification != null && classification.Any())
             {
                 categoryList = classification.Select(x => new CustomerCategoryViewModel
-                    {
-                        CategoryId = x.CategoryID,
-                        CategoryType = x.CategoryType,
-                        CategoryName = x.CategoryName ?? string.Empty,
-                        IsProblemAccount = x.CategoryType == 2
-                    }).ToList();
+                {
+                    CategoryId = x.CategoryID,
+                    CategoryType = x.CategoryType,
+                    CategoryName = x.CategoryName ?? string.Empty,
+                    IsProblemAccount = x.CategoryType == 2
+                }).ToList();
 
                 isVVip = categoryList.Any(x => x.CategoryId == (int)CustomerCategoryID.VVIP);
                 isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
@@ -1794,6 +1794,7 @@
             var twGroupBettingRate = cc.TWGroupBettingRate;
             var twTicketRejectRate = cc.TWTicketRejectRate;
             var twDesktopTicket = cc.TWDesktopUsageRate;
+            var firstTWGBCount = cc.FirstTWGBCount;
 
             switch (cc.CategoryID)
             {
@@ -1825,6 +1826,10 @@
                 case (int)ClassificationSourceType.GoodMember112:
                 case (int)ClassificationSourceType.GoodMember113:
                     spanReason += $"Turnover: {turnOver} | Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
+                    break;
+
+                case (int)ClassificationSourceType.NewMember39:
+                    spanReason += $"Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Group Betting Bet Count: {firstTWGBCount} | Sport: {GetSportNameNewGroupBettingFromSportType(cc)}";
                     break;
 
                 case (int)ClassificationSourceType.Probation57:
@@ -1884,6 +1889,18 @@
             }
 
             return spanReason;
+        }
+
+        private string GetSportNameNewGroupBettingFromSportType(CustomerClassificationHistoryModel cc)
+        {
+            switch (cc.SportType)
+            {
+                case (int)CustomerCategorySportType.Soccer:
+                case (int)CustomerCategorySportType.Basketball:
+                    return cc.SportName;
+                default:
+                    return "Socer/Basketball";
+            }
         }
 
         private string MappingReasonBySourceTypeID(string spanReason, CustomerClassificationHistoryModel cc, int roleID)
@@ -2005,7 +2022,7 @@
                 UserName = userName,
                 IsRobotUser = isRobotUser,
                 IsPinCategory = isPinCategory,
-                ProblemAccountList = _pamService.GetProblemAccountCategories().OrderBy(x=>x.Priorty)
+                ProblemAccountList = _pamService.GetProblemAccountCategories().OrderBy(x => x.Priorty)
             };
 
             var classifications = _accountService.GetCustomerClassification(ctsCustID);
@@ -2017,7 +2034,7 @@
                     CategoryId = x.CategoryID,
                     CategoryName = x.CategoryName ?? string.Empty,
                     CategoryGroup = x.CategoryGroup
-                });                                  
+                });
 
                 result.IsVVip = classifications.Any(x => x.CategoryID == (int)CustomerCategoryID.VVIP);
             }

@@ -35,6 +35,8 @@
 
         public long TWBetCount { get; set; }
 
+        public short FirstTWGBCount { get; set; }
+
         public decimal TWGroupBettingRate { get; set; }
 
         public decimal TWTicketRejectRate { get; set; }
