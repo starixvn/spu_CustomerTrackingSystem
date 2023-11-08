@@ -1794,7 +1794,7 @@
             var twGroupBettingRate = cc.TWGroupBettingRate;
             var twTicketRejectRate = cc.TWTicketRejectRate;
             var twDesktopTicket = cc.TWDesktopUsageRate;
-            var firstTWGBCount = cc.FirstTWGBCount;
+            var first5TWGBTicketCount = cc.First5TWGBTicketCount;
 
             switch (cc.CategoryID)
             {
@@ -1829,7 +1829,7 @@
                     break;
 
                 case (int)ClassificationSourceType.NewMember39:
-                    spanReason += $"Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Group Betting Bet Count: {firstTWGBCount} | Sport: {GetSportNameNewGroupBettingFromSportType(cc)}";
+                    spanReason += $"Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Group Betting Bet Count: {first5TWGBTicketCount} | Sport: {GetSportNameNewGroupBettingFromSportType(cc)}";
                     break;
 
                 case (int)ClassificationSourceType.Probation57:
