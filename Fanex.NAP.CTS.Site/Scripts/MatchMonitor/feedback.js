@@ -35,10 +35,12 @@
             title: 'MATCH MONITOR - INCORRECT REASON FEEDBACK',
             resizable: false,
             draggable: true,           
-            close: function () {                
-                if (domElementFeedbacks.hdSaveDraftTicked.val() == '') {
-                    ResetInputFeedback(false);
-                }
+            close: function () {     
+                domElementFeedbacks.hdSaveDraftTicked.val('1');
+
+                //if (domElementFeedbacks.hdSaveDraftTicked.val() == '') {
+                //    ResetInputFeedback(false);
+                //}
                 ClearElement();
 
                 $(this).dialog('close');
@@ -76,13 +78,19 @@
                         if (domElementFeedbacks.hdSaveDraftTicked.val() == '') {
                             if (reasonCheckedList.indexOf(reason) != -1) {
                                 $('input[name=incorrectreason]', ele).prop('checked', true);
-                                if (rangeTransTime != undefined && rangeTransTime.length == 2) {
-                                    $('input[name=from]', ele).val(rangeTransTime[0]);
-                                    $('input[name=to]', ele).val(rangeTransTime[1]);
-                                }
-                                
                             } else {
                                 $('input[name=incorrectreason]', ele).prop('checked', false);
+                            }
+                        }
+
+                        if ($('input[name=incorrectreason]:checked', ele).length > 0) {
+                            if (rangeTransTime != undefined && rangeTransTime.length == 2) {
+                                if (rangeTransTime[0] != '') {
+                                    $('input[name=from]', ele).val(rangeTransTime[0]);
+                                }
+                                if (rangeTransTime[1] != '') {
+                                    $('input[name=to]', ele).val(rangeTransTime[1]);
+                                }                                                               
                             }
                         }                        
                     }
@@ -369,14 +377,29 @@
         parameter.SportType = sportType;
         parameter.ReasonList = reasonList;
 
+        if (cacheParams.ReasonCheckedList != null) {
+            let isKeepSaveDraft = common.CompareArraysOfObjects(reasonCheckedList, cacheParams.ReasonCheckedList);
+
+            if (!isKeepSaveDraft) {
+                domElementFeedbacks.hdSaveDraftTicked.val('');
+                ResetInputFeedback(false);
+            }            
+        }
+
         cacheParams.ReasonList = reasonList;
         cacheParams.ReasonCheckedList = reasonCheckedList;
-        cacheParams.RangeTransTime = rangeTransTime;
+        cacheParams.RangeTransTime = rangeTransTime;        
 
         BuildGroupIncorrectReason(reasonList, reasonCheckedList, rangeTransTime);
 
         LoadIncorrectReasonFeedback();
-        
+
+        $(document).keydown(function (e) {
+            // Check if the key pressed is the "Esc" key (keyCode 27)
+            if (e.keyCode === 27) {
+                domElementFeedbacks.hdSaveDraftTicked.val('1');
+            }
+        });
     }
 
 }

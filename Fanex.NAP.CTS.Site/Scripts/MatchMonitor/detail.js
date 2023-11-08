@@ -2456,14 +2456,15 @@ function MatchMonitorDetail() {
 
         Resize();
 
-        $('#btnReasonFeedback').on('click', function () {
-            var reasonFeedback = new feedback();
+        var reasonFeedback = new feedback();
 
+        $('#btnReasonFeedback').on('click', function () {
+            
             let betTypeID = GetBetTypeSelected();
             let betID = GetBetIDSelected();
             let reasonList = cacheFilterDefault.ReasonList;
             let reasonCheckedList = GetSelectDataFilter(domElements.cbbReason, true);
-            let rangeTransTime = GetRangeTransTime();           
+            let rangeTransTime = GetRangeTransTime();
 
             reasonFeedback.Initial(domElements.matchID, domElements.cbbMarket.val(), betTypeID, betID, domElements.sportType, reasonList, reasonCheckedList, rangeTransTime);
         });
