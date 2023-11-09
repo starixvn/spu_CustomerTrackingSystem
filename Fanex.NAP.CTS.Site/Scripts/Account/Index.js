@@ -17,7 +17,7 @@
         tabAssociatedAccount: $("#associated_account"),
         tabChainEvidence: $("#chains_evidence"),
         tabCustomerCategory: $("#customer_category"),
-        //tabTransactionHistory: $("#trans_history"),
+        tabTransactionHistory: $("#trans_history"),
         tabRobotClassification: $("#robot_classification"),
         tabRobotBetting: $('#robot_betting'),     
         spanAssAccByBettingPattern: $('#spanAssAccByBettingPattern'),
