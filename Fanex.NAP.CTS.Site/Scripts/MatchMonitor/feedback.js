@@ -1,17 +1,17 @@
 ﻿function feedback() {
 
-    let domElementFeedbacks = {
+    let domElementFeedbacks = {        
         divIncorrectReasonFeedback: $('#divIncorrectReasonFeedback'),
         hdMMUserCommentID: $('#hdMMUserCommentID'),
         hdSaveDraftTicked: $('#hdSaveDraftTicked'),
+        tblFeedback: $('#tblFeedback'),
         btnReasonFeedback: $('#btnReasonFeedback'),
         grpInCorrectReason: $('#grpInCorrectReason'),
         grpRadioCorrectReason: $('#grpRadioCorrectReason'),
         txtComment: $('#txtComment'),
         btnCancel: $('#btnCancel'),
         btnSave: $('#btnSave'),
-        btnSaveAndClose: $('#btnSaveAndClose'),
-        tblFeedback: $('#tblFeedback')
+        btnSaveAndClose: $('#btnSaveAndClose'),        
     }
 
     let cacheParams = {
@@ -37,10 +37,7 @@
             draggable: true,           
             close: function () {     
                 domElementFeedbacks.hdSaveDraftTicked.val('1');
-
-                //if (domElementFeedbacks.hdSaveDraftTicked.val() == '') {
-                //    ResetInputFeedback(false);
-                //}
+               
                 ClearElement();
 
                 $(this).dialog('close');
@@ -392,14 +389,14 @@
 
         BuildGroupIncorrectReason(reasonList, reasonCheckedList, rangeTransTime);
 
-        LoadIncorrectReasonFeedback();
-
-        $(document).keydown(function (e) {
-            // Check if the key pressed is the "Esc" key (keyCode 27)
-            if (e.keyCode === 27) {
-                domElementFeedbacks.hdSaveDraftTicked.val('1');
-            }
-        });
+        LoadIncorrectReasonFeedback();        
     }
+
+    $(document).keydown(function (e) {
+        // Check if the key pressed is the "Esc" key (keyCode 27)
+        if (e.keyCode === 27) {           
+            domElementFeedbacks.hdSaveDraftTicked.val('1');            
+        }
+    });
 
 }
