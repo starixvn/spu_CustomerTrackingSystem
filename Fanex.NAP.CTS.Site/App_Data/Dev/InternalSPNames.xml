@@ -17,7 +17,7 @@
 		<Setting Key="DCS_DC_Transaction_GetHistory" SpName="DCS_DC_Transaction_GetHistory" DbName="MySQL.DCS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Common_ValidateUsername" SpName="CTS_DC_Common_ValidateUsername" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Common_GetSites" SpName="CTS_DC_Common_GetSites" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_Common_CustomerClass_Get" SpName="CTS_DC_Common_CustomerClass_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_Common_CustomerClass_Get" SpName="CTS_DC_Common_CustomerClass_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function name="CustInfo">
@@ -29,7 +29,7 @@
 			<Mapping DataField="SubscriberId" ObjectProperty="Id" Class="Subscriber" />
 			<Mapping DataField="SubscriberName" ObjectProperty="Name" Class="Subscriber" />
 		</Setting>
-		<Setting Key="CTS_DC_CustInfo_GetByCTSCustID" SpName="CTS_DC_CustInfo_GetByCTSCustID_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustInfo_GetByCTSCustID" SpName="CTS_DC_CustInfo_GetByCTSCustID" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_GetFlagged" SpName="CTS_DC_CustInfo_GetFlagged" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_GetCustomerRoles" SpName="CTS_DC_CustInfo_GetCustomerRoles" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_GetCustIDsRole" SpName="CTS_DC_CustInfo_GetCustIDsRole" DbName="MySQL.CTS_DataCenter.Reporter" />
@@ -132,10 +132,10 @@
 	</Function>
 
 	<Function name="Subscriber">
-		<Setting Key="CTS_DC_Subscriber_GetAll " SpName="CTS_DC_Subscriber_GetAll_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_Subscriber_GetAll " SpName="CTS_DC_Subscriber_GetAll" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Subscriber_GetDetails" SpName="CTS_DC_Subscriber_GetDetails" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Subscriber_Remove" SpName="CTS_DC_Subscriber_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_Subscriber_Update" SpName="CTS_DC_Subscriber_Update_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_Subscriber_Update" SpName="CTS_DC_Subscriber_Update" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CTSCustomer_UpdateSubscriberIDBySiteID" SpName="CTS_DC_CTSCustomer_UpdateSubscriberIDBySiteID" DbName="MySQL.CTS_DataCenter.Admin" />
 	</Function>
 
@@ -147,7 +147,7 @@
 	</Function>
 
 	<Function name="LatestTransaction">
-		<Setting Key="DCS_DC_Transaction_GetLatest" SpName="DCS_DC_Transaction_GetLatest_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
+		<Setting Key="DCS_DC_Transaction_GetLatest" SpName="DCS_DC_Transaction_GetLatest" DbName="MySQL.DCS_DataCenter.Reporter" />
 	</Function>
 
 	<Function name="MatchMonitor">
@@ -160,10 +160,10 @@
 		<Setting Key="CTS_DC_RobotClassification_GetRobotStatusByTransList" SpName="CTS_DC_RobotClassification_GetRobotStatusByTransList" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_MatchMonitor_GetStaticList " SpName="CTS_DC_MatchMonitor_GetStaticList" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_MatchMonitor_Details_MergeGroup" SpName="CTS_DC_MatchMonitor_Details_MergeGroup" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_MatchMonitor_UserComment_Get" SpName="CTS_DC_MatchMonitor_UserComment_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_MatchMonitor_UserComment_Insert" SpName="CTS_DC_MatchMonitor_UserComment_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_MatchMonitor_UserComment_Update" SpName="CTS_DC_MatchMonitor_UserComment_Update_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_MatchMonitor_UserComment_Delete" SpName="CTS_DC_MatchMonitor_UserComment_Delete_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_MatchMonitor_UserComment_Get" SpName="CTS_DC_MatchMonitor_UserComment_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_MatchMonitor_UserComment_Insert" SpName="CTS_DC_MatchMonitor_UserComment_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_MatchMonitor_UserComment_Update" SpName="CTS_DC_MatchMonitor_UserComment_Update" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_MatchMonitor_UserComment_Delete" SpName="CTS_DC_MatchMonitor_UserComment_Delete" DbName="MySQL.CTS_DataCenter.Admin" />
 	</Function>
 
 	<Function name="RobotClassification">
@@ -240,7 +240,7 @@
 	</Function>
 
 	<Function name="RobotReport">
-		<Setting Key="CTS_DC_RPT_RobotStatistic" SpName="CTS_DC_RPT_RobotStatistic_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
-		<Setting Key="CTS_DC_RPT_RobotStatistic_AI" SpName="CTS_DC_RPT_RobotStatistic_AI_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
+		<Setting Key="CTS_DC_RPT_RobotStatistic" SpName="CTS_DC_RPT_RobotStatistic" DbName="MySQL.CTS_DataCenter.Reporter"/>
+		<Setting Key="CTS_DC_RPT_RobotStatistic_AI" SpName="CTS_DC_RPT_RobotStatistic_AI" DbName="MySQL.CTS_DataCenter.Reporter"/>
 	</Function>
 </Functions>
