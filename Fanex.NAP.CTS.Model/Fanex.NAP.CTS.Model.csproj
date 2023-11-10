@@ -393,6 +393,7 @@
     <Compile Include="MatchMonitor\MatchScoreModel.cs" />
     <Compile Include="MatchMonitor\MatchGroupModel.cs" />
     <Compile Include="MatchMonitor\GetMatchMonitorModel.cs" />
+    <Compile Include="MatchMonitor\UserFeedback\GetMMUserFeedbackModel.cs" />
     <Compile Include="Notification\UpdateNotifiedSettingStatusModel.cs" />
     <Compile Include="Notification\NotifiedSettingStatusModel.cs" />
     <Compile Include="Notification\ProbationMessageModel.cs" />

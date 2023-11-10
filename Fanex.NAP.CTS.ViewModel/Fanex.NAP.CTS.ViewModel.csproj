@@ -176,7 +176,6 @@
     <Compile Include="MatchMonitor\DetectGroup\DetectGroupAssociationItemViewModel.cs" />
     <Compile Include="MatchMonitor\DetectGroup\MGrItemViewModel.cs" />
     <Compile Include="MatchMonitor\DetectGroup\MGrListViewModel.cs" />
-    <Compile Include="MatchMonitor\DetectGroup\TicketSelectForMGrViewModel.cs" />
     <Compile Include="MatchMonitor\ExExcelTicketInfoViewModel.cs" />
     <Compile Include="MatchMonitor\ExExlMatchInfoViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\CCGroupViewModel.cs" />
@@ -203,6 +202,11 @@
     <Compile Include="MatchMonitor\MatchMonitorViewModel.cs" />
     <Compile Include="MatchMonitor\MMDetailMergeGroupViewModel.cs" />
     <Compile Include="MatchMonitor\TicketDetailViewModel.cs" />
+    <Compile Include="MatchMonitor\UserFeedback\DeleteUserFeedbackViewModel.cs" />
+    <Compile Include="MatchMonitor\UserFeedback\GetMMUserFeedbackViewModel.cs" />
+    <Compile Include="MatchMonitor\UserFeedback\InsertUserFeedbackViewModel.cs" />
+    <Compile Include="MatchMonitor\UserFeedback\UpdateUserFeedbackViewModel.cs" />
+    <Compile Include="MatchMonitor\UserFeedback\UserFeedbackViewModel.cs" />
     <Compile Include="Notification\NotificationMessagesViewModel.cs" />
     <Compile Include="Notification\NotificationSettingStatusViewModel.cs" />
     <Compile Include="Notification\NotificationSettingViewModel.cs" />

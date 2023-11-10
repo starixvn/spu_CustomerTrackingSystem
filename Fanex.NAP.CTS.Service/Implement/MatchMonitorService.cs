@@ -731,5 +731,70 @@
                 };
         }
 
+        #region User Feedback
+        public IEnumerable<GetMMUserFeedbackModel> GetUserFeedback(UserFeedbackViewModel para)
+        {
+            var criteria = new GetMMUserFeedbackCriteria
+            {
+                MatchID = para.MatchID,
+                BetTypeID = para.BetTypeID,
+                LiveIndicator = para.IsLive,
+                BetID = para.BetID
+            };
+
+            return repository.Fetch<GetMMUserFeedbackModel>(criteria);
+        }
+
+        public DBResult InsertUserFeedback(InsertUserFeedbackViewModel para)
+        {
+            var criteria = new InsertMMUserFeedbackCriteria
+            {
+                MatchID = para.MatchID,
+                SportType = para.SportType,
+                LiveIndicator = para.IsLive,
+                BettypeID = para.BettypeID,
+                BetID = para.BetID,
+                UserID = para.UserID,
+                UserComment = para.UserComment ?? string.Empty,
+                IncorrectReason = para.IncorrectReason,
+                CorrectReasonID = para.CorrectReasonID
+            };
+
+            repository.Fetch<DBResult>(criteria);
+
+            return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
+        }
+
+        public DBResult UpdateUserFeedback(UpdateUserFeedbackViewModel para)
+        {
+            var criteria = new UpdateMMUserFeedbackCriteria
+            {
+                UserID = para.UserID,
+                MMUserCommentID = para.MMUserCommentID,
+                UserComment = para.UserComment ?? string.Empty,
+                IncorrectReason = para.IncorrectReason,
+                CorrectReasonID = para.CorrectReasonID
+            };
+
+            repository.Fetch<DBResult>(criteria);
+
+            return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
+        }
+
+        public DBResult DeleteUserFeedback(DeleteUserFeedbackViewModel para)
+        {
+            var criteria = new DeleteMMUserFeedbackCriteria
+            {
+                UserID = para.UserID,
+                MMUserCommentID = para.MMUserCommentID
+            };
+
+            repository.Fetch<DBResult>(criteria);
+
+            return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
+        }
+
+        #endregion
+
     }
 }

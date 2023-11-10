@@ -63,6 +63,18 @@
         byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath);
 
         byte[] ExportExcelMMDetailDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems
-            , string fileName, string templatePath);       
+            , string fileName, string templatePath);
+
+        #region User Feedback
+        IEnumerable<GetMMUserFeedbackModel> GetUserFeedback(UserFeedbackViewModel para);
+
+        DBResult InsertUserFeedback(InsertUserFeedbackViewModel para);
+
+        DBResult UpdateUserFeedback(UpdateUserFeedbackViewModel para);
+
+        DBResult DeleteUserFeedback(DeleteUserFeedbackViewModel para);
+
+        #endregion
+
     }
 }
