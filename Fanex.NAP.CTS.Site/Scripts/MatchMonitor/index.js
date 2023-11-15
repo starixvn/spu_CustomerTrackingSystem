@@ -105,17 +105,21 @@
             scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8], className: "text-center" },
-                { targets: [0], width: "7%" },
-                { targets: [1], width: "19%" },
-                { targets: [2], width: "26%" },
-                { targets: [3], width: "6%" },
-                { targets: [4], width: "9%" },
-                { targets: [5], width: "7%" },
-                { targets: [6], width: "11%" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ,10 ,11, 12], className: "text-center" },
+                { targets: [0], width: "6%" },
+                { targets: [1], width: "20%" },
+                { targets: [2], width: "20%" },
+                { targets: [3], width: "4%" },
+                { targets: [4], width: "6%" },
+                { targets: [5], width: "6%" },
+                { targets: [6], width: "9%" },
                 { targets: [7], width: "4%" },
-                { targets: [8], width: "11%" },
-                { targets: [9], visible: false }
+                { targets: [8], width: "4%" },
+                { targets: [9], width: "4%" },
+                { targets: [10], width: "4%" },
+                { targets: [11], width: "4%" },
+                { targets: [12], width: "9%" },
+                { targets: [13], visible: false }
             ],
             columns: [
                 { data: obj => obj.SportName },
@@ -138,6 +142,10 @@
                         return obj.ReasonName;
                     }
                 },
+                { data: obj => ConvertNumberToThousandsString(obj.HomeTotalAmount) },
+                { data: obj => ConvertNumberToThousandsString(obj.AwayTotalAmount) },
+                { data: obj => ConvertNumberToThousandsString(obj.HomeBetCount) },
+                { data: obj => ConvertNumberToThousandsString(obj.AwayBetCount) },
                 { data: obj => RenderVerifiedUI(obj.IsVerified) },
                 {
                     data: obj => () => {                        
@@ -155,10 +163,10 @@
                 var data = api.rows({ page: 'current' }).data();
                 var last = null;
 
-                api.column(9, { page: 'current' }).data().each(function (group, i) {
+                api.column(13, { page: 'current' }).data().each(function (group, i) {
                     if (last !== group) {
                         $(rows).eq(i).before(
-                            '<tr class="group group group-site"><td colspan="9"> ' + data[i].MatchSectionName + '</td></tr>'
+                            '<tr class="group group group-site"><td colspan="13"> ' + data[i].MatchSectionName + '</td></tr>'
                         );
 
                         last = group;
@@ -315,6 +323,10 @@
     $(document).ready(function () {
         Initial();
     });
+}
+
+function ConvertNumberToThousandsString(x) {  
+    return x ? x.toLocaleString() : 0;
 }
 
 $(MatchMonitor);
