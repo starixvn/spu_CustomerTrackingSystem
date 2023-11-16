@@ -245,7 +245,7 @@
                 ViewBag.AwayName = para?.AwayName.ToUpper() ?? string.Empty;
                 ViewBag.LiveIndicator = para?.LiveIndicator ?? true;
                 ViewBag.Reason = para?.Reason;
-                ViewBag.ReasonName = para?.ReasonName ?? string.Empty;
+                ViewBag.ReasonName = para?.ReasonName ?? string.Empty;                
                 ViewBag.LeagueName = para?.LeagueName.ToUpper() ?? string.Empty;
                 ViewBag.ReasonGroup = para?.ReasonGroup ?? string.Empty;
                 ViewBag.MarketName = para?.MarketName ?? string.Empty;
@@ -297,7 +297,7 @@
                     {
                         result = GetAllMMFilter(para);
                     }
-                }
+                }             
             }
             catch (Exception ex)
             {

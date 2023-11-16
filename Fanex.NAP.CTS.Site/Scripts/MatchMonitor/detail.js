@@ -48,6 +48,7 @@ function MatchMonitorDetail() {
         reason: $("#hdreason").val(),
         liveIndicator: $("#hdLiveIndicator").val(),
         isSupportShowAllTickets: $("#hdIsSupportShowAllTickets").val(),
+        defaultReasonNames: $('#hdReasonNames').val(),
         cbbMarket: $('#cbbMarket'),
         cbbBetType: $('#cbbBetType'),
         cbbTypeOfTickets: $('#cbbTypeOfTickets'),
@@ -118,6 +119,7 @@ function MatchMonitorDetail() {
         selectMgroup: {},
         isActive: false
     };
+    let cacheDefaultReason = null;
 
     let posClickGlobal = 0;
     let xhr;
@@ -199,7 +201,7 @@ function MatchMonitorDetail() {
                         if (obj.IsPA || obj.IsNormalLinkedPA || obj.IsRobot) {
                             classColRed = 'col-red';
                         }
-                        return `<a class='click-view-name ${classColRed}' href=${url}> ${obj.Username} </a>`;
+                        return `<a class='click-view-name ${classColRed}' href=${url}>${obj.Username}</a>`;
                     }
                 },
                 { data: obj => obj.CustomerClassToString },
@@ -316,6 +318,35 @@ function MatchMonitorDetail() {
         }
 
         element.multiselect("refresh");
+    }
+
+    function SetupFilterReason(element, data) {
+        element.multiselect().empty();
+        let arrReason = [];
+
+        if (cacheDefaultReason != null) {          
+            arrReason = cacheDefaultReason.split(',');
+        }
+
+        if (data) {
+            for (var i = 0; i < data.length; i++) {
+                let selected = true;
+                if (arrReason.length > 0) {
+                    if (arrReason.indexOf(data[i]) == -1) {
+                        selected = false;
+                    }
+                }
+                if (selected) {
+                    element.append(`<option selected value='${data[i]}'>${data[i]}</option>`);
+                } else {
+                    element.append(`<option value='${data[i]}'>${data[i]}</option>`);
+                }                
+            }
+
+            element.parent().find('button').removeClass('border-error');
+        }
+
+        element.multiselect("refresh");        
     }
 
     function SetupFilterScore(element, data) {        
@@ -992,7 +1023,9 @@ function MatchMonitorDetail() {
         cacheFilterDefault.AGrList = data.GroupList;
         cacheFilterDefault.ReasonList = data.ReasonList;
 
-        SetupFilter(domElements.cbbReason, data.ReasonList);       
+        //SetupFilter(domElements.cbbReason, data.ReasonList);     
+
+        SetupFilterReason(domElements.cbbReason, data.ReasonList);
 
         SetupAGroupFilter(data.GroupList);
 
@@ -2206,6 +2239,10 @@ function MatchMonitorDetail() {
         }
 
         domElements.cbbReason.multiselect().empty();
+        let arrReason = [];
+        if (cacheDefaultReason != null) {
+            arrReason = cacheDefaultReason.split(',');
+        }
         if (reasonItems.length > 0) {
             if (cacheSelectedReason.length > 0) {
                 reasonItems.forEach(item => {
@@ -2213,8 +2250,20 @@ function MatchMonitorDetail() {
                         domElements.cbbReason.append(`<option selected value='${item}'>${item}</option>`);
                     } else {
                         domElements.cbbReason.append(`<option value='${item}'>${item}</option>`);
-                    }   
-                });                 
+                    }
+                });
+            } else if (arrReason.length > 0) {
+                let arrReason = cacheDefaultReason.split(',');
+
+                reasonItems.forEach(item => {
+                    if ($.inArray(item.toString(), arrReason) != -1) {
+                        domElements.cbbReason.append(`<option selected value='${item}'>${item}</option>`);
+                    } else {
+                        domElements.cbbReason.append(`<option value='${item}'>${item}</option>`);
+                    }
+                });   
+
+                cacheDefaultReason = null;               
             } else {
                 reasonItems.forEach(item => {
                     domElements.cbbReason.append(`<option selected value='${item}'>${item}</option>`);
@@ -2366,6 +2415,8 @@ function MatchMonitorDetail() {
         domElements.cbbCurrency.change(function () { FilterDependOnSelected(IndexFilterSelected.Currency); });
         domElements.cbbReason.change(function () { FilterDependOnSelected(IndexFilterSelected.Reason); });
         domElements.cbbAGroup.change(function () { CheckChangeFilterByAssociationDetection(); });
+
+        cacheDefaultReason = domElements.defaultReasonNames.toString();
 
         try {
             isSupportShowAllTickets = JSON.parse(domElements?.isSupportShowAllTickets?.toLowerCase());
