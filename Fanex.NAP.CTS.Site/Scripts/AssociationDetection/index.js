@@ -102,8 +102,8 @@
                 },
                 { data: obj => obj.CustomerClassToString },
                 { data: obj => obj.DangerDisplay },
-                { data: obj => FormatTransInfo(obj.BotSumTrans, obj.BotPercentageTrans) },
-                { data: obj => FormatTransInfo(obj.InvalidBrowserInfoSumTrans, obj.InvalidBrowserInfoPercentageTrans) },
+                { data: obj => FormatTransInfo(obj.BotSumTrans, obj.BotPercentageTrans.toLocaleString(undefined, { style: 'percent', minimumFractionDigits: 2 })) },
+                { data: obj => FormatTransInfo(obj.InvalidBrowserInfoSumTrans, obj.InvalidBrowserInfoPercentageTrans.toLocaleString(undefined, { style: 'percent', minimumFractionDigits: 2 })) },
                 { data: obj => obj.Evidences },
                 {
                     data: obj => obj.AssociatedTypes, createdCell: (cell, _, row) => {
@@ -1013,7 +1013,7 @@
     }
 
     function FormatTransInfo(sum, percentage) {
-        var percentage = " (" + percentage + "%)";
+        var percentage = " (" + percentage + ")";
 
         return FormatNumber(sum) + percentage;
     }
