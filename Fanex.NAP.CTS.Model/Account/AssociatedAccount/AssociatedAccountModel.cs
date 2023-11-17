@@ -44,6 +44,7 @@
         public string CustomerClasses { get; set; }
 
         public bool IsProbation { get; set; }
+
         public string GroupIDs { get; set; }
 
         public string OriginGroupIDs { get; set; }

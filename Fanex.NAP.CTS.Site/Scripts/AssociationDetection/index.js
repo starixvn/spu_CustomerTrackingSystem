@@ -68,22 +68,23 @@
             scrollCollapse: true,
             paging: false,
             searching: false,
+            autoWidth: false,
             columnDefs: [
                 { "visible": false, "targets": 0 },
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], className: "text-center" },     
-                { targets: [0], width: "8%" },
-                { targets: [1], width: "3%" },
-                { targets: [2], width: "11%" },
-                { targets: [3], width: "9%" },
-                { targets: [4], width: "10%" },
-                { targets: [5], width: "5%" },
-                { targets: [6], width: "10%" },
-                { targets: [7], width: "15%" },
-                { targets: [8], width: "10%" },
+                { targets: [0], width: "0% " },
+                { targets: [1], width: "12%" },
+                { targets: [2], width: "2%" },
+                { targets: [3], width: "12%" },
+                { targets: [4], width: "6%" },
+                { targets: [5], width: "10%" },
+                { targets: [6], width: "8%" },
+                { targets: [7], width: "16%" },
+                { targets: [8], width: "11%" },
                 { targets: [9], width: "3%" },
-                { targets: [10], width: "8%" },
-                { targets: [11], width: "8%" },           
+                { targets: [10], width: "10%" },
+                { targets: [11], width: "9%" },           
             ],
             columns: [
                 { data: obj => obj.GroupID },
@@ -110,7 +111,7 @@
                     }
                 },
                 {
-                    data: obj => common.renderCategoryName(obj.CustomerCategory), createdCell: (cell, _, row) => {
+                    data: obj => common.renderCategoryName(obj.CustomerClassToString), createdCell: (cell, _, row) => {
                         common.renderCategoryColor(cell, row);
                     }
                 },
@@ -1105,8 +1106,8 @@
         var table = domElements.tblAssociationDetection.DataTable();
         var ccOptions = domElements.cbbCC.val().join();
         var dangerOptions = domElements.cbbDanger.val().join();
-        var textBot = domElements.txtBotTrans.val();
-        var textInvalidBrowser = domElements.txtInvalidBrowserTrans.val();
+        var textBot = VerifyTextBox(domElements.txtBotTrans);
+        var textInvalidBrowser = VerifyTextBox(domElements.txtInvalidBrowserTrans);
 
         var filterData = oldData.filter(c => ccOptions.includes(c.CustomerClass)
                                         && (dangerOptions.includes("1-" + c.Danger1)
@@ -1124,6 +1125,8 @@
                 var floatnumber = parseInt(textBot.replace(",", "").trim());
                 filterData = filterData.filter(c => c.BotSumTrans >= floatnumber);
             }
+
+            domElements.txtBotTrans.parent().removeClass("invalid-input");
         }
 
         if (textInvalidBrowser !== "") {
@@ -1135,10 +1138,35 @@
                 var floatnumber = parseInt(textInvalidBrowser.replace(",", "").trim());
                 filterData = filterData.filter(c => c.InvalidBrowserInfoSumTrans >= floatnumber);
             }
+
+            domElements.txtInvalidBrowserTrans.parent().removeClass("invalid-input");
         }
 
         table.clear();
         table.clear().rows.add(filterData).draw();
+    }
+
+    function VerifyTextBox(textBox) {
+        var text = textBox.val();
+
+        if (text === "")
+            return text;
+
+        if (!text.includes("%")) {
+            if (text.length < 4 && text.includes(",")) {
+                textBox.parent().addClass("invalid-input");
+                return "";
+            }
+        }
+
+        var numberic = text.replace("%", "");
+
+        if (!(!isNaN(parseFloat(numberic))  && isFinite(numberic))) {
+            textBox.parent().addClass("invalid-input");
+            return "";
+        }
+
+        return text;
     }
 
     function Initial() { 
