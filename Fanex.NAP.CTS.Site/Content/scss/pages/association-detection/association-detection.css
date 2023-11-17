@@ -562,7 +562,7 @@ body {
         background-color: #f0f8ff00;
         -moz-appearance: textfield;
         padding-left: 8px;
-        font-size: 10px;
+        font-size: 11px;
         /* text-align: center;*/ }
       .association-detection-report .association-detection-content .table-report .group .text-box {
         height: 2.8rem;
@@ -589,8 +589,8 @@ body {
       min-width: 210px; }
     .association-detection-report .association-detection-content .table-report .width-240 {
       min-width: 240px; }
-    .association-detection-report .association-detection-content .table-report .width-260 {
-      min-width: 260px; }
+    .association-detection-report .association-detection-content .table-report .width-280 {
+      min-width: 280px; }
     .association-detection-report .association-detection-content .table-report .label {
       width: max-content; }
     .association-detection-report .association-detection-content .table-report .fixed-header {
