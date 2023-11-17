@@ -1121,7 +1121,7 @@
                 filterData = filterData.filter(c => c.BotPercentageTrans >= floatnumber);
             }
             else {
-                var floatnumber = parseInt(textBot.trim());
+                var floatnumber = parseInt(textBot.replace(",", "").trim());
                 filterData = filterData.filter(c => c.BotSumTrans >= floatnumber);
             }
         }
@@ -1132,7 +1132,7 @@
                 filterData = filterData.filter(c => c.InvalidBrowserInfoPercentageTrans >= floatnumber);
             }
             else {
-                var floatnumber = parseInt(textInvalidBrowser.trim());
+                var floatnumber = parseInt(textInvalidBrowser.replace(",", "").trim());
                 filterData = filterData.filter(c => c.InvalidBrowserInfoSumTrans >= floatnumber);
             }
         }
