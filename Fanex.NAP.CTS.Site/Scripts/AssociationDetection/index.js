@@ -76,13 +76,13 @@
                 { targets: [0], width: "0% " },
                 { targets: [1], width: "12%" },
                 { targets: [2], width: "2%" },
-                { targets: [3], width: "12%" },
-                { targets: [4], width: "6%" },
-                { targets: [5], width: "10%" },
-                { targets: [6], width: "8%" },
-                { targets: [7], width: "16%" },
-                { targets: [8], width: "11%" },
-                { targets: [9], width: "3%" },
+                { targets: [3], width: "11%" },
+                { targets: [4], width: "3%" },
+                { targets: [5], width: "12%" },
+                { targets: [6], width: "6%" },
+                { targets: [7], width: "10%" },
+                { targets: [8], width: "8%" },
+                { targets: [9], width: "16%" },
                 { targets: [10], width: "10%" },
                 { targets: [11], width: "9%" },           
             ],
@@ -95,6 +95,12 @@
                     }               
                 },
                 { data: obj => obj.CustStatus },
+                {
+                    data: obj => common.renderCategoryName(obj.CustomerCategory), createdCell: (cell, _, row) => {
+                        common.renderCategoryColor(cell, row);
+                    }
+                },
+                { data: obj => obj.CustomerClassToString },
                 { data: obj => obj.DangerDisplay },
                 { data: obj => FormatTransInfo(obj.BotSumTrans, obj.BotPercentageTrans) },
                 { data: obj => FormatTransInfo(obj.InvalidBrowserInfoSumTrans, obj.InvalidBrowserInfoPercentageTrans) },
@@ -110,12 +116,6 @@
                         });
                     }
                 },
-                {
-                    data: obj => common.renderCategoryName(obj.CustomerClassToString), createdCell: (cell, _, row) => {
-                        common.renderCategoryColor(cell, row);
-                    }
-                },
-                { data: obj => obj.CustomerClass },
                 {
                     data: obj => () => {
                         if (obj.AgentCTSCustID != 0) {
