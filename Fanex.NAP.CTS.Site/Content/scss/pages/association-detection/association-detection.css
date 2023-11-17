@@ -524,6 +524,71 @@ body {
         margin-left: 15px; }
   .association-detection-report .association-detection-content .table-report {
     font-family: "Lato", Arial, Tahoma, sans-serif; }
+    .association-detection-report .association-detection-content .table-report .top-header {
+      justify-content: space-between; }
+    .association-detection-report .association-detection-content .table-report .group {
+      padding-bottom: 8px;
+      padding-top: 8px;
+      padding-right: 16px; }
+      .association-detection-report .association-detection-content .table-report .group .btn:not(:disabled) {
+        background-color: #396EF8;
+        border-radius: 2px;
+        height: 30px;
+        min-width: 98px;
+        color: #fff;
+        margin-bottom: 0px;
+        margin-left: 14px; }
+        .association-detection-report .association-detection-content .table-report .group .btn:not(:disabled):hover {
+          background-color: #5081ff; }
+      .association-detection-report .association-detection-content .table-report .group .width-select {
+        width: 18.5rem; }
+      .association-detection-report .association-detection-content .table-report .group .width-select-sites {
+        width: 11.5rem; }
+      .association-detection-report .association-detection-content .table-report .group .width-select-one {
+        height: 3rem;
+        /*width: 16.4rem;*/ }
+      .association-detection-report .association-detection-content .table-report .group .width-amount {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+        align-items: center; }
+      .association-detection-report .association-detection-content .table-report .group .width-amount-item {
+        color: #474747;
+        width: 85%;
+        font-style: italic;
+        border: aliceblue;
+        border: 0px;
+        background-color: #f0f8ff00;
+        -moz-appearance: textfield;
+        padding-left: 8px;
+        font-size: 12px;
+        /* text-align: center;*/ }
+      .association-detection-report .association-detection-content .table-report .group .text-box {
+        height: 2.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: auto;
+        padding: 0 1rem; }
+      .association-detection-report .association-detection-content .table-report .group .clear-amount {
+        margin-right: 5px;
+        cursor: pointer; }
+      .association-detection-report .association-detection-content .table-report .group .clear-amount:hover {
+        background-color: rgba(57, 110, 248, 0.2);
+        border-radius: 5px; }
+    .association-detection-report .association-detection-content .table-report .width-110 {
+      min-width: 110px; }
+    .association-detection-report .association-detection-content .table-report .width-160 {
+      min-width: 120px; }
+    .association-detection-report .association-detection-content .table-report .width-180 {
+      min-width: 180px; }
+    .association-detection-report .association-detection-content .table-report .width-210 {
+      min-width: 210px; }
+    .association-detection-report .association-detection-content .table-report .width-240 {
+      min-width: 240px; }
+    .association-detection-report .association-detection-content .table-report .label {
+      width: max-content; }
     .association-detection-report .association-detection-content .table-report .fixed-header {
       /*  padding-top: 1.6rem;*/
       position: sticky;

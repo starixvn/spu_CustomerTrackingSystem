@@ -112,31 +112,66 @@
                 <div class="table-report">
                     <div class="fixed-header">
                         <div class="top-header">
-                            <div class="button-primary">
-                                <span class="sub-icon" id="btnExportToExcel" title="Export To Excel">
-                                    <i class="icon-excel"></i>
-                                </span>
+                             <div class="box-left">
+                                 <div class="form-filter">
+                                     <div class="group width-160 ">
+                                         <label class="text">CC</label>
+                                         <select class="control width-select" id="cbbCC" multiple="multiple">
+                                         </select>
+                                     </div>
+                                     <div class="group width-160">
+                                         <label class="text">Danger</label>
+                                         <select class="control width-select" id="cbbDanger" multiple="multiple">
+                                         </select>
+                                     </div>
+                                     <div class="group width-210">
+                                         <label class="text">Bot Transaction</label>
+                                         <div class="ui-multiselect width-amount">
+                                             <input class="width-amount-item" placeholder=">= please input amount" id="inputBotTrans" maxlength="15" />
+                                             <span class="icon-cross-brow clear-amount hide"></span>
+                                         </div>
+                                     </div>
+                                     <div class="group width-210">
+                                         <label class="text label">Invalid Browser Info Transaction</label>
+                                         <div class="ui-multiselect width-amount">
+                                             <input class="width-amount-item" placeholder=">= please input amount" id="inputInvalidBrowserTrans" maxlength="15" />
+                                             <span class="icon-cross-brow clear-amount hide"></span>
+                                         </div>
+                                     </div>
+                                     <div class="group" >
+                                         <button id="btnFilterGenerate" class="button btn" >Generate</button>
+                                     </div>
+                                 </div>
+                             </div>
+                                <div class="box-right">
+                                    <div class="button-primary">
+                                        <span class="sub-icon" id="btnExportToExcel" title="Export To Excel">
+                                            <i class="icon-excel"></i>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
+                            <table id="tblAssociationDetection" class="table table-striped table-association-detection" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Group</th>
+                                        <th>Username</th>
+                                        <th>Status</th>
+                                        <th>Dgr</th>
+                                        <th>Bot Trans</th>
+                                        <th>Invalid Browser Info Trans</th>
+                                        <th>Evidence</th>
+                                        <th>Associated Type</th>
+                                        <th>Customer Category</th>
+                                        <th>CC</th>
+                                        <th>Agent</th>
+                                        <th>Agent's Evidence</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
-                    </div>
-                    <table id="tblAssociationDetection" class="table table-striped table-association-detection" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Group</th>
-                                <th>Username</th>
-                                <th>Status</th>
-                                <th>Evidence</th>
-                                <th>Associated Type</th>
-                                <th>Customer Category</th>
-                                <th>CC</th>
-                                <th>Agent</th>
-                                <th>Agent's Evidence</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
                 </div>
-            </div>
         </div>
     </div>
 </section>

@@ -11,5 +11,7 @@
         public string AssociationByIPJson { get; set; }
 
         public string AssociationByMatchesJson { get; set; }
+
+        public bool IsGetLogTransInfo { get; set; }
     }
 }

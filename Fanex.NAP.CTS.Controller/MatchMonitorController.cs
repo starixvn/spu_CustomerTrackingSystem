@@ -776,7 +776,7 @@
             var custIDIgnoreInternals = string.Join(",", custIgnoreInternals.Select(x => x.CustID));
             var ctsCustIDIgnoreInternals = string.Join(",", custIgnoreInternals.Select(x => x.CTSCustID));
             var custInfo = _matchMonitorService.GetCustInfoByCustID(custIDIgnoreInternals);
-            var mergeGroupInfo = new MergeGroupInfoModel { CTSCustIDs = ctsCustIDIgnoreInternals };
+            var mergeGroupInfo = new MergeGroupInfoModel { CTSCustIDs = ctsCustIDIgnoreInternals, IsGetLogTransInfo = false };
 
             Parallel.Invoke(() =>
             {                

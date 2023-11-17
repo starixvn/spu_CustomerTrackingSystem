@@ -46,6 +46,14 @@
 
         public decimal? TurnoverLast7Days { get; set; }
 
+        public int BotSumTrans { get; set; }
+
+        public double BotPercentageTrans { get; set; }
+
+        public int InvalidBrowserInfoSumTrans { get; set; }
+
+        public double InvalidBrowserInfoPercentageTrans { get; set; }
+
         public string DangerLevel 
         {
             get

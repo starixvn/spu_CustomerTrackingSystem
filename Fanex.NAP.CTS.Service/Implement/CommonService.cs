@@ -126,7 +126,7 @@
                          .Select(x => new CCGroupModel
                          {
                              CCGroupName = x.CCGroupName,
-                             CCList = x.CCList.OrderBy(y => y.CustomerClass).Select(y => y.CustomerClass)
+                             CCList = x.CCList.OrderBy(y => y.CustomerClass).Select(y => y.CustomerClass)?.ToList()
                          });
                 }
             }

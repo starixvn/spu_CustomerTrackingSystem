@@ -117,7 +117,8 @@
                 PrimaryJson = model.AssociationByPrimaryJson,
                 AgentJson = model.AssociationByAgentJson,
                 SharedIPJson = model.AssociationByIPJson,
-                SharedMatchesJson = model.AssociationByMatchesJson
+                SharedMatchesJson = model.AssociationByMatchesJson,
+                IsGetLogTransInfo = model.IsGetLogTransInfo
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

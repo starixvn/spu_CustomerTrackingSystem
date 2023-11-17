@@ -223,11 +223,16 @@
             bundles.Add(new ScriptBundle("~/association-detection-scripts").Include(
                "~/Scripts/AssociationDetection/index.js",
                 "~/Scripts/tagify/jquery.tagify.min.js",
-                "~/Scripts/tagify/tagify.min.js"));
+                "~/Scripts/tagify/tagify.min.js,",
+                "~/ Scripts/select2.min.js",
+                "~/Scripts/MultipleSelect/jquery.multiselect.filter.js"));
 
             bundles.Add(new StyleBundle("~/association-detection-styles").Include(
-                    "~/Content/scss/pages/association-detection/association-detection.css",
-                    "~/Content/scss/vendors/jquery-ui/base/tagify.css"));
+                "~/Content/scss/vendors/select2.min.css",
+                 "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
+                "~/Content/scss/MultipleSelect/jquery.multiselect.css",
+                "~/Content/scss/pages/association-detection/association-detection.css",
+                "~/Content/scss/vendors/jquery-ui/base/tagify.css"));
         }
 
         private static void RegisterAssociatedAccountMonitorBundles(BundleCollection bundles)

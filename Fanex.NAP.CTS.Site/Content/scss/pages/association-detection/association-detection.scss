@@ -126,6 +126,107 @@ body {
         .table-report {
             font-family: $font-family;
 
+            .top-header {
+                justify-content: space-between;
+            }
+
+            .group {
+                padding-bottom: 8px;
+                padding-top: 8px;
+                padding-right: 16px;
+
+                .btn:not(:disabled) {
+                    background-color: #396EF8;
+                    border-radius: 2px;
+                    height: 30px;
+                    min-width: 98px;
+                    color: #fff;
+                    margin-bottom: 0px;
+                    margin-left: 14px;
+
+                    &:hover {
+                        background-color: #5081ff
+                    }
+                }
+
+                .width-select {
+                    width: 18.5rem;
+                }
+
+                .width-select-sites {
+                    width: 11.5rem;
+                }
+
+                .width-select-one {
+                    height: 3rem;
+                    /*width: 16.4rem;*/
+                }
+
+                .width-amount {
+                    display: flex;
+                    justify-content: space-between;
+                    padding-left: 0px !important;
+                    padding-right: 0px !important;
+                    align-items: center;
+                }
+
+                .width-amount-item {
+                    color: #474747;
+                    width: 85%;
+                    font-style: italic;
+                    border: aliceblue;
+                    border: 0px;
+                    background-color: #f0f8ff00;
+                    -moz-appearance: textfield;
+                    padding-left: 8px;
+                    font-size: 12px;
+                    /* text-align: center;*/
+                }
+
+                .text-box {
+                    height: 2.8rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: auto;
+                    padding: 0 1rem;
+                }
+
+                .clear-amount {
+                    margin-right: 5px;
+                    cursor: pointer;
+                }
+
+                .clear-amount:hover {
+                    background-color: rgba(57, 110, 248, 0.2);
+                    border-radius: 5px;
+                }
+            }
+
+            .width-110 {
+                min-width: 110px;
+            }
+
+            .width-160 {
+                min-width: 120px;
+            }
+
+            .width-180 {
+                min-width: 180px;
+            }
+
+            .width-210 {
+                min-width: 210px;
+            }
+
+            .width-240 {
+                min-width: 240px;
+            }
+
+            .label {
+                width: max-content;
+            }
+
             .fixed-header {
                 /*  padding-top: 1.6rem;*/
                 position: sticky;
