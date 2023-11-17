@@ -44,6 +44,10 @@
 
         public int Sport { get; set; }
 
+        public DateTime? TranstimeFrom { get; set; }
+        
+        public DateTime? TranstimeTo { get; set; }
+
         public DateTime EventDate
         {
             get

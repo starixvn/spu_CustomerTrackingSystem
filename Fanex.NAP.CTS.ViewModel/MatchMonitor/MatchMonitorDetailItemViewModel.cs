@@ -366,7 +366,7 @@
             this.Score = ticket.LiveIndicator ? (ticket.LiveHomeScore + " - " + ticket.LiveAwayScore) : "-";
             this.TicketStatus = ticket.TicketStatus;
             this.TransTime = ticket.TransDate;
-            this.TransTimeToString = ticket.TransDate.ToString(Consts.FormatDateToString_ddMMhhmmss);
+            this.TransTimeToString = ticket.TransDate.ToString(Consts.FormatDateTimeToString_ddMMyyhhmmss);
             this.MDetectGroup = "-";
             this.MDetectGroupID = -2;
             //this.ReasonList = "",         

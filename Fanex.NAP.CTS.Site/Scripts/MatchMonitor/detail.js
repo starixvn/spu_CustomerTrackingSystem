@@ -19,7 +19,7 @@ const IndexFilterSelected = {
     AGr: 7
 }
 
-function ConvertNumberToThousandsString(x) {  
+function ConvertNumberToThousandsString(x) {
     return x ? x.toLocaleString() : 0;
 }
 
@@ -62,7 +62,7 @@ function MatchMonitorDetail() {
         cbbAGroup: $('#cbbAGroup'),
         cbbMGroup: $('#cbbMGroup'),
         cbbHDPBetTeam: $('#cbbHDPBetTeam'),
-        inputCustAmountRM: $('#inputCustAmountRM'),      
+        inputCustAmountRM: $('#inputCustAmountRM'),
         iconClearUsnAmt: $('#iconClearUsnAmt'),
         cbbTicketsStatus: $('#cbbTicketsStatus'),
         tblMMHomeTeam: $('#tblMMHomeTeam'),
@@ -79,7 +79,7 @@ function MatchMonitorDetail() {
         inputSGSelectAll: $('#inputSGSelectAll'),
         iconHToggleBetID: $('#iconHToggleBetID'),
         iconAToggleBetID: $('#iconAToggleBetID'),
-        divPopupAssDetect: $('#divPopupAssDetect'),        
+        divPopupAssDetect: $('#divPopupAssDetect'),
         btnShowPopupAssDetection: $('#btnShowPopupAssDetection'),
         tickCheckAll: $('#tickCheckAll'),
         tickUncheckAll: $('#tickUncheckAll'),
@@ -88,22 +88,32 @@ function MatchMonitorDetail() {
         inputOptIP: $('#inputOptIP'),
         inputOptAgent: $('#inputOptAgent'),
         inputOptIPLast3Days: $('#inputOptIPLast3Days'),
-        inputOpt3MatchesLast7Days: $('#inputOpt3MatchesLast7Days'),       
+        inputOpt3MatchesLast7Days: $('#inputOpt3MatchesLast7Days'),
         hdSelectedCustIDs: $('#hdSelectedCustIDs'),
         hdSelectedUsernames: $('#hdSelectedUsernames'),
         btnImportNewTicket: $('#btnImportNewTicket'),
-        btnGenerateDetail: $('#btnGenerate-detail'),     
+        btnGenerateDetail: $('#btnGenerate-detail'),
         btnAssDetection: $('#btnAssDetection'),
         btnExportExcel: $('#btnExportExcel'),
         btnVerifyAndClose: $('#btnVerifyAndClose'),
-        btnReasonFeedback: $('#btnReasonFeedback')
+        btnReasonFeedback: $('#btnReasonFeedback'),
+        inputTranstimeFrom: $('#inputTranstimeFrom'),
+        inputTranstimeTo: $('#inputTranstimeTo'),
+        iconTranstimeAutoFill: $('#iconTranstimeAutofill'),
+        iconTranstimeClear: $('#iconTranstimeClear'),
+        boderTranstimeInput: $('.info-input')
     };
+
+    let transtime = {
+        fromDate: undefined,
+        toDate: undefined
+    }
 
     let recordsFilteredGlobal = 0;
     let recordsTotalGlobal = 0;
     let maxSequenceId = 1;
 
-    let cacheFilter = {};    
+    let cacheFilter = {};
     let cacheFilterScore = undefined;
     let cacheFilterForImportNew = {};
     let cacheFilterDependOn = {
@@ -114,7 +124,7 @@ function MatchMonitorDetail() {
         ReasonList: [],
         AGrList: []
     };
-    let cacheMGroup = {      
+    let cacheMGroup = {
         allMGroup: {},
         selectMgroup: {},
         isActive: false
@@ -132,6 +142,7 @@ function MatchMonitorDetail() {
 
     const regexValidAmount = /^[0-9]{1,15}/;
     const regexInvalidAmount = /[^0-9]{1,15}/g;
+    const regexValidTranstime = /^(\d{2}\/\d{2}\/\d{2})(\s)(\d{2}\:\d{2}\:\d{2})$/;
     //#endregion Variables
 
     //#region Initial Grid
@@ -369,10 +380,10 @@ function MatchMonitorDetail() {
             if (cacheSelected != undefined && cacheSelected.cbbMatchScore != undefined && cacheSelected.cbbMatchScore.length > 0) {
                 setTimeout(RefreshFilterSelected(element, cacheSelected.cbbMatchScore), 10);
             }
-        }        
+        }
     }
 
-    function SetupFilterFromDictinary(element, data) {        
+    function SetupFilterFromDictinary(element, data) {
         element.multiselect().empty();
 
         if (data) {
@@ -389,7 +400,7 @@ function MatchMonitorDetail() {
     function SetupAGroupFilter(data) {
         domElements.cbbAGroup.multiselect().empty();
 
-        if (data) {           
+        if (data) {
             for (var i = 0; i < data.length; i++) {
                 domElements.cbbAGroup.append(`<option selected value='${data[i].GroupID}'>${data[i].GroupName}</option>`);
             }
@@ -403,24 +414,24 @@ function MatchMonitorDetail() {
     function SetupMGroupFilter(data) {
         domElements.cbbMGroup.multiselect().empty();
         let totalTicketDetect = domElements.divPopupAssDetect.attr('data-total-ticket-detect');
-      
+
         if (data) {
             let isExistedBlank = false;
             if (totalTicketDetect < recordsTotalGlobal) {
                 domElements.cbbMGroup.append(`<option value='0'>-</option>`);
-                cacheFilterDependOn.MGrList = ReUnshiftBlankMGr(cacheFilterDependOn.MGrList);              
+                cacheFilterDependOn.MGrList = ReUnshiftBlankMGr(cacheFilterDependOn.MGrList);
                 isExistedBlank = true;
             }
 
             data.forEach(element => {
                 if (element.MDetectGroupID == 0) {
                     if (!isExistedBlank) {
-                        domElements.cbbMGroup.append(`<option value='0'>-</option>`);                       
+                        domElements.cbbMGroup.append(`<option value='0'>-</option>`);
                         cacheFilterDependOn.MGrList = ReUnshiftBlankMGr(cacheFilterDependOn.MGrList);
-                    }                    
+                    }
                 } else {
-                    domElements.cbbMGroup.append(`<option selected value='${element.MDetectGroupID}'>${ element.MDetectGroup }</option>`);
-                }                
+                    domElements.cbbMGroup.append(`<option selected value='${element.MDetectGroupID}'>${element.MDetectGroup}</option>`);
+                }
             });
 
             domElements.cbbMGroup.parent().find('button').removeClass('border-error');
@@ -438,8 +449,8 @@ function MatchMonitorDetail() {
                     domElements.cbbMGroup.append(`<option selected value='0'>${data[i]}</option>`);
                 } else {
                     domElements.cbbMGroup.append(`<option selected value='${data[i]}'>${data[i]}</option>`);
-                }                
-            }            
+                }
+            }
 
             domElements.cbbMGroup.parent().find('button').removeClass('border-error');
         }
@@ -470,7 +481,7 @@ function MatchMonitorDetail() {
             if (data.Danger5.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(5, "E-Sports", data.Danger5.DangerItems, cacheSelectedDanger));
 
             domElements.cbbDanger.parent().find('button').removeClass('border-error');
-            
+
             domElements.cbbDanger.multiselect('refresh');
         }
     }
@@ -483,20 +494,20 @@ function MatchMonitorDetail() {
                     optgroup += `<option selected value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
                 } else {
                     optgroup += `<option value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
-                }                
+                }
             })
         } else {
             items.map(function (x) {
                 optgroup += `<option selected value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
             })
         }
-        
+
         optgroup += "</optgroup>";
 
         return optgroup;
     }
 
-    function SetupCC(data) {       
+    function SetupCC(data) {
         let cacheSelectedCC = [];
         let cacheSelected = cacheFilterForImportNew[currentType];
         if (cacheSelected != undefined && cacheSelected.cbbCC) {
@@ -506,10 +517,10 @@ function MatchMonitorDetail() {
         if (data) {
             let ccSelector = domElements.cbbCC.empty();
             let ccOthers = [];
-            
+
             domElements.cbbCCHidden.find('optgroup').each(function () {
                 let optGroup = $(this);
-                let groupName = optGroup.attr("label");                
+                let groupName = optGroup.attr("label");
                 let ccItems = [];
                 optGroup.find('option:selected').each(function (idx, opItem) {
                     ccItems.push(parseInt($(opItem).val()));
@@ -519,27 +530,27 @@ function MatchMonitorDetail() {
 
                 data = data.filter(item => !ccMatched.includes(item));
 
-                if (groupName.toLocaleLowerCase() == 'others') {  
+                if (groupName.toLocaleLowerCase() == 'others') {
                     if (data.length > 0) {
                         ccOthers = [...new Set([...ccOthers, ...data])];
                     }
-                    if (ccMatched.length > 0) {                      
+                    if (ccMatched.length > 0) {
                         ccOthers = [...new Set([...ccOthers, ...ccMatched])];
-                    }                                      
+                    }
                 } else {
-                    if (ccMatched.length > 0) {                        
+                    if (ccMatched.length > 0) {
                         ccSelector.append(BuildCCGroup(ccMatched, groupName, cacheSelectedCC));
-                    }         
+                    }
                 }
             });
 
             if (ccOthers.length > 0) {
                 ccSelector.append(BuildCCGroup(ccOthers, "Others", cacheSelectedCC));
             }
-          
+
             domElements.cbbCC.parent().find('button').removeClass('border-error');
 
-            domElements.cbbCC.multiselect('refresh');       
+            domElements.cbbCC.multiselect('refresh');
         }
     }
 
@@ -553,7 +564,7 @@ function MatchMonitorDetail() {
                     optgroup += `<option selected value=${item}>${itemName}</option>`;
                 } else {
                     optgroup += `<option value=${item}>${itemName}</option>`;
-                }             
+                }
             });
         } else {
             ccItems.map(function (item) {
@@ -561,13 +572,13 @@ function MatchMonitorDetail() {
                 optgroup += `<option selected value=${item}>${itemName}</option>`;
             });
         }
-        
+
         optgroup += "</optgroup>";
 
         return optgroup;
     }
 
-    function SetupSubscriberTypeFilter(data) {        
+    function SetupSubscriberTypeFilter(data) {
         if (data && data.length > 0) {
             domElements.cbbSites.empty();
             data.forEach(item => {
@@ -578,15 +589,15 @@ function MatchMonitorDetail() {
                     subName = "Licensee";
                 }
                 domElements.cbbSites.append(`<option value='${item}'>${subName}</option>`);
-            });            
+            });
 
             if (data.length > 1) {
                 let cacheSelected = cacheFilterForImportNew[currentType];
                 if (cacheSelected != undefined && cacheSelected.cbbSites) {
                     domElements.cbbSites.val(cacheSelected.cbbSites);
                 }
-            }            
-        } 
+            }
+        }
     }
 
     function SetupHDPBetTeam(hdpBetTeamItems) {
@@ -597,7 +608,7 @@ function MatchMonitorDetail() {
         }
 
         domElements.cbbHDPBetTeam.multiselect().empty();
-        
+
         if (hdpBetTeamItems.length > 0) {
             if (cacheSelectedHDPBetTeam.length > 0) {
                 hdpBetTeamItems.forEach(item => {
@@ -615,7 +626,7 @@ function MatchMonitorDetail() {
         }
 
         domElements.cbbHDPBetTeam.multiselect("refresh");
-    }    
+    }
 
     function SetupTicketStatusFilter(data) {
         let cacheTicketStatus = [];
@@ -643,12 +654,12 @@ function MatchMonitorDetail() {
                         domElements.cbbTicketsStatus.append(`<option selected value='${item.TicketStatus}'>${item.TicketStatusName}</option>`);
                     }
                 });
-            }           
+            }
 
             domElements.cbbTicketsStatus.parent().find('button').removeClass('border-error');
         }
 
-        domElements.cbbTicketsStatus.multiselect("refresh");    
+        domElements.cbbTicketsStatus.multiselect("refresh");
     }
 
     function SetupDoubleDataTable() {
@@ -810,7 +821,7 @@ function MatchMonitorDetail() {
     //#endregion Setup Filter & Grid
 
     //#region Get Filter Params Selected
-    function GetInputAmount() {       
+    function GetInputAmount() {
         let amount = domElements.inputCustAmountRM.val();
         if (regexValidAmount.test(amount) && Number(amount)) {
             if (amount < 0) {
@@ -853,9 +864,9 @@ function MatchMonitorDetail() {
             return allVal;
         }
 
-        for (let i = 0; i < ticketStatusLength; i++) {            
+        for (let i = 0; i < ticketStatusLength; i++) {
             if (ticketStatus[i].value != "101") { // ticket Reject
-                allVal += ticketStatus[i].value; 
+                allVal += ticketStatus[i].value;
             }
         }
 
@@ -911,12 +922,12 @@ function MatchMonitorDetail() {
         return true;
     }
 
-    function ValidateTicketStatus() {        
+    function ValidateTicketStatus() {
         if (isDisplaySingleGrid) {
             domElements.tblMMSG.DataTable().clear().draw(false);
             domElements.divHomeMonitor.addClass('hide');
             domElements.divAwayMonitor.addClass('hide');
-            domElements.divSGMonitor.removeClass('hide');           
+            domElements.divSGMonitor.removeClass('hide');
         } else {
             domElements.tblMMHomeTeam.DataTable().clear().draw(false);
             domElements.tblMMAwayTeam.DataTable().clear().draw(false);
@@ -929,11 +940,11 @@ function MatchMonitorDetail() {
         if (opt > 0) {
             return true;
         }
-       
+
         RefreshBreadcrumbTotalTickets(0, 0);
 
         return false;
-    }   
+    }
 
     function CheckSelected(element) {
         let opt = $("option", element).length;
@@ -943,7 +954,7 @@ function MatchMonitorDetail() {
             return true;
         }
         return false;
-    }      
+    }
 
     function ValidateCbb(element) {
         if (!CheckSelected(element)) {
@@ -982,10 +993,16 @@ function MatchMonitorDetail() {
         if (!ValidateCbb(domElements.cbbTicketsStatus)) {
             result = false;
         }
-      
+        if (domElements.boderTranstimeInput.hasClass('info-input-error')) {
+            result = false;
+        }
+        if (domElements.iconTranstimeAutoFill.hasClass('transtime-icon-forcus')) {
+            result = false;
+        }
+
         return result;
-    }    
-    
+    }
+
     function GetDangerSelectDataFilter(dangerType) {
         let dangerValues = [];
         domElements.cbbDanger.find('optgroup').each(function () {
@@ -1005,7 +1022,7 @@ function MatchMonitorDetail() {
     //#endregion Get Filter Params Selected
 
     //#region Render Filter
-   
+
     function RenderFilter(data) {
         recordsTotalGlobal = data.RecordsTotal;
         isDisplaySingleGrid = data.IsDisplaySingleGrid;
@@ -1013,9 +1030,9 @@ function MatchMonitorDetail() {
         SetupFilterFromDictinary(domElements.cbbCurrency, data.CurrencyList);
 
         if (data.IsDisplaySingleGrid) {
-            SetupHDPBetTeam(data.BetTeamList);                                
+            SetupHDPBetTeam(data.BetTeamList);
         } else {
-            SetupHDPBetTeam(data.HDPList);    
+            SetupHDPBetTeam(data.HDPList);
         }
 
         SetupFilterScore(domElements.cbbMatchScore, data.ScoreList);
@@ -1038,7 +1055,7 @@ function MatchMonitorDetail() {
             SetupDanger(data.DropdownListFilter.DangerList);
             SetupTicketStatusFilter(data.DropdownListFilter.TicketStatusList);
 
-            SetupSubscriberTypeFilter(data.DropdownListFilter.SubscriberTypeList);                                       
+            SetupSubscriberTypeFilter(data.DropdownListFilter.SubscriberTypeList);
         }
 
         if (data.DropdownListFilterDependOn) {
@@ -1046,7 +1063,7 @@ function MatchMonitorDetail() {
 
             FilterDependOnSelected(IndexFilterSelected.Score);
         }
-        
+
         cacheMGroup.allMGroup = {};
         cacheMGroup.selectMgroup = {};
         cacheFilterForImportNew[currentType] = undefined;
@@ -1056,7 +1073,7 @@ function MatchMonitorDetail() {
 
     //#region Cache Filter
 
-    function CheckChangeFilterByAssociationDetection() { 
+    function CheckChangeFilterByAssociationDetection() {
         let mGrList = cacheFilterDependOn.MGrList.map(obj => ({ ...obj }));
 
         if (mGrList.length > 0) {
@@ -1089,7 +1106,7 @@ function MatchMonitorDetail() {
                     RefreshMGr(mGrList);
                 }
             }
-        }        
+        }
     }
 
     function CacheSelectDataFilter() {
@@ -1099,7 +1116,7 @@ function MatchMonitorDetail() {
         else {
             cacheFilterScore = undefined;
         }
-    } 
+    }
 
     function CacheSelectFilterForImportNew() {
         var selectedFilter = cacheFilterForImportNew[currentType];
@@ -1125,11 +1142,11 @@ function MatchMonitorDetail() {
 
         for (var i = 0; i < items.length; i++) {
             if (items[i].MDetectGroupID == 0) {
-                domElements.cbbMGroup.append(`<option value='${items[i].MDetectGroupID}'>${items[i].MDetectGroup}</option>`);       
+                domElements.cbbMGroup.append(`<option value='${items[i].MDetectGroupID}'>${items[i].MDetectGroup}</option>`);
             }
             else {
                 domElements.cbbMGroup.append(`<option selected value='${items[i].MDetectGroupID}'>${items[i].MDetectGroup}</option>`);
-            }        
+            }
         }
 
         domElements.cbbMGroup.multiselect("refresh");
@@ -1163,7 +1180,7 @@ function MatchMonitorDetail() {
         if (selectedFilter != undefined) {
             cacheFilter[associationDetection] = selectedFilter;
         }
-    }   
+    }
 
     //#endregion Cache Filter
 
@@ -1199,16 +1216,16 @@ function MatchMonitorDetail() {
 
             domElements.breadcrumbTotalTickets.html('');
 
-            if (isDisplaySingleGrid) {              
+            if (isDisplaySingleGrid) {
                 domElements.divHomeMonitor.addClass('hide');
                 domElements.divAwayMonitor.addClass('hide');
                 domElements.divSGMonitor.removeClass('hide');
-            } else {                
+            } else {
                 domElements.divHomeMonitor.removeClass('hide');
                 domElements.divAwayMonitor.removeClass('hide');
                 domElements.divSGMonitor.addClass('hide');
             }
-           
+
             timeoutRenderTicketDetail = setTimeout(() => {
                 let params = {
                     EventDateToString: domElements.eventDataToString,
@@ -1232,7 +1249,7 @@ function MatchMonitorDetail() {
                     Danger5List: GetDangerSelectDataFilter(5),
                     CurrencyIdList: GetSelectDataFilter(domElements.cbbCurrency, true),
                     ReasonList: GetSelectDataFilter(domElements.cbbReason, true),
-                    Reason: domElements.reason,                    
+                    Reason: domElements.reason,
                     AGroupList: GetSelectDataFilter(domElements.cbbAGroup, true),
                     MGroupList: GetSelectDataFilter(domElements.cbbMGroup, true),
                     HDPList: GetHDPSelected(domElements.cbbHDPBetTeam, true),
@@ -1240,7 +1257,9 @@ function MatchMonitorDetail() {
                     CustAmountRM: GetInputAmount(),
                     TicketStatusList: GetSelectDataFilter(domElements.cbbTicketsStatus, true),
                     MGrTranIDListFiltered: GetTranIDsByFilterMGr(),
-                    Sport: domElements.sportType
+                    Sport: domElements.sportType,
+                    TranstimeFrom: transtime.fromDate,
+                    TranstimeTo: transtime.toDate
                 };
 
                 params.IsFilterSuspicious = IsFilterSuspicious(params);
@@ -1272,14 +1291,14 @@ function MatchMonitorDetail() {
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(data),
-                success: function (response) {                    
-                    if (response?.recordsTotal >= 0) {                        
+                success: function (response) {
+                    if (response?.recordsTotal >= 0) {
                         recordsTotalGlobal = response?.recordsTotal;
                         if ($('option', domElements.cbbMGroup).length > 1) {
                             domElements.breadcrumbTotalTickets.html(`Total Tickets: -/-`);
                         } else {
                             RefreshBreadcrumbTotalTickets(0, recordsTotalGlobal);
-                        }                        
+                        }
                     }
                 },
                 error: function (xhr, textStatus, error) {
@@ -1379,7 +1398,9 @@ function MatchMonitorDetail() {
             TypeOfTickets: currentType,
             IsImportNewTicket: isImportNewTicket,
             IsSupportShowAllTickets: isSupportShowAllTickets,
-            Sport: domElements.sportType
+            Sport: domElements.sportType,
+            TranstimeFrom: transtime.fromDate,
+            TranstimeTo: transtime.toDate
         };
 
         $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorFilter'), {
@@ -1387,7 +1408,9 @@ function MatchMonitorDetail() {
             type: 'POST',
             tryCount: 0,
             retryLimit: 3,
-            data: paramFilter,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(paramFilter),
             success: function (response) {
                 const data = response?.data;
                 if (data) {
@@ -1427,18 +1450,18 @@ function MatchMonitorDetail() {
                 recordsTotalGlobal = recordsFilteredGlobal = response.recordsFiltered;
             }
             if (typeOfTickets == MatchMonitorDetailViewType.TicketAll) {
-                recordsFilteredGlobal += response?.recordsFiltered ?? 0;                
+                recordsFilteredGlobal += response?.recordsFiltered ?? 0;
             }
 
             if (isDisplaySingleGrid) {
                 RenderSingleGrid(data, recordsFilteredGlobal, recordsTotalGlobal);
             } else {
                 RenderDoubleGrid(data, recordsFilteredGlobal, recordsTotalGlobal);
-            }                      
+            }
         }
     }
 
-    function RenderDoubleGrid(data, recordsFilteredGlobal, recordsTotalGlobal) {          
+    function RenderDoubleGrid(data, recordsFilteredGlobal, recordsTotalGlobal) {
         if (data?.HomeMatchItemList) {
             domElements.tblMMHomeTeam.DataTable().rows.add(data.HomeMatchItemList).draw(false);
         }
@@ -1450,7 +1473,7 @@ function MatchMonitorDetail() {
         RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsTotalGlobal);
     }
 
-    function RenderSingleGrid(data, recordsFilteredGlobal, recordsTotalGlobal) {           
+    function RenderSingleGrid(data, recordsFilteredGlobal, recordsTotalGlobal) {
         if (data?.ItemList) {
             domElements.tblMMSG.DataTable().rows.add(data.ItemList).draw(false);
         }
@@ -1560,14 +1583,14 @@ function MatchMonitorDetail() {
             xhr.onreadystatechange = null;
             xhr.abort();
         }
-       
+
         cacheFilterDependOn.MGrList = [];
         cacheMGroup.allMGroup = {};
-        cacheMGroup.selectMgroup = {};       
+        cacheMGroup.selectMgroup = {};
 
         SetCacheByAssociationDetection();
 
-        let params = {           
+        let params = {
             RawCustIDs: domElements.hdSelectedCustIDs.val(),
             RawUserNames: domElements.hdSelectedUsernames.val(),
             IsOptBP: domElements.inputOptBP.is(":checked"),
@@ -1575,7 +1598,7 @@ function MatchMonitorDetail() {
             IsOptIP: domElements.inputOptIP.is(":checked"),
             IsOptAgent: domElements.inputOptAgent.is(":checked"),
             IsOpt3MatchesLast7Days: domElements.inputOpt3MatchesLast7Days.is(":checked"),
-            IsOptIPLast3Days: domElements.inputOptIPLast3Days.is(":checked")           
+            IsOptIPLast3Days: domElements.inputOptIPLast3Days.is(":checked")
         }
 
         xhr = $.ajax(common.modifyRelativeUrl('MatchMonitor/DetectGroupAssWithOptions'), {
@@ -1590,7 +1613,7 @@ function MatchMonitorDetail() {
                 let itemList = response?.data?.ItemList;
                 if (response?.data?.ItemList) {
                     cacheMGroup.isActive = true;
-                                        
+
                     cacheFilterDependOn.MGrList = response.mGrList.MGrItems;
 
                     SetupMGroupFilter(response.mGrList.MGrItems);
@@ -1598,7 +1621,7 @@ function MatchMonitorDetail() {
                     if (isDisplaySingleGrid) {
                         BindChangeGroupAssWithOptions(domElements.tblMMSG.DataTable(), itemList);
                         let itemSG = domElements.tblMMSG.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
-                        
+
                         totalItem = itemSG.length;
                     } else {
                         BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam.DataTable(), itemList);
@@ -1608,7 +1631,7 @@ function MatchMonitorDetail() {
                         let itemMMAwayTeam = domElements.tblMMAwayTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
 
                         totalItem = itemMMHomeTeam.length + itemMMAwayTeam.length;
-                    }                                                           
+                    }
                 }
 
                 RefreshBreadcrumbTotalTickets(totalItem, totalItem);
@@ -1657,14 +1680,14 @@ function MatchMonitorDetail() {
                 }
             });
         }
-        
+
         domElements.divPopupAssDetect.attr('data-total-ticket-detect', custIDs.length);
 
         ctsCustIDs = ctsCustIDs.filter(OnlyUnique);
         custIDs = custIDs.filter(OnlyUnique);
         userNames = userNames.filter(OnlyUnique);
 
-        if (IsValidAssDetection(custIDs.length)) {                                   
+        if (IsValidAssDetection(custIDs.length)) {
             domElements.hdSelectedCustIDs.val(custIDs.join());
             domElements.hdSelectedUsernames.val(userNames.join());
 
@@ -1699,7 +1722,7 @@ function MatchMonitorDetail() {
     function OnlyUnique(value, index, self) {
         return self.indexOf(value) == index;
     }
-   
+
     function BindChangeGroupAssWithOptions(table, itemList) {
         table.rows().every(function () {
             let rowData = this.data();
@@ -1718,8 +1741,8 @@ function MatchMonitorDetail() {
         })
     }
 
-    function GetTranIDsByFilterMGr() {       
-        let arrMGrTranIDs = [];       
+    function GetTranIDsByFilterMGr() {
+        let arrMGrTranIDs = [];
         Object.keys(cacheMGroup.allMGroup).forEach((betID) => {
             arrMGrTranIDs.push({
                 BetID: betID,
@@ -1777,7 +1800,7 @@ function MatchMonitorDetail() {
                     awayCheckedL = awayCheckedL + 1;
             })
         }
-        
+
 
         if (homeCheckedL + awayCheckedL + itemCheckL < 2) {
             common.showError("Please select at least 2 records to proceed!")
@@ -1799,7 +1822,7 @@ function MatchMonitorDetail() {
         datas += `,&quot;EventDateStr&quot;:&quot;${domElements.eventDataToString}&quot;`;
         datas += `,&quot;BetTypeName&quot;:&quot;${betTypeName}&quot;}`;
         return datas;
-    }    
+    }
 
     function GetDataSelectedInGrid(table) {
         let datas = '';
@@ -1854,9 +1877,9 @@ function MatchMonitorDetail() {
                         if (currentMaxTime < data.TransTimeToString) {
                             currentMaxTime = data.TransTimeToString;
                         }
-                    }                 
+                    }
                 }
-            })            
+            })
         } else {
             domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
                 if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
@@ -1891,8 +1914,8 @@ function MatchMonitorDetail() {
             })
         }
 
-        rangeTransTime.push(currentMinTime); 
-        rangeTransTime.push(currentMaxTime); 
+        rangeTransTime.push(currentMinTime);
+        rangeTransTime.push(currentMaxTime);
 
         return rangeTransTime;
     }
@@ -1933,16 +1956,16 @@ function MatchMonitorDetail() {
         BetTypeOnChange();
     }
 
-    function BetTypeOnChange() {     
-        AddFilterLoading();     
-        
+    function BetTypeOnChange() {
+        AddFilterLoading();
+
         cacheFilterScore = undefined;
 
-        ResetDefaulCbbSite();        
+        ResetDefaulCbbSite();
 
         ChangeCbbTypeOfTickets();
-        
-        let txtMarket = $("option:selected", domElements.cbbMarket).text();        
+
+        let txtMarket = $("option:selected", domElements.cbbMarket).text();
         domElements.spanMarketInfo.text(`${txtMarket}`);
 
         let txtBetType = $("option:selected", domElements.cbbBetType).text();
@@ -1953,8 +1976,8 @@ function MatchMonitorDetail() {
         cacheFilterDependOn.MGrList = [];
 
         isImportNewTicket = true;
-     
-        FetchFilterMatchMonitorDetail();    
+
+        FetchFilterMatchMonitorDetail();
 
         domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
 
@@ -1974,21 +1997,21 @@ function MatchMonitorDetail() {
 
         cacheFilterDependOn.MGrList = [];
 
-        FetchFilterMatchMonitorDetail(); 
+        FetchFilterMatchMonitorDetail();
 
         domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
 
         domElements.btnReasonFeedback.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
 
         RemoveFilterLoading();
-    }   
+    }
 
     function ScoreOnChange() {
         $('option', domElements.cbbSites).each(function (_, siteItem) {
             if ($(siteItem).val() == 'A') {
                 domElements.cbbSites.val('A');
             }
-        });      
+        });
 
         $('option', domElements.cbbCC).prop("selected", true);
         domElements.cbbCC.multiselect('refresh');
@@ -1997,13 +2020,13 @@ function MatchMonitorDetail() {
         domElements.cbbDanger.multiselect('refresh');
 
         $("option", domElements.cbbHDPBetTeam).prop("selected", true);
-        domElements.cbbHDPBetTeam.multiselect('refresh');  
+        domElements.cbbHDPBetTeam.multiselect('refresh');
 
         cacheFilterDependOn.MGrList = [];
         cacheMGroup.allMGroup = {};
         cacheMGroup.selectMgroup = {};
 
-        domElements.cbbMGroup.multiselect().empty();        
+        domElements.cbbMGroup.multiselect().empty();
         domElements.cbbMGroup.append(`<option selected value='0'>-</option>`);
         domElements.cbbMGroup.multiselect("refresh");
 
@@ -2022,7 +2045,7 @@ function MatchMonitorDetail() {
         FilterDependOnSelected(IndexFilterSelected.Score);
     }
 
-    function FilterDependOnSelected(indexFilterSelected) {        
+    function FilterDependOnSelected(indexFilterSelected) {
         let scoresSelected = domElements.cbbMatchScore.val();
         let siteSelected = domElements.cbbSites.val();
         let ccSelected = domElements.cbbCC.val();
@@ -2031,26 +2054,26 @@ function MatchMonitorDetail() {
         let danger2Selected = GetDangerSelectDataFilter(2);
         let danger3Selected = GetDangerSelectDataFilter(3);
         let danger4Selected = GetDangerSelectDataFilter(4);
-        let danger5Selected = GetDangerSelectDataFilter(5);    
-        
+        let danger5Selected = GetDangerSelectDataFilter(5);
+
         let currencySelected = domElements.cbbCurrency.val();
         let reasonSelected = domElements.cbbReason.val();
 
         let isNoDangerSelect = !isDangerNone && danger1Selected.length == 0 && danger2Selected.length == 0 &&
             danger3Selected.length == 0 && danger4Selected.length == 0 && danger5Selected.length == 0;
-       
+
         if (cacheFilterDependOn.DropdownListFilterDependOn) {
             let dependOnFilter = cacheFilterDependOn.DropdownListFilterDependOn.filter(function (item) {
                 if (scoresSelected.length == 0 || isNoDangerSelect) {
                     return false;
                 }
-                if (indexFilterSelected == IndexFilterSelected.Reason) {                   
+                if (indexFilterSelected == IndexFilterSelected.Reason) {
                     if (!reasonSelected.find(x => item.ReasonItem.indexOf(x) > -1)) {
                         return false;
                     }
                     if (!currencySelected.find(x => x == item.CurrencyId)) {
                         return false;
-                    }                    
+                    }
                 }
 
                 if (indexFilterSelected == IndexFilterSelected.Currency) {
@@ -2058,7 +2081,7 @@ function MatchMonitorDetail() {
                         return false;
                     }
                 }
-           
+
                 let countDangerType = 0;
                 if (isDangerNone && item.DangerToString == '-') {
                     countDangerType += 1;
@@ -2101,7 +2124,7 @@ function MatchMonitorDetail() {
 
             CheckChangeFilterByAssociationDetection();
         }
-    }   
+    }
 
     function BindEffectFilterDependOn(indexFilterSelected, dependOnFilter) {
         let aGrItems = [];
@@ -2131,12 +2154,12 @@ function MatchMonitorDetail() {
                     aGrItems = DistinctByAGr(dependOnFilter);
                     RefreshAGr(aGrItems);
                 }
-               
+
                 break;
-        }        
+        }
     }
 
-    function DistinctByCurrency(dependOnFilter) {       
+    function DistinctByCurrency(dependOnFilter) {
         let distinct = new Set();
         let newObj = dependOnFilter.filter(obj => {
             if (!distinct.has(obj.CurrencyId)) {
@@ -2157,7 +2180,7 @@ function MatchMonitorDetail() {
                 distinct.add(obj.ReasonItem);
                 return true;
             }
-            return false;   
+            return false;
         }).map(function (reason) {
             if (reason.ReasonItem) {
                 reason.ReasonItem.split(',').forEach(x => {
@@ -2187,16 +2210,16 @@ function MatchMonitorDetail() {
                     isBlank = true;
                 } else {
                     aGrItems.push(parseInt(aGr.ADetectGroup));
-                }     
-            }                
-        });     
+                }
+            }
+        });
 
         let aGrItemsInt = aGrItems.map(str => parseInt(str));
 
-        aGrItemsInt.sort((a, b) => a - b);      
+        aGrItemsInt.sort((a, b) => a - b);
 
         if (isBlank) aGrItemsInt.unshift("-");
-   
+
         return aGrItemsInt;
     }
 
@@ -2268,12 +2291,12 @@ function MatchMonitorDetail() {
                 reasonItems.forEach(item => {
                     domElements.cbbReason.append(`<option selected value='${item}'>${item}</option>`);
                 });
-            }              
+            }
         }
         domElements.cbbReason.multiselect("refresh");
     }
 
-    function RefreshAGr(aGrItems) {  
+    function RefreshAGr(aGrItems) {
         let cacheSelectedAGr = [];
         let cacheSelected = cacheFilterForImportNew[currentType];
         if (cacheSelected != undefined && cacheSelected.cbbAGroup) {
@@ -2287,13 +2310,13 @@ function MatchMonitorDetail() {
                         domElements.cbbAGroup.append(`<option selected value='${item}'>${item}</option>`);
                     } else {
                         domElements.cbbAGroup.append(`<option  value='${item}'>${item}</option>`);
-                    }                    
+                    }
                 });
             } else {
                 aGrItems.forEach(item => {
                     domElements.cbbAGroup.append(`<option selected value='${item}'>${item}</option>`);
                 });
-            }            
+            }
         }
         domElements.cbbAGroup.multiselect("refresh");
     }
@@ -2326,6 +2349,10 @@ function MatchMonitorDetail() {
         cacheMGroup.selectMgroup = {};
         domElements.inputCustAmountRM.val('');
         domElements.iconClearUsnAmt.addClass("hide");
+        domElements.inputTranstimeFrom.val('');
+        domElements.inputTranstimeTo.val('');
+        transtime.fromDate = undefined;
+        transtime.toDate = undefined;
     }
 
     //#endregion Event OnChange
@@ -2342,7 +2369,7 @@ function MatchMonitorDetail() {
 
     function ToggleGridSelectAll(input, table) {
         var nodes = table.rows({ 'search': 'applied' }).nodes();
-       
+
         $('input[type="checkbox"][name="chkbx"]:not(:hidden)', nodes).prop('checked', input.is(":checked"));
     }
 
@@ -2369,6 +2396,129 @@ function MatchMonitorDetail() {
 
     //#endregion Event Toggle
 
+    //#region TranstimeFilter
+    function AutoFillTranstimeFromDataGrid() {
+        var rangeTransTime = GetRangeTransTime();
+        if (rangeTransTime[0] && rangeTransTime[1]) {
+            domElements.inputTranstimeFrom.val(rangeTransTime[0]);
+            domElements.inputTranstimeTo.val(rangeTransTime[1]);
+        }
+    }
+
+    function SetupTranstimeDateRange() {
+        if (domElements.inputTranstimeFrom.val() || domElements.inputTranstimeTo.val()) {
+            var transtimeFrom = GetDateFromInputTranstime(domElements.inputTranstimeFrom.val());
+            var transtimeTo = GetDateFromInputTranstime(domElements.inputTranstimeTo.val());
+
+            if (transtimeFrom.isException || transtimeTo.isException) {
+                common.showConfirmation('Convert to the correct Transtime format (dd/mm/yy hh:mm:ss) ?',
+                    function () {
+                        transtimeFrom = transtimeFrom.isException ? ConvertDateFromInputTranstime(domElements.inputTranstimeFrom.val()) : transtimeFrom;
+                        transtimeTo = transtimeTo.isException ? ConvertDateFromInputTranstime(domElements.inputTranstimeTo.val()) : transtimeTo;
+                        SetDataFromInputTranstime(transtimeFrom, transtimeTo);
+                    });
+            }
+
+            SetDataFromInputTranstime(transtimeFrom, transtimeTo);
+        }
+
+        if (domElements.inputTranstimeFrom.val().length === 0 &&
+            domElements.inputTranstimeTo.val().length === 0) {
+            transtime.fromDate = undefined;
+            transtime.toDate = undefined;
+            domElements.boderTranstimeInput.removeClass('info-input-error');
+
+            FetchFilterMatchMonitorDetail();
+
+            domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
+
+            domElements.btnReasonFeedback.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
+
+            RemoveFilterLoading();
+        }
+    }
+
+    function SetDataFromInputTranstime(transtimeFrom, transtimeTo) {
+        if (transtimeFrom.date <= transtimeTo.date) {
+            transtime.fromDate = transtimeFrom.date;
+            transtime.toDate = transtimeTo.date;
+            domElements.inputTranstimeFrom.val(transtimeFrom.dateToString);
+            domElements.inputTranstimeTo.val(transtimeTo.dateToString);
+
+            domElements.boderTranstimeInput.removeClass('info-input-error');
+
+            FetchFilterMatchMonitorDetail();
+
+            domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
+
+            domElements.btnReasonFeedback.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
+
+            RemoveFilterLoading();
+        }
+        else {
+            domElements.boderTranstimeInput.addClass('info-input-error');
+        }
+    }
+
+    function GetDateFromInputTranstime(dateStr) {
+        var result = {
+            date: undefined,
+            dateToString: undefined,
+            isException: undefined
+        }
+
+        if (dateStr)
+            try {
+                if (regexValidTranstime.test(dateStr)) {
+                    const [dateValues, timeValues] = dateStr.split(' ');
+                    const [day, month, year] = dateValues.split('/');
+                    const [hours, minutes, seconds] = timeValues.split(':');
+
+                    result.date = new Date(
+                        Date.UTC(
+                            +year + 2000,
+                            +month - 1,
+                            +day,
+                            +hours,
+                            +minutes,
+                            +seconds,
+                        )
+                    );
+
+                    result.dateToString = dateStr;
+                }
+                else {
+                    throw new Error();
+                }
+            } catch {
+                result.isException = true;
+            }
+
+        return result;
+
+    }
+
+    function ConvertDateFromInputTranstime(dateStr) {
+        var result = {
+            date: undefined,
+            dateToString: undefined,
+            isException: undefined
+        }
+
+        try {
+            result.date = new Date(dateStr);
+            result.dateToString = `${result.date.getUTCDate().toString().padStart(2, '0')}/` +
+                `${(+result.date.getUTCMonth() + 1).toString().padStart(2, '0')}/` +
+                `${result.date.getUTCFullYear().toString().slice(2, 4)} ` +
+                `${result.date.getUTCHours().toString().padStart(2, '0')}:` +
+                `${result.date.getUTCMinutes().toString().padStart(2, '0')}:` +
+                `${result.date.getUTCSeconds().toString().padStart(2, '0')}`;
+        } catch { }
+
+        return result;
+    }
+    //#endregion TranstimeFilter
+
     function Resize() {
         domElements.groupTable.width($(window).width() - 38);
 
@@ -2381,7 +2531,7 @@ function MatchMonitorDetail() {
         domElements.breadcrumbButton.css({ top: breadcrumbButtonTop });
         domElements.groupTable.css('top', groupTableTop);
 
-        domElements.groupTable.height($(window).height() - detailpageHeight - breadcrumbButtonHeight - 77);      
+        domElements.groupTable.height($(window).height() - detailpageHeight - breadcrumbButtonHeight - 77);
     }
 
     function Initial() {
@@ -2423,14 +2573,14 @@ function MatchMonitorDetail() {
         }
         catch { }
 
-        domElements.cbbTypeOfTickets.prop('disabled', !isSupportShowAllTickets);      
+        domElements.cbbTypeOfTickets.prop('disabled', !isSupportShowAllTickets);
 
         if (isSupportShowAllTickets) {
             domElements.cbbTypeOfTickets.change(function () {
                 ResetDefault();
 
                 CacheSelectDataFilter();
-               
+
                 TypeOfTicketsOnChange();
             });
         }
@@ -2441,7 +2591,7 @@ function MatchMonitorDetail() {
 
         domElements.inputCustAmountRM.on('input', function () {
             let validAmount = domElements.inputCustAmountRM.val().replace(regexInvalidAmount, "");
-            
+
             domElements.inputCustAmountRM.val(validAmount);
 
             if (validAmount >= 0) {
@@ -2450,19 +2600,19 @@ function MatchMonitorDetail() {
                 domElements.iconClearUsnAmt.addClass("hide");
             }
         });
-    
+
         domElements.btnImportNewTicket.on('click', function () {
-            isImportNewTicket = true;           
+            isImportNewTicket = true;
             maxSequenceId = 1;
             cacheFilter = {};
             cacheFilterScore = undefined;
             cacheMGroup.isActive = false;
             cacheMGroup.allMGroup = {};
             cacheMGroup.selectMgroup = {};
-            
+
             CacheSelectFilterForImportNew();
             cacheFilterDependOn.MGrList = [];
-            
+
             ResetDefaulCbbSite();
 
             TypeOfTicketsOnChange();
@@ -2479,14 +2629,14 @@ function MatchMonitorDetail() {
             if (!ValidateTicketStatus()) {
                 return;
             }
-            if (ValidationFilter()) {                              
-                FetchMatchMonitorDetail(currentType);                
+            if (ValidationFilter()) {
+                FetchMatchMonitorDetail(currentType);
             }
         })
 
         domElements.tickCheckAll.on('click', function () { ToggleTickCheckAll(true); });
 
-        domElements.tickUncheckAll.on('click', function () { ToggleTickCheckAll(false); });     
+        domElements.tickUncheckAll.on('click', function () { ToggleTickCheckAll(false); });
 
         domElements.btnShowPopupAssDetection.on('click', function () { ShowPopupAssDetection(); })
 
@@ -2498,11 +2648,36 @@ function MatchMonitorDetail() {
             common.showConfirmation2('<div class="popup - content">Are you sure about this?<br>Once confirmed, all tickets\' review status will be updated to "Verified".</div>', function () {
                 VerifyTransMatchMonitorDetail();
             });
-        })
+        });
+
+        domElements.inputTranstimeFrom.on('input', function () {
+            domElements.iconTranstimeAutoFill.addClass('transtime-icon-forcus');
+        });
+
+        domElements.inputTranstimeTo.on('input', function () {
+            domElements.iconTranstimeAutoFill.addClass('transtime-icon-forcus');
+        });
+
+        domElements.iconTranstimeClear.on('click', function () {
+            domElements.iconTranstimeAutoFill.removeClass('transtime-icon-forcus');
+
+            domElements.inputTranstimeFrom.val('');
+            domElements.inputTranstimeTo.val('');
+
+            SetupTranstimeDateRange();
+        });
+
+        domElements.iconTranstimeAutoFill.on('click', function () {
+            domElements.iconTranstimeAutoFill.removeClass('transtime-icon-forcus');
+
+            AutoFillTranstimeFromDataGrid();
+
+            SetupTranstimeDateRange();
+        });
 
         domElements.inputHomeSelectAll.prop('checked', false);
         domElements.inputAwaySelectAll.prop('checked', false);
-       
+
         ChangeCbbTypeOfTickets();
 
         Resize();
@@ -2510,7 +2685,7 @@ function MatchMonitorDetail() {
         var reasonFeedback = new feedback();
 
         $('#btnReasonFeedback').on('click', function () {
-            
+
             let betTypeID = GetBetTypeSelected();
             let betID = GetBetIDSelected();
             let reasonList = cacheFilterDefault.ReasonList;
