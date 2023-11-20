@@ -116,7 +116,7 @@
                 MatchID = filter.MatchID,
                 LiveIndicator = filter.LiveIndicator,
                 BettypeID = filter.BetTypeID,
-                BetID = filter.BetID
+                BetID = filter.BetID,
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -420,7 +420,9 @@
                 TicketType = para.TypeOfTickets == MatchMonitorQueryType.TicketAll ? 0 : 1,
                 BatchSize = batchSize,
                 IsLicensee = (para.Sites == MMSites.All || para.Sites == null) ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
-                ListTransId = transJson
+                ListTransId = transJson,
+                FromTransDate = para.TranstimeFrom != null ? para.TranstimeFrom.Value.ToUniversalTime() : (DateTime?)null,
+                ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null,
             };
 
             if (IsDisplaySingleGrid(para.BetTypeID))
@@ -492,7 +494,9 @@
                 ListSuspiciousTransId = suspiciousTranInfos != null ? JsonConvert.SerializeObject(suspiciousTranInfos) : null,
                 TicketType = para.TypeOfTickets == MatchMonitorQueryType.TicketAll ? 0 : 1,
                 IsExclTestCurr = false,
-                BetID = para.BetID
+                BetID = para.BetID,
+                FromTransDate = para.TranstimeFrom != null ? para.TranstimeFrom.Value.ToUniversalTime() : (DateTime?)null,
+                ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null,
             };
 
             var result = repository.Fetch<MMDetailFilterTicketInfoModel>(criteria);

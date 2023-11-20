@@ -335,7 +335,7 @@ function MatchMonitorDetail() {
         element.multiselect().empty();
         let arrReason = [];
 
-        if (cacheDefaultReason != null) {          
+        if (cacheDefaultReason != null) {
             arrReason = cacheDefaultReason.split(',');
         }
 
@@ -351,16 +351,16 @@ function MatchMonitorDetail() {
                     element.append(`<option selected value='${data[i]}'>${data[i]}</option>`);
                 } else {
                     element.append(`<option value='${data[i]}'>${data[i]}</option>`);
-                }                
+                }
             }
 
             element.parent().find('button').removeClass('border-error');
         }
 
-        element.multiselect("refresh");        
+        element.multiselect("refresh");
     }
 
-    function SetupFilterScore(element, data) {        
+    function SetupFilterScore(element, data) {
         if (cacheFilterScore != undefined) {
             data = [...new Set([...data, ...cacheFilterScore])];
 
@@ -2284,9 +2284,9 @@ function MatchMonitorDetail() {
                     } else {
                         domElements.cbbReason.append(`<option value='${item}'>${item}</option>`);
                     }
-                });   
+                });
 
-                cacheDefaultReason = null;               
+                cacheDefaultReason = null;
             } else {
                 reasonItems.forEach(item => {
                     domElements.cbbReason.append(`<option selected value='${item}'>${item}</option>`);
@@ -2349,6 +2349,9 @@ function MatchMonitorDetail() {
         cacheMGroup.selectMgroup = {};
         domElements.inputCustAmountRM.val('');
         domElements.iconClearUsnAmt.addClass("hide");
+    }
+
+    function ResetTranstime() {
         domElements.inputTranstimeFrom.val('');
         domElements.inputTranstimeTo.val('');
         transtime.fromDate = undefined;
@@ -2407,14 +2410,14 @@ function MatchMonitorDetail() {
 
     function SetupTranstimeDateRange() {
         if (domElements.inputTranstimeFrom.val() || domElements.inputTranstimeTo.val()) {
-            var transtimeFrom = GetDateFromInputTranstime(domElements.inputTranstimeFrom.val());
-            var transtimeTo = GetDateFromInputTranstime(domElements.inputTranstimeTo.val());
+            var transtimeFrom = GetDateFromInputTranstime(domElements.inputTranstimeFrom.val().trim());
+            var transtimeTo = GetDateFromInputTranstime(domElements.inputTranstimeTo.val().trim());
 
             if (transtimeFrom.isException || transtimeTo.isException) {
                 common.showConfirmation('Convert to the correct Transtime format (dd/mm/yy hh:mm:ss) ?',
                     function () {
-                        transtimeFrom = transtimeFrom.isException ? ConvertDateFromInputTranstime(domElements.inputTranstimeFrom.val()) : transtimeFrom;
-                        transtimeTo = transtimeTo.isException ? ConvertDateFromInputTranstime(domElements.inputTranstimeTo.val()) : transtimeTo;
+                        transtimeFrom = transtimeFrom.isException ? ConvertDateFromInputTranstime(domElements.inputTranstimeFrom.val().trim()) : transtimeFrom;
+                        transtimeTo = transtimeTo.isException ? ConvertDateFromInputTranstime(domElements.inputTranstimeTo.val().trim()) : transtimeTo;
                         SetDataFromInputTranstime(transtimeFrom, transtimeTo);
                     });
             }
@@ -2426,15 +2429,8 @@ function MatchMonitorDetail() {
             domElements.inputTranstimeTo.val().length === 0) {
             transtime.fromDate = undefined;
             transtime.toDate = undefined;
-            domElements.boderTranstimeInput.removeClass('info-input-error');
 
-            FetchFilterMatchMonitorDetail();
-
-            domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
-
-            domElements.btnReasonFeedback.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
-
-            RemoveFilterLoading();
+            FetchFilterMMDetailByTranstime();
         }
     }
 
@@ -2445,19 +2441,25 @@ function MatchMonitorDetail() {
             domElements.inputTranstimeFrom.val(transtimeFrom.dateToString);
             domElements.inputTranstimeTo.val(transtimeTo.dateToString);
 
-            domElements.boderTranstimeInput.removeClass('info-input-error');
-
-            FetchFilterMatchMonitorDetail();
-
-            domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
-
-            domElements.btnReasonFeedback.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
-
-            RemoveFilterLoading();
+            FetchFilterMMDetailByTranstime();
         }
         else {
             domElements.boderTranstimeInput.addClass('info-input-error');
         }
+    }
+
+    function FetchFilterMMDetailByTranstime() {
+        domElements.boderTranstimeInput.removeClass('info-input-error');
+
+        isImportNewTicket = true;
+
+        FetchFilterMatchMonitorDetail();
+
+        domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
+
+        domElements.btnReasonFeedback.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
+
+        RemoveFilterLoading();
     }
 
     function GetDateFromInputTranstime(dateStr) {
@@ -2476,12 +2478,12 @@ function MatchMonitorDetail() {
 
                     result.date = new Date(
                         Date.UTC(
-                            +year + 2000,
-                            +month - 1,
-                            +day,
-                            +hours,
-                            +minutes,
-                            +seconds,
+                        +year + 2000,
+                        +month - 1,
+                        +day,
+                        +hours,
+                        +minutes,
+                        +seconds,
                         )
                     );
 
@@ -2506,13 +2508,21 @@ function MatchMonitorDetail() {
         }
 
         try {
-            result.date = new Date(dateStr);
-            result.dateToString = `${result.date.getUTCDate().toString().padStart(2, '0')}/` +
-                `${(+result.date.getUTCMonth() + 1).toString().padStart(2, '0')}/` +
-                `${result.date.getUTCFullYear().toString().slice(2, 4)} ` +
-                `${result.date.getUTCHours().toString().padStart(2, '0')}:` +
-                `${result.date.getUTCMinutes().toString().padStart(2, '0')}:` +
-                `${result.date.getUTCSeconds().toString().padStart(2, '0')}`;
+            const date = new Date(dateStr);
+            result.date = new Date(Date.UTC(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate(),
+                date.getHours(),
+                date.getMinutes(),
+                date.getSeconds()
+            ));
+            result.dateToString = `${date.getDate().toString().padStart(2, '0')}/` +
+                `${(+date.getMonth() + 1).toString().padStart(2, '0')}/` +
+                `${date.getFullYear().toString().slice(2, 4)} ` +
+                `${date.getHours().toString().padStart(2, '0')}:` +
+                `${date.getMinutes().toString().padStart(2, '0')}:` +
+                `${date.getSeconds().toString().padStart(2, '0')}`;
         } catch { }
 
         return result;
@@ -2552,10 +2562,12 @@ function MatchMonitorDetail() {
 
         domElements.cbbMarket.change(function () {
             ResetDefault();
+            ResetTranstime();
             MarketOnChange();
         });
         domElements.cbbBetType.change(function () {
             ResetDefault();
+            ResetTranstime();
             BetTypeOnChange();
         });
         domElements.cbbMatchScore.change(function () { ScoreOnChange(); });

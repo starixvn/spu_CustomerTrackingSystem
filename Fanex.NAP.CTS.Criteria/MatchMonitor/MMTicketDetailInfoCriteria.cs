@@ -42,6 +42,12 @@
         [SpParam(SqlParamName = "TotalTicketCredit")]
         public Int64 TotalTicketCredit { get; set; }
 
+        [SpParam(SqlParamName = "FromTransDate")]
+        public DateTime? FromTransDate { get; set; }
+
+        [SpParam(SqlParamName = "ToTransDate")]
+        public DateTime? ToTransDate { get; set; }
+
         public override string GetSettingKey()
             => "CTS_TicketDetails_Info";
 

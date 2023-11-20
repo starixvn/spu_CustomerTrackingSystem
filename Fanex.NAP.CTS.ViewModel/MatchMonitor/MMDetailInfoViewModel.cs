@@ -20,6 +20,8 @@
             this.LiveIndicator = para.LiveIndicator;
             this.IsImportNewTicket = para.IsImportNewTicket;
             this.Sport = para.Sport;
+            this.TranstimeFrom = para.TranstimeFrom;
+            this.TranstimeTo = para.TranstimeTo;
         }
 
         public bool IsSupportShowAllTickets { get; set; }

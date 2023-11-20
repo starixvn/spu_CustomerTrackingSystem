@@ -75,6 +75,12 @@
         [SpParam(SqlParamName = "TotalTicket")]
         public int? TotalTicket { get; set; }
 
+        [SpParam(SqlParamName = "FromTransDate")]
+        public DateTime? FromTransDate { get; set; }
+
+        [SpParam(SqlParamName = "ToTransDate")]
+        public DateTime? ToTransDate { get; set; }
+
         public override string GetSettingKey()
                 => "CTS_Rpt_MatchMonitor_TicketDetails";
 
