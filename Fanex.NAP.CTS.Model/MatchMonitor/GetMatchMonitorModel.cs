@@ -37,5 +37,9 @@
         public DateTime KickOffTime { get; set; }
 
         public bool IsSupportShowAllTickets { get; set; }
+
+        public string FraudTrans { get; set; }
+
+        public short DataSource { get; set; }
     }
 }

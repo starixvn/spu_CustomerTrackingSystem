@@ -105,7 +105,8 @@
             scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ,10 ,11, 12], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 11, 12], className: "text-center" },
+                { targets: [7, 8, 9 ,10], className: "text-right" },
                 { targets: [0], width: "6%" },
                 { targets: [1], width: "20%" },
                 { targets: [2], width: "20%" },
@@ -142,8 +143,8 @@
                         return obj.ReasonName;
                     }
                 },
-                { data: obj => ConvertNumberToThousandsString(obj.HomeTotalAmount) },
-                { data: obj => ConvertNumberToThousandsString(obj.AwayTotalAmount) },
+                { data: obj => ConvertNumberToThousandsString(Math.round(obj.HomeTotalAmount)) },
+                { data: obj => ConvertNumberToThousandsString(Math.round(obj.AwayTotalAmount)) },
                 { data: obj => ConvertNumberToThousandsString(obj.HomeBetCount) },
                 { data: obj => ConvertNumberToThousandsString(obj.AwayBetCount) },
                 { data: obj => RenderVerifiedUI(obj.IsVerified) },

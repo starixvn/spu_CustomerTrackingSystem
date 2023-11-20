@@ -382,6 +382,7 @@
     <Compile Include="MatchMonitor\MMDetailBetTeamModel.cs" />
     <Compile Include="MatchMonitor\MMDetailCustModel.cs" />
     <Compile Include="MatchMonitor\MMDetailMergeGroupModel.cs" />
+    <Compile Include="MatchMonitor\MMFraudTicketsSummaryModel.cs" />
     <Compile Include="MatchMonitor\MMTicketDetailInfoModel.cs" />
     <Compile Include="MatchMonitor\RobotStatusModel.cs" />
     <Compile Include="MatchMonitor\SuspiciousTransInfoModel.cs" />

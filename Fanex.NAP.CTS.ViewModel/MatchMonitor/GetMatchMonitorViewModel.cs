@@ -250,5 +250,11 @@
 
             return string.Empty;
         }
+
+        public string BuildTicketsSummaryDictionaryKey(string betteam)
+        {
+            var betIDToString = BetID != null ? BetID.ToString() : string.Empty;
+            return $"{MatchID}_{Market}_{BettypeID}_{betteam}_{betIDToString}".ToLower();
+        }
     }
 }
