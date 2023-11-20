@@ -102,8 +102,8 @@
                 },
                 { data: obj => obj.CustomerClassToString },
                 { data: obj => obj.DangerDisplay },
-                { data: obj => FormatTransInfo(obj.BotSumTrans, obj.BotPercentageTrans.toLocaleString(undefined, { style: 'percent', minimumFractionDigits: 2 })) },
-                { data: obj => FormatTransInfo(obj.InvalidBrowserInfoSumTrans, obj.InvalidBrowserInfoPercentageTrans.toLocaleString(undefined, { style: 'percent', minimumFractionDigits: 2 })) },
+                { data: obj => FormatTransInfo(obj.BotTransSum, obj.BotTransPercentage) },
+                { data: obj => FormatTransInfo(obj.InvalidBrowserInfoTransSum, obj.InvalidBrowserInfoTransPercentage) },
                 { data: obj => obj.Evidences },
                 {
                     data: obj => obj.AssociatedTypes, createdCell: (cell, _, row) => {
@@ -1013,7 +1013,7 @@
     }
 
     function FormatTransInfo(sum, percentage) {
-        var percentage = " (" + percentage + ")";
+        var percentage = " (" + percentage.toFixed(2) + "%)";
 
         return FormatNumber(sum) + percentage;
     }
@@ -1076,7 +1076,7 @@
         let optgroup = `<optgroup label="${groupName}">`;
 
         ccItems.map(function (item) {
-            let itemName = item == 0 ? '-' : item;
+            let itemName = item == -1 ? '-' : item;
             optgroup += `<option selected value=${item}>${itemName}</option>`;
         });
 
@@ -1110,20 +1110,21 @@
         var textInvalidBrowser = VerifyTextBox(domElements.txtInvalidBrowserTrans);
 
         var filterData = oldData.filter(c => ccOptions.includes(c.CustomerClass)
-                                        && (dangerOptions.includes("1-" + c.Danger1)
+                                        && (dangerOptions.includes("0"+c.DangerDisplay+"0")
+                                        || (dangerOptions.includes("1-" + c.Danger1)
                                         || dangerOptions.includes("2-" + c.Danger2)
                                         || dangerOptions.includes("3-" + c.Danger3)
                                         || dangerOptions.includes("4-" + c.Danger4)
-                                        || dangerOptions.includes("5-" + c.Danger5)));
+                                        || dangerOptions.includes("5-" + c.Danger5))));
 
         if (textBot !== "") {
             if (textBot.includes("%")) {
                 var floatnumber = parseFloat(textBot.replace("%", "").trim());
-                filterData = filterData.filter(c => c.BotPercentageTrans >= floatnumber);
+                filterData = filterData.filter(c => c.BotTransPercentage >= floatnumber);
             }
             else {
                 var floatnumber = parseInt(textBot.replace(",", "").trim());
-                filterData = filterData.filter(c => c.BotSumTrans >= floatnumber);
+                filterData = filterData.filter(c => c.BotTransSum >= floatnumber);
             }
 
             domElements.txtBotTrans.parent().removeClass("invalid-input");
@@ -1132,11 +1133,11 @@
         if (textInvalidBrowser !== "") {
             if (textInvalidBrowser.includes("%")) {
                 var floatnumber = parseFloat(textInvalidBrowser.replace("%", "").trim());
-                filterData = filterData.filter(c => c.InvalidBrowserInfoPercentageTrans >= floatnumber);
+                filterData = filterData.filter(c => c.InvalidBrowserInfoTransPercentage >= floatnumber);
             }
             else {
                 var floatnumber = parseInt(textInvalidBrowser.replace(",", "").trim());
-                filterData = filterData.filter(c => c.InvalidBrowserInfoSumTrans >= floatnumber);
+                filterData = filterData.filter(c => c.InvalidBrowserInfoTransSum >= floatnumber);
             }
 
             domElements.txtInvalidBrowserTrans.parent().removeClass("invalid-input");

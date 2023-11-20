@@ -765,10 +765,10 @@
                         item.Danger3 = cust1.Danger3;
                         item.Danger4 = cust1.Danger4;
                         item.Danger5 = cust1.Danger5;
-                        item.BotSumTrans = cust1.BotSumTrans;
-                        item.BotPercentageTrans = cust1.BotPercentageTrans;
-                        item.InvalidBrowserInfoSumTrans = cust1.InvalidBrowserInfoSumTrans;
-                        item.InvalidBrowserInfoPercentageTrans = cust1.InvalidBrowserInfoPercentageTrans;
+                        item.BotTransSum = cust1.BotTransSum;
+                        item.BotTransPercentage = cust1.BotTransPercentage;
+                        item.InvalidBrowserInfoTransSum = cust1.InvalidBrowserInfoTransSum;
+                        item.InvalidBrowserInfoTransPercentage = cust1.InvalidBrowserInfoTransPercentage;
                     }
                     if (cust2 != null)
                     {

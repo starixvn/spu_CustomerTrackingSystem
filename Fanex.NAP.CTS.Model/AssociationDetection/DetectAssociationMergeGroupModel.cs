@@ -16,13 +16,13 @@
 
         public string CustStatus { get; set; }
 
-        public int BotSumTrans { get; set; }
+        public int BotTransSum { get; set; }
 
-        public double BotPercentageTrans { get; set; }
+        public double BotTransPercentage { get; set; }
 
-        public int InvalidBrowserInfoSumTrans { get; set; }
+        public int InvalidBrowserInfoTransSum { get; set; }
 
-        public double InvalidBrowserInfoPercentageTrans { get; set; }
+        public double InvalidBrowserInfoTransPercentage { get; set; }
 
         public string Evidence { get; set; }
 

@@ -28,7 +28,7 @@
 
             if (ccGroup != null && ccGroup.Any())
             {
-                ccGroup.FirstOrDefault(c => c.CCGroupName.Equals("Others")).CCList.Add(0);
+                ccGroup.FirstOrDefault(c => c.CCGroupName.Equals("Others")).CCList.Add(-1);
                 
                 ccGroup.ForEach(group =>
                 {

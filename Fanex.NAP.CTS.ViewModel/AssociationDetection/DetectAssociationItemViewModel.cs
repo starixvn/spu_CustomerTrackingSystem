@@ -23,10 +23,10 @@
             this.Danger4 = data.Danger4;
             this.Danger5 = data.Danger5;
             this.DangerDisplay = RenderDangerSetting(data);
-            this.BotSumTrans = data.BotSumTrans;
-            this.BotPercentageTrans = data.BotPercentageTrans;
-            this.InvalidBrowserInfoSumTrans = data.InvalidBrowserInfoSumTrans;
-            this.InvalidBrowserInfoPercentageTrans = data.InvalidBrowserInfoPercentageTrans;
+            this.BotTransSum = data.BotTransSum;
+            this.BotTransPercentage = Math.Round(data.BotTransPercentage, 2);
+            this.InvalidBrowserInfoTransSum = data.InvalidBrowserInfoTransSum;
+            this.InvalidBrowserInfoTransPercentage = Math.Round(data.InvalidBrowserInfoTransPercentage, 2);
             this.Evidences = data.Evidence;
             this.AssociatedTypes = GetAssociationType(data.AssociationType);
             this.CustomerCategory = data.CustomerCategory;
@@ -60,13 +60,13 @@
 
         public string DangerDisplay { get; set; }
 
-        public int BotSumTrans { get; set; }
+        public int BotTransSum { get; set; }
 
-        public double BotPercentageTrans { get; set; }
+        public double BotTransPercentage { get; set; }
 
-        public int InvalidBrowserInfoSumTrans { get; set; }
+        public int InvalidBrowserInfoTransSum { get; set; }
 
-        public double InvalidBrowserInfoPercentageTrans { get; set; }
+        public double InvalidBrowserInfoTransPercentage { get; set; }
 
         public string Evidences { get; set; }       
 
