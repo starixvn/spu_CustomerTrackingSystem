@@ -1104,12 +1104,12 @@
 
     function Search() {
         var table = domElements.tblAssociationDetection.DataTable();
-        var ccOptions = domElements.cbbCC.val().join();
-        var dangerOptions = domElements.cbbDanger.val().join();
+        var ccOptions = domElements.cbbCC.val();
+        var dangerOptions = domElements.cbbDanger.val();
         var textBot = VerifyTextBox(domElements.txtBotTrans);
         var textInvalidBrowser = VerifyTextBox(domElements.txtInvalidBrowserTrans);
 
-        var filterData = oldData.filter(c => ccOptions.includes(c.CustomerClass)
+        var filterData = oldData.filter(c => findElement(ccOptions, c.CustomerClass)
                                         && (dangerOptions.includes("0"+c.DangerDisplay+"0")
                                         || (dangerOptions.includes("1-" + c.Danger1)
                                         || dangerOptions.includes("2-" + c.Danger2)
@@ -1145,6 +1145,16 @@
 
         table.clear();
         table.clear().rows.add(filterData).draw();
+    }
+
+
+    function findElement(filters, element) {
+        for (let i = 0; i < filters.length; i++) {
+            if (filters[i] == element)
+                return true;
+        }
+
+        return false;
     }
 
     function VerifyTextBox(textBox) {
