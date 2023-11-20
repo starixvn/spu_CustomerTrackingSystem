@@ -524,8 +524,6 @@ body {
         margin-left: 15px; }
   .association-detection-report .association-detection-content .table-report {
     font-family: "Lato", Arial, Tahoma, sans-serif; }
-    .association-detection-report .association-detection-content .table-report .top-header {
-      justify-content: space-between; }
     .association-detection-report .association-detection-content .table-report .group {
       padding-bottom: 8px;
       padding-top: 8px;
@@ -599,7 +597,14 @@ body {
       position: -webkit-sticky;
       top: 9.3rem;
       background: #fff;
-      z-index: 9; }
+      z-index: 8; }
+      .association-detection-report .association-detection-content .table-report .fixed-header .top-header {
+        justify-content: space-between;
+        position: sticky;
+        position: -webkit-sticky;
+        top: 9.4rem;
+        font-weight: 300;
+        z-index: 99; }
       .association-detection-report .association-detection-content .table-report .fixed-header .button-primary {
         margin-left: 10px; }
         .association-detection-report .association-detection-content .table-report .fixed-header .button-primary .sub-icon {
@@ -619,7 +624,7 @@ body {
       position: sticky;
       position: -webkit-sticky;
       z-index: 99;
-      top: 13.5rem;
+      top: 17rem;
       transition: top 0.01s linear; }
     .association-detection-report .association-detection-content .table-report .table-association-detection {
       width: 100% !important; }
@@ -642,7 +647,7 @@ body {
       .association-detection-report .association-detection-content .table-report .table-association-detection thead tr:first-child th {
         position: sticky;
         position: -webkit-sticky;
-        top: 13.7rem;
+        top: 17.0rem;
         font-weight: 300;
         z-index: 99; }
         .association-detection-report .association-detection-content .table-report .table-association-detection thead tr:first-child th span {
