@@ -8,8 +8,7 @@
 
         bool PushValue<T>(string key, T value, int hours = 1) where T : class;
 
-
-       Task<bool> PushValueAsync<T>(string key, T value, int hours = 1) where T : class;
+        Task<bool> PushValueAsync<T>(string key, T value, int hours = 1) where T : class;
 
         Task<bool> RemoveValueAsync(string key);
 

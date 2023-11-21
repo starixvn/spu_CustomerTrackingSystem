@@ -376,10 +376,10 @@
         {
             var result = new MMDetailFilterViewModel();
 
-            var removeKeyFraud = $"{Enum.GetName(typeof(MatchMonitorQueryType), MatchMonitorQueryType.TicketFraud)}_{para.EventDateToString}_{para.MatchID}_{para.BetTypeID}_{para.BetID}_{para.LiveIndicator}";
+            var removeKeyFraud = para.BuildCacheKey(string.Empty, MMDetailRegion, Enum.GetName(typeof(MatchMonitorQueryType), MatchMonitorQueryType.TicketFraud));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyFraud);
 
-            var removeKeyAll = $"{Enum.GetName(typeof(MatchMonitorQueryType), MatchMonitorQueryType.TicketAll)}_{para.EventDateToString}_{para.MatchID}_{para.BetTypeID}_{para.BetID}_{para.LiveIndicator}";
+            var removeKeyAll = para.BuildCacheKey(string.Empty, MMDetailRegion, Enum.GetName(typeof(MatchMonitorQueryType), MatchMonitorQueryType.TicketAll));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyAll);
 
             switch (para.TypeOfTickets)

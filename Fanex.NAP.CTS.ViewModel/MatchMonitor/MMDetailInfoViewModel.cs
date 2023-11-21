@@ -67,9 +67,11 @@
 
         public MMDetailInfoViewModel Clone() => new MMDetailInfoViewModel(this);
 
-        public string BuildCacheKey(string nameOfFuntion, string region, string ticketType)
+        public string BuildCacheKey(string nameOfFuntion, string userID, string ticketType)
         {
-            return $"{nameOfFuntion}_{region}_{ticketType}_{EventDateToString}_{MatchID}_{BetTypeID}_{BetID}_{LiveIndicator}";
-        }       
+            var transtimeFrom = TranstimeFrom?.Subtract(DateTime.MinValue).TotalSeconds.ToString() ?? string.Empty;
+            var transtimeTo = TranstimeTo?.Subtract(DateTime.MinValue).TotalSeconds.ToString() ?? string.Empty;
+            return $"{nameOfFuntion}_{userID}_{MatchID}_{LiveIndicator}_{BetTypeID}_{BetID}_{ticketType}_{transtimeFrom}_{transtimeTo}";
+        }
     }
 }
