@@ -1794,7 +1794,7 @@
             var twGroupBettingRate = cc.TWGroupBettingRate;
             var twTicketRejectRate = cc.TWTicketRejectRate;
             var twDesktopTicket = cc.TWDesktopUsageRate;
-            var first5TWGBTicketCount = cc.First5TWGBTicketCount;
+            var first5TWGBTicketCount = cc.First5TWGBTicketCount?.ToString() ?? string.Empty;
 
             switch (cc.CategoryID)
             {
@@ -1899,7 +1899,7 @@
                 case (int)CustomerCategorySportType.Basketball:
                     return cc.SportName;
                 default:
-                    return "Socer/Basketball";
+                    return "Soccer/Basketball";
             }
         }
 
