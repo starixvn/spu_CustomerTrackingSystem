@@ -1171,6 +1171,7 @@
         }
 
         var numberic = text.replace("%", "");
+        numberic = numberic.replace(",", "");
 
         if (!(!isNaN(parseFloat(numberic))  && isFinite(numberic))) {
             textBox.parent().addClass("invalid-input");
