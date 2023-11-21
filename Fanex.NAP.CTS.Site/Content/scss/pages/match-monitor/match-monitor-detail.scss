@@ -386,10 +386,22 @@
                             .transtime-icon {
                                 vertical-align: middle;
                                 cursor: pointer;
+                                margin-left: 3px;
+                            }
+
+                            .transtime-icon-submit {
+                                border: 1px solid #474747;
+                                border-radius: 2px;
+                                width: 20px;
+                                height: 16px;
+                                font-size: 14px;
+                                display: inline-block;
+                                text-align: center;
                             }
 
                             .transtime-icon-forcus {
                                 color: red;
+                                border: 1px solid red;
                             }
                         }
 
@@ -603,6 +615,15 @@
                                                 -webkit-box-flex: 1;
                                                 flex: 3;
                                                 margin-right: 2px;
+                                            }
+
+                                            .icon-transtime-autofill {
+                                                border: 1px solid #ffffff;
+                                                border-radius: 2px;
+                                                width: 20px;
+                                                height: 16px;
+                                                font-size: 12px;
+                                                cursor: pointer;
                                             }
 
                                             .icon-collapse-expand {

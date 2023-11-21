@@ -99,9 +99,12 @@ function MatchMonitorDetail() {
         btnReasonFeedback: $('#btnReasonFeedback'),
         inputTranstimeFrom: $('#inputTranstimeFrom'),
         inputTranstimeTo: $('#inputTranstimeTo'),
-        iconTranstimeAutoFill: $('#iconTranstimeAutofill'),
+        iconTranstimeSubmit: $('#iconTranstimeSubmit'),
         iconTranstimeClear: $('#iconTranstimeClear'),
-        boderTranstimeInput: $('.info-input')
+        boderTranstimeInput: $('.info-input'),
+        iconHTranstimeAutofill: $('#iconHTranstimeAutofill'),
+        iconATranstimeAutofill: $('#iconATranstimeAutofill'),
+        iconSGTranstimeAutofill: $('#iconSGTranstimeAutofill'),
     };
 
     let transtime = {
@@ -687,7 +690,12 @@ function MatchMonitorDetail() {
                                         <th>Amt</th>
                                         <th>HDP</th>
                                         <th>Score</th>
-                                        <th>Transtime</th>
+                                        <th>
+                                            <div class="type-outer">
+                                                <span class="col-title">Transtime</span>
+                                                <span class="icon-transtime-autofill" id="iconHTranstimeAutofill">A</span>
+                                            </div>
+                                        </th>
                                         <th>B.f.</th>
                                         <th title="Auto-detected Association Group">
                                             A.Gr.
@@ -725,7 +733,12 @@ function MatchMonitorDetail() {
                                         <th>Amt</th>
                                         <th>HDP</th>
                                         <th>Score</th>
-                                        <th>Transtime</th>
+                                        <th>
+                                            <div class="type-outer">
+                                                <span class="col-title">Transtime</span>
+                                                <span class="icon-transtime-autofill" id="iconATranstimeAutofill">A</span>
+                                            </div>
+                                        </th>
                                         <th>B.f.</th>
                                         <th title="Auto-detected Association Group">
                                             A.Gr.
@@ -773,6 +786,17 @@ function MatchMonitorDetail() {
                 ToggleBetID(domElements.tblMMAwayTeam, true);
             }
         });
+
+        domElements.iconHTranstimeAutofill = $('#iconHTranstimeAutofill');
+        domElements.iconATranstimeAutofill = $('#iconATranstimeAutofill');
+
+        domElements.iconHTranstimeAutofill.on('click', function () {
+            AutoFillTranstimeFromDataGrid(domElements.tblMMHomeTeam.DataTable());
+        });
+
+        domElements.iconATranstimeAutofill.on('click', function () {
+            AutoFillTranstimeFromDataGrid(domElements.tblMMAwayTeam.DataTable());
+        });
     }
 
     function SetupSingleTable() {
@@ -795,7 +819,12 @@ function MatchMonitorDetail() {
                                         <th>Amt</th>
                                         <th>Choice</th>
                                         <th>Score</th>
-                                        <th>Transtime</th>
+                                        <th>
+                                            <div class="type-outer">
+                                                <span class="col-title">Transtime</span>
+                                                <span class="icon-transtime-autofill" id="iconSGTranstimeAutofill">A</span>
+                                            </div>
+                                        </th>
                                         <th>B.f.</th>
                                         <th title="Auto-detected Association Group">
                                             A.Gr.
@@ -816,6 +845,12 @@ function MatchMonitorDetail() {
 
         domElements.inputSGSelectAll = $('#inputSGSelectAll');
         domElements.inputSGSelectAll.on('click', function () { ToggleGridSelectAll(domElements.inputSGSelectAll, domElements.tblMMSG.DataTable()) });
+
+        domElements.iconSGTranstimeAutofill = $('#iconSGTranstimeAutofill');
+
+        domElements.iconSGTranstimeAutofill.on('click', function () {
+            AutoFillTranstimeFromDataGrid(domElements.tblMMSG.DataTable());
+        });
     }
 
     //#endregion Setup Filter & Grid
@@ -996,7 +1031,7 @@ function MatchMonitorDetail() {
         if (domElements.boderTranstimeInput.hasClass('info-input-error')) {
             result = false;
         }
-        if (domElements.iconTranstimeAutoFill.hasClass('transtime-icon-forcus')) {
+        if (domElements.iconTranstimeSubmit.hasClass('transtime-icon-forcus')) {
             result = false;
         }
 
@@ -1859,7 +1894,7 @@ function MatchMonitorDetail() {
     //#endregion Export To Excel  
 
     //#region Feedback
-    function GetRangeTransTime() {
+    function GetRangeTransTimeForFeedback() {
         let rangeTransTime = [];
         let currentMinTime = '';
         let currentMaxTime = '';
@@ -2400,11 +2435,13 @@ function MatchMonitorDetail() {
     //#endregion Event Toggle
 
     //#region TranstimeFilter
-    function AutoFillTranstimeFromDataGrid() {
-        var rangeTransTime = GetRangeTransTime();
+    function AutoFillTranstimeFromDataGrid(datatable) {
+        var rangeTransTime = GetRangeTransTimeForAutoFill(datatable);
         if (rangeTransTime[0] && rangeTransTime[1]) {
             domElements.inputTranstimeFrom.val(rangeTransTime[0]);
             domElements.inputTranstimeTo.val(rangeTransTime[1]);
+
+            domElements.iconTranstimeSubmit.addClass('transtime-icon-forcus');
         }
     }
 
@@ -2478,12 +2515,12 @@ function MatchMonitorDetail() {
 
                     result.date = new Date(
                         Date.UTC(
-                        +year + 2000,
-                        +month - 1,
-                        +day,
-                        +hours,
-                        +minutes,
-                        +seconds,
+                            +year + 2000,
+                            +month - 1,
+                            +day,
+                            +hours,
+                            +minutes,
+                            +seconds,
                         )
                     );
 
@@ -2526,6 +2563,31 @@ function MatchMonitorDetail() {
         } catch { }
 
         return result;
+    }
+
+    function GetRangeTransTimeForAutoFill(dataTable) {
+        let rangeTransTime = [];
+        let currentMinTime = '';
+        let currentMaxTime = '';
+
+        dataTable.rows(function (idx, data, node) {
+            if (currentMinTime == '') {
+                currentMinTime = data.TransTimeToString;
+                currentMaxTime = data.TransTimeToString;
+            } else {
+                if (currentMinTime > data.TransTimeToString) {
+                    currentMinTime = data.TransTimeToString;
+                }
+                if (currentMaxTime < data.TransTimeToString) {
+                    currentMaxTime = data.TransTimeToString;
+                }
+            }
+        })
+
+        rangeTransTime.push(currentMinTime);
+        rangeTransTime.push(currentMaxTime);
+
+        return rangeTransTime;
     }
     //#endregion TranstimeFilter
 
@@ -2663,15 +2725,15 @@ function MatchMonitorDetail() {
         });
 
         domElements.inputTranstimeFrom.on('input', function () {
-            domElements.iconTranstimeAutoFill.addClass('transtime-icon-forcus');
+            domElements.iconTranstimeSubmit.addClass('transtime-icon-forcus');
         });
 
         domElements.inputTranstimeTo.on('input', function () {
-            domElements.iconTranstimeAutoFill.addClass('transtime-icon-forcus');
+            domElements.iconTranstimeSubmit.addClass('transtime-icon-forcus');
         });
 
         domElements.iconTranstimeClear.on('click', function () {
-            domElements.iconTranstimeAutoFill.removeClass('transtime-icon-forcus');
+            domElements.iconTranstimeSubmit.removeClass('transtime-icon-forcus');
 
             domElements.inputTranstimeFrom.val('');
             domElements.inputTranstimeTo.val('');
@@ -2679,10 +2741,8 @@ function MatchMonitorDetail() {
             SetupTranstimeDateRange();
         });
 
-        domElements.iconTranstimeAutoFill.on('click', function () {
-            domElements.iconTranstimeAutoFill.removeClass('transtime-icon-forcus');
-
-            AutoFillTranstimeFromDataGrid();
+        domElements.iconTranstimeSubmit.on('click', function () {
+            domElements.iconTranstimeSubmit.removeClass('transtime-icon-forcus');
 
             SetupTranstimeDateRange();
         });
@@ -2702,7 +2762,7 @@ function MatchMonitorDetail() {
             let betID = GetBetIDSelected();
             let reasonList = cacheFilterDefault.ReasonList;
             let reasonCheckedList = GetSelectDataFilter(domElements.cbbReason, true);
-            let rangeTransTime = GetRangeTransTime();
+            let rangeTransTime = GetRangeTransTimeForFeedback();
 
             reasonFeedback.Initial(domElements.matchID, domElements.cbbMarket.val(), betTypeID, betID, domElements.sportType, reasonList, reasonCheckedList, rangeTransTime);
         });
