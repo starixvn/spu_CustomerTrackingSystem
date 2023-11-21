@@ -1119,11 +1119,11 @@
 
         if (textBot !== "") {
             if (textBot.includes("%")) {
-                var floatnumber = parseFloat(textBot.replace("%", "").trim());
+                var floatnumber = parseFloat(textBot.replaceAll("%", "").trim());
                 filterData = filterData.filter(c => c.BotTransPercentage >= floatnumber);
             }
             else {
-                var floatnumber = parseInt(textBot.replace(",", "").trim());
+                var floatnumber = parseFloat(textBot.replaceAll(",", "").trim());
                 filterData = filterData.filter(c => c.BotTransSum >= floatnumber);
             }
 
@@ -1132,11 +1132,11 @@
 
         if (textInvalidBrowser !== "") {
             if (textInvalidBrowser.includes("%")) {
-                var floatnumber = parseFloat(textInvalidBrowser.replace("%", "").trim());
+                var floatnumber = parseFloat(textInvalidBrowser.replaceAll("%", "").trim());
                 filterData = filterData.filter(c => c.InvalidBrowserInfoTransPercentage >= floatnumber);
             }
             else {
-                var floatnumber = parseInt(textInvalidBrowser.replace(",", "").trim());
+                var floatnumber = parseFloat(textInvalidBrowser.replaceAll(",", "").trim());
                 filterData = filterData.filter(c => c.InvalidBrowserInfoTransSum >= floatnumber);
             }
 
@@ -1170,8 +1170,8 @@
             }
         }
 
-        var numberic = text.replace("%", "");
-        numberic = numberic.replace(",", "");
+        var numberic = text.replaceAll("%", "");
+        numberic = numberic.replaceAll(",", "");
 
         if (!(!isNaN(parseFloat(numberic))  && isFinite(numberic))) {
             textBox.parent().addClass("invalid-input");
