@@ -604,7 +604,9 @@ body {
         position: -webkit-sticky;
         top: 9.4rem;
         font-weight: 300;
-        z-index: 99; }
+        z-index: 99;
+        background-color: #e7edff;
+        border: none; }
       .association-detection-report .association-detection-content .table-report .fixed-header .button-primary {
         margin-left: 10px; }
         .association-detection-report .association-detection-content .table-report .fixed-header .button-primary .sub-icon {
