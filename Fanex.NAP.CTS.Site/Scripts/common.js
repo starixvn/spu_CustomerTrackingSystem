@@ -95,6 +95,7 @@
         list.push({ 'id': '231', 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'New Member (31)' });
         list.push({ 'id': '232', 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'New Member (32)' });
         list.push({ 'id': '233', 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'New Member (33)' });
+        list.push({ 'id': '239', 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'New Member' });
 
         list.push({ 'id': '251', 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Probation (51)' });
         list.push({ 'id': '252', 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Probation (52)' });

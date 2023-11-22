@@ -62,6 +62,7 @@
         NewMember31 = 231,
         NewMember32 = 232,
         NewMember33 = 233,
+        NewMember39 = 239,
         NormalAccount = 202,
         NormalAccount121 = 221,
         NormalAccount122 = 222,
