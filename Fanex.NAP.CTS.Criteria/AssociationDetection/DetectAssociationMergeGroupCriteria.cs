@@ -8,8 +8,14 @@
         [SpParam(SqlParamName = "ip_CTSCustIDs")]
         public string CTSCustIDs { get; set; }
 
-        [SpParam(SqlParamName = "ip_Primary")]
-        public string PrimaryJson { get; set; }
+        [SpParam(SqlParamName = "ip_Device")]
+        public string DeviceJson { get; set; }
+
+        [SpParam(SqlParamName = "ip_AI")]
+        public string AIJson { get; set; }
+
+        [SpParam(SqlParamName = "ip_IP")]
+        public string IPJson { get; set; }
 
         [SpParam(SqlParamName = "ip_Agent")]
         public string AgentJson { get; set; }
@@ -25,7 +31,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_AssociationDetection_DetectGroup";
+            return "CTS_DC_Association_DetectGroup";
         }
 
         public override bool IsValid()

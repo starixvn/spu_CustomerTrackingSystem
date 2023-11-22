@@ -20,6 +20,7 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.Common;
+    using Fanex.NAP.CTS.ViewModel.AssociationDetection;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.DetectGroup;
     using Newtonsoft.Json;
@@ -819,63 +820,19 @@
         public ActionResult DetectGroupAssWithOptions(DetectGroupAssFilterViewModel model)
         {
             var result = new DetectGroupAssociationListViewModel();
-            var userNames = model.RawUserNames.Split(',');
-            var userNameList = string.Join(",", userNames.Select(x => x.ToUpper()).Distinct());
 
-            var orgUserList = userNames.Select(x => new ValidateUserNameModel { UserName = x });
+            var orgUserList = _associationDetectionService.ValidateUserName(model.RawUserNames);
 
-            var validatedList = _commonService.ValidateUsernames(userNameList, out bool isException);
-
-            orgUserList = orgUserList.Join(validatedList, c1 => c1.UserName.ToLower(), c2 => c2.UserName.ToLower(),
-                       (c1, c2) => new ValidateUserNameModel
-                       {
-                           UserName = c2.UserName,
-                           CustID = c2.CustID,
-                           CTSCustID = c2.CTSCustID,
-                           IsInternal = c2.IsInternal
-                       });
-            var custIgnoreInternals = orgUserList.Where(x => !x.IsInternal);
-            var custIDIgnoreInternals = string.Join(",", custIgnoreInternals.Select(x => x.CustID));
-            var ctsCustIDIgnoreInternals = string.Join(",", custIgnoreInternals.Select(x => x.CTSCustID));
-            var custInfo = _matchMonitorService.GetCustInfoByCustID(custIDIgnoreInternals);
-            var mergeGroupInfo = new MergeGroupInfoModel { CTSCustIDs = ctsCustIDIgnoreInternals, IsGetLogTransInfo = false };
-
-            Parallel.Invoke(() =>
-            {
-                var detectAssByIP = model.IsOptIPLast3Days ? _associationDetectionService.DetectAssociationByIP(custIDIgnoreInternals) : Enumerable.Empty<DetectAssociationBySharedIPModel>();
-
-                mergeGroupInfo.AssociationByIPJson = this.GetAssociationCustByIP(detectAssByIP, custInfo);
-            }, () =>
-            {
-                var detectAssByAssMatches = model.IsOpt3MatchesLast7Days ? _associationDetectionService.DetectAssociationBySharedMatches(custIDIgnoreInternals) : Enumerable.Empty<DetectAssociationBySharedIPMatchesModel>();
-
-                mergeGroupInfo.AssociationByMatchesJson = this.GetAssociationCustByMatch(detectAssByAssMatches, custInfo);
-            },
-            () =>
-            {
-                if (model.IsOptBP || model.IsOptDevice || model.IsOptIP)
-                {
-                    var assByPrimary = _associationDetectionService.DetectAssociationByPrimary(new DetectAssociationByPrimaryFilterModel
-                    {
-                        CTSCustIDs = ctsCustIDIgnoreInternals,
-                        IsBP = model.IsOptBP,
-                        IsDevice = model.IsOptDevice,
-                        IsIP = model.IsOptIP
-                    });
-
-                    mergeGroupInfo.AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary);
-                }
-            }, () =>
-            {
-                var assByAgent = Enumerable.Empty<DetectAssociationByPrimaryModel>();
-
-                if (model.IsOptAgent)
-                    assByAgent = _associationDetectionService.DetectAssociationByAgent(ctsCustIDIgnoreInternals);
-
-                mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);
-            });
-
-            var data = _associationDetectionService.DetectGroupDetectAssociation(mergeGroupInfo).Select(x => new DetectGroupAssociationItemViewModel(x));
+           var data = _associationDetectionService.DetectAssociation(new DetectAssociationByUserNamesViewModel 
+           { 
+                UserNames = model.RawUserNames,
+                IsBP = model.IsOptBP,
+                IsDevice = model.IsOptDevice,
+                IsIP = model.IsOptIP,
+                IsAgent = model.IsOptAgent,
+                IsIPLast3Days = model.IsOptIPLast3Days,
+                Is3MatchesLast7Days = model.IsOpt3MatchesLast7Days
+           }, orgUserList, false, false).Select(x => new DetectGroupAssociationItemViewModel(x)); ;
 
             result.ItemList = this.RearrangeAssGroup(data, true);
 

@@ -46,150 +46,6 @@
             return View();
         }
 
-        #region Old code
-
-        //public ActionResult ValidateUsernames(string userNames)
-        //{
-        //    var viewModel = ValidatedAccount(userNames);
-
-        //    return Json(viewModel, JsonRequestBehavior.AllowGet);
-        //}
-
-        //[HttpPost]
-        //[TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
-        //public ActionResult GetAssociationDetection(string userNames)
-        //{
-        //    var result = new GetAssociationDetectionViewModel();
-        //    var groupLevel2ByUsername = Enumerable.Empty<GetAssociationDetectionModel>();
-        //    var latestCustomerClassification = Enumerable.Empty<LatestClassificationModel>();
-        //    var isException = false;
-
-        //    if (!string.IsNullOrWhiteSpace(userNames))
-        //    {
-        //        var userNameList = userNames.Split(',');
-
-        //        var newUserNames = string.Join(",", userNameList.Distinct());
-
-        //        var validatedList = _commonService.ValidateUsernames(newUserNames, out isException);
-
-        //        var custIds = string.Join(",", validatedList.Select(x => x.CustID));
-
-        //        var ctsCustIds = string.Join(",", validatedList.Select(x => x.CTSCustID));
-
-        //        try
-        //        {
-        //            var getAssDetectionFromMySQL = AppSettings.Get("GetAssDetectionFromMySQL") == "1";
-
-        //            groupLevel2ByUsername = _associationDetectionService.GetAssociationDetection(ctsCustIds, getAssDetectionFromMySQL);
-
-        //            latestCustomerClassification = _custClassificationService.GetLatestClassification(custIds);
-
-        //            result.ItemList = TransformLatestCustomerClassification(groupLevel2ByUsername, latestCustomerClassification);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            result.ErrorCode = 1;
-        //            result.ErrorMessage = "Timeout Issue.Please try again";
-
-        //            var logMessage = new LogMessage(ex.Message)
-        //               .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-        //               .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-        //            LogService.Error($"GetAssociationDetection exeption message:  {logMessage}");
-        //        }
-
-        //        return Json(result, JsonRequestBehavior.AllowGet);
-        //    }
-
-        //    return Json(result, JsonRequestBehavior.AllowGet);
-        //}        
-
-        //private IEnumerable<AssociationDetectionItemViewModel> TransformLatestCustomerClassification(IEnumerable<GetAssociationDetectionModel> groupLevel2ByUsername
-        //    , IEnumerable<LatestClassificationModel> latestCustomerClassification)
-        //{
-        //    if (groupLevel2ByUsername != null && groupLevel2ByUsername.Any())
-        //    {
-        //        return groupLevel2ByUsername.Select(x =>
-        //        {
-        //            var customerClass = x.CustSubId == 0 && x.CustomerCategory != null 
-        //            ? latestCustomerClassification.FirstOrDefault(a => a.CustId == x.CustId)?.CustomerClass 
-        //            : 0;
-
-        //            return new AssociationDetectionItemViewModel
-        //            {
-        //                GroupId = x.GroupId,
-        //                UserName = x.UserName,
-        //                CustomerCategory = x.CustomerCategory,
-        //                CategoryIds = x.CategoryIds,
-        //                Evidence = x.Evidence,
-        //                Status = x.CustStatus,
-        //                CustomerClass = customerClass > 0 ? customerClass.ToString() : null,
-        //                IsProblemAccount = x.ParentIds != null && x.ParentIds.Split(',').Any(y => y == "50"),
-        //                IsPAProbation = x.IsProbation
-        //            };
-        //        });
-        //    }
-
-        //    return new List<AssociationDetectionItemViewModel>();
-        //}
-
-        //private ValidatedAccountsViewModel ValidatedAccount(string userNames)
-        //{
-        //    var isException = false;
-        //    var viewModel = new ValidatedAccountsViewModel { IsException = false };
-
-        //    if (!string.IsNullOrEmpty(userNames))
-        //    {
-        //        var userNameList = userNames.Split(',');
-        //        var userNameToUpperList = userNameList.Select(x => x.ToUpper());
-
-        //        var duplicateToUpperList = userNameToUpperList.GroupBy(x => x)
-        //               .Where(g => g.Count() > 1)
-        //               .Select(x => x.Last());
-
-        //        var noDuplicateToUpperList = userNameToUpperList.Distinct();
-        //        var noDuplicateToUpperUserName = string.Join(",", noDuplicateToUpperList);
-
-        //        var validatedList = _commonService.ValidateUsernames(noDuplicateToUpperUserName, out isException);
-        //        var validatedToUpperList = validatedList.Select(x => new ValidateUserNameModel
-        //        {
-        //            CTSCustID = x.CTSCustID,
-        //            CustID = x.CustID,
-        //            UserName = x.UserName.ToUpper()
-        //        });
-
-        //        viewModel = GenerateValidatedViewModel(userNames, validatedToUpperList, isException);
-
-        //        viewModel.UserNameDuplicatedList = userNameList.Where(x => duplicateToUpperList.Contains(x.ToUpper()));
-        //        viewModel.UserNameValidList = validatedList.Select(x => x.UserName);
-        //    }
-
-        //    return viewModel;
-        //}
-
-        //private ValidatedAccountsViewModel GenerateValidatedViewModel(string userNames, IEnumerable<ValidateUserNameModel> validatedToUpperList, bool isException)
-        //{
-        //    var userNameList = userNames.Split(',');
-        //    var invalidList = Enumerable.Empty<string>();
-
-        //    if (!isException)
-        //    {
-        //        var userNameToUpperValidatedList = validatedToUpperList.Select(x => x.UserName.ToUpper());
-
-        //        invalidList = userNameList.Where(x => !userNameToUpperValidatedList.Contains(x.ToUpper()));
-        //    }
-        //    else
-        //        invalidList = userNameList;
-
-        //    return new ValidatedAccountsViewModel
-        //    {
-        //        IsException = isException,
-        //        UserNameInvalidList = invalidList
-        //    };
-        //}
-
-        #endregion
-
         #region Validate Usernames
 
         public ActionResult ValidateUsernames(string userNames)
@@ -242,8 +98,7 @@
             return Json(new
             {
                 data = result,
-                filters = GenerateFilter(result),
-                associationByIPJson = model.AssociationByIPJson
+                filters = GenerateFilter(result)
             }, JsonRequestBehavior.AllowGet);
         }
 
@@ -288,100 +143,27 @@
         private DetectAssociationViewModel DetectAssociation(DetectAssociationByUserNamesViewModel model, bool isExportExcel)
         {
             var result = new DetectAssociationViewModel();
-            var isException = false;
 
             if (!string.IsNullOrWhiteSpace(model.UserNames))
             {
                 try
                 {
-                    var userNames = model.UserNames.Split(',');
-                    var userNameList = string.Join(",", userNames.Select(x => x.ToUpper()).Distinct());
+                    var orgUserList = _associationDetectionService.ValidateUserName(model.UserNames);
 
-                    var orgUserList = userNames.Select(x => new ValidateUserNameModel { UserName = x });
-
-                    var validatedList = _commonService.ValidateUsernames(userNameList, out isException);
-
-                    orgUserList = orgUserList.Join(validatedList, c1 => c1.UserName.ToLower(), c2 => c2.UserName.ToLower(),
-                        (c1, c2) => new ValidateUserNameModel
-                        {
-                            UserName = c2.UserName,
-                            CustID = c2.CustID,
-                            CTSCustID = c2.CTSCustID,
-                            IsInternal = c2.IsInternal
-                        });
-                 
-                    var custIDs = string.Join(",", orgUserList.Select(x => x.CustID).Distinct());
-
-                    var ctsCustIDs = string.Join(",", orgUserList.Select(x => x.CTSCustID));
-
-                    var mergeGroupInfo = new MergeGroupInfoModel { CTSCustIDs = ctsCustIDs, IsGetLogTransInfo = true };
-                   
-                    var assBySharedIP = Enumerable.Empty<SharedIPInfoModel>();
-
-                    Parallel.Invoke(() => {                        
-                        assBySharedIP = model.IsIPLast3Days ? DetectAssociationByIP(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPInfoModel>();
-                       
-                        mergeGroupInfo.AssociationByIPJson = GetAssociationCustByIP(assBySharedIP);                                         
-                    }, () => {                        
-                        var assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
-
-                        mergeGroupInfo.AssociationByMatchesJson = GetAssociationCustByMatch(assBySharedMatches);                       
-                    }, () => {
-                        var assByPrimary = Enumerable.Empty<DetectAssociationByPrimaryViewModel>();
-
-                    if (model.IsBP || model.IsDevice || model.IsIP)
-                    {
-                        var isGetAssDetectionFromMySQL = AppSettings.Get("GetAssDetectionFromMySQL") == "1";
-                            try
-                            {
-                                assByPrimary = _associationDetectionService.DetectAssociationByPrimary(new DetectAssociationByPrimaryFilterModel
-                                {
-                                    CTSCustIDs = ctsCustIDs,
-                                    IsBP = model.IsBP,
-                                    IsDevice = model.IsDevice,
-                                    IsIP = model.IsIP
-                                }, isGetAssDetectionFromMySQL).Select(x => new DetectAssociationByPrimaryViewModel
-                                {
-                                    O = x.OrigID,
-                                    D = x.DestID,
-                                    A = x.AssociationType
-                                });
-                                                             
-                                mergeGroupInfo.AssociationByPrimaryJson = ObjectHelper.SerializeObj(assByPrimary);
-                            }
-                            catch (Exception e)
-                            {
-                                var logMessage = new LogMessage(e.Message)
-                                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(e))
-                                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(e)).ToString();
-
-                                LogService.Error(logMessage);                               
-                            }                            
-                        }                                            
-                    }, () => {
-                        var assByAgent = Enumerable.Empty<DetectAssociationByPrimaryModel>();
-
-                        if (model.IsAgent)
-                        {
-                            var isGetAssDetectionFromMySQL = AppSettings.Get("GetAssDetectionFromMySQL") == "1";
-                            assByAgent = _associationDetectionService.DetectAssociationByAgent(ctsCustIDs, isGetAssDetectionFromMySQL);
-                        }
-
-                        mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);
-                    });
-                    
-                    var assMergeGroup = _associationDetectionService.DetectGroupDetectAssociation(mergeGroupInfo);
+                    var assMergeGroup = _associationDetectionService.DetectAssociation(model, orgUserList, isExportExcel, true);
 
                     var assRearrangeGroup = RearrangeAssGroup(assMergeGroup, isExportExcel);
 
                     if (isExportExcel)
-                    {                        
+                    {
+                        var custIDs = string.Join(",", orgUserList.Select(x => x.CustID).Distinct());
+
                         var custStatisticsList = _associationDetectionService.GetCustStatisticsInfoRealtime(custIDs);
 
                         result.ExportItemList = GetExportItem(orgUserList, assRearrangeGroup, custStatisticsList);
                     }
                     else
-                    {                        
+                    {
                         result.ItemList = assRearrangeGroup.Select(x =>
                         {
                             return new DetectAssociationItemViewModel(x);
@@ -402,88 +184,6 @@
             }
 
             return result;
-        }            
-
-        private IEnumerable<SharedIPInfoModel> DetectAssociationByIP(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds)
-        {
-            var detectAssByIP = _associationDetectionService.DetectAssociationByIP(custIds);          
-
-            var detectAssByIPGroupBy = detectAssByIP.GroupBy(x => new { x.CustID1, x.CustID2 })
-                .Select(g => new DetectAssociationBySharedIPModel
-                {
-                    CustID1 = g.Key.CustID1,
-                    CustID2 = g.Key.CustID2,
-                    IP = string.Join(",", g.Select(x => x.IP.Trim()))
-                });
-
-            return detectAssByIPGroupBy.Select(x =>
-            {
-                var fromCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID1)) ?? new ValidateUserNameModel();
-                var toCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID2)) ?? new ValidateUserNameModel();
-
-                return new SharedIPInfoModel
-                {
-                    FromCustID = x.CustID1,
-                    FromCTSCustID = fromCTSCust.CTSCustID,
-                    FromUserName = fromCTSCust.UserName,
-                    ToCustID = x.CustID2,
-                    ToCTSCustID = toCTSCust.CTSCustID,
-                    ToUserName = toCTSCust.UserName,
-                    IP = x.IP
-                };
-            }).Where(x => x.FromCTSCustID != 0 && x.ToCTSCustID != 0);
-        }
-
-        private IEnumerable<SharedIPMatchesInfoModel> DetectAssociationBySharedMatches(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds)
-        {
-            var detectAssByAssMatches = _associationDetectionService.DetectAssociationBySharedMatches(custIds);
-
-            return detectAssByAssMatches.Select(x =>
-            {
-                var fromCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID1)) ?? new ValidateUserNameModel();
-                var toCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID2)) ?? new ValidateUserNameModel();
-
-                return new SharedIPMatchesInfoModel
-                {
-                    FromCustID = x.CustID1,
-                    FromCTSCustID = fromCTSCust.CTSCustID,
-                    FromUserName = fromCTSCust.UserName,
-                    ToCustID = x.CustID2,
-                    ToCTSCustID = toCTSCust.CTSCustID,
-                    ToUserName = toCTSCust.UserName
-                };
-            }).Where(x => x.FromCTSCustID != 0 && x.ToCTSCustID != 0);
-        }
-
-        private string GetAssociationCustByIP(IEnumerable<SharedIPInfoModel> ass)
-        {
-            var assCustBySharedIP = ass.Select(x => new AssociationCustByIPViewModel
-            {
-                F1 = x.FromCustID,
-                O = x.FromCTSCustID,
-                X = x.FromUserName,
-                T1 = x.ToCustID,
-                D = x.ToCTSCustID,
-                Y = x.ToUserName,
-                IP = x.IP
-            });
-           
-            return ObjectHelper.SerializeObj(assCustBySharedIP);
-        }        
-
-        private string GetAssociationCustByMatch(IEnumerable<SharedIPMatchesInfoModel> ass)
-        {
-            var assCustBySharedIP = ass.Select(x => new AssociationCustModel
-            {
-                FromCustID = x.FromCustID,
-                FromCTSCustID = x.FromCTSCustID,
-                FromUserName = x.FromUserName,
-                ToCustID = x.ToCustID,
-                ToCTSCustID = x.ToCTSCustID,      
-                ToUserName = x.ToUserName
-            });
-
-            return JsonConvert.SerializeObject(assCustBySharedIP);
         }
 
         private IEnumerable<DetectAssociationMergeGroupModel> RearrangeAssGroup(IEnumerable<DetectAssociationMergeGroupModel> assGroupList, bool isExportExcel)
@@ -493,7 +193,7 @@
                 assGroupList = assGroupList.Where(x => x.GroupID.HasValue);
 
             if (assGroupList.Any())
-            {                
+            {
                 var grouping = assGroupList
                     .GroupBy(x => x.GroupID, (key, g) => new { GroupID = key, Items = g.ToList() })
                     .OrderBy(x => x.GroupID);
@@ -508,19 +208,20 @@
                     {
                         groupID = idx;
                         idx += 1;
-                    }         
+                    }
 
-                    result.AddRange(group.Items.Select(x => 
+                    result.AddRange(group.Items.Select(x =>
                     {
                         x.GroupID = groupID;
 
                         return x;
-                    }));                    
+                    }));
                 }
-            }            
-            
+            }
+
             return result;
         }
+
         #endregion
 
         #region Detail
@@ -581,7 +282,7 @@
         {
             var validatedList = _commonService.ValidateUsernames(userNames, out bool isException);
 
-            var assBySharedIP = DetectAssociationByIP(validatedList, custIDs);
+            var assBySharedIP = _associationDetectionService.DetectAssociationByIP(validatedList, custIDs);
           
             var result = assBySharedIP.Where(x => x.FromCTSCustID == ctsCustID || x.ToCTSCustID == ctsCustID)
                        .Select(x =>
