@@ -408,12 +408,26 @@
         {
             var assByPrimary = DetectAssociationByPrimary(custAssType);
 
-            return ObjectHelper.SerializeObj(assByPrimary);
+            var input = assByPrimary.Select(c => new
+            {
+                O = c.OrigID,
+                D = c.DestID,
+                A = c.AssociationType
+            });
+
+            return ObjectHelper.SerializeObj(input);
         }
 
         private string GetAssociationCustByAgent(string ctsCustIDs)
         {
             var assByAgent = DetectAssociationByAgent(ctsCustIDs);
+
+            var input = assByAgent.Select(c => new
+            {
+                O = c.OrigID,
+                D = c.DestID,
+                A = c.AssociationType
+            });
 
             return ObjectHelper.SerializeObj(assByAgent);
         }
