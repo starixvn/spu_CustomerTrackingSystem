@@ -26,10 +26,6 @@
 
         IEnumerable<DetectAssociationMergeGroupModel> DetectAssociation(DetectAssociationByUserNamesViewModel model, IEnumerable<ValidateUserNameModel> orgUserList, bool isExportExcel, bool IsGetLogTransInfo);
 
-        IEnumerable<GetAssociationDetectionModel> GetAssociationDetection(string ctsCustIds, bool fromMySQL = true);
-
-        
-
         List<GetAssociationDetectionModel> ClassifyGroupAssociation(IEnumerable<AssociationLevelGraphDbViewModel> association, IEnumerable<long> ip_CTSCustIDs);
 
         IEnumerable<GetAssociationDetectionModel> GetCustInfoAssDetectionReport(List<GetAssociationDetectionModel> assDetection);
@@ -131,26 +127,6 @@
             return assMergeGroup;
         }
 
-        public IEnumerable<GetAssociationDetectionModel> GetAssociationDetection(string ctsCustIds, bool fromMySQL = true)
-        {
-            var result = fromMySQL ? GetAssociationDetectionFromMySQL(ctsCustIds) : GetAssociationDetectionFromGraphDB(ctsCustIds);
-
-            return result ?? new List<GetAssociationDetectionModel>();
-        }
-
-        public IEnumerable<GetAssociationDetectionModel> GetAssociationDetectionFromMySQL(string ctsCustIds)
-        {
-            var criteria = new GetAssociationDetectionCriteria
-            {
-                CTSCustIds = ctsCustIds
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<GetAssociationDetectionModel>(criteria);
-            }
-        }
-
         public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimary(DetectAssociationByPrimaryFilterModel filter)
         {
             var criteria = new DetectAssociationByPrimaryCriteria
@@ -228,17 +204,34 @@
             }
         }
 
-        private IEnumerable<DetectAssociationBySharedIPModel> DetectAssociationByIP(string custIDList)
+        public IEnumerable<SharedIPInfoModel> DetectAssociationByIP(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds)
         {
-            var criteria = new DetectAssociationByIPCriteria
-            {
-                ListCustId = custIDList
-            };
+            var detectAssByIP = DetectAssociationByIP(custIds);
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            var detectAssByIPGroupBy = detectAssByIP.GroupBy(x => new { x.CustID1, x.CustID2 })
+                .Select(g => new DetectAssociationBySharedIPModel
+                {
+                    CustID1 = g.Key.CustID1,
+                    CustID2 = g.Key.CustID2,
+                    IP = string.Join(",", g.Select(x => x.IP.Trim()))
+                });
+
+            return detectAssByIPGroupBy.Select(x =>
             {
-                return db.Query<DetectAssociationBySharedIPModel>(criteria);
-            }
+                var fromCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID1)) ?? new ValidateUserNameModel();
+                var toCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID2)) ?? new ValidateUserNameModel();
+
+                return new SharedIPInfoModel
+                {
+                    FromCustID = x.CustID1,
+                    FromCTSCustID = fromCTSCust.CTSCustID,
+                    FromUserName = fromCTSCust.UserName,
+                    ToCustID = x.CustID2,
+                    ToCTSCustID = toCTSCust.CTSCustID,
+                    ToUserName = toCTSCust.UserName,
+                    IP = x.IP
+                };
+            }).Where(x => x.FromCTSCustID != 0 && x.ToCTSCustID != 0);
         }
 
         public IEnumerable<long> GetAssociationDetectSharedMatches(int rootCustID, string custIDList)
@@ -313,6 +306,10 @@
             return writer.ToBytes();
         }
 
+        #endregion
+
+        #region Private Methods
+
         private void FillRowData(IEnumerable<ExportAssociationDetectModel> AssociationDetect, ref ExcelTemplateWriter writer)
         {
             var idx = 1;
@@ -342,38 +339,17 @@
             }
         }
 
-        #endregion
-
-        #region Private Methods
-
-        public IEnumerable<SharedIPInfoModel> DetectAssociationByIP(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds)
+        private IEnumerable<DetectAssociationBySharedIPModel> DetectAssociationByIP(string custIDList)
         {
-            var detectAssByIP = DetectAssociationByIP(custIds);
-
-            var detectAssByIPGroupBy = detectAssByIP.GroupBy(x => new { x.CustID1, x.CustID2 })
-                .Select(g => new DetectAssociationBySharedIPModel
-                {
-                    CustID1 = g.Key.CustID1,
-                    CustID2 = g.Key.CustID2,
-                    IP = string.Join(",", g.Select(x => x.IP.Trim()))
-                });
-
-            return detectAssByIPGroupBy.Select(x =>
+            var criteria = new DetectAssociationByIPCriteria
             {
-                var fromCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID1)) ?? new ValidateUserNameModel();
-                var toCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID2)) ?? new ValidateUserNameModel();
+                ListCustId = custIDList
+            };
 
-                return new SharedIPInfoModel
-                {
-                    FromCustID = x.CustID1,
-                    FromCTSCustID = fromCTSCust.CTSCustID,
-                    FromUserName = fromCTSCust.UserName,
-                    ToCustID = x.CustID2,
-                    ToCTSCustID = toCTSCust.CTSCustID,
-                    ToUserName = toCTSCust.UserName,
-                    IP = x.IP
-                };
-            }).Where(x => x.FromCTSCustID != 0 && x.ToCTSCustID != 0);
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<DetectAssociationBySharedIPModel>(criteria);
+            }
         }
 
         private string GetAssociationCustByIP(IEnumerable<SharedIPInfoModel> ass)
@@ -441,8 +417,6 @@
 
             return ObjectHelper.SerializeObj(assByAgent);
         }
-
-       
 
         #endregion
 
