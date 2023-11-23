@@ -791,11 +791,11 @@ function MatchMonitorDetail() {
         domElements.iconATranstimeAutofill = $('#iconATranstimeAutofill');
 
         domElements.iconHTranstimeAutofill.on('click', function () {
-            AutoFillTranstimeFromDataGrid(domElements.tblMMHomeTeam.DataTable());
+            AutoFillTranstimeFromDataGrid();
         });
 
         domElements.iconATranstimeAutofill.on('click', function () {
-            AutoFillTranstimeFromDataGrid(domElements.tblMMAwayTeam.DataTable());
+            AutoFillTranstimeFromDataGrid();
         });
     }
 
@@ -849,7 +849,7 @@ function MatchMonitorDetail() {
         domElements.iconSGTranstimeAutofill = $('#iconSGTranstimeAutofill');
 
         domElements.iconSGTranstimeAutofill.on('click', function () {
-            AutoFillTranstimeFromDataGrid(domElements.tblMMSG.DataTable());
+            AutoFillTranstimeFromDataGrid();
         });
     }
 
@@ -1894,7 +1894,7 @@ function MatchMonitorDetail() {
     //#endregion Export To Excel  
 
     //#region Feedback
-    function GetRangeTransTimeForFeedback() {
+    function GetRangeTransTime() {
         let rangeTransTime = [];
         let currentMinTime = '';
         let currentMaxTime = '';
@@ -2435,13 +2435,16 @@ function MatchMonitorDetail() {
     //#endregion Event Toggle
 
     //#region TranstimeFilter
-    function AutoFillTranstimeFromDataGrid(datatable) {
-        var rangeTransTime = GetRangeTransTimeForAutoFill(datatable);
+    function AutoFillTranstimeFromDataGrid() {
+        var rangeTransTime = GetRangeTransTime();
         if (rangeTransTime[0] && rangeTransTime[1]) {
             domElements.inputTranstimeFrom.val(rangeTransTime[0]);
             domElements.inputTranstimeTo.val(rangeTransTime[1]);
 
             domElements.iconTranstimeSubmit.addClass('transtime-icon-forcus');
+        }
+        else {
+            common.showError("Please select at least 1 record to proceed!")
         }
     }
 
@@ -2486,6 +2489,8 @@ function MatchMonitorDetail() {
     }
 
     function FetchFilterMMDetailByTranstime() {
+        ResetDefaulCbbSite();
+
         domElements.boderTranstimeInput.removeClass('info-input-error');
 
         isImportNewTicket = true;
@@ -2565,30 +2570,6 @@ function MatchMonitorDetail() {
         return result;
     }
 
-    function GetRangeTransTimeForAutoFill(dataTable) {
-        let rangeTransTime = [];
-        let currentMinTime = '';
-        let currentMaxTime = '';
-
-        dataTable.rows(function (idx, data, node) {
-            if (currentMinTime == '') {
-                currentMinTime = data.TransTimeToString;
-                currentMaxTime = data.TransTimeToString;
-            } else {
-                if (currentMinTime > data.TransTimeToString) {
-                    currentMinTime = data.TransTimeToString;
-                }
-                if (currentMaxTime < data.TransTimeToString) {
-                    currentMaxTime = data.TransTimeToString;
-                }
-            }
-        })
-
-        rangeTransTime.push(currentMinTime);
-        rangeTransTime.push(currentMaxTime);
-
-        return rangeTransTime;
-    }
     //#endregion TranstimeFilter
 
     function Resize() {
@@ -2762,7 +2743,7 @@ function MatchMonitorDetail() {
             let betID = GetBetIDSelected();
             let reasonList = cacheFilterDefault.ReasonList;
             let reasonCheckedList = GetSelectDataFilter(domElements.cbbReason, true);
-            let rangeTransTime = GetRangeTransTimeForFeedback();
+            let rangeTransTime = GetRangeTransTime();
 
             reasonFeedback.Initial(domElements.matchID, domElements.cbbMarket.val(), betTypeID, betID, domElements.sportType, reasonList, reasonCheckedList, rangeTransTime);
         });
