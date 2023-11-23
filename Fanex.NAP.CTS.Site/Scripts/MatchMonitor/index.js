@@ -221,9 +221,7 @@
         }
     }
 
-    function RefreshBetTypeFilter() {
-        domElements.cbbBetType.find('option').remove();
-
+    function RefreshBetTypeFilter() {               
         let sportIDs = domElements.cbbSport.val().join()
         if (sportIDs != '') {
             $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMMFilterBetTypeBySportID'), {
@@ -232,28 +230,27 @@
                     sportIDs: domElements.cbbSport.val().join()
                 },
                 success: function (response) {
+                    domElements.cbbBetType.multiselect().empty();
+
                     if (response != undefined) {
                         response.forEach(i => {
                             let value = RenderBetTypeHTML(i.BetTypeID, i.BetID);
-                            domElements.cbbBetType.append(`<option value="${value}">${i.BetTypeName}</option>`);
-                        })
+                            domElements.cbbBetType.append(`<option selected value="${value}">${i.BetTypeName}</option>`);
+                        })                        
                     }
-                },
-                complete: function () {
-                    domElements.cbbBetType.find('option').prop('selected', true);
+
                     domElements.cbbBetType.multiselect("refresh");
+                },
+                complete: function () {                
                 },
                 error: function (errMsg) {
                     console.log(errMsg);
                 }
             });
-        } else {
-            domElements.cbbBetType.multiselect("refresh");
-        }
+        }                    
     }
 
     function RenderBetTypeHTML(betTypeID, betId) {
-        return `{&quot;BettypeID&quot;:` + betTypeID + `, &quot;BetID&quot;:` + betId + `}`;
     }
 
     function Initial() {
@@ -264,7 +261,6 @@
                 changeYear: true
             })
             .datepicker("setDate", new Date());
-        //.change(SetRestrictToDate);
 
         domElements.dpkToDate
             .datepicker({
@@ -273,7 +269,6 @@
                 changeYear: true
             })
             .datepicker("setDate", new Date());
-        //.change(SetRestrictFromDate);
 
         domElements.cbbSport.multiselect({
             menuWidth: 260,

@@ -90,33 +90,21 @@
                                     <option value="1_0" data-bettypeid="1">HDP</option>
                                     <option value="3_0" data-bettypeid="3">O/U</option>
                                     <option value="20_0" data-bettypeid="20">Moneyline</option>
-                                    <option value="9001_0" data-bettypeid="9001">Map X Moneyline</option>
-                                    <option value="9068_0" data-bettypeid="9001">Map X Round Y Moneyline</option>
-                                    <option value="9115_0" data-bettypeid="9115">Map X Total Gold Moneyline</option>
-                                    <option value="9002_0" data-bettypeid="9002">Map X Total Kills Handicap</option>
-                                    <option value="9003_0" data-bettypeid="9003">Map X Total Kills Over/Under</option>
-                                    <option value="9005_0" data-bettypeid="9005">Map X Total Kills Odd/Even</option>
-                                    <option value="9007_0" data-bettypeid="9007">Map X First to Y Kills</option>
-                                    <option value="9006_0" data-bettypeid="9006">Map X First Blood</option>
-                                    <option value="9089_0" data-bettypeid="9089">Map X First to Y Kills Time Over/Under</option>
-                                    <option value="9090_0" data-bettypeid="9090">Map X First Blood Time Over/Under</option>
-                                    <option value="9091_0" data-bettypeid="9091">Map X Total Kills at 10 Mins Handicap</option>
-                                    <option value="9092_0" data-bettypeid="9092">Map X Total Kills at 10 Mins Over/Under</option>
-                                    <option value="9093_0" data-bettypeid="9093">Map X Total Kills at 20 Mins Handicap</option>
-                                    <option value="9094_0" data-bettypeid="9094">Map X Total Kills at 20 Mins Over/Under</option>
-                                    <option value="9089_0" data-bettypeid="9089">Map X First to Y Kills Time Over/Under</option>
-                                    <option value="9101_0" data-bettypeid="9101">Map X 1st Kill</option>
-                                    <option value="9102_0" data-bettypeid="9102">Map X 2nd Kill</option>
-                                    <option value="9103_0" data-bettypeid="9103">Map X 3rd Kill</option>
-                                    <option value="9104_0" data-bettypeid="9104">Map X 4th Kill</option>
-                                    <option value="9105_0" data-bettypeid="9105">Map X 5th Kill</option>
-                                    <option value="9106_0" data-bettypeid="9106">Map X 6th Kill</option>
-                                    <option value="9107_0" data-bettypeid="9107">Map X 7th Kill</option>
-                                    <option value="9108_0" data-bettypeid="9108">Map X 8th Kill</option>
-                                    <option value="9109_0" data-bettypeid="9109">Map X 9th Kill</option>
-                                    <option value="9110_0" data-bettypeid="9110">Map X 10th Kill</option>
-                                    <option value="9110_0" data-bettypeid="9110">Map X 10th Kill</option>
-                                    <option value="9111_0" data-bettypeid="9111">Map X 10th Kill</option>
+
+                                }
+                            </select>
+
+                            <select class="control info-select" name="state">
+                                @for (int i = 0; i < 10; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+
+                            <select class="control info-select" name="state">
+                                @for (int i = 0; i < 99; i++)
+                                {
+                                    <option value="@i">@i</option>
                                 }
                             </select>
                         </div>

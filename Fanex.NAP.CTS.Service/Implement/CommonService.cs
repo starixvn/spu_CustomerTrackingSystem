@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
     using Fanex.Data;
+    using Fanex.Data.Repository;
     using Fanex.Logging;
     using Fanex.NAP.CTS.Criteria.Common;
     using Fanex.NAP.CTS.Model.Common;
@@ -12,6 +13,13 @@
 
     public class CommonService : ICommonService
     {
+        private readonly IDynamicRepository repository;
+
+        public CommonService()
+        {
+            repository = new DynamicRepository();
+        }
+
         public IEnumerable<SubscriberGroupViewModel> GetSubscriberGroups()
         {
             var subscriberGroups = Enumerable.Empty<SubscriberGroupViewModel>();
@@ -132,6 +140,46 @@
             }
 
             return groupCCList;
+        }
+
+        public int GetBetID(string betIDPattern, string nameDetailsX)
+        {
+            var betID = 0;
+
+            if (!string.IsNullOrEmpty(betIDPattern) && !string.IsNullOrEmpty(nameDetailsX))
+            {
+                var strBetID = betIDPattern.ToUpper().Replace("X", nameDetailsX);
+
+                int.TryParse(strBetID, out betID);
+            }
+
+            return betID;
+        }
+
+        public IEnumerable<StaticListModel> GetStaticLists(int listID, bool isStatusActive)
+        {
+            var criteria = new GetCommonStaticListCriteria
+            {
+                ListID = listID,
+                IsStatusActive = isStatusActive
+            };
+
+            return repository.Fetch<StaticListModel>(criteria);
+        }
+
+        public IEnumerable<BetTypeSettingModel> GetBetTypeSettings(BetTypeSettingParaModel infos)
+        {
+            var criteria = new GetCommonBetTypeSettingCriteria
+            {
+                FunctionID = infos.FunctionID,
+                BettypeIDList = infos.BettypeIDList,
+                SportTypeIDList = infos.SportTypeIDList,
+                IsFilterMMDetection = infos.IsFilterMMDetection,
+                IsShowDetailsX = infos.IsShowDetailsX,
+                Status = infos.Status
+            };
+
+            return repository.Fetch<BetTypeSettingModel>(criteria);
         }
 
     }

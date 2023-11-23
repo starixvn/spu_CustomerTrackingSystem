@@ -52,7 +52,7 @@
             };
 
             return repository.Fetch<GetMatchMonitorModel>(criteria);
-        }
+        }        
 
         public IEnumerable<MMFraudTicketsSummaryViewModel> GetMMFraudTicketsSummary(IEnumerable<MMFraudTicketsSummaryModel> mmModels)
         {

@@ -19,6 +19,7 @@
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.ViewModel.Common;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.DetectGroup;
     using Newtonsoft.Json;
@@ -65,16 +66,19 @@
                             FSFunctionKeys.MatchMonitor,
                             NAP.Core.Business.Constant.Policy.Host);
 
-            var userId = CurrentSession.UserId;
-
-            var mmStatic = _matchMonitorService.GetMMStaticList();
+            var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true)
+                .Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
+                .OrderBy(x=>x.ReasonName);
+          
+            var sports = _commonService.GetStaticLists((int)StaticListID.Sport, true)
+                .Select(x=> new SportStaticListViewModel { SportID = x.ItemValue, SportName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" });
 
             return View(new MatchMonitorViewModel
             {
                 IsHostPermission = isHostPermission,
-                CustId = userId,
-                Reasons = mmStatic.Reasons.OrderBy(x => x.ReasonName),
-                Sports = mmStatic.Sports
+                CustId = CurrentSession.UserId,
+                Reasons = reasons,
+                Sports = sports
             });
         }
 
@@ -247,7 +251,24 @@
         [HttpPost]
         public ActionResult GetMMFilterBetTypeBySportID(string sportIDs)
         {
-            var result = this.GetFilterBetTypeBySportID(sportIDs);
+            var paras = new BetTypeSettingParaModel
+            {
+                FunctionID = (int)BetTypeSettingsFunctionID.MMBetType,
+                BettypeIDList = null,
+                SportTypeIDList = sportIDs,
+                IsFilterMMDetection = true,
+                IsShowDetailsX = true,
+                Status = 1
+            };
+
+            var result = _commonService.GetBetTypeSettings(paras).Select(x => new MatchMonitorBetTypeViewModel
+            {
+                SportID = x.SportTypeID,               
+                BetTypeID = x.BetTypeID,
+                BetTypeName = x.BetTypeNameDisplay,
+                BetID = _commonService.GetBetID(x.BetIDPattern, x.NameDetailsX),                
+                IsSelected = true
+            });
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
