@@ -107,19 +107,19 @@
             }, () =>
             {
 
-                mergeGroupInfo.AssociationByDeviceJson = model.IsDevice ? GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(ctsCustIDs, AssociationDetectionType.Device)) : string.Empty;
+                mergeGroupInfo.AssociationByDeviceJson = model.IsDevice ? GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(ctsCustIDs, AssociationDetectionType.Device)) : "[]";
             }, () =>
             {
 
-                mergeGroupInfo.AssociationByAIJson = model.IsBP ? GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(ctsCustIDs, AssociationDetectionType.AI)) : string.Empty;
+                mergeGroupInfo.AssociationByAIJson = model.IsBP ? GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(ctsCustIDs, AssociationDetectionType.AI)) : "[]";
             }, () =>
             {
 
-                mergeGroupInfo.AssociationByIPJson = model.IsIP ? GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(ctsCustIDs, AssociationDetectionType.IP)) : string.Empty;
+                mergeGroupInfo.AssociationByIPJson = model.IsIP ? GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(ctsCustIDs, AssociationDetectionType.IP)) : "[]";
             }, () =>
             {
 
-                mergeGroupInfo.AssociationByAgentJson = model.IsAgent ? GetAssociationCustByAgent(ctsCustIDs) : string.Empty;
+                mergeGroupInfo.AssociationByAgentJson = model.IsAgent ? GetAssociationCustByAgent(ctsCustIDs) : "[]";
             });
 
             var assMergeGroup = DetectGroupDetectAssociation(mergeGroupInfo);
