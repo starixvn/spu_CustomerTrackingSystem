@@ -41,5 +41,11 @@
         public string FraudTrans { get; set; }
 
         public short DataSource { get; set; }
+
+        public string BettypeNameDisplay { get; set; }
+
+        public int DetailsX { get; set; }
+
+        public int DetailsY { get; set; }
     }
 }

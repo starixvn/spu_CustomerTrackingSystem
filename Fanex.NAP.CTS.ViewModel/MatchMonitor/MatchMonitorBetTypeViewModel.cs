@@ -10,6 +10,8 @@
 
         public int SportID { get; set; }
 
+        public bool IsSupportSuspicious { get; set; }
+
         public bool IsSelected { get; set; }
     }
 }

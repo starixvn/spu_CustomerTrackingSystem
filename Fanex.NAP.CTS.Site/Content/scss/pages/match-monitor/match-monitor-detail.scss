@@ -331,11 +331,14 @@
 
                     .first-row-info {
                         height: 32px !important;
+                        margin-left: 5px;
 
                         .info-text {
                             font-weight: bold;
                             color: black;
                             padding-right: 5px;
+                            width: 80px;
+                            line-height: 30px;
                         }
 
                         .info-select {
@@ -429,6 +432,11 @@
                         margin-bottom: 1px;
                         height: 30px;
                         border-right: 1px solid rgba(196, 196, 196, 1);
+                    }
+
+                    .select-group-bettype {
+                        width: 280px;
+                        display: flex;
                     }
                 }
 

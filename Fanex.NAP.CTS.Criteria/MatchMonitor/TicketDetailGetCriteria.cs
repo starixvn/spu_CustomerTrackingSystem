@@ -22,7 +22,10 @@
         public string ListTransId { get; set; }
 
         [SpParam(SqlParamName = "EventDate")]
-        public DateTime EventDate { get; set; }       
+        public DateTime EventDate { get; set; }
+
+        [SpParam(SqlParamName = "ListSportBettype")]
+        public string ListSportBettype { get; set; }
 
         [SpParam(SqlParamName = "MatchID")]
         public long MatchID { get; set; }

@@ -240,6 +240,9 @@
                         IsSupportShowAllTickets = m2.IsGetDataFromOrigin == 1,
                         DataSource = m2.DataSource,
                         FraudTrans = m1.FraudTrans
+						BettypeNameDisplay = m1.BettypeNameDisplay,
+                        DetailsX = m1.DetailsX,
+                        DetailsY = m1.DetailsY
                     });
 
                 return newMatches;
@@ -250,57 +253,61 @@
 
         [HttpPost]
         public ActionResult GetMMFilterBetTypeBySportID(string sportIDs)
+        {           
+            return Json(GetBetTypeSettings(sportIDs, true), JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<MatchMonitorBetTypeViewModel> GetBetTypeSettings(string sportIDs, bool isFilterMMDetection)
         {
             var paras = new BetTypeSettingParaModel
             {
                 FunctionID = (int)BetTypeSettingsFunctionID.MMBetType,
                 BettypeIDList = null,
                 SportTypeIDList = sportIDs,
-                IsFilterMMDetection = true,
+                IsFilterMMDetection = isFilterMMDetection,
                 IsShowDetailsX = true,
                 Status = 1
             };
 
-            var result = _commonService.GetBetTypeSettings(paras).Select(x => new MatchMonitorBetTypeViewModel
+            return _commonService.GetBetTypeSettings(paras).Select(x => new MatchMonitorBetTypeViewModel
             {
-                SportID = x.SportTypeID,               
+                SportID = x.SportTypeID,
                 BetTypeID = x.BetTypeID,
                 BetTypeName = x.BetTypeNameDisplay,
-                BetID = _commonService.GetBetID(x.BetIDPattern, x.NameDetailsX),                
+                BetID = _commonService.GetBetID(x.BetIDPattern, x.NameDetailsX),
+                IsSupportSuspicious = x.IsMMDetection,
                 IsSelected = true
             });
-
-            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<MatchMonitorBetTypeViewModel> GetFilterBetTypeBySportID(string sportIDs)
-        {
-            var result = Enumerable.Empty<MatchMonitorBetTypeViewModel>();
-            var sportIds = sportIDs.Split(',').Select(x => Convert.ToInt32(x));
+        //private IEnumerable<MatchMonitorBetTypeViewModel> GetFilterBetTypeBySportID(string sportIDs)
+        //{
+        //    var result = Enumerable.Empty<MatchMonitorBetTypeViewModel>();
+        //    var sportIds = sportIDs.Split(',').Select(x => Convert.ToInt32(x));
 
-            if (sportIds.Any())
-            {
-                var data = _matchMonitorService.GetMMStaticList();
+        //    if (sportIds.Any())
+        //    {
+        //        var data = _matchMonitorService.GetMMStaticList();
 
-                if (data.BetTypes != null && data.BetTypes.Any())
-                {
-                    result = data.BetTypes.Join(sportIds,
-                      x1 => x1.SportID,
-                      x2 => x2,
-                      (x1, x2) => new MatchMonitorBetTypeViewModel
-                      {
-                          BetTypeID = x1.BetTypeID,
-                          BetTypeName = x1.BetTypeName,
-                          BetID = x1.BetID,
-                          SportID = x1.SportID,
-                          IsSelected = true
-                      }).GroupBy(g => new { g.BetTypeID, g.BetID })
-                      .Select(g => g.First());
-                }
-            }
+        //        if (data.BetTypes != null && data.BetTypes.Any())
+        //        {
+        //            result = data.BetTypes.Join(sportIds,
+        //              x1 => x1.SportID,
+        //              x2 => x2,
+        //              (x1, x2) => new MatchMonitorBetTypeViewModel
+        //              {
+        //                  BetTypeID = x1.BetTypeID,
+        //                  BetTypeName = x1.BetTypeName,
+        //                  BetID = x1.BetID,
+        //                  SportID = x1.SportID,
+        //                  IsSelected = true
+        //              }).GroupBy(g => new { g.BetTypeID, g.BetID })
+        //              .Select(g => g.First());
+        //        }
+        //    }
 
-            return result;
-        }
+        //    return result;
+        //}
 
         #endregion
 
@@ -318,6 +325,9 @@
                 ViewBag.BetTypeID = para?.BetTypeID;
                 ViewBag.BettypeName = para?.BettypeName ?? string.Empty;
                 ViewBag.BetIDToString = para?.BetID.ToString();
+                ViewBag.BetTypeSettings = GetBetTypeSettings(para.SportType.ToString(), false);
+                ViewBag.MapX = para?.MX;
+                ViewBag.MapYY = para?.MY;
                 ViewBag.HomeName = para?.HomeName.ToUpper() ?? string.Empty;
                 ViewBag.AwayName = para?.AwayName.ToUpper() ?? string.Empty;
                 ViewBag.LiveIndicator = para?.LiveIndicator ?? true;

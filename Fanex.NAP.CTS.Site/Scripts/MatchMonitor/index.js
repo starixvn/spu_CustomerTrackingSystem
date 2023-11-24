@@ -128,8 +128,8 @@
                 { data: obj => obj.LeagueName },
                 {
                     data: obj => () => {
-                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&BettypeName={5}&MatchSection={6}&Market={7}&Reason={8}&ReasonName={9}&LeagueID={10}&BetID={11}&SportType={12}&KOTime={13}&IsSupportShowAllTickets={14}";
-                        let para = paramTemplate.format(obj.EventDateToString, obj.MatchID, obj.HomeID, obj.AwayID, obj.BettypeID, obj.BettypeName, obj.MatchSection, obj.Market, obj.Reason, obj.ReasonName, obj.LeagueID, obj.BetID, obj.SportType, obj.KOTime, obj.IsSupportShowAllTickets);
+                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&BettypeName={5}&MatchSection={6}&Market={7}&Reason={8}&ReasonName={9}&LeagueID={10}&BetID={11}&SportType={12}&KOTime={13}&IsSupportShowAllTickets={14}&MX={15}&MY={16}";
+                        let para = paramTemplate.format(obj.EventDateToString, obj.MatchID, obj.HomeID, obj.AwayID, obj.BettypeID, obj.BettypeName, obj.MatchSection, obj.Market, obj.Reason, obj.ReasonName, obj.LeagueID, obj.BetID, obj.SportType, obj.KOTime, obj.IsSupportShowAllTickets, obj.MapX, obj.MapYY);
 
                         return '<a class="click-view-details" href="MatchMonitor/Detail?' + para + '" target="_blank">' + obj.MatchName + '</a>';
                     }
@@ -181,21 +181,7 @@
     function RenderVerifiedUI(isVerified) {
         return '<label class="container-checkbox" id="containerCheckbox"><input id="isVerifiedCheckbox" type="checkbox" disabled' + (isVerified ? ' checked' : '') + '><span class="checkmark"></span></label>';
     }
-
-    function SetRestrictFromDate() {
-        let toDateValue = domElements.dpkToDate.datepicker("getDate");
-
-        domElements.dpkFromDate.datepicker("option", "maxDate", toDateValue);
-    }
-
-    function SetRestrictToDate() {
-        let fromDateValue = domElements.dpkFromDate.datepicker("getDate");
-
-        domElements.dpkToDate
-            .datepicker("option", "minDate", fromDateValue)
-            .datepicker("option", "maxDate", moment(fromDateValue).add(1, "year").toDate());
-    }
-
+   
     function RefreshChange($target) {
         domElements.eventTarget = $target
         var selectedVal = parseInt($target.getAttribute("value"));

@@ -23,7 +23,7 @@
             this.LeagueID = data.LeagueID;
             this.LeagueName = CachedRef.GetLeagueName(data.LeagueID);     
             this.BettypeID = data.BettypeID;
-            this.BettypeName = this.GetBettypeName(mmStatic.BetTypes, data.BettypeID, data.BetID);
+            //this.BettypeName = this.GetBettypeName(mmStatic.BetTypes, data.BettypeID, data.BetID);
             this.BetID = data.BetID;
             this.Reason = data.Reason;
             this.ReasonName = this.GetReasonName(mmStatic.Reasons, data.Reason);
@@ -33,6 +33,9 @@
             this.VerifiedBy = data.VerifiedBy;
             this.KOTime = data.KickOffTime.ToString(Consts.FormatTimeToString_hhmmss_2);
             this.IsSupportShowAllTickets = data.IsSupportShowAllTickets;
+            this.BettypeName = data.BettypeNameDisplay;
+            this.MapX = data.DetailsX;
+            this.MapYY = data.DetailsY;
         }
 
         public Int64 ID { get; set; }
@@ -84,6 +87,10 @@
         public string KOTime { get; set; }
 
         public bool IsSupportShowAllTickets { get; set; }
+
+        public int MapX { get; set; }
+
+        public int MapYY { get; set; }
 
         public string MarketName
         {

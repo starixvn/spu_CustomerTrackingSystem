@@ -408,6 +408,12 @@
 
         public TicketDetailViewModel GetMainTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int? batchSize, string transJson = null)
         {
+            var betTypeInfos = JsonConvert.SerializeObject(new MatchBetTypeSettingModel {
+                SportTypeID = para.Sport,
+                BetTypeID = para.BetTypeID,
+                BetID = para.BetID,
+            });
+
             var criteria = new TicketDetailGetCriteria()
             {
                 QueryType = 2, // Get ticket for view MM report              
@@ -415,6 +421,7 @@
                 LastScannedSequenceID = para.LastScannedSequenceID,
                 IsLive = para.LiveIndicator ? 1 : 0,
                 MatchID = para.MatchID,
+                //ListSportBettype = betTypeInfos,
                 BetType = para.BetTypeID,
                 BetID = para.BetID,
                 TicketType = para.TypeOfTickets == MatchMonitorQueryType.TicketAll ? 0 : 1,
