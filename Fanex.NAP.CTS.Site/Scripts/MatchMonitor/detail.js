@@ -937,14 +937,18 @@ function MatchMonitorDetail() {
         let betTypeSelected = $("option:selected", domElements.cbbBetType);
 
         if (betTypeSelected.length > 0) {
-            return betTypeSelected.attr('data-bettypeid')
+            return betTypeSelected.attr('data-bettypeid');
         }
 
         return domElements.betTypeID;
     }
 
+    function GetAttributeBetTypeSelected(attribute) {
+        return $("option:selected", domElements.cbbBetType).attr(attribute);
+    }
+
     function GetBetIDSelected() {
-        if (domElements.divMapX.hasClass('hidden')) {
+        if (domElements.divMapX.hasClass('hide')) {
             if (domElements.sportType == 2) {
                 let betTypeSelected = $("option:selected", domElements.cbbBetType);
 
@@ -957,7 +961,7 @@ function MatchMonitorDetail() {
         } else {
             let betIDString = "80" + domElements.cbbMapX.val();
             
-            if (!domElements.divMapYY.hasClass('hidden')) {
+            if (!domElements.divMapYY.hasClass('hide')) {
                 betIDString += ("0" + domElements.cbbMapYY.val()).slice(-2);
             }
             return betIDString;
@@ -1285,6 +1289,7 @@ function MatchMonitorDetail() {
                     MatchID: domElements.matchID,
                     BetTypeID: GetBetTypeSelected(),
                     BetID: GetBetIDSelected(),
+                    BetChoiceType: GetAttributeBetTypeSelected('data-betchoicetype'),
                     LiveIndicator: domElements.cbbMarket.val(),
                     LastScannedSequenceID: lastScannedSequenceID,
                     IsSupportShowAllTickets: isSupportShowAllTickets,
@@ -1445,6 +1450,7 @@ function MatchMonitorDetail() {
             MatchID: domElements.matchID,
             BetTypeID: GetBetTypeSelected(),
             BetID: GetBetIDSelected(),
+            BetChoiceType: GetAttributeBetTypeSelected('data-betchoicetype'),
             Sites: domElements.cbbSites.val(),
             Reason: domElements.reason,
             LiveIndicator: domElements.cbbMarket.val(),
@@ -2619,24 +2625,25 @@ function MatchMonitorDetail() {
         SetupMultiselect(domElements.cbbTicketsStatus, "Status");
         domElements.cbbBetType.select2();
         domElements.cbbMapX.select2();
-        domElements.cbbMapYY.select2();
+        domElements.cbbMapYY.select2();       
 
         if (domElements.mapX != "0") {
-            //domElements.divMapX.removeClass('hide');
+            domElements.divMapX.removeClass('hide');
             domElements.cbbMapX.val(domElements.mapX).trigger('change');
+            domElements.cbbBetType.val(`${domElements.betTypeID}_0`).trigger('change');
         } else {
-            //domElements.divMapX.addClass('hide');
+            domElements.divMapX.addClass('hide');
+            domElements.cbbBetType.val(`${domElements.betTypeID}_${domElements.betIDToString}`).trigger('change');
         }
         if (domElements.mapYY != "0") {
-            //domElements.divMapYY.removeClass('hide');
+            domElements.divMapYY.removeClass('hide');
             domElements.cbbMapYY.val(domElements.mapYY).trigger('change');
         } else {
-            //domElements.divMapYY.addClass('hide');
+            domElements.divMapYY.addClass('hide');
         }
         
         domElements.cbbMarket.val(domElements.liveIndicator);
-        domElements.cbbBetType.val(`${domElements.betTypeID}_${domElements.betIDToString}`).trigger('change');
-
+        
         domElements.cbbMarket.change(function () {
             ResetDefault();
             ResetTranstime();

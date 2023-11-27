@@ -423,6 +423,7 @@
                         .select2-selection .select2-selection--single {
                             height: 32px !important;
                         }
+                       
                     }
 
                     .first-row-line {
@@ -435,7 +436,8 @@
                     }
 
                     .select-group-bettype {
-                        width: 280px;
+                        width: 380px;
+                        height: 380px;
                         display: flex;
                     }
                 }

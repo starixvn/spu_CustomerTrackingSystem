@@ -12,8 +12,8 @@
         [SpParam(SqlParamName = "EventDate")]
         public DateTime EventDate { get; set; }
 
-        [SpParam(SqlParamName = "BetType")]
-        public Int32 BetType { get; set; }
+        //[SpParam(SqlParamName = "BetType")]
+        //public Int32 BetType { get; set; }
 
         [SpParam(SqlParamName = "IsLive")]
         public Int32 IsLive { get; set; }
@@ -24,14 +24,17 @@
         [SpParam(SqlParamName = "TicketType")]
         public int TicketType { get; set; }
 
-        [SpParam(SqlParamName = "BetID")]
-        public long BetID { get; set; }
+        //[SpParam(SqlParamName = "BetID")]
+        //public long BetID { get; set; }
 
         [SpParam(SqlParamName = "IsExclTestCurr")]
         public bool IsExclTestCurr { get; set; }
 
         [SpParam(SqlParamName = "MaxSequenceId")]
         public Int64? MaxSequenceId { get; set; }
+
+        [SpParam(SqlParamName = "ListSportBettype")]
+        public string ListSportBettype { get; set; }
 
         [SpParam(SqlParamName = "TotalTicketAll")]
         public Int64 TotalTicketAll { get; set; }

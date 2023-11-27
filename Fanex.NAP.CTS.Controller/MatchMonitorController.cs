@@ -275,6 +275,8 @@
                 BetTypeID = x.BetTypeID,
                 BetTypeName = x.BetTypeNameDisplay,
                 BetID = _commonService.GetBetID(x.BetIDPattern, x.NameDetailsX),
+                BetIDPattern = x.BetIDPattern,
+                BetChoiceType = x.BetChoiceType,
                 IsSupportSuspicious = x.IsMMDetection,
                 IsSelected = true
             });

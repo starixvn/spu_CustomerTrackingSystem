@@ -10,6 +10,10 @@
 
         public int SportID { get; set; }
 
+        public int BetChoiceType { get; set; }
+
+        public string BetIDPattern { get; set; }
+
         public bool IsSupportSuspicious { get; set; }
 
         public bool IsSelected { get; set; }

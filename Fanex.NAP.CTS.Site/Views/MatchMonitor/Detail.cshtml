@@ -56,29 +56,29 @@
 
                                     if (!item.IsSupportSuspicious)
                                     {
-                                        <option value="@itemValue" data-bettypeid="@item.BetTypeID" data-betid="@item.BetID" data-is-support-suspicious="false" class="readOnly">@item.BetTypeName</option>
+                                        <option value="@itemValue" data-bettypeid="@item.BetTypeID" data-betchoicetype="@item.BetChoiceType" data-betid="@item.BetID" data-is-support-suspicious="false" class="readOnly">@item.BetTypeName</option>
                                     }
                                     else
                                     {
-                                        <option value="@itemValue" data-bettypeid="@item.BetTypeID" data-betid="@item.BetID">@item.BetTypeName</option>
+                                        <option value="@itemValue" data-bettypeid="@item.BetTypeID" data-betchoicetype="@item.BetChoiceType" data-betid="@item.BetID">@item.BetTypeName</option>
                                     }
                                 }
 
                             </select>
                         </div>
 
-                        <div class="first-row-info" style="width: 100px" id="divMapX">
+                        <div class="first-row-info" style="width: 80px" id="divMapX">
                             <select class="control info-select" id="cbbMapX" name="state">
-                                @for (int i = 0; i < 10; i++)
+                                @for (int i = 1; i < 10; i++)
                                 {
                                     <option value="@i">@i</option>
                                 }
                             </select>
                         </div>
 
-                        <div class="first-row-info" style="width: 100px" id="divMapYY">
+                        <div class="first-row-info" style="width: 80px" id="divMapYY">
                             <select class="control info-select" id="cbbMapYY" name="state">
-                                @for (int i = 0; i < 99; i++)
+                                @for (int i = 1; i < 99; i++)
                                 {
                                     <option value="@i">@i</option>
                                 }

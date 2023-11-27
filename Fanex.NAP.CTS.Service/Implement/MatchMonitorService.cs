@@ -408,22 +408,23 @@
 
         public TicketDetailViewModel GetMainTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int? batchSize, string transJson = null)
         {
-            var betTypeInfos = JsonConvert.SerializeObject(new MatchBetTypeSettingModel {
+            var betTypeInfos = JsonConvert.SerializeObject(new List<MatchBetTypeSettingModel>() { new MatchBetTypeSettingModel {
                 SportTypeID = para.Sport,
                 BetTypeID = para.BetTypeID,
-                BetID = para.BetID,
-            });
+                //BetChoiceType = para.BetChoiceType,
+                BetID = para.BetID
+            } });
 
             var criteria = new TicketDetailGetCriteria()
             {
-                QueryType = 2, // Get ticket for view MM report              
+                QueryType = 2, // Get ticket for view MM report
                 EventDate = para.EventDate,
                 LastScannedSequenceID = para.LastScannedSequenceID,
                 IsLive = para.LiveIndicator ? 1 : 0,
                 MatchID = para.MatchID,
-                //ListSportBettype = betTypeInfos,
-                BetType = para.BetTypeID,
-                BetID = para.BetID,
+                ListSportBettype = betTypeInfos,
+                //BetType = para.BetTypeID,
+                //BetID = para.BetID,
                 TicketType = para.TypeOfTickets == MatchMonitorQueryType.TicketAll ? 0 : 1,
                 BatchSize = batchSize,
                 IsLicensee = (para.Sites == MMSites.All || para.Sites == null) ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
@@ -492,18 +493,26 @@
 
         public MMTicketDetailInfoModel GetMMTicketDetailInfo(MMDetailInfoViewModel para, IEnumerable<SuspiciousTransInfoModel> suspiciousTranInfos)
         {
+            var betTypeInfos = JsonConvert.SerializeObject(new List<MatchBetTypeSettingModel>() { new MatchBetTypeSettingModel {
+                SportTypeID = para.Sport,
+                BetTypeID = para.BetTypeID,
+                BetID = para.BetID
+            } });
+
             var criteria = new MMTicketDetailInfoCriteria()
             {
                 MatchID = para.MatchID,
-                EventDate = para.EventDate,
-                BetType = para.BetTypeID,
+                EventDate = para.EventDate,                
                 IsLive = para.LiveIndicator ? 1 : 0,
                 ListSuspiciousTransId = suspiciousTranInfos != null ? JsonConvert.SerializeObject(suspiciousTranInfos) : null,
                 TicketType = para.TypeOfTickets == MatchMonitorQueryType.TicketAll ? 0 : 1,
+                ListSportBettype = betTypeInfos,
                 IsExclTestCurr = false,
-                BetID = para.BetID,
+              
                 FromTransDate = para.TranstimeFrom != null ? para.TranstimeFrom.Value.ToUniversalTime() : (DateTime?)null,
                 ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null,
+                //BetType = para.BetTypeID,
+                //BetID = para.BetID
             };
 
             var result = repository.Fetch<MMDetailFilterTicketInfoModel>(criteria);

@@ -220,7 +220,7 @@
 
                     if (response != undefined) {
                         response.forEach(i => {
-                            let value = RenderBetTypeHTML(i.BetTypeID, i.BetID);
+                            let value = RenderBetTypeHTML(i.BetTypeID, i.BetID, i.BetIDPattern);
                             domElements.cbbBetType.append(`<option selected value="${value}">${i.BetTypeName}</option>`);
                         })                        
                     }
@@ -236,7 +236,10 @@
         }                    
     }
 
-    function RenderBetTypeHTML(betTypeID, betId) {
+    function RenderBetTypeHTML(betTypeID, betId, betIDPattern) {
+        if (betIDPattern != null) {
+            return `{&quot;BettypeID&quot;:` + betTypeID + `}`;
+        }
     }
 
     function Initial() {
@@ -264,8 +267,8 @@
         });
 
         domElements.cbbBetType.multiselect({
-            menuWidth: 260,
-            menuHeight: 260,
+            menuWidth: 340,
+            menuHeight: 320,
             selectedText: "# of # selected",
             noneSelectedText: "Select Bet Type"
         });
