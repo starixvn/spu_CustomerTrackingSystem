@@ -255,20 +255,14 @@
                         item.CustomerClass != -1 ? item.CustomerClass.ToString() : string.Empty,
                         item.DangerLevel,
                         (item.GroupID.HasValue ? item.GroupID.ToString() : string.Empty),
+                        item.TotalSettledTickets ?? 0,
                         item.BotTransSum,
                         item.BotTransPercentage.ToString() + " %",
                         item.InvalidBrowserInfoTransSum,
                         item.InvalidBrowserInfoTransPercentage.ToString() + " %",
-                        item.TotalSettledTickets.HasValue ? item.TotalSettledTickets.Value : 0,
                         item.TotalWinloss,
-                        item.WinlossLast3Days,
-                        item.WinlossLast7Days,
                         item.TotalSabaTurnoverRM,
-                        item.SabaTurnoverRMLast3Days,
-                        item.SabaTurnoverRMLast7Days,
-                        item.TotalTurnover,
-                        item.TurnoverLast3Days,
-                        item.TurnoverLast7Days
+                        item.TotalTurnover
                     };
 
                 writer.WriteRow(1, record);
