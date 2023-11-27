@@ -5,7 +5,8 @@
     let tableAssociationDetectDetailMatch = null;
     let tableAssociationDetectDetailAgent = null;
     let oldData = null;
-    let maxTags = 5000;    
+    let maxTags = 5000;
+    let isDetectEvent = true;
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),
         btnResultValidationClose: $('#btnResultValidationClose'),
@@ -58,8 +59,7 @@
                 lengthMenu: "",
                 info: "",
                 infoEmpty: "",
-                zeroRecords: "",
-                emptyTable: "No Group from input list"
+                zeroRecords: "No Group from input list"
             },
             info: false,
             ordering: false,
@@ -144,6 +144,14 @@
                 });
             }
         }).rows.add(data).draw();
+
+
+        domElements.tblAssociationDetection.DataTable().on('draw.dt', function () {
+            var element = domElements.tblAssociationDetection.find('.dataTables_empty');
+            if (element) {
+                element.html(isDetectEvent ? "No Group from input list" : "There's no data");
+            }
+        })
 
         $('tbody', domElements.tblAssociationDetection).on('click', 'tr', function () {
             if ($(this).hasClass('group')) {
@@ -766,6 +774,7 @@
 
     function DetectUserName() {
         let userNames = GetInputUserName();
+        isDetectEvent = true;
 
         if (userNames !== '') {
             parameters.UserNames = userNames;
@@ -1103,6 +1112,7 @@
     }
 
     function Search() {
+        isDetectEvent = false
         var table = domElements.tblAssociationDetection.DataTable();
         var ccOptions = domElements.cbbCC.val();
         var dangerOptions = domElements.cbbDanger.val();
