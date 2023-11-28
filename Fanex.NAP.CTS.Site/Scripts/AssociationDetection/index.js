@@ -43,6 +43,8 @@
         btnFilterGenerate: $('#btnFilterGenerate')
     };
 
+    const regexValidAmount = /^[0-9,.%]{1,15}/;
+
     let parameters = {
         UserNames: "",
         IsBP: false,
@@ -1112,12 +1114,16 @@
     }
 
     function Search() {
-        isDetectEvent = false
+        if (!VerifyInput(domElements.txtBotTrans)
+            || !VerifyInput(domElements.txtInvalidBrowserTrans))
+            return;
+        
+            isDetectEvent = false
         var table = domElements.tblAssociationDetection.DataTable();
         var ccOptions = domElements.cbbCC.val();
         var dangerOptions = domElements.cbbDanger.val();
-        var textBot = VerifyTextBox(domElements.txtBotTrans);
-        var textInvalidBrowser = VerifyTextBox(domElements.txtInvalidBrowserTrans);
+        var textBot = domElements.txtBotTrans.val();
+        var textInvalidBrowser = domElements.txtInvalidBrowserTrans.val();
 
         var filterData = oldData.filter(c => findElement(ccOptions, c.CustomerClass)
                                         && (dangerOptions.includes("0"+c.DangerDisplay+"0")
@@ -1136,8 +1142,6 @@
                 var floatnumber = parseFloat(textBot.replaceAll(",", "").trim());
                 filterData = filterData.filter(c => c.BotTransSum >= floatnumber);
             }
-
-            domElements.txtBotTrans.parent().removeClass("invalid-input");
         }
 
         if (textInvalidBrowser !== "") {
@@ -1149,8 +1153,6 @@
                 var floatnumber = parseFloat(textInvalidBrowser.replaceAll(",", "").trim());
                 filterData = filterData.filter(c => c.InvalidBrowserInfoTransSum >= floatnumber);
             }
-
-            domElements.txtInvalidBrowserTrans.parent().removeClass("invalid-input");
         }
 
         table.clear();
@@ -1167,28 +1169,41 @@
         return false;
     }
 
-    function VerifyTextBox(textBox) {
-        var text = textBox.val();
+    function VerifyInput(textBox) {
+        if (CheckInputTextBox(textBox)) {
+            textBox.parent().removeClass("invalid-input");
+            return true;
+        }
+        else {
+            textBox.parent().addClass("invalid-input");
+            return false;
+        }
+    }
 
-        if (text === "")
-            return text;
+    function CheckInputTextBox(textBox) {       
+        let amount = textBox.val();
 
-        if (!text.includes("%")) {
-            if (text.length < 4 && text.includes(",")) {
-                textBox.parent().addClass("invalid-input");
-                return "";
+        if (amount === "")
+            return true;
+
+        if (!regexValidAmount.test(amount))
+            return false;
+
+        if (!amount.includes("%")) {
+            if (amount.length < 4 && amount.includes(",")) {
+                return false;
             }
         }
 
-        var numberic = text.replaceAll("%", "");
+        var numberic = amount.replaceAll("%", "");
         numberic = numberic.replaceAll(",", "");
 
-        if (!(!isNaN(parseFloat(numberic))  && isFinite(numberic))) {
-            textBox.parent().addClass("invalid-input");
-            return "";
+        if (!(!isNaN(parseFloat(numberic))
+            && isFinite(numberic))) {
+            return false;
         }
 
-        return text;
+        return true;
     }
 
     function Initial() { 
@@ -1236,6 +1251,14 @@
 
         domElements.btnFilterGenerate.on('click', function () {
             Search();
+        }); 
+
+        domElements.txtBotTrans.on('keyup change', function () {
+            VerifyInput(domElements.txtBotTrans);
+        }); 
+
+        domElements.txtInvalidBrowserTrans.on('keyup change', function () {
+            VerifyInput(domElements.txtInvalidBrowserTrans);
         }); 
     }
 
