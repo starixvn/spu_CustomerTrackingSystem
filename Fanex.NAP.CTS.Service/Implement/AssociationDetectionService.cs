@@ -429,7 +429,7 @@
                 A = c.AssociationType
             });
 
-            return ObjectHelper.SerializeObj(assByAgent);
+            return ObjectHelper.SerializeObj(input);
         }
 
         #endregion
