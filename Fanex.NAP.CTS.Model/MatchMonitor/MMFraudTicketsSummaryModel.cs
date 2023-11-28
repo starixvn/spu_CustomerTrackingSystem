@@ -16,6 +16,7 @@ namespace Fanex.NAP.CTS.Model.MatchMonitor
         [JsonProperty("Bettype")]
         public int BettypeID { get; set; }
 
+        [JsonProperty("BetId")]
         public int? BetID { get; set; }
 
         public string FraudTrans { get; set; }
