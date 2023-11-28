@@ -948,24 +948,21 @@ function MatchMonitorDetail() {
     }
 
     function GetBetIDSelected() {
-        if (domElements.divMapX.hasClass('hide')) {
-            if (domElements.sportType == 2) {
-                let betTypeSelected = $("option:selected", domElements.cbbBetType);
+        let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
 
-                if (betTypeSelected.length > 0) {
-                    return betTypeSelected.attr('data-betid');
-                }
-            }
-            return domElements.betIDToString;
-
-        } else {
+        if (domElements.sportType != 2 && betidpattern.includes('X')) {
             let betIDString = "80" + domElements.cbbMapX.val();
-            
-            if (!domElements.divMapYY.hasClass('hide')) {
+
+            if (betidpattern.includes('YY')) {
                 betIDString += ("0" + domElements.cbbMapYY.val()).slice(-2);
             }
             return betIDString;
-        }
+            
+        } else if (domElements.sportType == 2) {
+            return $("option:selected", domElements.cbbBetType).attr('data-betid');
+        } else {
+            return domElements.betIDToString;
+        }       
     }
 
     function IsFilterSuspicious(params) {
@@ -2460,18 +2457,23 @@ function MatchMonitorDetail() {
     function ToggleMapXYY() {
         let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
 
-        if (betidpattern != undefined && betidpattern.includes('X')) {
-            domElements.divMapX.removeClass('hide');
-        } else {
-            domElements.divMapX.addClass('hide');
+        if (domElements.sportType != 2 && betidpattern.includes('X')) {
+            $("option[value='0']", domElements.cbbMapX).remove();
+            domElements.cbbMapX.prop('disabled', false);
+
+        } else {            
+            domElements.cbbMapX.prepend("<option value='0' selected='selected'>-</option>");
+            domElements.cbbMapX.prop('disabled', true);
         }
 
-        if (betidpattern != undefined && betidpattern.includes('YY')) {
-            domElements.divMapYY.removeClass('hide');
+        if (domElements.sportType != 2 && betidpattern != undefined && betidpattern.includes('YY')) {
+            $("option[value='0']", domElements.cbbMapYY).remove();
+            domElements.cbbMapYY.prop('disabled', false);
         } else {
-            domElements.divMapYY.addClass('hide');
+            domElements.cbbMapYY.prepend("<option value='0' selected='selected'>-</option>");
+            domElements.cbbMapYY.prop('disabled', true);
         }
-    }   
+    }
 
     //#endregion Event Toggle
 
@@ -2643,8 +2645,8 @@ function MatchMonitorDetail() {
         domElements.cbbMapX.select2();
         domElements.cbbMapYY.select2();       
 
-        if (domElements.mapX != "0") {            
-            domElements.cbbMapX.val(domElements.mapX).trigger('change');
+        if (domElements.mapX != "0" && domElements.sportType != 2) {            
+            domElements.cbbMapX.val(domElements.mapX).trigger('change');           
             domElements.cbbBetType.val(`${domElements.betTypeID}_0`).trigger('change');
         } else {           
             domElements.cbbBetType.val(`${domElements.betTypeID}_${domElements.betIDToString}`).trigger('change');
