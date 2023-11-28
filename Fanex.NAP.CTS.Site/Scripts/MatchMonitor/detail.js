@@ -2457,6 +2457,22 @@ function MatchMonitorDetail() {
         });
     }
 
+    function ToggleMapXYY() {
+        let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
+
+        if (betidpattern != undefined && betidpattern.includes('X')) {
+            domElements.divMapX.removeClass('hide');
+        } else {
+            domElements.divMapX.addClass('hide');
+        }
+
+        if (betidpattern != undefined && betidpattern.includes('YY')) {
+            domElements.divMapYY.removeClass('hide');
+        } else {
+            domElements.divMapYY.addClass('hide');
+        }
+    }   
+
     //#endregion Event Toggle
 
     //#region TranstimeFilter
@@ -2627,20 +2643,19 @@ function MatchMonitorDetail() {
         domElements.cbbMapX.select2();
         domElements.cbbMapYY.select2();       
 
-        if (domElements.mapX != "0") {
-            domElements.divMapX.removeClass('hide');
+        if (domElements.mapX != "0") {            
             domElements.cbbMapX.val(domElements.mapX).trigger('change');
             domElements.cbbBetType.val(`${domElements.betTypeID}_0`).trigger('change');
-        } else {
-            domElements.divMapX.addClass('hide');
+        } else {           
             domElements.cbbBetType.val(`${domElements.betTypeID}_${domElements.betIDToString}`).trigger('change');
         }
         if (domElements.mapYY != "0") {
-            domElements.divMapYY.removeClass('hide');
             domElements.cbbMapYY.val(domElements.mapYY).trigger('change');
         } else {
             domElements.divMapYY.addClass('hide');
         }
+
+        ToggleMapXYY();
         
         domElements.cbbMarket.val(domElements.liveIndicator);
         
@@ -2654,6 +2669,8 @@ function MatchMonitorDetail() {
             ResetDefault();
             ResetTranstime();
             BetTypeOnChange();
+            ToggleMapXYY();
+
             OnchangeFilter();
         });
         domElements.cbbMapX.change(function () {

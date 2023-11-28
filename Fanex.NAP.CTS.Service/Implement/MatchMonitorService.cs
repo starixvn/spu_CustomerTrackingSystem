@@ -411,7 +411,7 @@
             var betTypeInfos = JsonConvert.SerializeObject(new List<MatchBetTypeSettingModel>() { new MatchBetTypeSettingModel {
                 SportTypeID = para.Sport,
                 BetTypeID = para.BetTypeID,
-                //BetChoiceType = para.BetChoiceType,
+                BetChoiceType = para.BetChoiceType,
                 BetID = para.BetID
             } });
 
@@ -496,6 +496,7 @@
             var betTypeInfos = JsonConvert.SerializeObject(new List<MatchBetTypeSettingModel>() { new MatchBetTypeSettingModel {
                 SportTypeID = para.Sport,
                 BetTypeID = para.BetTypeID,
+                BetChoiceType = para.BetChoiceType,
                 BetID = para.BetID
             } });
 
