@@ -80,11 +80,14 @@ body {
                 }
 
                 .checkbox-filter {
-                    margin-right: 35px;
+                    margin-right: 16px;
                 }
 
                 .checkbox-container {
                     margin-top: 12px;
+                    font-size: 13px;
+                    font-weight: 400;
+                    line-height: 15.6px;
 
                     span {
                         &:before {
@@ -102,21 +105,35 @@ body {
 
                 .flex-container {
                     display: flex;
-                    margin-bottom: 10px;
+                    margin-bottom: 16px;
+                    width: 800px;
 
                     .checkbox-all {
                         cursor: pointer;
-                        color: #2097fd;
+                        color: #396EF8;
                         font-size: 12px;
+                        line-height: 16.8px;
+                        font-weight: 700;
                     }
 
                     .box-left {
-                        background: #E7EDFF;
+                        background: #E3E9F6;
                         padding-left: 10px;
+                        height: 80px;
+
+                        .icon-Check {
+                            color: #396EF8;
+                            font-weight: 700;
+                        }
+
+                        .icon-Close {
+                            color: #396EF8;
+                            font-weight: 700;
+                        }
                     }
 
                     .box-right {
-                        margin-top: 17px;
+                        margin-top: 0px;
                         margin-left: 15px;
                     }
                 }
@@ -125,10 +142,24 @@ body {
 
         .table-report {
             font-family: $font-family;
+            padding: 0 12px 12px 12px;
+            background: #F4F4F4;
+            border: 1px solid #C4C4C4;
+            border-radius: 2px;
+
+            .background-filter {
+                position: sticky;
+                position: -webkit-sticky;
+                top: 9.4rem;
+                z-index: 99;
+                background-color: #F4F4F4;
+                padding-top: 12px;
+            }
+
 
             .group {
-                padding-bottom: 8px;
-                padding-top: 8px;
+                padding-bottom: 16px;
+                padding-top: 0px;
                 padding-right: 16px;
 
                 .btn:not(:disabled) {
@@ -138,7 +169,6 @@ body {
                     min-width: 98px;
                     color: #fff;
                     margin-bottom: 0px;
-                    margin-left: 14px;
 
                     &:hover {
                         background-color: #5081ff
@@ -179,13 +209,8 @@ body {
                     /* text-align: center;*/
                 }
 
-                .text-box {
-                    height: 2.8rem;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    width: auto;
-                    padding: 0 1rem;
+                .ui-multiselect {
+                    border: 1px solid #C4C4C4;
                 }
 
                 .invalid-input {
@@ -234,21 +259,20 @@ body {
 
             .fixed-header {
                 /*  padding-top: 1.6rem;*/
-                position: sticky;
-                position: -webkit-sticky;
                 top: 9.3rem;
                 background: #fff;
-                z-index: 8;
 
                 .top-header {
-                    justify-content: space-between;
+                    /*justify-content: space-between;*/
+                    font-weight: 300;
+                    background-color: #E3E9F6;
+                    border-radius: 2px;
+                    border: 1px solid #C4C4C4;
+                    height: 36px;
                     position: sticky;
                     position: -webkit-sticky;
-                    top: 9.4rem;
-                    font-weight: 300;
+                    top: 17rem;
                     z-index: 99;
-                    background-color: #e7edff;
-                    border : none;
                 }
 
                 .button-primary {
@@ -256,7 +280,7 @@ body {
 
                     .sub-icon {
                         width: 32px;
-                        height: 32px;
+                        height: 24px;
                         display: inline-block;
                         position: relative;
                         cursor: pointer;
@@ -271,17 +295,13 @@ body {
                         }
 
                         .icon-excel {
-                            font-size: 3rem;
+                            font-size: 24px;
                         }
                     }
                 }
             }
 
             .wrapper-info-table {
-                position: sticky;
-                position: -webkit-sticky;
-                z-index: 99;
-                top: 17rem;
                 transition: top 0.01s linear;
             }
 
@@ -315,12 +335,13 @@ body {
                         th {
                             position: sticky;
                             position: -webkit-sticky;
-                            top: 17.0rem;
+                            top: 20.6rem;
                             font-weight: 300;
                             z-index: 99;
+                            height: 35px;
 
                             span {
-                                font-size: smaller;
+                                font-size: 14px;
                             }
                         }
                     }
