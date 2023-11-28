@@ -30,6 +30,10 @@ body {
     .association-detection-content {
         margin: 1rem 1.6rem 1rem 1.6rem;
 
+        ::placeholder {
+            color: #A8A8A8 !important;
+        }
+
         .control-table {
             width: 100%;
             background: #fff;
@@ -39,17 +43,68 @@ body {
                 margin-bottom: -1.3rem;
             }
 
+            .wrapper-rule-left {
+                margin-right: 0px;
+
+                .text {
+                    color: #545454;
+                    font-family: Lato;
+                    font-size: 13px;
+                    font-weight: 400;
+                    line-height: 16px;
+                    letter-spacing: 0em;
+                    text-align: left;
+                }
+
+                .icon-delete::before {
+                    color: #A8A8A8 !important;
+                }
+            }
+
+            .label {
+                color: #545454;
+                font-family: 'Lato';
+                font-size: 13px;
+                font-weight: 400;
+                line-height: 16px;
+                letter-spacing: 0em;
+                text-align: left;
+            }
+
+            .tagify__input:empty::before {
+                font-family: 'Lato';
+                color: #8C8C8C;
+                font-size: 13px;
+                font-style: italic;
+                font-weight: 400;
+                line-height: 16px;
+                letter-spacing: 0em;
+                text-align: left;
+            }
+
+            .tagify__input {
+                margin-top: 0px;
+            }
+
+            .wrapper-value {
+                border-color: #DDDDDD;
+            }
+
             .form-filter {
                 .box-username {
-                    max-width: 1280px;
                     width: 100%;
                     padding: 0 !important;
+
+                    .btn-detect {
+                        padding-right: 0px;
+                        padding-left: 0px;
+                        height: 28px;
+                        width: 67px;
+                    }
 
                     .btn-detect:not(:disabled) {
                         background-color: #396EF8;
                         border-radius: 2px;
-                        height: 30px;
-                        min-width: 98px;
                         color: #fff;
 
                         &:hover {
@@ -88,6 +143,13 @@ body {
                     font-size: 13px;
                     font-weight: 400;
                     line-height: 15.6px;
+                    font-family: Lato;
+                    font-size: 13px;
+                    font-weight: 400;
+                    line-height: 16px;
+                    letter-spacing: 0em;
+                    text-align: left;
+                    color: #545454;
 
                     span {
                         &:before {
@@ -136,6 +198,11 @@ body {
                         margin-top: 0px;
                         margin-left: 15px;
                     }
+
+                    input[type=checkbox]:checked + span:before {
+                        background: #4F971F;
+                        border-color: #4F971F;
+                    }
                 }
             }
         }
@@ -162,11 +229,18 @@ body {
                 padding-top: 0px;
                 padding-right: 16px;
 
+                .text {
+                    color: #333333;
+                }
+
+                .btn {
+                    height: 28px;
+                    width: 83px;
+                }
+
                 .btn:not(:disabled) {
                     background-color: #396EF8;
                     border-radius: 2px;
-                    height: 30px;
-                    min-width: 98px;
                     color: #fff;
                     margin-bottom: 0px;
 
@@ -211,6 +285,7 @@ body {
 
                 .ui-multiselect {
                     border: 1px solid #C4C4C4;
+                    color: #545454;
                 }
 
                 .invalid-input {
@@ -335,10 +410,10 @@ body {
                         th {
                             position: sticky;
                             position: -webkit-sticky;
-                            top: 20.6rem;
+                            top: 20.3rem;
                             font-weight: 300;
                             z-index: 99;
-                            height: 35px;
+                            height: 53px;
 
                             span {
                                 font-size: 14px;

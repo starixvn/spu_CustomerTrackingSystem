@@ -467,21 +467,58 @@ body {
 
 .association-detection-report .association-detection-content {
   margin: 1rem 1.6rem 1rem 1.6rem; }
+  .association-detection-report .association-detection-content ::placeholder {
+    color: #A8A8A8 !important; }
   .association-detection-report .association-detection-content .control-table {
     width: 100%;
     background: #fff;
     margin-top: 20px; }
     .association-detection-report .association-detection-content .control-table .title {
       margin-bottom: -1.3rem; }
+    .association-detection-report .association-detection-content .control-table .wrapper-rule-left {
+      margin-right: 0px; }
+      .association-detection-report .association-detection-content .control-table .wrapper-rule-left .text {
+        color: #545454;
+        font-family: Lato;
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 16px;
+        letter-spacing: 0em;
+        text-align: left; }
+      .association-detection-report .association-detection-content .control-table .wrapper-rule-left .icon-delete::before {
+        color: #A8A8A8 !important; }
+    .association-detection-report .association-detection-content .control-table .label {
+      color: #545454;
+      font-family: 'Lato';
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 16px;
+      letter-spacing: 0em;
+      text-align: left; }
+    .association-detection-report .association-detection-content .control-table .tagify__input:empty::before {
+      font-family: 'Lato';
+      color: #8C8C8C;
+      font-size: 13px;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 16px;
+      letter-spacing: 0em;
+      text-align: left; }
+    .association-detection-report .association-detection-content .control-table .tagify__input {
+      margin-top: 0px; }
+    .association-detection-report .association-detection-content .control-table .wrapper-value {
+      border-color: #DDDDDD; }
     .association-detection-report .association-detection-content .control-table .form-filter .box-username {
-      max-width: 1280px;
       width: 100%;
       padding: 0 !important; }
+      .association-detection-report .association-detection-content .control-table .form-filter .box-username .btn-detect {
+        padding-right: 0px;
+        padding-left: 0px;
+        height: 28px;
+        width: 67px; }
       .association-detection-report .association-detection-content .control-table .form-filter .box-username .btn-detect:not(:disabled) {
         background-color: #396EF8;
         border-radius: 2px;
-        height: 30px;
-        min-width: 98px;
         color: #fff; }
         .association-detection-report .association-detection-content .control-table .form-filter .box-username .btn-detect:not(:disabled):hover {
           background-color: #5081ff; }
@@ -504,7 +541,14 @@ body {
       margin-top: 12px;
       font-size: 13px;
       font-weight: 400;
-      line-height: 15.6px; }
+      line-height: 15.6px;
+      font-family: Lato;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 16px;
+      letter-spacing: 0em;
+      text-align: left;
+      color: #545454; }
       .association-detection-report .association-detection-content .control-table .form-filter .checkbox-container span:before {
         top: 1px;
         height: 16px;
@@ -535,6 +579,9 @@ body {
       .association-detection-report .association-detection-content .control-table .form-filter .flex-container .box-right {
         margin-top: 0px;
         margin-left: 15px; }
+      .association-detection-report .association-detection-content .control-table .form-filter .flex-container input[type=checkbox]:checked + span:before {
+        background: #4F971F;
+        border-color: #4F971F; }
   .association-detection-report .association-detection-content .table-report {
     font-family: "Lato", Arial, Tahoma, sans-serif;
     padding: 0 12px 12px 12px;
@@ -552,11 +599,14 @@ body {
       padding-bottom: 16px;
       padding-top: 0px;
       padding-right: 16px; }
+      .association-detection-report .association-detection-content .table-report .group .text {
+        color: #333333; }
+      .association-detection-report .association-detection-content .table-report .group .btn {
+        height: 28px;
+        width: 83px; }
       .association-detection-report .association-detection-content .table-report .group .btn:not(:disabled) {
         background-color: #396EF8;
         border-radius: 2px;
-        height: 30px;
-        min-width: 98px;
         color: #fff;
         margin-bottom: 0px; }
         .association-detection-report .association-detection-content .table-report .group .btn:not(:disabled):hover {
@@ -586,7 +636,8 @@ body {
         font-size: 11px;
         /* text-align: center;*/ }
       .association-detection-report .association-detection-content .table-report .group .ui-multiselect {
-        border: 1px solid #C4C4C4; }
+        border: 1px solid #C4C4C4;
+        color: #545454; }
       .association-detection-report .association-detection-content .table-report .group .invalid-input {
         border: 1px solid red; }
       .association-detection-report .association-detection-content .table-report .group .clear-amount {
@@ -662,10 +713,10 @@ body {
       .association-detection-report .association-detection-content .table-report .table-association-detection thead tr:first-child th {
         position: sticky;
         position: -webkit-sticky;
-        top: 20.6rem;
+        top: 20.3rem;
         font-weight: 300;
         z-index: 99;
-        height: 35px; }
+        height: 53px; }
         .association-detection-report .association-detection-content .table-report .table-association-detection thead tr:first-child th span {
           font-size: 14px; }
       .association-detection-report .association-detection-content .table-report .table-association-detection .sub-icon {
