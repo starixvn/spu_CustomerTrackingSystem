@@ -693,7 +693,7 @@ function MatchMonitorDetail() {
                                         <th>
                                             <div class="type-outer">
                                                 <span class="col-title">Transtime</span>
-                                                <span class="icon-transtime-autofill" id="iconHTranstimeAutofill">A</span>
+                                                <span class="icon-transtime-autofill icon-icon-copy" id="iconHTranstimeAutofill"></span>
                                             </div>
                                         </th>
                                         <th>B.f.</th>
@@ -736,7 +736,7 @@ function MatchMonitorDetail() {
                                         <th>
                                             <div class="type-outer">
                                                 <span class="col-title">Transtime</span>
-                                                <span class="icon-transtime-autofill" id="iconATranstimeAutofill">A</span>
+                                                <span class="icon-transtime-autofill icon-icon-copy" id="iconATranstimeAutofill"></span>
                                             </div>
                                         </th>
                                         <th>B.f.</th>
@@ -822,7 +822,7 @@ function MatchMonitorDetail() {
                                         <th>
                                             <div class="type-outer">
                                                 <span class="col-title">Transtime</span>
-                                                <span class="icon-transtime-autofill" id="iconSGTranstimeAutofill">A</span>
+                                                <span class="icon-transtime-autofill icon-icon-copy" id="iconSGTranstimeAutofill"></span>
                                             </div>
                                         </th>
                                         <th>B.f.</th>
@@ -1081,7 +1081,9 @@ function MatchMonitorDetail() {
 
         SetupAGroupFilter(data.GroupList);
 
-        RefreshReasonInfo(data.ReasonList);
+        if (transtime.fromDate == undefined && transtime.toDate == undefined) {
+            RefreshReasonInfo(data.ReasonList);
+        }
 
         SetupDefaultMGroupFilter(data.MGroupList);
 
@@ -2489,6 +2491,7 @@ function MatchMonitorDetail() {
     }
 
     function FetchFilterMMDetailByTranstime() {
+        ResetDefault();
         ResetDefaulCbbSite();
 
         domElements.boderTranstimeInput.removeClass('info-input-error');

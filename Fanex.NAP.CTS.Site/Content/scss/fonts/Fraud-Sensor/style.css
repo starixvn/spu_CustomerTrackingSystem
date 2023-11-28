@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Fraud-Sensor';
-  src:  url('fonts/Fraud-Sensor.eot?4u9w5d');
-  src:  url('fonts/Fraud-Sensor.eot?4u9w5d#iefix') format('embedded-opentype'),
-    url('fonts/Fraud-Sensor.ttf?4u9w5d') format('truetype'),
-    url('fonts/Fraud-Sensor.woff?4u9w5d') format('woff'),
-    url('fonts/Fraud-Sensor.svg?4u9w5d#Fraud-Sensor') format('svg');
+  src:  url('fonts/Fraud-Sensor.eot?l06kc1');
+  src:  url('fonts/Fraud-Sensor.eot?l06kc1#iefix') format('embedded-opentype'),
+    url('fonts/Fraud-Sensor.ttf?l06kc1') format('truetype'),
+    url('fonts/Fraud-Sensor.woff?l06kc1') format('woff'),
+    url('fonts/Fraud-Sensor.svg?l06kc1#Fraud-Sensor') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,23 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-icon-clear:before {
+  content: "\e93f";
+  color: #c1272d;
+}
+.icon-icon-transtime-submit .path1:before {
+  content: "\e940";
+  color: rgb(57, 110, 248);
+}
+.icon-icon-transtime-submit .path2:before {
+  content: "\e941";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-icon-copy:before {
+  content: "\e942";
+  color: #fff;
+}
 .icon-Check:before {
   content: "\e93d";
 }

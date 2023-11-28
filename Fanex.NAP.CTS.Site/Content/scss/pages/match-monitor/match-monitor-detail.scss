@@ -345,7 +345,6 @@
                         }
 
                         .info-input {
-                            padding-right: 8px;
                             height: 32px;
                             vertical-align: middle;
                             box-sizing: border-box;
@@ -386,17 +385,20 @@
                             .transtime-icon {
                                 vertical-align: middle;
                                 cursor: pointer;
-                                margin-left: 3px;
                             }
 
                             .transtime-icon-submit {
-                                border: 1px solid #474747;
-                                border-radius: 2px;
-                                width: 20px;
-                                height: 16px;
-                                font-size: 14px;
+                                border: 1px solid rgba(196, 196, 196, 1);
+                                font-size: 29px;
                                 display: inline-block;
                                 text-align: center;
+                                vertical-align: bottom;
+                            }
+
+                            .transtime-icon-clear {
+                                margin-right: 3px;
+                                font-size: 15px;
+                                display: inline-block;
                             }
 
                             .transtime-icon-forcus {
@@ -516,11 +518,11 @@
 
                 .button-feedback {
                     color: #FFFFFF;
-                    background-color: rgba(193, 39, 45, 0.5);
-                    border: 1px solid #C1272D;
+                    background: rgba(79, 151, 31, 1);
+                    border: 1px solid rgba(79, 151, 31, 1);
 
                     &:hover {
-                        background: rgba(193, 39, 45, 0.8);
+                        background: rgb(53, 100, 21);
                     }
                 }
             }
@@ -618,11 +620,7 @@
                                             }
 
                                             .icon-transtime-autofill {
-                                                border: 1px solid #ffffff;
-                                                border-radius: 2px;
-                                                width: 20px;
-                                                height: 16px;
-                                                font-size: 12px;
+                                                font-size: 15px;
                                                 cursor: pointer;
                                             }
 
@@ -707,7 +705,7 @@
 
                                     .col-transtime {
                                         font-size: 12px !important;
-                                        min-width: 100px;
+                                        min-width: 105px;
                                     }
 
                                     .col-betid,
