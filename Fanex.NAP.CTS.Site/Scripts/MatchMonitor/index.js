@@ -240,6 +240,7 @@
         if (betIDPattern != null) {
             return `{&quot;BettypeID&quot;:` + betTypeID + `}`;
         }
+        return `{&quot;BettypeID&quot;:` + betTypeID + `, &quot;BetID&quot;:` + betId + `}`;
     }
 
     function Initial() {

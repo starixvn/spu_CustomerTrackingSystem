@@ -239,7 +239,7 @@
                         MatchSection = m2.MatchSection,
                         IsSupportShowAllTickets = m2.IsGetDataFromOrigin == 1,
                         DataSource = m2.DataSource,
-                        FraudTrans = m1.FraudTrans
+                        FraudTrans = m1.FraudTrans,
 						BettypeNameDisplay = m1.BettypeNameDisplay,
                         DetailsX = m1.DetailsX,
                         DetailsY = m1.DetailsY
