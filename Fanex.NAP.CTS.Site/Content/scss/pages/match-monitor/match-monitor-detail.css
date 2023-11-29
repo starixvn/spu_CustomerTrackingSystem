@@ -616,8 +616,7 @@
               vertical-align: middle;
               cursor: pointer; }
             .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .info-input .transtime-icon-submit {
-              border: 1px solid #c4c4c4;
-              font-size: 29px;
+              font-size: 30px;
               display: inline-block;
               text-align: center;
               vertical-align: bottom; }
@@ -626,6 +625,7 @@
               font-size: 15px;
               display: inline-block; }
             .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .info-input .transtime-icon-forcus {
+              font-size: 29px;
               color: red;
               border: 1px solid red; }
           .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .info-input-error {
