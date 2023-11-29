@@ -207,20 +207,30 @@
         }
     }
 
-    function RefreshBetTypeFilter() {               
-        let sportIDs = domElements.cbbSport.val().join()
+    function RefreshBetTypeFilter() {   
+        let arrSportIDs = domElements.cbbSport.val();
+        let sportIDs = arrSportIDs.join();
         if (sportIDs != '') {
             $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMMFilterBetTypeBySportID'), {
                 type: 'POST',
                 data: {
-                    sportIDs: domElements.cbbSport.val().join()
+                    sportIDs: sportIDs
                 },
                 success: function (response) {
                     domElements.cbbBetType.multiselect().empty();
 
                     if (response != undefined) {
                         response.forEach(i => {
-                            let value = RenderBetTypeHTML(i.BetTypeID, i.BetID, i.BetIDPattern);
+                            let value = '';
+
+                            if (i.BetIDPattern == undefined && i.NameDetailsX == '') {
+                                value = `{&quot;BettypeID&quot;:` + i.BetTypeID + `, &quot;BetID&quot;:0` + `}`;
+                            } else if (i.BetIDPattern != '' && i.NameDetailsX != ''){
+                                value = `{&quot;BettypeID&quot;:` + i.BetTypeID + `, &quot;BetID&quot;:` + i.BetID + `}`;
+                            } else {
+                                value = `{&quot;BettypeID&quot;:` + i.BetTypeID + `}`;
+                            }
+                            
                             domElements.cbbBetType.append(`<option selected value="${value}">${i.BetTypeName}</option>`);
                         })                        
                     }
@@ -234,14 +244,7 @@
                 }
             });
         }                    
-    }
-
-    function RenderBetTypeHTML(betTypeID, betId, betIDPattern) {
-        if (betIDPattern != null) {
-            return `{&quot;BettypeID&quot;:` + betTypeID + `}`;
-        }
-        return `{&quot;BettypeID&quot;:` + betTypeID + `, &quot;BetID&quot;:` + betId + `}`;
-    }
+    }   
 
     function Initial() {
         domElements.dpkFromDate

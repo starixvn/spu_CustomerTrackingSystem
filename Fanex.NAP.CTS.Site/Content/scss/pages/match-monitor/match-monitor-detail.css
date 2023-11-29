@@ -576,11 +576,14 @@
         padding: 8px;
         border-radius: 3px 3px 0px 0px; }
         .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info {
-          height: 32px !important; }
+          height: 32px !important;
+          margin-left: 5px; }
           .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .info-text {
             font-weight: bold;
             color: black;
-            padding-right: 5px; }
+            padding-right: 5px;
+            width: 80px;
+            line-height: 30px; }
           .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .info-select {
             width: 149px !important;
             padding-left: 12px;
@@ -628,7 +631,7 @@
             background-color: #fff;
             border: 1px solid red; }
           .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .select2-container {
-            width: 151px !important;
+            /* width: 151px !important;*/
             height: 32px !important;
             vertical-align: middle; }
           .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .select2-container .select2-selection--single {
@@ -643,6 +646,10 @@
           margin-bottom: 1px;
           height: 30px;
           border-right: 1px solid #c4c4c4; }
+        .detailpage .monitor-container .monitor-table .group-control .first-row .select-group-bettype {
+          width: 380px;
+          height: 380px;
+          display: flex; }
       .detailpage .monitor-container .monitor-table .group-control .second-row-depend-1 {
         padding: 8px 5px 8.8px 5px;
         margin-top: 0px; }

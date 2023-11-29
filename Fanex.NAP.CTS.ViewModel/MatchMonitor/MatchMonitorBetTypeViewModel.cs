@@ -17,5 +17,7 @@
         public bool IsSupportSuspicious { get; set; }
 
         public bool IsSelected { get; set; }
+
+        public string NameDetailsX { get; set; }
     }
 }

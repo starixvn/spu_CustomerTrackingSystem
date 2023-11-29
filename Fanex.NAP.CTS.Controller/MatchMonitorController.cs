@@ -278,8 +278,9 @@
                 BetIDPattern = x.BetIDPattern,
                 BetChoiceType = x.BetChoiceType,
                 IsSupportSuspicious = x.IsMMDetection,
-                IsSelected = true
-            });
+                IsSelected = true,
+                NameDetailsX = x.NameDetailsX
+            }).GroupBy(g => new { g.BetTypeID, g.BetID }).Select(g => g.First());
         }
 
         //private IEnumerable<MatchMonitorBetTypeViewModel> GetFilterBetTypeBySportID(string sportIDs)

@@ -2661,16 +2661,12 @@ function MatchMonitorDetail() {
         
         domElements.cbbMarket.val(domElements.liveIndicator);
         
-        domElements.cbbMarket.change(function () {
-            ResetDefault();
-            ResetTranstime();
-            MarketOnChange();
+        domElements.cbbMarket.change(function () {          
+            ResetTranstime();           
             OnchangeFilter();
         });
-        domElements.cbbBetType.change(function () {           
-            ResetDefault();
-            ResetTranstime();
-            BetTypeOnChange();
+        domElements.cbbBetType.change(function () {                       
+            ResetTranstime();         
             ToggleMapXYY();
 
             OnchangeFilter();
