@@ -16,6 +16,14 @@
 
         public string CustStatus { get; set; }
 
+        public int BotTransSum { get; set; }
+
+        public double BotTransPercentage { get; set; }
+
+        public int InvalidBrowserInfoTransSum { get; set; }
+
+        public double InvalidBrowserInfoTransPercentage { get; set; }
+
         public string Evidence { get; set; }
 
         public string CustomerCategory { get; set; }
@@ -49,5 +57,7 @@
         public int Danger4 { get; set; }
 
         public int Danger5 { get; set; }
+
+        public string DangerDisplay { get; set; }
     }
 }

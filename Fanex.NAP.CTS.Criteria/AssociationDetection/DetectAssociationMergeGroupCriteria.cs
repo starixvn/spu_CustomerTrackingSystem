@@ -20,6 +20,9 @@
         [SpParam(SqlParamName = "ip_SharedMatches")]
         public string SharedMatchesJson { get; set; }
 
+        [SpParam(SqlParamName = "ip_IsGetLogTransInfo")]
+        public bool IsGetLogTransInfo { get; set; }
+
         public override string GetSettingKey()
         {
             return "CTS_DC_AssociationDetection_DetectGroup";

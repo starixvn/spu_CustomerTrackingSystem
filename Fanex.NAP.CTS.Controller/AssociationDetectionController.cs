@@ -242,10 +242,49 @@
             return Json(new
             {
                 data = result,
+                filters = GenerateFilter(result),
                 associationByIPJson = model.AssociationByIPJson
             }, JsonRequestBehavior.AllowGet);
         }
-      
+
+        private DetectAssociationLoadFilterViewModel GenerateFilter(DetectAssociationViewModel data)
+        {
+            var custClassList = _commonService.GetGroupCustomerClass().ToList();
+
+            var CustClassFilter = data.ItemList.Select(c => c.CustomerClass).Distinct().ToList();
+
+            var filters = new DetectAssociationLoadFilterViewModel(custClassList, CustClassFilter);           
+
+            #region Danger List
+            filters.DangerFilter.Danger1 = data.ItemList.Where(x => x.Danger1 > 0).Select(x => x.Danger1).Distinct()
+               .Select(x => new DetectAssociationFilterDangerViewModel { Danger = x, DangerName = "Original " + x })
+               .OrderBy(x => x.Danger);
+
+            filters.DangerFilter.Danger2 = data.ItemList.Where(x => x.Danger2 > 0).Select(x => x.Danger2).Distinct()
+               .Select(x => new DetectAssociationFilterDangerViewModel { Danger = x, DangerName = "ABI " + x })
+               .OrderBy(x => x.Danger);
+
+            filters.DangerFilter.Danger3 = data.ItemList.Where(x => x.Danger3 > 0).Select(x => x.Danger3).Distinct()
+                .Select(x => new DetectAssociationFilterDangerViewModel { Danger = x, DangerName = "Other Sports " + x })
+                .OrderBy(x => x.Danger);
+
+            filters.DangerFilter.Danger4 = data.ItemList.Where(x => x.Danger4 > 0).Select(x => x.Danger4).Distinct()
+                .Select(x => new DetectAssociationFilterDangerViewModel { Danger = x, DangerName = "Basketball " + x })
+                .OrderBy(x => x.Danger);
+
+            filters.DangerFilter.Danger5 = data.ItemList.Where(x => x.Danger5 > 0).Select(x => x.Danger5).Distinct()
+               .Select(x => new DetectAssociationFilterDangerViewModel { Danger = x, DangerName = "E-Sports " + x })
+               .OrderBy(x => x.Danger);
+
+            if (data.ItemList.Any(x => x.DangerDisplay == "-"))
+            {
+                filters.DangerFilter.NoneDanger = new List<DetectAssociationFilterDangerViewModel> { new DetectAssociationFilterDangerViewModel { Danger = 0, DangerName = "-" } };
+            }
+            #endregion
+
+            return filters;
+        }
+
         private DetectAssociationViewModel DetectAssociation(DetectAssociationByUserNamesViewModel model, bool isExportExcel)
         {
             var result = new DetectAssociationViewModel();
@@ -275,7 +314,7 @@
 
                     var ctsCustIDs = string.Join(",", orgUserList.Select(x => x.CTSCustID));
 
-                    var mergeGroupInfo = new MergeGroupInfoModel { CTSCustIDs = ctsCustIDs };
+                    var mergeGroupInfo = new MergeGroupInfoModel { CTSCustIDs = ctsCustIDs, IsGetLogTransInfo = true };
                    
                     var assBySharedIP = Enumerable.Empty<SharedIPInfoModel>();
 
@@ -332,7 +371,7 @@
                     });
                     
                     var assMergeGroup = _associationDetectionService.DetectGroupDetectAssociation(mergeGroupInfo);
-                    
+
                     var assRearrangeGroup = RearrangeAssGroup(assMergeGroup, isExportExcel);
 
                     if (isExportExcel)
@@ -346,7 +385,7 @@
                         result.ItemList = assRearrangeGroup.Select(x =>
                         {
                             return new DetectAssociationItemViewModel(x);
-                        });                       
+                        });
                     }
                 }
                 catch (Exception ex)
@@ -726,6 +765,10 @@
                         item.Danger3 = cust1.Danger3;
                         item.Danger4 = cust1.Danger4;
                         item.Danger5 = cust1.Danger5;
+                        item.BotTransSum = cust1.BotTransSum;
+                        item.BotTransPercentage = cust1.BotTransPercentage;
+                        item.InvalidBrowserInfoTransSum = cust1.InvalidBrowserInfoTransSum;
+                        item.InvalidBrowserInfoTransPercentage = cust1.InvalidBrowserInfoTransPercentage;
                     }
                     if (cust2 != null)
                     {

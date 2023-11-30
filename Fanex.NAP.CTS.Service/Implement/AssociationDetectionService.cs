@@ -117,7 +117,8 @@
                 PrimaryJson = model.AssociationByPrimaryJson,
                 AgentJson = model.AssociationByAgentJson,
                 SharedIPJson = model.AssociationByIPJson,
-                SharedMatchesJson = model.AssociationByMatchesJson
+                SharedMatchesJson = model.AssociationByMatchesJson,
+                IsGetLogTransInfo = model.IsGetLogTransInfo
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -250,20 +251,18 @@
                         idx++,
                         item.UserName,
                         item.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyy),
-                        item.CustomerClass != -1 ? item.CustomerClass.ToString() : string.Empty,
                         item.CustomerCategory = item.CustomerCategory,
+                        item.CustomerClass != -1 ? item.CustomerClass.ToString() : string.Empty,
                         item.DangerLevel,
                         (item.GroupID.HasValue ? item.GroupID.ToString() : string.Empty),
-                        item.TotalSettledTickets.HasValue ? item.TotalSettledTickets.Value : 0,
+                        item.TotalSettledTickets ?? 0,
+                        item.BotTransSum,
+                        item.BotTransPercentage.ToString() + " %",
+                        item.InvalidBrowserInfoTransSum,
+                        item.InvalidBrowserInfoTransPercentage.ToString() + " %",
                         item.TotalWinloss,
-                        item.WinlossLast3Days,
-                        item.WinlossLast7Days,
                         item.TotalSabaTurnoverRM,
-                        item.SabaTurnoverRMLast3Days,
-                        item.SabaTurnoverRMLast7Days,
-                        item.TotalTurnover,
-                        item.TurnoverLast3Days,
-                        item.TurnoverLast7Days
+                        item.TotalTurnover
                     };
 
                 writer.WriteRow(1, record);

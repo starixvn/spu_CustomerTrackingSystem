@@ -11,6 +11,6 @@
 
         public string CCGroupName { get; set; }
 
-        public IEnumerable<int> CCList { get; set; }
+        public List<int> CCList { get; set; }
     }
 }

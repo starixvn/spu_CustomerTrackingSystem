@@ -4,16 +4,18 @@
     let tableAssociationDetectDetailIP = null;
     let tableAssociationDetectDetailMatch = null;
     let tableAssociationDetectDetailAgent = null;
-    let maxTags = 5000;    
+    let oldData = null;
+    let maxTags = 5000;
+    let isDetectEvent = true;
     let domElements = {
-        hdIsHostPermission: $('#hdIsHostPermission'),                   
-        btnResultValidationClose: $('#btnResultValidationClose'),  
+        hdIsHostPermission: $('#hdIsHostPermission'),
+        btnResultValidationClose: $('#btnResultValidationClose'),
         divReportContainer: $('#divReportContainer'),
         divAddUserName: $('#divAddUserName'),
-        spanAddUserName : $('#spanAddUserName'),
-        spanAddUserNameMaxTag: $('#spanAddUserNameMaxTag'),        
+        spanAddUserName: $('#spanAddUserName'),
+        spanAddUserNameMaxTag: $('#spanAddUserNameMaxTag'),
         spanAddChangeHidden: $('#spanAddChangeHidden'),
-        inputTagUsername: $('#inputTagUsername'),  
+        inputTagUsername: $('#inputTagUsername'),
         btnRemoveInvalidUserName: $('#btnRemoveInvalidUserName'),
         tickCheckAll: $('#tickCheckAll'),
         tickUncheckAll: $('#tickUncheckAll'),
@@ -33,8 +35,15 @@
         divAssociationDetectDetailMatch: $('#divAssociationDetectDetailMatch'),
         tblAssociationDetectDetailMatch: $('#tblAssociationDetectDetailMatch'),
         divAssociationDetectDetailAgent: $('#divAssociationDetectDetailAgent'),
-        tblAssociationDetectDetailAgent: $('#tblAssociationDetectDetailAgent')    
+        tblAssociationDetectDetailAgent: $('#tblAssociationDetectDetailAgent'),
+        cbbCC: $('#cbbCC'),
+        cbbDanger: $('#cbbDanger'), 
+        txtBotTrans: $('#inputBotTrans'),
+        txtInvalidBrowserTrans: $('#inputInvalidBrowserTrans'),
+        btnFilterGenerate: $('#btnFilterGenerate')
     };
+
+    const regexValidAmount = /^[0-9,.%]{1,15}/;
 
     let parameters = {
         UserNames: "",
@@ -52,8 +61,7 @@
                 lengthMenu: "",
                 info: "",
                 infoEmpty: "",
-                zeroRecords: "",
-                emptyTable: "No Group from input list"
+                zeroRecords: "No Group from input list"
             },
             info: false,
             ordering: false,
@@ -62,18 +70,23 @@
             scrollCollapse: true,
             paging: false,
             searching: false,
+            autoWidth: false,
             columnDefs: [
                 { "visible": false, "targets": 0 },
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8], className: "text-center" },     
-                { targets: [0], width: "5%" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], className: "text-center" },     
+                { targets: [0], width: "0% " },
                 { targets: [1], width: "12%" },
-                { targets: [2], width: "10%" },
-                { targets: [3], width: "10%" },
-                { targets: [4], width: "20%" },
-                { targets: [5], width: "15%" },
-                { targets: [6], width: "10%" },
-                { targets: [7], width: "8%" }               
+                { targets: [2], width: "2%" },
+                { targets: [3], width: "11%" },
+                { targets: [4], width: "3%" },
+                { targets: [5], width: "12%" },
+                { targets: [6], width: "9%" },
+                { targets: [7], width: "9%" },
+                { targets: [8], width: "6%" },
+                { targets: [9], width: "16%" },
+                { targets: [10], width: "10%" },
+                { targets: [11], width: "9%" },           
             ],
             columns: [
                 { data: obj => obj.GroupID },
@@ -84,6 +97,15 @@
                     }               
                 },
                 { data: obj => obj.CustStatus },
+                {
+                    data: obj => common.renderCategoryName(obj.CustomerCategory), createdCell: (cell, _, row) => {
+                        common.renderCategoryColor(cell, row);
+                    }
+                },
+                { data: obj => obj.CustomerClassToString },
+                { data: obj => obj.DangerDisplay },
+                { data: obj => FormatTransInfo(obj.BotTransSum, obj.BotTransPercentage) },
+                { data: obj => FormatTransInfo(obj.InvalidBrowserInfoTransSum, obj.InvalidBrowserInfoTransPercentage) },
                 { data: obj => obj.Evidences },
                 {
                     data: obj => obj.AssociatedTypes, createdCell: (cell, _, row) => {
@@ -96,12 +118,6 @@
                         });
                     }
                 },
-                {
-                    data: obj => common.renderCategoryName(obj.CustomerCategory), createdCell: (cell, _, row) => {
-                        common.renderCategoryColor(cell, row);
-                    }
-                },
-                { data: obj => obj.CustomerClass },
                 {
                     data: obj => () => {
                         if (obj.AgentCTSCustID != 0) {
@@ -122,7 +138,7 @@
                 api.column(0, { page: 'current' }).data().each(function (group, i) {
                     if (last !== group) {
                         $(rows).eq(i).before(
-                            '<tr class="group"><td colspan="8"><span><i class="icon-chevron-down"></i>' + 'Group ' + group + '</span></td></tr>'
+                            '<tr class="group"><td colspan="11"><span><i class="icon-chevron-down"></i>' + 'Group ' + group + '</span></td></tr>'
                         );
 
                         last = group;
@@ -130,6 +146,14 @@
                 });
             }
         }).rows.add(data).draw();
+
+
+        domElements.tblAssociationDetection.DataTable().on('draw.dt', function () {
+            var element = domElements.tblAssociationDetection.find('.dataTables_empty');
+            if (element) {
+                element.html(isDetectEvent ? "No Group from input list" : "There's no data");
+            }
+        })
 
         $('tbody', domElements.tblAssociationDetection).on('click', 'tr', function () {
             if ($(this).hasClass('group')) {
@@ -148,8 +172,7 @@
                         .addClass('icon-chevron-down');
                 }
             }
-        });        
-      
+        });            
         return table;
     }    
 
@@ -753,6 +776,7 @@
 
     function DetectUserName() {
         let userNames = GetInputUserName();
+        isDetectEvent = true;
 
         if (userNames !== '') {
             parameters.UserNames = userNames;
@@ -779,9 +803,15 @@
                 },
                 success: function (response) {
                     if (response.data.ErrorCode == 0) {
+                        SetupDangerFilter(response.filters.DangerFilter);
+                        SetupCCFilter(response.filters.CustClassFilter);
+                        SetupTextBox();
+
                         dataTable
                             ? domElements.tblAssociationDetection.DataTable().clear().rows.add(response.data.ItemList).draw()
                             : dataTable = GenerateGrid(response.data.ItemList);
+
+                        oldData = response.data.ItemList;
 
                         domElements.tblAssociationDetection.DataTable().columns.adjust();
 
@@ -993,6 +1023,189 @@
         }
     }
 
+    function FormatTransInfo(sum, percentage) {
+        var percentage = " (" + percentage.toFixed(2) + "%)";
+
+        return FormatNumber(sum) + percentage;
+    }
+
+    function FormatNumber(num) {
+        return num ? num.toLocaleString() : 0;
+    }
+
+    function SetupDangerFilter(data) {
+        if (data) {
+            let dangerSelector = domElements.cbbDanger.empty();
+
+            if (data.NoneDanger.length > 0) dangerSelector.append(BuildDangerOptgroup(0, "None", data.NoneDanger));
+
+            if (data.Danger1.length > 0) dangerSelector.append(BuildDangerOptgroup(1, "Original", data.Danger1));
+
+            if (data.Danger2.length > 0) dangerSelector.append(BuildDangerOptgroup(2, "ABI", data.Danger2));
+
+            if (data.Danger3.length > 0) dangerSelector.append(BuildDangerOptgroup(3, "Other Sports", data.Danger3));
+
+            if (data.Danger4.length > 0) dangerSelector.append(BuildDangerOptgroup(4, "Basketball", data.Danger4));
+
+            if (data.Danger5.length > 0) dangerSelector.append(BuildDangerOptgroup(5, "E-Sports", data.Danger5));
+
+            domElements.cbbDanger.multiselect('refresh');
+        }
+    }
+
+    function BuildDangerOptgroup(optgroupValue, optgroupName, items) {
+        let optgroup = `<optgroup label="${optgroupName}" DangerType=${optgroupValue}>`;
+
+        items.map(function (x) {
+            optgroup += `<option selected value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
+        })
+
+        optgroup += "</optgroup>";
+
+        return optgroup;
+    }
+
+
+    function SetupCCFilter(data) {
+        if (data) {
+            let ccSelector = domElements.cbbCC.empty();
+
+            data.forEach(item => {
+                ccSelector.append(BuildCCGroup(item.CCList, item.CCGroupName));
+            });
+
+            domElements.cbbCC.multiselect('refresh');
+        }
+    }
+
+    function SetupTextBox() {
+        domElements.txtBotTrans.val("");
+        domElements.txtInvalidBrowserTrans.val("");
+    }
+
+    function BuildCCGroup(ccItems, groupName) {
+        let optgroup = `<optgroup label="${groupName}">`;
+
+        ccItems.map(function (item) {
+            let itemName = item == -1 ? '-' : item;
+            optgroup += `<option selected value=${item}>${itemName}</option>`;
+        });
+
+        optgroup += "</optgroup>";
+
+        return optgroup;
+    }
+
+    function SetupMultiselectFilter(ccb, selectName, menuWidth = 260, menuHeight = 280) {
+        ccb.multiselect({
+            menuWidth: menuWidth,
+            menuHeight: menuHeight,
+            selectedText: "# of # select",
+            noneSelectedText: `Select ${selectName}`,
+            enableClickableOptGroups: true,
+            includeSelectAllOption: true,
+            groupsCollapsable: true,
+            optGroupChecked: true
+        }).multiselectfilter({
+            width: 150,
+            placeholder: '',
+            label: ''
+        });
+    }
+
+    function Search() {
+        if (!VerifyInput(domElements.txtBotTrans)
+            || !VerifyInput(domElements.txtInvalidBrowserTrans))
+            return;
+        
+            isDetectEvent = false
+        var table = domElements.tblAssociationDetection.DataTable();
+        var ccOptions = domElements.cbbCC.val();
+        var dangerOptions = domElements.cbbDanger.val();
+        var textBot = domElements.txtBotTrans.val();
+        var textInvalidBrowser = domElements.txtInvalidBrowserTrans.val();
+
+        var filterData = oldData.filter(c => findElement(ccOptions, c.CustomerClass)
+                                        && (dangerOptions.includes("0"+c.DangerDisplay+"0")
+                                        || (dangerOptions.includes("1-" + c.Danger1)
+                                        || dangerOptions.includes("2-" + c.Danger2)
+                                        || dangerOptions.includes("3-" + c.Danger3)
+                                        || dangerOptions.includes("4-" + c.Danger4)
+                                        || dangerOptions.includes("5-" + c.Danger5))));
+
+        if (textBot !== "") {
+            if (textBot.includes("%")) {
+                var floatnumber = parseFloat(textBot.replaceAll("%", "").trim());
+                filterData = filterData.filter(c => c.BotTransPercentage >= floatnumber);
+            }
+            else {
+                var floatnumber = parseFloat(textBot.replaceAll(",", "").trim());
+                filterData = filterData.filter(c => c.BotTransSum >= floatnumber);
+            }
+        }
+
+        if (textInvalidBrowser !== "") {
+            if (textInvalidBrowser.includes("%")) {
+                var floatnumber = parseFloat(textInvalidBrowser.replaceAll("%", "").trim());
+                filterData = filterData.filter(c => c.InvalidBrowserInfoTransPercentage >= floatnumber);
+            }
+            else {
+                var floatnumber = parseFloat(textInvalidBrowser.replaceAll(",", "").trim());
+                filterData = filterData.filter(c => c.InvalidBrowserInfoTransSum >= floatnumber);
+            }
+        }
+
+        table.clear();
+        table.clear().rows.add(filterData).draw();
+    }
+
+
+    function findElement(filters, element) {
+        for (let i = 0; i < filters.length; i++) {
+            if (filters[i] == element)
+                return true;
+        }
+
+        return false;
+    }
+
+    function VerifyInput(textBox) {
+        if (CheckInputTextBox(textBox)) {
+            textBox.parent().removeClass("invalid-input");
+            return true;
+        }
+        else {
+            textBox.parent().addClass("invalid-input");
+            return false;
+        }
+    }
+
+    function CheckInputTextBox(textBox) {       
+        let amount = textBox.val();
+
+        if (amount === "")
+            return true;
+
+        if (!regexValidAmount.test(amount))
+            return false;
+
+        if (!amount.includes("%")) {
+            if (amount.length < 4 && amount.includes(",")) {
+                return false;
+            }
+        }
+
+        var numberic = amount.replaceAll("%", "");
+        numberic = numberic.replaceAll(",", "");
+
+        if (!(!isNaN(parseFloat(numberic))
+            && isFinite(numberic))) {
+            return false;
+        }
+
+        return true;
+    }
+
     function Initial() { 
         InitInputTagUsername();
 
@@ -1032,6 +1245,21 @@
         SetCacheForFilter(domElements.inputOptIPLast3Days, GetStorageFilter("AssDetectCheckboxIP3Days"));
 
         SetDefaultCheckboxFilter();
+
+        SetupMultiselectFilter(domElements.cbbCC, "CC");
+        SetupMultiselectFilter(domElements.cbbDanger, "Danger");
+
+        domElements.btnFilterGenerate.on('click', function () {
+            Search();
+        }); 
+
+        domElements.txtBotTrans.on('keyup change', function () {
+            VerifyInput(domElements.txtBotTrans);
+        }); 
+
+        domElements.txtInvalidBrowserTrans.on('keyup change', function () {
+            VerifyInput(domElements.txtInvalidBrowserTrans);
+        }); 
     }
 
     $(document).ready(function () {

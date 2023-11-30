@@ -467,21 +467,58 @@ body {
 
 .association-detection-report .association-detection-content {
   margin: 1rem 1.6rem 1rem 1.6rem; }
+  .association-detection-report .association-detection-content ::placeholder {
+    color: #A8A8A8 !important; }
   .association-detection-report .association-detection-content .control-table {
     width: 100%;
     background: #fff;
     margin-top: 20px; }
     .association-detection-report .association-detection-content .control-table .title {
       margin-bottom: -1.3rem; }
+    .association-detection-report .association-detection-content .control-table .wrapper-rule-left {
+      margin-right: 0px; }
+      .association-detection-report .association-detection-content .control-table .wrapper-rule-left .text {
+        color: #545454;
+        font-family: Lato;
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 16px;
+        letter-spacing: 0em;
+        text-align: left; }
+      .association-detection-report .association-detection-content .control-table .wrapper-rule-left .icon-delete::before {
+        color: #A8A8A8 !important; }
+    .association-detection-report .association-detection-content .control-table .label {
+      color: #545454;
+      font-family: 'Lato';
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 16px;
+      letter-spacing: 0em;
+      text-align: left; }
+    .association-detection-report .association-detection-content .control-table .tagify__input:empty::before {
+      font-family: 'Lato';
+      color: #8C8C8C;
+      font-size: 13px;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 16px;
+      letter-spacing: 0em;
+      text-align: left; }
+    .association-detection-report .association-detection-content .control-table .tagify__input {
+      margin-top: 0px; }
+    .association-detection-report .association-detection-content .control-table .wrapper-value {
+      border-color: #DDDDDD; }
     .association-detection-report .association-detection-content .control-table .form-filter .box-username {
-      max-width: 1280px;
       width: 100%;
       padding: 0 !important; }
+      .association-detection-report .association-detection-content .control-table .form-filter .box-username .btn-detect {
+        padding-right: 0px;
+        padding-left: 0px;
+        height: 28px;
+        width: 67px; }
       .association-detection-report .association-detection-content .control-table .form-filter .box-username .btn-detect:not(:disabled) {
         background-color: #396EF8;
         border-radius: 2px;
-        height: 30px;
-        min-width: 98px;
         color: #fff; }
         .association-detection-report .association-detection-content .control-table .form-filter .box-username .btn-detect:not(:disabled):hover {
           background-color: #5081ff; }
@@ -499,9 +536,19 @@ body {
       .association-detection-report .association-detection-content .control-table .form-filter .icon-delete.delete-invalid::before {
         color: #FF0000; }
     .association-detection-report .association-detection-content .control-table .form-filter .checkbox-filter {
-      margin-right: 35px; }
+      margin-right: 16px; }
     .association-detection-report .association-detection-content .control-table .form-filter .checkbox-container {
-      margin-top: 12px; }
+      margin-top: 12px;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 15.6px;
+      font-family: Lato;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 16px;
+      letter-spacing: 0em;
+      text-align: left;
+      color: #545454; }
       .association-detection-report .association-detection-content .control-table .form-filter .checkbox-container span:before {
         top: 1px;
         height: 16px;
@@ -511,31 +558,128 @@ body {
         left: 3px; }
     .association-detection-report .association-detection-content .control-table .form-filter .flex-container {
       display: flex;
-      margin-bottom: 10px; }
+      margin-bottom: 16px;
+      width: 800px; }
       .association-detection-report .association-detection-content .control-table .form-filter .flex-container .checkbox-all {
         cursor: pointer;
-        color: #2097fd;
-        font-size: 12px; }
+        color: #396EF8;
+        font-size: 12px;
+        line-height: 16.8px;
+        font-weight: 700; }
       .association-detection-report .association-detection-content .control-table .form-filter .flex-container .box-left {
-        background: #E7EDFF;
-        padding-left: 10px; }
+        background: #E3E9F6;
+        padding-left: 10px;
+        height: 80px; }
+        .association-detection-report .association-detection-content .control-table .form-filter .flex-container .box-left .icon-Check {
+          color: #396EF8;
+          font-weight: 700; }
+        .association-detection-report .association-detection-content .control-table .form-filter .flex-container .box-left .icon-Close {
+          color: #396EF8;
+          font-weight: 700; }
       .association-detection-report .association-detection-content .control-table .form-filter .flex-container .box-right {
-        margin-top: 17px;
+        margin-top: 0px;
         margin-left: 15px; }
+      .association-detection-report .association-detection-content .control-table .form-filter .flex-container input[type=checkbox]:checked + span:before {
+        background: #4F971F;
+        border-color: #4F971F; }
   .association-detection-report .association-detection-content .table-report {
-    font-family: "Lato", Arial, Tahoma, sans-serif; }
-    .association-detection-report .association-detection-content .table-report .fixed-header {
-      /*  padding-top: 1.6rem;*/
+    font-family: "Lato", Arial, Tahoma, sans-serif;
+    padding: 0 12px 12px 12px;
+    background: #F4F4F4;
+    border: 1px solid #C4C4C4;
+    border-radius: 2px; }
+    .association-detection-report .association-detection-content .table-report .background-filter {
       position: sticky;
       position: -webkit-sticky;
+      top: 9.4rem;
+      z-index: 99;
+      background-color: #F4F4F4;
+      padding-top: 12px; }
+    .association-detection-report .association-detection-content .table-report .group {
+      padding-bottom: 16px;
+      padding-top: 0px;
+      padding-right: 16px; }
+      .association-detection-report .association-detection-content .table-report .group .text {
+        color: #333333; }
+      .association-detection-report .association-detection-content .table-report .group .btn {
+        height: 28px;
+        width: 83px; }
+      .association-detection-report .association-detection-content .table-report .group .btn:not(:disabled) {
+        background-color: #396EF8;
+        border-radius: 2px;
+        color: #fff;
+        margin-bottom: 0px; }
+        .association-detection-report .association-detection-content .table-report .group .btn:not(:disabled):hover {
+          background-color: #5081ff; }
+      .association-detection-report .association-detection-content .table-report .group .width-select {
+        width: 18.5rem; }
+      .association-detection-report .association-detection-content .table-report .group .width-select-sites {
+        width: 11.5rem; }
+      .association-detection-report .association-detection-content .table-report .group .width-select-one {
+        height: 3rem;
+        /*width: 16.4rem;*/ }
+      .association-detection-report .association-detection-content .table-report .group .width-amount {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+        align-items: center; }
+      .association-detection-report .association-detection-content .table-report .group .width-amount-item {
+        color: #474747;
+        width: 100%;
+        font-style: italic;
+        border: aliceblue;
+        border: 0px;
+        background-color: #f0f8ff00;
+        -moz-appearance: textfield;
+        padding-left: 8px;
+        font-size: 11px;
+        /* text-align: center;*/ }
+      .association-detection-report .association-detection-content .table-report .group .ui-multiselect {
+        border: 1px solid #C4C4C4;
+        color: #545454; }
+      .association-detection-report .association-detection-content .table-report .group .invalid-input {
+        border: 1px solid red; }
+      .association-detection-report .association-detection-content .table-report .group .clear-amount {
+        margin-right: 5px;
+        cursor: pointer; }
+      .association-detection-report .association-detection-content .table-report .group .clear-amount:hover {
+        background-color: rgba(57, 110, 248, 0.2);
+        border-radius: 5px; }
+    .association-detection-report .association-detection-content .table-report .width-110 {
+      min-width: 110px; }
+    .association-detection-report .association-detection-content .table-report .width-160 {
+      min-width: 120px; }
+    .association-detection-report .association-detection-content .table-report .width-180 {
+      min-width: 180px; }
+    .association-detection-report .association-detection-content .table-report .width-210 {
+      min-width: 210px; }
+    .association-detection-report .association-detection-content .table-report .width-240 {
+      min-width: 240px; }
+    .association-detection-report .association-detection-content .table-report .width-280 {
+      min-width: 280px; }
+    .association-detection-report .association-detection-content .table-report .label {
+      width: max-content; }
+    .association-detection-report .association-detection-content .table-report .fixed-header {
+      /*  padding-top: 1.6rem;*/
       top: 9.3rem;
-      background: #fff;
-      z-index: 9; }
+      background: #fff; }
+      .association-detection-report .association-detection-content .table-report .fixed-header .top-header {
+        /*justify-content: space-between;*/
+        font-weight: 300;
+        background-color: #E3E9F6;
+        border-radius: 2px;
+        border: 1px solid #C4C4C4;
+        height: 36px;
+        position: sticky;
+        position: -webkit-sticky;
+        top: 17rem;
+        z-index: 99; }
       .association-detection-report .association-detection-content .table-report .fixed-header .button-primary {
         margin-left: 10px; }
         .association-detection-report .association-detection-content .table-report .fixed-header .button-primary .sub-icon {
           width: 32px;
-          height: 32px;
+          height: 24px;
           display: inline-block;
           position: relative;
           cursor: pointer; }
@@ -545,12 +689,8 @@ body {
           .association-detection-report .association-detection-content .table-report .fixed-header .button-primary .sub-icon .disabled {
             cursor: not-allowed; }
           .association-detection-report .association-detection-content .table-report .fixed-header .button-primary .sub-icon .icon-excel {
-            font-size: 3rem; }
+            font-size: 24px; }
     .association-detection-report .association-detection-content .table-report .wrapper-info-table {
-      position: sticky;
-      position: -webkit-sticky;
-      z-index: 99;
-      top: 13.5rem;
       transition: top 0.01s linear; }
     .association-detection-report .association-detection-content .table-report .table-association-detection {
       width: 100% !important; }
@@ -573,9 +713,12 @@ body {
       .association-detection-report .association-detection-content .table-report .table-association-detection thead tr:first-child th {
         position: sticky;
         position: -webkit-sticky;
-        top: 13.7rem;
+        top: 20.3rem;
         font-weight: 300;
-        z-index: 99; }
+        z-index: 99;
+        height: 53px; }
+        .association-detection-report .association-detection-content .table-report .table-association-detection thead tr:first-child th span {
+          font-size: 14px; }
       .association-detection-report .association-detection-content .table-report .table-association-detection .sub-icon {
         width: 24px;
         height: 24px;

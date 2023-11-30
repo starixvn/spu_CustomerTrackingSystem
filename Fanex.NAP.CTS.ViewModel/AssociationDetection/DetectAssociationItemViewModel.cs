@@ -17,10 +17,21 @@
             this.CustID = data.CustID;
             this.CategoryIds = data.CategoryIDs;
             this.CustStatus = data.CustStatus;
+            this.Danger1 = data.Danger1;
+            this.Danger2 = data.Danger2;
+            this.Danger3 = data.Danger3;
+            this.Danger4 = data.Danger4;
+            this.Danger5 = data.Danger5;
+            this.DangerDisplay = RenderDangerSetting(data);
+            this.BotTransSum = data.BotTransSum;
+            this.BotTransPercentage = Math.Round(data.BotTransPercentage, 2);
+            this.InvalidBrowserInfoTransSum = data.InvalidBrowserInfoTransSum;
+            this.InvalidBrowserInfoTransPercentage = Math.Round(data.InvalidBrowserInfoTransPercentage, 2);
             this.Evidences = data.Evidence;
             this.AssociatedTypes = GetAssociationType(data.AssociationType);
             this.CustomerCategory = data.CustomerCategory;
-            this.CustomerClass = data.CustomerClass > 0 ? data.CustomerClass.ToString() : null;
+            this.CustomerClassToString = data.CustomerClass > 0 ? data.CustomerClass.ToString() : null;
+            this.CustomerClass = data.CustomerClass;
             this.IsProblemAccount = data.ParentIDs != null && data.ParentIDs.Split(',').Any(y => y == "50");
             this.IsPAProbation = data.IsPAProbation;
             this.AgentCTSCustID = data.AgentCTSCustID;
@@ -47,6 +58,16 @@
 
         public string CustStatus { get; set; }
 
+        public string DangerDisplay { get; set; }
+
+        public int BotTransSum { get; set; }
+
+        public double BotTransPercentage { get; set; }
+
+        public int InvalidBrowserInfoTransSum { get; set; }
+
+        public double InvalidBrowserInfoTransPercentage { get; set; }
+
         public string Evidences { get; set; }       
 
         public string AssociatedTypes { get; set; }
@@ -55,7 +76,9 @@
 
         public string CustomerCategory { get; set; }
 
-        public string CustomerClass { get; set; }
+        public string CustomerClassToString { get; set; }
+
+        public int CustomerClass { get; set; }
 
         public bool IsProblemAccount { get; set; }
 
@@ -92,6 +115,66 @@
             newAssType += $"<div class='association-type-detail sub-icon - view-detail' id='sub-icon ' title='View Detail' data-groupid={this.GroupID} data-custid={this.CustID} data-ctscustid={this.CTSCustID} data-username={this.UserName}><i class='icon-Detail'></i ></div>";
             newAssType += "</div>";
             return newAssType;
+        }
+
+        private string RenderDangerSetting(DetectAssociationMergeGroupModel data)
+        {
+            var danger = string.Empty;
+
+            if (data.Danger1 != 0)
+            {
+                danger += "OR" + data.Danger1;
+            }
+
+            if (data.Danger2 != 0)
+            {
+                if (string.IsNullOrEmpty(danger))
+                {
+                    danger += "A" + data.Danger2;
+                }
+                else
+                {
+                    danger += ", A" + data.Danger2;
+                }
+            }
+
+            if (data.Danger3 != 0)
+            {
+                if (string.IsNullOrEmpty(danger))
+                {
+                    danger += "OS" + data.Danger3;
+                }
+                else
+                {
+                    danger += ", OS" + data.Danger3;
+                }
+            }
+
+            if (data.Danger4 != 0)
+            {
+                if (string.IsNullOrEmpty(danger))
+                {
+                    danger += "B" + data.Danger4;
+                }
+                else
+                {
+                    danger += ", B" + data.Danger4;
+                }
+            }
+
+            if (data.Danger5 != 0)
+            {
+                if (string.IsNullOrEmpty(danger))
+                {
+                    danger += "E" + data.Danger5;
+                }
+                else
+                {
+                    danger += ", E" + Danger5;
+                }
+            }
+
+            return (danger == string.Empty) ? "-" : danger;
         }
     }
 }

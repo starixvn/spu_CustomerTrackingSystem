@@ -46,38 +46,74 @@
 
         public decimal? TurnoverLast7Days { get; set; }
 
+        public int BotTransSum { get; set; }
+
+        public double BotTransPercentage { get; set; }
+
+        public int InvalidBrowserInfoTransSum { get; set; }
+
+        public double InvalidBrowserInfoTransPercentage { get; set; }
+
         public string DangerLevel 
         {
             get
             {
-                string danger = string.Empty;
+                var danger = string.Empty;
 
                 if (Danger1 != 0)
                 {
-                    danger += "Ori" + Danger1;
+                    danger += "OR" + Danger1;
                 }
 
                 if (Danger2 != 0)
                 {
-                    danger += string.IsNullOrEmpty(danger) ? "ABI" + Danger2 : "-ABI" + Danger2;
+                    if (string.IsNullOrEmpty(danger))
+                    {
+                        danger += "A" + Danger2;
+                    }
+                    else
+                    {
+                        danger += ", A" + Danger2;
+                    }
                 }
 
                 if (Danger3 != 0)
                 {
-                    danger += string.IsNullOrEmpty(danger) ? "OS" + Danger3 : "-OS" + Danger3;
+                    if (string.IsNullOrEmpty(danger))
+                    {
+                        danger += "OS" + Danger3;
+                    }
+                    else
+                    {
+                        danger += ", OS" + Danger3;
+                    }
                 }
 
                 if (Danger4 != 0)
                 {
-                    danger += string.IsNullOrEmpty(danger) ? "BkB" + Danger4 : "-BkB" + Danger4;
+                    if (string.IsNullOrEmpty(danger))
+                    {
+                        danger += "B" + Danger4;
+                    }
+                    else
+                    {
+                        danger += ", B" + Danger4;
+                    }
                 }
 
                 if (Danger5 != 0)
                 {
-                    danger += string.IsNullOrEmpty(danger) ? "ES" + Danger5 : "-ES" + Danger5;
+                    if (string.IsNullOrEmpty(danger))
+                    {
+                        danger += "E" + Danger5;
+                    }
+                    else
+                    {
+                        danger += ", E" + Danger5;
+                    }
                 }
 
-                return danger;
+                return (danger == string.Empty) ? "" : danger;
             }
         }
     }

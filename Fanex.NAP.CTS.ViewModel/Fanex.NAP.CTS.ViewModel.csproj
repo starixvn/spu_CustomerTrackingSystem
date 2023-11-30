@@ -126,10 +126,14 @@
     <Compile Include="AssociatedGroupMonitor\ResultValidatedViewModel.cs" />
     <Compile Include="AssociatedGroupMonitor\ValidateUserAssociatedAccountViewModel.cs" />
     <Compile Include="AssociationDetection\AssociationCustByIPViewModel.cs" />
+    <Compile Include="AssociationDetection\AssociationDetectionFilter\DetectAssociationFilterDangerViewModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByPrimaryViewModel.cs" />
+    <Compile Include="AssociationDetection\AssociationDetectionFilter\DetectAssociationDangerFilterViewModel.cs" />
+    <Compile Include="AssociationDetection\AssociationDetectionFilter\DetectAssociationFilterViewModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationItemViewModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByUserNamesViewModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationMergeGroupViewModel.cs" />
+    <Compile Include="AssociationDetection\AssociationDetectionFilter\DetectAssociationLoadFilterViewModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationViewModel.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectDetailAgentViewModel.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectDetailIPViewModel.cs" />
