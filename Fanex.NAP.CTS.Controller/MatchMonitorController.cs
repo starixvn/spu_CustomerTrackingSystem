@@ -41,8 +41,8 @@
         private readonly ICommonService _commonService;
         private readonly IMemoryCacheService _memoryCacheService;
         private readonly string MMDetailRegion = "MMDetail";
-        private readonly string[] PropertyNameOfSummaryHomeList = { nameof(MatchMonitorBetChoiceId.H), nameof(GetMatchMonitorViewModel.HomeTotalAmount), nameof(GetMatchMonitorViewModel.HomeBetCount) };
-        private readonly string[] PropertyNameOfSummaryAwayList = { nameof(MatchMonitorBetChoiceId.A), nameof(GetMatchMonitorViewModel.AwayTotalAmount), nameof(GetMatchMonitorViewModel.AwayBetCount) };
+        private readonly string[] PropertyNameOfSummaryHomeList = { nameof(GetMatchMonitorViewModel.HomeTotalAmount), nameof(GetMatchMonitorViewModel.HomeBetCount), nameof(MatchMonitorBetChoiceId.H), nameof(MatchMonitorBetChoiceId.O) };
+        private readonly string[] PropertyNameOfSummaryAwayList = { nameof(GetMatchMonitorViewModel.AwayTotalAmount), nameof(GetMatchMonitorViewModel.AwayBetCount), nameof(MatchMonitorBetChoiceId.A), nameof(MatchMonitorBetChoiceId.U) };
 
         public override string BaseControllerName { get => Consts.MenuItemMonitor; }
 
@@ -154,11 +154,12 @@
 
         private void SetValueMMTicketsSummaryFromDictionary(GetMatchMonitorViewModel result, Dictionary<string, MMFraudTicketsSummaryViewModel> mmDictionaryTicketsSummarys, string[] propertyNameOfSummaryList)
         {
-            if (mmDictionaryTicketsSummarys.TryGetValue(result.BuildTicketsSummaryDictionaryKey(propertyNameOfSummaryList[0]), out var mmFraudTicketsSummary))
+            if (mmDictionaryTicketsSummarys.TryGetValue(result.BuildTicketsSummaryDictionaryKey(propertyNameOfSummaryList[2]), out var mmFraudTicketsSummary) ||
+                mmDictionaryTicketsSummarys.TryGetValue(result.BuildTicketsSummaryDictionaryKey(propertyNameOfSummaryList[3]), out mmFraudTicketsSummary))
             {
-                result.SetPropertyValue(typeof(GetMatchMonitorViewModel).GetProperty(propertyNameOfSummaryList[1]), mmFraudTicketsSummary.Turnover);
+                result.SetPropertyValue(typeof(GetMatchMonitorViewModel).GetProperty(propertyNameOfSummaryList[0]), mmFraudTicketsSummary.Turnover);
 
-                result.SetPropertyValue(typeof(GetMatchMonitorViewModel).GetProperty(propertyNameOfSummaryList[2]), mmFraudTicketsSummary.BetCount);
+                result.SetPropertyValue(typeof(GetMatchMonitorViewModel).GetProperty(propertyNameOfSummaryList[1]), mmFraudTicketsSummary.BetCount);
             }
         }
 
