@@ -14,14 +14,19 @@
     using System.Collections.Generic;
     using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
+    using Fanex.NAP.CTS.Model.Common;
+    using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.Service.Implement;
 
     public class MatchMonitorService : IMatchMonitorService
     {
         private readonly IDynamicRepository repository;
+        private readonly ICommonService commonService;
 
         public MatchMonitorService()
         {
             repository = new DynamicRepository();
+            commonService = new CommonService();
         }
 
         public IEnumerable<MatchFromMainInfoModel> GetMatchFromMainInfos(MatchMonitorSearchViewModel filter, string matchIDs)
@@ -153,9 +158,14 @@
             return repository.Fetch<CustInfoModel>(criteria);
         }
 
-        public MMDetailFilterViewModel GetFraudFilterInfoDetail(MMDetailInfoViewModel para, TicketDetailViewModel fraudTicket)
+        public IEnumerable<BetTypeSettingModel> GetBetTypeSettings(BetTypeSettingParaModel infos)
         {
-            var fraudTicketMergeAGroup = MergeFraudReasonAGroup(fraudTicket);
+            return commonService.GetBetTypeSettings(infos);
+        }
+
+        public MMDetailFilterViewModel GetFraudFilterInfoDetail(MMDetailInfoViewModel para, TicketDetailViewModel fraudTicket, IEnumerable<StaticListModel> reasons)
+        {
+            var fraudTicketMergeAGroup = MergeFraudReasonAGroup(fraudTicket, reasons);
 
             var suspiciousTransInfos = fraudTicket.GetSuspiciousTransInfo(fraudTicketMergeAGroup);
 
@@ -191,7 +201,7 @@
             return mdItemList;
         }
 
-        public IEnumerable<MatchMonitorDetailItemViewModel> MergeFraudReasonAGroup(TicketDetailViewModel fraudTicket)
+        public IEnumerable<MatchMonitorDetailItemViewModel> MergeFraudReasonAGroup(TicketDetailViewModel fraudTicket, IEnumerable<StaticListModel> reasons)
         {
             var mdResult = Enumerable.Empty<MatchMonitorDetailItemViewModel>();
 
@@ -202,13 +212,11 @@
                 var mmStatic = new MatchMonitorStaticListModel();
                 var ticketDetail = fraudTicket.TicketDetails;
                 var mergeGroup = fraudTicket.MMDetailMergeGroup;
-
-                mmStatic = this.GetMMStaticList();
-
+               
                 var custIDs = matchDetailInfo.Custs.Select(x => x.CustID).Distinct();
                 var custInfo = GetCustInfoByCustID(custIDs);
 
-                mdResult = DrawColorFraudMMDetailWithMergeReasonAGroup(matchDetailInfo.VerifiedTrans, custInfo, ticketDetail, mergeGroup, mmStatic.Reasons);
+                mdResult = DrawColorFraudMMDetailWithMergeReasonAGroup(matchDetailInfo.VerifiedTrans, custInfo, ticketDetail, mergeGroup, reasons);
             }
 
             return mdResult;
@@ -218,7 +226,7 @@
             IEnumerable<CustInfoModel> custInfo,
             IEnumerable<TicketDetailModel> ticket,
             MMDetailMergeGroupViewModel mergeGroup,
-            IEnumerable<MatchMonitorReasonModel> reasons)
+            IEnumerable<StaticListModel> reasons)
         {
             var ticketResult = Enumerable.Empty<MatchMonitorDetailItemViewModel>();
 
@@ -247,15 +255,15 @@
             return ticketResult.Distinct(x => x.TransId);
         }
 
-        public string GetReasonName(IEnumerable<MatchMonitorReasonModel> reasonList, string reasonIDList)
+        public string GetReasonName(IEnumerable<StaticListModel> reasonList, string reasonIDList)
         {
             if (!string.IsNullOrEmpty(reasonIDList))
             {
-                var arrReasons = reasonIDList.Split(',').Select(x => Convert.ToInt32(x));
+                var arrReasons = reasonIDList.Split(',');
                 var reasonNames = reasonList.Join(arrReasons,
-                    r1 => r1.ReasonID,
+                    r1 => r1.ItemValue,
                     r2 => r2,
-                    (r1, r2) => r1.ReasonName);
+                    (r1, r2) => r1.ItemNameDisplay);
 
                 return string.Join(",", reasonNames);
             }
@@ -412,6 +420,8 @@
                 SportTypeID = para.Sport,
                 BetTypeID = para.BetTypeID,
                 BetChoiceType = para.BetChoiceType,
+                BetChoiceHome = para.BetChoiceHome,
+                BetChoiceAway = para.BetChoiceAway,
                 BetID = para.BetID
             } });
 
@@ -433,7 +443,7 @@
                 ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null,
             };
 
-            if (IsDisplaySingleGrid(para.BetTypeID))
+            if (para.BetChoiceType == 1)
             {
                 criteria.ListHDPBetTeam = filter?.BetTeamList == null ? null : string.Join(",", filter.BetTeamList);
             }
@@ -497,6 +507,8 @@
                 SportTypeID = para.Sport,
                 BetTypeID = para.BetTypeID,
                 BetChoiceType = para.BetChoiceType,
+                BetChoiceHome = para.BetChoiceHome,
+                BetChoiceAway = para.BetChoiceAway,
                 BetID = para.BetID
             } });
 
@@ -562,18 +574,7 @@
                 Sports = result.secondResultSet,
                 BetTypes = result.thirdResultSet
             };
-        }
-
-        public bool IsDisplaySingleGrid(int betTypeID)
-        {
-            return betTypeID == (int)MatchMonitorBetType.Full1X2
-                || betTypeID == (int)MatchMonitorBetType.First1X2
-                || betTypeID == (int)MatchMonitorBetType.CorrectScore
-                || betTypeID == (int)MatchMonitorBetType.FirstCorrectScore
-                || betTypeID == (int)MatchMonitorBetType.TotalGoal
-                || betTypeID == (int)MatchMonitorBetType.FirstTotalGoal
-                || betTypeID == (int)MatchMonitorBetType.FirstTotalGoal;
-        }
+        }      
 
         public byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath)
         {

@@ -8,6 +8,10 @@
 
         public int BetChoiceType { get; set; }
 
+        public string BetChoiceHome { get; set; }
+
+        public string BetChoiceAway { get; set; }
+
         public string BetIDPattern { get; set; }
 
         public long BetID { get; set; }

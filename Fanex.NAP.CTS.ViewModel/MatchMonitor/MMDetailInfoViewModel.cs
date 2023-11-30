@@ -17,6 +17,8 @@
             this.BetTypeID = para.BetTypeID;
             this.BetID = para.BetID;
             this.BetChoiceType = para.BetChoiceType;
+            this.BetChoiceHome = para.BetChoiceHome;
+            this.BetChoiceAway = para.BetChoiceAway;
             this.Sites = para.Sites;
             this.LiveIndicator = para.LiveIndicator;
             this.IsImportNewTicket = para.IsImportNewTicket;
@@ -40,6 +42,10 @@
         public Int64 BetID { get; set; }
 
         public int BetChoiceType { get; set; }
+
+        public string BetChoiceHome { get; set; }
+
+        public string BetChoiceAway { get; set; }
 
         public string Sites { get; set; }
 

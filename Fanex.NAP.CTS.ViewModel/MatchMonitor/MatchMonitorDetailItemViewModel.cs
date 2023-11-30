@@ -227,6 +227,8 @@
 
         public bool IsNormalLinkedPA { get; set; }
 
+        public int ChoiceOrder { get; set; }
+
         public MatchMonitorQueryType TypeOfTicket { get; set; } = MatchMonitorQueryType.TicketFraud;
 
         #endregion
@@ -373,6 +375,7 @@
             this.TransId = ticket.TransId;
             this.RobotType = null;
             this.IsRobot = false;
+            this.ChoiceOrder = ticket.ChoiceOrder;
         }
 
         private void MappingCustInfo(CustInfoModel cust)

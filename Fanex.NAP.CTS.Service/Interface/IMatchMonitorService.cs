@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Core;
+    using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using System;
@@ -22,7 +23,7 @@
 
         MMDetailResultModel GetMatchMonitorDetail(MMDetailInfoViewModel filter);
 
-        IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);
+        IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);      
 
         string GetTransFilterSuspicousMGr(MMDetailFilterViewModel filter, TicketDetailViewModel fraudTicket);
 
@@ -38,17 +39,17 @@
 
         IEnumerable<MatchMonitorDetailItemViewModel> MergeFraudToAllMMDetail(IEnumerable<MatchMonitorDetailItemViewModel> mdItemList, IEnumerable<MatchMonitorDetailItemViewModel> fraudMDItemList);
 
-        IEnumerable<MatchMonitorDetailItemViewModel> MergeFraudReasonAGroup(TicketDetailViewModel fraudTicket);
+        IEnumerable<MatchMonitorDetailItemViewModel> MergeFraudReasonAGroup(TicketDetailViewModel fraudTicket, IEnumerable<StaticListModel> reasons);
 
         IEnumerable<MatchMonitorDetailItemViewModel> DrawColorFraudMMDetailWithMergeReasonAGroup(IEnumerable<MatchMonitorDetailVerifyTransResultModel> verifiedTrans,
             IEnumerable<CustInfoModel> custInfo,
             IEnumerable<TicketDetailModel> ticket,
             MMDetailMergeGroupViewModel mergeGroup,
-            IEnumerable<MatchMonitorReasonModel> reasons);
+            IEnumerable<StaticListModel> reasons);
 
-        string GetReasonName(IEnumerable<MatchMonitorReasonModel> reasonList, string reasonNameList);
+        string GetReasonName(IEnumerable<StaticListModel> reasonList, string reasonNameList);
 
-        MMDetailFilterViewModel GetFraudFilterInfoDetail(MMDetailInfoViewModel para, TicketDetailViewModel fraudTicket);
+        MMDetailFilterViewModel GetFraudFilterInfoDetail(MMDetailInfoViewModel para, TicketDetailViewModel fraudTicket, IEnumerable<StaticListModel> reasons);
 
         MMDetailFilterViewModel GetAllFilterInfoDetail(MMDetailInfoViewModel para);
 
@@ -58,9 +59,7 @@
 
         IEnumerable<RobotStatusModel> GetRobotStatus(string transJson);
 
-        MatchMonitorStaticListModel GetMMStaticList();
-
-        bool IsDisplaySingleGrid(int betType);
+        MatchMonitorStaticListModel GetMMStaticList();    
 
         byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath);
 
