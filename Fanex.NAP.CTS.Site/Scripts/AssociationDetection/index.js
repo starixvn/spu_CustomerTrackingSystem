@@ -40,7 +40,9 @@
         cbbDanger: $('#cbbDanger'), 
         txtBotTrans: $('#inputBotTrans'),
         txtInvalidBrowserTrans: $('#inputInvalidBrowserTrans'),
-        btnFilterGenerate: $('#btnFilterGenerate')
+        btnFilterGenerate: $('#btnFilterGenerate'),
+        iconClearBotTrans: $('#iconClearBot'),
+        iconClearInvalidBrowserTran: $('#iconClearInvalidBrowser')
     };
 
     const regexValidAmount = /^[0-9,.%]{1,15}/;
@@ -1206,6 +1208,17 @@
         return true;
     }
 
+    function DisplayIconClearFunc(textBoxContent, iconClear) {
+        var value = textBoxContent.val();
+
+        if (value !== "") {
+            iconClear.removeClass("hide");
+        }
+        else {
+            iconClear.addClass("hide");
+        }
+    }
+
     function Initial() { 
         InitInputTagUsername();
 
@@ -1255,11 +1268,25 @@
 
         domElements.txtBotTrans.on('keyup change', function () {
             VerifyInput(domElements.txtBotTrans);
+            DisplayIconClearFunc(domElements.txtBotTrans, domElements.iconClearBotTrans);
         }); 
 
         domElements.txtInvalidBrowserTrans.on('keyup change', function () {
             VerifyInput(domElements.txtInvalidBrowserTrans);
+            DisplayIconClearFunc(domElements.txtInvalidBrowserTrans, domElements.iconClearInvalidBrowserTran);
         }); 
+
+        domElements.iconClearBotTrans.on('click', function () {
+            domElements.txtBotTrans.val('');
+            domElements.txtBotTrans.parent().removeClass("invalid-input");
+            domElements.iconClearBotTrans.addClass("hide");
+        })
+
+        domElements.iconClearInvalidBrowserTran.on('click', function () {
+            domElements.txtInvalidBrowserTrans.val('');
+            domElements.txtInvalidBrowserTrans.parent().removeClass("invalid-input");
+            domElements.iconClearInvalidBrowserTran.addClass("hide");
+        })
     }
 
     $(document).ready(function () {

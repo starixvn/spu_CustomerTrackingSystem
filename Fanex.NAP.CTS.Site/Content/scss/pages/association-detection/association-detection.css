@@ -611,6 +611,12 @@ body {
         margin-bottom: 0px; }
         .association-detection-report .association-detection-content .table-report .group .btn:not(:disabled):hover {
           background-color: #5081ff; }
+      .association-detection-report .association-detection-content .table-report .group .clear-btn {
+        margin-right: 5px;
+        cursor: pointer; }
+      .association-detection-report .association-detection-content .table-report .group .clear-btn:hover {
+        background-color: rgba(57, 110, 248, 0.2);
+        border-radius: 5px; }
       .association-detection-report .association-detection-content .table-report .group .width-select {
         width: 18.5rem; }
       .association-detection-report .association-detection-content .table-report .group .width-select-sites {

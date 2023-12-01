@@ -249,6 +249,16 @@ body {
                     }
                 }
 
+                .clear-btn {
+                    margin-right: 5px;
+                    cursor: pointer;
+                }
+
+                .clear-btn:hover {
+                    background-color: rgba(57, 110, 248, 0.2);
+                    border-radius: 5px;
+                }
+
                 .width-select {
                     width: 18.5rem;
                 }
