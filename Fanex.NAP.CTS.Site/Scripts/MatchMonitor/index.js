@@ -243,6 +243,9 @@
                     console.log(errMsg);
                 }
             });
+        } else {
+            domElements.cbbBetType.multiselect().empty();
+            domElements.cbbBetType.multiselect("refresh");
         }                    
     }   
 
@@ -275,6 +278,10 @@
             menuHeight: 320,
             selectedText: "# of # selected",
             noneSelectedText: "Select Bet Type"
+        }).multiselectfilter({
+            width: 260,
+            placeholder: '',
+            label: ''
         });
 
         domElements.cbbMatchSection.multiselect({

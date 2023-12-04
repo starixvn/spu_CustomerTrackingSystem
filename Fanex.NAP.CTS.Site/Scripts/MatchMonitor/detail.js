@@ -186,7 +186,7 @@ function MatchMonitorDetail() {
                 { targets: [0, 1, 2, 3, 5, 7, 9, 12, 13, 14, 15, 16], className: "text-center" },
                 {
                     targets: [0], width: "3%", render: function (data, type, full, meta) {
-                        return '<input type="checkbox" class="col-checkbox" name="chkbx" value="' + $('<div/>').text(data).html() + '">';
+                        return '<label><input type="checkbox" class="col-checkbox" name="chkbx" /></label>';
                     }
                 },
                 { targets: [1], width: "17%" },
@@ -211,7 +211,7 @@ function MatchMonitorDetail() {
             columns: [
                 {
                     data: obj => () => {
-                        return `<input type="checkbox" name="chkbx" class="col-checkbox" />`;
+                        return `<label><input type="checkbox" name="chkbx" class="col-checkbox" /></label>`;
                     }
                 },
                 {
@@ -2657,8 +2657,6 @@ function MatchMonitorDetail() {
         }
         if (domElements.mapYY != "0") {
             domElements.cbbMapYY.val(domElements.mapYY).trigger('change');
-        } else {
-            domElements.divMapYY.addClass('hide');
         }
 
         ToggleMapXYY();

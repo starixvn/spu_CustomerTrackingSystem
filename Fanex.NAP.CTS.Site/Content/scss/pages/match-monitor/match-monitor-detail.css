@@ -1056,7 +1056,8 @@
             cursor: pointer;
             margin: 0.1px;
             width: 16px;
-            height: 16px; }
+            height: 16px;
+            filter: hue-rotate(240deg); }
           .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .click-view-details,
           .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .click-view-details,
           .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .click-view-details {
