@@ -47,9 +47,17 @@
 
         public string HomeName { get; set; }
 
+        public long HomeTotalAmount { get; set; }
+
+        public long HomeBetCount { get; set; }
+
         public int AwayID { get; set; }
 
         public string AwayName { get; set; }
+
+        public long AwayTotalAmount { get; set; }
+
+        public long AwayBetCount { get; set; }
 
         public int LeagueID { get; set; }
 
@@ -241,6 +249,12 @@
             }
 
             return string.Empty;
+        }
+
+        public string BuildTicketsSummaryDictionaryKey(string betteam)
+        {
+            var betIDToString = BetID != null ? BetID.ToString() : string.Empty;
+            return $"{MatchID}_{Market}_{BettypeID}_{betteam}_{betIDToString}".ToLower();
         }
     }
 }

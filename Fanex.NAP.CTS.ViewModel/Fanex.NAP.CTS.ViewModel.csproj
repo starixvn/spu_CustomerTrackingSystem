@@ -205,6 +205,7 @@
     <Compile Include="MatchMonitor\MatchMonitorSearchViewModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorViewModel.cs" />
     <Compile Include="MatchMonitor\MMDetailMergeGroupViewModel.cs" />
+    <Compile Include="MatchMonitor\MMFraudTicketsSummaryViewModel.cs" />
     <Compile Include="MatchMonitor\TicketDetailViewModel.cs" />
     <Compile Include="MatchMonitor\UserFeedback\DeleteUserFeedbackViewModel.cs" />
     <Compile Include="MatchMonitor\UserFeedback\GetMMUserFeedbackViewModel.cs" />

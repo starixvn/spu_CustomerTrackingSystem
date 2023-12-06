@@ -103,6 +103,19 @@
                                 <option value="3">All</option>
                             </select>
                         </div>
+
+                        <div class="first-row-line"></div>
+
+                        <div class="first-row-info">
+                            <label class="text info-text">Transtime</label>
+                            <div class="control info-input">
+                                <input class="transtime-input" placeholder="dd/mm/yy hh:mm:ss" id="inputTranstimeFrom"/>
+                                <label>-</label>
+                                <input class="transtime-input" placeholder="dd/mm/yy hh:mm:ss" id="inputTranstimeTo"/>
+                                <span class="transtime-icon icon-clear icon-icon-clear" id="iconTranstimeClear"></span>
+                                <span class="icon-icon-transtime-submit transtime-icon transtime-icon-submit icon-icon-transtime-submit" id="iconTranstimeSubmit"><span class="path1"></span><span class="path2"></span></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -176,7 +189,7 @@
                             <label class="text">Username's Amt (RM)</label>
                             <div class="ui-multiselect width-amount">
                                 <input class="width-amount-item" placeholder=">= please input amount" id="inputCustAmountRM" maxlength="15" />
-                                <span class="icon-cross-brow clear-amount hide" id="iconClearUsnAmt"></span>
+                                <span class="icon-icon-clear icon-clear clear-amount hide" id="iconClearUsnAmt"></span>
                             </div>
                         </div>
 
@@ -240,7 +253,12 @@
                                         <th>Amt</th>
                                         <th>HDP</th>
                                         <th>Score</th>
-                                        <th>Transtime</th>
+                                        <th>
+                                            <div class="type-outer">
+                                                <span class="col-title">Transtime</span>
+                                                <span class="transtime-autofill-icon" id="iconHTranstimeAutofill"></span>
+                                            </div>
+                                        </th>
                                         <th>B.f.</th>
                                         <th title="Auto-detected Association Group">
                                             A.Gr.
@@ -282,7 +300,12 @@
                                         <th>Amt</th>
                                         <th>HDP</th>
                                         <th>Score</th>
-                                        <th>Transtime</th>
+                                        <th>
+                                            <div class="type-outer">
+                                                <span class="col-title">Transtime</span>
+                                                <span class="icon-transtime-autofill icon-icon-copy" id="iconATranstimeAutofill"></span>
+                                            </div>
+                                        </th>
                                         <th>B.f.</th>
                                         <th title="Auto-detected Association Group">
                                             A.Gr.
@@ -319,7 +342,12 @@
                                         <th>Amt</th>
                                         <th>Choice</th>
                                         <th>Score</th>
-                                        <th>Transtime</th>
+                                        <th>
+                                            <div class="type-outer">
+                                                <span class="col-title">Transtime</span>
+                                                <span class="icon-transtime-autofill icon-icon-copy" id="iconSGTranstimeAutofill"></span>
+                                            </div>
+                                        </th>
                                         <th>B.f.</th>
                                         <th title="Auto-detected Association Group">
                                             A.Gr.

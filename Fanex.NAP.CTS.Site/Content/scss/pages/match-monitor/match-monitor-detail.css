@@ -585,6 +585,48 @@
             width: 149px !important;
             padding-left: 12px;
             height: auto; }
+          .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .info-input {
+            height: 32px;
+            vertical-align: middle;
+            box-sizing: border-box;
+            display: inline-block;
+            position: relative;
+            background-color: #fff;
+            border: 1px solid #E5E5E5;
+            border-radius: 2px;
+            text-align: left; }
+            .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .info-input .transtime-input {
+              height: 30px;
+              width: 120px;
+              color: #474747;
+              border: aliceblue;
+              border: 0px;
+              background-color: #f0f8ff00;
+              padding-left: 12px;
+              font-size: 12px; }
+            .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .info-input .transtime-input::-webkit-input-placeholder {
+              font-style: italic; }
+            .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .info-input .transtime-input:-moz-placeholder {
+              font-style: italic; }
+            .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .info-input .transtime-input::-moz-placeholder {
+              font-style: italic; }
+            .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .info-input .transtime-input:-ms-input-placeholder {
+              font-style: italic; }
+            .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .info-input .transtime-icon {
+              vertical-align: middle;
+              cursor: pointer;
+              display: inline-block; }
+            .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .info-input .transtime-icon-submit {
+              font-size: 30px;
+              text-align: center;
+              vertical-align: bottom; }
+            .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .info-input .transtime-icon-forcus {
+              font-size: 29px;
+              color: red;
+              border: 1px solid red; }
+          .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .info-input-error {
+            background-color: #fff;
+            border: 1px solid red; }
           .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .select2-container {
             width: 151px !important;
             height: 32px !important;
@@ -657,10 +699,10 @@
         cursor: not-allowed; }
       .detailpage .monitor-container .monitor-table .breadcrumb-button .button-feedback {
         color: #FFFFFF;
-        background-color: rgba(193, 39, 45, 0.5);
-        border: 1px solid #C1272D; }
+        background: #4f971f;
+        border: 1px solid #4f971f; }
         .detailpage .monitor-container .monitor-table .breadcrumb-button .button-feedback:hover {
-          background: rgba(193, 39, 45, 0.8); }
+          background: #356415; }
     .detailpage .monitor-container .monitor-table .group-info {
       display: flex;
       padding: 1rem 0 0 0;
@@ -682,20 +724,41 @@
       position: fixed;
       top: 22.5rem;
       z-index: 8; }
-      .detailpage .monitor-container .monitor-table .group-table #monitor-datatable, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable {
+      .detailpage .monitor-container .monitor-table .group-table #monitor-datatable,
+      .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable,
+      .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable {
         flex: 50%; }
-        .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report {
+        .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report,
+        .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report,
+        .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report {
           font-family: "Lato", Arial, Tahoma, sans-serif; }
-          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .wrapper-info-table, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .wrapper-info-table, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .wrapper-info-table {
+          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .wrapper-info-table,
+          .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .wrapper-info-table,
+          .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .wrapper-info-table {
             padding: 0 1rem;
             z-index: 7;
             transition: top 0.01s linear; }
-          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail {
+          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor,
+          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail,
+          .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor,
+          .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail,
+          .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor,
+          .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail {
             /*  width: 100% !important;*/
             border-bottom: 1px solid #c4c4c4 !important; }
-            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor .loading, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .loading, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor .loading, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .loading, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor .loading, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .loading {
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor .loading,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .loading,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor .loading,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .loading,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor .loading,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .loading {
               position: relative; }
-              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor .loading:after, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .loading:after, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor .loading:after, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .loading:after, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor .loading:after, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .loading:after {
+              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor .loading:after,
+              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .loading:after,
+              .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor .loading:after,
+              .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .loading:after,
+              .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor .loading:after,
+              .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .loading:after {
                 content: '';
                 position: absolute;
                 left: 50%;
@@ -707,31 +770,74 @@
                 border-top-color: #396ef8;
                 -webkit-animation: spin 1s infinite linear;
                 animation: spin 1s infinite linear; }
-              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor .loading tr, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .loading tr, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor .loading tr, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .loading tr, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor .loading tr, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .loading tr {
+              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor .loading tr,
+              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .loading tr,
+              .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor .loading tr,
+              .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .loading tr,
+              .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor .loading tr,
+              .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .loading tr {
                 opacity: .3; }
-            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor thead tr, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail thead tr, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor thead tr, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail thead tr, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor thead tr, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail thead tr {
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor thead tr,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail thead tr,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor thead tr,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail thead tr,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor thead tr,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail thead tr {
               position: sticky;
               top: 0.01rem;
               z-index: 7; }
-              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor thead tr th, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail thead tr th, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor thead tr th, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail thead tr th, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor thead tr th, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail thead tr th {
+              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor thead tr th,
+              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail thead tr th,
+              .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor thead tr th,
+              .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail thead tr th,
+              .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor thead tr th,
+              .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail thead tr th {
                 font-weight: 300;
                 border-right: none;
                 font-size: 13px; }
-                .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor thead tr th .type-outer, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor thead tr th .type-outer, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor thead tr th .type-outer, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer {
+                .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor thead tr th .type-outer,
+                .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer,
+                .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor thead tr th .type-outer,
+                .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer,
+                .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor thead tr th .type-outer,
+                .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer {
                   display: -webkit-box;
                   display: -ms-flexbox;
                   display: flex;
                   position: relative; }
-                  .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor thead tr th .type-outer .col-title, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .col-title, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor thead tr th .type-outer .col-title, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .col-title, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor thead tr th .type-outer .col-title, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .col-title {
+                  .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor thead tr th .type-outer .col-title,
+                  .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .col-title,
+                  .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor thead tr th .type-outer .col-title,
+                  .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .col-title,
+                  .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor thead tr th .type-outer .col-title,
+                  .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .col-title {
                     -webkit-box-flex: 1;
                     flex: 3;
                     margin-right: 2px; }
-                  .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor thead tr th .type-outer .icon-collapse-expand, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .icon-collapse-expand, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor thead tr th .type-outer .icon-collapse-expand, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .icon-collapse-expand, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor thead tr th .type-outer .icon-collapse-expand, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .icon-collapse-expand {
+                  .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor thead tr th .type-outer .icon-transtime-autofill,
+                  .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .icon-transtime-autofill,
+                  .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor thead tr th .type-outer .icon-transtime-autofill,
+                  .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .icon-transtime-autofill,
+                  .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor thead tr th .type-outer .icon-transtime-autofill,
+                  .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .icon-transtime-autofill {
+                    font-size: 15px;
+                    cursor: pointer; }
+                  .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor thead tr th .type-outer .icon-collapse-expand,
+                  .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .icon-collapse-expand,
+                  .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor thead tr th .type-outer .icon-collapse-expand,
+                  .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .icon-collapse-expand,
+                  .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor thead tr th .type-outer .icon-collapse-expand,
+                  .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .icon-collapse-expand {
                     -webkit-box-flex: 1;
                     font-size: 12px;
                     line-height: 1.4;
                     cursor: pointer; }
-                  .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor thead tr th .type-outer .dropdown-button, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .dropdown-button, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor thead tr th .type-outer .dropdown-button, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .dropdown-button, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor thead tr th .type-outer .dropdown-button, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .dropdown-button {
+                  .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor thead tr th .type-outer .dropdown-button,
+                  .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .dropdown-button,
+                  .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor thead tr th .type-outer .dropdown-button,
+                  .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .dropdown-button,
+                  .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor thead tr th .type-outer .dropdown-button,
+                  .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .dropdown-button {
                     -webkit-box-flex: 1;
                     width: 20px;
                     border-radius: 3px;
@@ -741,16 +847,31 @@
                     align-items: center;
                     justify-content: center;
                     flex-direction: column; }
-                    .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor thead tr th .type-outer .dropdown-button span, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .dropdown-button span, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor thead tr th .type-outer .dropdown-button span, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .dropdown-button span, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor thead tr th .type-outer .dropdown-button span, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .dropdown-button span {
+                    .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor thead tr th .type-outer .dropdown-button span,
+                    .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .dropdown-button span,
+                    .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor thead tr th .type-outer .dropdown-button span,
+                    .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .dropdown-button span,
+                    .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor thead tr th .type-outer .dropdown-button span,
+                    .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .dropdown-button span {
                       width: 3px;
                       height: 3px;
                       border-radius: 20px;
                       background: #FFFFFF;
                       margin-bottom: 2px;
                       display: block; }
-                      .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor thead tr th .type-outer .dropdown-button span:last-child, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .dropdown-button span:last-child, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor thead tr th .type-outer .dropdown-button span:last-child, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .dropdown-button span:last-child, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor thead tr th .type-outer .dropdown-button span:last-child, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .dropdown-button span:last-child {
+                      .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor thead tr th .type-outer .dropdown-button span:last-child,
+                      .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .dropdown-button span:last-child,
+                      .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor thead tr th .type-outer .dropdown-button span:last-child,
+                      .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .dropdown-button span:last-child,
+                      .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor thead tr th .type-outer .dropdown-button span:last-child,
+                      .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail thead tr th .type-outer .dropdown-button span:last-child {
                         margin-bottom: 0; }
-            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr td, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr td, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr td, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr td, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr td, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr td {
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr td,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr td,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr td,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr td,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr td,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr td {
               padding-left: 0.5rem;
               padding-right: 0.5rem;
               border-right: none;
@@ -760,41 +881,123 @@
               padding-bottom: 5px;
               line-height: 10px !important;
               color: #333333; }
-              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr td .click-view-details, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr td .click-view-name, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-details, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-name, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr td .click-view-details, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr td .click-view-name, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-details, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-name, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr td .click-view-details, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr td .click-view-name, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-details, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-name {
+              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr td .click-view-details,
+              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr td .click-view-name,
+              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-details,
+              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-name,
+              .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr td .click-view-details,
+              .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr td .click-view-name,
+              .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-details,
+              .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-name,
+              .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr td .click-view-details,
+              .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr td .click-view-name,
+              .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-details,
+              .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-name {
                 cursor: pointer;
                 color: #396EF8; }
-              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr td .container-checkbox, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr td .container-checkbox, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr td .container-checkbox, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr td .container-checkbox, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr td .container-checkbox, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr td .container-checkbox {
+              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr td .container-checkbox,
+              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr td .container-checkbox,
+              .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr td .container-checkbox,
+              .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr td .container-checkbox,
+              .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr td .container-checkbox,
+              .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr td .container-checkbox {
                 padding-left: 19px;
                 pointer-events: none; }
-                .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr td .container-checkbox .checkmark, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr td .container-checkbox .checkmark, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr td .container-checkbox .checkmark, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr td .container-checkbox .checkmark, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr td .container-checkbox .checkmark, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr td .container-checkbox .checkmark {
+                .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr td .container-checkbox .checkmark,
+                .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr td .container-checkbox .checkmark,
+                .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr td .container-checkbox .checkmark,
+                .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr td .container-checkbox .checkmark,
+                .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr td .container-checkbox .checkmark,
+                .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr td .container-checkbox .checkmark {
                   top: 50%;
                   /*left: 5%;*/
                   z-index: 1;
                   transform: translate(50%, -50%);
                   /*height: 8px;*/
                   width: 6px; }
-            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .col-red, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-red, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-red, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-red, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-red, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-red {
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .col-red,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-red,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-red,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-red,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-red,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-red {
               color: #C1272D; }
-            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .col-score, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-score, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-score, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-score, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-score, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-score {
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .col-score,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-score,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-score,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-score,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-score,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-score {
               white-space: nowrap !important; }
-            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .col-transtime, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-transtime, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-transtime, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-transtime, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-transtime, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-transtime {
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .col-transtime,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-transtime,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-transtime,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-transtime,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-transtime,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-transtime {
               font-size: 12px !important;
-              min-width: 86px; }
-            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .col-betid, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .col-reason, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-betid, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-reason, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-betid, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-reason, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-betid, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-reason, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-betid, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-reason, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-betid, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-reason {
+              min-width: 105px; }
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .col-betid,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .col-reason,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-betid,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-reason,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-betid,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-reason,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-betid,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-reason,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-betid,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-reason,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-betid,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-reason {
               font-size: 12px !important; }
-            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .col-dgr, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-dgr, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-dgr, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-dgr, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-dgr, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-dgr {
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .col-dgr,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-dgr,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-dgr,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-dgr,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-dgr,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-dgr {
               font-size: 12px !important; }
-            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .col-amt, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-amt, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-amt, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-amt, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-amt, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-amt {
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .col-amt,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .col-amt,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .col-amt,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .col-amt,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .col-amt,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .col-amt {
               font-weight: bold; }
-            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .icon-Check::before, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .icon-Check::before, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .icon-Check::before, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .icon-Check::before, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .icon-Check::before, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .icon-Check::before {
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .icon-Check::before,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .icon-Check::before,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .icon-Check::before,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .icon-Check::before,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .icon-Check::before,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .icon-Check::before {
               color: #209005; }
-            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr td:last-child, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr td:last-child, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr td:last-child, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr td:last-child, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr td:last-child, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr td:last-child {
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr td:last-child,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr td:last-child,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr td:last-child,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr td:last-child,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr td:last-child,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr td:last-child {
               border-right: 1px solid #C4C4C4 !important; }
-            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr:last-child td, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr:last-child td, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr:last-child td, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr:last-child td, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr:last-child td, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr:last-child td {
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr:last-child td,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr:last-child td,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr:last-child td,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr:last-child td,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr:last-child td,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr:last-child td {
               border-bottom: 1px solid #C4C4C4 !important; }
-            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody .icon-loading, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody .icon-loading, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody .icon-loading, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody .icon-loading, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody .icon-loading, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody .icon-loading {
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody .icon-loading,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody .icon-loading,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody .icon-loading,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody .icon-loading,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody .icon-loading,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody .icon-loading {
               position: relative; }
-              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody .icon-loading:after, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody .icon-loading:after, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody .icon-loading:after, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody .icon-loading:after, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody .icon-loading:after, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody .icon-loading:after {
+              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody .icon-loading:after,
+              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody .icon-loading:after,
+              .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody .icon-loading:after,
+              .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody .icon-loading:after,
+              .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody .icon-loading:after,
+              .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody .icon-loading:after {
                 content: '';
                 position: absolute;
                 left: 0;
@@ -806,9 +1009,19 @@
                 border-top-color: #396ef8;
                 -webkit-animation: spin 1s infinite linear;
                 animation: spin 1s infinite linear; }
-            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody .icon-loading-group, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody .icon-loading-group, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody .icon-loading-group, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody .icon-loading-group, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody .icon-loading-group, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody .icon-loading-group {
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody .icon-loading-group,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody .icon-loading-group,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody .icon-loading-group,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody .icon-loading-group,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody .icon-loading-group,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody .icon-loading-group {
               position: relative; }
-              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody .icon-loading-group:after, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody .icon-loading-group:after, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody .icon-loading-group:after, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody .icon-loading-group:after, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody .icon-loading-group:after, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody .icon-loading-group:after {
+              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody .icon-loading-group:after,
+              .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody .icon-loading-group:after,
+              .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody .icon-loading-group:after,
+              .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody .icon-loading-group:after,
+              .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody .icon-loading-group:after,
+              .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody .icon-loading-group:after {
                 content: '';
                 position: absolute;
                 left: -0.8rem;
@@ -820,45 +1033,70 @@
                 border-top-color: #396ef8;
                 -webkit-animation: spin 1s infinite linear;
                 animation: spin 1s infinite linear; }
-            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody .row-blank, .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody .row-blank, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody .row-blank, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody .row-blank, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody .row-blank, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody .row-blank {
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody .row-blank,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody .row-blank,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody .row-blank,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody .row-blank,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody .row-blank,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody .row-blank {
               padding-left: 1.5rem !important;
               padding-right: 1.5rem !important; }
-          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .col-checkbox, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .col-checkbox, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .col-checkbox {
+          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .col-checkbox,
+          .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .col-checkbox,
+          .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .col-checkbox {
             display: inline;
             transition: all ease-in-out 0.3s;
             cursor: pointer;
             margin: 0.1px;
             width: 16px;
             height: 16px; }
-          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .click-view-details, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .click-view-details, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .click-view-details {
+          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .click-view-details,
+          .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .click-view-details,
+          .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .click-view-details {
             color: #474747; }
-          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .rejected-ticket, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .rejected-ticket, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .rejected-ticket {
+          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .rejected-ticket,
+          .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .rejected-ticket,
+          .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .rejected-ticket {
             background-color: #F1A0A0; }
-            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .rejected-ticket:hover, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .rejected-ticket:hover, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .rejected-ticket:hover {
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .rejected-ticket:hover,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .rejected-ticket:hover,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .rejected-ticket:hover {
               background-color: #F1A0A0 !important; }
-          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .void-ticket, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .void-ticket, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .void-ticket {
+          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .void-ticket,
+          .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .void-ticket,
+          .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .void-ticket {
             background-color: #A3C4F5; }
-            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .void-ticket:hover, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .void-ticket:hover, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .void-ticket:hover {
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .void-ticket:hover,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .void-ticket:hover,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .void-ticket:hover {
               background-color: #A3C4F5 !important; }
-          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .username-hightlight, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .username-hightlight, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .username-hightlight {
+          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .username-hightlight,
+          .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .username-hightlight,
+          .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .username-hightlight {
             background-color: #FDEED8; }
-          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .group, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .group, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .group {
+          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .group,
+          .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .group,
+          .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .group {
             padding-right: 0;
             margin-right: .6rem; }
-          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .fixed-header, .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .fixed-header, .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .fixed-header {
+          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .fixed-header,
+          .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .fixed-header,
+          .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .fixed-header {
             position: sticky;
             position: -webkit-sticky;
             top: 23.8rem;
             z-index: 9; }
       .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable {
         padding-right: 1rem; }
-      .detailpage .monitor-container .monitor-table .group-table #tblHomeHeaderFixed, .detailpage .monitor-container .monitor-table .group-table #tblAwayHeaderFixed {
+      .detailpage .monitor-container .monitor-table .group-table #tblHomeHeaderFixed,
+      .detailpage .monitor-container .monitor-table .group-table #tblAwayHeaderFixed {
         top: 25rem;
         display: none;
         position: sticky;
         z-index: 5;
         background-color: white; }
-        .detailpage .monitor-container .monitor-table .group-table #tblHomeHeaderFixed thead tr th, .detailpage .monitor-container .monitor-table .group-table #tblAwayHeaderFixed thead tr th {
+        .detailpage .monitor-container .monitor-table .group-table #tblHomeHeaderFixed thead tr th,
+        .detailpage .monitor-container .monitor-table .group-table #tblAwayHeaderFixed thead tr th {
           background: #1D2E4F;
           border: 1px solid #C4C4C4;
           line-height: 1;
@@ -866,7 +1104,8 @@
           vertical-align: middle;
           color: #fff;
           font-weight: 400; }
-          .detailpage .monitor-container .monitor-table .group-table #tblHomeHeaderFixed thead tr th input, .detailpage .monitor-container .monitor-table .group-table #tblAwayHeaderFixed thead tr th input {
+          .detailpage .monitor-container .monitor-table .group-table #tblHomeHeaderFixed thead tr th input,
+          .detailpage .monitor-container .monitor-table .group-table #tblAwayHeaderFixed thead tr th input {
             margin: 0;
             padding: 0;
             display: unset; }
@@ -941,9 +1180,22 @@
   height: auto !important;
   padding: .7rem 2rem; }
 
-.icon-base-robot, .icon-ob-robot, .icon-good-robot, .icon-bad-robot {
+.icon-clear {
+  margin-right: 3px;
+  font-size: 15px; }
+  .icon-clear:hover {
+    background-color: rgba(57, 110, 248, 0.2);
+    border-radius: 5px; }
+
+.icon-base-robot,
+.icon-ob-robot,
+.icon-good-robot,
+.icon-bad-robot {
   position: inherit; }
-  .icon-base-robot span:before, .icon-ob-robot span:before, .icon-good-robot span:before, .icon-bad-robot span:before {
+  .icon-base-robot span:before,
+  .icon-ob-robot span:before,
+  .icon-good-robot span:before,
+  .icon-bad-robot span:before {
     font-size: 2.2rem; }
 
 /*.detailpage {

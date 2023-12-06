@@ -37,6 +37,7 @@
         public const string FormatDatetimeToString_ddMMMyyyyHHmmssfff = "dd MMM, yyyy HH:mm:ss.fff";
         public const string FormatDateTimeToString_ddMMyyyy = "dd/MM/yyyy";
         public const string FormatDateTimeToString_ddMMyyyyhhmmss = "dd/MM/yyyy HH:mm:ss";
+        public const string FormatDateTimeToString_ddMMyyhhmmss = "dd/MM/yy HH:mm:ss";
         public const string FormatDatetimeToString_YYYYmmddHHmmss = "yyyy-MM-dd HH:mm:ss";
         public const string FormatDatetimeToString_ddMMMHHmmssfff = "dd MMM HH:mm:ss.fff";
         public const string FormatDatetimeToString_ddMMM = "dd MMM";
