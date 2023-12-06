@@ -385,19 +385,13 @@
                             .transtime-icon {
                                 vertical-align: middle;
                                 cursor: pointer;
+                                display: inline-block;
                             }
 
                             .transtime-icon-submit {
                                 font-size: 30px;
-                                display: inline-block;
                                 text-align: center;
                                 vertical-align: bottom;
-                            }
-
-                            .transtime-icon-clear {
-                                margin-right: 3px;
-                                font-size: 15px;
-                                display: inline-block;
                             }
 
                             .transtime-icon-forcus {
@@ -969,6 +963,16 @@
     border: 1px solid #396ef8;
     height: auto !important;
     padding: .7rem 2rem;
+}
+
+.icon-clear {
+    margin-right: 3px;
+    font-size: 15px;
+
+    &:hover {
+        background-color: rgba(57, 110, 248, 0.2);
+        border-radius: 5px;
+    }
 }
 
 .icon-base-robot,
