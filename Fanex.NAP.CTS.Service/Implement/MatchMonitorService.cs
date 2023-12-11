@@ -269,32 +269,7 @@
             }
 
             return string.Empty;
-        }
-
-        public string GetReasonID(IEnumerable<MatchMonitorReasonModel> reasonList, IEnumerable<string> reasonNames)
-        {
-            var reasonIDs = new List<int>();
-
-            if (reasonList == null)
-            {
-                var mmStatic = this.GetMMStaticList();
-                reasonList = mmStatic.Reasons;
-            }
-            if (reasonNames != null && reasonNames.Any())
-            {
-                reasonIDs = reasonList.Join(reasonNames,
-                    r1 => r1.ReasonName,
-                    r2 => r2,
-                    (r1, r2) => r1.ReasonID).ToList();
-
-                if (reasonNames.Any(x => x == "-") && !reasonIDs.Any(x => x == 0))
-                {
-                    reasonIDs.Add(0);
-                }
-            }
-
-            return string.Join(",", reasonIDs);
-        }
+        }       
 
         public string GetTransFilterSuspicousMGr(MMDetailFilterViewModel filter, TicketDetailViewModel fraudTicket)
         {

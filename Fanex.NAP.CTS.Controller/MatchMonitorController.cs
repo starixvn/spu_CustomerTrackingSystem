@@ -42,8 +42,8 @@
         private readonly ICommonService _commonService;
         private readonly IMemoryCacheService _memoryCacheService;
         private readonly string MMDetailRegion = "MMDetail";
-        private readonly string[] PropertyNameOfSummaryHomeList = { nameof(GetMatchMonitorViewModel.HomeTotalAmount), nameof(GetMatchMonitorViewModel.HomeBetCount), nameof(MatchMonitorBetChoiceId.H), nameof(MatchMonitorBetChoiceId.O) };
-        private readonly string[] PropertyNameOfSummaryAwayList = { nameof(GetMatchMonitorViewModel.AwayTotalAmount), nameof(GetMatchMonitorViewModel.AwayBetCount), nameof(MatchMonitorBetChoiceId.A), nameof(MatchMonitorBetChoiceId.U) };
+        private readonly string[] PropertyNameOfSummaryHomeList = { nameof(GetMatchMonitorViewModel.HomeTotalAmount), nameof(GetMatchMonitorViewModel.HomeBetCount) };
+        private readonly string[] PropertyNameOfSummaryAwayList = { nameof(GetMatchMonitorViewModel.AwayTotalAmount), nameof(GetMatchMonitorViewModel.AwayBetCount) };
 
         public override string BaseControllerName { get => Consts.MenuItemMonitor; }
 
@@ -98,9 +98,7 @@
                     && IsValidDateRange(para.FromDate, para.ToDate))
                 {
                     var matchFromCTSInfos = Enumerable.Empty<GetMatchMonitorModel>();
-
-                    var mmStatic = _matchMonitorService.GetMMStaticList();
-
+                   
                     if (para.DateType == 1)
                         matchFromCTSInfos = GetMMByScanDate(para);
                     else
@@ -108,7 +106,7 @@
 
                     var mmDictionaryTicketsSummarys = GetMMFraudTicketsSummary(matchFromCTSInfos);
 
-                    matchMonitors = MergeMatchMonitorWithMMStaticAndTicketsSummary(matchFromCTSInfos, mmStatic, mmDictionaryTicketsSummarys);
+                    matchMonitors = MergeMatchMonitorWithMMStaticAndTicketsSummary(matchFromCTSInfos, mmDictionaryTicketsSummarys);
 
                     if (!string.IsNullOrEmpty(para.Event))
                     {
@@ -136,19 +134,25 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<GetMatchMonitorViewModel> MergeMatchMonitorWithMMStaticAndTicketsSummary(IEnumerable<GetMatchMonitorModel> matchFromCTSInfos, MatchMonitorStaticListModel mmStatic, Dictionary<string, MMFraudTicketsSummaryViewModel> mmDictionaryTicketsSummarys)
+        private IEnumerable<GetMatchMonitorViewModel> MergeMatchMonitorWithMMStaticAndTicketsSummary(IEnumerable<GetMatchMonitorModel> matchFromCTSInfos,      
+            Dictionary<string, MMFraudTicketsSummaryViewModel> mmDictionaryTicketsSummarys)
         {
+            var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
+            var bettypeSettings = GetBetTypeSettings(null, true);
+
             return
                 matchFromCTSInfos?
                     .Select(x =>
                         {
-                            var result = new GetMatchMonitorViewModel(x, mmStatic);
+                            var result = new GetMatchMonitorViewModel(x, reasons);
+                            var betChoiceHome = bettypeSettings.FirstOrDefault(y => y.BetTypeID == result.BettypeID)?.BetChoiceHome;
+                            var betChoiceAway = bettypeSettings.FirstOrDefault(y => y.BetTypeID == result.BettypeID)?.BetChoiceAway;
 
                             if (mmDictionaryTicketsSummarys != null)
                             {
-                                SetValueMMTicketsSummaryFromDictionary(result, mmDictionaryTicketsSummarys, PropertyNameOfSummaryHomeList);
+                                SetValueMMTicketsSummaryFromDictionary(result, betChoiceHome, mmDictionaryTicketsSummarys, PropertyNameOfSummaryHomeList);
 
-                                SetValueMMTicketsSummaryFromDictionary(result, mmDictionaryTicketsSummarys, PropertyNameOfSummaryAwayList);
+                                SetValueMMTicketsSummaryFromDictionary(result, betChoiceAway, mmDictionaryTicketsSummarys, PropertyNameOfSummaryAwayList);
                             }
 
                             return result;
@@ -156,10 +160,10 @@
                     .OrderBy(c => c.MatchSection);
         }
 
-        private void SetValueMMTicketsSummaryFromDictionary(GetMatchMonitorViewModel result, Dictionary<string, MMFraudTicketsSummaryViewModel> mmDictionaryTicketsSummarys, string[] propertyNameOfSummaryList)
+        private void SetValueMMTicketsSummaryFromDictionary(GetMatchMonitorViewModel result, string betChoice, 
+            Dictionary<string, MMFraudTicketsSummaryViewModel> mmDictionaryTicketsSummarys, string[] propertyNameOfSummaryList)
         {
-            if (mmDictionaryTicketsSummarys.TryGetValue(result.BuildTicketsSummaryDictionaryKey(propertyNameOfSummaryList[2]), out var mmFraudTicketsSummary) ||
-                mmDictionaryTicketsSummarys.TryGetValue(result.BuildTicketsSummaryDictionaryKey(propertyNameOfSummaryList[3]), out mmFraudTicketsSummary))
+            if (mmDictionaryTicketsSummarys.TryGetValue(result.BuildTicketsSummaryDictionaryKey(betChoice), out var mmFraudTicketsSummary))  
             {
                 result.SetPropertyValue(typeof(GetMatchMonitorViewModel).GetProperty(propertyNameOfSummaryList[0]), mmFraudTicketsSummary.Turnover);
 

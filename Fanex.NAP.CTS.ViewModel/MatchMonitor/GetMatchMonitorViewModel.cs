@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
     using Fanex.NAP.CTS.Core.BaseClasses;
+    using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using System;
@@ -10,7 +11,7 @@
 
     public class GetMatchMonitorViewModel
     {
-        public GetMatchMonitorViewModel(GetMatchMonitorModel data, MatchMonitorStaticListModel mmStatic)
+        public GetMatchMonitorViewModel(GetMatchMonitorModel data, IEnumerable<StaticListModel> reasons)
         {            
             this.ID = data.ID;
             this.MatchID = data.MatchID;
@@ -26,7 +27,7 @@
             //this.BettypeName = this.GetBettypeName(mmStatic.BetTypes, data.BettypeID, data.BetID);
             this.BetID = data.BetID;
             this.Reason = data.Reason;
-            this.ReasonName = this.GetReasonName(mmStatic.Reasons, data.Reason);
+            this.ReasonName = this.GetReasonName(reasons, data.Reason);
             this.SportType = data.Sporttype;
             this.MatchSection = data.MatchSection;
             this.IsVerified = data.IsVerified;
@@ -237,26 +238,27 @@
             }
         }
 
-        private string GetBettypeName(IEnumerable<MatchMonitorBetTypeModel> betTypes, int betTypeID, int? betID)
-        {
-            return betTypes.FirstOrDefault(x => x.BetTypeID == betTypeID && x.BetID == betID)?.BetTypeName;
-        }
+        //private string GetBettypeName(IEnumerable<MatchMonitorBetTypeModel> betTypes, int betTypeID, int? betID)
+        //{
+        //    return betTypes.FirstOrDefault(x => x.BetTypeID == betTypeID && x.BetID == betID)?.BetTypeName;
+        //}
 
-        private string GetReasonName(IEnumerable<MatchMonitorReasonModel> Reasons, string reason)
+        private string GetReasonName(IEnumerable<StaticListModel> reasons, string reasonIDList)
         {
-            if (!string.IsNullOrEmpty(reason))
+            if (!string.IsNullOrEmpty(reasonIDList))
             {
-                var arrReasons = reason.Split(',').Select(x => Convert.ToInt32(x));
-                var reasonNames = Reasons.Join(arrReasons,
-                           r1 => r1.ReasonID,
+                var arrReasons = reasonIDList.Split(',');
+                var reasonNames = reasons.Join(arrReasons,
+                           r1 => r1.ItemValue,
                            r2 => r2,
-                           (r1, r2) => r1.ReasonName);
+                           (r1, r2) => r1.ItemNameDisplay);
 
                 return string.Join(",", reasonNames);
             }
 
             return string.Empty;
-        }
+        }     
+
 
         public string BuildTicketsSummaryDictionaryKey(string betteam)
         {

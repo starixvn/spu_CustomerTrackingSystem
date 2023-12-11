@@ -528,6 +528,12 @@
                         background: rgb(53, 100, 21);
                     }
                 }
+
+                .button-feedback[disabled] {
+                    background-color: $btn-disabled-bg;
+                    color: $btn-disabled-color;
+                    cursor: not-allowed;
+                }
             }
 
             .group-info {

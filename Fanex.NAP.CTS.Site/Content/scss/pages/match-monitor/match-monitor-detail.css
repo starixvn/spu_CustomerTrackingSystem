@@ -710,6 +710,10 @@
         border: 1px solid #4f971f; }
         .detailpage .monitor-container .monitor-table .breadcrumb-button .button-feedback:hover {
           background: #356415; }
+      .detailpage .monitor-container .monitor-table .breadcrumb-button .button-feedback[disabled] {
+        background-color: #c9cdd1;
+        color: #fff;
+        cursor: not-allowed; }
     .detailpage .monitor-container .monitor-table .group-info {
       display: flex;
       padding: 1rem 0 0 0;
