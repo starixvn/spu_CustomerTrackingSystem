@@ -259,6 +259,11 @@ body {
                     border-radius: 5px;
                 }
 
+                .icon-icon-clear:before {
+                    content: "\e93f";
+                    color: #c1272d;
+                }
+
                 .width-select {
                     width: 18.5rem;
                 }

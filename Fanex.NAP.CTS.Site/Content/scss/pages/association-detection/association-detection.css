@@ -617,6 +617,9 @@ body {
       .association-detection-report .association-detection-content .table-report .group .clear-btn:hover {
         background-color: rgba(57, 110, 248, 0.2);
         border-radius: 5px; }
+      .association-detection-report .association-detection-content .table-report .group .icon-icon-clear:before {
+        content: "\e93f";
+        color: #c1272d; }
       .association-detection-report .association-detection-content .table-report .group .width-select {
         width: 18.5rem; }
       .association-detection-report .association-detection-content .table-report .group .width-select-sites {
