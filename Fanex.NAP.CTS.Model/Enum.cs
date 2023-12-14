@@ -202,4 +202,15 @@
         Refund = 103,
         Completed = 131
     }
+
+    public enum StaticListID
+    {
+        Reason = 16,
+        Sport = 17
+    }
+
+    public enum BetTypeSettingsFunctionID
+    {
+        MMBetType = 1
+    }
 }

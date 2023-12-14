@@ -290,10 +290,13 @@
     <Compile Include="Association\CoupleIPFraudDetailModel.cs" />
     <Compile Include="Association\FraudDetailModel.cs" />
     <Compile Include="Association\StakeIpPatternDetailModel.cs" />
+    <Compile Include="Common\BetTypeSettingModel.cs" />
+    <Compile Include="Common\BetTypeSettingParaModel.cs" />
     <Compile Include="Common\CCGroupModel.cs" />
     <Compile Include="Common\CommonCustomerClassModel.cs" />
     <Compile Include="Common\MainMatchModel.cs" />
     <Compile Include="Common\SiteModel.cs" />
+    <Compile Include="Common\StaticListModel.cs" />
     <Compile Include="Common\SubscriberGroupModel.cs" />
     <Compile Include="Association\AssociationWithCategory.cs" />
     <Compile Include="AssociationReport\AssociationDetailModel.cs" />
@@ -367,6 +370,7 @@
     <Compile Include="ManageSubscriber\DetailedSiteModel.cs" />
     <Compile Include="ManageSubscriber\UpdateSubsciberResultModel.cs" />
     <Compile Include="MatchMonitor\FraudTransModel.cs" />
+    <Compile Include="MatchMonitor\MatchBetTypeSettingModel.cs" />
     <Compile Include="MatchMonitor\MatchGroupKeyModel.cs" />
     <Compile Include="MatchMonitor\MatchFromMainInfoModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorBetTypeModel.cs" />

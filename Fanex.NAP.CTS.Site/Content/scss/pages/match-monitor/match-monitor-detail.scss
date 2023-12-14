@@ -331,11 +331,14 @@
 
                     .first-row-info {
                         height: 32px !important;
+                        margin-left: 5px;
 
                         .info-text {
                             font-weight: bold;
                             color: black;
                             padding-right: 5px;
+                            width: 80px;
+                            line-height: 30px;
                         }
 
                         .info-select {
@@ -407,7 +410,7 @@
                         }
 
                         .select2-container {
-                            width: 151px !important;
+                            /* width: 151px !important;*/
                             height: 32px !important;
                             vertical-align: middle;
                         }
@@ -429,6 +432,12 @@
                         margin-bottom: 1px;
                         height: 30px;
                         border-right: 1px solid rgba(196, 196, 196, 1);
+                    }
+
+                    .select-group-bettype {
+                        width: 380px;
+                        height: 380px;
+                        display: flex;
                     }
                 }
 
@@ -518,6 +527,12 @@
                     &:hover {
                         background: rgb(53, 100, 21);
                     }
+                }
+
+                .button-feedback[disabled] {
+                    background-color: $btn-disabled-bg;
+                    color: $btn-disabled-color;
+                    cursor: not-allowed;
                 }
             }
 
@@ -780,6 +795,7 @@
                             margin: 0.1px;
                             width: 16px;
                             height: 16px;
+                            filter: hue-rotate(240deg);
                         }
 
                         .table-monitor-detail {

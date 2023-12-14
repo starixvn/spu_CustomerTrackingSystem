@@ -22,13 +22,16 @@
         public string ListTransId { get; set; }
 
         [SpParam(SqlParamName = "EventDate")]
-        public DateTime EventDate { get; set; }       
+        public DateTime EventDate { get; set; }
+
+        [SpParam(SqlParamName = "ListSportBettype")]
+        public string ListSportBettype { get; set; }
 
         [SpParam(SqlParamName = "MatchID")]
         public long MatchID { get; set; }
 
-        [SpParam(SqlParamName = "BetType")]
-        public int BetType { get; set; }
+        //[SpParam(SqlParamName = "BetType")]
+        //public int BetType { get; set; }
 
         [SpParam(SqlParamName = "TicketType")]
         public int TicketType { get; set; } // (0:All, 1: Suspicious)
@@ -48,8 +51,8 @@
         [SpParam(SqlParamName = "CustAmountRM")]
         public decimal? CustAmountRM { get; set; }
 
-        [SpParam(SqlParamName = "BetID")]
-        public long BetID { get; set; }
+        //[SpParam(SqlParamName = "BetID")]
+        //public long BetID { get; set; }
 
         [SpParam(SqlParamName = "ListDanger")]
         public string ListDanger { get; set; }

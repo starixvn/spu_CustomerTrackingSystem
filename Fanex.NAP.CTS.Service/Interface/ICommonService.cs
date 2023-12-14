@@ -19,5 +19,12 @@
         IEnumerable<MainTicketDetailModel> GetMainTicketDetails(string transIds, int? transSize, int? matchSize);
 
         IEnumerable<CCGroupModel> GetGroupCustomerClass();
+
+        int GetBetID(string betIDPattern, string nameDetailsX);
+
+        IEnumerable<StaticListModel> GetStaticLists(int listID, bool isStatusActive);
+
+        IEnumerable<BetTypeSettingModel> GetBetTypeSettings(BetTypeSettingParaModel infos);
+        
     }
 }

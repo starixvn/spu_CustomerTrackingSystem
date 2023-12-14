@@ -71,5 +71,7 @@
         public Decimal Hdp { get; set; }
 
         public int IsLicensee { get; set; }
+
+        public int ChoiceOrder { get; set; }
     }
 }

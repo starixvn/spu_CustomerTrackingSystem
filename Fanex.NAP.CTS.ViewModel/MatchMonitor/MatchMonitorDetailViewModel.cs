@@ -37,6 +37,10 @@
 
         public bool IsSupportShowAllTickets { get; set; }
 
+        public int MX { get; set; }
+
+        public int MY { get; set; }
+
         public bool LiveIndicator
         {
             get

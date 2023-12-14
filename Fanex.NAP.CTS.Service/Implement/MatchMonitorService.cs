@@ -14,14 +14,19 @@
     using System.Collections.Generic;
     using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
+    using Fanex.NAP.CTS.Model.Common;
+    using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.Service.Implement;
 
     public class MatchMonitorService : IMatchMonitorService
     {
         private readonly IDynamicRepository repository;
+        private readonly ICommonService commonService;
 
         public MatchMonitorService()
         {
             repository = new DynamicRepository();
+            commonService = new CommonService();
         }
 
         public IEnumerable<MatchFromMainInfoModel> GetMatchFromMainInfos(MatchMonitorSearchViewModel filter, string matchIDs)
@@ -52,7 +57,7 @@
             };
 
             return repository.Fetch<GetMatchMonitorModel>(criteria);
-        }
+        }        
 
         public IEnumerable<MMFraudTicketsSummaryViewModel> GetMMFraudTicketsSummary(IEnumerable<MMFraudTicketsSummaryModel> mmModels)
         {
@@ -153,9 +158,14 @@
             return repository.Fetch<CustInfoModel>(criteria);
         }
 
-        public MMDetailFilterViewModel GetFraudFilterInfoDetail(MMDetailInfoViewModel para, TicketDetailViewModel fraudTicket)
+        public IEnumerable<BetTypeSettingModel> GetBetTypeSettings(BetTypeSettingParaModel infos)
         {
-            var fraudTicketMergeAGroup = MergeFraudReasonAGroup(fraudTicket);
+            return commonService.GetBetTypeSettings(infos);
+        }
+
+        public MMDetailFilterViewModel GetFraudFilterInfoDetail(MMDetailInfoViewModel para, TicketDetailViewModel fraudTicket, IEnumerable<StaticListModel> reasons)
+        {
+            var fraudTicketMergeAGroup = MergeFraudReasonAGroup(fraudTicket, reasons);
 
             var suspiciousTransInfos = fraudTicket.GetSuspiciousTransInfo(fraudTicketMergeAGroup);
 
@@ -191,7 +201,7 @@
             return mdItemList;
         }
 
-        public IEnumerable<MatchMonitorDetailItemViewModel> MergeFraudReasonAGroup(TicketDetailViewModel fraudTicket)
+        public IEnumerable<MatchMonitorDetailItemViewModel> MergeFraudReasonAGroup(TicketDetailViewModel fraudTicket, IEnumerable<StaticListModel> reasons)
         {
             var mdResult = Enumerable.Empty<MatchMonitorDetailItemViewModel>();
 
@@ -202,13 +212,11 @@
                 var mmStatic = new MatchMonitorStaticListModel();
                 var ticketDetail = fraudTicket.TicketDetails;
                 var mergeGroup = fraudTicket.MMDetailMergeGroup;
-
-                mmStatic = this.GetMMStaticList();
-
+               
                 var custIDs = matchDetailInfo.Custs.Select(x => x.CustID).Distinct();
                 var custInfo = GetCustInfoByCustID(custIDs);
 
-                mdResult = DrawColorFraudMMDetailWithMergeReasonAGroup(matchDetailInfo.VerifiedTrans, custInfo, ticketDetail, mergeGroup, mmStatic.Reasons);
+                mdResult = DrawColorFraudMMDetailWithMergeReasonAGroup(matchDetailInfo.VerifiedTrans, custInfo, ticketDetail, mergeGroup, reasons);
             }
 
             return mdResult;
@@ -218,7 +226,7 @@
             IEnumerable<CustInfoModel> custInfo,
             IEnumerable<TicketDetailModel> ticket,
             MMDetailMergeGroupViewModel mergeGroup,
-            IEnumerable<MatchMonitorReasonModel> reasons)
+            IEnumerable<StaticListModel> reasons)
         {
             var ticketResult = Enumerable.Empty<MatchMonitorDetailItemViewModel>();
 
@@ -247,46 +255,21 @@
             return ticketResult.Distinct(x => x.TransId);
         }
 
-        public string GetReasonName(IEnumerable<MatchMonitorReasonModel> reasonList, string reasonIDList)
+        public string GetReasonName(IEnumerable<StaticListModel> reasonList, string reasonIDList)
         {
             if (!string.IsNullOrEmpty(reasonIDList))
             {
-                var arrReasons = reasonIDList.Split(',').Select(x => Convert.ToInt32(x));
+                var arrReasons = reasonIDList.Split(',');
                 var reasonNames = reasonList.Join(arrReasons,
-                    r1 => r1.ReasonID,
+                    r1 => r1.ItemValue,
                     r2 => r2,
-                    (r1, r2) => r1.ReasonName);
+                    (r1, r2) => r1.ItemNameDisplay);
 
                 return string.Join(",", reasonNames);
             }
 
             return string.Empty;
-        }
-
-        public string GetReasonID(IEnumerable<MatchMonitorReasonModel> reasonList, IEnumerable<string> reasonNames)
-        {
-            var reasonIDs = new List<int>();
-
-            if (reasonList == null)
-            {
-                var mmStatic = this.GetMMStaticList();
-                reasonList = mmStatic.Reasons;
-            }
-            if (reasonNames != null && reasonNames.Any())
-            {
-                reasonIDs = reasonList.Join(reasonNames,
-                    r1 => r1.ReasonName,
-                    r2 => r2,
-                    (r1, r2) => r1.ReasonID).ToList();
-
-                if (reasonNames.Any(x => x == "-") && !reasonIDs.Any(x => x == 0))
-                {
-                    reasonIDs.Add(0);
-                }
-            }
-
-            return string.Join(",", reasonIDs);
-        }
+        }       
 
         public string GetTransFilterSuspicousMGr(MMDetailFilterViewModel filter, TicketDetailViewModel fraudTicket)
         {
@@ -408,15 +391,25 @@
 
         public TicketDetailViewModel GetMainTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int? batchSize, string transJson = null)
         {
+            var betTypeInfos = JsonConvert.SerializeObject(new List<MatchBetTypeSettingModel>() { new MatchBetTypeSettingModel {
+                SportTypeID = para.Sport,
+                BetTypeID = para.BetTypeID,
+                BetChoiceType = para.BetChoiceType,
+                BetChoiceHome = para.BetChoiceHome,
+                BetChoiceAway = para.BetChoiceAway,
+                BetID = para.BetID
+            } });
+
             var criteria = new TicketDetailGetCriteria()
             {
-                QueryType = 2, // Get ticket for view MM report              
+                QueryType = 2, // Get ticket for view MM report
                 EventDate = para.EventDate,
                 LastScannedSequenceID = para.LastScannedSequenceID,
                 IsLive = para.LiveIndicator ? 1 : 0,
                 MatchID = para.MatchID,
-                BetType = para.BetTypeID,
-                BetID = para.BetID,
+                ListSportBettype = betTypeInfos,
+                //BetType = para.BetTypeID,
+                //BetID = para.BetID,
                 TicketType = para.TypeOfTickets == MatchMonitorQueryType.TicketAll ? 0 : 1,
                 BatchSize = batchSize,
                 IsLicensee = (para.Sites == MMSites.All || para.Sites == null) ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
@@ -425,7 +418,7 @@
                 ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null,
             };
 
-            if (IsDisplaySingleGrid(para.BetTypeID))
+            if (para.BetChoiceType == 1)
             {
                 criteria.ListHDPBetTeam = filter?.BetTeamList == null ? null : string.Join(",", filter.BetTeamList);
             }
@@ -485,18 +478,29 @@
 
         public MMTicketDetailInfoModel GetMMTicketDetailInfo(MMDetailInfoViewModel para, IEnumerable<SuspiciousTransInfoModel> suspiciousTranInfos)
         {
+            var betTypeInfos = JsonConvert.SerializeObject(new List<MatchBetTypeSettingModel>() { new MatchBetTypeSettingModel {
+                SportTypeID = para.Sport,
+                BetTypeID = para.BetTypeID,
+                BetChoiceType = para.BetChoiceType,
+                BetChoiceHome = para.BetChoiceHome,
+                BetChoiceAway = para.BetChoiceAway,
+                BetID = para.BetID
+            } });
+
             var criteria = new MMTicketDetailInfoCriteria()
             {
                 MatchID = para.MatchID,
-                EventDate = para.EventDate,
-                BetType = para.BetTypeID,
+                EventDate = para.EventDate,                
                 IsLive = para.LiveIndicator ? 1 : 0,
                 ListSuspiciousTransId = suspiciousTranInfos != null ? JsonConvert.SerializeObject(suspiciousTranInfos) : null,
                 TicketType = para.TypeOfTickets == MatchMonitorQueryType.TicketAll ? 0 : 1,
+                ListSportBettype = betTypeInfos,
                 IsExclTestCurr = false,
-                BetID = para.BetID,
+              
                 FromTransDate = para.TranstimeFrom != null ? para.TranstimeFrom.Value.ToUniversalTime() : (DateTime?)null,
                 ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null,
+                //BetType = para.BetTypeID,
+                //BetID = para.BetID
             };
 
             var result = repository.Fetch<MMDetailFilterTicketInfoModel>(criteria);
@@ -545,18 +549,7 @@
                 Sports = result.secondResultSet,
                 BetTypes = result.thirdResultSet
             };
-        }
-
-        public bool IsDisplaySingleGrid(int betTypeID)
-        {
-            return betTypeID == (int)MatchMonitorBetType.Full1X2
-                || betTypeID == (int)MatchMonitorBetType.First1X2
-                || betTypeID == (int)MatchMonitorBetType.CorrectScore
-                || betTypeID == (int)MatchMonitorBetType.FirstCorrectScore
-                || betTypeID == (int)MatchMonitorBetType.TotalGoal
-                || betTypeID == (int)MatchMonitorBetType.FirstTotalGoal
-                || betTypeID == (int)MatchMonitorBetType.FirstTotalGoal;
-        }
+        }      
 
         public byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath)
         {

@@ -108,13 +108,13 @@
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5, 6, 11, 12], className: "text-center" },
                 { targets: [7, 8, 9, 10], className: "text-right" },
-                { targets: [0], width: "6%" },
+                { targets: [0], width: "4%" },
                 { targets: [1], width: "18%" },
                 { targets: [2], width: "18%" },
                 { targets: [3], width: "4%" },
                 { targets: [4], width: "6%" },
-                { targets: [5], width: "6%" },
-                { targets: [6], width: "8%" },
+                { targets: [5], width: "10%" },
+                { targets: [6], width: "6%" },
                 { targets: [7], width: "6%" },
                 { targets: [8], width: "6%" },
                 { targets: [9], width: "5%" },
@@ -128,8 +128,8 @@
                 { data: obj => obj.LeagueName },
                 {
                     data: obj => () => {
-                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&BettypeName={5}&MatchSection={6}&Market={7}&Reason={8}&ReasonName={9}&LeagueID={10}&BetID={11}&SportType={12}&KOTime={13}&IsSupportShowAllTickets={14}";
-                        let para = paramTemplate.format(obj.EventDateToString, obj.MatchID, obj.HomeID, obj.AwayID, obj.BettypeID, obj.BettypeName, obj.MatchSection, obj.Market, obj.Reason, obj.ReasonName, obj.LeagueID, obj.BetID, obj.SportType, obj.KOTime, obj.IsSupportShowAllTickets);
+                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&BettypeName={5}&MatchSection={6}&Market={7}&Reason={8}&ReasonName={9}&LeagueID={10}&BetID={11}&SportType={12}&KOTime={13}&IsSupportShowAllTickets={14}&MX={15}&MY={16}";
+                        let para = paramTemplate.format(obj.EventDateToString, obj.MatchID, obj.HomeID, obj.AwayID, obj.BettypeID, obj.BettypeName, obj.MatchSection, obj.Market, obj.Reason, obj.ReasonName, obj.LeagueID, obj.BetID, obj.SportType, obj.KOTime, obj.IsSupportShowAllTickets, obj.MapX, obj.MapYY);
 
                         return '<a class="click-view-details" href="MatchMonitor/Detail?' + para + '" target="_blank">' + obj.MatchName + '</a>';
                     }
@@ -181,21 +181,7 @@
     function RenderVerifiedUI(isVerified) {
         return '<label class="container-checkbox" id="containerCheckbox"><input id="isVerifiedCheckbox" type="checkbox" disabled' + (isVerified ? ' checked' : '') + '><span class="checkmark"></span></label>';
     }
-
-    function SetRestrictFromDate() {
-        let toDateValue = domElements.dpkToDate.datepicker("getDate");
-
-        domElements.dpkFromDate.datepicker("option", "maxDate", toDateValue);
-    }
-
-    function SetRestrictToDate() {
-        let fromDateValue = domElements.dpkFromDate.datepicker("getDate");
-
-        domElements.dpkToDate
-            .datepicker("option", "minDate", fromDateValue)
-            .datepicker("option", "maxDate", moment(fromDateValue).add(1, "year").toDate());
-    }
-
+   
     function RefreshChange($target) {
         domElements.eventTarget = $target
         var selectedVal = parseInt($target.getAttribute("value"));
@@ -221,40 +207,47 @@
         }
     }
 
-    function RefreshBetTypeFilter() {
-        domElements.cbbBetType.find('option').remove();
-
-        let sportIDs = domElements.cbbSport.val().join()
+    function RefreshBetTypeFilter() {   
+        let arrSportIDs = domElements.cbbSport.val();
+        let sportIDs = arrSportIDs.join();
         if (sportIDs != '') {
             $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMMFilterBetTypeBySportID'), {
                 type: 'POST',
                 data: {
-                    sportIDs: domElements.cbbSport.val().join()
+                    sportIDs: sportIDs
                 },
                 success: function (response) {
+                    domElements.cbbBetType.multiselect().empty();
+
                     if (response != undefined) {
                         response.forEach(i => {
-                            let value = RenderBetTypeHTML(i.BetTypeID, i.BetID);
-                            domElements.cbbBetType.append(`<option value="${value}">${i.BetTypeName}</option>`);
-                        })
+                            let value = '';
+
+                            if (i.BetIDPattern == undefined && i.NameDetailsX == '') {
+                                value = `{&quot;BettypeID&quot;:` + i.BetTypeID + `, &quot;BetID&quot;:0` + `}`;
+                            } else if (i.BetIDPattern != '' && i.NameDetailsX != ''){
+                                value = `{&quot;BettypeID&quot;:` + i.BetTypeID + `, &quot;BetID&quot;:` + i.BetID + `}`;
+                            } else {
+                                value = `{&quot;BettypeID&quot;:` + i.BetTypeID + `}`;
+                            }
+                            
+                            domElements.cbbBetType.append(`<option selected value="${value}">${i.BetTypeName}</option>`);
+                        })                        
                     }
-                },
-                complete: function () {
-                    domElements.cbbBetType.find('option').prop('selected', true);
+
                     domElements.cbbBetType.multiselect("refresh");
+                },
+                complete: function () {                
                 },
                 error: function (errMsg) {
                     console.log(errMsg);
                 }
             });
         } else {
+            domElements.cbbBetType.multiselect().empty();
             domElements.cbbBetType.multiselect("refresh");
-        }
-    }
-
-    function RenderBetTypeHTML(betTypeID, betId) {
-        return `{&quot;BettypeID&quot;:` + betTypeID + `, &quot;BetID&quot;:` + betId + `}`;
-    }
+        }                    
+    }   
 
     function Initial() {
         domElements.dpkFromDate
@@ -264,7 +257,6 @@
                 changeYear: true
             })
             .datepicker("setDate", new Date());
-        //.change(SetRestrictToDate);
 
         domElements.dpkToDate
             .datepicker({
@@ -273,7 +265,6 @@
                 changeYear: true
             })
             .datepicker("setDate", new Date());
-        //.change(SetRestrictFromDate);
 
         domElements.cbbSport.multiselect({
             menuWidth: 260,
@@ -283,10 +274,14 @@
         });
 
         domElements.cbbBetType.multiselect({
-            menuWidth: 260,
-            menuHeight: 260,
+            menuWidth: 340,
+            menuHeight: 320,
             selectedText: "# of # selected",
             noneSelectedText: "Select Bet Type"
+        }).multiselectfilter({
+            width: 260,
+            placeholder: '',
+            label: ''
         });
 
         domElements.cbbMatchSection.multiselect({

@@ -49,8 +49,14 @@ function MatchMonitorDetail() {
         liveIndicator: $("#hdLiveIndicator").val(),
         isSupportShowAllTickets: $("#hdIsSupportShowAllTickets").val(),
         defaultReasonNames: $('#hdReasonNames').val(),
+        mapX: $('#hdMapX').val(),
+        mapYY: $('#hdMapYY').val(),
         cbbMarket: $('#cbbMarket'),
         cbbBetType: $('#cbbBetType'),
+        cbbMapX: $('#cbbMapX'),
+        cbbMapYY: $('#cbbMapYY'),
+        divMapX: $('#divMapX'),
+        divMapYY: $('#divMapYY'),
         cbbTypeOfTickets: $('#cbbTypeOfTickets'),
         cbbMatchScore: $('#cbbMatchScore'),
         cbbSites: $('#cbbSites'),
@@ -180,7 +186,7 @@ function MatchMonitorDetail() {
                 { targets: [0, 1, 2, 3, 5, 7, 9, 12, 13, 14, 15, 16], className: "text-center" },
                 {
                     targets: [0], width: "3%", render: function (data, type, full, meta) {
-                        return '<input type="checkbox" class="col-checkbox" name="chkbx" value="' + $('<div/>').text(data).html() + '">';
+                        return '<label><input type="checkbox" class="col-checkbox" name="chkbx" /></label>';
                     }
                 },
                 { targets: [1], width: "17%" },
@@ -205,7 +211,7 @@ function MatchMonitorDetail() {
             columns: [
                 {
                     data: obj => () => {
-                        return `<input type="checkbox" name="chkbx" class="col-checkbox" />`;
+                        return `<label><input type="checkbox" name="chkbx" class="col-checkbox" /></label>`;
                     }
                 },
                 {
@@ -931,21 +937,32 @@ function MatchMonitorDetail() {
         let betTypeSelected = $("option:selected", domElements.cbbBetType);
 
         if (betTypeSelected.length > 0) {
-            return betTypeSelected.attr('data-bettypeid')
+            return betTypeSelected.attr('data-bettypeid');
         }
 
         return domElements.betTypeID;
     }
 
-    function GetBetIDSelected() {
-        if (domElements.sportType == 2) {
-            let betTypeSelected = $("option:selected", domElements.cbbBetType);
+    function GetAttributeBetTypeSelected(attribute) {
+        return $("option:selected", domElements.cbbBetType).attr(attribute);
+    }
 
-            if (betTypeSelected.length > 0) {
-                return betTypeSelected.attr('data-betid');
+    function GetBetIDSelected() {
+        let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
+
+        if (domElements.sportType != 2 && betidpattern.includes('X')) {
+            let betIDString = "80" + domElements.cbbMapX.val();
+
+            if (betidpattern.includes('YY')) {
+                betIDString += ("0" + domElements.cbbMapYY.val()).slice(-2);
             }
-        }
-        return domElements.betIDToString;
+            return betIDString;
+            
+        } else if (domElements.sportType == 2) {
+            return $("option:selected", domElements.cbbBetType).attr('data-betid');
+        } else {
+            return domElements.betIDToString;
+        }       
     }
 
     function IsFilterSuspicious(params) {
@@ -1269,6 +1286,9 @@ function MatchMonitorDetail() {
                     MatchID: domElements.matchID,
                     BetTypeID: GetBetTypeSelected(),
                     BetID: GetBetIDSelected(),
+                    BetChoiceType: GetAttributeBetTypeSelected('data-betchoicetype'),
+                    BetChoiceHome: GetAttributeBetTypeSelected('data-betchoicehome'),
+                    BetChoiceAway: GetAttributeBetTypeSelected('data-betchoiceaway'),
                     LiveIndicator: domElements.cbbMarket.val(),
                     LastScannedSequenceID: lastScannedSequenceID,
                     IsSupportShowAllTickets: isSupportShowAllTickets,
@@ -1429,6 +1449,9 @@ function MatchMonitorDetail() {
             MatchID: domElements.matchID,
             BetTypeID: GetBetTypeSelected(),
             BetID: GetBetIDSelected(),
+            BetChoiceType: GetAttributeBetTypeSelected('data-betchoicetype'),
+            BetChoiceHome: GetAttributeBetTypeSelected('data-betchoicehome'),
+            BetChoiceAway: GetAttributeBetTypeSelected('data-betchoiceaway'),
             Sites: domElements.cbbSites.val(),
             Reason: domElements.reason,
             LiveIndicator: domElements.cbbMarket.val(),
@@ -1989,10 +2012,6 @@ function MatchMonitorDetail() {
         domElements.cbbSites.val(SiteViewType.SiteAll);
     }
 
-    function MarketOnChange() {
-        BetTypeOnChange();
-    }
-
     function BetTypeOnChange() {
         AddFilterLoading();
 
@@ -2388,6 +2407,11 @@ function MatchMonitorDetail() {
         domElements.iconClearUsnAmt.addClass("hide");
     }
 
+    function OnchangeFilter() {
+        ResetDefault();
+        BetTypeOnChange();
+    }
+
     function ResetTranstime() {
         domElements.inputTranstimeFrom.val('');
         domElements.inputTranstimeTo.val('');
@@ -2432,6 +2456,32 @@ function MatchMonitorDetail() {
                 }
             }
         });
+    }
+
+    function ToggleMapXYY(isBetTypeChange) {
+        let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
+
+        if (domElements.sportType != 2 && betidpattern.includes('X')) {
+            $("option[value='0']", domElements.cbbMapX).remove();
+            domElements.cbbMapX.prop('disabled', false);
+            if (isBetTypeChange) {
+                domElements.cbbMapX.val('1').trigger('change');                
+            }
+        } else {            
+            domElements.cbbMapX.prepend("<option value='0' selected='selected'>-</option>");
+            domElements.cbbMapX.prop('disabled', true);
+        }
+
+        if (domElements.sportType != 2 && betidpattern != undefined && betidpattern.includes('YY')) {
+            $("option[value='0']", domElements.cbbMapYY).remove();
+            domElements.cbbMapYY.prop('disabled', false);
+            if (isBetTypeChange) {
+                domElements.cbbMapYY.val('1').trigger('change');
+            }
+        } else {
+            domElements.cbbMapYY.prepend("<option value='0' selected='selected'>-</option>");
+            domElements.cbbMapYY.prop('disabled', true);
+        }
     }
 
     //#endregion Event Toggle
@@ -2600,21 +2650,39 @@ function MatchMonitorDetail() {
         SetupMultiselect(domElements.cbbMGroup, "M.Gr.");
         SetupMultiselect(domElements.cbbReason, "Reason");
         SetupMultiselect(domElements.cbbTicketsStatus, "Status");
-
         domElements.cbbBetType.select2();
+        domElements.cbbMapX.select2();
+        domElements.cbbMapYY.select2();       
 
+        if (domElements.mapX != "0" && domElements.sportType != 2) {            
+            domElements.cbbMapX.val(domElements.mapX).trigger('change');           
+            domElements.cbbBetType.val(`${domElements.betTypeID}_0`).trigger('change');
+        } else {           
+            domElements.cbbBetType.val(`${domElements.betTypeID}_${domElements.betIDToString}`).trigger('change');
+        }
+        if (domElements.mapYY != "0") {
+            domElements.cbbMapYY.val(domElements.mapYY).trigger('change');
+        }
+
+        ToggleMapXYY(false);
+        
         domElements.cbbMarket.val(domElements.liveIndicator);
-        domElements.cbbBetType.val(`${domElements.betTypeID}_${domElements.betIDToString}`).trigger('change');
-
-        domElements.cbbMarket.change(function () {
-            ResetDefault();
-            ResetTranstime();
-            MarketOnChange();
+        
+        domElements.cbbMarket.change(function () {          
+            ResetTranstime();           
+            OnchangeFilter();
         });
-        domElements.cbbBetType.change(function () {
-            ResetDefault();
-            ResetTranstime();
-            BetTypeOnChange();
+        domElements.cbbBetType.change(function () {                       
+            ResetTranstime();         
+            ToggleMapXYY(true);
+
+            OnchangeFilter();
+        });
+        domElements.cbbMapX.change(function () {
+            OnchangeFilter();
+        });
+        domElements.cbbMapYY.change(function () {
+            OnchangeFilter();
         });
         domElements.cbbMatchScore.change(function () { ScoreOnChange(); });
         domElements.cbbSites.change(function () { FilterDependOnSelected(IndexFilterSelected.Site); });
@@ -2626,10 +2694,7 @@ function MatchMonitorDetail() {
 
         cacheDefaultReason = domElements.defaultReasonNames.toString();
 
-        try {
-            isSupportShowAllTickets = JSON.parse(domElements?.isSupportShowAllTickets?.toLowerCase());
-        }
-        catch { }
+        isSupportShowAllTickets = JSON.parse(domElements?.isSupportShowAllTickets?.toLowerCase());
 
         domElements.cbbTypeOfTickets.prop('disabled', !isSupportShowAllTickets);
 

@@ -19,6 +19,7 @@
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.ViewModel.Common;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.DetectGroup;
     using Newtonsoft.Json;
@@ -41,8 +42,8 @@
         private readonly ICommonService _commonService;
         private readonly IMemoryCacheService _memoryCacheService;
         private readonly string MMDetailRegion = "MMDetail";
-        private readonly string[] PropertyNameOfSummaryHomeList = { nameof(GetMatchMonitorViewModel.HomeTotalAmount), nameof(GetMatchMonitorViewModel.HomeBetCount), nameof(MatchMonitorBetChoiceId.H), nameof(MatchMonitorBetChoiceId.O) };
-        private readonly string[] PropertyNameOfSummaryAwayList = { nameof(GetMatchMonitorViewModel.AwayTotalAmount), nameof(GetMatchMonitorViewModel.AwayBetCount), nameof(MatchMonitorBetChoiceId.A), nameof(MatchMonitorBetChoiceId.U) };
+        private readonly string[] PropertyNameOfSummaryHomeList = { nameof(GetMatchMonitorViewModel.HomeTotalAmount), nameof(GetMatchMonitorViewModel.HomeBetCount) };
+        private readonly string[] PropertyNameOfSummaryAwayList = { nameof(GetMatchMonitorViewModel.AwayTotalAmount), nameof(GetMatchMonitorViewModel.AwayBetCount) };
 
         public override string BaseControllerName { get => Consts.MenuItemMonitor; }
 
@@ -65,16 +66,19 @@
                             FSFunctionKeys.MatchMonitor,
                             NAP.Core.Business.Constant.Policy.Host);
 
-            var userId = CurrentSession.UserId;
-
-            var mmStatic = _matchMonitorService.GetMMStaticList();
+            var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true)
+                .Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
+                .OrderBy(x=>x.ReasonName);
+          
+            var sports = _commonService.GetStaticLists((int)StaticListID.Sport, true)
+                .Select(x=> new SportStaticListViewModel { SportID = x.ItemValue, SportName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" });
 
             return View(new MatchMonitorViewModel
             {
                 IsHostPermission = isHostPermission,
-                CustId = userId,
-                Reasons = mmStatic.Reasons.OrderBy(x => x.ReasonName),
-                Sports = mmStatic.Sports
+                CustId = CurrentSession.UserId,
+                Reasons = reasons,
+                Sports = sports
             });
         }
 
@@ -94,9 +98,7 @@
                     && IsValidDateRange(para.FromDate, para.ToDate))
                 {
                     var matchFromCTSInfos = Enumerable.Empty<GetMatchMonitorModel>();
-
-                    var mmStatic = _matchMonitorService.GetMMStaticList();
-
+                   
                     if (para.DateType == 1)
                         matchFromCTSInfos = GetMMByScanDate(para);
                     else
@@ -104,7 +106,7 @@
 
                     var mmDictionaryTicketsSummarys = GetMMFraudTicketsSummary(matchFromCTSInfos);
 
-                    matchMonitors = MergeMatchMonitorWithMMStaticAndTicketsSummary(matchFromCTSInfos, mmStatic, mmDictionaryTicketsSummarys);
+                    matchMonitors = MergeMatchMonitorWithMMStaticAndTicketsSummary(matchFromCTSInfos, mmDictionaryTicketsSummarys);
 
                     if (!string.IsNullOrEmpty(para.Event))
                     {
@@ -132,19 +134,25 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<GetMatchMonitorViewModel> MergeMatchMonitorWithMMStaticAndTicketsSummary(IEnumerable<GetMatchMonitorModel> matchFromCTSInfos, MatchMonitorStaticListModel mmStatic, Dictionary<string, MMFraudTicketsSummaryViewModel> mmDictionaryTicketsSummarys)
+        private IEnumerable<GetMatchMonitorViewModel> MergeMatchMonitorWithMMStaticAndTicketsSummary(IEnumerable<GetMatchMonitorModel> matchFromCTSInfos,      
+            Dictionary<string, MMFraudTicketsSummaryViewModel> mmDictionaryTicketsSummarys)
         {
+            var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
+            var bettypeSettings = GetBetTypeSettings(null, true);
+
             return
                 matchFromCTSInfos?
                     .Select(x =>
                         {
-                            var result = new GetMatchMonitorViewModel(x, mmStatic);
+                            var result = new GetMatchMonitorViewModel(x, reasons);
+                            var betChoiceHome = bettypeSettings.FirstOrDefault(y => y.BetTypeID == result.BettypeID)?.BetChoiceHome;
+                            var betChoiceAway = bettypeSettings.FirstOrDefault(y => y.BetTypeID == result.BettypeID)?.BetChoiceAway;
 
                             if (mmDictionaryTicketsSummarys != null)
                             {
-                                SetValueMMTicketsSummaryFromDictionary(result, mmDictionaryTicketsSummarys, PropertyNameOfSummaryHomeList);
+                                SetValueMMTicketsSummaryFromDictionary(result, betChoiceHome, mmDictionaryTicketsSummarys, PropertyNameOfSummaryHomeList);
 
-                                SetValueMMTicketsSummaryFromDictionary(result, mmDictionaryTicketsSummarys, PropertyNameOfSummaryAwayList);
+                                SetValueMMTicketsSummaryFromDictionary(result, betChoiceAway, mmDictionaryTicketsSummarys, PropertyNameOfSummaryAwayList);
                             }
 
                             return result;
@@ -152,10 +160,10 @@
                     .OrderBy(c => c.MatchSection);
         }
 
-        private void SetValueMMTicketsSummaryFromDictionary(GetMatchMonitorViewModel result, Dictionary<string, MMFraudTicketsSummaryViewModel> mmDictionaryTicketsSummarys, string[] propertyNameOfSummaryList)
+        private void SetValueMMTicketsSummaryFromDictionary(GetMatchMonitorViewModel result, string betChoice, 
+            Dictionary<string, MMFraudTicketsSummaryViewModel> mmDictionaryTicketsSummarys, string[] propertyNameOfSummaryList)
         {
-            if (mmDictionaryTicketsSummarys.TryGetValue(result.BuildTicketsSummaryDictionaryKey(propertyNameOfSummaryList[2]), out var mmFraudTicketsSummary) ||
-                mmDictionaryTicketsSummarys.TryGetValue(result.BuildTicketsSummaryDictionaryKey(propertyNameOfSummaryList[3]), out mmFraudTicketsSummary))
+            if (mmDictionaryTicketsSummarys.TryGetValue(result.BuildTicketsSummaryDictionaryKey(betChoice), out var mmFraudTicketsSummary))  
             {
                 result.SetPropertyValue(typeof(GetMatchMonitorViewModel).GetProperty(propertyNameOfSummaryList[0]), mmFraudTicketsSummary.Turnover);
 
@@ -235,7 +243,10 @@
                         MatchSection = m2.MatchSection,
                         IsSupportShowAllTickets = m2.IsGetDataFromOrigin == 1,
                         DataSource = m2.DataSource,
-                        FraudTrans = m1.FraudTrans
+                        FraudTrans = m1.FraudTrans,
+						BettypeNameDisplay = m1.BettypeNameDisplay,
+                        DetailsX = m1.DetailsX,
+                        DetailsY = m1.DetailsY
                     });
 
                 return newMatches;
@@ -246,40 +257,37 @@
 
         [HttpPost]
         public ActionResult GetMMFilterBetTypeBySportID(string sportIDs)
-        {
-            var result = this.GetFilterBetTypeBySportID(sportIDs);
-
-            return Json(result, JsonRequestBehavior.AllowGet);
+        {           
+            return Json(GetBetTypeSettings(sportIDs, true), JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<MatchMonitorBetTypeViewModel> GetFilterBetTypeBySportID(string sportIDs)
+        private IEnumerable<MatchMonitorBetTypeViewModel> GetBetTypeSettings(string sportIDs, bool isFilterMMDetection)
         {
-            var result = Enumerable.Empty<MatchMonitorBetTypeViewModel>();
-            var sportIds = sportIDs.Split(',').Select(x => Convert.ToInt32(x));
-
-            if (sportIds.Any())
+            var paras = new BetTypeSettingParaModel
             {
-                var data = _matchMonitorService.GetMMStaticList();
+                FunctionID = (int)BetTypeSettingsFunctionID.MMBetType,
+                BettypeIDList = null,
+                SportTypeIDList = sportIDs,
+                IsFilterMMDetection = isFilterMMDetection,
+                IsShowDetailsX = true,
+                Status = 1
+            };
 
-                if (data.BetTypes != null && data.BetTypes.Any())
-                {
-                    result = data.BetTypes.Join(sportIds,
-                      x1 => x1.SportID,
-                      x2 => x2,
-                      (x1, x2) => new MatchMonitorBetTypeViewModel
-                      {
-                          BetTypeID = x1.BetTypeID,
-                          BetTypeName = x1.BetTypeName,
-                          BetID = x1.BetID,
-                          SportID = x1.SportID,
-                          IsSelected = true
-                      }).GroupBy(g => new { g.BetTypeID, g.BetID })
-                      .Select(g => g.First());
-                }
-            }
-
-            return result;
-        }
+            return _commonService.GetBetTypeSettings(paras).Select(x => new MatchMonitorBetTypeViewModel
+            {
+                SportID = x.SportTypeID,
+                BetTypeID = x.BetTypeID,
+                BetTypeName = x.BetTypeNameDisplay,
+                BetID = _commonService.GetBetID(x.BetIDPattern, x.NameDetailsX),
+                BetIDPattern = x.BetIDPattern,
+                BetChoiceType = x.BetChoiceType,
+                BetChoiceHome = x.BetChoiceHome,
+                BetChoiceAway = x.BetChoiceAway,
+                IsSupportSuspicious = x.IsMMDetection,
+                IsSelected = true,
+                NameDetailsX = x.NameDetailsX
+            }).GroupBy(g => new { g.BetTypeID, g.BetID }).Select(g => g.First());
+        }    
 
         #endregion
 
@@ -297,6 +305,9 @@
                 ViewBag.BetTypeID = para?.BetTypeID;
                 ViewBag.BettypeName = para?.BettypeName ?? string.Empty;
                 ViewBag.BetIDToString = para?.BetID.ToString();
+                ViewBag.BetTypeSettings = GetBetTypeSettings(para.SportType.ToString(), false);
+                ViewBag.MapX = para?.MX;
+                ViewBag.MapYY = para?.MY;
                 ViewBag.HomeName = para?.HomeName.ToUpper() ?? string.Empty;
                 ViewBag.AwayName = para?.AwayName.ToUpper() ?? string.Empty;
                 ViewBag.LiveIndicator = para?.LiveIndicator ?? true;
@@ -439,15 +450,17 @@
 
                     if (fraudTicket != null)
                     {
-                        fraudFilterResult = _matchMonitorService.GetFraudFilterInfoDetail(para, fraudTicket);
+                        var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
+
+                        fraudFilterResult = _matchMonitorService.GetFraudFilterInfoDetail(para, fraudTicket, reasons);
 
                         _memoryCacheService.PushValueAsync(key, fraudFilterResult);
                     }
                 }
-            }
+            }      
 
             fraudFilterResult = fraudFilterResult ?? new MMDetailFilterViewModel();
-            fraudFilterResult.IsDisplaySingleGrid = _matchMonitorService.IsDisplaySingleGrid(para.BetTypeID);
+            fraudFilterResult.IsDisplaySingleGrid = para.BetChoiceType == 1;
 
             return fraudFilterResult;
         }
@@ -468,7 +481,9 @@
 
                     if (fraudTicket != null)
                     {
-                        allFilterResult = _matchMonitorService.GetFraudFilterInfoDetail(para, fraudTicket);
+                        var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
+
+                        allFilterResult = _matchMonitorService.GetFraudFilterInfoDetail(para, fraudTicket, reasons);
 
                         _memoryCacheService.PushValueAsync(key, allFilterResult);
                     }
@@ -493,7 +508,7 @@
             }
 
             allFilterResult = allFilterResult ?? new MMDetailFilterViewModel();
-            allFilterResult.IsDisplaySingleGrid = _matchMonitorService.IsDisplaySingleGrid(para.BetTypeID);
+            allFilterResult.IsDisplaySingleGrid = para.BetChoiceType == 1;
 
             return allFilterResult;
         }
@@ -608,7 +623,7 @@
 
             try
             {
-                if (!_matchMonitorService.IsDisplaySingleGrid(para.BetTypeID))
+                if (info.BetChoiceType != 1)
                 {
                     var matchDetailInfo = _matchMonitorService.GetMatchMonitorDetail(para);
 
@@ -630,12 +645,9 @@
 
                         mdItemList = _matchMonitorService.MergeFraudToAllMMDetail(mdItemList, fraudTicket?.AGroupReasonMerged);
 
-                        mdResult.HomeMatchItemList = mdItemList?.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)
-                               || string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.O), StringComparison.OrdinalIgnoreCase))
-                              .OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
-                        mdResult.AwayMatchItemList = mdItemList?.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)
-                                || string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.U), StringComparison.OrdinalIgnoreCase))
-                               .OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
+                        mdResult.HomeMatchItemList = mdItemList?.Where(x=>x.ChoiceOrder == 10).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
+
+                        mdResult.AwayMatchItemList = mdItemList?.Where(x => x.ChoiceOrder == 20).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();                       
 
                         mdResult.RecordsTotal = mdItemList?.Count() ?? 0;
                     }
@@ -677,7 +689,7 @@
                 var ticketDetail = fraudTicket.TicketDetails;
                 var mergeGroup = fraudTicket.MMDetailMergeGroup;
 
-                mmStatic = _matchMonitorService.GetMMStaticList();
+                var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
 
                 var custIDs = matchDetailInfo.Custs.Select(x => x.CustID).Distinct();
                 var custInfo = GetCustInfoByCustID(custIDs);
@@ -692,22 +704,18 @@
 
                 custInfo = GetCustInfoByCustID(custIDs);
 
-                var mergeInfo = _matchMonitorService.DrawColorFraudMMDetailWithMergeReasonAGroup(matchDetailInfo.VerifiedTrans, custInfo, ticketDetailGroup.TicketDetails, mergeGroup, mmStatic.Reasons);
+                var mergeInfo = _matchMonitorService.DrawColorFraudMMDetailWithMergeReasonAGroup(matchDetailInfo.VerifiedTrans, custInfo, ticketDetailGroup.TicketDetails, mergeGroup, reasons);
 
                 var mdItemList = MappingRobotStatus(mergeInfo, para.BetTypeID);
 
-                if (_matchMonitorService.IsDisplaySingleGrid(para.BetTypeID))
+                if (para.BetChoiceType == 1)
                 {
                     mdResult.ItemList = mdItemList.OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
                 }
                 else
-                {
-                    mdResult.HomeMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)
-                            || string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.O), StringComparison.OrdinalIgnoreCase))
-                           .OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
-                    mdResult.AwayMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)
-                            || string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.U), StringComparison.OrdinalIgnoreCase))
-                           .OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
+                {                  
+                    mdResult.HomeMatchItemList = mdItemList.Where(x => x.ChoiceOrder == 10).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
+                    mdResult.AwayMatchItemList = mdItemList.Where(x=> x.ChoiceOrder == 20).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();                 
                 }
 
                 mdResult.RecordsTotal = mdItemList?.Count() ?? 0;
@@ -735,11 +743,13 @@
 
                     if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
                     {
+                        var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
+
                         fraudMMDetailResult = _matchMonitorService.GetTicketDetailFraud(matchDetailInfo, para);
 
                         fraudMMDetailResult.MatchDetailInfo = matchDetailInfo;
 
-                        fraudMMDetailResult.AGroupReasonMerged = _matchMonitorService.MergeFraudReasonAGroup(fraudMMDetailResult);
+                        fraudMMDetailResult.AGroupReasonMerged = _matchMonitorService.MergeFraudReasonAGroup(fraudMMDetailResult, reasons);
 
                         _memoryCacheService.PushValue(key, fraudMMDetailResult);
                     }
@@ -784,18 +794,14 @@
 
             var mdItemList = DrawColorAllMMDetailAndUpdateValue(verifiedTrans, custInfo, ticketDetailGroup.TicketDetails, para.BetTypeID);
 
-            if (_matchMonitorService.IsDisplaySingleGrid(para.BetTypeID))
+            if (para.BetChoiceType == 1)
             {
                 ticketFromMainDb.ItemList = mdItemList.OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
             }
             else
             {
-                ticketFromMainDb.HomeMatchItemList = mdItemList?.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)
-                              || string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.O), StringComparison.OrdinalIgnoreCase))
-                             .OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
-                ticketFromMainDb.AwayMatchItemList = mdItemList?.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)
-                        || string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.U), StringComparison.OrdinalIgnoreCase))
-                       .OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
+                ticketFromMainDb.HomeMatchItemList = mdItemList?.Where(x=> x.ChoiceOrder == 10).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
+                ticketFromMainDb.AwayMatchItemList = mdItemList?.Where(x => x.ChoiceOrder == 20).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();               
             }
 
             ticketFromMainDb.RecordsTotal = mdItemList?.Count() ?? 0;
@@ -803,7 +809,7 @@
 
             return ticketFromMainDb;
         }
-
+       
         #endregion Detail Tickets
 
         #region Association Detect

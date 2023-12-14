@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
-    using Fanex.NAP.CTS.Model.MatchMonitor;
+    using Fanex.NAP.CTS.ViewModel.Common;
     using System.Collections.Generic;
 
     public class MatchMonitorViewModel
@@ -9,9 +9,9 @@
 
         public long CustId { get; set; }
        
-        public IEnumerable<MatchMonitorReasonModel> Reasons { get; set; }
+        public IEnumerable<ReasonStaticListViewModel> Reasons { get; set; }
 
-        public IEnumerable<MatchMonitorSportModel> Sports { get; set; }
+        public IEnumerable<SportStaticListViewModel> Sports { get; set; }
        
     }
 }

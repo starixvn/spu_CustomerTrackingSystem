@@ -639,7 +639,7 @@
             return Enumerable.Empty<GetAssociationDetectDetailViewModel>();
         }
         #endregion
-
+        
         #region Detail IP
         
         [HttpPost]
