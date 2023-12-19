@@ -12,10 +12,22 @@
 
         public string CustomerClassNameCN { get; set; }
 
+        public string CategoryNameCN3 { get; set; }
+
+        public string CategoryNameTHB { get; set; }
+
+        public string CategoryNameIND { get; set; }
+
         public string SabaRiskLevel { get; set; }
 
         public string SabaRiskLevelTCN { get; set; }
 
         public string SabaRiskLevelSCN { get; set; }
+
+        public string SabaRiskLevelCN3 { get; set; }
+
+        public string SabaRiskLevelTHB { get; set; }
+
+        public string SabaRiskLevelIND { get; set; }
     }
 }
