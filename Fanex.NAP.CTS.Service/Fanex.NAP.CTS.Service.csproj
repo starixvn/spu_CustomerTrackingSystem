@@ -175,7 +175,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Fanex.RemotingRef">
-      <Version>1.5.0</Version>
+      <Version>1.5.1</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.1</Version>
