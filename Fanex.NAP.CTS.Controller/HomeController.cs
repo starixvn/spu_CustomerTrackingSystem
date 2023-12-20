@@ -48,7 +48,10 @@
                        NapSettings.Settings.SiteId,
                        FSFunctionKeys.ProbationManagement,
                        NAP.Core.Business.Constant.Policy.Read);
+
             LogService.Info($"CTS test site");
+
+            var result = accountService.SearchAccounts("x");
 
             return View(CurrentSession.MenuItemList);
         }
