@@ -402,7 +402,9 @@
     <Content Include="App_Data\SQL\SPNames.AWS.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\SQL\SPNames.KLDR.xml" />
+    <Content Include="App_Data\SQL\SPNames.KLDR.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="App_Data\SQL\SPNames.UAT.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -539,12 +541,14 @@
     <Content Include="Web.ConnectionString.AWS.config">
       <DependentUpon>Web.ConnectionString.config</DependentUpon>
     </Content>
-    <None Include="Web.ConnectionString.KLDR.config">
+    <Content Include="Web.ConnectionString.KLDR.config">
       <DependentUpon>Web.ConnectionString.config</DependentUpon>
-    </None>
-    <None Include="Web.KLDR.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Web.KLDR.config">
       <DependentUpon>Web.config</DependentUpon>
-    </None>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NAP.CTS.Core\Fanex.NAP.CTS.Core.csproj">
