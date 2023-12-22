@@ -400,6 +400,9 @@
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="App_Data\AWS\ExternalSPNames.xml" />
+    <Content Include="App_Data\AWS\InternalSPNames.xml" />
+    <Content Include="App_Data\AWS\NAPFrameworkSpNames.xml" />
     <Content Include="App_Data\Dev\ExternalSPNames.xml" />
     <Content Include="App_Data\Dev\InternalSPNames.xml" />
     <Content Include="App_Data\Dev\NAPFrameworkSpNames.xml" />
@@ -412,14 +415,14 @@
     <Content Include="App_Data\Local\ExternalSPNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\AWS\ExternalSPNames.xml">
+    <Content Include="App_Data\KLDR\ExternalSPNames.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\AWS\InternalSPNames.xml">
+    <Content Include="App_Data\KLDR\InternalSPNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\AWS\NAPFrameworkSpNames.xml">
+    <Content Include="App_Data\KLDR\NAPFrameworkSpNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App_Data\PRO\InternalSPNames.xml">
