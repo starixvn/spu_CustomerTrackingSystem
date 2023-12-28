@@ -17,6 +17,8 @@
     using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Implement;
+    using System.Threading.Tasks;
+    using Fanex.NAP.CTS.Core.Helpers.Api;
 
     public class MatchMonitorService : IMatchMonitorService
     {
@@ -814,6 +816,39 @@
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
+        #endregion
+
+        #region Hold Key
+        public async Task<List<HoldKeyStatusGetModel>> GetHoldKeyStatus(Int64 matchID, string url)
+        {
+            if (matchID != 0 && !string.IsNullOrEmpty(url))
+            {
+                var para = new List<string> { matchID.ToString() };
+
+                return await ApiHelper.Post<List<HoldKeyStatusGetModel>>(url, para, 300);
+            }
+
+            return new List<HoldKeyStatusGetModel>();
+        }
+
+        public async Task<HoldKeyUpdateResultModel> UpdateHoldKeyStatus(HoldKeyUpdateViewModel parameters, string url)
+        {
+            if (parameters.MatchID != 0 
+                    && parameters.UserId != 0
+                    && !string.IsNullOrEmpty(url))
+            {
+                var para = new HoldKeyUpdateModel()
+                {
+                    matchIds = new List<string> { parameters.MatchID.ToString() },
+                    enabled = parameters.IsHold,
+                    userId = parameters.UserId
+                };
+
+                return await ApiHelper.Post<HoldKeyUpdateResultModel>(url, para, 300);
+            }
+
+            return new HoldKeyUpdateResultModel();
+        }
         #endregion
 
     }

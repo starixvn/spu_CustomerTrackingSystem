@@ -96,6 +96,10 @@
 
         public static string DeleteAFCAccountsURL => GetConfigStringByName("AFC_DeleteAccountsURL");
 
+        public static string GetHoldKeyMMDetailURL => GetConfigStringByName("MMDetail_HoldKeyGetURL");
+
+        public static string UpdateHoldKeyMMDetailURL => GetConfigStringByName("MMDetail_HoldKeyUpdateURL");
+
         public static int ImportEvidenceChunkSize
         {
             get

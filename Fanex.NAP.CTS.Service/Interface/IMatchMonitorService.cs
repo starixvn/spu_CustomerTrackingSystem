@@ -6,6 +6,7 @@
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     public interface IMatchMonitorService
     {
@@ -74,6 +75,14 @@
         DBResult UpdateUserFeedback(UpdateUserFeedbackViewModel para);
 
         DBResult DeleteUserFeedback(DeleteUserFeedbackViewModel para);
+
+        #endregion
+
+        #region Hold Key
+
+        Task<HoldKeyUpdateResultModel> UpdateHoldKeyStatus(HoldKeyUpdateViewModel parameters, string url);
+
+        Task<List<HoldKeyStatusGetModel>> GetHoldKeyStatus(Int64 matchID, string url);
 
         #endregion
 

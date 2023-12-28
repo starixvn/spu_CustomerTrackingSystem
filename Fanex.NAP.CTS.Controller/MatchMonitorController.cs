@@ -11,6 +11,7 @@
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.Common;
@@ -364,6 +365,7 @@
                 ViewBag.SportName = para?.SportName ?? string.Empty;
                 ViewBag.KOTime = para?.KOTime;
                 ViewBag.IsSupportShowAllTickets = para?.IsSupportShowAllTickets;
+                ViewBag.HoldKeyStatus = GetHoldKeyStatus(para?.MatchID ?? 0);
                 ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                                                                             NapSettings.Settings.SiteId,
                                                                             FSFunctionKeys.MatchMonitor,
@@ -1027,6 +1029,85 @@
         #endregion User Feedback
 
         #endregion Detail Page
+
+
+        #region Hold-Key
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailHoldKeyUpdate)]
+        public ActionResult UpdateHoldKeyStatus(HoldKeyUpdateViewModel paramters)
+        {
+            var result = new HoldKeyResultViewModel();
+
+            try
+            {
+                if (paramters.MatchID != 0)
+                {
+                    paramters.UserId = CurrentSession.UserId;
+
+                    var updateResult = _matchMonitorService.UpdateHoldKeyStatus(paramters, ConfigSettings.UpdateHoldKeyMMDetailURL);
+
+                    var statusResult = GetHoldKeyStatus(paramters.MatchID);
+
+                    result = new HoldKeyResultViewModel
+                    {
+                        IsSuccess = updateResult.Result.isSuccess,
+                        Message = updateResult.Result.msg,
+                        HoldKeyStatus = statusResult
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Update hold key status - Exception: "
+                                 + ex.Message
+                                 + ex.StackTrace + "\n"
+                                 + ex?.InnerException?.Message + "\n"
+                                 + $"DataInput: {JsonConvert.SerializeObject(paramters) + "\n"}"
+                                 + ex?.InnerException?.Source
+                                 + ex?.InnerException?.StackTrace);
+            }
+
+
+            return Json(new
+            {
+                data = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private HoldKeyStatusGetViewModel GetHoldKeyStatus(Int64 matchId)
+        {
+            var result = new HoldKeyStatusGetViewModel();
+
+            try
+            {
+                if (matchId != 0)
+                {
+                    var statusResult = _matchMonitorService.GetHoldKeyStatus(matchId, ConfigSettings.GetHoldKeyMMDetailURL).Result.FirstOrDefault();
+
+                    result = new HoldKeyStatusGetViewModel
+                    {
+                        IsHold = statusResult.isHold,
+                        UserName = statusResult.userName
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Get hold key status - Exception: "
+                  + ex.Message
+                  + ex.StackTrace + "\n"
+                  + ex?.InnerException?.Message + "\n"
+                  + $"DataInput: {JsonConvert.SerializeObject(matchId) + "\n"}"
+                  + ex?.InnerException?.Source
+                  + ex?.InnerException?.StackTrace);
+            }
+
+            return result;
+        }
+
+
+        #endregion
 
         #region Export to Excel
         [HttpPost]

@@ -1269,7 +1269,7 @@
 
 .hold-key {
     .toggle {
-        width: 86px;
+        width: 115px;
         height: 20px;
         margin: 0 auto;
         position: relative;
@@ -1281,7 +1281,7 @@
     }
 
     .toggle-on {
-        background: #4F971F;
+        background: #C1272D;
         -webkit-transition: all .5s .15s ease-out;
         transition: all .5s .15s ease-out;
     }
@@ -1292,7 +1292,7 @@
         top: .2rem;
         width: 16px;
         bottom: .4rem;
-        right: 6.8rem;
+        right: 9.7rem;
         background-color: #fff;
         border-radius: 19px;
         cursor: pointer;
@@ -1315,6 +1315,7 @@
         font-size: 1.3rem;
         font-weight: bold;
         cursor: pointer;
+        text-transform: none !important;
         -webkit-user-select: none; /* Chrome/Safari */
         -moz-user-select: none; /* Firefox */
         -ms-user-select: none; /* IE10+ */
@@ -1339,10 +1340,11 @@
         position: absolute;
         top: 0;
         bottom: 0;
-        right: .8rem;
+        right: 0.6rem;
         text-align: center;
         font-size: 1.3rem;
         font-weight: bold;
+        text-transform: none !important;
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;

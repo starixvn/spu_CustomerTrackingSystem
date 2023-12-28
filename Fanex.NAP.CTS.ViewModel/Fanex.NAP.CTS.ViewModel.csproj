@@ -202,6 +202,9 @@
     <Compile Include="MatchMonitor\FilterDependOn\TicketStatusViewModel.cs" />
     <Compile Include="MatchMonitor\GetMatchMonitorViewModel.cs" />
     <Compile Include="MatchMonitor\BetTeamOrderViewModel.cs" />
+    <Compile Include="MatchMonitor\HoldKey\HoldKeyStatusGetViewModel.cs" />
+    <Compile Include="MatchMonitor\HoldKey\HoldKeyResultViewModel.cs" />
+    <Compile Include="MatchMonitor\HoldKey\HoldKeyUpdateViewModel.cs" />
     <Compile Include="MatchMonitor\MMDetailFilterDropdownListViewModel.cs" />
     <Compile Include="MatchMonitor\MMDetailFilterTicketInfoViewModel.cs" />
     <Compile Include="MatchMonitor\MMDetailFilterViewModel.cs" />
