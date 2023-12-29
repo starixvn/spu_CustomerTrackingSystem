@@ -14,7 +14,7 @@
 		<Setting Key="CTS_DC_CustClassification_GetAllByCategory" SpName="CTS_DC_CustClassification_GetAllByCategory" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="Acc_CustomerUpdateCustomerClass" SpName="Acc_CustomerUpdateCustomerClass" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
 		<Setting Key="CTS_DC_CustClassification_UpdateProblemAccount" SpName="CTS_DC_CustClassification_UpdateProblemAccount" DbName="MySQL.CTS_DataCenter.Admin"/>
-		<Setting Key="CTS_DC_CustClassification_PA_Insert" SpName="CTS_DC_CustClassification_PA_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin"/>
+		<Setting Key="CTS_DC_CustClassification_PA_Insert" SpName="CTS_DC_CustClassification_PA_Insert_xpre" DbName="MySQL.CTS_DataCenter.Admin"/>
 		<Setting Key="CTS_DC_CustClassification_Get" SpName="CTS_DC_CustClassification_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
@@ -79,7 +79,7 @@
 	<Function name="RescanCustomerClassification">
 		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
 		<Setting Key="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" SpName="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" DbName="MySQL.CTS_Archive.Admin" />
-		<Setting Key="CTS_DC_CustClassification_PA_ReScan" SpName="CTS_DC_CustClassification_PA_ReScan" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_PA_ReScan" SpName="CTS_DC_CustClassification_PA_ReScan_xpre" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassification_PA_InsertRobot" SpName="CTS_DC_CustClassification_PA_InsertRobot" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_PA_ClearOld" SpName="CTS_DC_CustClassification_PA_ClearOld" DbName="MySQL.CTS_DataCenter.Admin" />
 

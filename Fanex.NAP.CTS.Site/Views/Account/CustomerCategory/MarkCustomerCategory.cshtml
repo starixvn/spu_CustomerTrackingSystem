@@ -39,7 +39,9 @@
                             }
                             else
                             {
-                                if (Model.IsPinCategory || paCategory.CategoryID == (int)CustomerCategoryID.SystemDetectGroupBetting)
+                                if (Model.IsPinCategory || paCategory.CategoryID == (int)CustomerCategoryID.SystemDetectGroupBetting
+                                    || paCategory.CategoryID == (int)CustomerCategoryID.SysDetectUnauthorizedLogin
+                                    || paCategory.CategoryID == (int)CustomerCategoryID.SysDetectUnauthorizedLoginLosing)
                                 {
                                     <label class="checkbox-container disabled">
                                         <input type="checkbox" disabled>

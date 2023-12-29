@@ -104,7 +104,7 @@
         RobotOCRD166 = 166,
         Robot81 = 81,
         Robot161 = 161,
-        ProPunterInactive = 1002,
+        ProPunterInactive = 1002      
     }
 
     public enum SourceTypeID
@@ -116,7 +116,8 @@
         Classification_ClassifyGBMatchMonitor = 35,
         Classification_Rescan = 36,
         Classification_InsertRobot = 37,
-        NoShow_Detail = 38
+        NoShow_Detail = 38,
+        UnauthorizedLogin_Customer = 39
     }
 
     public enum EvidenceQueueActionID
@@ -166,8 +167,10 @@
     public enum CustomerCategoryID
     {
         VVIP = 210,
-        SystemDetectGroupBetting = 63,
-        RobotOCRD = 165
+        SystemDetectGroupBetting = 63,       
+        RobotOCRD = 165,
+        SysDetectUnauthorizedLogin = 64,
+        SysDetectUnauthorizedLoginLosing = 104
     }
 
     public enum IPPatternType3S

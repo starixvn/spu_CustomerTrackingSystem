@@ -123,7 +123,9 @@
         {
             var data = _pamService.GetProblemAccountCategories()
                 .Where(x => x.CategoryID != (int)CustomerCategoryID.SystemDetectGroupBetting
-                        && x.CategoryID != (int)CustomerCategoryID.RobotOCRD)
+                        && x.CategoryID != (int)CustomerCategoryID.RobotOCRD
+                        && x.CategoryID != (int)CustomerCategoryID.SysDetectUnauthorizedLogin
+                        && x.CategoryID != (int)CustomerCategoryID.SysDetectUnauthorizedLoginLosing)
                 .OrderBy(x => x.Priorty);
 
             return Json(data, JsonRequestBehavior.AllowGet);

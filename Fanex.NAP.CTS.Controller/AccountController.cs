@@ -455,7 +455,7 @@
                         IsPAProbation = x.IsProbation,
                         CategoryIds = x.CategoryIDs,
                         CategoryNames = !string.IsNullOrEmpty(x.CategoryNames) ? x.CategoryNames : "-",
-                        CustomerClasses = x.CustomerClasses,
+                        CustomerClasses = x.CustomerClasses != "-1" ? x.CustomerClasses : "-",
                         GroupIDs = x.GroupIDs,
                         OriginGroupIDs = x.OriginGroupIDs
                     };
@@ -1954,7 +1954,22 @@
                 case (int)SourceTypeID.NoShow_Detail:
                     spanReason += $"{cc.CategoryName}";
                     break;
+                case (int)SourceTypeID.UnauthorizedLogin_Customer:
+                    if (!string.IsNullOrEmpty(cc.Remark))
+                    {
+                        var unauthLoginCust = JsonConvert.DeserializeObject<RemarkDetectUnauthorizedModel>(cc.Remark);
+                        spanReason += $"First Bet Date: {unauthLoginCust.FirstBetDate.ToString(Consts.FormatDateToString_MMMddyyyy)} " +
+                            $"| Detection Date: {unauthLoginCust.DetectionDate.ToString(Consts.FormatDateToString_MMMddyyyy)} " +
+                            $"- Bot Trans: { unauthLoginCust.Bot } ({unauthLoginCust.BotPCT}%) " +
+                            $"- Invalid Browser Info Trans: {unauthLoginCust.InvalidBrowser} ({unauthLoginCust.InvalidBrowserPCT}%) " +
+                            $" | Win loss: {winloss}";
+                    }
+                    else
+                    {
+                        spanReason += $"Win loss: {winloss}";
+                    }
 
+                    break;
                 default:
                     break;
             }

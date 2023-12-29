@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.ProblemAccountManagement
 {
     using Fanex.NAP.CTS.Core.BaseClasses;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
     using Fanex.NAP.CTS.Resource.Consts;
    
@@ -45,7 +46,12 @@
         {
             var comment = string.Empty;
 
-            if (string.IsNullOrEmpty(data.Remark) && data.IsFromTVS)
+            if (data.CategoryID == (int)CustomerCategoryID.SysDetectUnauthorizedLogin
+                || data.CategoryID == (int)CustomerCategoryID.SysDetectUnauthorizedLoginLosing)
+            {
+                comment = "-";
+            }
+            else if (string.IsNullOrEmpty(data.Remark) && data.IsFromTVS)
             {
                 if (data.TVSRequestID > 0)
                     comment += $"Void by RequestID: { data.TVSRequestID } ";
@@ -57,7 +63,7 @@
 
                 if (data.IsParlay != null && data.IsParlay.Value)
                     comment += $"| Parlay";
-            }
+            }           
             else
             {
                 comment = string.IsNullOrEmpty(data.Remark) ? "-" : data.Remark;
