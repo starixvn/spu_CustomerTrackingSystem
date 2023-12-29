@@ -2788,6 +2788,7 @@ function MatchMonitorDetail() {
         domElements.groupTable.height($(window).height() - detailpageHeight - breadcrumbButtonHeight - 77);
     }
 
+    //#region Hold Key
     function UpdateHoldKeyStatus(matchId, isHold) {
         common.showConfirmation('<div class="popup - content"> Are you sure to turn ' + (isHold ? 'on' : 'off')+ ' the Hold Key?".</div>', function () { 
             $.ajax(common.modifyRelativeUrl('MatchMonitor/UpdateHoldKeyStatus'), {
@@ -2813,10 +2814,11 @@ function MatchMonitorDetail() {
                     }
 
                     if (!response.data.IsSuccess) {
-                        common.showError(response.data.Message);
+                        common.showError((response.data.HoldKeyStatus.IsHold ? "Turn on" : "Turn off") + " Hold Key failed.");
+                        console.log(errMsg)
                     }
                     else {
-                        common.showSuccess((response.data.HoldKeyStatus.IsHold ? "Turn on" : "Turn off" ) + " hold key successfully");
+                        common.showSuccess((response.data.HoldKeyStatus.IsHold ? "Turn on" : "Turn off" ) + " Hold Key successfully.");
                     }
                 },
                 complete: function () {
@@ -2829,6 +2831,61 @@ function MatchMonitorDetail() {
             });
         });
     }
+    //#endregion Hold Key
+
+    //#region Ticket Voiding
+    function RedirectToTicketVoiding() {
+        let tranIds = [];
+
+        if (isDisplaySingleGrid) {
+            domElements.tblMMSG.DataTable().rows(function (idx, data, node) {
+                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                    tranIds.push(data.BetID);
+                }
+            });
+        } else {
+            domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
+                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                    tranIds.push(data.BetID);
+                }
+            });
+            domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
+                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                    tranIds.push(data.BetID);
+                }
+            });
+        }
+
+        if (tranIds.length > 2000) {
+            common.showError("Exceeded max 2000 Tickets.Please try again with a smaller range.");
+        } else if (tranIds.length = 0) {
+            common.showError("Please select at least 1 record to proceed.");
+        }
+
+        $.ajax(common.modifyRelativeUrl('MatchMonitor/RedirectToTicketVoiding'), {
+            type: 'POST',
+            data:
+            {
+                tranIds: tranIds
+            },
+            beforeSend: function () {
+                domElements.divPageLoading.addClass('loading-icon');
+            },
+            success: function (response) {
+              
+            },
+            complete: function () {
+                domElements.divPageLoading.removeClass('loading-icon');
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+                domElements.divPageLoading.removeClass('loading-icon');
+            }
+        });
+
+        
+    }
+    //#endregion Ticket Voiding
 
     function Initial() {
         SetupMultiselectFilter(domElements.cbbCC, "CC");

@@ -220,6 +220,7 @@
     <Compile Include="MatchMonitor\MMDetailMergeGroupViewModel.cs" />
     <Compile Include="MatchMonitor\MMFraudTicketsSummaryViewModel.cs" />
     <Compile Include="MatchMonitor\TicketDetailViewModel.cs" />
+    <Compile Include="MatchMonitor\TicketVoiding\TicketVoidingViewModel.cs" />
     <Compile Include="MatchMonitor\UserFeedback\DeleteUserFeedbackViewModel.cs" />
     <Compile Include="MatchMonitor\UserFeedback\GetMMUserFeedbackViewModel.cs" />
     <Compile Include="MatchMonitor\UserFeedback\InsertUserFeedbackViewModel.cs" />

@@ -1115,6 +1115,52 @@
 
         #endregion
 
+        #region Ticket Voiding
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailHoldKeyUpdate)]
+        public ActionResult RedirectToTicketVoiding(IEnumerable<string> tranIds)
+        {
+            var result = new HoldKeyResultViewModel();
+            const int maxTranIds = 2000;
+
+            try
+            {
+                if (tranIds != null && tranIds.Any() && tranIds.Count() < maxTranIds)
+                {
+                    var parameters = new TicketVoidingViewModel
+                    {
+                        OnUserId = CurrentSession.OnUserId,
+                        UserId = CurrentSession.UserId,
+                        Time = DateTime.Now.ToString(),
+                        TransIds = tranIds
+                    };
+
+                    string forwardLink = "";
+
+                    return Redirect(forwardLink);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Redirect to Ticket Voiding - Exception: "
+                                 + ex.Message
+                                 + ex.StackTrace + "\n"
+                                 + ex?.InnerException?.Message + "\n"
+                                 + $"DataInput: {JsonConvert.SerializeObject(tranIds) + "\n"}"
+                                 + ex?.InnerException?.Source
+                                 + ex?.InnerException?.StackTrace);
+            }
+
+
+            return Json(new
+            {
+                status = "ok"
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
+
         #region Export to Excel
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailExportToExcelRpt)]
