@@ -1041,18 +1041,24 @@
 
             try
             {
-                if (paramters.MatchID != 0)
+                if (paramters.MatchId != 0)
                 {
                     paramters.UserId = CurrentSession.UserId;
 
-                    var updateResult = _matchMonitorService.UpdateHoldKeyStatus(paramters, ConfigSettings.UpdateHoldKeyMMDetailURL);
+                    //var updateResult = _matchMonitorService.UpdateHoldKeyStatus(paramters, ConfigSettings.UpdateHoldKeyMMDetailURL);
 
-                    var statusResult = GetHoldKeyStatus(paramters.MatchID);
+                    var updateResult = new HoldKeyUpdateResultModel()
+                    {
+                        isSuccess = true,
+                        msg = ""
+                    };
+
+                    var statusResult = GetHoldKeyStatus(paramters.MatchId);
 
                     result = new HoldKeyResultViewModel
                     {
-                        IsSuccess = updateResult.Result.isSuccess,
-                        Message = updateResult.Result.msg,
+                        IsSuccess = updateResult.isSuccess,
+                        Message = updateResult.msg,
                         HoldKeyStatus = statusResult
                     };
                 }
@@ -1083,12 +1089,12 @@
             {
                 if (matchId != 0)
                 {
-                    var statusResult = _matchMonitorService.GetHoldKeyStatus(matchId, ConfigSettings.GetHoldKeyMMDetailURL).Result.FirstOrDefault();
+                    //var statusResult = _matchMonitorService.GetHoldKeyStatus(matchId, ConfigSettings.GetHoldKeyMMDetailURL).Result.FirstOrDefault();
 
                     result = new HoldKeyStatusGetViewModel
                     {
-                        IsHold = statusResult.isHold,
-                        UserName = statusResult.userName
+                        IsHold = false, //statusResult.isHold,
+                        UserName = "test" // statusResult.userName
                     };
                 }
             }

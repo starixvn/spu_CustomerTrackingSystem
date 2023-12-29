@@ -29,6 +29,7 @@ function MatchMonitorDetail() {
     let domElements = {
         detailpage: $('#detailpage'),
         divContent: $('#divContent'),
+        divPageLoading: $('#divPageLoading'),
         groupControl: $('#groupControl'),
         divFilterMonitor: $('#divFilterMonitor'),
         divFilterLoading: $('#divFilterLoading'),
@@ -113,6 +114,8 @@ function MatchMonitorDetail() {
         iconHTranstimeAutofill: $('#iconHTranstimeAutofill'),
         iconATranstimeAutofill: $('#iconATranstimeAutofill'),
         iconSGTranstimeAutofill: $('#iconSGTranstimeAutofill'),
+        tggHoldKey: $('#tggHoldKey'),
+        ttHoldKey: $('#ttHoldKey')
     };
 
     let transtime = {
@@ -2785,6 +2788,41 @@ function MatchMonitorDetail() {
         domElements.groupTable.height($(window).height() - detailpageHeight - breadcrumbButtonHeight - 77);
     }
 
+    function UpdateHoldKeyStatus(matchId, isHold) {
+        common.showConfirmation('<div class="popup - content">Are you sure to turn ' + isHold ? 'on' : 'off' + ' the Hold Key?".</div>', function () { 
+            //$.ajax(common.modifyRelativeUrl('MatchMonitor/UpdateHoldKeyStatus'), {
+            //    type: 'POST',
+            //    data:
+            //    {
+            //        MatchId: matchId,
+            //        IsHold: isHold
+            //    },
+            //    beforeSend: function () {
+            //        domElements.divPageLoading.addClass('loading-icon');
+            //    },
+            //    success: function (response) {
+            //        if (response.data.HoldKeyStatus.IsHold) {
+            //            domElements.tggHoldKey.addClass('toggle-on');
+            //            domElements.ttHoldKey.addClass('tooltiptext');
+            //            domElements.ttHoldKey.text(response.data.HoldKeyStatus.UserName);
+            //        }
+            //        else {
+            //            domElements.tggHoldKey.removeClass('toggle-on');
+            //            domElements.ttHoldKey.removeClass('tooltiptext');
+            //            domElements.ttHoldKey.text("");
+            //        }
+            //    },
+            //    complete: function () {
+            //        domElements.divPageLoading.removeClass('loading-icon');
+            //    },
+            //    error: function (errMsg) {
+            //        console.log(errMsg);
+            //        domElements.divPageLoading.removeClass('loading-icon');
+            //    }
+            //});
+        });
+    }
+
     function Initial() {
         SetupMultiselectFilter(domElements.cbbCC, "CC");
         SetupMultiselectFilter(domElements.cbbDanger, "Danger");
@@ -2963,6 +3001,10 @@ function MatchMonitorDetail() {
             let rangeTransTime = GetRangeTransTime();
 
             reasonFeedback.Initial(domElements.matchID, domElements.cbbMarket.val(), betTypeID, betID, domElements.sportType, reasonList, reasonCheckedList, rangeTransTime);
+        });
+
+        domElements.tggHoldKey.on('click', function () {
+            UpdateHoldKeyStatus(domElements.matchID, domElements.tggHoldKey.is('.toggle-on') == true ? false : true);
         });
     }
 

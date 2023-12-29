@@ -2,7 +2,7 @@
 {   
     public class HoldKeyUpdateViewModel
     {
-        public int MatchID { get; set; }
+        public int MatchId { get; set; }
 
         public long UserId { get; set; }
 

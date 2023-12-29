@@ -833,13 +833,13 @@
 
         public async Task<HoldKeyUpdateResultModel> UpdateHoldKeyStatus(HoldKeyUpdateViewModel parameters, string url)
         {
-            if (parameters.MatchID != 0 
+            if (parameters.MatchId != 0 
                     && parameters.UserId != 0
                     && !string.IsNullOrEmpty(url))
             {
                 var para = new HoldKeyUpdateModel()
                 {
-                    matchIds = new List<string> { parameters.MatchID.ToString() },
+                    matchIds = new List<string> { parameters.MatchId.ToString() },
                     enabled = parameters.IsHold,
                     userId = parameters.UserId
                 };
