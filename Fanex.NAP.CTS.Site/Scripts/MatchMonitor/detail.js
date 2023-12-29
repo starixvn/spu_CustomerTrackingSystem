@@ -2789,37 +2789,44 @@ function MatchMonitorDetail() {
     }
 
     function UpdateHoldKeyStatus(matchId, isHold) {
-        common.showConfirmation('<div class="popup - content">Are you sure to turn ' + isHold ? 'on' : 'off' + ' the Hold Key?".</div>', function () { 
-            //$.ajax(common.modifyRelativeUrl('MatchMonitor/UpdateHoldKeyStatus'), {
-            //    type: 'POST',
-            //    data:
-            //    {
-            //        MatchId: matchId,
-            //        IsHold: isHold
-            //    },
-            //    beforeSend: function () {
-            //        domElements.divPageLoading.addClass('loading-icon');
-            //    },
-            //    success: function (response) {
-            //        if (response.data.HoldKeyStatus.IsHold) {
-            //            domElements.tggHoldKey.addClass('toggle-on');
-            //            domElements.ttHoldKey.addClass('tooltiptext');
-            //            domElements.ttHoldKey.text(response.data.HoldKeyStatus.UserName);
-            //        }
-            //        else {
-            //            domElements.tggHoldKey.removeClass('toggle-on');
-            //            domElements.ttHoldKey.removeClass('tooltiptext');
-            //            domElements.ttHoldKey.text("");
-            //        }
-            //    },
-            //    complete: function () {
-            //        domElements.divPageLoading.removeClass('loading-icon');
-            //    },
-            //    error: function (errMsg) {
-            //        console.log(errMsg);
-            //        domElements.divPageLoading.removeClass('loading-icon');
-            //    }
-            //});
+        common.showConfirmation('<div class="popup - content"> Are you sure to turn ' + (isHold ? 'on' : 'off')+ ' the Hold Key?".</div>', function () { 
+            $.ajax(common.modifyRelativeUrl('MatchMonitor/UpdateHoldKeyStatus'), {
+                type: 'POST',
+                data:
+                {
+                    MatchId: matchId,
+                    IsHold: isHold
+                },
+                beforeSend: function () {
+                    domElements.divPageLoading.addClass('loading-icon');
+                },
+                success: function (response) {
+                    if (response.data.HoldKeyStatus.IsHold) {
+                        domElements.tggHoldKey.addClass('toggle-on');
+                        domElements.ttHoldKey.addClass('tooltiptext');
+                        domElements.ttHoldKey.text(response.data.HoldKeyStatus.UserName);
+                    }
+                    else {
+                        domElements.tggHoldKey.removeClass('toggle-on');
+                        domElements.ttHoldKey.removeClass('tooltiptext');
+                        domElements.ttHoldKey.text("");
+                    }
+
+                    if (!response.data.IsSuccess) {
+                        common.showError(response.data.Message);
+                    }
+                    else {
+                        common.showSuccess((response.data.HoldKeyStatus.IsHold ? "Turn on" : "Turn off" ) + " hold key successfully");
+                    }
+                },
+                complete: function () {
+                    domElements.divPageLoading.removeClass('loading-icon');
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                    domElements.divPageLoading.removeClass('loading-icon');
+                }
+            });
         });
     }
 

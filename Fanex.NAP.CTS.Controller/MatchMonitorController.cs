@@ -1045,20 +1045,21 @@
                 {
                     paramters.UserId = CurrentSession.UserId;
 
-                    //var updateResult = _matchMonitorService.UpdateHoldKeyStatus(paramters, ConfigSettings.UpdateHoldKeyMMDetailURL);
-
-                    var updateResult = new HoldKeyUpdateResultModel()
+                    var updateResult = _matchMonitorService.UpdateHoldKeyStatus(paramters, ConfigSettings.UpdateHoldKeyMMDetailURL);
+                    
+                    if (!updateResult.Result.isSuccess)
                     {
-                        isSuccess = true,
-                        msg = ""
-                    };
-
+                        LogService.Error($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Update hold key status - Exception: "
+                                         + updateResult.Result.msg
+                                         + $" DataInput: {JsonConvert.SerializeObject(paramters) + "\n"}");
+                    }   
+                    
                     var statusResult = GetHoldKeyStatus(paramters.MatchId);
 
                     result = new HoldKeyResultViewModel
                     {
-                        IsSuccess = updateResult.isSuccess,
-                        Message = updateResult.msg,
+                        IsSuccess = updateResult.Result.isSuccess,
+                        Message = updateResult.Result.msg,
                         HoldKeyStatus = statusResult
                     };
                 }
@@ -1089,12 +1090,12 @@
             {
                 if (matchId != 0)
                 {
-                    //var statusResult = _matchMonitorService.GetHoldKeyStatus(matchId, ConfigSettings.GetHoldKeyMMDetailURL).Result.FirstOrDefault();
+                    var statusResult = _matchMonitorService.GetHoldKeyStatus(matchId, ConfigSettings.GetHoldKeyMMDetailURL).Result.FirstOrDefault();
 
                     result = new HoldKeyStatusGetViewModel
                     {
-                        IsHold = false, //statusResult.isHold,
-                        UserName = "test" // statusResult.userName
+                        IsHold = statusResult.isHold,
+                        UserName = statusResult.userName
                     };
                 }
             }
@@ -1111,7 +1112,6 @@
 
             return result;
         }
-
 
         #endregion
 
