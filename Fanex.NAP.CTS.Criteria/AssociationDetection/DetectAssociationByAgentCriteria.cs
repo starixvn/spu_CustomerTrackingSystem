@@ -10,7 +10,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_AssociationDetection_Agent_DetectGroup";
+            return "CTS_DC_Association_Agent_GetCustEdge";
         }
 
         public override bool IsValid()

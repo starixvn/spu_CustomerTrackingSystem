@@ -23,6 +23,13 @@
         All = 0
     }
 
+    public enum AssociationDetectionType
+    {
+        Device = 1,
+        AI = 2,
+        IP = 4
+    }
+
     public enum EvidenceStatus
     {
         All,

@@ -28,7 +28,7 @@
             return target;
         }
 
-        public static string SerializeObj(object obj)
+        public static string SerializeObj<T>(T obj)
         {
             var serializer = new JavaScriptSerializer();
             serializer.MaxJsonLength = Int32.MaxValue;
