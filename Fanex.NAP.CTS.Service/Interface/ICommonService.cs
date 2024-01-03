@@ -25,6 +25,7 @@
         IEnumerable<StaticListModel> GetStaticLists(int listID, bool isStatusActive);
 
         IEnumerable<BetTypeSettingModel> GetBetTypeSettings(BetTypeSettingParaModel infos);
-        
+
+        IEnumerable<SportBettypeViewModel> GetMainSportBettype(SportBettypeModel model);
     }
 }

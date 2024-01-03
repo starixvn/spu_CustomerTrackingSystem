@@ -539,6 +539,18 @@
     <Content Include="Content\scss\pages\common\maintenance.min.css">
       <DependentUpon>maintenance.css</DependentUpon>
     </Content>
+    <Content Include="Content\scss\pages\danger-monitor\danger-monitor-detail.css">
+      <DependentUpon>danger-monitor-detail.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\danger-monitor\danger-monitor-detail.min.css">
+      <DependentUpon>danger-monitor-detail.css</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\danger-monitor\danger-monitor.css">
+      <DependentUpon>danger-monitor.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\danger-monitor\danger-monitor.min.css">
+      <DependentUpon>danger-monitor.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\pages\evidence\evidence.css">
       <DependentUpon>evidence.scss</DependentUpon>
     </Content>
@@ -555,6 +567,8 @@
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.ttf" />
     <Content Include="Content\scss\pages\associated-group-monitor\associated-group-monitor.scss" />
     <Content Include="Content\scss\components\_vertical-tabs.scss" />
+    <Content Include="Content\scss\pages\danger-monitor\danger-monitor-detail.scss" />
+    <Content Include="Content\scss\pages\danger-monitor\danger-monitor.scss" />
     <None Include="Content\scss\pages\latest-transaction\latest-transaction.scss" />
     <Content Include="Content\scss\pages\latest-transaction\latest-transaction.css">
       <DependentUpon>latest-transaction.scss</DependentUpon>
@@ -700,6 +714,8 @@
     <Content Include="Scripts\AssociationDetection\index.js" />
     <Content Include="Scripts\AssociationReport\detail.js" />
     <Content Include="Scripts\AssociationReport\index.js" />
+    <Content Include="Scripts\DangerMonitor\detail.js" />
+    <Content Include="Scripts\DangerMonitor\index.js" />
     <Content Include="Scripts\DataTables_New\AutoFill-2.3.4\css\autoFill.bootstrap.css" />
     <Content Include="Scripts\DataTables_New\AutoFill-2.3.4\css\autoFill.bootstrap.min.css" />
     <Content Include="Scripts\DataTables_New\AutoFill-2.3.4\css\autoFill.bootstrap4.css" />
@@ -1146,6 +1162,8 @@
     <Content Include="WebConfigs\Web.KLDR.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views\DangerMonitor\Detail.cshtml" />
+    <Content Include="Views\DangerMonitor\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

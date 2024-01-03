@@ -151,9 +151,12 @@
     <Compile Include="Common\ReasonStaticListViewModel.cs" />
     <Compile Include="Common\SiteGroupViewModel.cs" />
     <Compile Include="Common\SiteViewModel.cs" />
+    <Compile Include="Common\SportBettypeViewModel.cs" />
     <Compile Include="Common\SportStaticListViewModel.cs" />
     <Compile Include="Common\SubscriberGroupViewModel.cs" />
     <Compile Include="Common\SubscriberViewModel.cs" />
+    <Compile Include="DangerMonitor\DangerMonitorBetTypeViewModel.cs" />
+    <Compile Include="DangerMonitor\DangerMonitorViewModel.cs" />
     <Compile Include="Evidence\Evidence.cs" />
     <Compile Include="Evidence\GeneralInformationPlaceEvidenceByAccount.cs" />
     <Compile Include="Evidence\InformationEvidenceByAccount.cs" />

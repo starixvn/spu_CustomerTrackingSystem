@@ -142,5 +142,13 @@
   {
     "outputFile": "Content/scss/vendors/month-picker/month-picker.css",
     "inputFile": "Content/scss/vendors/month-picker/month-picker.scss"
+  },
+  {
+    "outputFile": "Content/scss/pages/danger-monitor/danger-monitor-detail.css",
+    "inputFile": "Content/scss/pages/danger-monitor/danger-monitor-detail.scss"
+  },
+  {
+    "outputFile": "Content/scss/pages/danger-monitor/danger-monitor.css",
+    "inputFile": "Content/scss/pages/danger-monitor/danger-monitor.scss"
   }
 ]

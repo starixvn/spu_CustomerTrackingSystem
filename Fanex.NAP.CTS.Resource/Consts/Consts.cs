@@ -476,6 +476,11 @@
             AIRobot
         }
 
+        public enum ProductType
+        {
+            SportBook = 1
+        }
+
         public enum CustomerCategorySportType
         {
             [Description("Soccer")]

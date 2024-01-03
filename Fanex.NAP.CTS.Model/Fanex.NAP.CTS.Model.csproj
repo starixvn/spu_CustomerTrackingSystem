@@ -300,6 +300,7 @@
     <Compile Include="Common\CommonCustomerClassModel.cs" />
     <Compile Include="Common\MainMatchModel.cs" />
     <Compile Include="Common\SiteModel.cs" />
+    <Compile Include="Common\SportBettypeModel.cs" />
     <Compile Include="Common\StaticListModel.cs" />
     <Compile Include="Common\SubscriberGroupModel.cs" />
     <Compile Include="Association\AssociationWithCategory.cs" />
@@ -350,6 +351,7 @@
     <Compile Include="CustomerClassification\ProblemAccount\InsertProblemAccountModel.cs" />
     <Compile Include="CustomerClassification\LatestClassification4ReportModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\RescanCustClassificationModel.cs" />
+    <Compile Include="DangerMonitor\DangerMonitorSearchModel.cs" />
     <Compile Include="DTO\CustomerEvidence.cs" />
     <Compile Include="DTO\CustomerEvidenceForTW.cs" />
     <Compile Include="GraphDB\AssDetection\DetectAssGetDetailParams.cs" />

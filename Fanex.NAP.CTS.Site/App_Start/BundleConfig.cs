@@ -11,7 +11,7 @@
                         "~/Scripts/JQuery/jquery-{version}.js",
                         "~/Scripts/JQuery/jquery-ui-1.12.1.min.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(                        
+            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/JQuery/jquery.validate*"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
@@ -36,11 +36,14 @@
                       "~/Content/scss/pages/dashboard/dashboard.min.css"));
 
             RegisterCTSCoreBundles(bundles);
-            RegisterSearchBoxBundles(bundles);           
-            RegisterNotificationBundles(bundles);            
+            RegisterSearchBoxBundles(bundles);
+            RegisterNotificationBundles(bundles);
 
             RegisterMatchMonitorBundles(bundles);
-            RegisterMatchMonitorDetailBundles(bundles);            
+            RegisterMatchMonitorDetailBundles(bundles);
+
+            RegisterDangerMonitorBundles(bundles);
+            RegisterDangerMonitorDetailBundles(bundles);
 
             RegisterBettingStatistic(bundles);
 
@@ -89,6 +92,35 @@
             RegisterRobotReport(bundles);
         }
 
+        private static void RegisterDangerMonitorDetailBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/danger-monitor-detail-scripts").Include(
+               "~/Scripts/select2.min.js",
+               "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
+               "~/Scripts/DangerMonitor/detail.js"));
+
+            bundles.Add(new StyleBundle("~/danger-monitor-detail-styles").Include(
+                "~/Content/scss/vendors/select2.min.css",
+                 "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
+                "~/Content/scss/MultipleSelect/jquery.multiselect.css",
+                "~/Content/scss/pages/danger-monitor/danger-monitor-detail.css",
+                "~/Content/scss/vendors/jquery-ui/base/tagify.css"));
+        }
+
+        private static void RegisterDangerMonitorBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/danger-monitor-scripts").Include(
+               "~/Scripts/select2.min.js",
+               "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
+               "~/Scripts/DangerMonitor/index.js"));
+
+            bundles.Add(new StyleBundle("~/danger-monitor-styles").Include(
+                "~/Content/scss/vendors/select2.min.css",
+                 "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
+                "~/Content/scss/MultipleSelect/jquery.multiselect.css",
+                "~/Content/scss/pages/danger-monitor/danger-monitor.css"));
+        }
+
         private static void RegisterCTSCoreBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/core").Include(
@@ -120,12 +152,12 @@
 
             bundles.Add(new ScriptBundle("~/notification-setting-scripts").Include("~/Scripts/NotificationSetting/notification-setting.js"));
         }
-                 
+
         private static void RegisterBettingStatistic(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/statistic-scripts")
                 .Include("~/Scripts/highcharts/highcharts.js",
-                "~/Scripts/highcharts/full-screen.js",                
+                "~/Scripts/highcharts/full-screen.js",
                 "~/Scripts/Account/BettingStatistic/sport-statistic-scripts.js",
                 "~/Scripts/Account/BettingStatistic/turnover-by-bettype.js",
                 "~/Scripts/Account/BettingStatistic/winlost-statistic-scripts.js"
@@ -156,7 +188,7 @@
         {
             bundles.Add(new ScriptBundle("~/account/transaction-history-scripts").Include("~/Scripts/Account/TransactionHistory/*.js"));
         }
-        
+
         private static void RobotClassificationBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/account/robot-classification-scripts").Include("~/Scripts/Account/RobotClassification/*.js"));
@@ -321,7 +353,7 @@
         private static void RegisterMatchMonitorBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/match-monitor-scripts").Include(
-               "~/Scripts/select2.min.js",              
+               "~/Scripts/select2.min.js",
                "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
                "~/Scripts/MatchMonitor/index.js"));
 
@@ -348,7 +380,7 @@
                 "~/Content/scss/pages/match-monitor/match-monitor-detail.css",
                 "~/Content/scss/vendors/jquery-ui/base/tagify.css"));
         }
-        
+
         private static void RegisterProblemCaseMonitor(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/problem-case-monitor-scripts").Include(
@@ -394,7 +426,7 @@
 
         private static void RegisterAssociatedGroupMonitor(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/associated-group-monitor-scripts").Include(              
+            bundles.Add(new ScriptBundle("~/associated-group-monitor-scripts").Include(
                 "~/Scripts/tagify/jquery.tagify.min.js",
                 "~/Scripts/tagify/tagify.min.js",
                 "~/Scripts/select2.min.js",
@@ -402,12 +434,12 @@
                 "~/Scripts/AssociatedGroupMonitor/index.js",
                 "~/Scripts/AssociatedGroupMonitor/transfer-account.js"));
 
-            bundles.Add(new StyleBundle("~/associated-group-monitor-styles").Include(               
+            bundles.Add(new StyleBundle("~/associated-group-monitor-styles").Include(
                 "~/Content/scss/vendors/jquery-ui/base/tagify.css",
                 "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
                 "~/Content/scss/MultipleSelect/jquery.multiselect.css",
                 "~/Content/scss/vendors/select2.min.css",
-                "~/Content/scss/pages/associated-group-monitor/associated-group-monitor.css"));           
+                "~/Content/scss/pages/associated-group-monitor/associated-group-monitor.css"));
         }
 
         private static void RegisterRobotReport(BundleCollection bundles)

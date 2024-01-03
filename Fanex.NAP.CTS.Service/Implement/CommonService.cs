@@ -182,5 +182,16 @@
             return repository.Fetch<BetTypeSettingModel>(criteria);
         }
 
+        public IEnumerable<SportBettypeViewModel> GetMainSportBettype(SportBettypeModel model)
+        {
+            var criteria = new GetCommonSportBettypeCriteria
+            {
+                ProductId = model.ProductId,
+                BettypeList = model.BettypeList,
+                SportTypeList = model.SportTypeList
+            };
+
+            return repository.Fetch<SportBettypeViewModel>(criteria);
+        }
     }
 }
