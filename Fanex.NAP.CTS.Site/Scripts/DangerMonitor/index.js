@@ -261,35 +261,136 @@
         FetchSports();
 
         domElements.btnGenerate.on('click', function () {
-            let dangers = domElements.cbbDgr.val();
+            dataTable ? dataTable.ajax.reload(null, true) : dataTable = GenerateGrid();
+        });
+    }
 
-            let params = {
-                FromDate: domElements.dpkFromDate.val(),
-                ToDate: domElements.dpkToDate.val(),
-                Danger1: GetDangerList(dangers, 1),
-                Danger2: GetDangerList(dangers, 2),
-                Danger3: GetDangerList(dangers, 3),
-                Danger4: GetDangerList(dangers, 4),
-                Danger5: GetDangerList(dangers, 5),
-                Sports: domElements.cbbSport.val().join(),
-                Event: domElements.txtEvent.val().trim().toUpperCase(),
-                Market: domElements.cbbMarket.val(),
-                MatchSection: domElements.cbbMatchSection.val().join(),
-                BetTypes: JSON.stringify(domElements.cbbBetType.val().map(x => ({
+    function GenerateGrid() {
+
+        let data = {
+            FromDate: function () { return domElements.dpkFromDate.val(); },
+            ToDate: function () { return !domElements.dpkToDate.val().includes('--- --,----') ? domElements.dpkToDate.val() : null },
+            DangerList: function () { return JSON.stringify(GetDangerList()) },
+            Sports: function () { return domElements.cbbSport.val().join() },
+            Event: function () { return domElements.txtEvent.val().trim().toUpperCase() },
+            Market: function () { return domElements.cbbMarket.val() == "" ? "0,1" : domElements.cbbMarket.val() },
+            MatchSection: function () { return domElements.cbbMatchSection.val().join() },
+            BetTypes: function () {
+                return JSON.stringify(domElements.cbbBetType.val().map(x => ({
                     "BetType": bettypeList[x].BetType,
                     "BetChoiceType": bettypeList[x].BetChoiceType,
                     "BetChoiceHome": bettypeList[x].BetChoiceType == 2 ? bettypeList[x].BetChoiceHome : undefined,
                     "BetChoiceAway": bettypeList[x].BetChoiceType == 2 ? bettypeList[x].BetChoiceAway : undefined,
                     "BetID": bettypeList[x].BetID
-                }))),
-            };
+                })))
+            },
+        };
 
-            console.log(params);
+        return domElements.tblMonitor.DataTable({
+            serverSide: false,
+            ajax: {
+                url: common.modifyRelativeUrl('DangerMonitor/GetDangerMonitor'),
+                type: 'POST',
+                data: data,
+                beforeSend: function () {
+                    domElements.tblMonitor.find('tbody').addClass('loading');
+                },
+                complete: function () {
+                    domElements.tblMonitor.find('tbody').removeClass('loading');
+                },
+                error: function (error) {
+                    domElements.tblMonitor.find('tbody').removeClass('loading');
+                    console.log(error);
+                }
+            },
+            dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
+            pagingType: "full_numbers",
+            language: {
+                lengthMenu: "Page size _MENU_",
+                paginate: {
+                    first: "<span class=\"icon-chevron-left\"></span><span class=\"icon-chevron-left\"></span>",
+                    last: "<span class=\"icon-chevron-right\"></span><span class=\"icon-chevron-right\"></span>",
+                    next: "",
+                    previous: ""
+                },
+                info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
+                infoEmpty: "",
+                zeroRecords: "There's no data"
+            },
+            ordering: false,
+            searching: false,
+            lengthMenu: [1000, 1500, 2000],
+            pageLength: 1000,
+            scrollX: false,
+            scrollCollapse: true,
+            scrollY: `${$(window).height() - 340}px`,
+            columnDefs: [
+                { targets: "_all", defaultContent: "-" },
+                { targets: [0, 1, 2, 3, 4, 5], className: "text-center" },
+                { targets: [6, 7, 8, 9], className: "text-right" },
+                { targets: [0], width: "4%" },
+                { targets: [1], width: "16%" },
+                { targets: [2], width: "20%" },
+                { targets: [3], width: "4%" },
+                { targets: [4], width: "6%" },
+                { targets: [5], width: "10%" },
+                { targets: [6], width: "6%" },
+                { targets: [7], width: "6%" },
+                { targets: [8], width: "4%" },
+                { targets: [9], width: "4%" },
+                { targets: [10], visible: false }
+            ],
+            columns: [
+                { data: obj => obj.SportName },
+                { data: obj => obj.LeagueName },
+                {
+                    data: obj => () => {
+                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&BettypeName={5}&MatchSection={6}&Market={7}&LeagueID={8}&BetID={9}&SportType={10}&KOTime={11}";
+                        let para = paramTemplate.format(obj.EventDateToString, obj.MatchID, obj.HomeID, obj.AwayID, obj.BettypeID, obj.BettypeName, obj.MatchSection, obj.Market, obj.LeagueID, obj.BetID, obj.SportType, obj.KOTime);
+
+                        return '<a class="click-view-details" href="DangerMonitor/Detail?' + para + '" target="_blank">' + obj.MatchName + '</a>';
+                    }
+                },
+                { data: obj => obj.MarketName },
+                { data: obj => obj.EventDateToString },
+                { data: obj => obj.BettypeName },
+                { data: obj => ConvertNumberToThousandsString(Math.round(obj.TotalAmtHome)) },
+                { data: obj => obj.BetChoiceType == 2 ? ConvertNumberToThousandsString(Math.round(obj.TotalAmtAway)) : '-' },
+                { data: obj => ConvertNumberToThousandsString(obj.TotalTicketHome) },
+                { data: obj => obj.BetChoiceType == 2 ? ConvertNumberToThousandsString(obj.TotalTicketAway) : '-' },
+                { data: obj => obj.MatchSectionName },
+            ],
+            drawCallback: function () {
+                var api = this.api();
+                var rows = api.rows({ page: 'current' }).nodes();
+                var data = api.rows({ page: 'current' }).data();
+                var last = null;
+
+                api.column(10, { page: 'current' }).data().each(function (group, i) {
+                    if (last !== group) {
+                        $(rows).eq(i).before(
+                            '<tr class="group group group-site"><td colspan="13"> ' + data[i].MatchSectionName + '</td></tr>'
+                        );
+
+                        last = group;
+                    }
+                });
+            },
+            rowCallback: function (row, data) {
+                if (data.BetChoiceType != 2) {
+                    $('td:eq(7)', row).addClass("betchoice-1");
+                    $('td:eq(9)', row).addClass("betchoice-1");
+                }
+            }
         });
     }
 
-    function GetDangerList(list, groupNumber) {
-        return list.filter(x => x.split('-')[0] == groupNumber).map(x => Number(x.split('-')[1]));
+    function GetDangerList() {
+        return domElements.cbbDgr.val().map((x) => {
+            let key = x.split('-')[0];
+            let val = Number(x.split('-')[1]);
+            return { [`Danger${key}`]: val };
+        });
     }
 
     $(document).ready(function () {
@@ -302,3 +403,7 @@
 }
 
 $(DangerousSetting);
+
+function ConvertNumberToThousandsString(x) {
+    return x ? x.toLocaleString() : 0;
+}

@@ -3,13 +3,17 @@
     using Fanex.NAP.CTS.Model.DangerMonitor;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.ViewModel.MatchMonitor;
+    using System.Linq;
     using System.Web.Mvc;
 
     public class DangerMonitorController : BaseController
     {
         private readonly IDangerMonitorService _dangerMonitorService;
+        private readonly MatchMonitorController _matchMonitor;
         public DangerMonitorController() {
             _dangerMonitorService = new DangerMonitorService();
+            _matchMonitor = new MatchMonitorController();
         }
 
         #region danger main
@@ -31,17 +35,20 @@
         [HttpPost]
         public ActionResult GetDangerMonitor(DangerMonitorSearchModel filter)
         {
+            var data = _dangerMonitorService.GetDangerMonitor(filter);
             return Json(new
             {
-                data = string.Empty
+                data = data
             }, JsonRequestBehavior.AllowGet);
         }
         #endregion
 
         #region danger detail
-        public ActionResult Detail()
+        public ActionResult Detail(MatchMonitorDetailViewModel para)
         {
-            return View();
+            para.IsSupportShowAllTickets = true;
+            return _matchMonitor.Detail(para);
+            //return View();
         }
         #endregion
     }

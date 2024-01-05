@@ -1,4 +1,5 @@
-﻿
+﻿@using Fanex.NAP.CTS.Resource.Consts;
+
 @{
     ViewBag.Title = "DANGER MONITOR DETAIL";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -12,16 +13,16 @@
     <div class="content" id="divContent">
         <div class="page-title-match">
             <div class="title-box-left">
-                <span class="title-description">DANGER MONITOR DETAIL</span>
-                @*<span class="title-match-name"> @ViewBag.HomeName <span class="title-match-vs"> vs </span> @ViewBag.AwayName</span>
+                <span class="title-description">MATCH MONITOR DETAIL</span>
+                <span class="title-match-name"> @ViewBag.HomeName <span class="title-match-vs"> vs </span> @ViewBag.AwayName</span>
                 <span class="title-league-name"> @ViewBag.LeagueName</span>
-                <span class="title-ko-time"> KO Time: @ViewBag.KOTime</span>*@
+                <span class="title-ko-time"> KO Time: @ViewBag.KOTime</span>
 
             </div>
             <div class="title-box-right">
                 <span class="title-sport-name">
-                    @*<span id="spanSportBetTypeInfo">@ViewBag.SportName - @ViewBag.BettypeName -</span>
-                    <span class="title-market" id="spanMarketInfo">@ViewBag.MarketName</span>*@
+                    <span id="spanSportBetTypeInfo">@ViewBag.SportName - @ViewBag.BettypeName -</span>
+                    <span class="title-market" id="spanMarketInfo">@ViewBag.MarketName</span>
                     <span class="title-market-line"> | </span>
                     <span class="title-market" id="spanReasonInfo"> GB, FG</span>
                 </span>
@@ -51,7 +52,7 @@
                         <div class="first-row-info select-group-bettype">
                             <label class="info-text">Bet Type</label>
                             <select class="control info-select" id="cbbBetType" name="state">
-                                @*@foreach (var item in ViewBag.BetTypeSettings)
+                                @foreach (var item in ViewBag.BetTypeSettings)
                                 {
                                     var itemValue = item.BetTypeID + "_" + item.BetID;
 
@@ -63,7 +64,7 @@
                                     {
                                         <option value="@itemValue" data-bettypeid="@item.BetTypeID" data-betidpattern="@item.BetIDPattern" data-betchoicetype="@item.BetChoiceType" data-betchoicehome="@item.BetChoiceHome" data-betchoiceaway="@item.BetChoiceAway" data-betid="@item.BetID">@item.BetTypeName</option>
                                     }
-                                }*@
+                                }
 
                             </select>
                         </div>
@@ -86,15 +87,15 @@
                             </select>
                         </div>
 
-                        <div class="first-row-line"></div>
+                        <!-- <div class="first-row-line"></div>
 
-                        @*<div class="first-row-info">
+                        <div class="first-row-info">
                             <label class="text info-text">Tickets Type</label>
                             <select class="control info-select" id="cbbTypeOfTickets">
                                 <option value="2">Suspicious</option>
                                 <option value="3">All</option>
                             </select>
-                        </div>*@
+                        </div> -->
 
                         <div class="first-row-line"></div>
 
@@ -113,7 +114,7 @@
 
                 <div class="group-info filter-group border" style="padding: 0px;">
                     <div class="form-filter">
-                        <div class="group width-160 second-row-depend-1 start-box" @*@(ViewBag.IsDisableScoreFilter ? "hidden" : "")*@>
+                        <div class="group width-160 second-row-depend-1 start-box" @(ViewBag.IsDisableScoreFilter ? "hidden" : "")>
                             <label class="text">Score</label>
                             <select class="control width-select" id="cbbMatchScore" multiple="multiple">
                                 @*@if (ViewBag.MatchScore != null)
@@ -126,7 +127,7 @@
                             </select>
                         </div>
 
-                        <div class="group width-160 second-row-depend-1" @*@(ViewBag.IsDisableScoreFilter ? "start-box": "")"*@>
+                        <div class="group width-160 second-row-depend-1 @(ViewBag.IsDisableScoreFilter ? "start-box": "")">
                             <label class="text">Site</label>
                             <select class="control width-select-one" id="cbbSites">
                                 <option value="A">All</option>
@@ -214,8 +215,8 @@
                         <button class="button-primary-outline-1" id="btnImportNewTicket">Import New Tickets</button>
                         <button class="button-primary-outline-1" id="btnShowPopupAssDetection">Detect Association</button>
                         <button class="button-primary-outline-1" id="btnExportExcel">Export Excel</button>
-                        @*<button class="button-primary-outline-1" id="btnVerifyAndClose">Verify and Close</button>
-                        <button class="button-primary-outline-1 button-feedback" id="btnReasonFeedback">Feedback</button>*@
+                        <!-- <button class="button-primary-outline-1" id="btnVerifyAndClose">Verify and Close</button>
+                        <button class="button-primary-outline-1 button-feedback" id="btnReasonFeedback">Feedback</button> -->
                     </div>
                 </div>
 
@@ -228,7 +229,7 @@
                                         <th><input name="select_all" value="1" id="inputHomeSelectAll" type="checkbox" class="col-checkbox" /></th>
                                         <th>Username</th>
                                         <th>CC</th>
-                                        <!-- <th>Bot</th> -->
+                                        <th>Bot</th>
                                         <th>Dgr</th>
                                         <th>Odds</th>
                                         <th>
@@ -259,7 +260,7 @@
                                             M.Gr.<sup style="vertical-align: super; font-size: smaller;">i</sup>
                                         </th>
                                         <th>Reason</th>
-                                        <!-- <th></th> -->
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -275,7 +276,7 @@
                                         <th><input name="select_all" value="1" id="inputAwaySelectAll" type="checkbox" class="col-checkbox" /></th>
                                         <th>Username</th>
                                         <th>CC</th>
-                                        <!-- <th>Bot</th> -->
+                                        <th>Bot</th>
                                         <th>Dgr</th>
                                         <th>Odds</th>
                                         <th>
@@ -306,7 +307,7 @@
                                             M.Gr.<sup style="vertical-align: super; font-size: smaller;">i</sup>
                                         </th>
                                         <th>Reason</th>
-                                        <!-- <th></th> -->
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -322,7 +323,7 @@
                                         <th><input name="select_all" value="1" id="inputSGSelectAll" type="checkbox" class="col-checkbox" /></th>
                                         <th>Username</th>
                                         <th>CC</th>
-                                        <!-- <th>Bot</th> -->
+                                        <th>Bot</th>
                                         <th>Dgr</th>
                                         <th>Odds</th>
                                         <th>
@@ -348,7 +349,7 @@
                                             M.Gr.<sup style="vertical-align: super; font-size: smaller;">i</sup>
                                         </th>
                                         <th>Reason</th>
-                                        <!-- <th></th> -->
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -364,7 +365,7 @@
             <div>
                 <label class="text">CC</label>
                 <select class="control" id="cbbCCHidden" multiple="multiple">
-                    @*@foreach (var group in ViewBag.GroupCCList)
+                    @foreach (var group in ViewBag.GroupCCList)
                     {
                         <optgroup label="@group.CCGroupName">
                             @foreach (var cc in group.CCList)
@@ -376,10 +377,10 @@
                                 <option selected value=0>-</option>
                             }
                         </optgroup>
-                    }*@
+                    }
                 </select>
             </div>
-            @*<input id="hdEventDataToString" type="hidden" value="@ViewBag.EventDateToString" />
+            <input id="hdEventDataToString" type="hidden" value="@ViewBag.EventDateToString" />
             <input id="hdMatchID" type="hidden" value="@ViewBag.MatchID" />
             <input id="hdMatchName" type="hidden" value="@ViewBag.MatchName" />
             <input id="hdBetTypeID" type="hidden" value="@ViewBag.BetTypeID" />
@@ -393,7 +394,7 @@
             <input id="hdIsHostPermission" type="hidden" IsHostPermission="@ViewBag.IsHostPermission.ToString()" />
             <input id="hdReasonNames" type="hidden" value="@ViewBag.ReasonName" />
             <input id="hdMapX" type="hidden" value="@ViewBag.MapX" />
-            <input id="hdMapYY" type="hidden" value="@ViewBag.MapYY" />*@
+            <input id="hdMapYY" type="hidden" value="@ViewBag.MapYY" />
         </div>
     </div>
 </section>
@@ -477,14 +478,16 @@
             <button id="btnAssDetection" class="button button-primary-outline" title="Association Detection">Detect</button>
         </div>
 
-        @*<div class="hide">
+        <div class="hide">
             <input id="hdSelectedCustIDs" type="hidden" />
             <input id="hdSelectedUsernames" type="hidden" />
             <input id="hdSelectedHomeDetectMGr" type="hidden" />
             <input id="hdSelectedAwayDetectMGr" type="hidden" />            
-        </div>*@
+        </div>
     </div>
 </div>
+
+@*@Html.Partial("Feedback")*@
 
 @section scripts{
     @Scripts.Render("~/danger-monitor-detail-scripts")

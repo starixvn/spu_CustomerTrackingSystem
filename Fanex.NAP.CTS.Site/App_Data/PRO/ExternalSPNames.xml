@@ -78,4 +78,8 @@
 	<Function name="RobotReport">
 		<Setting Key="CTS_Customer_RobotListSelByDate" SpName="CTS_Customer_RobotListSelByDate" DbName="DBONUSER.ON_USER.bodbSPUNet"/>
 	</Function>
+
+	<Function name="DangerMonitor">
+		<Setting Key="CTS_MatchTicketInfo_Get" SpName="CTS_MatchTicketInfo_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
+	</Function>
 </Functions>

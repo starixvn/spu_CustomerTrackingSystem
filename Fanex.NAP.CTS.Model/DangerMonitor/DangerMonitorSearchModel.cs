@@ -9,21 +9,13 @@
 
         public DateTime? ToDate { get; set; }
 
-        public List<int> Danger1List { get; set; }
-
-        public List<int> Danger2List { get; set; }
-
-        public List<int> Danger3List { get; set; }
-
-        public List<int> Danger4List { get; set; }
-
-        public List<int> Danger5List { get; set; }
+        public string DangerList { get; set; }
 
         public string Sports { get; set; }
 
         public string Event { get; set; } /* League / Match */
 
-        public int? Market { get; set; }
+        public string Market { get; set; }
 
         public string MatchSection { get; set; }
 

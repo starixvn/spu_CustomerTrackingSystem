@@ -5,6 +5,7 @@
     using Fanex.Logging;
     using Fanex.NAP.CTS.Criteria.Common;
     using Fanex.NAP.CTS.Model.Common;
+    using Fanex.NAP.CTS.Model.DangerMonitor;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.Common;
     using System;
@@ -192,6 +193,19 @@
             };
 
             return repository.Fetch<SportBettypeViewModel>(criteria);
+        }
+
+        public IEnumerable<MainMatchModel> GetMainMatchInfos(DangerMonitorSearchModel filter)
+        {
+            var criteria = new GetMatchesInfoCriteria
+            {
+                FromDate = filter.FromDate,
+                ToDate = filter.ToDate,
+                SportList = filter.Sports,
+                MatchSectionList = filter.MatchSection
+            };
+
+            return repository.Fetch<MainMatchModel>(criteria);
         }
     }
 }
