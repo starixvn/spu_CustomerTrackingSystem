@@ -65,7 +65,7 @@
             var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                             NapSettings.Settings.SiteId,
                             FSFunctionKeys.MatchMonitor,
-                            NAP.Core.Business.Constant.Policy.Host);
+                            NAP.Core.Business.Constant.Policy.Host);          
 
             var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true)
                 .Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
@@ -213,7 +213,7 @@
         }
 
         private IEnumerable<GetMatchMonitorModel> GetMMByScanDate(MatchMonitorSearchViewModel para)
-        {
+        {            
             var matchFromCTSInfos = _matchMonitorService.GetMatchMonitor(para, null);
 
             if (matchFromCTSInfos.Any())
