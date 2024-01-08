@@ -391,6 +391,19 @@
                     }
                 </select>
             </div>
+            <div>
+                <select class="control" id="cbbReasonGroupHidden" multiple="multiple">
+                    @foreach (var group in ViewBag.ReasonGroups)
+                    {
+                        <optgroup label="@group.ReasonGroupName">
+                            @foreach (var reason in group.ReasonItems)
+                            {
+                                <option value=@reason.ReasonName selected>@reason.ReasonName</option>
+                            }                           
+                        </optgroup>
+                    }
+                </select>
+            </div>
             <input id="hdEventDataToString" type="hidden" value="@ViewBag.EventDateToString" />
             <input id="hdMatchID" type="hidden" value="@ViewBag.MatchID" />
             <input id="hdMatchName" type="hidden" value="@ViewBag.MatchName" />

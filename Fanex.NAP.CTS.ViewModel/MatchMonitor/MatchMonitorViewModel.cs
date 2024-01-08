@@ -8,6 +8,8 @@
         public bool IsHostPermission { get; set; }
 
         public long CustId { get; set; }
+
+        public IEnumerable<ReasonGroupStaticListViewModel> ReasonGroups { get; set; }
        
         public IEnumerable<ReasonStaticListViewModel> Reasons { get; set; }
 

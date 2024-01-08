@@ -63,7 +63,7 @@
         #region Main Page
         public ActionResult Index()
         {
-            IUserService userService = new UserService();
+            IUserService userService = new UserService();            
 
             var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                             NapSettings.Settings.SiteId,
@@ -72,7 +72,11 @@
 
             var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true)
                 .Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
-                .OrderBy(x => x.ReasonName);
+                .OrderBy(x=>x.ReasonName);
+
+            var reasonGroupItems = _commonService.GetStaticLists((int)StaticListID.Reason, true);
+
+            var reasonGroups = GetReasonGroups();            
 
             var sports = _commonService.GetStaticLists((int)StaticListID.Sport, true)
                 .Select(x => new SportStaticListViewModel { SportID = x.ItemValue, SportName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" });
@@ -81,6 +85,7 @@
             {
                 IsHostPermission = isHostPermission,
                 CustId = CurrentSession.UserId,
+                ReasonGroups = reasonGroups,
                 Reasons = reasons,
                 Sports = sports
             });
@@ -138,7 +143,29 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<GetMatchMonitorViewModel> MergeMatchMonitorWithMMStaticAndTicketsSummary(IEnumerable<GetMatchMonitorModel> matchFromCTSInfos,
+        private IEnumerable<ReasonGroupStaticListViewModel> GetReasonGroups()
+        {
+            var reasonGroups = new List<ReasonGroupStaticListViewModel>();
+            var reasonGroupItems = _commonService.GetStaticLists((int)StaticListID.Reason, true);
+
+            reasonGroups.Add(new ReasonGroupStaticListViewModel
+            {
+                ReasonGroupName = Consts.ReasonDetectBySystem,
+                ReasonItems = reasonGroupItems.Where(x => x.ItemID < 100).Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
+                .OrderBy(x => x.ReasonName)
+            });
+
+            reasonGroups.Add(new ReasonGroupStaticListViewModel
+            {
+                ReasonGroupName = Consts.ReasonDetectByAI,
+                ReasonItems = reasonGroupItems.Where(x => x.ItemID >= 100).Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
+                .OrderBy(x => x.ReasonName)
+            });
+
+            return reasonGroups;
+        }
+
+        private IEnumerable<GetMatchMonitorViewModel> MergeMatchMonitorWithMMStaticAndTicketsSummary(IEnumerable<GetMatchMonitorModel> matchFromCTSInfos,      
             Dictionary<string, MMFraudTicketsSummaryViewModel> mmDictionaryTicketsSummarys)
         {
             var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
@@ -304,6 +331,7 @@
             try
             {
                 ViewBag.GroupCCList = _commonService.GetGroupCustomerClass();
+                ViewBag.ReasonGroups = this.GetReasonGroups();
                 ViewBag.EventDateToString = para?.EventDateToString;
                 ViewBag.MatchID = para?.MatchID;
                 ViewBag.BetTypeID = para?.BetTypeID;
@@ -903,18 +931,20 @@
 
             var data = _matchMonitorService.GetUserFeedback(para);
 
-            result = data.GroupBy(g => g.MMUserCommentID)
+            if (data.Any())
+            {
+                result = data.GroupBy(g => g.MMUserCommentID)
                 .Select(g => new
                 {
                     MMUserCommentID = g.Key,
                     IncorrectReasonTrans = g.Where(x => !string.IsNullOrEmpty(x.IncorrectReason)).OrderBy(x => x.IncorrectReason).Select(x =>
-                      {
-                          if (string.IsNullOrEmpty(x.FromTransInfo) && string.IsNullOrEmpty(x.ToTransInfo))
-                          {
-                              return "<span>" + x.IncorrectReason + "<br/></span>";
-                          }
-                          return "<span>" + x.IncorrectReason + " (" + x.FromTransInfo + " - " + x.ToTransInfo + ") <br/></span>";
-                      }),
+                    {
+                        if (string.IsNullOrEmpty(x.FromTransInfo) && string.IsNullOrEmpty(x.ToTransInfo))
+                        {
+                            return "<span>" + x.IncorrectReason + "<br/></span>";
+                        }
+                        return "<span>" + x.IncorrectReason + " (" + x.FromTransInfo + " - " + x.ToTransInfo + ") <br/></span>";
+                    }),
                     IncorrectReasonRaw = g.Where(x => !string.IsNullOrEmpty(x.IncorrectReason)).Select(x => new
                     {
                         IncorrectReason = x.IncorrectReason,
@@ -935,6 +965,7 @@
                     LastModifiedBy = x.Item?.LastModifiedBy,
                     LastModifiedDate = x.Item?.LastModifiedDate.ToString(Consts.FormatDateTimeToString_yyyyMMdd)
                 });
+            }            
 
             return Json(new
             {

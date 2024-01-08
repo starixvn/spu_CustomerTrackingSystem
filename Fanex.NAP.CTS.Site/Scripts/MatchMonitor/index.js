@@ -293,7 +293,7 @@
 
         domElements.cbbReason.multiselect({
             menuWidth: 260,
-            menuHeight: 260,
+            menuHeight: 300,
             selectedText: "# of # selected",
             noneSelectedText: "Select Reason"
         });
