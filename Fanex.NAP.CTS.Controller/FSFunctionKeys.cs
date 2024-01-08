@@ -33,6 +33,8 @@ public static class FSFunctionKeys
 
     public const string DailyDataCapture = "DailyDataCapture";
 
+    public const string DangerMonitor = "DangerMonitor";
+
     public const string FraudCase = "FraudCase";
 
     public const string Home = "Home";

@@ -36,13 +36,15 @@
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class MatchMonitorController : BaseController
     {
-        private const string MMDetailDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/DoubleGridTemplate.xlsx";
-        private const string MMDetailSingleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/SingleGridTemplate.xlsx";
-        private readonly IMatchMonitorService _matchMonitorService;
+        protected string MMDetailDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/DoubleGridTemplate.xlsx";
+        protected string MMDetailSingleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/SingleGridTemplate.xlsx";
+        protected readonly IMatchMonitorService _matchMonitorService;
         private readonly IAssociationDetectionService _associationDetectionService;
-        private readonly ICommonService _commonService;
+        protected readonly ICommonService _commonService;
         private readonly IMemoryCacheService _memoryCacheService;
-        private readonly string MMDetailRegion = "MMDetail";
+        private readonly string UserID = "MMDetailUserID";
+        protected string Region = "MMDetailRegion";
+        protected string ControllerName = "Match Monitor";
         private readonly string[] PropertyNameOfSummaryHomeList = { nameof(GetMatchMonitorViewModel.HomeTotalAmount), nameof(GetMatchMonitorViewModel.HomeBetCount) };
         private readonly string[] PropertyNameOfSummaryAwayList = { nameof(GetMatchMonitorViewModel.AwayTotalAmount), nameof(GetMatchMonitorViewModel.AwayBetCount) };
 
@@ -54,11 +56,11 @@
             _commonService = new CommonService();
             _associationDetectionService = new AssociationDetectionService();
             _memoryCacheService = new MemoryCacheService();
-            MMDetailRegion = CurrentSession.UserId.ToString();
+            UserID = CurrentSession.UserId.ToString();
         }
 
         #region Main Page
-        public ActionResult Index()
+        public virtual ActionResult Index()
         {
             IUserService userService = new UserService();
 
@@ -69,10 +71,10 @@
 
             var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true)
                 .Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
-                .OrderBy(x=>x.ReasonName);
-          
+                .OrderBy(x => x.ReasonName);
+
             var sports = _commonService.GetStaticLists((int)StaticListID.Sport, true)
-                .Select(x=> new SportStaticListViewModel { SportID = x.ItemValue, SportName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" });
+                .Select(x => new SportStaticListViewModel { SportID = x.ItemValue, SportName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" });
 
             return View(new MatchMonitorViewModel
             {
@@ -85,7 +87,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorRpt, "isSkipTracking")]
-        public ActionResult GetMatchMonitor(MatchMonitorSearchViewModel para, bool? isSkipTracking)
+        public virtual ActionResult GetMatchMonitor(MatchMonitorSearchViewModel para, bool? isSkipTracking)
         {
             var matchMonitors = Enumerable.Empty<GetMatchMonitorViewModel>();
 
@@ -99,7 +101,7 @@
                     && IsValidDateRange(para.FromDate, para.ToDate))
                 {
                     var matchFromCTSInfos = Enumerable.Empty<GetMatchMonitorModel>();
-                   
+
                     if (para.DateType == 1)
                         matchFromCTSInfos = GetMMByScanDate(para);
                     else
@@ -120,7 +122,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                    .AddMessage("Get Match Monitor Error: " + ex.Message + ex.StackTrace + "\n"
+                    .AddMessage($"Get {ControllerName} Error: " + ex.Message + ex.StackTrace + "\n"
                      + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                      + ex.InnerException.StackTrace)
                     .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -135,7 +137,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<GetMatchMonitorViewModel> MergeMatchMonitorWithMMStaticAndTicketsSummary(IEnumerable<GetMatchMonitorModel> matchFromCTSInfos,      
+        private IEnumerable<GetMatchMonitorViewModel> MergeMatchMonitorWithMMStaticAndTicketsSummary(IEnumerable<GetMatchMonitorModel> matchFromCTSInfos,
             Dictionary<string, MMFraudTicketsSummaryViewModel> mmDictionaryTicketsSummarys)
         {
             var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
@@ -161,10 +163,10 @@
                     .OrderBy(c => c.MatchSection);
         }
 
-        private void SetValueMMTicketsSummaryFromDictionary(GetMatchMonitorViewModel result, string betChoice, 
+        private void SetValueMMTicketsSummaryFromDictionary(GetMatchMonitorViewModel result, string betChoice,
             Dictionary<string, MMFraudTicketsSummaryViewModel> mmDictionaryTicketsSummarys, string[] propertyNameOfSummaryList)
         {
-            if (mmDictionaryTicketsSummarys.TryGetValue(result.BuildTicketsSummaryDictionaryKey(betChoice), out var mmFraudTicketsSummary))  
+            if (mmDictionaryTicketsSummarys.TryGetValue(result.BuildTicketsSummaryDictionaryKey(betChoice), out var mmFraudTicketsSummary))
             {
                 result.SetPropertyValue(typeof(GetMatchMonitorViewModel).GetProperty(propertyNameOfSummaryList[0]), mmFraudTicketsSummary.Turnover);
 
@@ -245,7 +247,7 @@
                         IsSupportShowAllTickets = m2.IsGetDataFromOrigin == 1,
                         DataSource = m2.DataSource,
                         FraudTrans = m1.FraudTrans,
-						BettypeNameDisplay = m1.BettypeNameDisplay,
+                        BettypeNameDisplay = m1.BettypeNameDisplay,
                         DetailsX = m1.DetailsX,
                         DetailsY = m1.DetailsY
                     });
@@ -258,7 +260,7 @@
 
         [HttpPost]
         public ActionResult GetMMFilterBetTypeBySportID(string sportIDs)
-        {           
+        {
             return Json(GetBetTypeSettings(sportIDs, true), JsonRequestBehavior.AllowGet);
         }
 
@@ -288,13 +290,13 @@
                 IsSelected = true,
                 NameDetailsX = x.NameDetailsX
             }).GroupBy(g => new { g.BetTypeID, g.BetID }).Select(g => g.First());
-        }    
+        }
 
         #endregion
 
         #region Detail Page
         [HttpGet]
-        public ActionResult Detail(MatchMonitorDetailViewModel para)
+        public virtual ActionResult Detail(MatchMonitorDetailViewModel para)
         {
             IUserService userService = new UserService();
 
@@ -331,7 +333,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                   .AddMessage("Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
+                   .AddMessage($"{ControllerName} Detail Error: " + ex.Message + ex.StackTrace + "\n"
                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                     + ex.InnerException.StackTrace)
                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -370,7 +372,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                  .AddMessage("Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
+                  .AddMessage($"Get {ControllerName} Filter Error: " + ex.Message + ex.StackTrace + "\n"
                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                    + ex.InnerException.StackTrace)
                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -389,10 +391,10 @@
         {
             var result = new MMDetailFilterViewModel();
 
-            var removeKeyFraud = para.BuildCacheKey(string.Empty, MMDetailRegion, Enum.GetName(typeof(MatchMonitorQueryType), MatchMonitorQueryType.TicketFraud));
+            var removeKeyFraud = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MatchMonitorQueryType), MatchMonitorQueryType.TicketFraud));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyFraud);
 
-            var removeKeyAll = para.BuildCacheKey(string.Empty, MMDetailRegion, Enum.GetName(typeof(MatchMonitorQueryType), MatchMonitorQueryType.TicketAll));
+            var removeKeyAll = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MatchMonitorQueryType), MatchMonitorQueryType.TicketAll));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyAll);
 
             switch (para.TypeOfTickets)
@@ -439,7 +441,7 @@
             para.TypeOfTickets = MatchMonitorQueryType.TicketFraud;
             var ticketTypeName = Enum.GetName(typeof(MatchMonitorQueryType), para.TypeOfTickets);
 
-            var key = para.BuildCacheKey(nameof(GetFraudMMFilter), MMDetailRegion, ticketTypeName);
+            var key = para.BuildCacheKey(nameof(GetFraudMMFilter), Region, UserID, ticketTypeName);
 
             lock (key)
             {
@@ -458,7 +460,7 @@
                         _memoryCacheService.PushValueAsync(key, fraudFilterResult);
                     }
                 }
-            }      
+            }
 
             fraudFilterResult = fraudFilterResult ?? new MMDetailFilterViewModel();
             fraudFilterResult.IsDisplaySingleGrid = para.BetChoiceType == 1;
@@ -470,7 +472,7 @@
         {
             var allFilterResult = new MMDetailFilterViewModel();
             var ticketTypeName = Enum.GetName(typeof(MatchMonitorQueryType), para.TypeOfTickets);
-            var key = para.BuildCacheKey(nameof(GetAllMMFilter), MMDetailRegion, ticketTypeName);
+            var key = para.BuildCacheKey(nameof(GetAllMMFilter), Region, UserID, ticketTypeName);
 
             try
             {
@@ -533,7 +535,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                   .AddMessage("Get Match Monitor Total Ticket Error: " + ex.Message + ex.StackTrace + "\n"
+                   .AddMessage($"Get {ControllerName} Total Ticket Error: " + ex.Message + ex.StackTrace + "\n"
                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                     + ex.InnerException.StackTrace)
                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -553,7 +555,7 @@
         #region Detail Tickets
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailRpt)]
-        public ActionResult GetMatchMonitorDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter)
+        public virtual ActionResult GetMatchMonitorDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter)
         {
             var mdResult = default(MMDetailTicketListViewModel);
 
@@ -585,12 +587,12 @@
 
                                 if (ctsCustIDHomeIsZero != null && ctsCustIDHomeIsZero.Any())
                                 {
-                                    LogService.Error($"Get Match Monitor Detail with CTSCustIDHome=0: {JsonConvert.SerializeObject(ctsCustIDHomeIsZero)}");
+                                    LogService.Error($"Get {ControllerName} Detail with CTSCustIDHome=0: {JsonConvert.SerializeObject(ctsCustIDHomeIsZero)}");
                                 }
 
                                 if (ctsCustIDAwayIsZero != null && ctsCustIDAwayIsZero.Any())
                                 {
-                                    LogService.Error($"Get Match Monitor Detail with CTSCustIDAway=0: {JsonConvert.SerializeObject(ctsCustIDAwayIsZero)}");
+                                    LogService.Error($"Get {ControllerName} Detail with CTSCustIDAway=0: {JsonConvert.SerializeObject(ctsCustIDAwayIsZero)}");
                                 }
                             }
 
@@ -601,7 +603,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                   .AddMessage("Get Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
+                   .AddMessage($"Get {ControllerName} Detail Error: " + ex.Message + ex.StackTrace + "\n"
                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                     + ex.InnerException.StackTrace)
                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -648,9 +650,9 @@
 
                         mdItemList = _matchMonitorService.MergeFraudToAllMMDetail(mdItemList, fraudTicket?.AGroupReasonMerged);
 
-                        mdResult.HomeMatchItemList = mdItemList?.Where(x=>x.ChoiceOrder == 10).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
+                        mdResult.HomeMatchItemList = mdItemList?.Where(x => x.ChoiceOrder == 10).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
 
-                        mdResult.AwayMatchItemList = mdItemList?.Where(x => x.ChoiceOrder == 20).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();                       
+                        mdResult.AwayMatchItemList = mdItemList?.Where(x => x.ChoiceOrder == 20).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
 
                         mdResult.RecordsTotal = mdItemList?.Count() ?? 0;
                     }
@@ -669,7 +671,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                 .AddMessage("Get All Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
+                 .AddMessage($"Get All {ControllerName} Detail Error: " + ex.Message + ex.StackTrace + "\n"
                   + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                   + ex.InnerException.StackTrace)
                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -716,9 +718,9 @@
                     mdResult.ItemList = mdItemList.OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
                 }
                 else
-                {                  
+                {
                     mdResult.HomeMatchItemList = mdItemList.Where(x => x.ChoiceOrder == 10).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
-                    mdResult.AwayMatchItemList = mdItemList.Where(x=> x.ChoiceOrder == 20).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();                 
+                    mdResult.AwayMatchItemList = mdItemList.Where(x => x.ChoiceOrder == 20).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
                 }
 
                 mdResult.RecordsTotal = mdItemList?.Count() ?? 0;
@@ -732,7 +734,7 @@
             var para = filter.Clone();
             var fraudMMDetailResult = new TicketDetailViewModel();
             var ticketTypeName = Enum.GetName(typeof(MatchMonitorQueryType), MatchMonitorQueryType.TicketFraud);
-            var key = para.BuildCacheKey("TicketFraud", MMDetailRegion, ticketTypeName);
+            var key = para.BuildCacheKey("TicketFraud", Region, UserID, ticketTypeName);
 
             try
             {
@@ -803,8 +805,8 @@
             }
             else
             {
-                ticketFromMainDb.HomeMatchItemList = mdItemList?.Where(x=> x.ChoiceOrder == 10).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
-                ticketFromMainDb.AwayMatchItemList = mdItemList?.Where(x => x.ChoiceOrder == 20).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();               
+                ticketFromMainDb.HomeMatchItemList = mdItemList?.Where(x => x.ChoiceOrder == 10).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
+                ticketFromMainDb.AwayMatchItemList = mdItemList?.Where(x => x.ChoiceOrder == 20).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
             }
 
             ticketFromMainDb.RecordsTotal = mdItemList?.Count() ?? 0;
@@ -812,21 +814,21 @@
 
             return ticketFromMainDb;
         }
-       
+
         #endregion Detail Tickets
 
         #region Association Detect
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailManualDetectRpt)]
-        public ActionResult DetectGroupAssWithOptions(DetectGroupAssFilterViewModel model)
+        public virtual ActionResult DetectGroupAssWithOptions(DetectGroupAssFilterViewModel model)
         {
             var result = new DetectGroupAssociationListViewModel();
 
             var orgUserList = _associationDetectionService.ValidateUserName(model.RawUserNames);
 
-           var data = _associationDetectionService.DetectAssociation(new DetectAssociationByUserNamesViewModel 
-           { 
+            var data = _associationDetectionService.DetectAssociation(new DetectAssociationByUserNamesViewModel
+            {
                 UserNames = model.RawUserNames,
                 IsBP = model.IsOptBP,
                 IsDevice = model.IsOptDevice,
@@ -834,7 +836,7 @@
                 IsAgent = model.IsOptAgent,
                 IsIPLast3Days = model.IsOptIPLast3Days,
                 Is3MatchesLast7Days = model.IsOpt3MatchesLast7Days
-           }, orgUserList, false, false).Select(x => new DetectGroupAssociationItemViewModel(x)); ;
+            }, orgUserList, false, false).Select(x => new DetectGroupAssociationItemViewModel(x)); ;
 
             result.ItemList = this.RearrangeAssGroup(data, true);
 
@@ -854,7 +856,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailVerifyTransRpt)]
-        public ActionResult VerifyTransMMDetail(MatchMonitorDetailVerifyTransParaModel para)
+        public virtual ActionResult VerifyTransMMDetail(MatchMonitorDetailVerifyTransParaModel para)
         {
             var result = new DBResult();
 
@@ -893,7 +895,7 @@
         #region User Feedback
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailUserFeedback)]
-        public ActionResult GetUserFeedback(UserFeedbackViewModel para)
+        public virtual ActionResult GetUserFeedback(UserFeedbackViewModel para)
         {
             var result = Enumerable.Empty<GetMMUserFeedbackViewModel>();
 
@@ -940,7 +942,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailUserFeedbackInsert)]
-        public ActionResult InsertUserFeedback(InsertUserFeedbackViewModel para)
+        public virtual ActionResult InsertUserFeedback(InsertUserFeedbackViewModel para)
         {
             para.UserID = CurrentSession.UserId;
 
@@ -954,7 +956,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailUserFeedbackInsert)]
-        public ActionResult UpdateUserFeedback(UpdateUserFeedbackViewModel para)
+        public virtual ActionResult UpdateUserFeedback(UpdateUserFeedbackViewModel para)
         {
             para.UserID = CurrentSession.UserId;
 
@@ -968,7 +970,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailUserFeedbackInsert)]
-        public ActionResult DeleteUserFeedback(DeleteUserFeedbackViewModel para)
+        public virtual ActionResult DeleteUserFeedback(DeleteUserFeedbackViewModel para)
         {
             para.UserID = CurrentSession.UserId;
 
@@ -987,7 +989,7 @@
         #region Export to Excel
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailExportToExcelRpt)]
-        public ActionResult ExportToExcelMMDetail(FormCollection from)
+        public virtual ActionResult ExportToExcelMMDetail(FormCollection from)
         {
             var serializer = new JavaScriptSerializer();
             serializer.MaxJsonLength = Int32.MaxValue;

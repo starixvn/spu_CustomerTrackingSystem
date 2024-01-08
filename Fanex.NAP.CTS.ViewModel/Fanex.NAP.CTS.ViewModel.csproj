@@ -156,6 +156,7 @@
     <Compile Include="Common\SubscriberGroupViewModel.cs" />
     <Compile Include="Common\SubscriberViewModel.cs" />
     <Compile Include="DangerMonitor\DangerMonitorBetTypeViewModel.cs" />
+    <Compile Include="DangerMonitor\DangerMonitorDetailViewModel.cs" />
     <Compile Include="DangerMonitor\DangerMonitorTicketSummaryViewModel.cs" />
     <Compile Include="DangerMonitor\DangerMonitorInfoViewModel.cs" />
     <Compile Include="Evidence\Evidence.cs" />

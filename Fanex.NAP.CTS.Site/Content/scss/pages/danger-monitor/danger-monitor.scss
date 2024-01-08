@@ -2,6 +2,15 @@
 @import "../../abstracts/mixins";
 @import "../../components/popup";
 
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
 
 .match-monitor {
     .content {
@@ -84,6 +93,11 @@
                         display: flex;
                         align-items: center;
                         width: auto;
+
+                        .icon-clear {
+                            position: absolute;
+                            right: 2.6rem;
+                        }
 
                         .icon-calendar-text {
                             right: 0.5rem;

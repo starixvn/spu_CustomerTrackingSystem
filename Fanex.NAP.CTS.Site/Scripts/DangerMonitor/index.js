@@ -4,6 +4,13 @@
     let isSkipTracking = false;
     let sportBetType = [];
     let bettypeList = {};
+    let dangerListSelected = {
+        Danger1: null,
+        Danger2: null,
+        Danger3: null,
+        Danger4: null,
+        Danger5: null
+    }
 
     let domElements = {
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
@@ -27,7 +34,7 @@
         cbbMatchSection: $('#cbbMatchSection'),
         cbbReason: $('#cbbReason'),
         rbtnScanDate: $('#rbtnScanDate'),
-        rbtnEventDate: $('#rbtnEventDate')
+        rbtnEventDate: $('#rbtnEventDate'),
     };
 
     function FetchSports() {
@@ -56,10 +63,10 @@
 
             sportBetType.filter(x => sportSelectedList.includes(x.SportType.toString()))
                 .map(x =>
-                    bettypeList[`${x.BetTypeId}_${x.BetID}`] =
+                    bettypeList[`${x.BetTypeID}_${x.BetID}`] =
                     ({
                         "BetTypeName": x.BetTypeName,
-                        "BetType": x.BetTypeId,
+                        "BetType": x.BetTypeID,
                         "BetChoiceType": x.BetChoiceType,
                         "BetChoiceHome": x.BetChoiceHome,
                         "BetChoiceAway": x.BetChoiceAway,
@@ -218,8 +225,16 @@
         domElements.cbbSport.multiselect({
             menuWidth: 260,
             menuHeight: 260,
-            selectedText: "# of # selected",
-            noneSelectedText: "Select Sport"
+            selectedText: "# of # select",
+            noneSelectedText: `Select Sports`,
+            enableClickableOptGroups: true,
+            includeSelectAllOption: true,
+            groupsCollapsable: true,
+            optGroupChecked: true
+        }).multiselectfilter({
+            width: 150,
+            placeholder: '',
+            label: ''
         });
 
         domElements.cbbBetType.multiselect({
@@ -261,12 +276,17 @@
         FetchSports();
 
         domElements.btnGenerate.on('click', function () {
+            dangerListSelected.Danger1 = GetDangerListById(1);
+            dangerListSelected.Danger2 = GetDangerListById(2);
+            dangerListSelected.Danger3 = GetDangerListById(3);
+            dangerListSelected.Danger4 = GetDangerListById(4);
+            dangerListSelected.Danger5 = GetDangerListById(5);
+
             dataTable ? dataTable.ajax.reload(null, true) : dataTable = GenerateGrid();
         });
     }
 
     function GenerateGrid() {
-
         let data = {
             FromDate: function () { return domElements.dpkFromDate.val(); },
             ToDate: function () { return !domElements.dpkToDate.val().includes('--- --,----') ? domElements.dpkToDate.val() : null },
@@ -284,6 +304,7 @@
                     "BetID": bettypeList[x].BetID
                 })))
             },
+            isSkipTracking: isSkipTracking,
         };
 
         return domElements.tblMonitor.DataTable({
@@ -345,8 +366,25 @@
                 { data: obj => obj.LeagueName },
                 {
                     data: obj => () => {
-                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&BettypeName={5}&MatchSection={6}&Market={7}&LeagueID={8}&BetID={9}&SportType={10}&KOTime={11}";
-                        let para = paramTemplate.format(obj.EventDateToString, obj.MatchID, obj.HomeID, obj.AwayID, obj.BettypeID, obj.BettypeName, obj.MatchSection, obj.Market, obj.LeagueID, obj.BetID, obj.SportType, obj.KOTime);
+                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&BettypeName={5}&MatchSection={6}&Market={7}&LeagueID={8}&BetID={9}&SportType={10}&KOTime={11}&Danger1={12}&Danger2={13}&Danger3={14}&Danger4={15}&Danger5={16}";
+                        let para = paramTemplate.format(
+                            obj.EventDateToString,
+                            obj.MatchID,
+                            obj.HomeID,
+                            obj.AwayID,
+                            obj.BettypeID,
+                            obj.BettypeName,
+                            obj.MatchSection,
+                            obj.Market,
+                            obj.LeagueID,
+                            obj.BetID,
+                            obj.SportType,
+                            obj.KOTime,
+                            dangerListSelected.Danger1.join(),
+                            dangerListSelected.Danger2.join(),
+                            dangerListSelected.Danger3.join(),
+                            dangerListSelected.Danger4.join(),
+                            dangerListSelected.Danger5.join());
 
                         return '<a class="click-view-details" href="DangerMonitor/Detail?' + para + '" target="_blank">' + obj.MatchName + '</a>';
                     }
@@ -391,6 +429,11 @@
             let val = Number(x.split('-')[1]);
             return { [`Danger${key}`]: val };
         });
+    }
+
+    function GetDangerListById(id) {
+        return domElements.cbbDgr.val().filter(x => x.split('-')[0] == id)
+            .map((x) => Number(x.split('-')[1]));
     }
 
     $(document).ready(function () {

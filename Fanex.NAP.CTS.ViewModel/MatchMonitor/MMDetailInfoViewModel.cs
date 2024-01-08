@@ -56,7 +56,7 @@
         public int Sport { get; set; }
 
         public DateTime? TranstimeFrom { get; set; }
-        
+
         public DateTime? TranstimeTo { get; set; }
 
         public DateTime EventDate
@@ -76,11 +76,11 @@
 
         public MMDetailInfoViewModel Clone() => new MMDetailInfoViewModel(this);
 
-        public string BuildCacheKey(string nameOfFuntion, string userID, string ticketType)
+        public string BuildCacheKey(string nameOfFuntion, string mmDetailRegion, string userID, string ticketType)
         {
             var transtimeFrom = TranstimeFrom?.Subtract(DateTime.MinValue).TotalSeconds.ToString() ?? string.Empty;
             var transtimeTo = TranstimeTo?.Subtract(DateTime.MinValue).TotalSeconds.ToString() ?? string.Empty;
-            return $"{nameOfFuntion}_{userID}_{MatchID}_{LiveIndicator}_{BetTypeID}_{BetID}_{ticketType}_{transtimeFrom}_{transtimeTo}";
+            return $"{nameOfFuntion}_{mmDetailRegion}_{userID}_{MatchID}_{LiveIndicator}_{BetTypeID}_{BetID}_{ticketType}_{transtimeFrom}_{transtimeTo}";
         }
     }
 }

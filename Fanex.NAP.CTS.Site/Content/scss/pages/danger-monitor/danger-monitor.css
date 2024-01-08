@@ -348,6 +348,12 @@
     .popup-add .modal-footer .-add {
       height: 30px; }
 
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
+
 .match-monitor .content {
   width: 100%;
   position: sticky;
@@ -404,6 +410,9 @@
       display: flex;
       align-items: center;
       width: auto; }
+      .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar .icon-clear {
+        position: absolute;
+        right: 2.6rem; }
       .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar .icon-calendar-text {
         right: 0.5rem;
         bottom: auto; }

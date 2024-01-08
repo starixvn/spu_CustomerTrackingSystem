@@ -390,6 +390,10 @@
             MatchMonitorDetailUserFeedbackInsert = 77,
             MatchMonitorDetailUserFeedbackUpdate = 78,
             MatchMonitorDetailUserFeedbackDelete = 79,
+            DangerMonitorRpt = 81,
+            DangerMonitorDetailRpt = 82,
+            DangerMonitorDetailManualDetectRpt = 83,
+            DangerMonitorDetailExportToExcelRpt = 84,
 
             //PlaceEvidenceForMultipleCustAPI = 200,
             GetFlaggedCustomersByLevelAPI = 201,

@@ -6,7 +6,7 @@
 
         public string SportName { get; set; }
 
-        public int BetTypeId { get; set; }
+        public int BetTypeID { get; set; }
 
         public string BetTypeName { get; set; }
 
@@ -19,5 +19,7 @@
         public string BetChoiceHome { get; set; }
 
         public string BetChoiceAway { get; set; }
+
+        public string BetIDPattern { get; set; }
     }
 }

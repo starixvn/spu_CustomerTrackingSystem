@@ -109,7 +109,7 @@ function DangerousSettingDetail() {
         boderTranstimeInput: $('.info-input'),
         iconHTranstimeAutofill: $('#iconHTranstimeAutofill'),
         iconATranstimeAutofill: $('#iconATranstimeAutofill'),
-        iconSGTranstimeAutofill: $('#iconSGTranstimeAutofill'),
+        iconSGTranstimeAutofill: $('#iconSGTranstimeAutofill')
     };
 
     let transtime = {
@@ -138,6 +138,13 @@ function DangerousSettingDetail() {
         isActive: false
     };
     let cacheDefaultReason = null;
+    let cacheDefaultDanger = {
+        Danger1: $('#hdDanger1').val(),
+        Danger2: $('#hdDanger2').val(),
+        Danger3: $('#hdDanger3').val(),
+        Danger4: $('#hdDanger4').val(),
+        Danger5: $('#hdDanger5').val()
+    }
 
     let posClickGlobal = 0;
     let xhr;
@@ -182,7 +189,7 @@ function DangerousSettingDetail() {
             autoWidth: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 5, 7, 9, 12, 13, 14, 15, 16], className: "text-center" },
+                { targets: [0, 1, 2, 4, 6, 8, 11, 12, 13, 14, 15], className: "text-center" },
                 {
                     targets: [0], width: "3%", render: function (data, type, full, meta) {
                         return '<label><input type="checkbox" class="col-checkbox" name="chkbx" /></label>';
@@ -190,22 +197,22 @@ function DangerousSettingDetail() {
                 },
                 { targets: [1], width: "17%" },
                 { targets: [2], width: "4%" },
-                { targets: [3], width: "4%" },
-                { targets: [4], width: "10%", className: "text-center col-dgr" },
-                { targets: [5], width: "5%" },
-                { targets: [6], width: "5%", className: "text-center col-betid" },
-                { targets: [7], width: "5%" },
-                { targets: [8], width: "5%", className: "text-right col-amt" },
-                { targets: [9], width: "4%" },
-                { targets: [10], width: "5%", className: "text-center col-score" },
-                { targets: [11], width: "13%", className: "text-center col-transtime" },
-                { targets: [12], width: "3%" },
-                { targets: [13], width: "5%" },
-                { targets: [14], width: "5%", className: "text-center" },
-                { targets: [15], width: "7%", className: "text-center col-reason" },
-                { targets: [16], width: "3%" },
-                { targets: [17], visible: false },
-                { targets: [18], visible: false }
+                // { targets: [3], width: "4%" },
+                { targets: [3], width: "10%", className: "text-center col-dgr" },
+                { targets: [4], width: "5%" },
+                { targets: [5], width: "5%", className: "text-center col-betid" },
+                { targets: [6], width: "5%" },
+                { targets: [7], width: "5%", className: "text-right col-amt" },
+                { targets: [8], width: "4%" },
+                { targets: [9], width: "5%", className: "text-center col-score" },
+                { targets: [10], width: "13%", className: "text-center col-transtime" },
+                { targets: [11], width: "3%" },
+                { targets: [12], width: "5%" },
+                { targets: [13], width: "5%", className: "text-center" },
+                { targets: [14], width: "7%", className: "text-center col-reason" },
+                // { targets: [15], width: "3%" },
+                { targets: [15], visible: false },
+                { targets: [16], visible: false }
             ],
             columns: [
                 {
@@ -224,7 +231,7 @@ function DangerousSettingDetail() {
                     }
                 },
                 { data: obj => obj.CustomerClassToString },
-                { data: obj => RenderBotIcon(obj.RobotType, obj.IsRobot) },
+                // { data: obj => RenderBotIcon(obj.RobotType, obj.IsRobot) },
                 { data: obj => obj.DangerToString },
                 { data: obj => obj.Odds },
                 {
@@ -274,12 +281,12 @@ function DangerousSettingDetail() {
                         return "-";
                     }
                 },
-                {
-                    data: obj => () => {
-                        if (obj.PICVerified) return "<span class='icon-Check'></span>";
-                        return "-";
-                    }
-                },
+                // {
+                //     data: obj => () => {
+                //         if (obj.PICVerified) return "<span class='icon-Check'></span>";
+                //         return "-";
+                //     }
+                // },
                 { data: obj => obj.TransIdToString },
                 { data: obj => obj.ADetectGroupID }
             ],
@@ -343,7 +350,7 @@ function DangerousSettingDetail() {
         element.multiselect().empty();
         let arrReason = [];
 
-        if (cacheDefaultReason != null) {
+        if (cacheDefaultReason) {
             arrReason = cacheDefaultReason.split(',');
         }
 
@@ -471,6 +478,13 @@ function DangerousSettingDetail() {
         let cacheSelected = cacheFilterForImportNew[currentType];
         if (cacheSelected != undefined && cacheSelected.cbbDanger) {
             cacheSelectedDanger = cacheSelected.cbbDanger;
+        }
+        else {
+            cacheDefaultDanger.Danger1.split(',').forEach(x => cacheSelectedDanger.push(`1-${x}`));
+            cacheDefaultDanger.Danger2.split(',').forEach(x => cacheSelectedDanger.push(`2-${x}`));
+            cacheDefaultDanger.Danger3.split(',').forEach(x => cacheSelectedDanger.push(`3-${x}`));
+            cacheDefaultDanger.Danger4.split(',').forEach(x => cacheSelectedDanger.push(`4-${x}`));
+            cacheDefaultDanger.Danger5.split(',').forEach(x => cacheSelectedDanger.push(`5-${x}`));
         }
 
         if (data) {
@@ -678,7 +692,6 @@ function DangerousSettingDetail() {
                                         <th><input name="select_all" value="1" id="inputHomeSelectAll" type="checkbox" class="col-checkbox" /></th>
                                         <th>Username</th>
                                         <th>CC</th>
-                                        <th>Bot</th>
                                         <th>Dgr</th>
                                         <th>Odds</th>
                                         <th>
@@ -709,7 +722,6 @@ function DangerousSettingDetail() {
                                             M.Gr.<sup style="vertical-align: super; font-size: smaller;">i</sup>
                                         </th>
                                         <th>Reason</th>
-                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -721,7 +733,6 @@ function DangerousSettingDetail() {
                                         <th><input name="select_all" value="1" id="inputAwaySelectAll" type="checkbox" class="col-checkbox" /></th>
                                         <th>Username</th>
                                         <th>CC</th>
-                                        <th>Bot</th>
                                         <th>Dgr</th>
                                         <th>Odds</th>
                                         <th>
@@ -752,7 +763,6 @@ function DangerousSettingDetail() {
                                             M.Gr.<sup style="vertical-align: super; font-size: smaller;">i</sup>
                                         </th>
                                         <th>Reason</th>
-                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -812,7 +822,6 @@ function DangerousSettingDetail() {
                                         <th><input name="select_all" value="1" id="inputSGSelectAll" type="checkbox" class="col-checkbox" /></th>
                                         <th>Username</th>
                                         <th>CC</th>
-                                        <th>Bot</th>
                                         <th>Dgr</th>
                                         <th>Odds</th>
                                         <th>
@@ -838,7 +847,6 @@ function DangerousSettingDetail() {
                                             M.Gr.<sup style="vertical-align: super; font-size: smaller;">i</sup>
                                         </th>
                                         <th>Reason</th>
-                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -1180,7 +1188,7 @@ function DangerousSettingDetail() {
         selectedFilter.cbbMatchScore = GetSelectDataFilter(domElements.cbbMatchScore);
         selectedFilter.cbbSites = domElements.cbbSites.val();
         selectedFilter.cbbCC = GetSelectDataFilter(domElements.cbbCC);
-        selectedFilter.cbbDanger = GetSelectDataFilter(domElements.cbbDanger);
+        selectedFilter.cbbDanger = GetSelectDataFilter(domElements.cbbDanger, true);
         selectedFilter.cbbCurrency = GetSelectDataFilter(domElements.cbbCurrency);
         selectedFilter.cbbReason = GetSelectDataFilter(domElements.cbbReason);
         selectedFilter.cbbAGroup = GetSelectDataFilter(domElements.cbbAGroup);
@@ -1339,7 +1347,7 @@ function DangerousSettingDetail() {
             data.LastScannedSequenceID = lastScannedSequenceID;
             currentType = data.TypeOfTickets;
 
-            $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorTotalTicket'), {
+            $.ajax(common.modifyRelativeUrl('DangerMonitor/GetMatchMonitorTotalTicket'), {
                 async: false,
                 type: 'POST',
                 tryCount: 0,
@@ -1378,7 +1386,7 @@ function DangerousSettingDetail() {
             data.LastScannedSequenceID = lastScannedSequenceID;
             currentType = data.TypeOfTickets;
 
-            xhr = $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorDetail'), {
+            xhr = $.ajax(common.modifyRelativeUrl('DangerMonitor/GetMatchMonitorDetail'), {
                 type: 'POST',
                 tryCount: 0,
                 retryLimit: 3,
@@ -1462,7 +1470,7 @@ function DangerousSettingDetail() {
             TranstimeTo: transtime.toDate
         };
 
-        $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorFilter'), {
+        $.ajax(common.modifyRelativeUrl('DangerMonitor/GetMatchMonitorFilter'), {
             async: false,
             type: 'POST',
             tryCount: 0,
@@ -1540,19 +1548,19 @@ function DangerousSettingDetail() {
         RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsTotalGlobal);
     }
 
-    function RenderBotIcon(robotType, isRobot) {
-        let html = '-';
-        let spanHtml = '<span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span>';
+    // function RenderBotIcon(robotType, isRobot) {
+    //     let html = '-';
+    //     let spanHtml = '<span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span>';
 
-        if (isRobot) {
-            if (robotType == 1)
-                html = `<span class="icon-big-Robot icon-big-good-robot">${spanHtml}</span>`;
-            else if (robotType == 2)
-                html = `<span class="icon-big-Robot icon-big-bad-robot">${spanHtml}</span>`;
-        }
+    //     if (isRobot) {
+    //         if (robotType == 1)
+    //             html = `<span class="icon-big-Robot icon-big-good-robot">${spanHtml}</span>`;
+    //         else if (robotType == 2)
+    //             html = `<span class="icon-big-Robot icon-big-bad-robot">${spanHtml}</span>`;
+    //     }
 
-        return html;
-    }
+    //     return html;
+    // }
 
     //#endregion Render Grid
 
@@ -1587,24 +1595,24 @@ function DangerousSettingDetail() {
     //#endregion Refresh
 
     //#region Verify Trans
-    function GetTranIds() {
-        let tranIds = [];
-        domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
-            if (data.PICVerified == '-' || data.PICVerified == '' || data.PICVerified == null) {
-                tranIds.push(data.TransIdToString);
-            }
-        });
-        domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
-            if (data.PICVerified == '' || data.PICVerified == '' || data.PICVerified == null) {
-                tranIds.push(data.TransIdToString);
-            }
-        });
+    // function GetTranIds() {
+    //     let tranIds = [];
+    //     domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
+    //         if (data.PICVerified == '-' || data.PICVerified == '' || data.PICVerified == null) {
+    //             tranIds.push(data.TransIdToString);
+    //         }
+    //     });
+    //     domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
+    //         if (data.PICVerified == '' || data.PICVerified == '' || data.PICVerified == null) {
+    //             tranIds.push(data.TransIdToString);
+    //         }
+    //     });
 
-        return tranIds;
-    }
+    //     return tranIds;
+    // }
 
     // function VerifyTransMatchMonitorDetail() {
-    //     $.ajax(common.modifyRelativeUrl('MatchMonitor/VerifyTransMMDetail'), {
+    //     $.ajax(common.modifyRelativeUrl('DangerMonitor/VerifyTransMMDetail'), {
     //         type: 'POST',
     //         data:
     //         {
@@ -1660,7 +1668,7 @@ function DangerousSettingDetail() {
             IsOptIPLast3Days: domElements.inputOptIPLast3Days.is(":checked")
         }
 
-        xhr = $.ajax(common.modifyRelativeUrl('MatchMonitor/DetectGroupAssWithOptions'), {
+        xhr = $.ajax(common.modifyRelativeUrl('DangerMonitor/DetectGroupAssWithOptions'), {
             type: 'POST',
             data: params,
             beforeSend: function () {
@@ -1824,7 +1832,7 @@ function DangerousSettingDetail() {
                 awayMItems: isDisplaySingleGrid ? null : GetDataSelectedInGrid(domElements.tblMMAwayTeam.DataTable()),
                 mItems: isDisplaySingleGrid ? GetDataSelectedInGrid(domElements.tblMMSG.DataTable()) : null
             }
-            let url = common.modifyRelativeUrl('MatchMonitor/ExportToExcelMMDetail');
+            let url = common.modifyRelativeUrl('DangerMonitor/ExportToExcelMMDetail');
 
             $('body').append('<form action="' + url + '" method="post" target="output_frame" id="postToIframe"></form>');
             $('#postToIframe').append('<input type="hidden" asp-for="isDisplaySingleGridf" name=isDisplaySingleGrid value="' + mmDetails.isDisplaySingleGrid + '" />');
@@ -2318,7 +2326,7 @@ function DangerousSettingDetail() {
 
         domElements.cbbReason.multiselect().empty();
         let arrReason = [];
-        if (cacheDefaultReason != null) {
+        if (cacheDefaultReason) {
             arrReason = cacheDefaultReason.split(',');
         }
         if (reasonItems.length > 0) {
