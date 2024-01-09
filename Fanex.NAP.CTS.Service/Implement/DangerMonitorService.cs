@@ -6,6 +6,7 @@
     using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Criteria.DangerMonitor;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Common;
@@ -31,7 +32,7 @@
         private readonly IMatchMonitorService _matchMonitorService;
 
         private readonly string UserID = "MMDetailUserID";
-        protected string Region = "MMDetailRegion";
+        private readonly string Region = "MMDetailRegion";
 
         public DangerMonitorService(string region, string userID)
         {
@@ -76,11 +77,13 @@
                     }));
         }
 
-        public IEnumerable<DangerMonitorInfoViewModel> GetDangerMonitor(DangerMonitorSearchModel filter)
+        public GetDangerMonitorViewModel GetDangerMonitor(DangerMonitorSearchModel filter)
         {
             var result = Enumerable.Empty<DangerMonitorInfoViewModel>();
 
-            var mainMatches = _commonService.GetMainMatchInfos(filter);
+            var md5FilterKey = filter.BuildMD5FilterKey();
+
+            var mainMatches = GetMainMatchInfosWithBatchSize(md5FilterKey, filter);
 
             var teamNameDictionary = mainMatches.SelectMany(x => new List<int> { x.HomeId, x.AwayId }).Distinct().ToDictionary(x => x, x => CachedRef.GetTeamName(x));
             var leagueNameDictionary = mainMatches.Select(x => x.LeagueId).Distinct().ToDictionary(x => x, x => CachedRef.GetLeagueName(x));
@@ -88,6 +91,7 @@
                                             .Where(x =>
                                                 x.MatchName.ToUpper().Contains((filter.Event ?? string.Empty).ToUpper()) ||
                                                 x.LeagueName.ToUpper().Contains((filter.Event ?? string.Empty).ToUpper())).ToList();
+
             if (filterMatches?.Any() ?? false)
             {
                 var matchIDs = string.Join(",", filterMatches.Select(x => x.MatchID));
@@ -113,7 +117,12 @@
                 });
             }
 
-            return result;
+            return new GetDangerMonitorViewModel
+            {
+                DangerMonitors = result,
+                LastID = filter.LastID,
+                LastMatchSection = filter.LastMatchSection
+            };
         }
 
         public byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath)
@@ -786,6 +795,94 @@
             }
 
             return Enumerable.Empty<CustInfoModel>();
+        }
+
+        private IEnumerable<MainMatchModel> GetMainMatchInfosWithBatchSize(string md5FilterKey, DangerMonitorSearchModel filter)
+        {
+            var batchSize = 100;
+            var result = default(IEnumerable<MainMatchModel>);
+            var matchSectionMainMatches = default(IEnumerable<MainMatchModel>);
+
+            var getDangerMonitorGenerate = GetDangerMonitorGenerateFromCache(md5FilterKey, filter);
+
+            if (filter.LastID == 0)
+            {
+                filter.LastMatchSection = getDangerMonitorGenerate.Item1.MatchSection?.Split(',')[0] ?? string.Empty;
+            }
+
+            var cacheKeyMatchSection = filter.BuildCacheKey(nameof(GetDangerMonitorGenerateFromCache), Region, md5FilterKey, filter.LastMatchSection.ToString());
+
+            while (result == null)
+            {
+                if (filter.LastMatchSection != null)
+                {
+                    lock (cacheKeyMatchSection)
+                    {
+                        matchSectionMainMatches = _memoryCacheService.GetValue<List<MainMatchModel>>(cacheKeyMatchSection);
+
+                        if (matchSectionMainMatches == null)
+                        {
+                            getDangerMonitorGenerate = GetDangerMonitorGenerateFromCache(md5FilterKey, filter, filter.LastMatchSection);
+
+                            matchSectionMainMatches = getDangerMonitorGenerate.Item2;
+                        }
+                    }
+
+                    result = matchSectionMainMatches?.Skip(filter.LastID).Take(batchSize);
+                }
+                else
+                {
+                    break;
+                }
+
+                if (result != null && result.Count() == 0)
+                {
+                    filter.LastMatchSection = getDangerMonitorGenerate.Item1.MatchSection.Split(',').Where(x => int.Parse(x) > int.Parse(filter.LastMatchSection)).FirstOrDefault();
+                    filter.LastID = 0;
+                }
+            }
+
+            filter.LastID = filter.LastID + batchSize;
+
+            return result;
+        }
+
+        private (GetDangerMonitorGenerateModel, List<MainMatchModel>) GetDangerMonitorGenerateFromCache(string md5FilterKey, DangerMonitorSearchModel filter, string lastMatchSection = "")
+        {
+            var result = default(GetDangerMonitorGenerateModel);
+            var matchSectionMainMatch = default(List<MainMatchModel>);
+
+            var cacheKey = filter.BuildCacheKey(nameof(GetDangerMonitorGenerateFromCache), Region, md5FilterKey, "Generate");
+
+            lock (cacheKey)
+            {
+                result = _memoryCacheService.GetValue<GetDangerMonitorGenerateModel>(cacheKey);
+
+                if (result == null)
+                {
+                    var mainMatches = _commonService.GetMainMatchInfos(filter).OrderBy(x => x.MatchSection).ThenByDescending(x => x.MatchID).ToList();
+
+                    var matchSectionMainMatchesList = mainMatches.GroupBy(x => x.MatchSection);
+
+                    result = new GetDangerMonitorGenerateModel
+                    {
+                        MatchID = matchSectionMainMatchesList.FirstOrDefault()?.FirstOrDefault()?.MatchID ?? 0,
+                        MatchSection = matchSectionMainMatchesList.Select(x => x.Key).Join()
+                    };
+
+                    matchSectionMainMatch = matchSectionMainMatchesList.FirstOrDefault(x => x.Key.ToString() == lastMatchSection)?.ToList();
+
+                    foreach (var matchSectionMainMatches in matchSectionMainMatchesList)
+                    {
+                        var cacheKeyMatchSection = filter.BuildCacheKey(nameof(GetDangerMonitorGenerateFromCache), Region, md5FilterKey, matchSectionMainMatches.Key.ToString());
+                        _memoryCacheService.PushValue(cacheKeyMatchSection, matchSectionMainMatches.ToList());
+                    }
+
+                    _memoryCacheService.PushValueAsync(cacheKey, result);
+                }
+            }
+
+            return (result, matchSectionMainMatch);
         }
         #endregion
     }

@@ -1,8 +1,6 @@
 ﻿function DangerousSetting() {
     let dateEmptyString = "------,----";
     let dataTable;
-    let timeoutHolder = null;
-    let isSkipTracking = false;
     let sportBetType = [];
     let bettypeList = {};
     let dangerListSelected = {
@@ -16,8 +14,6 @@
     let domElements = {
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
         userId: $("#hdCTSCustId").val(),
-        // checkboxFrom: $('#checkboxFrom'),
-        // checkboxTo: $('#checkboxTo'),
         dpkFromDate: $('#dpkFromDate'),
         dpkToDate: $('#dpkToDate'),
         cbbIsVerified: $('#cbbIsVerified'),
@@ -38,6 +34,9 @@
         rbtnEventDate: $('#rbtnEventDate'),
         iconClear: $('#iconClear')
     };
+
+    let timeoutRenderTicketDetail = undefined;
+    let xhr;
 
     function FetchSports() {
         if (sportBetType) {
@@ -168,6 +167,62 @@
         return optgroup;
     }
 
+    function GetDangerMonitor(lastID = 0, lastMatchSection = "1", isSkipTracking = true) {
+        timeoutRenderTicketDetail = setTimeout(() => {
+            let data = {
+                FromDate: domElements.dpkFromDate.val(),
+                ToDate: !domElements.dpkToDate.val().includes(dateEmptyString) ? domElements.dpkToDate.val() : null,
+                DangerList: JSON.stringify(GetDangerList()),
+                Sports: domElements.cbbSport.val().join(),
+                Event: domElements.txtEvent.val().trim().toUpperCase(),
+                Market: domElements.cbbMarket.val() == "" ? "0,1" : domElements.cbbMarket.val(),
+                MatchSection: domElements.cbbMatchSection.val().join(),
+                BetTypes: JSON.stringify(domElements.cbbBetType.val().map(x => ({
+                    "BetType": bettypeList[x].BetType,
+                    "BetChoiceType": bettypeList[x].BetChoiceType,
+                    "BetChoiceHome": bettypeList[x].BetChoiceType == 2 ? bettypeList[x].BetChoiceHome : undefined,
+                    "BetChoiceAway": bettypeList[x].BetChoiceType == 2 ? bettypeList[x].BetChoiceAway : undefined,
+                    "BetID": bettypeList[x].BetID
+                }))),
+                isSkipTracking: isSkipTracking,
+                LastID: lastID,
+                LastMatchSection: lastMatchSection
+            };
+
+            xhr = $.ajax(common.modifyRelativeUrl('DangerMonitor/GetDangerMonitor'), {
+                type: 'POST',
+                tryCount: 0,
+                retryLimit: 3,
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    if (response?.data) {
+                        domElements.tblMonitor.DataTable().rows.add(response?.data?.DangerMonitors).draw(false);
+                    }
+
+                    if (response?.data?.LastMatchSection) {
+                        GetDangerMonitor(response?.data?.LastID, response?.data?.LastMatchSection, false);
+                        domElements.tblMonitor.find('tbody').removeClass('loading');
+                    }
+                },
+                error: function (xhr, textStatus, error) {
+                    domElements.tblMonitor.find('tbody').removeClass('loading');
+                    if (textStatus == 'timeout') {
+                        this.tryCount++;
+                        if (this.tryCount <= this.retryLimit) {
+                            //try again
+                            $.ajax(this);
+                            return;
+                        }
+                    }
+
+                    console.log(error);
+                }
+            });
+        }, 10);
+    }
+
     function Initial() {
         domElements.dpkFromDate
             .datepicker({
@@ -186,28 +241,6 @@
                 minDate: '-7D'
             })
             .datepicker("setDate", new Date());
-
-        // domElements.checkboxFrom.on('change', function () {
-        //     domElements.dpkFromDate.prop('disabled', !domElements.checkboxFrom.is(':checked'))
-
-        //     if (!domElements.checkboxFrom.is(':checked')) {
-        //         domElements.dpkFromDate.datepicker("setDate", moment().add(-7, "days").toDate());
-        //     }
-        // })
-
-        // domElements.checkboxTo.on('change', function () {
-        //     domElements.dpkToDate.prop('disabled', !domElements.checkboxTo.is(':checked'))
-
-        //     if (domElements.checkboxTo.is(':checked')) {
-        //         domElements.dpkToDate.datepicker("setDate", new Date());
-        //     }
-        //     else {
-        //         domElements.dpkToDate.val(dateEmptyString);
-        //     }
-        // })
-
-        // domElements.checkboxFrom.change();
-        // domElements.checkboxTo.change();
 
         domElements.cbbDgr.multiselect({
             menuWidth: 260,
@@ -296,49 +329,27 @@
                 dangerListSelected.Danger4 = GetDangerListById(4);
                 dangerListSelected.Danger5 = GetDangerListById(5);
 
-                dataTable ? dataTable.ajax.reload(null, true) : dataTable = GenerateGrid();
+                if (!dataTable) {
+                    dataTable = GenerateGrid();
+                }
+
+                if (timeoutRenderTicketDetail || xhr) {
+                    clearTimeout(timeoutRenderTicketDetail);
+                    xhr.onreadystatechange = null;
+                    xhr.abort();
+                }
+
+                domElements.tblMonitor.DataTable().clear().draw();
+
+                domElements.tblMonitor.find('tbody').addClass('loading');
+                GetDangerMonitor();
             }
         });
     }
 
     function GenerateGrid() {
-        let data = {
-            FromDate: function () { return domElements.dpkFromDate.val(); },
-            ToDate: function () { return !domElements.dpkToDate.val().includes(dateEmptyString) ? domElements.dpkToDate.val() : null },
-            DangerList: function () { return JSON.stringify(GetDangerList()) },
-            Sports: function () { return domElements.cbbSport.val().join() },
-            Event: function () { return domElements.txtEvent.val().trim().toUpperCase() },
-            Market: function () { return domElements.cbbMarket.val() == "" ? "0,1" : domElements.cbbMarket.val() },
-            MatchSection: function () { return domElements.cbbMatchSection.val().join() },
-            BetTypes: function () {
-                return JSON.stringify(domElements.cbbBetType.val().map(x => ({
-                    "BetType": bettypeList[x].BetType,
-                    "BetChoiceType": bettypeList[x].BetChoiceType,
-                    "BetChoiceHome": bettypeList[x].BetChoiceType == 2 ? bettypeList[x].BetChoiceHome : undefined,
-                    "BetChoiceAway": bettypeList[x].BetChoiceType == 2 ? bettypeList[x].BetChoiceAway : undefined,
-                    "BetID": bettypeList[x].BetID
-                })))
-            },
-            isSkipTracking: isSkipTracking,
-        };
-
         return domElements.tblMonitor.DataTable({
             serverSide: false,
-            ajax: {
-                url: common.modifyRelativeUrl('DangerMonitor/GetDangerMonitor'),
-                type: 'POST',
-                data: data,
-                beforeSend: function () {
-                    domElements.tblMonitor.find('tbody').addClass('loading');
-                },
-                complete: function () {
-                    domElements.tblMonitor.find('tbody').removeClass('loading');
-                },
-                error: function (error) {
-                    domElements.tblMonitor.find('tbody').removeClass('loading');
-                    console.log(error);
-                }
-            },
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
             language: {
@@ -349,7 +360,7 @@
                     next: "",
                     previous: ""
                 },
-                info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
+                info: "Total Item: _TOTAL_ item(s)",
                 infoEmpty: "",
                 zeroRecords: "There's no data"
             },
@@ -359,6 +370,7 @@
             pageLength: 1000,
             scrollX: false,
             scrollCollapse: true,
+            paging: false,
             scrollY: `${$(window).height() - 340}px`,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },

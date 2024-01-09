@@ -10,7 +10,6 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.DangerMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
-    using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
@@ -30,10 +29,8 @@
     {
         private readonly IDangerMonitorService _dangerMonitorService;
         private readonly IAssociationDetectionService _associationDetectionService;
-        private readonly IMatchMonitorService _matchMonitorService;
         private readonly ICommonService _commonService;
 
-        private readonly string UserID = "MMDetailUserID";
         private const string Region = "DangerDetailRegion";
 
         private const string MMDetailDoubleGridTemplate = "~/App_Data/Excel Template/DangerMonitor/DoubleGridTemplate.xlsx";
@@ -70,7 +67,13 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.DangerMonitorRpt, "isSkipTracking")]
         public ActionResult GetDangerMonitor(DangerMonitorSearchModel filter, bool? isSkipTracking)
         {
-            var data = _dangerMonitorService.GetDangerMonitor(filter);
+            var data = default(GetDangerMonitorViewModel);
+
+            while ((data?.DangerMonitors == null || data.DangerMonitors.Count() == 0) && filter.LastMatchSection != null)
+            {
+                data = _dangerMonitorService.GetDangerMonitor(filter);
+            }
+
             return Json(new
             {
                 data = data

@@ -9,7 +9,7 @@
     {
         IEnumerable<DangerMonitorBetTypeViewModel> GetSportBettypes();
 
-        IEnumerable<DangerMonitorInfoViewModel> GetDangerMonitor(DangerMonitorSearchModel filter);
+        GetDangerMonitorViewModel GetDangerMonitor(DangerMonitorSearchModel filter);
 
         byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath);
 
