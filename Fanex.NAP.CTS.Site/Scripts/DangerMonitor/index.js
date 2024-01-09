@@ -205,6 +205,9 @@
                         GetDangerMonitor(response?.data?.LastID, response?.data?.LastMatchSection, false);
                         domElements.tblMonitor.find('tbody').removeClass('loading');
                     }
+                    else {
+                        $('.loading').addClass('hide');
+                    }
                 },
                 error: function (xhr, textStatus, error) {
                     domElements.tblMonitor.find('tbody').removeClass('loading');
@@ -342,6 +345,8 @@
                 domElements.tblMonitor.DataTable().clear().draw();
 
                 domElements.tblMonitor.find('tbody').addClass('loading');
+                $('.loading').removeClass('hide');
+
                 GetDangerMonitor();
             }
         });
@@ -360,7 +365,7 @@
                     next: "",
                     previous: ""
                 },
-                info: "Total Item: _TOTAL_ item(s)",
+                info: "<div class=\"loading\"></div> Total Item: _TOTAL_ item(s)",
                 infoEmpty: "",
                 zeroRecords: "There's no data"
             },
