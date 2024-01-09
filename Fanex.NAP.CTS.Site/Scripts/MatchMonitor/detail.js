@@ -422,11 +422,12 @@ function MatchMonitorDetail() {
 
     function SetupMGroupFilter(data) {
         domElements.cbbMGroup.multiselect().empty();
+        let totalTicket = domElements.divPopupAssDetect.attr('data-total-ticket');
         let totalTicketDetect = domElements.divPopupAssDetect.attr('data-total-ticket-detect');
 
         if (data) {
             let isExistedBlank = false;
-            if (totalTicketDetect < recordsTotalGlobal) {
+            if (parseInt(totalTicketDetect) < parseInt(totalTicket)) {
                 domElements.cbbMGroup.append(`<option value='0'>-</option>`);
                 cacheFilterDependOn.MGrList = ReUnshiftBlankMGr(cacheFilterDependOn.MGrList);
                 isExistedBlank = true;
@@ -957,12 +958,12 @@ function MatchMonitorDetail() {
                 betIDString += ("0" + domElements.cbbMapYY.val()).slice(-2);
             }
             return betIDString;
-            
+
         } else if (domElements.sportType == 2) {
             return $("option:selected", domElements.cbbBetType).attr('data-betid');
         } else {
             return domElements.betIDToString;
-        }       
+        }
     }
 
     function IsFilterSuspicious(params) {
@@ -1355,6 +1356,8 @@ function MatchMonitorDetail() {
                             domElements.breadcrumbTotalTickets.html(`Total Tickets: -/-`);
                         } else {
                             RefreshBreadcrumbTotalTickets(0, recordsTotalGlobal);
+
+                            domElements.divPopupAssDetect.attr('data-total-ticket', recordsTotalGlobal);
                         }
                     }
                 },
@@ -2465,9 +2468,9 @@ function MatchMonitorDetail() {
             $("option[value='0']", domElements.cbbMapX).remove();
             domElements.cbbMapX.prop('disabled', false);
             if (isBetTypeChange) {
-                domElements.cbbMapX.val('1').trigger('change');                
+                domElements.cbbMapX.val('1').trigger('change');
             }
-        } else {            
+        } else {
             domElements.cbbMapX.prepend("<option value='0' selected='selected'>-</option>");
             domElements.cbbMapX.prop('disabled', true);
         }
@@ -2652,12 +2655,12 @@ function MatchMonitorDetail() {
         SetupMultiselect(domElements.cbbTicketsStatus, "Status");
         domElements.cbbBetType.select2();
         domElements.cbbMapX.select2();
-        domElements.cbbMapYY.select2();       
+        domElements.cbbMapYY.select2();
 
-        if (domElements.mapX != "0" && domElements.sportType != 2) {            
-            domElements.cbbMapX.val(domElements.mapX).trigger('change');           
+        if (domElements.mapX != "0" && domElements.sportType != 2) {
+            domElements.cbbMapX.val(domElements.mapX).trigger('change');
             domElements.cbbBetType.val(`${domElements.betTypeID}_0`).trigger('change');
-        } else {           
+        } else {
             domElements.cbbBetType.val(`${domElements.betTypeID}_${domElements.betIDToString}`).trigger('change');
         }
         if (domElements.mapYY != "0") {
@@ -2665,15 +2668,15 @@ function MatchMonitorDetail() {
         }
 
         ToggleMapXYY(false);
-        
+
         domElements.cbbMarket.val(domElements.liveIndicator);
-        
-        domElements.cbbMarket.change(function () {          
-            ResetTranstime();           
+
+        domElements.cbbMarket.change(function () {
+            ResetTranstime();
             OnchangeFilter();
         });
-        domElements.cbbBetType.change(function () {                       
-            ResetTranstime();         
+        domElements.cbbBetType.change(function () {
+            ResetTranstime();
             ToggleMapXYY(true);
 
             OnchangeFilter();

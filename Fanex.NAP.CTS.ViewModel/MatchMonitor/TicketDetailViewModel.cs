@@ -25,22 +25,12 @@
 
         public string GetTransByFilterIncludeSuspicous(MMDetailFilterViewModel filter, IEnumerable<MatchMonitorDetailItemViewModel> ticketMergeGroups)
         {
-            var transList = new List<FraudTransModel>();          
+            var transList = new List<FraudTransModel>();
             var mGrTranIDListFilteredDic = new Dictionary<long, MGrTranIDListFilteredModel>();
 
             if (!string.IsNullOrEmpty(filter.MGrTranIDListFiltered))
             {
-                var mGrTranIDListFiltered = JsonConvert.DeserializeObject<IEnumerable<MGrTranIDListFilteredModel>>(filter.MGrTranIDListFiltered);                                
-
-                if (filter.MGroupList.Count == 1 && filter.MGroupList.Any(x => x == "0"))
-                {
-                    mGrTranIDListFilteredDic = mGrTranIDListFiltered.ToDictionary(x => x.TransID, x => x);
-                }
-                else
-                {
-                    mGrTranIDListFiltered = mGrTranIDListFiltered.Where(x => filter.MGroupList.Contains(x.MGrName));
-                    mGrTranIDListFilteredDic = mGrTranIDListFiltered.ToDictionary(x => x.TransID, x => x);
-                }
+                mGrTranIDListFilteredDic = JsonConvert.DeserializeObject<IEnumerable<MGrTranIDListFilteredModel>>(filter.MGrTranIDListFiltered).ToDictionary(x => x.TransID, x => x);
             }
 
             foreach (var ticket in ticketMergeGroups)
@@ -73,8 +63,8 @@
                     }
                 }
             }
-           
-            transList = GetTranByFilterMGr(transList, mGrTranIDListFilteredDic);          
+
+            transList = GetTranByFilterMGr(transList, mGrTranIDListFilteredDic);
 
             if (transList.Any())
             {
@@ -95,15 +85,13 @@
             {
                 if (filter.MGroupList.Contains("-") || filter.MGroupList.Contains("0"))
                 {
-                    mGrTranIDListFiltered = JsonConvert.DeserializeObject<IEnumerable<MGrTranIDListFilteredModel>>(filter.MGrTranIDListFiltered)
-                  .Where(x => !filter.MGroupList.Contains(x.MGrName));
-                    mGrTranIDListFilteredDic = mGrTranIDListFiltered.ToDictionary(x => x.TransID, x => x);
+                    mGrTranIDListFilteredDic = JsonConvert.DeserializeObject<IEnumerable<MGrTranIDListFilteredModel>>(filter.MGrTranIDListFiltered)
+                        .Where(x => !filter.MGroupList.Contains(x.MGrName)).ToDictionary(x => x.TransID, x => x);
                 }
                 else
                 {
-                    mGrTranIDListFiltered = JsonConvert.DeserializeObject<IEnumerable<MGrTranIDListFilteredModel>>(filter.MGrTranIDListFiltered)
-                  .Where(x => filter.MGroupList.Contains(x.MGrName));
-                    mGrTranIDListFilteredDic = mGrTranIDListFiltered.ToDictionary(x => x.TransID, x => x);
+                    mGrTranIDListFilteredDic = JsonConvert.DeserializeObject<IEnumerable<MGrTranIDListFilteredModel>>(filter.MGrTranIDListFiltered)
+                        .Where(x => filter.MGroupList.Contains(x.MGrName)).ToDictionary(x => x.TransID, x => x);
                 }
             }
 
@@ -114,9 +102,9 @@
                 var equals = !filter.ReasonList.Any(y => (ticket.ReasonList ?? "-").Contains(y))
                             || !filter.AGroupList.Contains(ticket.ADetectGroup)
                             || mGrTranIDListFilteredDic.ContainsKey(ticket.TransId);
-                
+
                 if (equals)
-                {                    
+                {
                     if (!string.IsNullOrEmpty(ticket.ReasonIDList))
                     {
                         var arrReason = ticket.ReasonList.Split(',');
@@ -134,7 +122,7 @@
                     }
                 }
             }
-           
+
             transList = GetTranByFilterMGr(transList, mGrTranIDListFilteredDic);
 
             if (transList.Any())
@@ -143,12 +131,12 @@
             }
 
             return string.Empty;
-        }        
+        }
 
         public string GetTransByFilterIncludeMGr(MMDetailFilterViewModel filter)
         {
             var transList = new List<FraudTransModel>();
-           
+
             var mGrTranIDListFilteredDic = new Dictionary<long, MGrTranIDListFilteredModel>();
 
             if (!string.IsNullOrEmpty(filter.MGrTranIDListFiltered))
@@ -214,13 +202,13 @@
 
             transList.AddRange(trandsExcept);
 
-            return transList;           
+            return transList;
         }
 
         public IEnumerable<SuspiciousTransInfoModel> GetSuspiciousTransInfo(IEnumerable<MatchMonitorDetailItemViewModel> tickets)
         {
             var suspiciousTransInfos = new List<SuspiciousTransInfoModel>();
-           
+
             foreach (var ticket in tickets)
             {
                 var arrReasons = ticket.ReasonList.Split(',');
@@ -241,7 +229,7 @@
 
         public MMDetailFilterViewModel GenerateDropdownFilterListByMainTicketInfo(IEnumerable<MMDetailFilterTicketInfoModel> infoList, bool liveIndicator, int sportType)
         {
-            var filter = new MMDetailFilterViewModel();            
+            var filter = new MMDetailFilterViewModel();
 
             filter.DropdownListFilterDependOn = infoList.Select(x => new DependOnFilterItemViewModel(x, liveIndicator));
 
@@ -267,7 +255,7 @@
             else
             {
                 filter.ScoreList = scoreList.ToList();
-            }            
+            }
 
             filter.GroupList = filter.DropdownListFilterDependOn.Select(x => new GroupInfoViewModel
             {
@@ -276,7 +264,7 @@
             }).Distinct(x => x.GroupID).OrderBy(x => x.GroupID).ToList();
 
             if (filter.DropdownListFilterDependOn.Any())
-                filter.MGroupList = new List<string>() { "-" };           
+                filter.MGroupList = new List<string>() { "-" };
 
             var subscriberTypeList = filter.DropdownListFilterDependOn.Select(x => x.SubscriberType).Distinct().ToList();
 
