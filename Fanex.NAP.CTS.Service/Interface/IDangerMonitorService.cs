@@ -15,5 +15,11 @@
 
         byte[] ExportExcelMMDetailDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems
             , string fileName, string templatePath);
+
+        MMDetailTicketListViewModel GetMatchMonitorDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter);
+
+        MMDetailFilterViewModel GetMatchMonitorFilter(MMDetailInfoViewModel para);
+
+        long GetMatchMonitorTotalTicket(MMDetailInfoViewModel info, MMDetailFilterViewModel filter);
     }
 }

@@ -36,15 +36,16 @@
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class MatchMonitorController : BaseController
     {
-        protected string MMDetailDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/DoubleGridTemplate.xlsx";
-        protected string MMDetailSingleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/SingleGridTemplate.xlsx";
-        protected readonly IMatchMonitorService _matchMonitorService;
+        private const string MMDetailDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/DoubleGridTemplate.xlsx";
+        private const string MMDetailSingleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/SingleGridTemplate.xlsx";
+
+        private readonly IMatchMonitorService _matchMonitorService;
         private readonly IAssociationDetectionService _associationDetectionService;
-        protected readonly ICommonService _commonService;
+        private readonly ICommonService _commonService;
         private readonly IMemoryCacheService _memoryCacheService;
+
         private readonly string UserID = "MMDetailUserID";
-        protected string Region = "MMDetailRegion";
-        protected string ControllerName = "Match Monitor";
+        private readonly string Region = "MMDetailRegion";
         private readonly string[] PropertyNameOfSummaryHomeList = { nameof(GetMatchMonitorViewModel.HomeTotalAmount), nameof(GetMatchMonitorViewModel.HomeBetCount) };
         private readonly string[] PropertyNameOfSummaryAwayList = { nameof(GetMatchMonitorViewModel.AwayTotalAmount), nameof(GetMatchMonitorViewModel.AwayBetCount) };
 
@@ -60,7 +61,7 @@
         }
 
         #region Main Page
-        public virtual ActionResult Index()
+        public ActionResult Index()
         {
             IUserService userService = new UserService();
 
@@ -87,7 +88,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorRpt, "isSkipTracking")]
-        public virtual ActionResult GetMatchMonitor(MatchMonitorSearchViewModel para, bool? isSkipTracking)
+        public ActionResult GetMatchMonitor(MatchMonitorSearchViewModel para, bool? isSkipTracking)
         {
             var matchMonitors = Enumerable.Empty<GetMatchMonitorViewModel>();
 
@@ -122,7 +123,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                    .AddMessage($"Get {ControllerName} Error: " + ex.Message + ex.StackTrace + "\n"
+                    .AddMessage($"{Region} Get Match Monitor Error: " + ex.Message + ex.StackTrace + "\n"
                      + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                      + ex.InnerException.StackTrace)
                     .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -296,7 +297,7 @@
 
         #region Detail Page
         [HttpGet]
-        public virtual ActionResult Detail(MatchMonitorDetailViewModel para)
+        public ActionResult Detail(MatchMonitorDetailViewModel para)
         {
             IUserService userService = new UserService();
 
@@ -333,7 +334,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                   .AddMessage($"{ControllerName} Detail Error: " + ex.Message + ex.StackTrace + "\n"
+                   .AddMessage($"{Region} Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                     + ex.InnerException.StackTrace)
                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -372,7 +373,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                  .AddMessage($"Get {ControllerName} Filter Error: " + ex.Message + ex.StackTrace + "\n"
+                  .AddMessage($"{Region} Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                    + ex.InnerException.StackTrace)
                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -499,7 +500,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                    .AddMessage("Get All MM Filter Error: " + ex.Message + ex.StackTrace + "\n"
+                    .AddMessage($"{Region} Get All MM Filter Error: " + ex.Message + ex.StackTrace + "\n"
                      + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                      + ex.InnerException.StackTrace)
                     .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -535,7 +536,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                   .AddMessage($"Get {ControllerName} Total Ticket Error: " + ex.Message + ex.StackTrace + "\n"
+                   .AddMessage($"{Region} Get Match Monitor Total Ticket Error: " + ex.Message + ex.StackTrace + "\n"
                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                     + ex.InnerException.StackTrace)
                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -555,7 +556,7 @@
         #region Detail Tickets
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailRpt)]
-        public virtual ActionResult GetMatchMonitorDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter)
+        public ActionResult GetMatchMonitorDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter)
         {
             var mdResult = default(MMDetailTicketListViewModel);
 
@@ -587,12 +588,12 @@
 
                                 if (ctsCustIDHomeIsZero != null && ctsCustIDHomeIsZero.Any())
                                 {
-                                    LogService.Error($"Get {ControllerName} Detail with CTSCustIDHome=0: {JsonConvert.SerializeObject(ctsCustIDHomeIsZero)}");
+                                    LogService.Error($"{Region} Get Match Monitor Detail with CTSCustIDHome=0: {JsonConvert.SerializeObject(ctsCustIDHomeIsZero)}");
                                 }
 
                                 if (ctsCustIDAwayIsZero != null && ctsCustIDAwayIsZero.Any())
                                 {
-                                    LogService.Error($"Get {ControllerName} Detail with CTSCustIDAway=0: {JsonConvert.SerializeObject(ctsCustIDAwayIsZero)}");
+                                    LogService.Error($"{Region} Get Match Monitor Detail with CTSCustIDAway=0: {JsonConvert.SerializeObject(ctsCustIDAwayIsZero)}");
                                 }
                             }
 
@@ -603,7 +604,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                   .AddMessage($"Get {ControllerName} Detail Error: " + ex.Message + ex.StackTrace + "\n"
+                   .AddMessage($"{Region} Get Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                     + ex.InnerException.StackTrace)
                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -671,7 +672,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                 .AddMessage($"Get All {ControllerName} Detail Error: " + ex.Message + ex.StackTrace + "\n"
+                 .AddMessage($"{Region} Get All Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
                   + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                   + ex.InnerException.StackTrace)
                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -763,7 +764,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                  .AddMessage("Get Fraud MM Detail For Cache Error: " + ex.Message + ex.StackTrace + "\n"
+                  .AddMessage($"{Region} Get Fraud MM Detail For Cache Error: " + ex.Message + ex.StackTrace + "\n"
                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                    + ex.InnerException.StackTrace)
                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -821,7 +822,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailManualDetectRpt)]
-        public virtual ActionResult DetectGroupAssWithOptions(DetectGroupAssFilterViewModel model)
+        public ActionResult DetectGroupAssWithOptions(DetectGroupAssFilterViewModel model)
         {
             var result = new DetectGroupAssociationListViewModel();
 
@@ -856,7 +857,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailVerifyTransRpt)]
-        public virtual ActionResult VerifyTransMMDetail(MatchMonitorDetailVerifyTransParaModel para)
+        public ActionResult VerifyTransMMDetail(MatchMonitorDetailVerifyTransParaModel para)
         {
             var result = new DBResult();
 
@@ -872,7 +873,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                 .AddMessage("Verify Trans MM Detail Error: " + ex.Message + ex.StackTrace + "\n"
+                 .AddMessage($"{Region} Verify Trans MM Detail Error: " + ex.Message + ex.StackTrace + "\n"
                   + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                   + ex.InnerException.StackTrace)
                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -895,7 +896,7 @@
         #region User Feedback
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailUserFeedback)]
-        public virtual ActionResult GetUserFeedback(UserFeedbackViewModel para)
+        public ActionResult GetUserFeedback(UserFeedbackViewModel para)
         {
             var result = Enumerable.Empty<GetMMUserFeedbackViewModel>();
 
@@ -942,7 +943,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailUserFeedbackInsert)]
-        public virtual ActionResult InsertUserFeedback(InsertUserFeedbackViewModel para)
+        public ActionResult InsertUserFeedback(InsertUserFeedbackViewModel para)
         {
             para.UserID = CurrentSession.UserId;
 
@@ -956,7 +957,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailUserFeedbackInsert)]
-        public virtual ActionResult UpdateUserFeedback(UpdateUserFeedbackViewModel para)
+        public ActionResult UpdateUserFeedback(UpdateUserFeedbackViewModel para)
         {
             para.UserID = CurrentSession.UserId;
 
@@ -970,7 +971,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailUserFeedbackInsert)]
-        public virtual ActionResult DeleteUserFeedback(DeleteUserFeedbackViewModel para)
+        public ActionResult DeleteUserFeedback(DeleteUserFeedbackViewModel para)
         {
             para.UserID = CurrentSession.UserId;
 
@@ -989,7 +990,7 @@
         #region Export to Excel
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailExportToExcelRpt)]
-        public virtual ActionResult ExportToExcelMMDetail(FormCollection from)
+        public ActionResult ExportToExcelMMDetail(FormCollection from)
         {
             var serializer = new JavaScriptSerializer();
             serializer.MaxJsonLength = Int32.MaxValue;

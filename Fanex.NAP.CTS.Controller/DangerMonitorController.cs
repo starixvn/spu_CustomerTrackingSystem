@@ -9,11 +9,14 @@
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.DangerMonitor;
-    using Fanex.NAP.CTS.Model.MatchMonitor;
+    using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.ViewModel.AssociationDetection;
     using Fanex.NAP.CTS.ViewModel.DangerMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
+    using Fanex.NAP.CTS.ViewModel.MatchMonitor.DetectGroup;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -23,22 +26,31 @@
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.DangerMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
-    public class DangerMonitorController : MatchMonitorController
+    public class DangerMonitorController : BaseController
     {
         private readonly IDangerMonitorService _dangerMonitorService;
+        private readonly IAssociationDetectionService _associationDetectionService;
+        private readonly IMatchMonitorService _matchMonitorService;
+        private readonly ICommonService _commonService;
 
-        public DangerMonitorController() : base()
+        private readonly string UserID = "MMDetailUserID";
+        private const string Region = "DangerDetailRegion";
+
+        private const string MMDetailDoubleGridTemplate = "~/App_Data/Excel Template/DangerMonitor/DoubleGridTemplate.xlsx";
+        private const string MMDetailSingleGridTemplate = "~/App_Data/Excel Template/DangerMonitor/SingleGridTemplate.xlsx";
+
+        public override string BaseControllerName { get => Consts.MenuItemMonitor; }
+
+        public DangerMonitorController()
         {
-            _dangerMonitorService = new DangerMonitorService();
-            Region = "DangerDetailRegion";
-            ControllerName = "Danger Monitor";
-            MMDetailDoubleGridTemplate = "~/App_Data/Excel Template/DangerMonitor/DoubleGridTemplate.xlsx";
-            MMDetailSingleGridTemplate = "~/App_Data/Excel Template/DangerMonitor/SingleGridTemplate.xlsx";
+            _dangerMonitorService = new DangerMonitorService(Region, CurrentSession.UserId.ToString());
+            _associationDetectionService = new AssociationDetectionService();
+            _commonService = new CommonService();
         }
 
         #region danger main
         [HttpGet]
-        public override ActionResult Index()
+        public ActionResult Index()
         {
             return View();
         }
@@ -111,7 +123,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                   .AddMessage($"{ControllerName} Detail Error: " + ex.Message + ex.StackTrace + "\n"
+                   .AddMessage($"{Region} Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                     + ex.InnerException.StackTrace)
                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -124,12 +136,92 @@
         }
         #endregion
 
+        #region Detail Filter
+        [HttpPost]
+        public ActionResult GetMatchMonitorFilter(MMDetailInfoViewModel para)
+        {
+            var result = new MMDetailFilterViewModel();
+
+            try
+            {
+                result = _dangerMonitorService.GetMatchMonitorFilter(para);
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                  .AddMessage($"{Region} Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
+                   + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                   + ex.InnerException.StackTrace)
+                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+            }
+
+            return Json(new
+            {
+                data = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion Detail Filter
+
+        #region Detail Total Tickets
+        [HttpPost]
+        public ActionResult GetMatchMonitorTotalTicket(MMDetailInfoViewModel info, MMDetailFilterViewModel filter)
+        {
+            long recordsTotal = 0;
+
+            try
+            {
+                recordsTotal = _dangerMonitorService.GetMatchMonitorTotalTicket(info, filter);
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                   .AddMessage($"{Region} Get Match Monitor Total Ticket Error: " + ex.Message + ex.StackTrace + "\n"
+                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                    + ex.InnerException.StackTrace)
+                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+            }
+
+            return Json(new
+            {
+                recordsTotal = recordsTotal,
+            }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion Detail Total Tickets
+
         #region Detail Tickets
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.DangerMonitorDetailRpt)]
-        public override ActionResult GetMatchMonitorDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter)
+        public ActionResult GetMatchMonitorDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter)
         {
-            return base.GetMatchMonitorDetail(para, filter);
+            var mdResult = default(MMDetailTicketListViewModel);
+
+            try
+            {
+                mdResult = _dangerMonitorService.GetMatchMonitorDetail(para, filter);
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                   .AddMessage($"{Region} Get Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
+                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                    + ex.InnerException.StackTrace)
+                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+            }
+
+            return Json(new
+            {
+                data = mdResult,
+                recordsFiltered = (mdResult?.RecordsTotal ?? 0)
+            }, JsonRequestBehavior.AllowGet);
         }
         #endregion
 
@@ -137,9 +229,33 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.DangerMonitorDetailManualDetectRpt)]
-        public override ActionResult DetectGroupAssWithOptions(DetectGroupAssFilterViewModel model)
+        public ActionResult DetectGroupAssWithOptions(DetectGroupAssFilterViewModel model)
         {
-            return base.DetectGroupAssWithOptions(model);
+            var result = new DetectGroupAssociationListViewModel();
+
+            var orgUserList = _associationDetectionService.ValidateUserName(model.RawUserNames);
+
+            var data = _associationDetectionService.DetectAssociation(new DetectAssociationByUserNamesViewModel
+            {
+                UserNames = model.RawUserNames,
+                IsBP = model.IsOptBP,
+                IsDevice = model.IsOptDevice,
+                IsIP = model.IsOptIP,
+                IsAgent = model.IsOptAgent,
+                IsIPLast3Days = model.IsOptIPLast3Days,
+                Is3MatchesLast7Days = model.IsOpt3MatchesLast7Days
+            }, orgUserList, false, false).Select(x => new DetectGroupAssociationItemViewModel(x)); ;
+
+            result.ItemList = this.RearrangeAssGroup(data, true);
+
+            var mGrList = new MGrListViewModel();
+            mGrList.BuildMGrList(result.ItemList, model.RawCustIDs);
+
+            return Json(new
+            {
+                data = result,
+                mGrList = mGrList
+            }, JsonRequestBehavior.AllowGet);
         }
 
         #endregion Association Detect
@@ -147,7 +263,7 @@
         #region Export to Excel
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.DangerMonitorDetailExportToExcelRpt)]
-        public override ActionResult ExportToExcelMMDetail(FormCollection from)
+        public ActionResult ExportToExcelMMDetail(FormCollection from)
         {
             var serializer = new JavaScriptSerializer();
             serializer.MaxJsonLength = Int32.MaxValue;
@@ -183,57 +299,54 @@
 
         #endregion
 
-        #region disable function
-        #region match monitor
-        [NonAction]
-        public override ActionResult GetMatchMonitor(MatchMonitorSearchViewModel para, bool? isSkipTracking)
+        #region private method
+        private IEnumerable<DetectGroupAssociationItemViewModel> RearrangeAssGroup(IEnumerable<DetectGroupAssociationItemViewModel> assGroupList, bool isDisableNone)
         {
-            return base.GetMatchMonitor(para, isSkipTracking);
+            var result = new List<DetectGroupAssociationItemViewModel>();
+
+            if (isDisableNone)
+                assGroupList = assGroupList.Where(x => x.GroupID != 0);
+
+            if (assGroupList.Any())
+            {
+                var grouping = assGroupList
+                    .GroupBy(x => x.GroupID, (key, g) => new { GroupID = key, Items = g.ToList() })
+                    .OrderBy(x => x.GroupID);
+
+                var idx = 1;
+
+                foreach (var group in grouping)
+                {
+                    var groupID = group.GroupID;
+                    var groupName = group.GroupID.ToString();
+
+                    if (groupID.HasValue)
+                    {
+                        if (groupID == 0)
+                        {
+                            groupID = -1;
+                            groupName = "None";
+                        }
+                        else
+                        {
+                            groupID = idx;
+                            groupName = idx.ToString();
+                            idx += 1;
+                        }
+                    }
+
+                    result.AddRange(group.Items.Select(x =>
+                    {
+                        x.GroupID = groupID;
+                        x.GroupName = groupName;
+
+                        return x;
+                    }));
+                }
+            }
+
+            return result;
         }
-
-        [NonAction]
-        public override ActionResult Detail(MatchMonitorDetailViewModel para)
-        {
-            return base.Detail(para);
-        }
-        #endregion
-
-        #region Verify Trans
-
-        [NonAction]
-        public override ActionResult VerifyTransMMDetail(MatchMonitorDetailVerifyTransParaModel para)
-        {
-            return base.VerifyTransMMDetail(para);
-        }
-
-        #endregion Verify Trans
-
-        #region User Feedback
-        [NonAction]
-        public override ActionResult GetUserFeedback(UserFeedbackViewModel para)
-        {
-            return base.GetUserFeedback(para);
-        }
-
-        [NonAction]
-        public override ActionResult InsertUserFeedback(InsertUserFeedbackViewModel para)
-        {
-            return base.InsertUserFeedback(para);
-        }
-
-        [NonAction]
-        public override ActionResult UpdateUserFeedback(UpdateUserFeedbackViewModel para)
-        {
-            return UpdateUserFeedback(para);
-        }
-
-        [NonAction]
-        public override ActionResult DeleteUserFeedback(DeleteUserFeedbackViewModel para)
-        {
-            return base.DeleteUserFeedback(para);
-        }
-
-        #endregion User Feedback
         #endregion
     }
 }
