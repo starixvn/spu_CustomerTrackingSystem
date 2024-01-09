@@ -1,4 +1,5 @@
 ﻿function DangerousSetting() {
+    let dateEmptyString = "------,----";
     let dataTable;
     let timeoutHolder = null;
     let isSkipTracking = false;
@@ -15,8 +16,8 @@
     let domElements = {
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
         userId: $("#hdCTSCustId").val(),
-        checkboxFrom: $('#checkboxFrom'),
-        checkboxTo: $('#checkboxTo'),
+        // checkboxFrom: $('#checkboxFrom'),
+        // checkboxTo: $('#checkboxTo'),
         dpkFromDate: $('#dpkFromDate'),
         dpkToDate: $('#dpkToDate'),
         cbbIsVerified: $('#cbbIsVerified'),
@@ -35,6 +36,7 @@
         cbbReason: $('#cbbReason'),
         rbtnScanDate: $('#rbtnScanDate'),
         rbtnEventDate: $('#rbtnEventDate'),
+        iconClear: $('#iconClear')
     };
 
     function FetchSports() {
@@ -174,7 +176,7 @@
                 changeYear: true,
                 minDate: '-7D'
             })
-            .datepicker("setDate", moment().add(-7, "days").toDate());
+            .datepicker("setDate", moment().toDate());
 
         domElements.dpkToDate
             .datepicker({
@@ -185,27 +187,27 @@
             })
             .datepicker("setDate", new Date());
 
-        domElements.checkboxFrom.on('change', function () {
-            domElements.dpkFromDate.prop('disabled', !domElements.checkboxFrom.is(':checked'))
+        // domElements.checkboxFrom.on('change', function () {
+        //     domElements.dpkFromDate.prop('disabled', !domElements.checkboxFrom.is(':checked'))
 
-            if (!domElements.checkboxFrom.is(':checked')) {
-                domElements.dpkFromDate.datepicker("setDate", moment().add(-7, "days").toDate());
-            }
-        })
+        //     if (!domElements.checkboxFrom.is(':checked')) {
+        //         domElements.dpkFromDate.datepicker("setDate", moment().add(-7, "days").toDate());
+        //     }
+        // })
 
-        domElements.checkboxTo.on('change', function () {
-            domElements.dpkToDate.prop('disabled', !domElements.checkboxTo.is(':checked'))
+        // domElements.checkboxTo.on('change', function () {
+        //     domElements.dpkToDate.prop('disabled', !domElements.checkboxTo.is(':checked'))
 
-            if (domElements.checkboxTo.is(':checked')) {
-                domElements.dpkToDate.datepicker("setDate", new Date());
-            }
-            else {
-                domElements.dpkToDate.val('--- --,----');
-            }
-        })
+        //     if (domElements.checkboxTo.is(':checked')) {
+        //         domElements.dpkToDate.datepicker("setDate", new Date());
+        //     }
+        //     else {
+        //         domElements.dpkToDate.val(dateEmptyString);
+        //     }
+        // })
 
-        domElements.checkboxFrom.change();
-        domElements.checkboxTo.change();
+        // domElements.checkboxFrom.change();
+        // domElements.checkboxTo.change();
 
         domElements.cbbDgr.multiselect({
             menuWidth: 260,
@@ -266,30 +268,43 @@
             domElements.refreshList.toggleClass('block-box');
         });
 
+        domElements.dpkToDate.on('change', function () {
+            domElements.iconClear.removeClass('hide');
+        });
+
+        domElements.iconClear.on('click', function () {
+            domElements.dpkToDate.val(dateEmptyString);
+
+            domElements.iconClear.addClass('hide');
+        });
+
         domElements.cbbSport.on('change', function () {
             FetchBetTypes();
-        })
+        });
 
+        domElements.iconClear.click();
         GetSportBetTypeList();
         GetDgrList();
 
         FetchSports();
 
         domElements.btnGenerate.on('click', function () {
-            dangerListSelected.Danger1 = GetDangerListById(1);
-            dangerListSelected.Danger2 = GetDangerListById(2);
-            dangerListSelected.Danger3 = GetDangerListById(3);
-            dangerListSelected.Danger4 = GetDangerListById(4);
-            dangerListSelected.Danger5 = GetDangerListById(5);
+            if (ValidateRangeDate()) {
+                dangerListSelected.Danger1 = GetDangerListById(1);
+                dangerListSelected.Danger2 = GetDangerListById(2);
+                dangerListSelected.Danger3 = GetDangerListById(3);
+                dangerListSelected.Danger4 = GetDangerListById(4);
+                dangerListSelected.Danger5 = GetDangerListById(5);
 
-            dataTable ? dataTable.ajax.reload(null, true) : dataTable = GenerateGrid();
+                dataTable ? dataTable.ajax.reload(null, true) : dataTable = GenerateGrid();
+            }
         });
     }
 
     function GenerateGrid() {
         let data = {
             FromDate: function () { return domElements.dpkFromDate.val(); },
-            ToDate: function () { return !domElements.dpkToDate.val().includes('--- --,----') ? domElements.dpkToDate.val() : null },
+            ToDate: function () { return !domElements.dpkToDate.val().includes(dateEmptyString) ? domElements.dpkToDate.val() : null },
             DangerList: function () { return JSON.stringify(GetDangerList()) },
             Sports: function () { return domElements.cbbSport.val().join() },
             Event: function () { return domElements.txtEvent.val().trim().toUpperCase() },
@@ -434,6 +449,26 @@
     function GetDangerListById(id) {
         return domElements.cbbDgr.val().filter(x => x.split('-')[0] == id)
             .map((x) => Number(x.split('-')[1]));
+    }
+
+    function ValidateRangeDate() {
+        let isValid = true;
+        let fromDateValue = domElements.dpkFromDate.val();
+        let toDateValue = !domElements.dpkToDate.val().includes(dateEmptyString) ? domElements.dpkToDate.val() : null;
+
+        if (toDateValue != null && fromDateValue > toDateValue) {
+            isValid = false;
+        }
+
+        if (toDateValue != null && moment(fromDateValue) < moment(toDateValue).add(-7, "days")) {
+            isValid = false;
+        }
+
+        if (!isValid) {
+            common.showError("Invalid date range, please select not more than 7 days");
+        }
+
+        return isValid;
     }
 
     $(document).ready(function () {

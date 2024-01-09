@@ -97,6 +97,15 @@
                         .icon-clear {
                             position: absolute;
                             right: 2.6rem;
+
+                            &:hover {
+                                background-color: rgba(57, 110, 248, 0.2);
+                                border-radius: 5px;
+                            }
+
+                            .hide {
+                                display: none;
+                            }
                         }
 
                         .icon-calendar-text {
