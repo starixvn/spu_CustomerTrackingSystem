@@ -295,7 +295,11 @@
             menuWidth: 260,
             menuHeight: 300,
             selectedText: "# of # selected",
-            noneSelectedText: "Select Reason"
+            noneSelectedText: "Select Reason",
+            enableClickableOptGroups: true,
+            includeSelectAllOption: true,
+            groupsCollapsable: true,
+            optGroupChecked: true
         });
 
         domElements.groupDropDown.hover(function () {

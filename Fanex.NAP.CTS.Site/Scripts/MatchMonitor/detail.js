@@ -1163,9 +1163,7 @@ function MatchMonitorDetail() {
         SetupFilterScore(domElements.cbbMatchScore, data.ScoreList);
 
         cacheFilterDefault.AGrList = data.GroupList;
-        cacheFilterDefault.ReasonList = data.ReasonList;
-
-        //SetupFilter(domElements.cbbReason, data.ReasonList);     
+        cacheFilterDefault.ReasonList = data.ReasonList;   
 
         SetupFilterGroupReason(domElements.cbbReason, data.ReasonList);
 
@@ -2443,11 +2441,9 @@ function MatchMonitorDetail() {
         if (reasonItems.length > 0) {
             if (cacheSelectedReason.length > 0) {
                 reasonItems.forEach(item => {
-                    if ($.inArray(item.toString(), cacheSelectedReason) != -1) {
-                        //domElements.cbbReason.append(`<option selected value='${item}'>${item}</option>`);
+                    if ($.inArray(item.toString(), cacheSelectedReason) != -1) {                       
                         domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "selected");
-                    } else {
-                        //domElements.cbbReason.append(`<option value='${item}'>${item}</option>`);
+                    } else {                      
                         domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "");
                     }
                 });
@@ -2455,19 +2451,16 @@ function MatchMonitorDetail() {
                 let arrReason = cacheDefaultReason.split(',');
 
                 reasonItems.forEach(item => {
-                    if ($.inArray(item.toString(), arrReason) != -1) {
-                        //domElements.cbbReason.append(`<option selected value='${item}'>${item}</option>`);
+                    if ($.inArray(item.toString(), arrReason) != -1) {                      
                         domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "selected");
-                    } else {
-                        //domElements.cbbReason.append(`<option value='${item}'>${item}</option>`);
+                    } else {                      
                         domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "");
                     }
                 });
 
                 cacheDefaultReason = null;
             } else {
-                reasonItems.forEach(item => {
-                    //domElements.cbbReason.append(`<option selected value='${item}'>${item}</option>`);
+                reasonItems.forEach(item => {                 
                     domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "selected");
                 });
             }
