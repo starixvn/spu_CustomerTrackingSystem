@@ -806,7 +806,7 @@
 
         private IEnumerable<MainMatchModel> GetMainMatchInfosWithBatchSize(string md5FilterKey, DangerMonitorSearchModel filter)
         {
-            var batchSize = 100;
+            var batchSize = 500;
             var result = default(IEnumerable<MainMatchModel>);
             var matchSectionMainMatches = default(IEnumerable<MainMatchModel>);
 
