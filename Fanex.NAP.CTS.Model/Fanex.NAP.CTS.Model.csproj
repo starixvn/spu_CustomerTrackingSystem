@@ -353,6 +353,7 @@
     <Compile Include="CustomerClassification\RescanCustomerClassification\RescanCustClassificationModel.cs" />
     <Compile Include="DangerMonitor\DangerMonitorSearchModel.cs" />
     <Compile Include="DangerMonitor\GetDangerMonitorGenerateModel.cs" />
+    <Compile Include="DangerMonitor\PrepareDangerMonitorMainMatchModel.cs" />
     <Compile Include="DTO\CustomerEvidence.cs" />
     <Compile Include="DTO\CustomerEvidenceForTW.cs" />
     <Compile Include="GraphDB\AssDetection\DetectAssGetDetailParams.cs" />

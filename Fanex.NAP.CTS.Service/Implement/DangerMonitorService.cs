@@ -60,7 +60,7 @@
             var mainBetTypes = _commonService.GetMainSportBettype(filter);
 
             return mainBetTypes
-                .GroupJoin(betTypes, main => main.Typeid, cts => cts.BetTypeID, (main, ctsGroup) => (main, ctsGroup))
+                .GroupJoin(betTypes, main => main.Typeid, cts => cts.BetTypeID, (main, ctsGroup) => new { main, ctsGroup })
                 .SelectMany(item =>
                     item.ctsGroup.Select(group => new DangerMonitorBetTypeViewModel
                     {
@@ -138,7 +138,7 @@
                 .GroupJoin(mainSummaryTicketMatches,
                     main => main.MatchID,
                     mainSumGroup => mainSumGroup.MatchId,
-                    (main, mainSumGroup) => (main, mainSumGroup))
+                    (main, mainSumGroup) => new { main, mainSumGroup })
                 .SelectMany(item =>
                 {
                     return item.mainSumGroup.Select(x => new DangerMonitorInfoViewModel(item.main, x));
@@ -167,7 +167,7 @@
 
             return filterMatches;
         }
-        
+
         private IEnumerable<BetTypeSettingModel> GetBetTypeSettings(string sportIDs, bool isFilterMMDetection)
         {
             var paras = new BetTypeSettingParaModel
@@ -823,7 +823,7 @@
 
             if (filter.LastID == 0)
             {
-                filter.LastMatchSection = getDangerMonitorGenerate.Item1.MatchSection?.Split(',')[0] ?? string.Empty;
+                filter.LastMatchSection = getDangerMonitorGenerate.GetDangerMonitorGenerate.MatchSection?.Split(',')[0] ?? string.Empty;
             }
 
             var cacheKeyMatchSection = filter.BuildCacheKey(nameof(GetDangerMonitorGenerateFromCache), Region, md5FilterKey, filter.LastMatchSection.ToString());
@@ -846,7 +846,7 @@
                         {
                             getDangerMonitorGenerate = GetDangerMonitorGenerateFromCache(md5FilterKey, filter, filter.LastMatchSection);
 
-                            matchSectionMainMatches = getDangerMonitorGenerate.Item2;
+                            matchSectionMainMatches = getDangerMonitorGenerate.MatchSectionMainMatch;
                         }
                     }
 
@@ -859,7 +859,7 @@
 
                 if (result != null && result.Count() == 0)
                 {
-                    filter.LastMatchSection = getDangerMonitorGenerate.Item1.MatchSection.Split(',').Where(x => int.Parse(x) > int.Parse(filter.LastMatchSection)).FirstOrDefault();
+                    filter.LastMatchSection = getDangerMonitorGenerate.GetDangerMonitorGenerate.MatchSection.Split(',').Where(x => int.Parse(x) > int.Parse(filter.LastMatchSection)).FirstOrDefault();
                     filter.LastID = 0;
                 }
             }
@@ -869,7 +869,7 @@
             return result;
         }
 
-        private (GetDangerMonitorGenerateModel, List<MainMatchModel>) GetDangerMonitorGenerateFromCache(string md5FilterKey, DangerMonitorSearchModel filter, string lastMatchSection = "")
+        private PrepareDangerMonitorMainMatchModel GetDangerMonitorGenerateFromCache(string md5FilterKey, DangerMonitorSearchModel filter, string lastMatchSection = "")
         {
             var result = default(GetDangerMonitorGenerateModel);
             var matchSectionMainMatch = default(List<MainMatchModel>);
@@ -904,7 +904,11 @@
                 }
             }
 
-            return (result, matchSectionMainMatch);
+            return new PrepareDangerMonitorMainMatchModel
+            {
+                GetDangerMonitorGenerate = result,
+                MatchSectionMainMatch = matchSectionMainMatch
+            };
         }
         #endregion
     }
