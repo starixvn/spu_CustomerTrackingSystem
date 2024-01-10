@@ -47,34 +47,25 @@
         }
 
         #region public method
-        public IEnumerable<DangerMonitorBetTypeViewModel> GetSportBettypes()
+        public IEnumerable<DangerMonitorBetTypeViewModel> GetSportBettypesFromCache()
         {
-            var betTypes = GetBetTypeSettings(null, false);
+            var result = default(IEnumerable<DangerMonitorBetTypeViewModel>);
 
-            var filter = new SportBettypeModel
+            var cacheKey = $"{nameof(GetSportBettypesFromCache)}_{Region}";
+
+            lock (cacheKey)
             {
-                ProductId = (int)ProductType.SportBook,
-                BettypeList = string.Join(",", betTypes.Select(x => x.BetTypeID).Distinct())
-            };
+                result = _memoryCacheService.GetValue<IEnumerable<DangerMonitorBetTypeViewModel>>(cacheKey);
 
-            var mainBetTypes = _commonService.GetMainSportBettype(filter);
+                if (result == null)
+                {
+                    result = GetSportBettypes();
 
-            return mainBetTypes
-                .GroupJoin(betTypes, main => main.Typeid, cts => cts.BetTypeID, (main, ctsGroup) => new { main, ctsGroup })
-                .SelectMany(item =>
-                    item.ctsGroup.Select(group => new DangerMonitorBetTypeViewModel
-                    {
-                        SportType = item.main.SportType,
-                        SportName = item.main.SportName,
-                        BetTypeID = group.BetTypeID,
-                        BetTypeName = group.BetTypeNameDisplay,
-                        BetID = _commonService.GetBetID(group.BetIDPattern, group.NameDetailsX),
-                        BetChoiceType = group.BetChoiceType,
-                        BetChoiceHome = group.BetChoiceHome,
-                        BetChoiceAway = group.BetChoiceAway,
-                        PriorityOrder = group.PriorityOrder,
-                        BetIDPattern = group.BetIDPattern
-                    }));
+                    _memoryCacheService.PushValue(cacheKey, result);
+                }
+            }
+
+            return result;
         }
 
         public GetDangerMonitorViewModel GetDangerMonitor(DangerMonitorSearchModel filter)
@@ -147,7 +138,7 @@
 
         private IEnumerable<DangerMonitorInfoViewModel> MappingDangerMonitorWithSportBettype(IEnumerable<DangerMonitorInfoViewModel> dangerMonitors)
         {
-            var sportBettypes = GetSportBettypes();
+            var sportBettypes = GetSportBettypesFromCache();
 
             return dangerMonitors.Join(sportBettypes, item => $"{item.SportType}_{item.BettypeID}_{item.BetID}", sportBettype => $"{sportBettype.SportType}_{sportBettype.BetTypeID}_{sportBettype.BetID}", (item, sportBettype) =>
             {
@@ -909,6 +900,36 @@
                 GetDangerMonitorGenerate = result,
                 MatchSectionMainMatch = matchSectionMainMatch
             };
+        }
+
+        private IEnumerable<DangerMonitorBetTypeViewModel> GetSportBettypes()
+        {
+            var betTypes = GetBetTypeSettings(null, false);
+
+            var filter = new SportBettypeModel
+            {
+                ProductId = (int)ProductType.SportBook,
+                BettypeList = string.Join(",", betTypes.Select(x => x.BetTypeID).Distinct())
+            };
+
+            var mainBetTypes = _commonService.GetMainSportBettype(filter);
+
+            return mainBetTypes
+                .GroupJoin(betTypes, main => main.Typeid, cts => cts.BetTypeID, (main, ctsGroup) => new { main, ctsGroup })
+                .SelectMany(item =>
+                    item.ctsGroup.Select(group => new DangerMonitorBetTypeViewModel
+                    {
+                        SportType = item.main.SportType,
+                        SportName = item.main.SportName,
+                        BetTypeID = group.BetTypeID,
+                        BetTypeName = group.BetTypeNameDisplay,
+                        BetID = _commonService.GetBetID(group.BetIDPattern, group.NameDetailsX),
+                        BetChoiceType = group.BetChoiceType,
+                        BetChoiceHome = group.BetChoiceHome,
+                        BetChoiceAway = group.BetChoiceAway,
+                        PriorityOrder = group.PriorityOrder,
+                        BetIDPattern = group.BetIDPattern
+                    }));
         }
         #endregion
     }

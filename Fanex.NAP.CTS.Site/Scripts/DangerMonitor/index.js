@@ -203,7 +203,9 @@
 
                     if (response?.data?.LastMatchSection) {
                         GetDangerMonitor(response?.data?.LastID, response?.data?.LastMatchSection, false);
-                        domElements.tblMonitor.find('tbody').removeClass('loading');
+                        if (response?.data?.DangerMonitors.length > 0) {
+                            domElements.tblMonitor.find('tbody').removeClass('loading');
+                        }
                     }
                     else {
                         $('.loading').addClass('hide');
@@ -334,6 +336,7 @@
 
                 if (!dataTable) {
                     dataTable = GenerateGrid();
+                    $('.wrapper-info-table').append("<div class=\"loading hide\"></div>");
                 }
 
                 if (timeoutRenderTicketDetail || xhr) {

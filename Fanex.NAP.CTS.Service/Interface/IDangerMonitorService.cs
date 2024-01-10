@@ -7,7 +7,7 @@
 
     public interface IDangerMonitorService
     {
-        IEnumerable<DangerMonitorBetTypeViewModel> GetSportBettypes();
+        IEnumerable<DangerMonitorBetTypeViewModel> GetSportBettypesFromCache();
 
         GetDangerMonitorViewModel GetDangerMonitor(DangerMonitorSearchModel filter);
 

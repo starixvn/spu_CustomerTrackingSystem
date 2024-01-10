@@ -55,7 +55,7 @@
         [HttpPost]
         public ActionResult GetSportBettype()
         {
-            var sportBettypeList = _dangerMonitorService.GetSportBettypes();
+            var sportBettypeList = _dangerMonitorService.GetSportBettypesFromCache();
 
             return Json(new
             {
@@ -102,7 +102,7 @@
                 ViewBag.BetTypeID = para?.BetTypeID;
                 ViewBag.BettypeName = para?.BettypeName ?? string.Empty;
                 ViewBag.BetIDToString = para?.BetID.ToString();
-                ViewBag.BetTypeSettings = _dangerMonitorService.GetSportBettypes().Where(x => x.SportType == para.SportType);
+                ViewBag.BetTypeSettings = _dangerMonitorService.GetSportBettypesFromCache().Where(x => x.SportType == para.SportType);
                 ViewBag.MapX = para?.MX;
                 ViewBag.MapYY = para?.MY;
                 ViewBag.HomeName = para?.HomeName.ToUpper() ?? string.Empty;
