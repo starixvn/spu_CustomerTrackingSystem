@@ -793,20 +793,3 @@
 
 .betchoice-1 {
   background: lightgray; }
-
-.wrapper-info-table .dataTables_info {
-  left: 0 !important; }
-  .wrapper-info-table .dataTables_info .loading {
-    position: relative; }
-    .wrapper-info-table .dataTables_info .loading:after {
-      content: '';
-      position: absolute;
-      left: 125px;
-      top: -5px;
-      border-radius: 50%;
-      width: 2.4rem;
-      height: 2.4rem;
-      border: 0.25rem solid rgba(57, 110, 248, 0.2);
-      border-top-color: #396ef8;
-      -webkit-animation: spin 1s infinite linear;
-      animation: spin 1s infinite linear; }

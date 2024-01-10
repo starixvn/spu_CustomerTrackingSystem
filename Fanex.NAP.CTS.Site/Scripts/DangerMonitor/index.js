@@ -365,7 +365,8 @@
                     next: "",
                     previous: ""
                 },
-                info: "<div class=\"loading\"></div> Total Item: _TOTAL_ item(s)",
+                // info: "<div class=\"loading\"></div> Total Item: _TOTAL_ item(s)",
+                info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
                 infoEmpty: "",
                 zeroRecords: "There's no data"
             },
@@ -375,7 +376,7 @@
             pageLength: 1000,
             scrollX: false,
             scrollCollapse: true,
-            paging: false,
+            // paging: false,
             scrollY: `${$(window).height() - 340}px`,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
