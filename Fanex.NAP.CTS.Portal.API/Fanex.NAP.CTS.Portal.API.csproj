@@ -548,6 +548,8 @@
       <DependentUpon>Web.ConnectionString.config</DependentUpon>
     </Content>
     <Content Include="Web.ConnectionString.SIT.config">
+		<DependentUpon>Web.ConnectionString.config</DependentUpon>
+	</Content>
     <Content Include="Web.ConnectionString.KLDR.config">
       <DependentUpon>Web.ConnectionString.config</DependentUpon>
     </Content>
