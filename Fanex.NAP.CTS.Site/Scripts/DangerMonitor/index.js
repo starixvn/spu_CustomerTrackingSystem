@@ -481,12 +481,8 @@
             isValid = false;
         }
 
-        if (toDateValue != null && moment(fromDateValue) < moment(toDateValue).add(-7, "days")) {
-            isValid = false;
-        }
-
         if (!isValid) {
-            common.showError("Invalid date range, please select not more than 7 days");
+            common.showError("Invalid date range");
         }
 
         return isValid;
