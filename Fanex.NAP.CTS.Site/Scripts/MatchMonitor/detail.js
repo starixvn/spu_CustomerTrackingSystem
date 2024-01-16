@@ -104,6 +104,7 @@ function MatchMonitorDetail() {
         btnGenerateDetail: $('#btnGenerate-detail'),
         btnAssDetection: $('#btnAssDetection'),
         btnExportExcel: $('#btnExportExcel'),
+        btnVoidTicket: $('#btnVoidTicket'),
         btnVerifyAndClose: $('#btnVerifyAndClose'),
         btnReasonFeedback: $('#btnReasonFeedback'),
         inputTranstimeFrom: $('#inputTranstimeFrom'),
@@ -2858,33 +2859,54 @@ function MatchMonitorDetail() {
 
         if (tranIds.length > 2000) {
             common.showError("Exceeded max 2000 Tickets.Please try again with a smaller range.");
-        } else if (tranIds.length = 0) {
+        } else if (tranIds.length == 0) {
             common.showError("Please select at least 1 record to proceed.");
+        } else {
+
+            $.ajax(common.modifyRelativeUrl('MatchMonitor/RedirectToTicketVoiding'), {
+                type: 'POST',
+                data: {
+                    tranIds: tranIds.join()
+                },
+                beforeSend: function () {
+                    domElements.divPageLoading.addClass('loading-icon');
+                },
+                success: function (response) {
+                    if (response.isValid) {
+                        OpenWindowWithPost("http://tvs.nexdev.net/TicketVoidingSystem/AddRequestFromCTS", response.data);
+                    }
+                },
+                complete: function () {
+                    domElements.divPageLoading.removeClass('loading-icon');
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                    domElements.divPageLoading.removeClass('loading-icon');
+                }
+            });
+        }
+    }
+
+    function OpenWindowWithPost(url, data) {
+        var form = document.createElement("form");
+        form.target = "_blank";
+        form.method = "POST";
+        form.action = url;
+        form.style.display = "none";
+
+        for (var key in data) {
+            var input = document.createElement("input");
+            input.type = "hidden";
+            input.name = key;
+            input.value = data[key];
+            form.appendChild(input);
         }
 
-        $.ajax(common.modifyRelativeUrl('MatchMonitor/RedirectToTicketVoiding'), {
-            type: 'POST',
-            data:
-            {
-                tranIds: tranIds
-            },
-            beforeSend: function () {
-                domElements.divPageLoading.addClass('loading-icon');
-            },
-            success: function (response) {
-              
-            },
-            complete: function () {
-                domElements.divPageLoading.removeClass('loading-icon');
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-                domElements.divPageLoading.removeClass('loading-icon');
-            }
-        });
-
-        
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
     }
+
     //#endregion Ticket Voiding
 
     function Initial() {
@@ -3069,6 +3091,10 @@ function MatchMonitorDetail() {
 
         domElements.tggHoldKey.on('click', function () {
             UpdateHoldKeyStatus(domElements.matchID, domElements.tggHoldKey.is('.toggle-on') == true ? false : true);
+        });
+
+        domElements.btnVoidTicket.on('click', function () {
+            RedirectToTicketVoiding();
         });
     }
 

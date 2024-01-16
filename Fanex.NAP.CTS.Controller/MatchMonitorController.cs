@@ -1043,7 +1043,7 @@
             {
                 if (paramters.MatchId != 0)
                 {
-                    paramters.UserId = CurrentSession.UserId;
+                    paramters.UserId = CurrentSession.UserId; 
 
                     var updateResult = _matchMonitorService.UpdateHoldKeyStatus(paramters, ConfigSettings.UpdateHoldKeyMMDetailURL);
                     
@@ -1119,26 +1119,26 @@
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailHoldKeyUpdate)]
-        public ActionResult RedirectToTicketVoiding(IEnumerable<string> tranIds)
+        public ActionResult RedirectToTicketVoiding(string tranIds)
         {
-            var result = new HoldKeyResultViewModel();
+            var result = new TicketVoidingViewModel();
+            bool isValid = false;
             const int maxTranIds = 2000;
 
             try
             {
-                if (tranIds != null && tranIds.Any() && tranIds.Count() < maxTranIds)
+                if (!string.IsNullOrEmpty(tranIds))
                 {
-                    var parameters = new TicketVoidingViewModel
+                    List<string> tranList = tranIds.Split(',').ToList();
+
+                    if (tranList.Count() <= maxTranIds)
                     {
-                        OnUserId = CurrentSession.OnUserId,
-                        UserId = CurrentSession.UserId,
-                        Time = DateTime.Now.ToString(),
-                        TransIds = tranIds
-                    };
-
-                    string forwardLink = "";
-
-                    return Redirect(forwardLink);
+                        result.OnUserId = CurrentSession.OnUserId;
+                        result.UserId = CurrentSession.UserId;
+                        result.Time = DateTime.Now.ToString();
+                        result.TransIds = tranList;
+                        isValid = true;
+                    }
                 }
             }
             catch (Exception ex)
@@ -1152,10 +1152,10 @@
                                  + ex?.InnerException?.StackTrace);
             }
 
-
             return Json(new
             {
-                status = "ok"
+                data = result,
+                isValid = isValid
             }, JsonRequestBehavior.AllowGet);
         }
 
