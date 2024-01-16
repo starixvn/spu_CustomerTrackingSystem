@@ -1,42 +1,14 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.DangerMonitor
 {
-    using Fanex.NAP.CTS.Core.BaseClasses;
-    using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Resource.Consts;
     using System;
-    using System.Collections.Generic;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
-    public class DangerMonitorInfoViewModel
+    public class GetDangerMonitorItemViewModel
     {
-        public DangerMonitorInfoViewModel(MainMatchModel mainMatchModel, IDictionary<int, string> teamNameDic, IDictionary<int, string> leagueNameDic)
+        public GetDangerMonitorItemViewModel(GetDangerSummaryItemViewModel matchSummary, int matchSection, DangerMonitorBetTypeViewModel sportBettype)
         {
-            MatchID = mainMatchModel.MatchID;
-            HomeID = mainMatchModel.HomeId;
-            AwayID = mainMatchModel.AwayId;
-            LeagueID = mainMatchModel.LeagueId;
-            SportType = mainMatchModel.SportType;
-            EventDate = mainMatchModel.EventDate;
-            MatchSection = mainMatchModel.MatchSection;
-            KickOffTime = mainMatchModel.KickOffTime;
-
-            if (teamNameDic.TryGetValue(HomeID, out string homeName))
-            {
-                HomeName = homeName;
-            }
-            if (teamNameDic.TryGetValue(AwayID, out string awayName))
-            {
-                AwayName = awayName;
-            }
-            if (leagueNameDic.TryGetValue(LeagueID, out string leagueName))
-            {
-                LeagueName = leagueName;
-            }
-        }
-
-        public DangerMonitorInfoViewModel(DangerMonitorInfoViewModel matchInfo, DangerMonitorTicketSummaryViewModel matchSummary)
-        {
-            MatchID = matchInfo.MatchID;
+            MatchID = matchSummary.MatchId;
 
             TotalAmtHome = matchSummary.TotalAmountHome;
             TotalAmtAway = matchSummary.TotalAmountAway;
@@ -47,16 +19,20 @@
             BetID = matchSummary.BetID;
             BetChoiceType = matchSummary.BetChoiceType;
 
-            HomeID = matchInfo.HomeID;
-            HomeName = matchInfo.HomeName;
-            AwayID = matchInfo.AwayID;
-            AwayName = matchInfo.AwayName;
-            LeagueID = matchInfo.LeagueID;
-            LeagueName = matchInfo.LeagueName;
-            SportType = matchInfo.SportType;
-            EventDate = matchInfo.EventDate;
-            MatchSection = matchInfo.MatchSection;
-            KickOffTime = matchInfo.KickOffTime;
+            HomeID = matchSummary.HomeId;
+            HomeName = matchSummary.HomeName;
+            AwayID = matchSummary.AwayId;
+            AwayName = matchSummary.AwayName;
+            LeagueID = matchSummary.LeagueId;
+            LeagueName = matchSummary.LeagueName;
+            SportType = matchSummary.SportType;
+            EventDate = matchSummary.EventDate;
+            MatchSection = matchSection;
+            KickOffTime = matchSummary.GlobalShowTime;
+
+            BettypeName = sportBettype.BetTypeName;
+            //BetID = sportBettype.BetID;
+            SportName = sportBettype.SportName;
         }
 
         public int BetChoiceType { get; set; }
@@ -159,7 +135,7 @@
             }
         }
 
-        public void MappingTicketSummary(DangerMonitorTicketSummaryViewModel monitorSummary)
+        public void MappingTicketSummary(GetDangerSummaryItemViewModel monitorSummary)
         {
             MatchID = monitorSummary.MatchId;
 

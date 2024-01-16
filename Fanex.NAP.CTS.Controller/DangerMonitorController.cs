@@ -55,7 +55,7 @@
         [HttpPost]
         public ActionResult GetSportBettype()
         {
-            var sportBettypeList = _dangerMonitorService.GetSportBettypesFromCache();
+            var sportBettypeList = _dangerMonitorService.GetSportBettypesFromCache(isGetNew: true);
 
             return Json(new
             {
@@ -67,10 +67,10 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.DangerMonitorRpt, "isSkipTracking")]
         public ActionResult GetDangerMonitor(DangerMonitorSearchModel filter, bool? isSkipTracking)
         {
-            var data = default(GetDangerMonitorViewModel);
+            var data = default(GetDangerMonitorResultViewModel);
 
             var count = 10;
-            while ((data?.DangerMonitors == null || data.DangerMonitors.Count() == 0) && filter.LastMatchSection != null)
+            while ((data?.Items == null || data.Items.Count() == 0) && filter.LastMatchSection != null)
             {
                 if (count-- <= 0)
                 {

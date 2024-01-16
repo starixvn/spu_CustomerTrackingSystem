@@ -28,7 +28,5 @@
         IEnumerable<BetTypeSettingModel> GetBetTypeSettings(BetTypeSettingParaModel infos);
 
         IEnumerable<SportBettypeViewModel> GetMainSportBettype(SportBettypeModel model);
-
-        IEnumerable<MainMatchModel> GetMainMatchInfos(DangerMonitorSearchModel filter);
     }
 }

@@ -167,7 +167,7 @@
         return optgroup;
     }
 
-    function GetDangerMonitor(lastID = 0, lastMatchSection = "1", isSkipTracking = true) {
+    function GetDangerMonitor(lastMatchID = null, lastEventDate = null, lastMatchSection = null, isSkipTracking = true) {
         timeoutRenderTicketDetail = setTimeout(() => {
             let data = {
                 FromDate: domElements.dpkFromDate.val(),
@@ -185,8 +185,9 @@
                     "BetID": bettypeList[x].BetID
                 }))),
                 isSkipTracking: isSkipTracking,
-                LastID: lastID,
-                LastMatchSection: lastMatchSection
+                LastMatchID: lastMatchID,
+                LastMatchSection: lastMatchSection ?? domElements.cbbMatchSection.val()[0],
+                LastEventDate: lastEventDate
             };
 
             xhr = $.ajax(common.modifyRelativeUrl('DangerMonitor/GetDangerMonitor'), {
@@ -198,16 +199,17 @@
                 data: JSON.stringify(data),
                 success: function (response) {
                     if (response?.data) {
-                        domElements.tblMonitor.DataTable().rows.add(response?.data?.DangerMonitors).draw(false);
+                        domElements.tblMonitor.DataTable().rows.add(response?.data?.Items).draw(false);
                     }
 
                     if (response?.data?.LastMatchSection) {
-                        GetDangerMonitor(response?.data?.LastID, response?.data?.LastMatchSection, false);
-                        if (response?.data?.DangerMonitors.length > 0) {
-                            domElements.tblMonitor.find('tbody').removeClass('loading');
+                        GetDangerMonitor(response?.data?.LastMatchID, response?.data?.LastEventDate, response?.data?.LastMatchSection, false);
+                        if (response?.data?.Items.length > 0) {
+                            domElements.tblMonitor.find('tbody').removeClass('loading hide');
                         }
                     }
                     else {
+                        domElements.tblMonitor.find('tbody').removeClass('loading hide');
                         $('.loading').addClass('hide');
                     }
                 },
@@ -380,7 +382,7 @@
             scrollX: false,
             scrollCollapse: true,
             // paging: false,
-            scrollY: `${$(window).height() - 340}px`,
+            scrollY: `${$(window).height() - 285}px`,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5], className: "text-center" },

@@ -7,9 +7,9 @@
 
     public interface IDangerMonitorService
     {
-        IEnumerable<DangerMonitorBetTypeViewModel> GetSportBettypesFromCache();
+        IEnumerable<DangerMonitorBetTypeViewModel> GetSportBettypesFromCache(bool isGetNew = false);
 
-        GetDangerMonitorViewModel GetDangerMonitor(DangerMonitorSearchModel filter);
+        GetDangerMonitorResultViewModel GetDangerMonitor(DangerMonitorSearchModel filter);
 
         byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath);
 

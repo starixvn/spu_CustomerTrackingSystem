@@ -4,7 +4,6 @@
     using Fanex.Logging;
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
-    using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Criteria.DangerMonitor;
@@ -47,7 +46,7 @@
         }
 
         #region public method
-        public IEnumerable<DangerMonitorBetTypeViewModel> GetSportBettypesFromCache()
+        public IEnumerable<DangerMonitorBetTypeViewModel> GetSportBettypesFromCache(bool isGetNew = false)
         {
             var result = default(IEnumerable<DangerMonitorBetTypeViewModel>);
 
@@ -55,7 +54,7 @@
 
             lock (cacheKey)
             {
-                result = _memoryCacheService.GetValue<IEnumerable<DangerMonitorBetTypeViewModel>>(cacheKey);
+                result = isGetNew ? null : _memoryCacheService.GetValue<IEnumerable<DangerMonitorBetTypeViewModel>>(cacheKey);
 
                 if (result == null)
                 {
@@ -68,28 +67,34 @@
             return result;
         }
 
-        public GetDangerMonitorViewModel GetDangerMonitor(DangerMonitorSearchModel filter)
+        public GetDangerMonitorResultViewModel GetDangerMonitor(DangerMonitorSearchModel filter)
         {
-            var result = Enumerable.Empty<DangerMonitorInfoViewModel>();
+            var batchSize = 500;
+            var result = Enumerable.Empty<GetDangerMonitorItemViewModel>();
 
-            var md5FilterKey = filter.BuildMD5FilterKey();
-
-            var mainMatches = GetMainMatchInfosWithBatchSize(md5FilterKey, filter).ToList();
-
-            var filterMatches = FilterMatchesByEvent(mainMatches, filter);
-
-            if (filterMatches?.Any() ?? false)
+            if (!string.IsNullOrWhiteSpace(filter.LastMatchSection) && !string.IsNullOrWhiteSpace(filter.MatchSection))
             {
-                result = MappingMainDangerMatchWithDangerTicketSummary(filterMatches, filter);
+                var dangerMonitor = GetDangerMonitorSummary(filter, batchSize);
 
-                result = MappingDangerMonitorWithSportBettype(result);
+                int.TryParse(filter.LastMatchSection, out var matchSection);
+
+                result = dangerMonitor != null ? MappingDangerMonitorWithSportBettype(dangerMonitor.Items, matchSection) : null;
+
+                var isNextMatchSection = !result?.Any() ?? true;
+
+                filter.LastMatchSection = isNextMatchSection ? filter.MatchSection.Split(',').Where(x => int.Parse(x) > int.Parse(filter.LastMatchSection)).FirstOrDefault() : filter.LastMatchSection;
+
+                filter.LastMatchID = isNextMatchSection ? null : dangerMonitor?.LastMatchId;
+
+                filter.LastEventDate = isNextMatchSection ? null : dangerMonitor?.LastEventDate;
             }
 
-            return new GetDangerMonitorViewModel
+            return new GetDangerMonitorResultViewModel
             {
-                DangerMonitors = result,
-                LastID = filter.LastID,
-                LastMatchSection = filter.LastMatchSection
+                Items = result ?? new List<GetDangerMonitorItemViewModel>(),
+                LastMatchID = filter.LastMatchID,
+                LastMatchSection = filter.LastMatchSection,
+                LastEventDate = filter.LastEventDate
             };
         }
 
@@ -120,43 +125,14 @@
         #endregion
 
         #region private method
-        private IEnumerable<DangerMonitorInfoViewModel> MappingMainDangerMatchWithDangerTicketSummary(IEnumerable<DangerMonitorInfoViewModel> filterMatches, DangerMonitorSearchModel filter)
-        {
-            var matchIDs = string.Join(",", filterMatches.Select(x => x.MatchID));
-            var mainSummaryTicketMatches = GetDangerMonitorSummary(filter, matchIDs);
-
-            return filterMatches
-                .GroupJoin(mainSummaryTicketMatches,
-                    main => main.MatchID,
-                    mainSumGroup => mainSumGroup.MatchId,
-                    (main, mainSumGroup) => new { main, mainSumGroup })
-                .SelectMany(item =>
-                {
-                    return item.mainSumGroup.Select(x => new DangerMonitorInfoViewModel(item.main, x));
-                });
-        }
-
-        private IEnumerable<DangerMonitorInfoViewModel> MappingDangerMonitorWithSportBettype(IEnumerable<DangerMonitorInfoViewModel> dangerMonitors)
+        private IEnumerable<GetDangerMonitorItemViewModel> MappingDangerMonitorWithSportBettype(IEnumerable<GetDangerSummaryItemViewModel> dangerMonitors, int matchSection)
         {
             var sportBettypes = GetSportBettypesFromCache();
 
-            return dangerMonitors.Join(sportBettypes, item => $"{item.SportType}_{item.BettypeID}_{item.BetID}", sportBettype => $"{sportBettype.SportType}_{sportBettype.BetTypeID}_{sportBettype.BetID}", (item, sportBettype) =>
-            {
-                item.MappingBettypeSportInfo(sportBettype);
-                return item;
-            });
-        }
-
-        private IEnumerable<DangerMonitorInfoViewModel> FilterMatchesByEvent(List<MainMatchModel> mainMatches, DangerMonitorSearchModel filter)
-        {
-            var teamNameDictionary = mainMatches.SelectMany(x => new List<int> { x.HomeId, x.AwayId }).Distinct().ToDictionary(x => x, x => CachedRef.GetTeamName(x));
-            var leagueNameDictionary = mainMatches.Select(x => x.LeagueId).Distinct().ToDictionary(x => x, x => CachedRef.GetLeagueName(x));
-            var filterMatches = mainMatches.Select(x => new DangerMonitorInfoViewModel(x, teamNameDictionary, leagueNameDictionary))
-                                            .Where(x =>
-                                                x.MatchName.ToUpper().Contains((filter.Event ?? string.Empty).ToUpper()) ||
-                                                x.LeagueName.ToUpper().Contains((filter.Event ?? string.Empty).ToUpper()));
-
-            return filterMatches;
+            return dangerMonitors.Join(sportBettypes,
+                                        item => $"{item.SportType}_{item.Bettype}_{item.BetID}",
+                                        sportBettype => $"{sportBettype.SportType}_{sportBettype.BetTypeID}_{sportBettype.BetID}",
+                                        (item, sportBettype) => new GetDangerMonitorItemViewModel(item, matchSection, sportBettype));
         }
 
         private IEnumerable<BetTypeSettingModel> GetBetTypeSettings(string sportIDs, bool isFilterMMDetection)
@@ -174,17 +150,32 @@
             return _commonService.GetBetTypeSettings(paras);
         }
 
-        private IEnumerable<DangerMonitorTicketSummaryViewModel> GetDangerMonitorSummary(DangerMonitorSearchModel filter, string matchIds)
+        private GetDangerSummaryResultViewModel GetDangerMonitorSummary(DangerMonitorSearchModel filter, int batchSize = 500)
         {
             var criteria = new DangerMonitorTicketSummaryCriteria
             {
+                FromDate = filter.FromDate,
+                ToDate = filter.ToDate,
+                SportList = filter.Sports,
+                LeagueEvent = filter.Event ?? string.Empty,
                 BettypeList = filter.BetTypes,
                 DangerList = filter.DangerList,
                 MarketList = filter.Market,
-                MatchIds = matchIds
+                MatchSection = filter.LastMatchSection,
+                LastEventDate = filter.LastEventDate,
+                LastMatchID = filter.LastMatchID,
+                BatchSize = batchSize,
             };
 
-            return _repository.Fetch<DangerMonitorTicketSummaryViewModel>(criteria);
+            var response = _repository.FetchMultiple<GetDangerSummaryResultViewModel, GetDangerSummaryItemViewModel>(criteria);
+
+            var result = response.firstResultSet.FirstOrDefault();
+
+            if (result != null)
+            {
+                result.Items = response.secondResultSet;
+            }
+            return result;
         }
 
         private void FillRowDataSG(IEnumerable<ExExcelTicketInfoViewModel> items, ref ExcelTemplateWriter writer)
@@ -802,104 +793,6 @@
             }
 
             return Enumerable.Empty<CustInfoModel>();
-        }
-
-        private IEnumerable<MainMatchModel> GetMainMatchInfosWithBatchSize(string md5FilterKey, DangerMonitorSearchModel filter)
-        {
-            var batchSize = 500;
-            var result = default(IEnumerable<MainMatchModel>);
-            var matchSectionMainMatches = default(IEnumerable<MainMatchModel>);
-
-            var getDangerMonitorGenerate = GetDangerMonitorGenerateFromCache(md5FilterKey, filter);
-
-            if (filter.LastID == 0)
-            {
-                filter.LastMatchSection = getDangerMonitorGenerate.GetDangerMonitorGenerate.MatchSection?.Split(',')[0] ?? string.Empty;
-            }
-
-            var cacheKeyMatchSection = filter.BuildCacheKey(nameof(GetDangerMonitorGenerateFromCache), Region, md5FilterKey, filter.LastMatchSection.ToString());
-
-            var count = 3;
-            while (result == null)
-            {
-                if (count-- <= 0)
-                {
-                    break;
-                }
-
-                if (filter.LastMatchSection != null)
-                {
-                    lock (cacheKeyMatchSection)
-                    {
-                        matchSectionMainMatches = _memoryCacheService.GetValue<List<MainMatchModel>>(cacheKeyMatchSection);
-
-                        if (matchSectionMainMatches == null)
-                        {
-                            getDangerMonitorGenerate = GetDangerMonitorGenerateFromCache(md5FilterKey, filter, filter.LastMatchSection);
-
-                            matchSectionMainMatches = getDangerMonitorGenerate.MatchSectionMainMatch;
-                        }
-                    }
-
-                    result = matchSectionMainMatches?.Skip(filter.LastID).Take(batchSize);
-                }
-                else
-                {
-                    break;
-                }
-
-                if (result != null && result.Count() == 0)
-                {
-                    filter.LastMatchSection = getDangerMonitorGenerate.GetDangerMonitorGenerate.MatchSection.Split(',').Where(x => int.Parse(x) > int.Parse(filter.LastMatchSection)).FirstOrDefault();
-                    filter.LastID = 0;
-                }
-            }
-
-            filter.LastID = filter.LastID + batchSize;
-
-            return result;
-        }
-
-        private PrepareDangerMonitorMainMatchModel GetDangerMonitorGenerateFromCache(string md5FilterKey, DangerMonitorSearchModel filter, string lastMatchSection = "")
-        {
-            var result = default(GetDangerMonitorGenerateModel);
-            var matchSectionMainMatch = default(List<MainMatchModel>);
-
-            var cacheKey = filter.BuildCacheKey(nameof(GetDangerMonitorGenerateFromCache), Region, md5FilterKey, "Generate");
-
-            lock (cacheKey)
-            {
-                result = _memoryCacheService.GetValue<GetDangerMonitorGenerateModel>(cacheKey);
-
-                if (result == null)
-                {
-                    var mainMatches = _commonService.GetMainMatchInfos(filter).OrderBy(x => x.MatchSection).ThenByDescending(x => x.MatchID).ToList();
-
-                    var matchSectionMainMatchesList = mainMatches.GroupBy(x => x.MatchSection);
-
-                    result = new GetDangerMonitorGenerateModel
-                    {
-                        MatchID = matchSectionMainMatchesList.FirstOrDefault()?.FirstOrDefault()?.MatchID ?? 0,
-                        MatchSection = matchSectionMainMatchesList.Select(x => x.Key).Join()
-                    };
-
-                    matchSectionMainMatch = matchSectionMainMatchesList.FirstOrDefault(x => x.Key.ToString() == lastMatchSection)?.ToList();
-
-                    foreach (var matchSectionMainMatches in matchSectionMainMatchesList)
-                    {
-                        var cacheKeyMatchSection = filter.BuildCacheKey(nameof(GetDangerMonitorGenerateFromCache), Region, md5FilterKey, matchSectionMainMatches.Key.ToString());
-                        _memoryCacheService.PushValue(cacheKeyMatchSection, matchSectionMainMatches.ToList());
-                    }
-
-                    _memoryCacheService.PushValueAsync(cacheKey, result);
-                }
-            }
-
-            return new PrepareDangerMonitorMainMatchModel
-            {
-                GetDangerMonitorGenerate = result,
-                MatchSectionMainMatch = matchSectionMainMatch
-            };
         }
 
         private IEnumerable<DangerMonitorBetTypeViewModel> GetSportBettypes()
