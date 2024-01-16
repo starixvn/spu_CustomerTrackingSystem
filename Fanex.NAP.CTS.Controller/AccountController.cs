@@ -455,7 +455,7 @@
                         IsPAProbation = x.IsProbation,
                         CategoryIds = x.CategoryIDs,
                         CategoryNames = !string.IsNullOrEmpty(x.CategoryNames) ? x.CategoryNames : "-",
-                        CustomerClasses = x.CustomerClasses,
+                        CustomerClasses = x.CustomerClasses != "-1" ? x.CustomerClasses : "-",
                         GroupIDs = x.GroupIDs,
                         OriginGroupIDs = x.OriginGroupIDs
                     };
@@ -1747,7 +1747,7 @@
         {
             var divReason = $"<div>";
             var spanReason = string.Empty;
-            var winloss = Math.Round(cc.Winloss, 3);
+            var winloss = cc.Winloss.ToString(Consts.FormatDecimalToString_Thousands3Places);
 
             if (cc.SourceTypeID == (int)SourceTypeID.Classification_Rescan)
             {
@@ -1787,9 +1787,9 @@
         private string MappingReasonByCategoryID(string spanReason, CustomerClassificationHistoryModel cc)
         {
             var margin = Math.Round(cc.Margin, 3);
-            var winloss = Math.Round(cc.Winloss, 3);
-            var turnOver = Math.Round(cc.TurnOver, 3);
-            var betCount = cc.BetCount;
+            var winloss = cc.Winloss.ToString(Consts.FormatDecimalToString_Thousands3Places);
+            var turnOver = cc.TurnOver.ToString(Consts.FormatDecimalToString_Thousands3Places);
+            var betCount = cc.BetCount.ToString("N0");
             var activeDays = cc.ActiveDays;
             var twGroupBettingRate = cc.TWGroupBettingRate;
             var twTicketRejectRate = cc.TWTicketRejectRate;
@@ -1905,7 +1905,7 @@
 
         private string MappingReasonBySourceTypeID(string spanReason, CustomerClassificationHistoryModel cc, int roleID)
         {
-            var winloss = Math.Round(cc.Winloss, 3);
+            var winloss = cc.Winloss.ToString(Consts.FormatDecimalToString_Thousands3Places);
 
             switch (cc.SourceTypeID)
             {
@@ -1954,7 +1954,22 @@
                 case (int)SourceTypeID.NoShow_Detail:
                     spanReason += $"{cc.CategoryName}";
                     break;
+                case (int)SourceTypeID.UnauthorizedLogin_Customer:
+                    if (!string.IsNullOrEmpty(cc.Remark))
+                    {
+                        var unauthLoginCust = JsonConvert.DeserializeObject<RemarkDetectUnauthorizedModel>(cc.Remark);
+                        spanReason += $"First Bet Date: {unauthLoginCust.FirstBetDate.ToString(Consts.FormatDateToString_MMMddyyyy)} " +
+                            $"| Detection Date: {unauthLoginCust.DetectionDate.ToString(Consts.FormatDateToString_MMMddyyyy)} " +
+                            $"- Bot Trans: { unauthLoginCust.Bot.ToString("N0") } ({unauthLoginCust.BotPCT}%) " +
+                            $"- Invalid Browser Info Trans: {unauthLoginCust.InvalidBrowser.ToString("N0")} ({unauthLoginCust.InvalidBrowserPCT}%) " +
+                            $" | Win loss: {winloss}";
+                    }
+                    else
+                    {
+                        spanReason += $"Win loss: {winloss}";
+                    }
 
+                    break;
                 default:
                     break;
             }
