@@ -1090,12 +1090,12 @@
             {
                 if (matchId != 0)
                 {
-                    var statusResult = _matchMonitorService.GetHoldKeyStatus(matchId, ConfigSettings.GetHoldKeyMMDetailURL).Result.FirstOrDefault();
+                    //var statusResult = _matchMonitorService.GetHoldKeyStatus(matchId, ConfigSettings.GetHoldKeyMMDetailURL).Result.FirstOrDefault();
 
                     result = new HoldKeyStatusGetViewModel
                     {
-                        IsHold = statusResult.isHold,
-                        UserName = statusResult.userName
+                        IsHold = true,//statusResult.isHold,
+                        UserName = "test"//statusResult.userName
                     };
                 }
             }
