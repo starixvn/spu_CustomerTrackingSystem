@@ -82,7 +82,7 @@
                 userId = Cryptography.CfsDeCrypt(userId.Replace(" ", "+"));
                 onuserId = Cryptography.CfsDeCrypt(onuserId.Replace(" ", "+"));
                 time = Cryptography.CfsDeCrypt(time.Replace(" ", "+"));
-                
+
                 var currentTime = _securityService.GetTime();
 
                 var expiration = Convert.ToDateTime(currentTime) - Convert.ToDateTime(time);

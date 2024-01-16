@@ -10,9 +10,9 @@
             ActionId = string.Empty;
         }
 
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
-        public int OnUserId { get; set; }
+        public string OnUserId { get; set; }
 
         public string Time { get; set; }
 

@@ -1129,13 +1129,14 @@
             {
                 if (!string.IsNullOrEmpty(tranIds))
                 {
+
                     List<string> tranList = tranIds.Split(',').ToList();
 
                     if (tranList.Count() <= maxTranIds)
                     {
-                        result.OnUserId = CurrentSession.OnUserId;
-                        result.UserId = CurrentSession.UserId;
-                        result.Time = DateTime.Now.ToString();
+                        result.OnUserId = Common.Cryptography.CfsEnCrypt(CurrentSession.OnUserId.ToString());
+                        result.UserId = Common.Cryptography.CfsEnCrypt(CurrentSession.UserId.ToString());
+                        result.Time = Common.Cryptography.CfsEnCrypt(DateTime.Now.ToString());
                         result.TransIds = tranList;
                         isValid = true;
                     }

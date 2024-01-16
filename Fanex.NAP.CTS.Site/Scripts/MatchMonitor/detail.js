@@ -2873,7 +2873,7 @@ function MatchMonitorDetail() {
                 },
                 success: function (response) {
                     if (response.isValid) {
-                        OpenWindowWithPost("http://tvs.nexdev.net/TicketVoidingSystem/AddRequestFromCTS", response.data);
+                        OpenWindowWithPost("https://tvs.nexdev.net/TicketVoidingSystem/AddRequestFromCTS", response.data);
                     }
                 },
                 complete: function () {
