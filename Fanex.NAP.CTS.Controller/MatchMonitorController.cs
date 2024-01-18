@@ -1137,7 +1137,7 @@
                         result.OnUserId = Common.Cryptography.CfsEnCrypt(CurrentSession.OnUserId.ToString());
                         result.UserId = Common.Cryptography.CfsEnCrypt(CurrentSession.UserId.ToString());
                         result.Time = Common.Cryptography.CfsEnCrypt(DateTime.Now.ToString());
-                        result.TransIds = JsonConvert.SerializeObject(tranList);
+                        result.TransIds = tranList;
                         isValid = true;
                     }
                 }

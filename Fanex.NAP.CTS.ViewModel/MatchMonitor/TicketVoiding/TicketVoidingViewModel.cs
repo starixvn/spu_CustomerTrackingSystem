@@ -18,7 +18,7 @@
 
         public bool IsTest { get; set; }
 
-        public string TransIds { get; set; }
+        public List<string> TransIds { get; set; }
 
         public string SubIssueTypeId { get; set; }
 
