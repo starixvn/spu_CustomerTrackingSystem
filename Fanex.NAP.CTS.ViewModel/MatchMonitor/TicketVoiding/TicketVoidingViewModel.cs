@@ -18,7 +18,7 @@
 
         public bool IsTest { get; set; }
 
-        public IEnumerable<string> TransIds { get; set; }
+        public string TransIds { get; set; }
 
         public string SubIssueTypeId { get; set; }
 
