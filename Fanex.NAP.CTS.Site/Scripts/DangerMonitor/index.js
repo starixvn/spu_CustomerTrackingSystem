@@ -479,7 +479,7 @@
         let fromDateValue = domElements.dpkFromDate.val();
         let toDateValue = !domElements.dpkToDate.val().includes(dateEmptyString) ? domElements.dpkToDate.val() : null;
 
-        if (toDateValue != null && fromDateValue > toDateValue) {
+        if (toDateValue != null && moment(fromDateValue) > moment(toDateValue)) {
             isValid = false;
         }
 
