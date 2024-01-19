@@ -487,6 +487,8 @@
     <Content Include="App_Data\Excel Template\MatchMonitor\DoubleGridTemplate.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="App_Data\Excel Template\DangerMonitor\DoubleGridTemplate.xlsx" />
+    <Content Include="App_Data\Excel Template\DangerMonitor\SingleGridTemplate.xlsx" />
     <None Include="Content\scss\components\_notification.scss" />
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.svg" />
     <Content Include="Content\scss\images\chevron-down.png" />
@@ -1928,7 +1930,6 @@
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\SonarAnalyzer.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\Excel Template\DangerMonitor\" />
     <Folder Include="Views\UM\" />
   </ItemGroup>
   <ItemGroup>
