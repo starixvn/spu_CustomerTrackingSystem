@@ -1935,14 +1935,14 @@ function DangerousSettingDetail() {
             domElements.tblMMSG.DataTable().rows(function (idx, data, node) {
                 if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
                     if (currentMinTime == '') {
-                        currentMinTime = data.TransTimeToString;
-                        currentMaxTime = data.TransTimeToString;
+                        currentMinTime = data;
+                        currentMaxTime = data;
                     } else {
-                        if (currentMinTime > data.TransTimeToString) {
-                            currentMinTime = data.TransTimeToString;
+                        if (currentMinTime.TransTime > data.TransTime) {
+                            currentMinTime = data;
                         }
-                        if (currentMaxTime < data.TransTimeToString) {
-                            currentMaxTime = data.TransTimeToString;
+                        if (currentMaxTime.TransTime < data.TransTime) {
+                            currentMaxTime = data;
                         }
                     }
                 }
@@ -1951,14 +1951,14 @@ function DangerousSettingDetail() {
             domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
                 if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
                     if (currentMinTime == '') {
-                        currentMinTime = data.TransTimeToString;
-                        currentMaxTime = data.TransTimeToString;
+                        currentMinTime = data;
+                        currentMaxTime = data;
                     } else {
-                        if (currentMinTime > data.TransTimeToString) {
-                            currentMinTime = data.TransTimeToString;
+                        if (currentMinTime.TransTime > data.TransTime) {
+                            currentMinTime = data;
                         }
-                        if (currentMaxTime < data.TransTimeToString) {
-                            currentMaxTime = data.TransTimeToString;
+                        if (currentMaxTime.TransTime < data.TransTime) {
+                            currentMaxTime = data;
                         }
                     }
                 }
@@ -1967,22 +1967,22 @@ function DangerousSettingDetail() {
             domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
                 if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
                     if (currentMinTime == '') {
-                        currentMinTime = data.TransTimeToString;
-                        currentMaxTime = data.TransTimeToString;
+                        currentMinTime = data;
+                        currentMaxTime = data;
                     } else {
-                        if (currentMinTime > data.TransTimeToString) {
-                            currentMinTime = data.TransTimeToString;
+                        if (currentMinTime.TransTime > data.TransTime) {
+                            currentMinTime = data;
                         }
-                        if (currentMaxTime < data.TransTimeToString) {
-                            currentMaxTime = data.TransTimeToString;
+                        if (currentMaxTime.TransTime < data.TransTime) {
+                            currentMaxTime = data;
                         }
                     }
                 }
             })
         }
 
-        rangeTransTime.push(currentMinTime);
-        rangeTransTime.push(currentMaxTime);
+        rangeTransTime.push(currentMinTime.TransTimeToString);
+        rangeTransTime.push(currentMaxTime.TransTimeToString);
 
         return rangeTransTime;
     }
