@@ -1044,7 +1044,8 @@
                 if (paramters.MatchId != 0
                     && !string.IsNullOrEmpty(ConfigSettings.UpdateHoldKeyMMDetailURL))
                 {
-                    paramters.UserId = CurrentSession.UserId; 
+                    paramters.UserId = CurrentSession.UserId;
+                    paramters.UserName = CurrentSession.Username;
 
                     var updateResult = _matchMonitorService.UpdateHoldKeyStatus(paramters, ConfigSettings.UpdateHoldKeyMMDetailURL);
                     
@@ -1093,11 +1094,21 @@
                 {
                     var statusResult = _matchMonitorService.GetHoldKeyStatus(matchId, ConfigSettings.GetHoldKeyMMDetailURL).Result.FirstOrDefault();
 
-                    result = new HoldKeyStatusGetViewModel
+                    if (statusResult != null)
                     {
-                        IsHold = statusResult.isHold,
-                        UserName = statusResult.userName
-                    };
+                        if (statusResult.matchId == matchId)
+                        {
+                            result = new HoldKeyStatusGetViewModel
+                            {
+                                IsHold = statusResult.isHold,
+                                UserName = statusResult.userName
+                            };
+                        }
+                        else
+                        {
+                            throw new Exception($"GetHoldKeyStatus - API returns incorrect matchId (IP = {matchId} || OP = {statusResult.matchId})");
+                        }
+                    }
                 }
             }
             catch (Exception ex)

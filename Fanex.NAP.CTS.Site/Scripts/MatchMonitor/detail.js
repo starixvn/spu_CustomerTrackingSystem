@@ -2790,13 +2790,14 @@ function MatchMonitorDetail() {
     }
 
     //#region Hold Key
-    function UpdateHoldKeyStatus(matchId, isHold) {
+    function UpdateHoldKeyStatus(matchId, sportType, isHold) {
         common.showConfirmation('<div class="popup - content"> Are you sure to turn ' + (isHold ? 'on' : 'off')+ ' the Hold Key?".</div>', function () { 
             $.ajax(common.modifyRelativeUrl('MatchMonitor/UpdateHoldKeyStatus'), {
                 type: 'POST',
                 data:
                 {
                     MatchId: matchId,
+                    SportType: sportType,
                     IsHold: isHold
                 },
                 beforeSend: function () {
@@ -3090,7 +3091,7 @@ function MatchMonitorDetail() {
         });
 
         domElements.tggHoldKey.on('click', function () {
-            UpdateHoldKeyStatus(domElements.matchID, domElements.tggHoldKey.is('.toggle-on') == true ? false : true);
+            UpdateHoldKeyStatus(domElements.matchID, domElements.sportType, domElements.tggHoldKey.is('.toggle-on') == true ? false : true);
         });
 
         domElements.btnVoidTicket.on('click', function () {

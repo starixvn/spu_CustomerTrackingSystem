@@ -825,7 +825,7 @@
             {
                 var para = new List<string> { matchID.ToString() };
 
-                return await ApiHelper.Post<List<HoldKeyStatusGetModel>>(url, para, 300);
+                return await ApiHelper.Post<List<HoldKeyStatusGetModel>>(url, para, 120);
             }
 
             return new List<HoldKeyStatusGetModel>();
@@ -833,18 +833,21 @@
 
         public async Task<HoldKeyUpdateResultModel> UpdateHoldKeyStatus(HoldKeyUpdateViewModel parameters, string url)
         {
-            if (parameters.MatchId != 0 
-                    && parameters.UserId != 0
-                    && !string.IsNullOrEmpty(url))
+            if (parameters.MatchId != 0 && parameters.UserId != 0 && !string.IsNullOrEmpty(url))
             {
-                var para = new HoldKeyUpdateModel()
+                var para = new List<HoldKeyUpdateModel>()
                 {
-                    matchIds = new List<string> { parameters.MatchId.ToString() },
-                    enabled = parameters.IsHold,
-                    userId = parameters.UserId
+                    new HoldKeyUpdateModel
+                    {
+                        matchId =  parameters.MatchId,
+                        sporttype = parameters.SportType,
+                        enabled = parameters.IsHold,
+                        userId = parameters.UserId,
+                        userName = parameters.UserName
+                    }
                 };
 
-                return await ApiHelper.Post<HoldKeyUpdateResultModel>(url, para, 300);
+                return await ApiHelper.Post<HoldKeyUpdateResultModel>(url, para, 120);
             }
 
             return new HoldKeyUpdateResultModel();

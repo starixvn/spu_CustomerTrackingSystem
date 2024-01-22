@@ -6,8 +6,6 @@
 
         public bool isHold { get; set; }
 
-        public int userId { get; set; }
-
         public string userName { get; set; }
     }
 }

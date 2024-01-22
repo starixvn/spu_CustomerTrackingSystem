@@ -4,10 +4,14 @@
 
     public class HoldKeyUpdateModel
     {
-        public IEnumerable<string> matchIds { get; set; }
+        public int matchId { get; set; }
+
+        public int sporttype { get; set; }
 
         public bool enabled { get; set; }
 
         public long userId { get; set; }
+
+        public string userName { get; set; }
     }
 }
