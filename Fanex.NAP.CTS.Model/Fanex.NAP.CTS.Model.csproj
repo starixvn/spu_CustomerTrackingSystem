@@ -189,6 +189,9 @@
     <Compile Include="Account\RobotClassification.cs" />
     <Compile Include="API\ApiIResultModel.cs" />
     <Compile Include="API\CategoryCustomerClassModel.cs" />
+    <Compile Include="API\CtsAssociationAPI\DetectAssociationByTypeFilterModel.cs" />
+    <Compile Include="API\CtsAssociationAPI\DetectAssociationByTypeViewModel.cs" />
+    <Compile Include="API\CtsAssociationAPI\DetectAssociationByTypeModel.cs" />
     <Compile Include="API\CustomerClassModel.cs" />
     <Compile Include="API\CustomerClassification.cs" />
     <Compile Include="API\ForceSpecialCustomerClassModel.cs" />

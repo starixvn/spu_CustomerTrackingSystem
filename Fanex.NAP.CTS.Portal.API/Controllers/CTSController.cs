@@ -23,6 +23,7 @@
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.Service.Interface.Api;
     using Fanex.NAP.CTS.ViewModel.API.ProblemCaseMonitor;
     using Fanex.NAP.CTS.ViewModel.SpecialCustomerClass;
     using Fanex.NAP.SPU.Graph.Core;
@@ -55,6 +56,7 @@
         private readonly IAntiFraudCenterService _antiFraudCenterService;
         private readonly ISpecialCustomerClassService _customerClassService;
         private readonly IProblemAccountClassificationService _paClassificationService;
+        private readonly ICtsAssociationApiService _ctsAssociationApiService;
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -450,16 +452,21 @@
         }
 
         /// <summary>
-        /// Get Association by CustId
+        /// Provide API to get association (Device, IP, AI)
+        /// Integration team: NAP 
         /// </summary>
         /// <param name="custId"></param>
-        /// <param name="associationType">1-Device, 2-Manual</param>
-        /// <returns></returns>
         [HttpGet]
+        [Route("api/cts/Association/GetByCustId")]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationPerTypeAPI)]
-        public string GetAssociationPerType(long custId, int associationType)
+        public IEnumerable<DetectAssociationByTypeModel> GetAssociationByCustId(long custId)
         {
-            return string.Empty;
+            if (custId >= 0)
+            {
+                return _ctsAssociationApiService.DetectAssociationByCustId(custId);
+            }
+
+            return Enumerable.Empty<DetectAssociationByTypeModel>();
         }
 
         [HttpGet]
