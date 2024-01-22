@@ -2816,7 +2816,7 @@ function MatchMonitorDetail() {
 
                     if (!response.data.IsSuccess) {
                         common.showError((response.data.HoldKeyStatus.IsHold ? "Turn on" : "Turn off") + " Hold Key failed.");
-                        console.log(errMsg)
+                        console.log(response.data.Message)
                     }
                     else {
                         common.showSuccess((response.data.HoldKeyStatus.IsHold ? "Turn on" : "Turn off" ) + " Hold Key successfully.");
@@ -2873,7 +2873,7 @@ function MatchMonitorDetail() {
                 },
                 success: function (response) {
                     if (response.isValid) {
-                        OpenWindowWithPost("https://tvs.nexdev.net/TicketVoidingSystem/AddRequestFromCTS", response.data);
+                        OpenWindowWithPost(response.TVSRedirectURL, response.data);
                     }
                 },
                 complete: function () {

@@ -4,7 +4,9 @@
     {
         public HoldKeyResultViewModel()
         {
-            IsSuccess = true;
+            IsSuccess = false;
+            HoldKeyStatus = new HoldKeyStatusGetViewModel { IsHold = false };
+            Message = string.Empty;
         }
 
         public bool IsSuccess { get; set; }

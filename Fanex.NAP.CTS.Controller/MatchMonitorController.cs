@@ -1041,7 +1041,8 @@
 
             try
             {
-                if (paramters.MatchId != 0)
+                if (paramters.MatchId != 0
+                    && !string.IsNullOrEmpty(ConfigSettings.UpdateHoldKeyMMDetailURL))
                 {
                     paramters.UserId = CurrentSession.UserId; 
 
@@ -1088,14 +1089,14 @@
 
             try
             {
-                if (matchId != 0)
+                if (matchId != 0 && !string.IsNullOrEmpty(ConfigSettings.GetHoldKeyMMDetailURL))
                 {
-                    //var statusResult = _matchMonitorService.GetHoldKeyStatus(matchId, ConfigSettings.GetHoldKeyMMDetailURL).Result.FirstOrDefault();
+                    var statusResult = _matchMonitorService.GetHoldKeyStatus(matchId, ConfigSettings.GetHoldKeyMMDetailURL).Result.FirstOrDefault();
 
                     result = new HoldKeyStatusGetViewModel
                     {
-                        IsHold = true,//statusResult.isHold,
-                        UserName = "test"//statusResult.userName
+                        IsHold = statusResult.isHold,
+                        UserName = statusResult.userName
                     };
                 }
             }

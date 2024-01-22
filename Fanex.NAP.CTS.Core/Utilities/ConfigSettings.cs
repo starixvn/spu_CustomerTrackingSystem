@@ -100,6 +100,8 @@
 
         public static string UpdateHoldKeyMMDetailURL => GetConfigStringByName("MMDetail_HoldKeyUpdateURL");
 
+        public static string TVSTicketVoidingURL => GetConfigStringByName("MMDetail_TVSTicketVoidingURL");
+
         public static int ImportEvidenceChunkSize
         {
             get
