@@ -465,10 +465,10 @@
             {
                 return new List<DetectAssociationByTypeModel>
                 {
-                    new DetectAssociationByTypeModel {CustId = 1, AssociationType = "Device", AssociationTypeID = 1},
-                    new DetectAssociationByTypeModel {CustId = 1, AssociationType = "AI", AssociationTypeID = 2},
-                    new DetectAssociationByTypeModel {CustId = 2, AssociationType = "AI", AssociationTypeID = 2},
-                    new DetectAssociationByTypeModel {CustId = 3, AssociationType = "IP", AssociationTypeID = 3}
+                    new DetectAssociationByTypeModel {CustId = 1, AssociationTypeName = "Device", AssociationTypeID = 1},
+                    new DetectAssociationByTypeModel {CustId = 1, AssociationTypeName = "Betting Pattern", AssociationTypeID = 3},
+                    new DetectAssociationByTypeModel {CustId = 2, AssociationTypeName = "Betting Pattern", AssociationTypeID = 4},
+                    new DetectAssociationByTypeModel {CustId = 3, AssociationTypeName = "IP", AssociationTypeID = 5}
                 };
 
                 //return _ctsAssociationApiService.DetectAssociationByCustId(custId);

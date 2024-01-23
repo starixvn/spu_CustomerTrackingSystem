@@ -6,6 +6,6 @@
 
         public int AssociationTypeID { get; set; }
 
-        public string AssociationType { get; set; }
+        public string AssociationTypeName { get; set; }
     }
 }
