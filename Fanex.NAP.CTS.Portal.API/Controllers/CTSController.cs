@@ -463,7 +463,15 @@
         {
             if (custId >= 0)
             {
-                return _ctsAssociationApiService.DetectAssociationByCustId(custId);
+                return new List<DetectAssociationByTypeModel>
+                {
+                    new DetectAssociationByTypeModel {CustId = 1, AssociationType = "Device", AssociationTypeID = 1},
+                    new DetectAssociationByTypeModel {CustId = 1, AssociationType = "AI", AssociationTypeID = 2},
+                    new DetectAssociationByTypeModel {CustId = 2, AssociationType = "AI", AssociationTypeID = 2},
+                    new DetectAssociationByTypeModel {CustId = 3, AssociationType = "IP", AssociationTypeID = 3}
+                };
+
+                //return _ctsAssociationApiService.DetectAssociationByCustId(custId);
             }
 
             return Enumerable.Empty<DetectAssociationByTypeModel>();
