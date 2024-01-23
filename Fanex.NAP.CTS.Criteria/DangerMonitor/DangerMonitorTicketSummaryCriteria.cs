@@ -23,7 +23,7 @@
 
         public int BatchSize { get; set; }
 
-        public DateTime? LastEventDate { get; set; }
+        public string LastEventDate { get; set; }
 
         public long? LastMatchID { get; set; }
 

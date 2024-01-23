@@ -38,6 +38,6 @@
 
         public string LastMatchSection { get; set; }
 
-        public DateTime? LastEventDate { get; set; }
+        public string LastEventDate { get; set; }
     }
 }

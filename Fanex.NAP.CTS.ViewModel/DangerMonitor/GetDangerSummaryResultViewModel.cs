@@ -9,6 +9,6 @@
 
         public long? LastMatchId { get; set; }
 
-        public DateTime? LastEventDate { get; set; }
+        public string LastEventDate { get; set; }
     }
 }
