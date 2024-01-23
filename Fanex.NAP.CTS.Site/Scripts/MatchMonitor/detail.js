@@ -2791,7 +2791,7 @@ function MatchMonitorDetail() {
 
     //#region Hold Key
     function UpdateHoldKeyStatus(matchId, sportType, isHold) {
-        common.showConfirmation('<div class="popup - content"> Are you sure to turn ' + (isHold ? 'on' : 'off')+ ' the Hold Key?".</div>', function () { 
+        common.showConfirmation('<div class="popup - content"> Are you sure to turn ' + (isHold ? 'on' : 'off')+ ' the Hold Key?</div>', function () { 
             $.ajax(common.modifyRelativeUrl('MatchMonitor/UpdateHoldKeyStatus'), {
                 type: 'POST',
                 data:
