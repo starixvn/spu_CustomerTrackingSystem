@@ -2874,7 +2874,7 @@ function MatchMonitorDetail() {
                 },
                 success: function (response) {
                     if (response.isValid) {
-                        OpenWindowWithPost(response.TVSRedirectURL, response.data);
+                        OpenWindowWithPost(response.data.TVSRedirectURL, response.data);
                     }
                 },
                 complete: function () {
