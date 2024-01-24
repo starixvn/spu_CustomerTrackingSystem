@@ -574,12 +574,14 @@
                         }
                     case MatchMonitorQueryType.TicketAll when para.IsSupportShowAllTickets:
                         {
+                            var internalCurrencyIDs = new List<int> { 20, 27, 28 };
+
                             mdResult = GetAllMMDetail(para, filter);
 
                             if (mdResult != null)
                             {
-                                var ctsCustIDHomeIsZero = mdResult.HomeMatchItemList.Where(x => x.CTSCustID == 0).Select(x => x);
-                                var ctsCustIDAwayIsZero = mdResult.AwayMatchItemList.Where(x => x.CTSCustID == 0).Select(x => x);
+                                var ctsCustIDHomeIsZero = mdResult.HomeMatchItemList.Where(x => x.CTSCustID == 0 && !internalCurrencyIDs.Any(c => c == x.CurrencyId)).Select(x => x);
+                                var ctsCustIDAwayIsZero = mdResult.AwayMatchItemList.Where(x => x.CTSCustID == 0 && !internalCurrencyIDs.Any(c => c == x.CurrencyId)).Select(x => x);
 
                                 if (ctsCustIDHomeIsZero != null && ctsCustIDHomeIsZero.Any())
                                 {
