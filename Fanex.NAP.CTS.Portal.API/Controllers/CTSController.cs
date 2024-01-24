@@ -22,6 +22,7 @@
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Implement.Api;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Interface.Api;
     using Fanex.NAP.CTS.ViewModel.API.ProblemCaseMonitor;
@@ -77,6 +78,7 @@
             _customerClassService = new SpecialCustomerClassService();
             _problemAccountManagementService = new ProblemAccountManagementService();
             _paClassificationService = new ProblemAccountClassificationService();
+            _ctsAssociationApiService = new CtsAssociationApiService();
         }
 
         /// <summary>
@@ -463,15 +465,7 @@
         {
             if (custId >= 0)
             {
-                return new List<DetectAssociationByTypeModel>
-                {
-                    new DetectAssociationByTypeModel {CustId = 1, AssociationTypeName = "Device", AssociationTypeID = 1},
-                    new DetectAssociationByTypeModel {CustId = 1, AssociationTypeName = "Betting Pattern", AssociationTypeID = 3},
-                    new DetectAssociationByTypeModel {CustId = 2, AssociationTypeName = "Betting Pattern", AssociationTypeID = 4},
-                    new DetectAssociationByTypeModel {CustId = 3, AssociationTypeName = "IP", AssociationTypeID = 5}
-                };
-
-                //return _ctsAssociationApiService.DetectAssociationByCustId(custId);
+                return _ctsAssociationApiService.DetectAssociationByCustId(custId);
             }
 
             return Enumerable.Empty<DetectAssociationByTypeModel>();

@@ -19,7 +19,7 @@
 
         public override string GetSettingKey()
         {
-            return "xxx";
+            return "CTS_DC_Association_GetByCustID";
         }
 
         public override bool IsValid()

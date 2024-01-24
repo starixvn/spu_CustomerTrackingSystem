@@ -36,10 +36,10 @@
                 assLists.AsssociationByDevice = GetAssociationByType(new DetectAssociationByTypeFilterModel(custID, AssociationDetectionType.Device));
             }, () =>
             {
-                assLists.AsssociationByDevice = GetAssociationByType(new DetectAssociationByTypeFilterModel(custID, AssociationDetectionType.IP));
+                assLists.AsssociationIP = GetAssociationByType(new DetectAssociationByTypeFilterModel(custID, AssociationDetectionType.IP));
             }, () =>
             {
-                assLists.AsssociationByDevice = GetAssociationByType(new DetectAssociationByTypeFilterModel(custID, AssociationDetectionType.AI));
+                assLists.AsssociationAI = GetAssociationByType(new DetectAssociationByTypeFilterModel(custID, AssociationDetectionType.AI));
             });
 
             return assLists.GetAssociation();
