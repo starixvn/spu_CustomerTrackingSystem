@@ -24,8 +24,8 @@ function ConvertNumberToThousandsString(x) {
 }
 
 function DangerousSettingDetail() {
-     //#region Variables
-     let domElements = {
+    //#region Variables
+    let domElements = {
         detailpage: $('#detailpage'),
         divContent: $('#divContent'),
         groupControl: $('#groupControl'),
@@ -154,6 +154,7 @@ function DangerousSettingDetail() {
     let isSupportShowAllTickets = false;
     let isDisplaySingleGrid = false;
     let timeoutRenderTicketDetail = undefined;
+    let isRefreshDgr = true;
 
     const regexValidAmount = /^[0-9]{1,15}/;
     const regexInvalidAmount = /[^0-9]{1,15}/g;
@@ -478,19 +479,20 @@ function DangerousSettingDetail() {
         let cacheSelected = cacheFilterForImportNew[currentType];
         if (cacheSelected != undefined && cacheSelected.cbbDanger) {
             cacheSelectedDanger = cacheSelected.cbbDanger;
-        }
-        else {
-            cacheDefaultDanger.Danger1.split(',').forEach(x => cacheSelectedDanger.push(`1-${x}`));
-            cacheDefaultDanger.Danger2.split(',').forEach(x => cacheSelectedDanger.push(`2-${x}`));
-            cacheDefaultDanger.Danger3.split(',').forEach(x => cacheSelectedDanger.push(`3-${x}`));
-            cacheDefaultDanger.Danger4.split(',').forEach(x => cacheSelectedDanger.push(`4-${x}`));
-            cacheDefaultDanger.Danger5.split(',').forEach(x => cacheSelectedDanger.push(`5-${x}`));
+        } else {
+            if (isRefreshDgr) {
+                cacheDefaultDanger.Danger1.split(',').forEach(x => cacheSelectedDanger.push(`1-${x}`));
+                cacheDefaultDanger.Danger2.split(',').forEach(x => cacheSelectedDanger.push(`2-${x}`));
+                cacheDefaultDanger.Danger3.split(',').forEach(x => cacheSelectedDanger.push(`3-${x}`));
+                cacheDefaultDanger.Danger4.split(',').forEach(x => cacheSelectedDanger.push(`4-${x}`));
+                cacheDefaultDanger.Danger5.split(',').forEach(x => cacheSelectedDanger.push(`5-${x}`));
+            }
+
+            isRefreshDgr = true;
         }
 
         if (data) {
             let dangerSelector = domElements.cbbDanger.empty();
-
-            if (data.NoneDanger.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(0, "None", data.NoneDanger.DangerItems, cacheSelectedDanger));
 
             if (data.Danger1.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(1, "Original", data.Danger1.DangerItems, cacheSelectedDanger));
 
@@ -501,6 +503,8 @@ function DangerousSettingDetail() {
             if (data.Danger4.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(4, "Basketball", data.Danger4.DangerItems, cacheSelectedDanger));
 
             if (data.Danger5.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(5, "E-Sports", data.Danger5.DangerItems, cacheSelectedDanger));
+
+            if (data.NoneDanger.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(0, "None", data.NoneDanger.DangerItems, cacheSelectedDanger));
 
             domElements.cbbDanger.parent().find('button').removeClass('border-error');
 
@@ -964,12 +968,12 @@ function DangerousSettingDetail() {
                 betIDString += ("0" + domElements.cbbMapYY.val()).slice(-2);
             }
             return betIDString;
-            
+
         } else if (domElements.sportType == 2) {
             return $("option:selected", domElements.cbbBetType).attr('data-betid');
         } else {
             return domElements.betIDToString;
-        }       
+        }
     }
 
     function IsFilterSuspicious(params) {
@@ -2472,9 +2476,9 @@ function DangerousSettingDetail() {
             $("option[value='0']", domElements.cbbMapX).remove();
             domElements.cbbMapX.prop('disabled', false);
             if (isBetTypeChange) {
-                domElements.cbbMapX.val('1').trigger('change');                
+                domElements.cbbMapX.val('1').trigger('change');
             }
-        } else {            
+        } else {
             domElements.cbbMapX.prepend("<option value='0' selected='selected'>-</option>");
             domElements.cbbMapX.prop('disabled', true);
         }
@@ -2554,6 +2558,8 @@ function DangerousSettingDetail() {
         domElements.boderTranstimeInput.removeClass('info-input-error');
 
         isImportNewTicket = true;
+
+        isRefreshDgr = false;
 
         FetchFilterMatchMonitorDetail();
 
@@ -2659,12 +2665,12 @@ function DangerousSettingDetail() {
         SetupMultiselect(domElements.cbbTicketsStatus, "Status");
         domElements.cbbBetType.select2();
         domElements.cbbMapX.select2();
-        domElements.cbbMapYY.select2();       
+        domElements.cbbMapYY.select2();
 
-        if (domElements.mapX != "0" && domElements.sportType != 2) {            
-            domElements.cbbMapX.val(domElements.mapX).trigger('change');           
+        if (domElements.mapX != "0" && domElements.sportType != 2) {
+            domElements.cbbMapX.val(domElements.mapX).trigger('change');
             domElements.cbbBetType.val(`${domElements.betTypeID}_0`).trigger('change');
-        } else {           
+        } else {
             domElements.cbbBetType.val(`${domElements.betTypeID}_${domElements.betIDToString}`).trigger('change');
         }
         if (domElements.mapYY != "0") {
@@ -2672,15 +2678,15 @@ function DangerousSettingDetail() {
         }
 
         ToggleMapXYY(false);
-        
+
         domElements.cbbMarket.val(domElements.liveIndicator);
-        
-        domElements.cbbMarket.change(function () {          
-            ResetTranstime();           
+
+        domElements.cbbMarket.change(function () {
+            ResetTranstime();
             OnchangeFilter();
         });
-        domElements.cbbBetType.change(function () {                       
-            ResetTranstime();         
+        domElements.cbbBetType.change(function () {
+            ResetTranstime();
             ToggleMapXYY(true);
 
             OnchangeFilter();
