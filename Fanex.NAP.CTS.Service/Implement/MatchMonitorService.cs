@@ -419,6 +419,7 @@
                 BatchSize = batchSize,
                 IsLicensee = (para.Sites == MMSites.All || para.Sites == null) ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
                 ListTransId = transJson,
+                IsCashout = para.IsCashout,
                 FromTransDate = para.TranstimeFrom != null ? para.TranstimeFrom.Value.ToUniversalTime() : (DateTime?)null,
                 ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null,
             };
@@ -505,6 +506,7 @@
 
                 FromTransDate = para.TranstimeFrom != null ? para.TranstimeFrom.Value.ToUniversalTime() : (DateTime?)null,
                 ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null,
+
                 //BetType = para.BetTypeID,
                 //BetID = para.BetID
             };
@@ -565,7 +567,7 @@
 
             FillRowDataSG(items, ref writer);
 
-            writer.SyncColumnsWidth(16);
+            writer.SyncColumnsWidth(17);
 
             return writer.ToBytes();
         }
@@ -585,6 +587,7 @@
                     (item.IsRobot ? "x" : "-"),
                     item.DangerToString,
                     item.Odds,
+                    item.MalayOdds,
                     item.BetID.ToString(),
                     item.Currency,
                     (item.Amount % 1 == 0 ? item.Amount.ToString(Consts.FormatDecimalToString_Thousands) : item.Amount.ToString()),
@@ -610,7 +613,7 @@
 
             FillRowDataDG(homeMItems, awayMItems, ref writer);
 
-            writer.SyncColumnsWidth(33);
+            writer.SyncColumnsWidth(35);
 
             return writer.ToBytes();
         }
@@ -654,6 +657,7 @@
                     (itemH.IsRobot ? "x" : "-"),
                     itemH.DangerToString,
                     itemH.Odds,
+                    itemH.MalayOdds,
                     itemH.BetID.ToString(),
                     itemH.Currency,
                     (itemH.Amount % 1 == 0 ? itemH.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemH.Amount.ToString()),
@@ -666,7 +670,7 @@
                     itemH.ReasonList,
                     (!string.IsNullOrEmpty(itemH.PICVerified) ? "x" : "-"),
                     null, null, null, null,
-                    null, null, null,
+                    null, null, null, null,
                     null, null, null,
                     null, null, null, null,
                     null, null, null, null
@@ -679,7 +683,7 @@
                 {
                     null, null, null, null,
                     null, null, null,
-                    null, null, null,
+                    null, null, null, null,
                     null, null, null, null,
                     null, null, null, null,
                     itemA.SubscriberType,
@@ -688,6 +692,7 @@
                     (itemA.IsRobot ? "x" : "-"),
                     itemA.DangerToString,
                     itemA.Odds,
+                    itemA.MalayOdds,
                     itemA.BetID.ToString(),
                     itemA.Currency,
                     (itemA.Amount % 1 == 0 ? itemA.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemA.Amount.ToString()),
@@ -712,6 +717,7 @@
                     (itemH.IsRobot ? "x" : "-"),
                     itemH.DangerToString,
                     itemH.Odds,
+                    itemH.MalayOdds,
                     itemH.BetID.ToString(),
                     itemH.Currency,
                     (itemH.Amount % 1 == 0 ? itemH.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemH.Amount.ToString()),
@@ -730,6 +736,7 @@
                     (itemA.IsRobot ? "x" : "-"),
                     itemA.DangerToString,
                     itemA.Odds,
+                    itemH.MalayOdds,
                     itemA.BetID.ToString(),
                     itemA.Currency,
                     (itemA.Amount % 1 == 0 ? itemA.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemA.Amount.ToString()),

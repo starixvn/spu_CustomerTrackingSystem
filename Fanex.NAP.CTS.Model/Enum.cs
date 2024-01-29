@@ -1,4 +1,6 @@
-﻿namespace Fanex.NAP.CTS.Model
+﻿using System.ComponentModel;
+
+namespace Fanex.NAP.CTS.Model
 {
     public enum AccountStatus
     {
@@ -104,7 +106,7 @@
         RobotOCRD166 = 166,
         Robot81 = 81,
         Robot161 = 161,
-        ProPunterInactive = 1002      
+        ProPunterInactive = 1002
     }
 
     public enum SourceTypeID
@@ -160,14 +162,14 @@
     }
 
     public enum CustomerCategoryGroup
-    {      
+    {
         RobotUser = 163
     }
 
     public enum CustomerCategoryID
     {
         VVIP = 210,
-        SystemDetectGroupBetting = 63,       
+        SystemDetectGroupBetting = 63,
         RobotOCRD = 165,
         SysDetectUnauthorizedLogin = 64,
         SysDetectUnauthorizedLoginLosing = 104
@@ -223,5 +225,17 @@
     {
         MMBetType = 1,
         DgrBetType = 2
+    }
+
+    public enum StatusCashout
+    {
+        [Description("All")]
+        All = -1,
+
+        [Description("Non-Cashout")]
+        NonCashout = 0,
+
+        [Description("Cashout")]
+        Cashout = 1,
     }
 }

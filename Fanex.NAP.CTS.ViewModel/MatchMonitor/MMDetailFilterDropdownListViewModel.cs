@@ -11,6 +11,7 @@
             this.CCList = new List<int>();
             this.DangerList = new DangerViewModel();
             this.TicketStatusList = new List<TicketStatusViewModel>();
+            this.CashoutStatusList = new List<CashoutStatusViewModel>();
         }
 
         public IEnumerable<string> SubscriberTypeList { get; set; }
@@ -21,5 +22,6 @@
 
         public IEnumerable<TicketStatusViewModel> TicketStatusList { get; set; }
 
+        public IEnumerable<CashoutStatusViewModel> CashoutStatusList { get; set; }
     }
 }

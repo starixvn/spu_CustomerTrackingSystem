@@ -34,5 +34,6 @@
 
         public int TicketStatus { get; set; }
 
+        public int IsCashout { get; set; }
     }
 }

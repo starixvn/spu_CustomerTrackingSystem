@@ -190,6 +190,7 @@
     <Compile Include="MatchMonitor\DetectGroup\MGrListViewModel.cs" />
     <Compile Include="MatchMonitor\ExExcelTicketInfoViewModel.cs" />
     <Compile Include="MatchMonitor\ExExlMatchInfoViewModel.cs" />
+    <Compile Include="MatchMonitor\FilterDependOn\CashoutStatusViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\CCGroupViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\DangerViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\DangerTypeViewModel.cs" />
