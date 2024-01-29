@@ -463,9 +463,16 @@
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationPerTypeAPI)]
         public IEnumerable<DetectAssociationByTypeModel> GetAssociationByCustId(long custId)
         {
-            if (custId >= 0)
+            try
             {
-                return _ctsAssociationApiService.DetectAssociationByCustId(custId);
+                if (custId >= 0)
+                {
+                    return _ctsAssociationApiService.DetectAssociationByCustId(custId);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetAssociationByCustId exception: " + ex.Message);
             }
 
             return Enumerable.Empty<DetectAssociationByTypeModel>();
