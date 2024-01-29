@@ -595,13 +595,12 @@
             <param name="subscriberName"></param>
             <returns>Subscriber Info</returns>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetAssociationPerType(System.Int64,System.Int32)">
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetAssociationByCustId(System.Int64)">
             <summary>
-            Get Association by CustId
+            Provide API to get association (Device, IP, AI)
+            Integration team: NAP 
             </summary>
             <param name="custId"></param>
-            <param name="associationType">1-Device, 2-Manual</param>
-            <returns></returns>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetProblemCaseMonitor(Fanex.NAP.CTS.Model.API.ProblemCaseMonitor.ProblemCaseMonitorParamsModel)">
             <summary>
