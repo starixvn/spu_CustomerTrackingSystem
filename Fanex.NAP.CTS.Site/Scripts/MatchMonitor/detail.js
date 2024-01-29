@@ -1924,61 +1924,49 @@ function MatchMonitorDetail() {
     //#region Feedback
     function GetRangeTransTime() {
         let rangeTransTime = [];
-        let currentMinTime = '';
-        let currentMaxTime = '';
+        let currentMin = '';
+        let currentMax = '';
 
         if (isDisplaySingleGrid) {
             domElements.tblMMSG.DataTable().rows(function (idx, data, node) {
                 if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
-                    if (currentMinTime == '') {
-                        currentMinTime = data.TransTimeToString;
-                        currentMaxTime = data.TransTimeToString;
+                    if (currentMin == '') {
+                        currentMin = data;
+                        currentMax = data;
                     } else {
-                        if (currentMinTime > data.TransTimeToString) {
-                            currentMinTime = data.TransTimeToString;
-                        }
-                        if (currentMaxTime < data.TransTimeToString) {
-                            currentMaxTime = data.TransTimeToString;
-                        }
+                        if (currentMin.TransTime > data.TransTime) currentMin = data;
+                        if (currentMax.TransTime < data.TransTime) currentMax = data;
                     }
                 }
             })
         } else {
             domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
                 if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
-                    if (currentMinTime == '') {
-                        currentMinTime = data.TransTimeToString;
-                        currentMaxTime = data.TransTimeToString;
+                    if (currentMin == '') {
+                        currentMin = data;
+                        currentMax = data;
                     } else {
-                        if (currentMinTime > data.TransTimeToString) {
-                            currentMinTime = data.TransTimeToString;
-                        }
-                        if (currentMaxTime < data.TransTimeToString) {
-                            currentMaxTime = data.TransTimeToString;
-                        }
+                        if (currentMin.TransTime > data.TransTime) currentMin = data;
+                        if (currentMax.TransTime < data.TransTime) currentMax = data;
                     }
                 }
             });
 
             domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
                 if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
-                    if (currentMinTime == '') {
-                        currentMinTime = data.TransTimeToString;
-                        currentMaxTime = data.TransTimeToString;
+                    if (currentMin == '') {
+                        currentMin = data;
+                        currentMax = data;
                     } else {
-                        if (currentMinTime > data.TransTimeToString) {
-                            currentMinTime = data.TransTimeToString;
-                        }
-                        if (currentMaxTime < data.TransTimeToString) {
-                            currentMaxTime = data.TransTimeToString;
-                        }
+                        if (currentMin.TransTime > data.TransTime) currentMin = data;
+                        if (currentMax.TransTime < data.TransTime) currentMax = data;
                     }
                 }
             })
         }
 
-        rangeTransTime.push(currentMinTime);
-        rangeTransTime.push(currentMaxTime);
+        rangeTransTime.push(currentMin.TransTimeToString);
+        rangeTransTime.push(currentMax.TransTimeToString);
 
         return rangeTransTime;
     }
@@ -2401,17 +2389,19 @@ function MatchMonitorDetail() {
         domElements.cbbTicketsStatus.parent().find('button').removeClass('border-error');
     }
 
-    function ResetDefault() {
+    function ResetDefault(isResetAmountRM) {
         cacheMGroup.isActive = false;
         cacheFilterDependOn.MGrList = [];
         cacheMGroup.allMGroup = {};
         cacheMGroup.selectMgroup = {};
-        domElements.inputCustAmountRM.val('');
-        domElements.iconClearUsnAmt.addClass("hide");
+        if (isResetAmountRM) {
+            domElements.inputCustAmountRM.val('');
+            domElements.iconClearUsnAmt.addClass("hide");
+        }        
     }
 
     function OnchangeFilter() {
-        ResetDefault();
+        ResetDefault(true);
         BetTypeOnChange();
     }
 
@@ -2544,7 +2534,7 @@ function MatchMonitorDetail() {
     }
 
     function FetchFilterMMDetailByTranstime() {
-        ResetDefault();
+        ResetDefault(false);
         ResetDefaulCbbSite();
 
         domElements.boderTranstimeInput.removeClass('info-input-error');
@@ -2656,6 +2646,10 @@ function MatchMonitorDetail() {
         domElements.cbbBetType.select2();
         domElements.cbbMapX.select2();
         domElements.cbbMapYY.select2();
+        domElements.inputCustAmountRM.val('');
+        domElements.iconClearUsnAmt.addClass("hide");
+        domElements.inputTranstimeFrom.val('');
+        domElements.inputTranstimeTo.val('');
 
         if (domElements.mapX != "0" && domElements.sportType != 2) {
             domElements.cbbMapX.val(domElements.mapX).trigger('change');
@@ -2703,7 +2697,7 @@ function MatchMonitorDetail() {
 
         if (isSupportShowAllTickets) {
             domElements.cbbTypeOfTickets.change(function () {
-                ResetDefault();
+                ResetDefault(true);
 
                 CacheSelectDataFilter();
 
