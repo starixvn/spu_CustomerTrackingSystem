@@ -29,7 +29,7 @@
 
         public bool IsSupportShowAllTickets { get; set; }
 
-        public MatchMonitorQueryType? TypeOfTickets { get; set; }
+        public MMTypeOfTicket? TypeOfTickets { get; set; }
 
         public long? LastScannedSequenceID { get; set; }
 

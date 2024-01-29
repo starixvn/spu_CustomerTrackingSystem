@@ -468,10 +468,16 @@
             TD = 300
         };
 
-        public enum MatchMonitorQueryType
+        public enum MMTypeOfTicket
         {
             TicketFraud = 2,
             TicketAll = 3
+        }
+
+        public enum MMQueryType
+        {
+            MMReport = 2,
+            DangerMMReport = 3
         }
 
         public enum RobotType

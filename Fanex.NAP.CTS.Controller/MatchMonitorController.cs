@@ -53,7 +53,7 @@
 
         public MatchMonitorController()
         {
-            _matchMonitorService = new MatchMonitorService();
+            _matchMonitorService = new MatchMonitorService(MMQueryType.MMReport);
             _commonService = new CommonService();
             _associationDetectionService = new AssociationDetectionService();
             _memoryCacheService = new MemoryCacheService();
@@ -360,7 +360,7 @@
                 }
                 else
                 {
-                    if (para.TypeOfTickets == MatchMonitorQueryType.TicketFraud)
+                    if (para.TypeOfTickets == MMTypeOfTicket.TicketFraud)
                     {
                         result = GetFraudMMFilter(para);
                     }
@@ -392,15 +392,15 @@
         {
             var result = new MMDetailFilterViewModel();
 
-            var removeKeyFraud = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MatchMonitorQueryType), MatchMonitorQueryType.TicketFraud));
+            var removeKeyFraud = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMTypeOfTicket), MMTypeOfTicket.TicketFraud));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyFraud);
 
-            var removeKeyAll = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MatchMonitorQueryType), MatchMonitorQueryType.TicketAll));
+            var removeKeyAll = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMTypeOfTicket), MMTypeOfTicket.TicketAll));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyAll);
 
             switch (para.TypeOfTickets)
             {
-                case MatchMonitorQueryType.TicketFraud:
+                case MMTypeOfTicket.TicketFraud:
                     {
                         result = GetFraudMMFilter(para);
 
@@ -408,7 +408,7 @@
                         {
                             Task.Run(() =>
                             {
-                                para.TypeOfTickets = MatchMonitorQueryType.TicketAll;
+                                para.TypeOfTickets = MMTypeOfTicket.TicketAll;
 
                                 _ = GetAllMMFilter(para);
                             });
@@ -416,15 +416,15 @@
 
                         break;
                     }
-                case MatchMonitorQueryType.TicketAll:
+                case MMTypeOfTicket.TicketAll:
                     {
-                        para.TypeOfTickets = MatchMonitorQueryType.TicketFraud;
+                        para.TypeOfTickets = MMTypeOfTicket.TicketFraud;
 
                         GetFraudMMDetailForCache(para);
 
                         if (para.IsSupportShowAllTickets)
                         {
-                            para.TypeOfTickets = MatchMonitorQueryType.TicketAll;
+                            para.TypeOfTickets = MMTypeOfTicket.TicketAll;
 
                             result = GetAllMMFilter(para);
                         }
@@ -439,8 +439,8 @@
         private MMDetailFilterViewModel GetFraudMMFilter(MMDetailInfoViewModel para)
         {
             var fraudFilterResult = new MMDetailFilterViewModel();
-            para.TypeOfTickets = MatchMonitorQueryType.TicketFraud;
-            var ticketTypeName = Enum.GetName(typeof(MatchMonitorQueryType), para.TypeOfTickets);
+            para.TypeOfTickets = MMTypeOfTicket.TicketFraud;
+            var ticketTypeName = Enum.GetName(typeof(MMTypeOfTicket), para.TypeOfTickets);
 
             var key = para.BuildCacheKey(nameof(GetFraudMMFilter), Region, UserID, ticketTypeName);
 
@@ -472,7 +472,7 @@
         private MMDetailFilterViewModel GetAllMMFilter(MMDetailInfoViewModel para)
         {
             var allFilterResult = new MMDetailFilterViewModel();
-            var ticketTypeName = Enum.GetName(typeof(MatchMonitorQueryType), para.TypeOfTickets);
+            var ticketTypeName = Enum.GetName(typeof(MMTypeOfTicket), para.TypeOfTickets);
             var key = para.BuildCacheKey(nameof(GetAllMMFilter), Region, UserID, ticketTypeName);
 
             try
@@ -564,7 +564,7 @@
             {
                 switch (para.TypeOfTickets)
                 {
-                    case MatchMonitorQueryType.TicketFraud:
+                    case MMTypeOfTicket.TicketFraud:
                         {
                             var fraudTicket = GetFraudMMDetailForCache(para);
 
@@ -575,7 +575,7 @@
 
                             break;
                         }
-                    case MatchMonitorQueryType.TicketAll when para.IsSupportShowAllTickets:
+                    case MMTypeOfTicket.TicketAll when para.IsSupportShowAllTickets:
                         {
                             var internalCurrencyIDs = new List<int> { 20, 27, 28 };
 
@@ -623,7 +623,7 @@
         private MMDetailTicketListViewModel GetAllMMDetail(MMDetailInfoViewModel info, MMDetailFilterViewModel filter)
         {
             var para = info.Clone();
-            para.TypeOfTickets = MatchMonitorQueryType.TicketAll;
+            para.TypeOfTickets = MMTypeOfTicket.TicketAll;
             var mdResult = new MMDetailTicketListViewModel();
             var ticketDetailGroup = new TicketDetailViewModel();
 
@@ -662,7 +662,7 @@
                         mdResult = GetTicketsFromMainDb(para, filter);
                     }
                 }
-                else if (para.TypeOfTickets == MatchMonitorQueryType.TicketAll)
+                else if (para.TypeOfTickets == MMTypeOfTicket.TicketAll)
                 {
                     mdResult = GetTicketsFromMainDb(para, filter);
                 }
@@ -734,7 +734,7 @@
         {
             var para = filter.Clone();
             var fraudMMDetailResult = new TicketDetailViewModel();
-            var ticketTypeName = Enum.GetName(typeof(MatchMonitorQueryType), MatchMonitorQueryType.TicketFraud);
+            var ticketTypeName = Enum.GetName(typeof(MMTypeOfTicket), MMTypeOfTicket.TicketFraud);
             var key = para.BuildCacheKey("TicketFraud", Region, UserID, ticketTypeName);
 
             try
@@ -743,7 +743,7 @@
 
                 if (fraudMMDetailResult == null)
                 {
-                    para.TypeOfTickets = MatchMonitorQueryType.TicketFraud;
+                    para.TypeOfTickets = MMTypeOfTicket.TicketFraud;
 
                     var matchDetailInfo = _matchMonitorService.GetMatchMonitorDetail(para);
 
@@ -1060,7 +1060,7 @@
                 nTicket.ADetectGroup = "-";
                 nTicket.ReasonList = "-";
                 nTicket.ReasonIDList = string.Empty;
-                nTicket.TypeOfTicket = MatchMonitorQueryType.TicketAll;
+                nTicket.TypeOfTicket = MMTypeOfTicket.TicketAll;
 
                 ticketResult.Add(nTicket);
             });
