@@ -56,7 +56,6 @@ function DangerousSettingDetail() {
         cbbMapYY: $('#cbbMapYY'),
         divMapX: $('#divMapX'),
         divMapYY: $('#divMapYY'),
-        // cbbTypeOfTickets: $('#cbbTypeOfTickets'),
         cbbMatchScore: $('#cbbMatchScore'),
         cbbSites: $('#cbbSites'),
         cbbCC: $('#cbbCC'),
@@ -100,8 +99,6 @@ function DangerousSettingDetail() {
         btnGenerateDetail: $('#btnGenerate-detail'),
         btnAssDetection: $('#btnAssDetection'),
         btnExportExcel: $('#btnExportExcel'),
-        // btnVerifyAndClose: $('#btnVerifyAndClose'),
-        // btnReasonFeedback: $('#btnReasonFeedback'),
         inputTranstimeFrom: $('#inputTranstimeFrom'),
         inputTranstimeTo: $('#inputTranstimeTo'),
         iconTranstimeSubmit: $('#iconTranstimeSubmit'),
@@ -119,7 +116,11 @@ function DangerousSettingDetail() {
 
     let recordsFilteredGlobal = 0;
     let recordsTotalGlobal = 0;
-    let maxSequenceId = 1;
+
+    let lastMark = {
+        maxSequenceId: 1,
+        maxTransDate: new Date()
+    }
 
     let cacheFilter = {};
     let cacheFilterScore = undefined;
@@ -1251,7 +1252,11 @@ function DangerousSettingDetail() {
 
     //#region Fetch Match Monitor Detail
 
-    function FetchMatchMonitorDetail(typeOfTickets = MatchMonitorDetailViewType.TicketFraud, lastScannedSequenceID = maxSequenceId) {
+    function FetchMatchMonitorDetail(
+        typeOfTickets = MatchMonitorDetailViewType.TicketFraud,
+        lastScannedSequenceID = lastMark.maxSequenceId,
+        lastTransDate = lastMark.maxTransDate) {
+
         recordsFilteredGlobal = 0;
 
         RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsFilteredGlobal);
@@ -1270,7 +1275,7 @@ function DangerousSettingDetail() {
             xhr.abort();
         }
 
-        if (lastScannedSequenceID || typeOfTickets == MatchMonitorDetailViewType.TicketFraud) {
+        if (GetDataCondition(lastScannedSequenceID, lastTransDate, typeOfTickets)) {
             domElements.tblMMHomeTeam.find('tbody').addClass('loading');
             domElements.tblMMAwayTeam.find('tbody').addClass('loading');
             domElements.tblMMSG.find('tbody').addClass('loading');
@@ -1302,6 +1307,7 @@ function DangerousSettingDetail() {
                     BetChoiceAway: GetAttributeBetTypeSelected('data-betchoiceaway'),
                     LiveIndicator: domElements.cbbMarket.val(),
                     LastScannedSequenceID: lastScannedSequenceID,
+                    LastTransDate: lastTransDate == new Date() ? null : lastTransDate,
                     IsSupportShowAllTickets: isSupportShowAllTickets,
                     IsFilter: true,
                     TypeOfTickets: typeOfTickets,
@@ -1332,10 +1338,10 @@ function DangerousSettingDetail() {
 
                 params.IsFilterSuspicious = IsFilterSuspicious(params);
 
-                GetMatchMonitorTotalTicket(params, lastScannedSequenceID);
+                GetMatchMonitorTotalTicket(params, lastScannedSequenceID, lastTransDate);
 
                 if (recordsTotalGlobal > 0) {
-                    GetMatchMonitorDetail(params, lastScannedSequenceID, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
+                    GetMatchMonitorDetail(params, lastScannedSequenceID, lastTransDate, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
                 }
                 else {
                     domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
@@ -1346,9 +1352,13 @@ function DangerousSettingDetail() {
         }
     }
 
-    function GetMatchMonitorTotalTicket(data = null, lastScannedSequenceID = maxSequenceId) {
-        if (lastScannedSequenceID || data.TypeOfTickets == MatchMonitorDetailViewType.TicketFraud) {
+    function GetMatchMonitorTotalTicket(
+        data = null,
+        lastScannedSequenceID = lastMark.maxSequenceId,
+        lastTransDate = lastMark.maxTransDate) {
+        if (GetDataCondition(lastScannedSequenceID, lastTransDate, data.TypeOfTickets)) {
             data.LastScannedSequenceID = lastScannedSequenceID;
+            data.LastTransDate = lastTransDate == new Date() ? null : lastTransDate;
             currentType = data.TypeOfTickets;
 
             $.ajax(common.modifyRelativeUrl('DangerMonitor/GetMatchMonitorTotalTicket'), {
@@ -1385,9 +1395,14 @@ function DangerousSettingDetail() {
         }
     }
 
-    function GetMatchMonitorDetail(data = null, lastScannedSequenceID = maxSequenceId, posClick = 0) {
-        if (lastScannedSequenceID || data.TypeOfTickets == MatchMonitorDetailViewType.TicketFraud) {
+    function GetMatchMonitorDetail(
+        data = null,
+        lastScannedSequenceID = lastMark.maxSequenceId,
+        lastTransDate = lastMark.maxTransDate,
+        posClick = 0) {
+        if (GetDataCondition(lastScannedSequenceID, lastTransDate, data.TypeOfTickets)) {
             data.LastScannedSequenceID = lastScannedSequenceID;
+            data.LastTransDate = lastTransDate == new Date() ? null : lastTransDate;
             currentType = data.TypeOfTickets;
 
             xhr = $.ajax(common.modifyRelativeUrl('DangerMonitor/GetMatchMonitorDetail'), {
@@ -1405,11 +1420,11 @@ function DangerousSettingDetail() {
 
                         RenderMatchMonitorDetail(response, data.TypeOfTickets);
 
-                        if (data.TypeOfTickets == MatchMonitorDetailViewType.TicketAll && response?.data?.LastSequenceID) {
-                            GetMatchMonitorDetail(data, response?.data?.LastSequenceID, posClick);
+                        if (data.TypeOfTickets == MatchMonitorDetailViewType.TicketAll && StopLoopCallBackCondition(response)) {
+                            GetMatchMonitorDetail(data, response?.data?.LastSequenceID, response?.data?.LastTransDate, posClick);
                         }
 
-                        if (response?.data?.LastSequenceID == null) {
+                        if (DisplayTotalTicketCondition(response)) {
                             RefreshLengthPage(-1, false);
 
                             let hdTotalTicketTxt = domElements.hdbreadcrumTotalTickets.text();
@@ -1440,6 +1455,18 @@ function DangerousSettingDetail() {
                 }
             });
         }
+    }
+
+    function GetDataCondition(lastScannedSequenceID, lastTransDate, typeOfTicket) {
+        return lastScannedSequenceID || lastTransDate || typeOfTicket == MatchMonitorDetailViewType.TicketFraud;
+    }
+
+    function StopLoopCallBackCondition(response) {
+        return response?.data?.LastSequenceID || response?.data?.LastTransDate;
+    }
+
+    function DisplayTotalTicketCondition(response) {
+        return response?.data?.LastSequenceID == null && response?.data?.LastTransDate == null;
     }
 
     function FetchFilterMatchMonitorDetail() {
@@ -1488,7 +1515,8 @@ function DangerousSettingDetail() {
                     RenderFilter(data);
 
                     if (data.MaxSequenceId > 0 && currentType == MatchMonitorDetailViewType.TicketAll) {
-                        maxSequenceId = data.MaxSequenceId;
+                        lastMark.maxSequenceId = data.MaxSequenceId;
+                        lastMark.maxTransDate = data.MaxTransDate
                     }
                 }
             },
@@ -1552,20 +1580,6 @@ function DangerousSettingDetail() {
         RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsTotalGlobal);
     }
 
-    // function RenderBotIcon(robotType, isRobot) {
-    //     let html = '-';
-    //     let spanHtml = '<span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span>';
-
-    //     if (isRobot) {
-    //         if (robotType == 1)
-    //             html = `<span class="icon-big-Robot icon-big-good-robot">${spanHtml}</span>`;
-    //         else if (robotType == 2)
-    //             html = `<span class="icon-big-Robot icon-big-bad-robot">${spanHtml}</span>`;
-    //     }
-
-    //     return html;
-    // }
-
     //#endregion Render Grid
 
     //#region Refresh
@@ -1599,51 +1613,6 @@ function DangerousSettingDetail() {
     //#endregion Refresh
 
     //#region Verify Trans
-    // function GetTranIds() {
-    //     let tranIds = [];
-    //     domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
-    //         if (data.PICVerified == '-' || data.PICVerified == '' || data.PICVerified == null) {
-    //             tranIds.push(data.TransIdToString);
-    //         }
-    //     });
-    //     domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
-    //         if (data.PICVerified == '' || data.PICVerified == '' || data.PICVerified == null) {
-    //             tranIds.push(data.TransIdToString);
-    //         }
-    //     });
-
-    //     return tranIds;
-    // }
-
-    // function VerifyTransMatchMonitorDetail() {
-    //     $.ajax(common.modifyRelativeUrl('DangerMonitor/VerifyTransMMDetail'), {
-    //         type: 'POST',
-    //         data:
-    //         {
-    //             MatchId: domElements.matchID,
-    //             LiveIndicator: domElements.cbbMarket.val(),
-    //             BettypeID: GetBetTypeSelected(),
-    //             BetID: GetBetIDSelected(),
-    //             TranIds: GetTranIds().join()
-    //         },
-    //         beforeSend: function () {
-    //             domElements.tblMMHomeTeam.addClass('loading-value');
-    //             domElements.tblMMAwayTeam.addClass('loading-value');
-    //         },
-    //         success: function () {
-    //             window.close();
-    //         },
-    //         complete: function () {
-    //             domElements.tblMMHomeTeam.removeClass("loading-value");
-    //             domElements.tblMMAwayTeam.removeClass("loading-value");
-    //         },
-    //         error: function (errMsg) {
-    //             console.log(errMsg);
-    //             domElements.tblMMHomeTeam.removeClass("loading-value");
-    //             domElements.tblMMAwayTeam.removeClass("loading-value");
-    //         }
-    //     });
-    // }
 
     //#endregion Verify Trans
 
@@ -1995,24 +1964,6 @@ function DangerousSettingDetail() {
 
     //#region Event OnChange
 
-    // function ChangeCbbTypeOfTickets() {
-    //     RemoveAllFilterError();
-
-    //     let betTypeSelected = $("option:selected", domElements.cbbBetType);
-
-    //     if (betTypeSelected.attr('data-is-support-suspicious') == 'false') {
-    //         domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketAll);
-    //         domElements.cbbTypeOfTickets.prop('disabled', true);
-    //     } else if (!isSupportShowAllTickets) {
-    //         $(".readOnly", domElements.cbbBetType).prop("disabled", true);
-    //         domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
-    //         domElements.cbbTypeOfTickets.prop('disabled', true);
-    //     } else {
-    //         domElements.cbbTypeOfTickets.val(MatchMonitorDetailViewType.TicketFraud);
-    //         domElements.cbbTypeOfTickets.prop('disabled', false);
-    //     }
-    // }
-
     function ResetDefaulCbbSite() {
         domElements.cbbSites.prop('disabled', false);
         domElements.cbbSites.empty();
@@ -2030,25 +1981,17 @@ function DangerousSettingDetail() {
 
         ResetDefaulCbbSite();
 
-        // ChangeCbbTypeOfTickets();
-
         let txtMarket = $("option:selected", domElements.cbbMarket).text();
         domElements.spanMarketInfo.text(`${txtMarket}`);
 
         let txtBetType = $("option:selected", domElements.cbbBetType).text();
         domElements.spanSportBetTypeInfo.text(`${domElements.sportName} - ${txtBetType} -`);
 
-        // currentType = Number(domElements.cbbTypeOfTickets.val());
-
         cacheFilterDependOn.MGrList = [];
 
         isImportNewTicket = true;
 
         FetchFilterMatchMonitorDetail();
-
-        // domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
-
-        // domElements.btnReasonFeedback.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
 
         RemoveFilterLoading();
     }
@@ -2060,15 +2003,9 @@ function DangerousSettingDetail() {
 
         ResetDefaulCbbSite();
 
-        // currentType = Number(domElements.cbbTypeOfTickets.val());
-
         cacheFilterDependOn.MGrList = [];
 
         FetchFilterMatchMonitorDetail();
-
-        // domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
-
-        // domElements.btnReasonFeedback.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
 
         RemoveFilterLoading();
     }
@@ -2563,10 +2500,6 @@ function DangerousSettingDetail() {
 
         FetchFilterMatchMonitorDetail();
 
-        // domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
-
-        // domElements.btnReasonFeedback.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
-
         RemoveFilterLoading();
     }
 
@@ -2709,18 +2642,6 @@ function DangerousSettingDetail() {
 
         isSupportShowAllTickets = JSON.parse(domElements?.isSupportShowAllTickets?.toLowerCase());
 
-        // domElements.cbbTypeOfTickets.prop('disabled', !isSupportShowAllTickets);
-
-        // if (isSupportShowAllTickets) {
-        //     domElements.cbbTypeOfTickets.change(function () {
-        //         ResetDefault();
-
-        //         CacheSelectDataFilter();
-
-        //         TypeOfTicketsOnChange();
-        //     });
-        // }
-
         SetupDoubleDataTable();
 
         SetupSingleTable();
@@ -2739,7 +2660,8 @@ function DangerousSettingDetail() {
 
         domElements.btnImportNewTicket.on('click', function () {
             isImportNewTicket = true;
-            maxSequenceId = 1;
+            lastMark.maxSequenceId = 1;
+            lastMark.maxTransDate = new Date();
             cacheFilter = {};
             cacheFilterScore = undefined;
             cacheMGroup.isActive = false;
@@ -2780,12 +2702,6 @@ function DangerousSettingDetail() {
 
         domElements.btnExportExcel.on('click', function () { ExportToExcel(); })
 
-        // domElements.btnVerifyAndClose.on('click', function () {
-        //     common.showConfirmation2('<div class="popup - content">Are you sure about this?<br>Once confirmed, all tickets\' review status will be updated to "Verified".</div>', function () {
-        //         VerifyTransMatchMonitorDetail();
-        //     });
-        // });
-
         domElements.inputTranstimeFrom.on('input', function () {
             domElements.iconTranstimeSubmit.addClass('transtime-icon-forcus');
         });
@@ -2812,22 +2728,7 @@ function DangerousSettingDetail() {
         domElements.inputHomeSelectAll.prop('checked', false);
         domElements.inputAwaySelectAll.prop('checked', false);
 
-        // ChangeCbbTypeOfTickets();
-
         Resize();
-
-        // var reasonFeedback = new feedback();
-
-        // $('#btnReasonFeedback').on('click', function () {
-
-        //     let betTypeID = GetBetTypeSelected();
-        //     let betID = GetBetIDSelected();
-        //     let reasonList = cacheFilterDefault.ReasonList;
-        //     let reasonCheckedList = GetSelectDataFilter(domElements.cbbReason, true);
-        //     let rangeTransTime = GetRangeTransTime();
-
-        //     reasonFeedback.Initial(domElements.matchID, domElements.cbbMarket.val(), betTypeID, betID, domElements.sportType, reasonList, reasonCheckedList, rangeTransTime);
-        // });
     }
 
     $(window).resize(function () {

@@ -360,7 +360,7 @@
                 }
                 else
                 {
-                    if (para.TypeOfTickets == MMTypeOfTicket.TicketFraud)
+                    if (para.TypeOfTickets == MMTicketTypeFromUI.TicketFraud)
                     {
                         result = GetFraudMMFilter(para);
                     }
@@ -392,15 +392,15 @@
         {
             var result = new MMDetailFilterViewModel();
 
-            var removeKeyFraud = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMTypeOfTicket), MMTypeOfTicket.TicketFraud));
+            var removeKeyFraud = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMTicketTypeFromUI), MMTicketTypeFromUI.TicketFraud));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyFraud);
 
-            var removeKeyAll = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMTypeOfTicket), MMTypeOfTicket.TicketAll));
+            var removeKeyAll = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMTicketTypeFromUI), MMTicketTypeFromUI.TicketAll));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyAll);
 
             switch (para.TypeOfTickets)
             {
-                case MMTypeOfTicket.TicketFraud:
+                case MMTicketTypeFromUI.TicketFraud:
                     {
                         result = GetFraudMMFilter(para);
 
@@ -408,7 +408,7 @@
                         {
                             Task.Run(() =>
                             {
-                                para.TypeOfTickets = MMTypeOfTicket.TicketAll;
+                                para.TypeOfTickets = MMTicketTypeFromUI.TicketAll;
 
                                 _ = GetAllMMFilter(para);
                             });
@@ -416,15 +416,15 @@
 
                         break;
                     }
-                case MMTypeOfTicket.TicketAll:
+                case MMTicketTypeFromUI.TicketAll:
                     {
-                        para.TypeOfTickets = MMTypeOfTicket.TicketFraud;
+                        para.TypeOfTickets = MMTicketTypeFromUI.TicketFraud;
 
                         GetFraudMMDetailForCache(para);
 
                         if (para.IsSupportShowAllTickets)
                         {
-                            para.TypeOfTickets = MMTypeOfTicket.TicketAll;
+                            para.TypeOfTickets = MMTicketTypeFromUI.TicketAll;
 
                             result = GetAllMMFilter(para);
                         }
@@ -439,8 +439,8 @@
         private MMDetailFilterViewModel GetFraudMMFilter(MMDetailInfoViewModel para)
         {
             var fraudFilterResult = new MMDetailFilterViewModel();
-            para.TypeOfTickets = MMTypeOfTicket.TicketFraud;
-            var ticketTypeName = Enum.GetName(typeof(MMTypeOfTicket), para.TypeOfTickets);
+            para.TypeOfTickets = MMTicketTypeFromUI.TicketFraud;
+            var ticketTypeName = Enum.GetName(typeof(MMTicketTypeFromUI), para.TypeOfTickets);
 
             var key = para.BuildCacheKey(nameof(GetFraudMMFilter), Region, UserID, ticketTypeName);
 
@@ -472,7 +472,7 @@
         private MMDetailFilterViewModel GetAllMMFilter(MMDetailInfoViewModel para)
         {
             var allFilterResult = new MMDetailFilterViewModel();
-            var ticketTypeName = Enum.GetName(typeof(MMTypeOfTicket), para.TypeOfTickets);
+            var ticketTypeName = Enum.GetName(typeof(MMTicketTypeFromUI), para.TypeOfTickets);
             var key = para.BuildCacheKey(nameof(GetAllMMFilter), Region, UserID, ticketTypeName);
 
             try
@@ -564,7 +564,7 @@
             {
                 switch (para.TypeOfTickets)
                 {
-                    case MMTypeOfTicket.TicketFraud:
+                    case MMTicketTypeFromUI.TicketFraud:
                         {
                             var fraudTicket = GetFraudMMDetailForCache(para);
 
@@ -575,7 +575,7 @@
 
                             break;
                         }
-                    case MMTypeOfTicket.TicketAll when para.IsSupportShowAllTickets:
+                    case MMTicketTypeFromUI.TicketAll when para.IsSupportShowAllTickets:
                         {
                             var internalCurrencyIDs = new List<int> { 20, 27, 28 };
 
@@ -623,7 +623,7 @@
         private MMDetailTicketListViewModel GetAllMMDetail(MMDetailInfoViewModel info, MMDetailFilterViewModel filter)
         {
             var para = info.Clone();
-            para.TypeOfTickets = MMTypeOfTicket.TicketAll;
+            para.TypeOfTickets = MMTicketTypeFromUI.TicketAll;
             var mdResult = new MMDetailTicketListViewModel();
             var ticketDetailGroup = new TicketDetailViewModel();
 
@@ -662,7 +662,7 @@
                         mdResult = GetTicketsFromMainDb(para, filter);
                     }
                 }
-                else if (para.TypeOfTickets == MMTypeOfTicket.TicketAll)
+                else if (para.TypeOfTickets == MMTicketTypeFromUI.TicketAll)
                 {
                     mdResult = GetTicketsFromMainDb(para, filter);
                 }
@@ -734,7 +734,7 @@
         {
             var para = filter.Clone();
             var fraudMMDetailResult = new TicketDetailViewModel();
-            var ticketTypeName = Enum.GetName(typeof(MMTypeOfTicket), MMTypeOfTicket.TicketFraud);
+            var ticketTypeName = Enum.GetName(typeof(MMTicketTypeFromUI), MMTicketTypeFromUI.TicketFraud);
             var key = para.BuildCacheKey("TicketFraud", Region, UserID, ticketTypeName);
 
             try
@@ -743,7 +743,7 @@
 
                 if (fraudMMDetailResult == null)
                 {
-                    para.TypeOfTickets = MMTypeOfTicket.TicketFraud;
+                    para.TypeOfTickets = MMTicketTypeFromUI.TicketFraud;
 
                     var matchDetailInfo = _matchMonitorService.GetMatchMonitorDetail(para);
 
@@ -1060,7 +1060,7 @@
                 nTicket.ADetectGroup = "-";
                 nTicket.ReasonList = "-";
                 nTicket.ReasonIDList = string.Empty;
-                nTicket.TypeOfTicket = MMTypeOfTicket.TicketAll;
+                nTicket.TypeOfTicket = MMTicketTypeFromUI.TicketAll;
 
                 ticketResult.Add(nTicket);
             });

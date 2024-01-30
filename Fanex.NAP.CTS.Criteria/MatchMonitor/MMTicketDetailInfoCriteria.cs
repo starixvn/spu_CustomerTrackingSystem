@@ -33,6 +33,9 @@
         [SpParam(SqlParamName = "MaxSequenceId")]
         public Int64? MaxSequenceId { get; set; }
 
+        [SpParam(SqlParamName = "MaxTransDate")]
+        public DateTime? MaxTransDate { get; set; }
+
         [SpParam(SqlParamName = "ListSportBettype")]
         public string ListSportBettype { get; set; }
 

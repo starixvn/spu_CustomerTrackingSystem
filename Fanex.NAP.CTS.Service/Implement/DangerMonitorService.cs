@@ -33,6 +33,9 @@
         private readonly string UserID = "MMDetailUserID";
         private readonly string Region = "MMDetailRegion";
 
+        private const int mainBatchSize = 500;
+        private const int detailBatchSize = 10;
+
         public DangerMonitorService(string region, string userID)
         {
             _commonService = new CommonService();
@@ -69,12 +72,11 @@
 
         public GetDangerMonitorResultViewModel GetDangerMonitor(DangerMonitorSearchModel filter)
         {
-            var batchSize = 500;
             var result = Enumerable.Empty<GetDangerMonitorItemViewModel>();
 
             if (!string.IsNullOrWhiteSpace(filter.LastMatchSection) && !string.IsNullOrWhiteSpace(filter.MatchSection))
             {
-                var dangerMonitor = GetDangerMonitorSummary(filter, batchSize);
+                var dangerMonitor = GetDangerMonitorSummary(filter, mainBatchSize);
 
                 int.TryParse(filter.LastMatchSection, out var matchSection);
 
@@ -335,7 +337,7 @@
 
             switch (para.TypeOfTickets)
             {
-                case MMTypeOfTicket.TicketFraud:
+                case MMTicketTypeFromUI.TicketFraud:
                     {
                         var fraudTicket = GetFraudMMDetailForCache(para);
 
@@ -346,7 +348,7 @@
 
                         break;
                     }
-                case MMTypeOfTicket.TicketAll when para.IsSupportShowAllTickets:
+                case MMTicketTypeFromUI.TicketAll when para.IsSupportShowAllTickets:
                     {
                         mdResult = GetAllMMDetail(para, filter);
 
@@ -383,7 +385,7 @@
             }
             else
             {
-                if (para.TypeOfTickets == MMTypeOfTicket.TicketFraud)
+                if (para.TypeOfTickets == MMTicketTypeFromUI.TicketFraud)
                 {
                     result = GetFraudMMFilter(para);
                 }
@@ -415,7 +417,7 @@
         {
             var para = filter.Clone();
             var fraudMMDetailResult = new TicketDetailViewModel();
-            var ticketTypeName = Enum.GetName(typeof(MMTypeOfTicket), MMTypeOfTicket.TicketFraud);
+            var ticketTypeName = Enum.GetName(typeof(MMTicketTypeFromUI), MMTicketTypeFromUI.TicketFraud);
             var key = para.BuildCacheKey("TicketFraud", Region, UserID, ticketTypeName);
 
             try
@@ -424,7 +426,7 @@
 
                 if (fraudMMDetailResult == null)
                 {
-                    para.TypeOfTickets = MMTypeOfTicket.TicketFraud;
+                    para.TypeOfTickets = MMTicketTypeFromUI.TicketFraud;
 
                     var matchDetailInfo = _matchMonitorService.GetMatchMonitorDetail(para);
 
@@ -506,7 +508,7 @@
         private MMDetailTicketListViewModel GetAllMMDetail(MMDetailInfoViewModel info, MMDetailFilterViewModel filter)
         {
             var para = info.Clone();
-            para.TypeOfTickets = MMTypeOfTicket.TicketAll;
+            para.TypeOfTickets = MMTicketTypeFromUI.TicketAll;
             var mdResult = new MMDetailTicketListViewModel();
             var ticketDetailGroup = new TicketDetailViewModel();
 
@@ -522,9 +524,9 @@
 
                         var transJson = _matchMonitorService.GetTransFilterSuspicousMGr(filter, fraudTicket);
 
-                        ticketDetailGroup = _matchMonitorService.GetTicketDetailAll(para, filter, transJson);
+                        ticketDetailGroup = GetTicketDetailAll(para, filter, transJson);
 
-                        mdResult.LastSequenceID = para.LastScannedSequenceID;
+                        mdResult.SetLastMark(para);
 
                         var custIDs = ticketDetailGroup.TicketDetails.Select(ticket => ticket.CustId).Distinct();
 
@@ -545,7 +547,7 @@
                         mdResult = GetTicketsFromMainDb(para, filter);
                     }
                 }
-                else if (para.TypeOfTickets == MMTypeOfTicket.TicketAll)
+                else if (para.TypeOfTickets == MMTicketTypeFromUI.TicketAll)
                 {
                     mdResult = GetTicketsFromMainDb(para, filter);
                 }
@@ -565,6 +567,45 @@
             }
 
             return mdResult;
+        }
+
+        private TicketDetailViewModel GetTicketDetailAll(MMDetailInfoViewModel info, MMDetailFilterViewModel filter, string transJson)
+        {
+            var ticketDetails = new List<TicketDetailModel>();
+            var result = new TicketDetailViewModel();
+            var isContinue = true;
+
+            if (filter.CustAmountRM > 0)
+            {
+                result = _matchMonitorService.GetMainTicketDetail(info, filter, -1, transJson);
+                info.SetLastMark(result);
+            }
+            else
+            {
+                do
+                {
+                    result = _matchMonitorService.GetMainTicketDetail(info, filter, detailBatchSize, transJson);
+
+                    result.TicketDetails = result.TicketDetails.OrderByDescending(x => x.SequenceID);
+
+                    info.SetLastMark(result);
+
+                    if (!(result.MinSequenceId is null && result.MinTransDate is null) && result.TicketDetails.Count() > 0)
+                    {
+                        ticketDetails.AddRange(result.TicketDetails);
+                    }
+
+                    if ((result.MinSequenceId is null && result.MinTransDate is null) || ticketDetails.Count() >= detailBatchSize)
+                    {
+                        result.TicketDetails = ticketDetails.ToList();
+
+                        isContinue = false;
+                    }
+
+                } while (isContinue);
+            }
+
+            return result;
         }
 
         private IEnumerable<MatchMonitorDetailItemViewModel> MappingRobotStatus(IEnumerable<MatchMonitorDetailItemViewModel> ticket, int betTypeID)
@@ -618,7 +659,7 @@
                 nTicket.ADetectGroup = "-";
                 nTicket.ReasonList = "-";
                 nTicket.ReasonIDList = string.Empty;
-                nTicket.TypeOfTicket = MMTypeOfTicket.TicketAll;
+                nTicket.TypeOfTicket = MMTicketTypeFromUI.TicketAll;
 
                 ticketResult.Add(nTicket);
             }
@@ -633,7 +674,7 @@
 
             var transJson = _matchMonitorService.GetTransFilterSuspicousMGr(filter, null);
 
-            var ticketDetailGroup = _matchMonitorService.GetTicketDetailAll(para, filter, transJson);
+            var ticketDetailGroup = GetTicketDetailAll(para, filter, transJson);
 
             var custInfo = GetCustInfoByCustID(ticketDetailGroup.TicketDetails.Select(ticket => ticket.CustId).Distinct());
 
@@ -650,7 +691,7 @@
             }
 
             ticketFromMainDb.RecordsTotal = mdItemList?.Count() ?? 0;
-            ticketFromMainDb.LastSequenceID = para.LastScannedSequenceID;
+            ticketFromMainDb.SetLastMark(para);
 
             return ticketFromMainDb;
         }
@@ -659,15 +700,15 @@
         {
             var result = new MMDetailFilterViewModel();
 
-            var removeKeyFraud = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMTypeOfTicket), MMTypeOfTicket.TicketFraud));
+            var removeKeyFraud = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMTicketTypeFromUI), MMTicketTypeFromUI.TicketFraud));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyFraud);
 
-            var removeKeyAll = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMTypeOfTicket), MMTypeOfTicket.TicketAll));
+            var removeKeyAll = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMTicketTypeFromUI), MMTicketTypeFromUI.TicketAll));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyAll);
 
             switch (para.TypeOfTickets)
             {
-                case MMTypeOfTicket.TicketFraud:
+                case MMTicketTypeFromUI.TicketFraud:
                     {
                         result = GetFraudMMFilter(para);
 
@@ -675,7 +716,7 @@
                         {
                             Task.Run(() =>
                             {
-                                para.TypeOfTickets = MMTypeOfTicket.TicketAll;
+                                para.TypeOfTickets = MMTicketTypeFromUI.TicketAll;
 
                                 _ = GetAllMMFilter(para);
                             });
@@ -683,15 +724,15 @@
 
                         break;
                     }
-                case MMTypeOfTicket.TicketAll:
+                case MMTicketTypeFromUI.TicketAll:
                     {
-                        para.TypeOfTickets = MMTypeOfTicket.TicketFraud;
+                        para.TypeOfTickets = MMTicketTypeFromUI.TicketFraud;
 
                         GetFraudMMDetailForCache(para);
 
                         if (para.IsSupportShowAllTickets)
                         {
-                            para.TypeOfTickets = MMTypeOfTicket.TicketAll;
+                            para.TypeOfTickets = MMTicketTypeFromUI.TicketAll;
 
                             result = GetAllMMFilter(para);
                         }
@@ -706,8 +747,8 @@
         private MMDetailFilterViewModel GetFraudMMFilter(MMDetailInfoViewModel para)
         {
             var fraudFilterResult = new MMDetailFilterViewModel();
-            para.TypeOfTickets = MMTypeOfTicket.TicketFraud;
-            var ticketTypeName = Enum.GetName(typeof(MMTypeOfTicket), para.TypeOfTickets);
+            para.TypeOfTickets = MMTicketTypeFromUI.TicketFraud;
+            var ticketTypeName = Enum.GetName(typeof(MMTicketTypeFromUI), para.TypeOfTickets);
 
             var key = para.BuildCacheKey(nameof(GetFraudMMFilter), Region, UserID, ticketTypeName);
 
@@ -739,7 +780,7 @@
         private MMDetailFilterViewModel GetAllMMFilter(MMDetailInfoViewModel para)
         {
             var allFilterResult = new MMDetailFilterViewModel();
-            var ticketTypeName = Enum.GetName(typeof(MMTypeOfTicket), para.TypeOfTickets);
+            var ticketTypeName = Enum.GetName(typeof(MMTicketTypeFromUI), para.TypeOfTickets);
             var key = para.BuildCacheKey(nameof(GetAllMMFilter), Region, UserID, ticketTypeName);
 
             try
