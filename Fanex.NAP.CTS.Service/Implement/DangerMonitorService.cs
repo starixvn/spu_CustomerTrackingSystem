@@ -34,7 +34,7 @@
         private readonly string Region = "MMDetailRegion";
 
         private const int mainBatchSize = 500;
-        private const int detailBatchSize = 10;
+        private const int detailBatchSize = 100;
 
         public DangerMonitorService(string region, string userID)
         {
