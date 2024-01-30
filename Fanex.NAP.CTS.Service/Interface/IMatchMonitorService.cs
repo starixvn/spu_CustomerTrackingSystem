@@ -84,6 +84,8 @@
 
         Task<List<HoldKeyStatusGetModel>> GetHoldKeyStatus(Int64 matchID, string url);
 
+        void LogHoldKeyAction(int userId, bool status);
+
         #endregion
 
     }

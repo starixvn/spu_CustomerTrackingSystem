@@ -194,6 +194,7 @@
     <Compile Include="Api\GetFlaggedEvidenceByDirectAssociationCriteria.cs" />
     <Compile Include="MatchMonitor\GetMatchFromMainInfoCriteria.cs" />
     <Compile Include="MatchMonitor\GetMatchMonitorStaticListCriteria.cs" />
+    <Compile Include="MatchMonitor\HoldKey\HoldKeyLogInsertCriteria.cs" />
     <Compile Include="MatchMonitor\MMDetailMergeGroupCriteria.cs" />
     <Compile Include="MatchMonitor\MMFraudTicketsSummaryCriteria.cs" />
     <Compile Include="MatchMonitor\MMTicketDetailInfoCriteria.cs" />

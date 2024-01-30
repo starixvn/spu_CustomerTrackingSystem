@@ -852,6 +852,21 @@
 
             return new HoldKeyUpdateResultModel();
         }
+
+        public void LogHoldKeyAction(int userId, bool status)
+        {
+            if (userId != 0) 
+            {
+                var criteria = new HoldKeyLogInsertCriteria
+                {
+                    UserID = userId,
+                    Status = status
+                };
+
+                repository.Execute(criteria);
+            }
+        }
+
         #endregion
 
     }

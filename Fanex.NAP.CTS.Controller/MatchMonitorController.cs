@@ -1047,6 +1047,8 @@
                     paramters.UserId = CurrentSession.UserId;
                     paramters.UserName = CurrentSession.Username;
 
+                    _matchMonitorService.LogHoldKeyAction(CurrentSession.UserId, paramters.IsHold);
+
                     var updateResult = _matchMonitorService.UpdateHoldKeyStatus(paramters, ConfigSettings.UpdateHoldKeyMMDetailURL);
                     
                     if (!updateResult.Result.isSuccess)
@@ -1130,7 +1132,7 @@
         #region Ticket Voiding
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailHoldKeyUpdate)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailTicketVoiding)]
         public ActionResult RedirectToTicketVoiding(string tranIds)
         {
             var result = new TicketVoidingViewModel();
