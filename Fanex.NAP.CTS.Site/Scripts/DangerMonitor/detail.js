@@ -2346,17 +2346,19 @@ function DangerousSettingDetail() {
         domElements.cbbTicketsStatus.parent().find('button').removeClass('border-error');
     }
 
-    function ResetDefault() {
+    function ResetDefault(isResetAmountRM) {
         cacheMGroup.isActive = false;
         cacheFilterDependOn.MGrList = [];
         cacheMGroup.allMGroup = {};
         cacheMGroup.selectMgroup = {};
-        domElements.inputCustAmountRM.val('');
-        domElements.iconClearUsnAmt.addClass("hide");
+        if (isResetAmountRM) {
+            domElements.inputCustAmountRM.val('');
+            domElements.iconClearUsnAmt.addClass("hide");
+        } 
     }
 
     function OnchangeFilter() {
-        ResetDefault();
+        ResetDefault(true);
         BetTypeOnChange();
     }
 
@@ -2489,7 +2491,7 @@ function DangerousSettingDetail() {
     }
 
     function FetchFilterMMDetailByTranstime() {
-        ResetDefault();
+        ResetDefault(false);
         ResetDefaulCbbSite();
 
         domElements.boderTranstimeInput.removeClass('info-input-error');
@@ -2599,6 +2601,10 @@ function DangerousSettingDetail() {
         domElements.cbbBetType.select2();
         domElements.cbbMapX.select2();
         domElements.cbbMapYY.select2();
+        domElements.inputCustAmountRM.val('');
+        domElements.iconClearUsnAmt.addClass("hide");
+        domElements.inputTranstimeFrom.val('');
+        domElements.inputTranstimeTo.val('');
 
         if (domElements.mapX != "0" && domElements.sportType != 2) {
             domElements.cbbMapX.val(domElements.mapX).trigger('change');

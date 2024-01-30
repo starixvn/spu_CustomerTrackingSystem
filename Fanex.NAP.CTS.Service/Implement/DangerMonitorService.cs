@@ -590,12 +590,12 @@
 
                     info.SetLastMark(result);
 
-                    if (!(result.MinSequenceId is null && result.MinTransDate is null) && result.TicketDetails.Count() > 0)
+                    if (!StopLoopCallDataMMCondition(result) && result.TicketDetails.Count() > 0)
                     {
                         ticketDetails.AddRange(result.TicketDetails);
                     }
 
-                    if ((result.MinSequenceId is null && result.MinTransDate is null) || ticketDetails.Count() >= detailBatchSize)
+                    if (StopLoopCallDataMMCondition(result) || ticketDetails.Count() >= detailBatchSize)
                     {
                         result.TicketDetails = ticketDetails.ToList();
 
@@ -606,6 +606,11 @@
             }
 
             return result;
+        }
+
+        private bool StopLoopCallDataMMCondition(TicketDetailViewModel result)
+        {
+            return result.MinSequenceId is null && result.MinTransDate is null;
         }
 
         private IEnumerable<MatchMonitorDetailItemViewModel> MappingRobotStatus(IEnumerable<MatchMonitorDetailItemViewModel> ticket, int betTypeID)
