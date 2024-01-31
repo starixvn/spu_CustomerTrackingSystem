@@ -1060,7 +1060,7 @@
                                          + updateResult.Result.msg
                                          + $" DataInput: {JsonConvert.SerializeObject(paramters) + "\n"}");
                     }   
-                    
+                     
                     var statusResult = GetHoldKeyStatus(paramters.MatchId, paramters.MatchSection);
 
                     result = new HoldKeyResultViewModel
@@ -1081,7 +1081,6 @@
                                  + ex?.InnerException?.Source
                                  + ex?.InnerException?.StackTrace);
             }
-
 
             return Json(new
             {
