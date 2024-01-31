@@ -1478,7 +1478,7 @@
   .hold-key .tooltip {
     position: relative;
     /*display: inline-block;*/
-    border-bottom: 1px dotted black; }
+    /* border-bottom: 1px dotted black;*/ }
   .hold-key .tooltip .tooltiptext {
     visibility: hidden;
     width: 100%;

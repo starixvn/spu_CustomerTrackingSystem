@@ -48,6 +48,7 @@ function MatchMonitorDetail() {
         sportName: $('#hdSportName').val(),
         reason: $("#hdreason").val(),
         liveIndicator: $("#hdLiveIndicator").val(),
+        matchSection: $("#hdMatchSection").val(),
         isSupportShowAllTickets: $("#hdIsSupportShowAllTickets").val(),
         defaultReasonNames: $('#hdReasonNames').val(),
         mapX: $('#hdMapX').val(),
@@ -2790,13 +2791,14 @@ function MatchMonitorDetail() {
     }
 
     //#region Hold Key
-    function UpdateHoldKeyStatus(matchId, sportType, isHold) {
+    function UpdateHoldKeyStatus(matchId, matchSection, sportType, isHold) {
         common.showConfirmation('<div class="popup - content"> Are you sure to turn ' + (isHold ? 'on' : 'off')+ ' the Hold Key?</div>', function () { 
             $.ajax(common.modifyRelativeUrl('MatchMonitor/UpdateHoldKeyStatus'), {
                 type: 'POST',
                 data:
                 {
                     MatchId: matchId,
+                    MatchSection: matchSection,
                     SportType: sportType,
                     IsHold: isHold
                 },
@@ -3091,7 +3093,7 @@ function MatchMonitorDetail() {
         });
 
         domElements.tggHoldKey.on('click', function () {
-            UpdateHoldKeyStatus(domElements.matchID, domElements.sportType, domElements.tggHoldKey.is('.toggle-on') == true ? false : true);
+            UpdateHoldKeyStatus(domElements.matchID, domElements.matchSection, domElements.sportType, domElements.tggHoldKey.is('.toggle-on') == true ? false : true);
         });
 
         domElements.btnVoidTicket.on('click', function () {

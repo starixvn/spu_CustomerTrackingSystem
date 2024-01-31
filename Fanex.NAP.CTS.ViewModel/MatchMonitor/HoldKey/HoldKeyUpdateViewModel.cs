@@ -6,6 +6,8 @@
 
         public int SportType { get; set; }
 
+        public int MatchSection { get; set; }
+
         public long UserId { get; set; }
 
         public string UserName { get; set; }

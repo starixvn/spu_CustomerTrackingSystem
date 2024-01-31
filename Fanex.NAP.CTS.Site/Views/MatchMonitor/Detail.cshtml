@@ -19,7 +19,7 @@
 
             </div>
             <div class="title-box-right">
-                <div class="hold-key">
+                <div class="hold-key" @(ViewBag.IsVisibleHoldKey ? "" : "style=display:none")>
                     <div class="toggle tooltip @(ViewBag.HoldKeyStatus.IsHold ? "toggle-on": "") " id="tggHoldKey" type="checkbox">
                         <div class="toggle-text-off">Hold Key - OFF</div>
                         <div class="glow-comp"></div>
@@ -420,6 +420,7 @@
             <input id="hdBetTypeName" type="hidden" value="@ViewBag.BettypeName" />
             <input id="hdBetIDToString" type="hidden" value="@ViewBag.BetIDToString" />
             <input id="hdLiveIndicator" type="hidden" value="@ViewBag.LiveIndicator.ToString()" />
+            <input id="hdMatchSection" type="hidden" value="@ViewBag.MatchSection" />
             <input id="hdreason" type="hidden" value="@ViewBag.Reason" />
             <input id="hdSportType" type="hidden" value="@ViewBag.SportType">
             <input id="hdSportName" type="hidden" value="@ViewBag.SportName" />

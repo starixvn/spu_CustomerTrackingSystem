@@ -365,7 +365,9 @@
                 ViewBag.SportName = para?.SportName ?? string.Empty;
                 ViewBag.KOTime = para?.KOTime;
                 ViewBag.IsSupportShowAllTickets = para?.IsSupportShowAllTickets;
-                ViewBag.HoldKeyStatus = GetHoldKeyStatus(para?.MatchID ?? 0);
+                ViewBag.MatchSection = para?.MatchSection ?? 0;
+                ViewBag.IsVisibleHoldKey = para?.MatchSection != (int)MATCHMONITOR_SECTION.Closed;
+                ViewBag.HoldKeyStatus = GetHoldKeyStatus(para?.MatchID ?? 0, para?.MatchSection ?? 0);
                 ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                                                                             NapSettings.Settings.SiteId,
                                                                             FSFunctionKeys.MatchMonitor,
@@ -1042,6 +1044,7 @@
             try
             {
                 if (paramters.MatchId != 0
+                    && paramters.MatchSection != (int)MATCHMONITOR_SECTION.Closed
                     && !string.IsNullOrEmpty(ConfigSettings.UpdateHoldKeyMMDetailURL))
                 {
                     paramters.UserId = CurrentSession.UserId;
@@ -1058,7 +1061,7 @@
                                          + $" DataInput: {JsonConvert.SerializeObject(paramters) + "\n"}");
                     }   
                     
-                    var statusResult = GetHoldKeyStatus(paramters.MatchId);
+                    var statusResult = GetHoldKeyStatus(paramters.MatchId, paramters.MatchSection);
 
                     result = new HoldKeyResultViewModel
                     {
@@ -1086,13 +1089,15 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private HoldKeyStatusGetViewModel GetHoldKeyStatus(Int64 matchId)
+        private HoldKeyStatusGetViewModel GetHoldKeyStatus(Int64 matchId, int matchStatus)
         {
             var result = new HoldKeyStatusGetViewModel();
 
             try
             {
-                if (matchId != 0 && !string.IsNullOrEmpty(ConfigSettings.GetHoldKeyMMDetailURL))
+                if (matchId != 0 
+                    && matchStatus != (int)MATCHMONITOR_SECTION.Closed
+                    && !string.IsNullOrEmpty(ConfigSettings.GetHoldKeyMMDetailURL))
                 {
                     var statusResult = _matchMonitorService.GetHoldKeyStatus(matchId, ConfigSettings.GetHoldKeyMMDetailURL).Result.FirstOrDefault();
 
