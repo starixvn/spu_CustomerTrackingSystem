@@ -76,7 +76,7 @@
 
             var reasonGroupItems = _commonService.GetStaticLists((int)StaticListID.Reason, true);
 
-            var reasonGroups = GetReasonGroups();            
+            var reasonGroups = GetReasonGroups(false);            
 
             var sports = _commonService.GetStaticLists((int)StaticListID.Sport, true)
                 .Select(x => new SportStaticListViewModel { SportID = x.ItemValue, SportName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" });
@@ -143,26 +143,35 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<ReasonGroupStaticListViewModel> GetReasonGroups()
-        {
-            var reasonGroups = new List<ReasonGroupStaticListViewModel>();
+        private IEnumerable<ReasonGroupStaticListViewModel> GetReasonGroups(bool isInitGroupNone)
+        {           
             var reasonGroupItems = _commonService.GetStaticLists((int)StaticListID.Reason, true);
+            var result = new List<ReasonGroupStaticListViewModel>();
 
-            reasonGroups.Add(new ReasonGroupStaticListViewModel
+            if (isInitGroupNone)
+            {
+                result.Add(new ReasonGroupStaticListViewModel
+                {
+                    ReasonGroupName = Consts.ReasonDetectNone,
+                    ReasonItems = new List<ReasonStaticListViewModel>() { new ReasonStaticListViewModel { ReasonID = "-1", ReasonName = "-", IsSelected = true } }
+                });
+            }
+
+            result.Add(new ReasonGroupStaticListViewModel
             {
                 ReasonGroupName = Consts.ReasonDetectBySystem,
                 ReasonItems = reasonGroupItems.Where(x => x.ItemID < 100).Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
-                .OrderBy(x => x.ReasonName)
+                    .OrderBy(x => x.ReasonName)
             });
 
-            reasonGroups.Add(new ReasonGroupStaticListViewModel
+            result.Add(new ReasonGroupStaticListViewModel
             {
                 ReasonGroupName = Consts.ReasonDetectByAI,
                 ReasonItems = reasonGroupItems.Where(x => x.ItemID >= 100).Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
-                .OrderBy(x => x.ReasonName)
+                    .OrderBy(x => x.ReasonName)
             });
 
-            return reasonGroups;
+            return result;
         }
 
         private IEnumerable<GetMatchMonitorViewModel> MergeMatchMonitorWithMMStaticAndTicketsSummary(IEnumerable<GetMatchMonitorModel> matchFromCTSInfos,      
@@ -331,7 +340,7 @@
             try
             {
                 ViewBag.GroupCCList = _commonService.GetGroupCustomerClass();
-                ViewBag.ReasonGroups = this.GetReasonGroups();
+                ViewBag.ReasonGroups = this.GetReasonGroups(true);
                 ViewBag.EventDateToString = para?.EventDateToString;
                 ViewBag.MatchID = para?.MatchID;
                 ViewBag.BetTypeID = para?.BetTypeID;
