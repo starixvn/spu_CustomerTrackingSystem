@@ -795,11 +795,11 @@
   background: lightgray; }
 
 .wrapper-info-table .loading {
-  position: relative; }
+  float: right; }
   .wrapper-info-table .loading:after {
     content: '';
     position: absolute;
-    right: 0px;
+    margin-left: 5px;
     top: 7px;
     border-radius: 50%;
     width: 2.4rem;

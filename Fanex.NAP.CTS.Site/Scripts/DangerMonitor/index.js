@@ -197,6 +197,9 @@
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(data),
+                beforeSend: function () {
+                    $('.loading').removeClass('hide');
+                },
                 success: function (response) {
                     if (response?.data) {
                         domElements.tblMonitor.DataTable().rows.add(response?.data?.Items).draw(false);
@@ -338,7 +341,6 @@
 
                 if (!dataTable) {
                     dataTable = GenerateGrid();
-                    $('.wrapper-info-table').append("<div class=\"loading hide\"></div>");
                 }
 
                 if (timeoutRenderTicketDetail || xhr) {
@@ -371,9 +373,17 @@
                     previous: ""
                 },
                 // info: "<div class=\"loading\"></div> Total Item: _TOTAL_ item(s)",
-                info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
-                infoEmpty: "",
+                // info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
+                // infoEmpty: "",
                 zeroRecords: "There's no data"
+            },
+            infoCallback: function (settings, start, end, max, total, pre) {
+                if (!total) {
+                    return `<div class="display-total-ticket"></div> <div class="loading hide"></div>`
+                }
+                else {
+                    $('.display-total-ticket').html(`Displaying ${start} to ${end} of ${total} item(s)`);
+                }
             },
             ordering: false,
             searching: false,
@@ -495,7 +505,7 @@
     });
 
     $(window).resize(function () {
-        $('.dataTables_scrollBody').css('max-height', ($(window).height() - 340));
+        $('.dataTables_scrollBody').css('max-height', ($(window).height() - 285));
     });
 }
 

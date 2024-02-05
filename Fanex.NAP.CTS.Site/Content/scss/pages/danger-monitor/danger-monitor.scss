@@ -524,12 +524,12 @@
 
 .wrapper-info-table {
     .loading {
-        position: relative;
+        float: right;
 
         &:after {
             content: '';
             position: absolute;
-            right: 0px;
+            margin-left: 5px;
             top: 7px;
             border-radius: 50%;
             width: 2.4rem;

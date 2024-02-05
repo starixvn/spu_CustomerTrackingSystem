@@ -32,7 +32,7 @@ function DangerousSettingDetail() {
         divFilterMonitor: $('#divFilterMonitor'),
         divFilterLoading: $('#divFilterLoading'),
         breadcrumbButton: $('#breadcrumbButton'),
-        breadcrumbTotalTickets: $(".breadcrumb-totaltickets"),
+        breadcrumbTotalTickets: $(".breadcrumb-totaltickets-text"),
         hdbreadcrumTotalTickets: $("#hdbreadcrumTotalTickets"),
         groupTable: $('#groupTable'),
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
@@ -1270,10 +1270,7 @@ function DangerousSettingDetail() {
         }, 10);
 
         posClickGlobal++;
-        if (xhr) {
-            xhr.onreadystatechange = null;
-            xhr.abort();
-        }
+        StopRequestProcess();
 
         if (GetDataCondition(lastScannedSequenceID, lastTransDate, typeOfTickets)) {
             domElements.tblMMHomeTeam.find('tbody').addClass('loading');
@@ -1284,7 +1281,9 @@ function DangerousSettingDetail() {
                 clearTimeout(timeoutRenderTicketDetail);
             }
 
-            domElements.breadcrumbTotalTickets.html('');
+            // domElements.breadcrumbTotalTickets.html('');
+            domElements.breadcrumbTotalTickets.html('Total Tickets: 0');
+            $('.breadcrumb-totaltickets-loading').removeClass('hide');
 
             if (isDisplaySingleGrid) {
                 domElements.divHomeMonitor.addClass('hide');
@@ -1338,62 +1337,70 @@ function DangerousSettingDetail() {
 
                 params.IsFilterSuspicious = IsFilterSuspicious(params);
 
-                GetMatchMonitorTotalTicket(params, lastScannedSequenceID, lastTransDate);
+                // GetMatchMonitorTotalTicket(params, lastScannedSequenceID, lastTransDate);
 
-                if (recordsTotalGlobal > 0) {
-                    GetMatchMonitorDetail(params, lastScannedSequenceID, lastTransDate, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
-                }
-                else {
-                    domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
-                    domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
-                    domElements.tblMMSG.find('tbody').removeClass('loading');
-                }
+                // if (recordsTotalGlobal > 0) {
+                GetMatchMonitorDetail(params, lastScannedSequenceID, lastTransDate, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
+                // }
+                // else {
+                //     domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
+                //     domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
+                //     domElements.tblMMSG.find('tbody').removeClass('loading');
+                // }
             }, 10)
         }
     }
 
-    function GetMatchMonitorTotalTicket(
-        data = null,
-        lastScannedSequenceID = lastMark.maxSequenceId,
-        lastTransDate = lastMark.maxTransDate) {
-        if (GetDataCondition(lastScannedSequenceID, lastTransDate, data.TypeOfTickets)) {
-            data.LastScannedSequenceID = lastScannedSequenceID;
-            data.LastTransDate = lastTransDate == new Date() ? null : lastTransDate;
-            currentType = data.TypeOfTickets;
-
-            $.ajax(common.modifyRelativeUrl('DangerMonitor/GetMatchMonitorTotalTicket'), {
-                async: false,
-                type: 'POST',
-                tryCount: 0,
-                retryLimit: 3,
-                dataType: 'json',
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify(data),
-                success: function (response) {
-                    if (response?.recordsTotal >= 0) {
-                        recordsTotalGlobal = response?.recordsTotal;
-                        if ($('option', domElements.cbbMGroup).length > 1) {
-                            domElements.breadcrumbTotalTickets.html(`Total Tickets: -/-`);
-                        } else {
-                            RefreshBreadcrumbTotalTickets(0, recordsTotalGlobal);
-                        }
-                    }
-                },
-                error: function (xhr, textStatus, error) {
-                    if (textStatus == 'timeout') {
-                        this.tryCount++;
-                        if (this.tryCount <= this.retryLimit) {
-                            //try again
-                            $.ajax(this);
-                            return;
-                        }
-                    }
-
-                    console.log(error);
-                }
-            });
+    function StopRequestProcess() {
+        if (xhr) {
+            $('.breadcrumb-totaltickets-loading').addClass('hide');
+            xhr.onreadystatechange = null;
+            xhr.abort();
         }
     }
+
+    // function GetMatchMonitorTotalTicket(
+    //     data = null,
+    //     lastScannedSequenceID = lastMark.maxSequenceId,
+    //     lastTransDate = lastMark.maxTransDate) {
+    //     if (GetDataCondition(lastScannedSequenceID, lastTransDate, data.TypeOfTickets)) {
+    //         data.LastScannedSequenceID = lastScannedSequenceID;
+    //         data.LastTransDate = lastTransDate == new Date() ? null : lastTransDate;
+    //         currentType = data.TypeOfTickets;
+
+    //         $.ajax(common.modifyRelativeUrl('DangerMonitor/GetMatchMonitorTotalTicket'), {
+    //             async: false,
+    //             type: 'POST',
+    //             tryCount: 0,
+    //             retryLimit: 3,
+    //             dataType: 'json',
+    //             contentType: 'application/json; charset=utf-8',
+    //             data: JSON.stringify(data),
+    //             success: function (response) {
+    //                 if (response?.recordsTotal >= 0) {
+    //                     recordsTotalGlobal = response?.recordsTotal;
+    //                     if ($('option', domElements.cbbMGroup).length > 1) {
+    //                         domElements.breadcrumbTotalTickets.html(`Total Tickets: -/-`);
+    //                     } else {
+    //                         RefreshBreadcrumbTotalTickets(0, recordsTotalGlobal);
+    //                     }
+    //                 }
+    //             },
+    //             error: function (xhr, textStatus, error) {
+    //                 if (textStatus == 'timeout') {
+    //                     this.tryCount++;
+    //                     if (this.tryCount <= this.retryLimit) {
+    //                         //try again
+    //                         $.ajax(this);
+    //                         return;
+    //                     }
+    //                 }
+
+    //                 console.log(error);
+    //             }
+    //         });
+    //     }
+    // }
 
     function GetMatchMonitorDetail(
         data = null,
@@ -1422,6 +1429,9 @@ function DangerousSettingDetail() {
 
                         if (data.TypeOfTickets == MatchMonitorDetailViewType.TicketAll && StopLoopCallBackCondition(response)) {
                             GetMatchMonitorDetail(data, response?.data?.LastSequenceID, response?.data?.LastTransDate, posClick);
+                        }
+                        else {
+                            $('.breadcrumb-totaltickets-loading').addClass('hide');
                         }
 
                         if (DisplayTotalTicketCondition(response)) {
@@ -1473,10 +1483,7 @@ function DangerousSettingDetail() {
         recordsTotalGlobal = 0;
 
         posClickGlobal++;
-        if (xhr) {
-            xhr.onreadystatechange = null;
-            xhr.abort();
-        }
+        StopRequestProcess();
 
         GetFilterMatchMonitorDetail();
     }
@@ -1607,7 +1614,8 @@ function DangerousSettingDetail() {
     }
 
     function RefreshBreadcrumbTotalTickets(recordsFilteredGlobal, recordsTotalGlobal) {
-        domElements.breadcrumbTotalTickets.html(`Total Tickets: ${ConvertNumberToThousandsString(recordsFilteredGlobal)}/${ConvertNumberToThousandsString(recordsTotalGlobal)}`);
+        domElements.breadcrumbTotalTickets.html(`Total Tickets: ${ConvertNumberToThousandsString(recordsFilteredGlobal)}`);
+        // domElements.breadcrumbTotalTickets.html(`Total Tickets: ${ConvertNumberToThousandsString(recordsFilteredGlobal)}/${ConvertNumberToThousandsString(recordsTotalGlobal)}`);
     }
 
     //#endregion Refresh
@@ -1619,10 +1627,7 @@ function DangerousSettingDetail() {
     //#region Detect Association
     function DetectAssociation() {
         posClickGlobal++;
-        if (xhr) {
-            xhr.onreadystatechange = null;
-            xhr.abort();
-        }
+        StopRequestProcess();
 
         cacheFilterDependOn.MGrList = [];
         cacheMGroup.allMGroup = {};
@@ -2354,7 +2359,7 @@ function DangerousSettingDetail() {
         if (isResetAmountRM) {
             domElements.inputCustAmountRM.val('');
             domElements.iconClearUsnAmt.addClass("hide");
-        } 
+        }
     }
 
     function OnchangeFilter() {
@@ -2574,6 +2579,9 @@ function DangerousSettingDetail() {
     //#endregion TranstimeFilter
 
     function Resize() {
+        domElements.breadcrumbButton.removeClass('hide');
+        domElements.groupTable.removeClass('hide');
+
         domElements.groupTable.width($(window).width() - 38);
 
         let detailpageHeight = domElements.detailpage.outerHeight();
@@ -2589,22 +2597,27 @@ function DangerousSettingDetail() {
     }
 
     function Initial() {
-        SetupMultiselectFilter(domElements.cbbCC, "CC");
-        SetupMultiselectFilter(domElements.cbbDanger, "Danger");
-        SetupMultiselectFilter(domElements.cbbCurrency, "Currency");
-        SetupMultiselect(domElements.cbbHDPBetTeam, "HDP");
-        SetupMultiselect(domElements.cbbMatchScore, "Score");
-        SetupMultiselect(domElements.cbbAGroup, "A.Gr.");
-        SetupMultiselect(domElements.cbbMGroup, "M.Gr.");
-        SetupMultiselect(domElements.cbbReason, "Reason");
-        SetupMultiselect(domElements.cbbTicketsStatus, "Status");
+        Resize();
+
         domElements.cbbBetType.select2();
         domElements.cbbMapX.select2();
         domElements.cbbMapYY.select2();
-        domElements.inputCustAmountRM.val('');
-        domElements.iconClearUsnAmt.addClass("hide");
         domElements.inputTranstimeFrom.val('');
         domElements.inputTranstimeTo.val('');
+        SetupMultiselect(domElements.cbbMatchScore, "Score");
+        SetupMultiselectFilter(domElements.cbbCC, "CC");
+        SetupMultiselectFilter(domElements.cbbDanger, "Danger");
+        SetupMultiselectFilter(domElements.cbbCurrency, "Currency");
+        SetupMultiselect(domElements.cbbReason, "Reason");
+        SetupMultiselect(domElements.cbbAGroup, "A.Gr.");
+        SetupMultiselect(domElements.cbbMGroup, "M.Gr.");
+        SetupMultiselect(domElements.cbbHDPBetTeam, "HDP");
+        domElements.inputCustAmountRM.val('');
+        domElements.iconClearUsnAmt.addClass("hide");
+        SetupMultiselect(domElements.cbbTicketsStatus, "Status");
+        
+        SetupDoubleDataTable();
+        SetupSingleTable();
 
         if (domElements.mapX != "0" && domElements.sportType != 2) {
             domElements.cbbMapX.val(domElements.mapX).trigger('change');
@@ -2647,10 +2660,6 @@ function DangerousSettingDetail() {
         cacheDefaultReason = domElements.defaultReasonNames.toString();
 
         isSupportShowAllTickets = JSON.parse(domElements?.isSupportShowAllTickets?.toLowerCase());
-
-        SetupDoubleDataTable();
-
-        SetupSingleTable();
 
         domElements.inputCustAmountRM.on('input', function () {
             let validAmount = domElements.inputCustAmountRM.val().replace(regexInvalidAmount, "");
@@ -2733,8 +2742,6 @@ function DangerousSettingDetail() {
 
         domElements.inputHomeSelectAll.prop('checked', false);
         domElements.inputAwaySelectAll.prop('checked', false);
-
-        Resize();
     }
 
     $(window).resize(function () {
@@ -2744,7 +2751,9 @@ function DangerousSettingDetail() {
     $(document).ready(function () {
         Initial();
 
-        domElements.btnImportNewTicket.click();
+        setTimeout(() => {
+            domElements.btnImportNewTicket.click();
+        }, 100);
     });
 }
 

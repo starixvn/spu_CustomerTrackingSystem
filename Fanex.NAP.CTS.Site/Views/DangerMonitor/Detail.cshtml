@@ -199,8 +199,11 @@
                     </div>
                 </div>
 
-                <div class="breadcrumb-button" id="breadcrumbButton">
-                    <div class="breadcrumb-totaltickets"></div>
+                <div class="breadcrumb-button hide" id="breadcrumbButton">
+                    <div class="breadcrumb-totaltickets">
+                        <div class="breadcrumb-totaltickets-text">Total Tickets: 0</div>
+                        <div class="breadcrumb-totaltickets-loading"></div>
+                    </div>
                     <div id="hdbreadcrumTotalTickets" style="display: none">0</div>
                     <div>
                         <button class="button-primary-outline-1" id="btnImportNewTicket">Import New Tickets</button>
@@ -211,7 +214,7 @@
                     </div>
                 </div>
 
-                <div class="group-table" id="groupTable">
+                <div class="group-table hide" id="groupTable">
                     <div id="first-monitor-datatable">
                         <div id="tbrMMHomeTeam" class="table-report" style="width: 100%; padding-bottom: 8px;">
                             <table id="tblMMHomeTeam" class="table table-striped table-monitor-detail">
