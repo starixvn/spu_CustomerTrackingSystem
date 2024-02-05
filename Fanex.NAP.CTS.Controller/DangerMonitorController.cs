@@ -69,14 +69,8 @@
         {
             var data = default(GetDangerMonitorResultViewModel);
 
-            var count = 10;
-            while ((data?.Items == null || data.Items.Count() == 0) && filter.LastMatchSection != null)
+            if (filter.LastMatchSection != null)
             {
-                if (count-- <= 0)
-                {
-                    break;
-                }
-
                 data = _dangerMonitorService.GetDangerMonitor(filter);
             }
 

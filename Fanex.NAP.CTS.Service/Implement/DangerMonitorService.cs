@@ -33,8 +33,8 @@
         private readonly string UserID = "MMDetailUserID";
         private readonly string Region = "MMDetailRegion";
 
-        private const int mainBatchSize = 500;
-        private const int detailBatchSize = 100;
+        private const int mainBatchSize = 5000;
+        private const int detailBatchSize = 5000;
 
         public DangerMonitorService(string region, string userID)
         {
@@ -586,7 +586,7 @@
                 {
                     result = _matchMonitorService.GetMainTicketDetail(info, filter, detailBatchSize, transJson);
 
-                    result.TicketDetails = result.TicketDetails.OrderByDescending(x => x.SequenceID);
+                    result.TicketDetails = result.TicketDetails.OrderByDescending(x => x.TransDate);
 
                     info.SetLastMark(result);
 
