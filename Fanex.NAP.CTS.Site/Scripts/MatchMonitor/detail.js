@@ -2117,6 +2117,11 @@ function MatchMonitorDetail() {
         });
         domElements.cbbTicketsStatus.multiselect('refresh');
 
+        var cashoutOption = $('option', domElements.cbbCashoutType)[0]?.value;
+        if (cashoutOption) {
+            domElements.cbbCashoutType.val(cashoutOption);
+        }
+
         FilterDependOnSelected(IndexFilterSelected.Score);
     }
 
@@ -2425,7 +2430,7 @@ function MatchMonitorDetail() {
         if (isResetAmountRM) {
             domElements.inputCustAmountRM.val('');
             domElements.iconClearUsnAmt.addClass("hide");
-        }        
+        }
     }
 
     function OnchangeFilter() {
