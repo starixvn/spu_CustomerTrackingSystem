@@ -2818,11 +2818,11 @@ function MatchMonitorDetail() {
                     }
 
                     if (!response.data.IsSuccess) {
-                        common.showError((domElements.tggHoldKey.hasClass("toggle-on") ? "Turn off" : "Turn on") + " Hold Key failed.");
-                        console.log(response.data.Message)
+                        common.showError((isHold ? "Turn on" : "Turn off") + " Hold Key failed.");
+                        console.log(response.data.Message);
                     }
                     else {
-                        common.showSuccess((domElements.tggHoldKey.hasClass("toggle-on") ? "Turn on" : "Turn off" ) + " Hold Key successfully.");
+                        common.showSuccess((isHold ? "Turn on" : "Turn off") + " Hold Key successfully.");
                     }
                 },
                 complete: function () {
