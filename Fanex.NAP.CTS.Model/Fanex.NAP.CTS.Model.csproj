@@ -376,6 +376,7 @@
     <Compile Include="ManageSubscriber\DetailedSiteModel.cs" />
     <Compile Include="ManageSubscriber\UpdateSubsciberResultModel.cs" />
     <Compile Include="MatchMonitor\FraudTransModel.cs" />
+    <Compile Include="MatchMonitor\HoldKey\HoldKeyStatusGetResultModel.cs" />
     <Compile Include="MatchMonitor\HoldKey\HoldKeyUpdateModel.cs" />
     <Compile Include="MatchMonitor\HoldKey\HoldKeyStatusGetModel.cs" />
     <Compile Include="MatchMonitor\HoldKey\HoldKeyUpdateResultModel.cs" />

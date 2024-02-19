@@ -80,9 +80,9 @@
 
         #region Hold Key
 
-        Task<HoldKeyUpdateResultModel> UpdateHoldKeyStatus(HoldKeyUpdateViewModel parameters, string url);
+       HoldKeyUpdateResultModel UpdateHoldKeyStatus(HoldKeyUpdateViewModel parameters, string url);
 
-        Task<List<HoldKeyStatusGetModel>> GetHoldKeyStatus(Int64 matchID, string url);
+        HoldKeyStatusGetResultModel GetHoldKeyStatus(Int64 matchID, string url);
 
         void LogHoldKeyAction(int userId, bool status);
 

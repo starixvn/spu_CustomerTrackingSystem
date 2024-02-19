@@ -1054,10 +1054,10 @@
 
                     var updateResult = _matchMonitorService.UpdateHoldKeyStatus(paramters, ConfigSettings.UpdateHoldKeyMMDetailURL);
                     
-                    if (!updateResult.Result.isSuccess)
+                    if (!updateResult.isSuccess)
                     {
                         LogService.Error($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Update hold key status - Exception: "
-                                         + updateResult.Result.msg
+                                         + updateResult.msg
                                          + $" DataInput: {JsonConvert.SerializeObject(paramters) + "\n"}");
                     }   
                      
@@ -1065,8 +1065,8 @@
 
                     result = new HoldKeyResultViewModel
                     {
-                        IsSuccess = updateResult.Result.isSuccess,
-                        Message = updateResult.Result.msg,
+                        IsSuccess = updateResult.isSuccess,
+                        Message = updateResult.msg,
                         HoldKeyStatus = statusResult
                     };
                 }
@@ -1098,21 +1098,30 @@
                     && matchStatus != (int)MATCHMONITOR_SECTION.Closed
                     && !string.IsNullOrEmpty(ConfigSettings.GetHoldKeyMMDetailURL))
                 {
-                    var statusResult = _matchMonitorService.GetHoldKeyStatus(matchId, ConfigSettings.GetHoldKeyMMDetailURL).Result.FirstOrDefault();
+                    var statusResult = _matchMonitorService.GetHoldKeyStatus(matchId, ConfigSettings.GetHoldKeyMMDetailURL);
 
-                    if (statusResult != null)
+                    if (statusResult != null && !statusResult.isSuccess)
                     {
-                        if (statusResult.matchId == matchId)
+                        throw new Exception($"GetHoldKeyStatus - call Adminsite's api unsuccessfully (IP = {matchId})");
+                    }   
+                    
+                    if (statusResult != null 
+                        && statusResult.holdKeyInfo != null
+                        && statusResult.holdKeyInfo.Any())
+                    {
+                        var matchInfo = statusResult.holdKeyInfo.FirstOrDefault();
+
+                        if (matchInfo.matchId == matchId)
                         {
                             result = new HoldKeyStatusGetViewModel
                             {
-                                IsHold = statusResult.isHold,
-                                UserName = statusResult.userName
+                                IsHold = matchInfo.isHold,
+                                UserName = matchInfo.userName
                             };
                         }
                         else
                         {
-                            throw new Exception($"GetHoldKeyStatus - API returns incorrect matchId (IP = {matchId} || OP = {statusResult.matchId})");
+                            throw new Exception($"GetHoldKeyStatus - Adminsite's api returns incorrect matchId (IP = {matchId} || OP = {matchInfo.matchId})");
                         }
                     }
                 }

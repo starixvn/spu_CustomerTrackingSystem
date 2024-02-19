@@ -819,19 +819,24 @@
         #endregion
 
         #region Hold Key
-        public async Task<List<HoldKeyStatusGetModel>> GetHoldKeyStatus(Int64 matchID, string url)
+
+        public HoldKeyStatusGetResultModel GetHoldKeyStatus(Int64 matchID, string url)
         {
             if (matchID != 0 && !string.IsNullOrEmpty(url))
             {
-                var para = new List<string> { matchID.ToString() };
+                var para = new List<Int64> { matchID };
 
-                return await ApiHelper.Post<List<HoldKeyStatusGetModel>>(url, para, 120);
+                var result = ApiHelper.Post<HoldKeyStatusGetResultModel>(url, para, 120);
+
+                Task.WhenAll(result);
+
+                return result.Result;
             }
 
-            return new List<HoldKeyStatusGetModel>();
+            return new HoldKeyStatusGetResultModel();
         }
 
-        public async Task<HoldKeyUpdateResultModel> UpdateHoldKeyStatus(HoldKeyUpdateViewModel parameters, string url)
+        public HoldKeyUpdateResultModel UpdateHoldKeyStatus(HoldKeyUpdateViewModel parameters, string url)
         {
             if (parameters.MatchId != 0 && parameters.UserId != 0 && !string.IsNullOrEmpty(url))
             {
@@ -847,7 +852,11 @@
                     }
                 };
 
-                return await ApiHelper.Post<HoldKeyUpdateResultModel>(url, para, 120);
+                var result = ApiHelper.Post<HoldKeyUpdateResultModel>(url, para, 120);
+
+                Task.WhenAll(result);
+
+                return result.Result;
             }
 
             return new HoldKeyUpdateResultModel();
