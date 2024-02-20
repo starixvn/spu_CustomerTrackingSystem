@@ -159,7 +159,7 @@
     function BuildOptgroup(optgroupValue, optgroupName, items) {
         let optgroup = `<optgroup label="${optgroupName}" DangerType=${optgroupValue}>`;
         items.map(function (x) {
-            optgroup += `<option selected value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
+            optgroup += `<option value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
         })
 
         optgroup += "</optgroup>";
@@ -241,7 +241,7 @@
                 changeYear: true,
                 minDate: '-7D'
             })
-            .datepicker("setDate", moment().toDate());
+            .datepicker("setDate", moment().add(-7, 'd').toDate());
 
         domElements.dpkToDate
             .datepicker({
@@ -250,7 +250,7 @@
                 changeYear: true,
                 minDate: '-7D'
             })
-            .datepicker("setDate", new Date());
+            .datepicker("setDate", moment().toDate());
 
         domElements.cbbDgr.multiselect({
             menuWidth: 260,
@@ -325,7 +325,6 @@
             FetchBetTypes();
         });
 
-        domElements.iconClear.click();
         GetSportBetTypeList();
         GetDgrList();
 
