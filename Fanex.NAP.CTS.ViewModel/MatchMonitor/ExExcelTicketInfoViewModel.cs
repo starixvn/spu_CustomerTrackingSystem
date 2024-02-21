@@ -21,7 +21,7 @@
 
         public decimal Odds { get; set; }
 
-        public decimal MalayOdds { get; set; }
+        public string MalayOdds { get; set; }
 
         public string BetID { get; set; }
 

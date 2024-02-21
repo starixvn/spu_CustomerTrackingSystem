@@ -1927,7 +1927,7 @@ function MatchMonitorDetail() {
                     datas += `,&quot;IsRobot&quot;:&quot;${data.IsRobot}&quot;`;
                     datas += `,&quot;DangerToString&quot;:&quot;${data.DangerToString}&quot;`;
                     datas += `,&quot;Odds&quot;:&quot;${data.Odds}&quot;`;
-                    datas += `,&quot;MalayOdds&quot;:&quot;${data.MalayOdds}&quot;`;
+                    datas += `,&quot;MalayOdds&quot;:&quot;${data.MalayOdds ?? "-"}&quot;`;
                     datas += `,&quot;BetID&quot;:&quot;${data.BetID}&quot;`;
                     datas += `,&quot;BetTeam&quot;:&quot;${data.BetTeam}&quot;`;
                     datas += `,&quot;Currency&quot;:&quot;${data.CurrencyName}&quot;`;
