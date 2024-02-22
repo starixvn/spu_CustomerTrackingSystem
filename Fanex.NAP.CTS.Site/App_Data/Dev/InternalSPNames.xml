@@ -161,7 +161,7 @@
 		<Setting Key="CTS_DC_RobotClassification_GetRobotStatusByTransList" SpName="CTS_DC_RobotClassification_GetRobotStatusByTransList" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_MatchMonitor_GetStaticList " SpName="CTS_DC_MatchMonitor_GetStaticList" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_MatchMonitor_Details_MergeGroup" SpName="CTS_DC_MatchMonitor_Details_MergeGroup_UAT2" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_MatchMonitor_UserComment_Get" SpName="CTS_DC_MatchMonitor_UserComment_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_MatchMonitor_UserComment_Get" SpName="CTS_DC_MatchMonitor_UserComment_Get_UAT2" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_MatchMonitor_UserComment_Insert" SpName="CTS_DC_MatchMonitor_UserComment_Insert_UAT2" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_MatchMonitor_UserComment_Update" SpName="CTS_DC_MatchMonitor_UserComment_Update" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_MatchMonitor_UserComment_Delete" SpName="CTS_DC_MatchMonitor_UserComment_Delete" DbName="MySQL.CTS_DataCenter.Admin" />
