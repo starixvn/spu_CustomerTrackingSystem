@@ -18,6 +18,8 @@
         [SpParam(SqlParamName = "MatchSection")]
         public string MatchSection { get; set; }
 
+        public string SportList { get; set; }
+
         public override string GetSettingKey()
            => "CTS_Rpt_MatchMonitor_MatchInfo";
 

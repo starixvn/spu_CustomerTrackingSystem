@@ -1,14 +1,9 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
-    using Fanex.NAP.CTS.Core.Extentions;
-    using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn;
-    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;   
-    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class MMDetailFilterViewModel
     {
@@ -36,6 +31,7 @@
             this.IsFilter = filter.IsFilter;
             this.IsFilterSuspicious = filter.IsFilterSuspicious;
             this.MaxSequenceId = filter.MaxSequenceId;
+            this.MaxTransDate = filter.MaxTransDate;
             this.RecordsTotal = filter.RecordsTotal;
             this.ScoreList = filter.ScoreList;
             this.Danger1List = filter.Danger1List;
@@ -70,6 +66,8 @@
         public int SportType { get; set; }
 
         public long? MaxSequenceId { get; set; }
+
+        public string MaxTransDate { get; set; }
 
         public long RecordsTotal { get; set; }
 

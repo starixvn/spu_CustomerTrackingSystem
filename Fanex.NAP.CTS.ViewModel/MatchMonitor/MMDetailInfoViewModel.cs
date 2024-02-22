@@ -12,6 +12,7 @@
             this.IsSupportShowAllTickets = para.IsSupportShowAllTickets;
             this.TypeOfTickets = para.TypeOfTickets;
             this.LastScannedSequenceID = para.LastScannedSequenceID;
+            this.LastTransDate = para.LastTransDate;
             this.EventDateToString = para.EventDateToString;
             this.MatchID = para.MatchID;
             this.BetTypeID = para.BetTypeID;
@@ -29,9 +30,11 @@
 
         public bool IsSupportShowAllTickets { get; set; }
 
-        public MatchMonitorQueryType? TypeOfTickets { get; set; }
+        public MMTicketTypeFromUI? TypeOfTickets { get; set; }
 
         public long? LastScannedSequenceID { get; set; }
+
+        public string LastTransDate { get; set; }
 
         public string EventDateToString { get; set; }
 
@@ -56,7 +59,7 @@
         public int Sport { get; set; }
 
         public DateTime? TranstimeFrom { get; set; }
-        
+
         public DateTime? TranstimeTo { get; set; }
 
         public DateTime EventDate
@@ -76,11 +79,17 @@
 
         public MMDetailInfoViewModel Clone() => new MMDetailInfoViewModel(this);
 
-        public string BuildCacheKey(string nameOfFuntion, string userID, string ticketType)
+        public string BuildCacheKey(string nameOfFuntion, string mmDetailRegion, string userID, string ticketType)
         {
             var transtimeFrom = TranstimeFrom?.Subtract(DateTime.MinValue).TotalSeconds.ToString() ?? string.Empty;
             var transtimeTo = TranstimeTo?.Subtract(DateTime.MinValue).TotalSeconds.ToString() ?? string.Empty;
-            return $"{nameOfFuntion}_{userID}_{MatchID}_{LiveIndicator}_{BetTypeID}_{BetID}_{ticketType}_{transtimeFrom}_{transtimeTo}";
+            return $"{nameOfFuntion}_{mmDetailRegion}_{userID}_{MatchID}_{LiveIndicator}_{BetTypeID}_{BetID}_{ticketType}_{transtimeFrom}_{transtimeTo}";
+        }
+
+        public void SetLastMark(TicketDetailViewModel ticketDetail)
+        {
+            LastScannedSequenceID = ticketDetail.MinSequenceId;
+            LastTransDate = ticketDetail.MinTransDate?.ToString(FormatDatetimeToString_YYYYmmddHHmmssfff);
         }
     }
 }

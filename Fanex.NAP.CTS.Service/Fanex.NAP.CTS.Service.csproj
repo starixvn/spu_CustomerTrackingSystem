@@ -61,6 +61,7 @@
     <Compile Include="Implement\CustomerClassification\DataLogTrackingServices.cs" />
     <Compile Include="Implement\CustomerClassification\RescanCustomerClassificationService.cs" />
     <Compile Include="Implement\CustomerEvidenceService.cs" />
+    <Compile Include="Implement\DangerMonitorService.cs" />
     <Compile Include="Implement\ExportExcel\ExportExcelService.cs" />
     <Compile Include="Implement\MemoryCacheService.cs" />
     <Compile Include="Implement\MonitorCtsFunctionService.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Interface\ICategoryService.cs" />
     <Compile Include="Interface\ICustomerEvidenceService.cs" />
     <Compile Include="Interface\ExportExcel\IExportExcelService.cs" />
+    <Compile Include="Interface\IDangerMonitorService.cs" />
     <Compile Include="Interface\IMemoryCacheService.cs" />
     <Compile Include="Interface\IMonitorCtsFunctionService.cs" />
     <Compile Include="Interface\ICommonService.cs" />

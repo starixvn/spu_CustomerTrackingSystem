@@ -1865,8 +1865,8 @@ function MatchMonitorDetail() {
         }
 
 
-        if (homeCheckedL + awayCheckedL + itemCheckL < 2) {
-            common.showError("Please select at least 2 records to proceed!")
+        if (homeCheckedL + awayCheckedL + itemCheckL < 1) {
+            common.showError("Please select at least 1 record to proceed!")
             return false;
         }
         if (homeCheckedL + awayCheckedL + itemCheckL > 40000) {

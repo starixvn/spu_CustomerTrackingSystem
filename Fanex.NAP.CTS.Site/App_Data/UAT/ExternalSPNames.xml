@@ -32,7 +32,8 @@
 		<Setting Key="TicketVoiding_TicketsInRequest_Select" SpName="TicketVoiding_TicketsInRequest_Select_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get_xtest" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />		
 		<Setting Key="CTS_Customer_RobotCheckExist" SpName="CTS_Customer_RobotCheckExist_xtest" DbName="DBONUSER.ON_USER.bodbSPUNet" />
-		<Setting Key="CTS_MatchInfo_Get" SpName="CTS_MatchInfo_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_MatchInfo_Get" SpName="CTS_MatchInfo_Get_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_SportBettype_Get" SpName="CTS_SportBettype_Get_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 
 	<Function name="ProbationManagement">
@@ -75,5 +76,9 @@
 
 	<Function name="RobotReport">
 		<Setting Key="CTS_Customer_RobotListSelByDate" SpName="CTS_Customer_RobotListSelByDate" DbName="DBONUSER.ON_USER.bodbSPUNet"/>
+	</Function>
+
+	<Function name="DangerMonitor">
+		<Setting Key="CTS_MatchTicketInfo_Get" SpName="CTS_MatchTicketInfo_Get_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 </Functions>

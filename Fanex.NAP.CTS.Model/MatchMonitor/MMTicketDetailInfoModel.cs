@@ -6,6 +6,8 @@
     public class MMTicketDetailInfoModel
     {
         public long? MaxSequenceId { get; set; }
+        
+        public DateTime? MaxTransDate { get; set; }
 
         public Int64 TotalTicketAll { get; set; }
 

@@ -5,6 +5,7 @@
     using Fanex.Logging;
     using Fanex.NAP.CTS.Criteria.Common;
     using Fanex.NAP.CTS.Model.Common;
+    using Fanex.NAP.CTS.Model.DangerMonitor;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.Common;
     using System;
@@ -182,5 +183,16 @@
             return repository.Fetch<BetTypeSettingModel>(criteria);
         }
 
+        public IEnumerable<SportBettypeViewModel> GetMainSportBettype(SportBettypeModel model)
+        {
+            var criteria = new GetCommonSportBettypeCriteria
+            {
+                ProductId = model.ProductId,
+                BettypeList = model.BettypeList,
+                SportTypeList = model.SportTypeList
+            };
+
+            return repository.Fetch<SportBettypeViewModel>(criteria);
+        }
     }
 }

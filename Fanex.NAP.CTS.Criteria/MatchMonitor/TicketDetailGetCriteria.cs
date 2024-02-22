@@ -12,6 +12,9 @@
         [SpParam(SqlParamName = "LastScannedSequenceID")]
         public Int64? LastScannedSequenceID { get; set; }
 
+        [SpParam(SqlParamName = "LastTransDate")]
+        public string LastTransDate { get; set; }
+
         [SpParam(SqlParamName = "IsLive")]
         public int IsLive { get; set; }
 
@@ -74,6 +77,9 @@
 
         [SpParam(SqlParamName = "MinSequenceId")]
         public long? MinSequenceId { get; set; }
+
+        [SpParam(SqlParamName = "MinTransDate")]
+        public DateTime? MinTransDate { get; set; }
 
         [SpParam(SqlParamName = "TotalTicket")]
         public int? TotalTicket { get; set; }

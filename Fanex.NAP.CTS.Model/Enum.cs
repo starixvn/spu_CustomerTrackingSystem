@@ -221,6 +221,7 @@
 
     public enum BetTypeSettingsFunctionID
     {
-        MMBetType = 1
+        MMBetType = 1,
+        DgrBetType = 2
     }
 }

@@ -29,5 +29,7 @@
         public int FinalHomeScore { get; set; }
 
         public int FinalAwayScore { get; set; }
+
+        public int MatchSection { get; set; }
     }
 }

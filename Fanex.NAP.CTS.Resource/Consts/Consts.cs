@@ -27,18 +27,19 @@
         public const string FormatDateToString_MMMddyyyy = "MMM dd, yyyy";
         public const string FormatDateToString_MMMddyyyy2 = "MMM-dd-yyyy";
         public const string FormatDateToString_ddMMMyyyy = "dd MMM, yyyy";
-        public const string FormatDateToString_MMMddyyyyhhmmss = "MMM dd, yyyy HH:mm:ss";        
+        public const string FormatDateToString_MMMddyyyyhhmmss = "MMM dd, yyyy HH:mm:ss";
         public const string FormatDateToString_MMMddyyyyhhmmss2 = "MMM dd, yyyy - HH:mm:ss";
         public const string FormatDateToString_MMMddyyyyhhmmsstt = "MMM dd, yyyy HH:mm:ss tt";
         public const string FormatDateToString_MMMddyyyyhhmm = "MMM dd, yyyy HH:mm";
         public const string FormatDateToString_yyyyMMddHHmmss = "yyyyMMddHHmmss";
         public const string FormatDateTimeToString_YYYYmmddThhddmm = "yyyy-MM-dd'T'HH:mm:ss.fffffff'Z'";
-        public const string FormatDateTimeToString_YYYYmmdd = "yyyyMMdd";        
+        public const string FormatDateTimeToString_YYYYmmdd = "yyyyMMdd";
         public const string FormatDatetimeToString_ddMMMyyyyHHmmssfff = "dd MMM, yyyy HH:mm:ss.fff";
         public const string FormatDateTimeToString_ddMMyyyy = "dd/MM/yyyy";
         public const string FormatDateTimeToString_ddMMyyyyhhmmss = "dd/MM/yyyy HH:mm:ss";
         public const string FormatDateTimeToString_ddMMyyhhmmss = "dd/MM/yy HH:mm:ss";
         public const string FormatDatetimeToString_YYYYmmddHHmmss = "yyyy-MM-dd HH:mm:ss";
+        public const string FormatDatetimeToString_YYYYmmddHHmmssfff = "yyyy-MM-dd HH:mm:ss.fff";
         public const string FormatDatetimeToString_ddMMMHHmmssfff = "dd MMM HH:mm:ss.fff";
         public const string FormatDatetimeToString_ddMMM = "dd MMM";
         public const string FormatTimeToString_hhmmss = "HHmmss";
@@ -308,7 +309,7 @@
             AFCSerivce = 4,
             ManualTrigger = 5
         };
-        
+
         public enum TrackingCtsFunctionId
         {
             ProblemAccountMonitor = 1,
@@ -364,11 +365,11 @@
             AssociationDetectionDetails = 51,
             AccountProfileGetCustomerCategoryBySportRpt = 52,
             AccountProfileGetCustomerCategoryHistoryBySportRpt = 53,
-			AssociationDetectionExportToExcel = 54,
-  			AssociatedGroupMonitorAddNewGroupRpt = 55,
+            AssociationDetectionExportToExcel = 54,
+            AssociatedGroupMonitorAddNewGroupRpt = 55,
             AssociatedGroupMonitorUpdateGroupRpt = 56,
             AssociatedGroupMonitorRemoveGroupRpt = 57,
-            AssociatedGroupMonitorAddAccountRpt = 58, 
+            AssociatedGroupMonitorAddAccountRpt = 58,
             AssociatedGroupMonitorTransferAccountRpt = 59,
             AssociatedGroupMonitorSetPARpt = 60,
             AssociatedGroupMonitorExportToExcelRpt = 61,
@@ -390,6 +391,10 @@
             MatchMonitorDetailUserFeedbackInsert = 77,
             MatchMonitorDetailUserFeedbackUpdate = 78,
             MatchMonitorDetailUserFeedbackDelete = 79,
+            DangerMonitorRpt = 81,
+            DangerMonitorDetailRpt = 82,
+            DangerMonitorDetailManualDetectRpt = 83,
+            DangerMonitorDetailExportToExcelRpt = 84,
 
             //PlaceEvidenceForMultipleCustAPI = 200,
             GetFlaggedCustomersByLevelAPI = 201,
@@ -464,16 +469,49 @@
             TD = 300
         };
 
-        public enum MatchMonitorQueryType
+        public enum MMTicketTypeFromUI
         {
             TicketFraud = 2,
             TicketAll = 3
+        }
+
+        public enum MMTicketTypeFromDB
+        {
+            TicketAll = 0,
+            TicketFraud = 1,
+            TicketDanger = 2
+        }
+
+        public enum MMQueryType
+        {
+            MMReport = 2,
+            DangerMMReport = 3
+        }
+
+        public static MMTicketTypeFromDB GetTicketTypeFromDB(MMQueryType queryType, MMTicketTypeFromUI? ticketTypeFromUI)
+        {
+            if (ticketTypeFromUI == MMTicketTypeFromUI.TicketAll && queryType == MMQueryType.MMReport)
+            {
+                return MMTicketTypeFromDB.TicketAll;
+            }
+
+            if (ticketTypeFromUI == MMTicketTypeFromUI.TicketAll && queryType == MMQueryType.DangerMMReport)
+            {
+                return MMTicketTypeFromDB.TicketDanger;
+            }
+
+            return MMTicketTypeFromDB.TicketFraud;
         }
 
         public enum RobotType
         {
             Robot,
             AIRobot
+        }
+
+        public enum ProductType
+        {
+            SportBook = 1
         }
 
         public enum CustomerCategorySportType

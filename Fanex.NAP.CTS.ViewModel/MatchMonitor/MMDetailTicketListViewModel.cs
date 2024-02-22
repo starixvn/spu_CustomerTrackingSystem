@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
-{      
+{
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -30,6 +31,8 @@
 
         public long? LastSequenceID { get; set; }
 
+        public string LastTransDate { get; set; }
+
         public string CTSCustIDList { get; set; }
 
         public bool IsSingleGrid { get; set; }
@@ -41,6 +44,11 @@
         public List<MatchMonitorDetailItemViewModel> ItemList { get; set; }
 
         public MMDetailTicketListViewModel Clone() => new MMDetailTicketListViewModel(this);
-                      
+
+        public void SetLastMark(MMDetailInfoViewModel info)
+        {
+            LastSequenceID = info.LastScannedSequenceID;
+            LastTransDate = info.LastTransDate;
+        }
     }
 }

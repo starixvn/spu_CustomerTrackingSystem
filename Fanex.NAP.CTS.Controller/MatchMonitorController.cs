@@ -38,11 +38,14 @@
     {
         private const string MMDetailDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/DoubleGridTemplate.xlsx";
         private const string MMDetailSingleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/SingleGridTemplate.xlsx";
+
         private readonly IMatchMonitorService _matchMonitorService;
         private readonly IAssociationDetectionService _associationDetectionService;
         private readonly ICommonService _commonService;
         private readonly IMemoryCacheService _memoryCacheService;
-        private readonly string MMDetailRegion = "MMDetail";
+
+        private readonly string UserID = "MMDetailUserID";
+        private readonly string Region = "MMDetailRegion";
         private readonly string[] PropertyNameOfSummaryHomeList = { nameof(GetMatchMonitorViewModel.HomeTotalAmount), nameof(GetMatchMonitorViewModel.HomeBetCount) };
         private readonly string[] PropertyNameOfSummaryAwayList = { nameof(GetMatchMonitorViewModel.AwayTotalAmount), nameof(GetMatchMonitorViewModel.AwayBetCount) };
 
@@ -50,11 +53,11 @@
 
         public MatchMonitorController()
         {
-            _matchMonitorService = new MatchMonitorService();
+            _matchMonitorService = new MatchMonitorService(MMQueryType.MMReport);
             _commonService = new CommonService();
             _associationDetectionService = new AssociationDetectionService();
             _memoryCacheService = new MemoryCacheService();
-            MMDetailRegion = CurrentSession.UserId.ToString();
+            UserID = CurrentSession.UserId.ToString();
         }
 
         #region Main Page
@@ -69,10 +72,10 @@
 
             var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true)
                 .Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
-                .OrderBy(x=>x.ReasonName);
-          
+                .OrderBy(x => x.ReasonName);
+
             var sports = _commonService.GetStaticLists((int)StaticListID.Sport, true)
-                .Select(x=> new SportStaticListViewModel { SportID = x.ItemValue, SportName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" });
+                .Select(x => new SportStaticListViewModel { SportID = x.ItemValue, SportName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" });
 
             return View(new MatchMonitorViewModel
             {
@@ -99,7 +102,7 @@
                     && IsValidDateRange(para.FromDate, para.ToDate))
                 {
                     var matchFromCTSInfos = Enumerable.Empty<GetMatchMonitorModel>();
-                   
+
                     if (para.DateType == 1)
                         matchFromCTSInfos = GetMMByScanDate(para);
                     else
@@ -120,7 +123,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                    .AddMessage("Get Match Monitor Error: " + ex.Message + ex.StackTrace + "\n"
+                    .AddMessage($"{Region} Get Match Monitor Error: " + ex.Message + ex.StackTrace + "\n"
                      + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                      + ex.InnerException.StackTrace)
                     .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -135,7 +138,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<GetMatchMonitorViewModel> MergeMatchMonitorWithMMStaticAndTicketsSummary(IEnumerable<GetMatchMonitorModel> matchFromCTSInfos,      
+        private IEnumerable<GetMatchMonitorViewModel> MergeMatchMonitorWithMMStaticAndTicketsSummary(IEnumerable<GetMatchMonitorModel> matchFromCTSInfos,
             Dictionary<string, MMFraudTicketsSummaryViewModel> mmDictionaryTicketsSummarys)
         {
             var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
@@ -161,10 +164,10 @@
                     .OrderBy(c => c.MatchSection);
         }
 
-        private void SetValueMMTicketsSummaryFromDictionary(GetMatchMonitorViewModel result, string betChoice, 
+        private void SetValueMMTicketsSummaryFromDictionary(GetMatchMonitorViewModel result, string betChoice,
             Dictionary<string, MMFraudTicketsSummaryViewModel> mmDictionaryTicketsSummarys, string[] propertyNameOfSummaryList)
         {
-            if (mmDictionaryTicketsSummarys.TryGetValue(result.BuildTicketsSummaryDictionaryKey(betChoice), out var mmFraudTicketsSummary))  
+            if (mmDictionaryTicketsSummarys.TryGetValue(result.BuildTicketsSummaryDictionaryKey(betChoice), out var mmFraudTicketsSummary))
             {
                 result.SetPropertyValue(typeof(GetMatchMonitorViewModel).GetProperty(propertyNameOfSummaryList[0]), mmFraudTicketsSummary.Turnover);
 
@@ -245,7 +248,7 @@
                         IsSupportShowAllTickets = m2.IsGetDataFromOrigin == 1,
                         DataSource = m2.DataSource,
                         FraudTrans = m1.FraudTrans,
-						BettypeNameDisplay = m1.BettypeNameDisplay,
+                        BettypeNameDisplay = m1.BettypeNameDisplay,
                         DetailsX = m1.DetailsX,
                         DetailsY = m1.DetailsY
                     });
@@ -258,7 +261,7 @@
 
         [HttpPost]
         public ActionResult GetMMFilterBetTypeBySportID(string sportIDs)
-        {           
+        {
             return Json(GetBetTypeSettings(sportIDs, true), JsonRequestBehavior.AllowGet);
         }
 
@@ -288,7 +291,7 @@
                 IsSelected = true,
                 NameDetailsX = x.NameDetailsX
             }).GroupBy(g => new { g.BetTypeID, g.BetID }).Select(g => g.First());
-        }    
+        }
 
         #endregion
 
@@ -311,6 +314,7 @@
                 ViewBag.MapYY = para?.MY;
                 ViewBag.HomeName = para?.HomeName.ToUpper() ?? string.Empty;
                 ViewBag.AwayName = para?.AwayName.ToUpper() ?? string.Empty;
+                ViewBag.MatchName = ViewBag.HomeName + "_" + ViewBag.AwayName;
                 ViewBag.LiveIndicator = para?.LiveIndicator ?? true;
                 ViewBag.Reason = para?.Reason;
                 ViewBag.ReasonName = para?.ReasonName ?? string.Empty;
@@ -331,7 +335,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                   .AddMessage("Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
+                   .AddMessage($"{Region} Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                     + ex.InnerException.StackTrace)
                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -357,7 +361,7 @@
                 }
                 else
                 {
-                    if (para.TypeOfTickets == MatchMonitorQueryType.TicketFraud)
+                    if (para.TypeOfTickets == MMTicketTypeFromUI.TicketFraud)
                     {
                         result = GetFraudMMFilter(para);
                     }
@@ -370,7 +374,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                  .AddMessage("Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
+                  .AddMessage($"{Region} Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                    + ex.InnerException.StackTrace)
                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -389,15 +393,15 @@
         {
             var result = new MMDetailFilterViewModel();
 
-            var removeKeyFraud = para.BuildCacheKey(string.Empty, MMDetailRegion, Enum.GetName(typeof(MatchMonitorQueryType), MatchMonitorQueryType.TicketFraud));
+            var removeKeyFraud = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMTicketTypeFromUI), MMTicketTypeFromUI.TicketFraud));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyFraud);
 
-            var removeKeyAll = para.BuildCacheKey(string.Empty, MMDetailRegion, Enum.GetName(typeof(MatchMonitorQueryType), MatchMonitorQueryType.TicketAll));
+            var removeKeyAll = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMTicketTypeFromUI), MMTicketTypeFromUI.TicketAll));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyAll);
 
             switch (para.TypeOfTickets)
             {
-                case MatchMonitorQueryType.TicketFraud:
+                case MMTicketTypeFromUI.TicketFraud:
                     {
                         result = GetFraudMMFilter(para);
 
@@ -405,7 +409,7 @@
                         {
                             Task.Run(() =>
                             {
-                                para.TypeOfTickets = MatchMonitorQueryType.TicketAll;
+                                para.TypeOfTickets = MMTicketTypeFromUI.TicketAll;
 
                                 _ = GetAllMMFilter(para);
                             });
@@ -413,15 +417,15 @@
 
                         break;
                     }
-                case MatchMonitorQueryType.TicketAll:
+                case MMTicketTypeFromUI.TicketAll:
                     {
-                        para.TypeOfTickets = MatchMonitorQueryType.TicketFraud;
+                        para.TypeOfTickets = MMTicketTypeFromUI.TicketFraud;
 
                         GetFraudMMDetailForCache(para);
 
                         if (para.IsSupportShowAllTickets)
                         {
-                            para.TypeOfTickets = MatchMonitorQueryType.TicketAll;
+                            para.TypeOfTickets = MMTicketTypeFromUI.TicketAll;
 
                             result = GetAllMMFilter(para);
                         }
@@ -436,10 +440,10 @@
         private MMDetailFilterViewModel GetFraudMMFilter(MMDetailInfoViewModel para)
         {
             var fraudFilterResult = new MMDetailFilterViewModel();
-            para.TypeOfTickets = MatchMonitorQueryType.TicketFraud;
-            var ticketTypeName = Enum.GetName(typeof(MatchMonitorQueryType), para.TypeOfTickets);
+            para.TypeOfTickets = MMTicketTypeFromUI.TicketFraud;
+            var ticketTypeName = Enum.GetName(typeof(MMTicketTypeFromUI), para.TypeOfTickets);
 
-            var key = para.BuildCacheKey(nameof(GetFraudMMFilter), MMDetailRegion, ticketTypeName);
+            var key = para.BuildCacheKey(nameof(GetFraudMMFilter), Region, UserID, ticketTypeName);
 
             lock (key)
             {
@@ -458,7 +462,7 @@
                         _memoryCacheService.PushValueAsync(key, fraudFilterResult);
                     }
                 }
-            }      
+            }
 
             fraudFilterResult = fraudFilterResult ?? new MMDetailFilterViewModel();
             fraudFilterResult.IsDisplaySingleGrid = para.BetChoiceType == 1;
@@ -469,8 +473,8 @@
         private MMDetailFilterViewModel GetAllMMFilter(MMDetailInfoViewModel para)
         {
             var allFilterResult = new MMDetailFilterViewModel();
-            var ticketTypeName = Enum.GetName(typeof(MatchMonitorQueryType), para.TypeOfTickets);
-            var key = para.BuildCacheKey(nameof(GetAllMMFilter), MMDetailRegion, ticketTypeName);
+            var ticketTypeName = Enum.GetName(typeof(MMTicketTypeFromUI), para.TypeOfTickets);
+            var key = para.BuildCacheKey(nameof(GetAllMMFilter), Region, UserID, ticketTypeName);
 
             try
             {
@@ -497,7 +501,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                    .AddMessage("Get All MM Filter Error: " + ex.Message + ex.StackTrace + "\n"
+                    .AddMessage($"{Region} Get All MM Filter Error: " + ex.Message + ex.StackTrace + "\n"
                      + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                      + ex.InnerException.StackTrace)
                     .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -533,7 +537,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                   .AddMessage("Get Match Monitor Total Ticket Error: " + ex.Message + ex.StackTrace + "\n"
+                   .AddMessage($"{Region} Get Match Monitor Total Ticket Error: " + ex.Message + ex.StackTrace + "\n"
                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                     + ex.InnerException.StackTrace)
                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -561,7 +565,7 @@
             {
                 switch (para.TypeOfTickets)
                 {
-                    case MatchMonitorQueryType.TicketFraud:
+                    case MMTicketTypeFromUI.TicketFraud:
                         {
                             var fraudTicket = GetFraudMMDetailForCache(para);
 
@@ -572,7 +576,7 @@
 
                             break;
                         }
-                    case MatchMonitorQueryType.TicketAll when para.IsSupportShowAllTickets:
+                    case MMTicketTypeFromUI.TicketAll when para.IsSupportShowAllTickets:
                         {
                             var internalCurrencyIDs = new List<int> { 20, 27, 28 };
 
@@ -585,12 +589,12 @@
 
                                 if (ctsCustIDHomeIsZero != null && ctsCustIDHomeIsZero.Any())
                                 {
-                                    LogService.Error($"Get Match Monitor Detail with CTSCustIDHome=0: {JsonConvert.SerializeObject(ctsCustIDHomeIsZero)}");
+                                    LogService.Error($"{Region} Get Match Monitor Detail with CTSCustIDHome=0: {JsonConvert.SerializeObject(ctsCustIDHomeIsZero)}");
                                 }
 
                                 if (ctsCustIDAwayIsZero != null && ctsCustIDAwayIsZero.Any())
                                 {
-                                    LogService.Error($"Get Match Monitor Detail with CTSCustIDAway=0: {JsonConvert.SerializeObject(ctsCustIDAwayIsZero)}");
+                                    LogService.Error($"{Region} Get Match Monitor Detail with CTSCustIDAway=0: {JsonConvert.SerializeObject(ctsCustIDAwayIsZero)}");
                                 }
                             }
 
@@ -601,7 +605,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                   .AddMessage("Get Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
+                   .AddMessage($"{Region} Get Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                     + ex.InnerException.StackTrace)
                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -620,7 +624,7 @@
         private MMDetailTicketListViewModel GetAllMMDetail(MMDetailInfoViewModel info, MMDetailFilterViewModel filter)
         {
             var para = info.Clone();
-            para.TypeOfTickets = MatchMonitorQueryType.TicketAll;
+            para.TypeOfTickets = MMTicketTypeFromUI.TicketAll;
             var mdResult = new MMDetailTicketListViewModel();
             var ticketDetailGroup = new TicketDetailViewModel();
 
@@ -648,9 +652,9 @@
 
                         mdItemList = _matchMonitorService.MergeFraudToAllMMDetail(mdItemList, fraudTicket?.AGroupReasonMerged);
 
-                        mdResult.HomeMatchItemList = mdItemList?.Where(x=>x.ChoiceOrder == 10).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
+                        mdResult.HomeMatchItemList = mdItemList?.Where(x => x.ChoiceOrder == 10).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
 
-                        mdResult.AwayMatchItemList = mdItemList?.Where(x => x.ChoiceOrder == 20).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();                       
+                        mdResult.AwayMatchItemList = mdItemList?.Where(x => x.ChoiceOrder == 20).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
 
                         mdResult.RecordsTotal = mdItemList?.Count() ?? 0;
                     }
@@ -659,7 +663,7 @@
                         mdResult = GetTicketsFromMainDb(para, filter);
                     }
                 }
-                else if (para.TypeOfTickets == MatchMonitorQueryType.TicketAll)
+                else if (para.TypeOfTickets == MMTicketTypeFromUI.TicketAll)
                 {
                     mdResult = GetTicketsFromMainDb(para, filter);
                 }
@@ -669,7 +673,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                 .AddMessage("Get All Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
+                 .AddMessage($"{Region} Get All Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
                   + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                   + ex.InnerException.StackTrace)
                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -716,9 +720,9 @@
                     mdResult.ItemList = mdItemList.OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
                 }
                 else
-                {                  
+                {
                     mdResult.HomeMatchItemList = mdItemList.Where(x => x.ChoiceOrder == 10).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
-                    mdResult.AwayMatchItemList = mdItemList.Where(x=> x.ChoiceOrder == 20).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();                 
+                    mdResult.AwayMatchItemList = mdItemList.Where(x => x.ChoiceOrder == 20).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
                 }
 
                 mdResult.RecordsTotal = mdItemList?.Count() ?? 0;
@@ -731,8 +735,8 @@
         {
             var para = filter.Clone();
             var fraudMMDetailResult = new TicketDetailViewModel();
-            var ticketTypeName = Enum.GetName(typeof(MatchMonitorQueryType), MatchMonitorQueryType.TicketFraud);
-            var key = para.BuildCacheKey("TicketFraud", MMDetailRegion, ticketTypeName);
+            var ticketTypeName = Enum.GetName(typeof(MMTicketTypeFromUI), MMTicketTypeFromUI.TicketFraud);
+            var key = para.BuildCacheKey("TicketFraud", Region, UserID, ticketTypeName);
 
             try
             {
@@ -740,7 +744,7 @@
 
                 if (fraudMMDetailResult == null)
                 {
-                    para.TypeOfTickets = MatchMonitorQueryType.TicketFraud;
+                    para.TypeOfTickets = MMTicketTypeFromUI.TicketFraud;
 
                     var matchDetailInfo = _matchMonitorService.GetMatchMonitorDetail(para);
 
@@ -761,7 +765,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                  .AddMessage("Get Fraud MM Detail For Cache Error: " + ex.Message + ex.StackTrace + "\n"
+                  .AddMessage($"{Region} Get Fraud MM Detail For Cache Error: " + ex.Message + ex.StackTrace + "\n"
                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                    + ex.InnerException.StackTrace)
                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -803,8 +807,8 @@
             }
             else
             {
-                ticketFromMainDb.HomeMatchItemList = mdItemList?.Where(x=> x.ChoiceOrder == 10).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
-                ticketFromMainDb.AwayMatchItemList = mdItemList?.Where(x => x.ChoiceOrder == 20).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();               
+                ticketFromMainDb.HomeMatchItemList = mdItemList?.Where(x => x.ChoiceOrder == 10).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
+                ticketFromMainDb.AwayMatchItemList = mdItemList?.Where(x => x.ChoiceOrder == 20).OrderByDescending(x => x.TransTime).ThenByDescending(x => x.TransId).ToList();
             }
 
             ticketFromMainDb.RecordsTotal = mdItemList?.Count() ?? 0;
@@ -812,7 +816,7 @@
 
             return ticketFromMainDb;
         }
-       
+
         #endregion Detail Tickets
 
         #region Association Detect
@@ -825,8 +829,8 @@
 
             var orgUserList = _associationDetectionService.ValidateUserName(model.RawUserNames);
 
-           var data = _associationDetectionService.DetectAssociation(new DetectAssociationByUserNamesViewModel 
-           { 
+            var data = _associationDetectionService.DetectAssociation(new DetectAssociationByUserNamesViewModel
+            {
                 UserNames = model.RawUserNames,
                 IsBP = model.IsOptBP,
                 IsDevice = model.IsOptDevice,
@@ -834,7 +838,7 @@
                 IsAgent = model.IsOptAgent,
                 IsIPLast3Days = model.IsOptIPLast3Days,
                 Is3MatchesLast7Days = model.IsOpt3MatchesLast7Days
-           }, orgUserList, false, false).Select(x => new DetectGroupAssociationItemViewModel(x)); ;
+            }, orgUserList, false, false).Select(x => new DetectGroupAssociationItemViewModel(x)); ;
 
             result.ItemList = this.RearrangeAssGroup(data, true);
 
@@ -870,7 +874,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                 .AddMessage("Verify Trans MM Detail Error: " + ex.Message + ex.StackTrace + "\n"
+                 .AddMessage($"{Region} Verify Trans MM Detail Error: " + ex.Message + ex.StackTrace + "\n"
                   + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                   + ex.InnerException.StackTrace)
                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -1057,7 +1061,7 @@
                 nTicket.ADetectGroup = "-";
                 nTicket.ReasonList = "-";
                 nTicket.ReasonIDList = string.Empty;
-                nTicket.TypeOfTicket = MatchMonitorQueryType.TicketAll;
+                nTicket.TypeOfTicket = MMTicketTypeFromUI.TicketAll;
 
                 ticketResult.Add(nTicket);
             });

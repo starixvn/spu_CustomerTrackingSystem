@@ -229,7 +229,7 @@
 
         public int ChoiceOrder { get; set; }
 
-        public MatchMonitorQueryType TypeOfTicket { get; set; } = MatchMonitorQueryType.TicketFraud;
+        public MMTicketTypeFromUI TypeOfTicket { get; set; } = MMTicketTypeFromUI.TicketFraud;
 
         #endregion
 

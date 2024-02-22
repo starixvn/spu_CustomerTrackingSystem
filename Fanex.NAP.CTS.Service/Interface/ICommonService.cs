@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service.Interface
 {
     using Fanex.NAP.CTS.Model.Common;
+    using Fanex.NAP.CTS.Model.DangerMonitor;
     using Fanex.NAP.CTS.ViewModel.Common;
     using System.Collections.Generic;
 
@@ -25,6 +26,7 @@
         IEnumerable<StaticListModel> GetStaticLists(int listID, bool isStatusActive);
 
         IEnumerable<BetTypeSettingModel> GetBetTypeSettings(BetTypeSettingParaModel infos);
-        
+
+        IEnumerable<SportBettypeViewModel> GetMainSportBettype(SportBettypeModel model);
     }
 }

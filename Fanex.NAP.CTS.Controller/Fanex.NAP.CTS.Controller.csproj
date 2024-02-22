@@ -182,6 +182,7 @@
     <Compile Include="AssociationReportController.cs" />
     <Compile Include="BaseController.cs" />
     <Compile Include="ConfigurationsController.cs" />
+    <Compile Include="DangerMonitorController.cs" />
     <Compile Include="ErrorsController.cs" />
     <Compile Include="FSFunctionKeys.cs">
       <DependentUpon>FSFunctionKeys.tt</DependentUpon>

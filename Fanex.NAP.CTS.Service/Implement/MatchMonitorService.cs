@@ -22,11 +22,13 @@
     {
         private readonly IDynamicRepository repository;
         private readonly ICommonService commonService;
+        private readonly MMQueryType _mmQueryType;
 
-        public MatchMonitorService()
+        public MatchMonitorService(MMQueryType mmQueryType)
         {
             repository = new DynamicRepository();
             commonService = new CommonService();
+            _mmQueryType = mmQueryType;
         }
 
         public IEnumerable<MatchFromMainInfoModel> GetMatchFromMainInfos(MatchMonitorSearchViewModel filter, string matchIDs)
@@ -57,7 +59,7 @@
             };
 
             return repository.Fetch<GetMatchMonitorModel>(criteria);
-        }        
+        }
 
         public IEnumerable<MMFraudTicketsSummaryViewModel> GetMMFraudTicketsSummary(IEnumerable<MMFraudTicketsSummaryModel> mmModels)
         {
@@ -173,6 +175,7 @@
 
             var allFilterResult = fraudTicket.GenerateDropdownFilterListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator, para.Sport);
             allFilterResult.MaxSequenceId = mmticketDetailInfo.MaxSequenceId;
+            allFilterResult.MaxTransDate = mmticketDetailInfo.MaxTransDate?.ToString();
             allFilterResult.RecordsTotal = mmticketDetailInfo.TotalTicketAll;
 
             return allFilterResult;
@@ -184,6 +187,7 @@
 
             var allFilterResult = new TicketDetailViewModel().GenerateDropdownFilterListByMainTicketInfo(mmticketDetailInfo.TicketInfoList, para.LiveIndicator, para.Sport);
             allFilterResult.MaxSequenceId = mmticketDetailInfo.MaxSequenceId;
+            allFilterResult.MaxTransDate = mmticketDetailInfo.MaxTransDate?.ToString(FormatDatetimeToString_YYYYmmddHHmmssfff);
             allFilterResult.RecordsTotal = mmticketDetailInfo.TotalTicketAll;
 
             return allFilterResult;
@@ -212,7 +216,7 @@
                 var mmStatic = new MatchMonitorStaticListModel();
                 var ticketDetail = fraudTicket.TicketDetails;
                 var mergeGroup = fraudTicket.MMDetailMergeGroup;
-               
+
                 var custIDs = matchDetailInfo.Custs.Select(x => x.CustID).Distinct();
                 var custInfo = GetCustInfoByCustID(custIDs);
 
@@ -269,7 +273,7 @@
             }
 
             return string.Empty;
-        }       
+        }
 
         public string GetTransFilterSuspicousMGr(MMDetailFilterViewModel filter, TicketDetailViewModel fraudTicket)
         {
@@ -402,15 +406,16 @@
 
             var criteria = new TicketDetailGetCriteria()
             {
-                QueryType = 2, // Get ticket for view MM report
+                QueryType = (int)_mmQueryType, // Get ticket for view MM report
                 EventDate = para.EventDate,
                 LastScannedSequenceID = para.LastScannedSequenceID,
+                LastTransDate = para.LastTransDate,
                 IsLive = para.LiveIndicator ? 1 : 0,
                 MatchID = para.MatchID,
                 ListSportBettype = betTypeInfos,
                 //BetType = para.BetTypeID,
                 //BetID = para.BetID,
-                TicketType = para.TypeOfTickets == MatchMonitorQueryType.TicketAll ? 0 : 1,
+                TicketType = para.TypeOfTickets == MMTicketTypeFromUI.TicketAll ? 0 : 1,
                 BatchSize = batchSize,
                 IsLicensee = (para.Sites == MMSites.All || para.Sites == null) ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
                 ListTransId = transJson,
@@ -450,6 +455,7 @@
             {
                 TicketDetails = result,
                 MinSequenceId = criteria.MinSequenceId,
+                MinTransDate = criteria.MinTransDate,
                 TotalTicket = criteria.TotalTicket
             };
         }
@@ -490,13 +496,13 @@
             var criteria = new MMTicketDetailInfoCriteria()
             {
                 MatchID = para.MatchID,
-                EventDate = para.EventDate,                
+                EventDate = para.EventDate,
                 IsLive = para.LiveIndicator ? 1 : 0,
                 ListSuspiciousTransId = suspiciousTranInfos != null ? JsonConvert.SerializeObject(suspiciousTranInfos) : null,
-                TicketType = para.TypeOfTickets == MatchMonitorQueryType.TicketAll ? 0 : 1,
+                TicketType = (int)GetTicketTypeFromDB(_mmQueryType, para.TypeOfTickets),
                 ListSportBettype = betTypeInfos,
                 IsExclTestCurr = false,
-              
+
                 FromTransDate = para.TranstimeFrom != null ? para.TranstimeFrom.Value.ToUniversalTime() : (DateTime?)null,
                 ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null,
                 //BetType = para.BetTypeID,
@@ -508,6 +514,7 @@
             return new MMTicketDetailInfoModel
             {
                 MaxSequenceId = criteria.MaxSequenceId,
+                MaxTransDate = criteria.MaxTransDate,
                 TotalTicketAll = criteria.TotalTicketAll,
                 TotalTicketCredit = criteria.TotalTicketCredit,
                 TotalTicketLicensee = criteria.TotalTicketLicensee,
@@ -549,7 +556,7 @@
                 Sports = result.secondResultSet,
                 BetTypes = result.thirdResultSet
             };
-        }      
+        }
 
         public byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath)
         {

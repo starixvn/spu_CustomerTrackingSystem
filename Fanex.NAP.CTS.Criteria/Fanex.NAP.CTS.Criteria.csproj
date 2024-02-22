@@ -132,6 +132,7 @@
     <Compile Include="AssociationDetection\GetMainCustStatisticsInfoCriteria.cs" />
     <Compile Include="Common\GetCommonBetTypeSettingCriteria.cs" />
     <Compile Include="Common\GetCommonCustomerClassCriteria.cs" />
+    <Compile Include="Common\GetCommonSportBettypeCriteria.cs" />
     <Compile Include="Common\GetCommonStaticListCriteria.cs" />
     <Compile Include="Common\GetMatchesInfoCriteria.cs" />
     <Compile Include="Common\GetSitesCriteria.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="CustomerClassification\ProblemAccount\ProblemAccountGetCriteria.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\ProblemAccountUmmarkCriteria.cs" />
     <Compile Include="CustomerClassification\Robot\RobotAccountInsertCriteria.cs" />
+    <Compile Include="DangerMonitor\DangerMonitorTicketSummaryCriteria.cs" />
     <Compile Include="ImportEvidences\CheckCleanCustFlaggedEvidenceCriteria.cs" />
     <Compile Include="LogInputData\LogInputDataCriteria.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\GetExistedTWRobotUserCriteria.cs" />

@@ -23,6 +23,8 @@
 
         public long? MinSequenceId { get; set; }
 
+        public DateTime? MinTransDate { get; set; }
+
         public string GetTransByFilterIncludeSuspicous(MMDetailFilterViewModel filter, IEnumerable<MatchMonitorDetailItemViewModel> ticketMergeGroups)
         {
             var transList = new List<FraudTransModel>();
