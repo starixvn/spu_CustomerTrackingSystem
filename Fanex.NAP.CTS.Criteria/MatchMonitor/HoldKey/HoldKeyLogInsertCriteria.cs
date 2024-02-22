@@ -8,6 +8,9 @@
         [SpParam(SqlParamName = "ip_UserID")]
         public int UserID { get; set; }
 
+        [SpParam(SqlParamName = "ip_MatchID")]
+        public int MatchID { get; set; }
+
         [SpParam(SqlParamName = "ip_Status")]
         public bool Status { get; set; }
 

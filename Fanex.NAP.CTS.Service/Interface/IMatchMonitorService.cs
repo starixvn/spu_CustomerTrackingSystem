@@ -84,7 +84,7 @@
 
         HoldKeyStatusGetResultModel GetHoldKeyStatus(Int64 matchID, string url);
 
-        void LogHoldKeyAction(int userId, bool status);
+        void LogHoldKeyAction(int userId, bool status, int matchId);
 
         #endregion
 

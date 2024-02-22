@@ -1050,7 +1050,7 @@
                     paramters.UserId = CurrentSession.UserId;
                     paramters.UserName = CurrentSession.Username;
 
-                    _matchMonitorService.LogHoldKeyAction(CurrentSession.UserId, paramters.IsHold);
+                    _matchMonitorService.LogHoldKeyAction(CurrentSession.UserId, paramters.IsHold, paramters.MatchId);
 
                     var updateResult = _matchMonitorService.UpdateHoldKeyStatus(paramters, ConfigSettings.UpdateHoldKeyMMDetailURL);
                     

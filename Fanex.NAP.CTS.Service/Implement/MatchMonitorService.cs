@@ -862,14 +862,15 @@
             return new HoldKeyUpdateResultModel();
         }
 
-        public void LogHoldKeyAction(int userId, bool status)
+        public void LogHoldKeyAction(int userId, bool status, int matchId)
         {
             if (userId != 0) 
             {
                 var criteria = new HoldKeyLogInsertCriteria
                 {
                     UserID = userId,
-                    Status = status
+                    Status = status,
+                    MatchID = matchId
                 };
 
                 repository.Execute(criteria);
