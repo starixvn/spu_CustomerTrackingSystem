@@ -34,8 +34,8 @@
 		<Setting Key="FS_Rpt_CTSMatchMonitor_Get" SpName="FS_Rpt_CTSMatchMonitor_Get" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
 		<Setting Key="FS_Rpt_CTSMatchMonitor_Details_GetMatchInfo" SpName="FS_Rpt_CTSMatchMonitor_Details_GetMatchInfo" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
 		<Setting Key="FS_Rpt_CTSMatchMonitor_Details_GetTickets" SpName="FS_Rpt_CTSMatchMonitor_Details_GetTickets" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged_UAT1" DbName="DBCust.CustDB.bodbAdminNet" />
-		<Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged_UAT1" DbName="DBCust.CustDB.bodbAdminNet" />
+		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged" DbName="DBCust.CustDB.bodbAdminNet" />
+		<Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged" DbName="DBCust.CustDB.bodbAdminNet" />
 		<Setting Key="Acc_CustomerUpdateCustomerClass" SpName="Acc_CustomerUpdateCustomerClass" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
 		<Setting Key="TicketVoiding_TicketsInRequest_Select" SpName="TicketVoiding_TicketsInRequest_Select" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
@@ -55,10 +55,10 @@
 	</Function>
 
 	<Function name="MatchMonitor">
-		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails_UAT2" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_Rpt_MatchMonitor_MatchInfo" SpName="CTS_Rpt_MatchMonitor_MatchInfo" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_TicketDetails_Info" SpName="CTS_TicketDetails_Info_UAT2" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_Rpt_MatchMonitor_FraudTicketsSummary" SpName="CTS_Rpt_MatchMonitor_FraudTicketsSummary_UAT1" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_TicketDetails_Info" SpName="CTS_TicketDetails_Info" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_Rpt_MatchMonitor_FraudTicketsSummary" SpName="CTS_Rpt_MatchMonitor_FraudTicketsSummary" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 
 	<Function name="RobotBetting">
