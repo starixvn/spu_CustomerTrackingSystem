@@ -266,12 +266,16 @@
             }).Distinct(x => x.GroupID).OrderBy(x => x.GroupID).ToList();
 
             if (filter.DropdownListFilterDependOn.Any())
+            {
                 filter.MGroupList = new List<string>() { "-" };
+            }
 
             var subscriberTypeList = filter.DropdownListFilterDependOn.Select(x => x.SubscriberType).Distinct().ToList();
 
             if (subscriberTypeList.Count() == 2)
+            {
                 subscriberTypeList.Insert(0, "A");
+            }
 
             filter.DropdownListFilter.SubscriberTypeList = subscriberTypeList;
 
@@ -283,6 +287,21 @@
                                 TicketStatus = x,
                                 TicketStatusName = Enum.GetName(typeof(StatusTicket), x) ?? x.ToString()
                             }).OrderBy(x => x.StatusOrderIdx);
+
+            var cashoutStatusList = filter.DropdownListFilterDependOn.Select(x => (int?)x.IsCashout).Distinct().ToList();
+
+            if (cashoutStatusList.Count() == 2)
+            {
+                cashoutStatusList.Add(null);
+            }
+
+            // x -1 is Cashout Type All
+            filter.DropdownListFilter.CashoutStatusList = cashoutStatusList.Select(x =>
+                                                            new CashoutStatusViewModel
+                                                            {
+                                                                CashoutStatus = x,
+                                                                CashoutName = ((StatusCashout)(x.GetValueOrDefault(-1))).GetStringSlow() ?? string.Empty
+                                                            }).OrderBy(x => x.StatusOrderIdx);
 
             #region Danger List
             var dangerList = filter.DropdownListFilterDependOn.Where(x => !string.IsNullOrEmpty(x.DangerToString));

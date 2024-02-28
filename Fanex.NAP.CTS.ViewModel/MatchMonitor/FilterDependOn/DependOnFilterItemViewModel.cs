@@ -22,6 +22,7 @@
             this.BallHeadHDP = info.Hdp;
             this.BallHeadBetTeam = info.BetTeam;
             this.TicketStatus = info.TicketStatus;
+            this.IsCashout = info.IsCashout;
         }
 
         public string Score { get; set; }
@@ -127,6 +128,8 @@
         public string BallHeadBetTeam { get; set; }
 
         public int TicketStatus { get; set; }
+
+        public int IsCashout { get; set; }
 
         private string AddSpaceDanger(int commaCount)
         {

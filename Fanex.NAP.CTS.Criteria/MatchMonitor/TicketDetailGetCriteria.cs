@@ -90,6 +90,9 @@
         [SpParam(SqlParamName = "ToTransDate")]
         public DateTime? ToTransDate { get; set; }
 
+        [SpParam(SqlParamName = "IsCashout")]
+        public int? IsCashout { get; set; }
+
         public override string GetSettingKey()
                 => "CTS_Rpt_MatchMonitor_TicketDetails";
 

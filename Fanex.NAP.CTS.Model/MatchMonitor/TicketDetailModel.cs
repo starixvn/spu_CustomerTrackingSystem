@@ -40,6 +40,8 @@
 
         public Decimal Odds { get; set; }
 
+        public Decimal? MalayOdds { get; set; }
+
         public Decimal Hdp1 { get; set; }
 
         public Decimal Hdp2 { get; set; }

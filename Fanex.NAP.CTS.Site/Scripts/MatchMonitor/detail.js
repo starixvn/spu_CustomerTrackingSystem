@@ -71,6 +71,7 @@ function MatchMonitorDetail() {
         inputCustAmountRM: $('#inputCustAmountRM'),
         iconClearUsnAmt: $('#iconClearUsnAmt'),
         cbbTicketsStatus: $('#cbbTicketsStatus'),
+        cbbCashoutType: $('#cbbCashoutType'),
         tblMMHomeTeam: $('#tblMMHomeTeam'),
         tblMMAwayTeam: $('#tblMMAwayTeam'),
         tblMMSG: $('#tblMMSG'),
@@ -183,7 +184,7 @@ function MatchMonitorDetail() {
             autoWidth: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 5, 7, 9, 12, 13, 14, 15, 16], className: "text-center" },
+                { targets: [0, 1, 2, 3, 5, 6, 8, 10, 13, 14, 15, 16, 17], className: "text-center" },
                 {
                     targets: [0], width: "3%", render: function (data, type, full, meta) {
                         return '<label><input type="checkbox" class="col-checkbox" name="chkbx" /></label>';
@@ -194,19 +195,20 @@ function MatchMonitorDetail() {
                 { targets: [3], width: "4%" },
                 { targets: [4], width: "10%", className: "text-center col-dgr" },
                 { targets: [5], width: "5%" },
-                { targets: [6], width: "5%", className: "text-center col-betid" },
-                { targets: [7], width: "5%" },
-                { targets: [8], width: "5%", className: "text-right col-amt" },
-                { targets: [9], width: "4%" },
-                { targets: [10], width: "5%", className: "text-center col-score" },
-                { targets: [11], width: "13%", className: "text-center col-transtime" },
-                { targets: [12], width: "3%" },
-                { targets: [13], width: "5%" },
-                { targets: [14], width: "5%", className: "text-center" },
-                { targets: [15], width: "7%", className: "text-center col-reason" },
-                { targets: [16], width: "3%" },
-                { targets: [17], visible: false },
-                { targets: [18], visible: false }
+                { targets: [6], width: "5%" },
+                { targets: [7], width: "5%", className: "text-center col-betid" },
+                { targets: [8], width: "5%" },
+                { targets: [9], width: "5%", className: "text-right col-amt" },
+                { targets: [10], width: "4%" },
+                { targets: [11], width: "5%", className: "text-center col-score" },
+                { targets: [12], width: "13%", className: "text-center col-transtime" },
+                { targets: [13], width: "3%" },
+                { targets: [14], width: "5%" },
+                { targets: [15], width: "5%", className: "text-center" },
+                { targets: [16], width: "7%", className: "text-center col-reason" },
+                { targets: [17], width: "3%" },
+                { targets: [18], visible: false },
+                { targets: [19], visible: false }
             ],
             columns: [
                 {
@@ -228,6 +230,7 @@ function MatchMonitorDetail() {
                 { data: obj => RenderBotIcon(obj.RobotType, obj.IsRobot) },
                 { data: obj => obj.DangerToString },
                 { data: obj => obj.Odds },
+                { data: obj => obj.MalayOdds },
                 {
                     data: obj => {
                         if (!isDisplaySingleGrid && obj.TransIdToString.length > 6) {
@@ -672,6 +675,24 @@ function MatchMonitorDetail() {
         domElements.cbbTicketsStatus.multiselect("refresh");
     }
 
+    function SetupCashoutTypeFilter(data) {
+        let cacheCashoutType = undefined;
+        let cacheSelected = cacheFilterForImportNew[currentType];
+        if (cacheSelected != undefined && cacheSelected.cbbCashoutType) {
+            cacheCashoutType = cacheSelected.cbbCashoutType;
+        }
+
+        domElements.cbbCashoutType.empty();
+
+        if (data) {
+            data.forEach(item => {
+                domElements.cbbCashoutType.append(`<option value='${item.CashoutStatus}'>${item.CashoutName}</option>`);
+            });
+
+            domElements.cbbCashoutType.val(cacheCashoutType ?? `${data[0].CashoutStatus}`);
+        }
+    }
+
     function SetupDoubleDataTable() {
         $("#tbrMMHomeTeam").html(`
                                 <table id="tblMMHomeTeam" class="table table-striped table-monitor-detail">
@@ -683,6 +704,7 @@ function MatchMonitorDetail() {
                                         <th>Bot</th>
                                         <th>Dgr</th>
                                         <th>Odds</th>
+                                        <th>MY.Odds</th>
                                         <th>
                                             <div class="type-outer">
                                                 <span class="col-title">BetID</span>
@@ -726,6 +748,7 @@ function MatchMonitorDetail() {
                                         <th>Bot</th>
                                         <th>Dgr</th>
                                         <th>Odds</th>
+                                        <th>MY.Odds</th>
                                         <th>
                                             <div class="type-outer">
                                                 <span class="col-title">BetID</span>
@@ -817,6 +840,7 @@ function MatchMonitorDetail() {
                                         <th>Bot</th>
                                         <th>Dgr</th>
                                         <th>Odds</th>
+                                        <th>MY.Odds</th>
                                         <th>
                                             <div class="type-outer">
                                                 <span class="col-title">BetID</span>                                                                                               
@@ -1109,6 +1133,7 @@ function MatchMonitorDetail() {
             SetupCC(data.DropdownListFilter.CCList);
             SetupDanger(data.DropdownListFilter.DangerList);
             SetupTicketStatusFilter(data.DropdownListFilter.TicketStatusList);
+            SetupCashoutTypeFilter(data.DropdownListFilter.CashoutStatusList);
 
             SetupSubscriberTypeFilter(data.DropdownListFilter.SubscriberTypeList);
         }
@@ -1188,6 +1213,7 @@ function MatchMonitorDetail() {
         selectedFilter.cbbAGroup = GetSelectDataFilter(domElements.cbbAGroup);
         selectedFilter.cbbHDPBetTeam = GetSelectDataFilter(domElements.cbbHDPBetTeam);
         selectedFilter.cbbTicketsStatus = GetSelectDataFilterTicketStatus();
+        selectedFilter.cbbCashoutType = domElements.cbbCashoutType.val();
 
         cacheFilterForImportNew[currentType] = selectedFilter;
     }
@@ -1314,6 +1340,7 @@ function MatchMonitorDetail() {
                     BetTeamList: GetBetTeamSelected(domElements.cbbHDPBetTeam, true),
                     CustAmountRM: GetInputAmount(),
                     TicketStatusList: GetSelectDataFilter(domElements.cbbTicketsStatus, true),
+                    IsCashout: domElements.cbbCashoutType.val(),
                     MGrTranIDListFiltered: GetTranIDsByFilterMGr(),
                     Sport: domElements.sportType,
                     TranstimeFrom: transtime.fromDate,
@@ -1900,6 +1927,7 @@ function MatchMonitorDetail() {
                     datas += `,&quot;IsRobot&quot;:&quot;${data.IsRobot}&quot;`;
                     datas += `,&quot;DangerToString&quot;:&quot;${data.DangerToString}&quot;`;
                     datas += `,&quot;Odds&quot;:&quot;${data.Odds}&quot;`;
+                    datas += `,&quot;MalayOdds&quot;:&quot;${data.MalayOdds ?? "-"}&quot;`;
                     datas += `,&quot;BetID&quot;:&quot;${data.BetID}&quot;`;
                     datas += `,&quot;BetTeam&quot;:&quot;${data.BetTeam}&quot;`;
                     datas += `,&quot;Currency&quot;:&quot;${data.CurrencyName}&quot;`;
@@ -2088,6 +2116,11 @@ function MatchMonitorDetail() {
             }
         });
         domElements.cbbTicketsStatus.multiselect('refresh');
+
+        var cashoutOption = $('option', domElements.cbbCashoutType)[0]?.value;
+        if (cashoutOption) {
+            domElements.cbbCashoutType.val(cashoutOption);
+        }
 
         FilterDependOnSelected(IndexFilterSelected.Score);
     }
@@ -2397,7 +2430,7 @@ function MatchMonitorDetail() {
         if (isResetAmountRM) {
             domElements.inputCustAmountRM.val('');
             domElements.iconClearUsnAmt.addClass("hide");
-        }        
+        }
     }
 
     function OnchangeFilter() {

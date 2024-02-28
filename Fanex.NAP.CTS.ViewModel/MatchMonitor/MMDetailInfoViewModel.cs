@@ -26,6 +26,7 @@
             this.Sport = para.Sport;
             this.TranstimeFrom = para.TranstimeFrom;
             this.TranstimeTo = para.TranstimeTo;
+            this.IsCashout = para.IsCashout;
         }
 
         public bool IsSupportShowAllTickets { get; set; }
@@ -57,6 +58,8 @@
         public bool IsImportNewTicket { get; set; }
 
         public int Sport { get; set; }
+
+        public int? IsCashout { get; set; }
 
         public DateTime? TranstimeFrom { get; set; }
 

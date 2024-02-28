@@ -127,6 +127,8 @@
 
         public decimal Odds { get; set; }
 
+        public decimal? MalayOdds { get; set; }
+
         public string BetID { get; set; }
 
         public string BetTeam { get; set; }
@@ -355,6 +357,7 @@
             this.Danger4 = ticket.Danger4;
             this.Danger5 = ticket.Danger5;
             this.Odds = ticket.Odds;
+            this.MalayOdds = ticket.MalayOdds;
             this.BetTypeID = ticket.BetType;
             this.BetID = ticket.TransId.ToString();
             this.BetTeam = ticket.BetTeam;
