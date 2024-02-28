@@ -2800,7 +2800,9 @@ function MatchMonitorDetail() {
                     MatchId: matchId,
                     MatchSection: matchSection,
                     SportType: sportType,
-                    IsHold: isHold
+                    IsHold: isHold,
+                    IsCurrentStatus: domElements.tggHoldKey.is('.toggle-on'),
+                    Username: domElements.ttHoldKey.text()
                 },
                 beforeSend: function () {
                     domElements.divPageLoading.addClass('loading-icon');

@@ -1037,38 +1037,39 @@
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailHoldKeyUpdate)]
-        public ActionResult UpdateHoldKeyStatus(HoldKeyUpdateViewModel paramters)
+        public ActionResult UpdateHoldKeyStatus(HoldKeyUpdateViewModel paramter)
         {
-            var result = new HoldKeyResultViewModel();
-
+            var result = new HoldKeyResultViewModel(
+                            new HoldKeyStatusGetViewModel
+                            {
+                                IsHold = paramter.IsCurrentStatus,
+                                UserName = paramter.UserName
+                            });
             try
             {
-                if (paramters.MatchId != 0
-                    && paramters.MatchSection != (int)MATCHMONITOR_SECTION.Closed
+                if (paramter.MatchId != 0
+                    && paramter.MatchSection != (int)MATCHMONITOR_SECTION.Closed
                     && !string.IsNullOrEmpty(ConfigSettings.UpdateHoldKeyMMDetailURL))
                 {
-                    paramters.UserId = CurrentSession.UserId;
-                    paramters.UserName = CurrentSession.Username;
+                    paramter.UserId = CurrentSession.UserId;
+                    paramter.UserName = CurrentSession.Username;
 
-                    _matchMonitorService.LogHoldKeyAction(CurrentSession.UserId, paramters.IsHold, paramters.MatchId);
+                    _matchMonitorService.LogHoldKeyAction(CurrentSession.UserId, paramter.IsHold, paramter.MatchId);
 
-                    var updateResult = _matchMonitorService.UpdateHoldKeyStatus(paramters, ConfigSettings.UpdateHoldKeyMMDetailURL);
-                    
+                    var updateResult = _matchMonitorService.UpdateHoldKeyStatus(paramter, ConfigSettings.UpdateHoldKeyMMDetailURL);
+
                     if (!updateResult.isSuccess)
                     {
                         LogService.Error($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Update hold key status - Exception: "
                                          + updateResult.msg
-                                         + $" DataInput: {JsonConvert.SerializeObject(paramters) + "\n"}");
-                    }   
-                     
-                    var statusResult = GetHoldKeyStatus(paramters.MatchId, paramters.MatchSection);
+                                         + $" DataInput: {JsonConvert.SerializeObject(paramter) + "\n"}");
+                    }
 
-                    result = new HoldKeyResultViewModel
-                    {
-                        IsSuccess = updateResult.isSuccess,
-                        Message = updateResult.msg,
-                        HoldKeyStatus = statusResult
-                    };
+                    var statusResult = GetHoldKeyStatus(paramter.MatchId, paramter.MatchSection);
+
+                    result.HoldKeyStatus = statusResult;
+                    result.IsSuccess = updateResult.isSuccess;
+                    result.Message = updateResult.msg;
                 }
             }
             catch (Exception ex)
@@ -1077,7 +1078,7 @@
                                  + ex.Message
                                  + ex.StackTrace + "\n"
                                  + ex?.InnerException?.Message + "\n"
-                                 + $"DataInput: {JsonConvert.SerializeObject(paramters) + "\n"}"
+                                 + $"DataInput: {JsonConvert.SerializeObject(paramter) + "\n"}"
                                  + ex?.InnerException?.Source
                                  + ex?.InnerException?.StackTrace);
             }

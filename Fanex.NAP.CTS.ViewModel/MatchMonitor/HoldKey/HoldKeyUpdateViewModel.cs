@@ -13,5 +13,7 @@
         public string UserName { get; set; }
 
         public bool IsHold { get; set; }        
+
+        public bool IsCurrentStatus { get; set; }
     }
 }

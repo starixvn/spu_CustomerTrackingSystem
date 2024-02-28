@@ -2,10 +2,10 @@
 {   
     public class HoldKeyResultViewModel
     {
-        public HoldKeyResultViewModel()
+        public HoldKeyResultViewModel(HoldKeyStatusGetViewModel data)
         {
             IsSuccess = false;
-            HoldKeyStatus = new HoldKeyStatusGetViewModel { IsHold = false };
+            HoldKeyStatus = data;
             Message = string.Empty;
         }
 
