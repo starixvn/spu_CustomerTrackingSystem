@@ -33,8 +33,8 @@
 		<Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
 		<Setting Key="CTS_RobotUserStatus_Get" SpName="CTS_RobotUserStatus_Get" DbName="DBONUSER.ON_USER.bodbSPUNet" />
 		<Setting Key="CTS_Customer_RobotCheckExist" SpName="CTS_Customer_RobotCheckExist" DbName="DBONUSER.ON_USER.bodbSPUNet" />
-		<Setting Key="CTS_MatchInfo_Get" SpName="CTS_MatchInfo_Get_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_SportBettype_Get" SpName="CTS_SportBettype_Get_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_MatchInfo_Get" SpName="CTS_MatchInfo_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_SportBettype_Get" SpName="CTS_SportBettype_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 
 	<Function name="ProbationManagement">
@@ -47,9 +47,9 @@
 	</Function>
 
 	<Function name="MatchMonitor">
-		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails_UAT3" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_Rpt_MatchMonitor_MatchInfo" SpName="CTS_Rpt_MatchMonitor_MatchInfo_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_TicketDetails_Info" SpName="CTS_TicketDetails_Info_UAT3" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_Rpt_MatchMonitor_MatchInfo" SpName="CTS_Rpt_MatchMonitor_MatchInfo" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_TicketDetails_Info" SpName="CTS_TicketDetails_Info" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_Rpt_MatchMonitor_FraudTicketsSummary" SpName="CTS_Rpt_MatchMonitor_FraudTicketsSummary_UAT1" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 
@@ -79,6 +79,6 @@
 	</Function>
 
 	<Function name="DangerMonitor">
-		<Setting Key="CTS_MatchTicketInfo_Get" SpName="CTS_MatchTicketInfo_Get_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_MatchTicketInfo_Get" SpName="CTS_MatchTicketInfo_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 </Functions>
