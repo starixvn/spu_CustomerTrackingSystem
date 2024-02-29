@@ -85,18 +85,24 @@
                         <div class="group width-180">
                             <label class="text">Reason</label>
                             <select class="control width-select" id="cbbReason" multiple="multiple">
-                                @foreach (var item in Model.Reasons)
+                                @foreach (var group in Model.ReasonGroups)
                                 {
-                                    if (item.IsSelected)
-                                    {
-                                        <option value=@item.ReasonID selected>@item.ReasonName</option>
-                                    }
-                                    else
-                                    {
-                                        <option value=@item.ReasonID>@item.ReasonName</option>
-                                    }
+                                    <optgroup label="@group.ReasonGroupName">
+                                        @foreach (var reason in group.ReasonItems)
+                                        {
+                                            if (reason.IsSelected)
+                                            {
+                                                <option value=@reason.ReasonID selected>@reason.ReasonName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value=@reason.ReasonID>@reason.ReasonName</option>
+                                            }
+                                        }
+                                    </optgroup>                                    
                                 }
                             </select>
+
                         </div>
 
                         <div class="group width-180">

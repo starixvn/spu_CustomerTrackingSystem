@@ -62,6 +62,7 @@ function MatchMonitorDetail() {
         cbbSites: $('#cbbSites'),
         cbbCC: $('#cbbCC'),
         cbbCCHidden: $('#cbbCCHidden'),
+        cbbReasonGroupHidden: $('#cbbReasonGroupHidden'),
         cbbDanger: $('#cbbDanger'),
         cbbCurrency: $('#cbbCurrency'),
         cbbReason: $('#cbbReason'),
@@ -302,7 +303,7 @@ function MatchMonitorDetail() {
 
     //#endregion Initial Grid
 
-    //#region Setup Filter & Grid
+    //#region Setup Filter & Grid    
     function SetupMultiselect(ccb, selectName, menuWidth = 260, menuHeight = 280) {
         ccb.multiselect({
             menuWidth: menuWidth,
@@ -327,6 +328,53 @@ function MatchMonitorDetail() {
             placeholder: '',
             label: ''
         });
+    }
+
+    function SetupMultiselectGroup(ccb, selectName, menuWidth = 260, menuHeight = 280) {
+        ccb.multiselect({
+            menuWidth: menuWidth,
+            menuHeight: menuHeight,
+            selectedText: "# of # select",
+            noneSelectedText: `Select ${selectName}`,
+            enableClickableOptGroups: true,
+            includeSelectAllOption: true,
+            groupsCollapsable: true,
+            optGroupChecked: true
+        });
+    }
+
+    function SetupFilterGroupReason(element, data) {
+        element.multiselect().empty();
+        let arrReason = [];
+
+        if (cacheDefaultReason != null) {
+            arrReason = cacheDefaultReason.split(',');
+        }
+
+        if (data) {
+            for (var i = 0; i < data.length; i++) {
+                let selected = true;
+                if (arrReason.length > 0) {
+                    if (arrReason.indexOf(data[i]) == -1) {
+                        selected = false;
+                    }
+                }
+              
+                let optgroup = `<optgroup label='Detect By v.v...'>`;
+                if (selected) {
+                    optgroup += `<option selected value='${data[i]}'>${data[i]}</option>`;
+                } else {
+                    optgroup += `<option value='${data[i]}'>${data[i]}</option>`;
+                }
+                optgroup += `</optgroup>`;
+
+                element.append(optgroup);
+            }
+
+            element.parent().find('button').removeClass('border-error');
+        }
+
+        element.multiselect("refresh");
     }
 
     function SetupFilter(element, data) {
@@ -1115,11 +1163,9 @@ function MatchMonitorDetail() {
         SetupFilterScore(domElements.cbbMatchScore, data.ScoreList);
 
         cacheFilterDefault.AGrList = data.GroupList;
-        cacheFilterDefault.ReasonList = data.ReasonList;
+        cacheFilterDefault.ReasonList = data.ReasonList;   
 
-        //SetupFilter(domElements.cbbReason, data.ReasonList);     
-
-        SetupFilterReason(domElements.cbbReason, data.ReasonList);
+        SetupFilterGroupReason(domElements.cbbReason, data.ReasonList);
 
         SetupAGroupFilter(data.GroupList);
 
@@ -2218,8 +2264,10 @@ function MatchMonitorDetail() {
                 break;
             case IndexFilterSelected.Currency:
                 reasonItems = DistinctByReason(dependOnFilter);
-                RefreshReason(reasonItems);
+                BuildReasonGroup(reasonItems);
 
+                RefreshReason(reasonItems);
+                
                 aGrItems = DistinctByAGr(dependOnFilter);
                 RefreshAGr(aGrItems);
                 break;
@@ -2229,7 +2277,9 @@ function MatchMonitorDetail() {
 
                 if (!isRefreshDependCurrency) {
                     reasonItems = DistinctByReason(dependOnFilter);
-                    RefreshReason(reasonItems);
+                    BuildReasonGroup(reasonItems);
+
+                    RefreshReason(reasonItems);                    
 
                     aGrItems = DistinctByAGr(dependOnFilter);
                     RefreshAGr(aGrItems);
@@ -2334,7 +2384,7 @@ function MatchMonitorDetail() {
         return isRefreshDependCurrency;
     }
 
-    function RefreshReason(reasonItems) {
+    function RefreshReasonOld(reasonItems) {
         let cacheSelectedReason = [];
         let cacheSelected = cacheFilterForImportNew[currentType];
         if (cacheSelected != undefined && cacheSelected.cbbReason) {
@@ -2374,6 +2424,75 @@ function MatchMonitorDetail() {
             }
         }
         domElements.cbbReason.multiselect("refresh");
+    }
+
+    function RefreshReason(reasonItems) {
+        let cacheSelectedReason = [];
+        let cacheSelected = cacheFilterForImportNew[currentType];
+        if (cacheSelected != undefined && cacheSelected.cbbReason) {
+            cacheSelectedReason = cacheSelected.cbbReason;
+        }
+
+        //domElements.cbbReason.multiselect().empty();
+        let arrReason = [];
+        if (cacheDefaultReason != null) {
+            arrReason = cacheDefaultReason.split(',');
+        }
+        if (reasonItems.length > 0) {
+            if (cacheSelectedReason.length > 0) {
+                reasonItems.forEach(item => {
+                    if ($.inArray(item.toString(), cacheSelectedReason) != -1) {                       
+                        domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "selected");
+                    } else {                      
+                        domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "");
+                    }
+                });
+            } else if (arrReason.length > 0) {
+                let arrReason = cacheDefaultReason.split(',');
+
+                reasonItems.forEach(item => {
+                    if ($.inArray(item.toString(), arrReason) != -1) {                      
+                        domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "selected");
+                    } else {                      
+                        domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "");
+                    }
+                });
+
+                cacheDefaultReason = null;
+            } else {
+                reasonItems.forEach(item => {                 
+                    domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "selected");
+                });
+            }
+        }
+        domElements.cbbReason.multiselect("refresh");
+    }
+
+    function BuildReasonGroup(reasonItems) {
+        domElements.cbbReason.multiselect().empty();      
+
+        domElements.cbbReasonGroupHidden.find('optgroup').each(function () {
+            let optGroup = $(this);
+            let groupName = optGroup.attr('label');
+            let items = [];
+            optGroup.find('option:selected').each(function (idx, opItem) {
+                items.push($(opItem).val());
+            })
+
+            let reasonMatched = items.filter(i => reasonItems.includes(i));
+
+            if (reasonMatched.length > 0) {
+                let optgroup = `<optgroup label='${groupName}'>`;
+                reasonMatched.forEach(reason => {                   
+                    optgroup += `<option value='${reason}'>${reason}</option>`;
+                });
+
+                optgroup += `</optgroup>`;
+                domElements.cbbReason.append(optgroup);
+            }
+        });
+
+        domElements.cbbReason.multiselect("refresh");       
     }
 
     function RefreshAGr(aGrItems) {
@@ -2674,7 +2793,7 @@ function MatchMonitorDetail() {
         SetupMultiselect(domElements.cbbMatchScore, "Score");
         SetupMultiselect(domElements.cbbAGroup, "A.Gr.");
         SetupMultiselect(domElements.cbbMGroup, "M.Gr.");
-        SetupMultiselect(domElements.cbbReason, "Reason");
+        SetupMultiselectGroup(domElements.cbbReason, "Reason");
         SetupMultiselect(domElements.cbbTicketsStatus, "Status");
         domElements.cbbBetType.select2();
         domElements.cbbMapX.select2();

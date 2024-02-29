@@ -115,6 +115,9 @@
         public const string ProblemAccountManagement_SiteCredit = "Credit";
         public const string ProblemAccountManagement_CategoryPA = "Problem Account Category";
         public const string MarkPA_AssociatedGroup = "Associated Group";
+        public const string ReasonDetectNone = "None";
+        public const string ReasonDetectBySystem = "Detect by System";
+        public const string ReasonDetectByAI = "Detect by AI";
 
         public struct Platform
         {

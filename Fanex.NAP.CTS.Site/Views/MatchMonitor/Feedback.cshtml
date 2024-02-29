@@ -109,6 +109,21 @@
                             </div>
                         </div>
 
+                        <div class="flex-item" reason="LB" reasonName="Lopsided Betting">
+                            <div class="form-control radio-button width-160">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="incorrectreason" incorrectreasonid="4">
+                                    <span class="checkmark"></span>
+                                    Lopsided Betting
+                                </label>
+                            </div>
+                            <div class="form-control radio-button">
+                                <label class="text">From</label>
+                                <input id="fTranLopsidedBet" name="from" maxlength="30" />
+                                <label class="text">To</label>
+                                <input id="tTranLopsidedBet" name="to" maxlength="30" />
+                            </div>
+                        </div>                     
                     </div>
                 </div>
             </div>
@@ -128,6 +143,11 @@
                                     <span class="correct-reason">Fixed Game</span>
                                 </label><br>
 
+                                <label for="CFormulaBet">
+                                    <input type="radio" id="CFormulaBet" name="CorrectReason" value="Formula Bet" correctreasonid="59">
+                                    <span class="correct-reason">Formula Bet</span>
+                                </label><br>
+
                                 <label for="CGB">
                                     <input type="radio" id="CGB" name="CorrectReason" value="Group Betting" correctreasonid="0">
                                     <span class="correct-reason">Group Betting</span>
@@ -138,9 +158,24 @@
                                     <span class="correct-reason">Hedging</span>
                                 </label><br>
 
+                                <label for="CInfoBet">
+                                    <input type="radio" id="CInfoBet" name="CorrectReason" value="Info Bet" correctreasonid="82">
+                                    <span class="correct-reason">Info Bet</span>
+                                </label><br>
+
                                 <label for="CIrrigation">
                                     <input type="radio" id="CIrrigation" name="CorrectReason" value="Irrigation" correctreasonid="58">
                                     <span class="correct-reason">Irrigation</span>
+                                </label><br>
+
+                                <label for="CRobotUser">
+                                    <input type="radio" id="CRobotUser" name="CorrectReason" value="Robot User" correctreasonid="163">
+                                    <span class="correct-reason">Robot User</span>
+                                </label><br>
+
+                                <label for="CLopsidedBet">
+                                    <input type="radio" id="CLopsidedBet" name="CorrectReason" value="Lopsided Betting" correctreasonid="4">
+                                    <span class="correct-reason">Lopsided Betting</span>
                                 </label><br>
 
                                 <label for="COthers">
