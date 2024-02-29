@@ -1034,7 +1034,7 @@ function MatchMonitorDetail() {
         } else if (domElements.sportType == 2) {
             return $("option:selected", domElements.cbbBetType).attr('data-betid');
         } else {
-            return domElements.betIDToString;
+            return 0; //default
         }
     }
 
