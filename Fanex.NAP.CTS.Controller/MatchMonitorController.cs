@@ -167,7 +167,7 @@
             result.Add(new ReasonGroupStaticListViewModel
             {
                 ReasonGroupName = Consts.ReasonDetectByAI,
-                ReasonItems = reasonGroupItems.Where(x => x.ItemID >= 100).Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
+                ReasonItems = reasonGroupItems.Where(x => x.ItemID >= 100).Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = false })
                     .OrderBy(x => x.ReasonName)
             });
 
