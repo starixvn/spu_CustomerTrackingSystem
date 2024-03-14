@@ -46,7 +46,12 @@
                             NapSettings.Settings.SiteId,
                             FSFunctionKeys.SpecialCustomerClass,
                             NAP.Core.Business.Constant.Policy.Host);
-            
+
+            ViewBag.CustomerCategorySportOrder = (from int item in Enum.GetValues(typeof(CustomerCategorySportType))
+                                                 select new KeyValuePair<int, string>(item, ((CustomerCategorySportType)item).GetStringSlow()))
+                                                 .OrderBy(x => CustomerCategorySportOrder[(CustomerCategorySportType)x.Key])
+                                                 .ToList();
+
             return View(isHostPermission);
         }
         
