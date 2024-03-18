@@ -51,6 +51,8 @@
 
         public bool IsDirectPA { get; set; }
 
+        public bool IsFromAI { get; set; }
+
         public bool IsFromTVS { get; set; }
 
         public int? TVSRequestID { get; set; }

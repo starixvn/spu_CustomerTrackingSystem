@@ -217,7 +217,7 @@
             {
                 CheckNewPAAssociationCustomerForRollback(customerInfo);
 
-                var custIds = customerInfo.Select(x => x.CustID).Distinct();
+                var custIds = customerInfo.Where(x=>x.CategoryType == 1).Select(x => x.CustID).Distinct();
 
                 UpdateBetLimitOfFlaggedCustomer(custIds);
             }

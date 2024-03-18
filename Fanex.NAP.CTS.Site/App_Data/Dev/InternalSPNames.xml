@@ -212,6 +212,7 @@
 		<Setting Key="CTS_DC_CustClassification_PA_ClearOld" SpName="CTS_DC_CustClassification_PA_ClearOld" DbName="MySQL.CTS_DataCenter.Admin" />
 
 		<Setting Key="CTS_DC_CustClassification_GetCCAndDangerLevel" SpName="CTS_DC_CustClassification_GetCCAndDangerLevel" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_PA_Dangerous_ReScan" SpName="CTS_DC_CustClassification_PA_Dangerous_ReScan_xpre" DbName="MySQL.CTS_DataCenter.Admin" />
 	</Function>
 
 	<Function name="AssociatedGroupMonitor">
@@ -245,5 +246,9 @@
 	<Function name="RobotReport">
 		<Setting Key="CTS_DC_RPT_RobotStatistic" SpName="CTS_DC_RPT_RobotStatistic" DbName="MySQL.CTS_DataCenter.Reporter"/>
 		<Setting Key="CTS_DC_RPT_RobotStatistic_AI" SpName="CTS_DC_RPT_RobotStatistic_AI" DbName="MySQL.CTS_DataCenter.Reporter"/>
+	</Function>
+
+	<Function Name="DailyDangerousScoreClassification">		
+		
 	</Function>
 </Functions>

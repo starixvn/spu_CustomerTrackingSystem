@@ -14,6 +14,8 @@
       
         public IEnumerable<long> CustIds { get; set; }
 
+        public bool IsRescanPADangerous { get; set; }
+
         public bool IsRescanPA { get; set; }
 
         public bool IsUpdateDangerToMainDB { get; set; }
