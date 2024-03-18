@@ -265,6 +265,7 @@
     <Compile Include="SpecialCustomerClass\ResultInsertRemoveViewModel.cs" />
     <Compile Include="Account\TransactionHistory\IPInformation.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidatedAcssociatedAccountViewModel.cs" />
+    <Compile Include="SpecialCustomerClass\ValidateSpecialCCResultViewModel.cs" />
     <Compile Include="TransactionReport\TransactionFilterViewModel.cs" />
     <Compile Include="TransactionReport\TransactionViewModel.cs" />
   </ItemGroup>

@@ -438,7 +438,9 @@
     <Compile Include="RobotReport\RobotReportCounterView.cs" />
     <Compile Include="RobotReport\RobotReportModel.cs" />
     <Compile Include="RobotReport\RobotReportParamModel.cs" />
+    <Compile Include="SpecialCustomerClass\AddSpecialCCParamsModel.cs" />
     <Compile Include="SpecialCustomerClass\CustomerClassModel.cs" />
+    <Compile Include="SpecialCustomerClass\RemoveSpecialCCParamsModel.cs" />
     <Compile Include="SpecialCustomerClass\ResultInsertCustomerClass.cs" />
     <Compile Include="DTO\CustomerCategory.cs" />
     <Compile Include="Association\AssociationCustomerModel.cs" />
@@ -492,6 +494,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportModel.cs" />
     <Compile Include="DTO\Subscriber.cs" />
+    <Compile Include="SpecialCustomerClass\SearchSpecialCCParamsModel.cs" />
+    <Compile Include="SpecialCustomerClass\UserListSpecialCCParamsModel.cs" />
     <Compile Include="Subscriber\Subscriber.cs" />
     <Compile Include="Subscriber\SubscriberAssignment.cs" />
     <Compile Include="Subscriber\SubscriberAssignmentUpdate.cs" />

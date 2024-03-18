@@ -661,3 +661,6 @@ button#btnGenerate {
       height: 30px; }
     .modal-footer button.-add {
       height: 30px; }
+
+.jq-toast-wrap {
+  max-width: 580px; }

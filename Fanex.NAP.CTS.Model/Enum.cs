@@ -240,4 +240,10 @@ namespace Fanex.NAP.CTS.Model
         [Description("Cashout")]
         Cashout = 1,
     }
+
+    public enum FunctionValidateSpecialCC
+    {
+        Add = 1,
+        Remove = 2
+    }
 }

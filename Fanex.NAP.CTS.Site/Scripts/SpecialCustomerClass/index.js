@@ -2,7 +2,8 @@
     let dataTable;
 
     let domElements = {
-        cbbSporType: $('#ccbSportType'),
+        ccbSportTypeSingle: $('#ccbSportTypeSingle'),
+        cbbSportTypeMulti: $('#ccbSportType'),
         specialCustomerClassTable: $('#tblSpecialCustomerClass'),
         divCustomerClass: $('#divAddCustomerClass'),
         btnAddCustomerClass: $('#btnAdd'),
@@ -22,7 +23,8 @@
         divAddProblemAccount: $('#divAddProblemAccount'),
         txtComment: $('#txtComment'),
         formValidate: $('.form-validate'),
-        btnRemoveCustomerClass: $('#btnRemove')
+        btnRemoveCustomerClass: $('#btnRemove'),
+        inputSelectAll: $('#inputSelectAll'),
     };
 
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
@@ -67,11 +69,7 @@
             scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                {
-                    targets: [0], className: "text-center", render: function (data, type, full, meta) {
-                        return '<label><input type="checkbox" class="col-checkbox" name="chkbx" /></label>';
-                    }
-                },
+                { targets: [0], className: "text-center" },
                 { targets: [0], width: "1%" },
                 { targets: [1, 2, 5], className: "text-left col-username" },
                 { targets: [3, 4], className: "text-center col-username" },
@@ -82,7 +80,7 @@
             columns: [
                 {
                     data: obj => () => {
-                        return `<label><input type="checkbox" name="chkbx" class="col-checkbox" /></label>`;
+                        return `<label><input type="checkbox" name="chkbx" class="col-checkbox"/></label>`;
                     }
                 },
                 { data: obj => obj.Username },
@@ -103,7 +101,7 @@
                                 let html = "<div class='popup - content'>Do you want remove <strong>" + row.Username + "</strong> from Special Customer Class list? </div>";
 
                                 common.showConfirmation(html, function () {
-                                    RemoveCustomerClass(row.CustID, row.CTSCustID);
+                                    RemoveCustomerClass(row);
                                 }, () => {
                                     $('td #sub-icon').removeClass('none-pointer');
                                 });
@@ -160,23 +158,33 @@
         });
     }
 
-    function RemoveCustomerClass(custID, ctsCustID) {
+    function RemoveCustomerClass(model, isRemoveAll = false) {
         var url = common.modifyRelativeUrl('/SpecialCustomerClass/RemoveCustomerClass');
         var params = {};
-        params.custID = custID;
-        params.ctsCustID = ctsCustID;
+        params.Comment = domElements.txtComment.val();
+        params.UserList = [];
+
+        if (isRemoveAll) {
+            domElements.specialCustomerClassTable.DataTable().rows(function (idx, x, node) {
+                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                    params.UserList.push({ Username: x.Username, SportID: 0 });
+                }
+            });
+        }
+        else {
+            params.UserList = [{ Username: model.Username, SportID: 0 }];
+        }
 
         $.ajax(url, {
             type: 'POST',
-            data: params,
+            tryCount: 0,
+            retryLimit: 3,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(params),
             success: function (response) {
-                if (response.ErrorCode === 0) {
-                    common.showSuccess('Remove the Customer Class successful');
-                    LoadGrid(domElements.txtSearchUsername.val(), true);
-                }
-                else {
-                    common.showError('Failed! ' + response.ErrorMsg);
-                }
+                LoadGrid(domElements.txtSearchUsername.val(), true);
+                common.showSuccess('Remove the Customer Class successful');
             },
             beforeSend: function () {
                 common.showLoading();
@@ -184,74 +192,142 @@
             complete: function () {
                 common.closeLoading();
             },
-            error: function (err) {
-                console.log(err);
+            error: function (xhr, textStatus, error) {
+                if (textStatus == 'timeout') {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        //try again
+                        $.ajax(this);
+                        return;
+                    }
+                }
+
+                console.log(xhr);
+                if (xhr.status === 400 && xhr.responseJSON?.Users) {
+                    $.toast({
+                        text: `<div class='toast-content'>${ShowInValidUserNameString(xhr.responseJSON)}</div>`, // Text that is to be shown in the toast
+                        heading: 'Invalid Accounts', // Optional heading to be shown on the toast
+                        icon: 'error', // Type of toast icon
+                        showHideTransition: 'fade', // fade, slide or plain
+                        allowToastClose: true, // Boolean value true or false
+                        hideAfter: false, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                        stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                        position: 'top-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                        textAlign: 'left',  // Text alignment i.e. left, right or center
+                        loader: true,  // Whether to show loader or not. True by default
+                        loaderBg: '#fff',  // Background color of the toast loader
+                    });
+                }
+                else {
+                    common.showError(xhr.responseText, false);
+                }
+
                 common.closeLoading();
             }
         });
     }
 
     function ValidateInputs() {
-        if (domElements.inputTagUsername.val() === "") {
-            common.showError('Username "' + domElements.inputTagUsername.val() + '" is invalid.');
-            return false;
+        var result = true;
+
+        if (domElements.inputTagUsername.val().trim().length == 0) {
+            common.showError('Username ' + domElements.inputTagUsername.val() + ' is invalid.');
+            result = false;
         }
 
         let inputClass = domElements.txtCustomerClass.val();
 
-        if (inputClass === "") {
-            common.showError('Class "' + domElements.txtCustomerClass.val() + '" is invalid.');
-            return false;
+        if (!inputClass || !parseInt(inputClass)) {
+            common.showError('Class ' + domElements.txtCustomerClass.val() + ' is invalid.');
+            result = false;
         }
 
-        let parseInputClass = parseInt(inputClass);
-
-        if (parseInputClass === undefined) {
-            common.showError('Class "' + domElements.txtCustomerClass.val() + '" is number.');
-
-            return false;
-        }
-
-        return true;
+        return result;
     }
 
     function AddCustomerClass() {
-        console.log(domElements.inputTagUsername.val());
-        if (false && ValidateInputs()) {
-            var url = common.modifyRelativeUrl('/SpecialCustomerClass/AddCustomerClass');
-            var params = {};
-            params.UserName = domElements.inputTagUsername.val();
-            params.custClass = domElements.txtCustomerClass.val();
-            params.isAffectToAss = domElements.btnIsAffectToAssociation.is(':checked');
+        var url = common.modifyRelativeUrl('/SpecialCustomerClass/AddCustomerClass');
+        var params = {};
+        params.UserList = JSON.parse(domElements.inputTagUsername.val()).map(x => { return { Username: x.value, SportID: domElements.ccbSportTypeSingle.val() } });
+        params.Comment = domElements.txtComment.val();
+        params.CustomerClass = domElements.txtCustomerClass.val();
 
-            $.ajax(url, {
-                type: 'POST',
-                data: params,
-                success: function (response) {
-                    if (response !== undefined) {
-                        if (response.ErrorCode === 0) {
-                            common.showSuccess("Add the Customer Class successful");
-                            domElements.divCustomerClass.dialog('close');
-                        } else {
-                            common.showError("Failed! " + response.ErrorMessage);
-                        }
+        $.ajax(url, {
+            type: 'POST',
+            tryCount: 0,
+            retryLimit: 3,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(params),
+            success: function (response) {
+                common.showSuccess('Add the Customer Class successful');
+                LoadGrid(domElements.txtSearchUsername.val(), false);
+
+                // if (response !== undefined) {
+                //     if (response.ErrorCode === 0) {
+                //         domElements.divCustomerClass.dialog('close');
+                //     } else {
+                //         common.showError("Failed! " + response.ErrorMessage);
+                //     }
+                // }
+            },
+            beforeSend: function () {
+                common.showLoading();
+            },
+            complete: function () {
+                common.closeLoading();
+            },
+            error: function (xhr, textStatus, error) {
+                if (textStatus == 'timeout') {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        //try again
+                        $.ajax(this);
+                        return;
                     }
-                },
-                beforeSend: function () {
-                    common.showLoading();
-                },
-                complete: function () {
-                    common.closeLoading();
-                },
-                error: function (err) {
-                    console.log(err);
-                    common.closeLoading();
                 }
-            });
+
+                console.log(xhr);
+                if (xhr.status === 400 && xhr.responseJSON?.Users) {
+                    $.toast({
+                        text: `<div class='toast-content'>${ShowInValidUserNameString(xhr.responseJSON)}</div>`, // Text that is to be shown in the toast
+                        heading: 'Invalid Accounts', // Optional heading to be shown on the toast
+                        icon: 'error', // Type of toast icon
+                        showHideTransition: 'fade', // fade, slide or plain
+                        allowToastClose: true, // Boolean value true or false
+                        hideAfter: false, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                        stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                        position: 'top-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                        textAlign: 'left',  // Text alignment i.e. left, right or center
+                        loader: true,  // Whether to show loader or not. True by default
+                        loaderBg: '#fff',  // Background color of the toast loader
+                    });
+                }
+                else {
+                    common.showError(xhr.responseText, false);
+                }
+
+                common.closeLoading();
+            }
+        });
+    }
+
+    function ShowInValidUserNameString(responseJson) {
+        var users = responseJson.Users;
+        var result = '';
+
+        for (var element of domElements.cbbSportTypeMulti[0].options) {
+            var arr = users.filter(x => x.SportID == element.value && !x.IsValid).map(x => x.Username);
+            if (arr.length > 0) {
+                result += `${element.label}<br>`;
+                result += `&emsp;${arr.join(', ')}<br>`;
+            }
         }
+        return result;
     }
 
     function LoadGrid(username, isSkip) {
+        domElements.inputSelectAll.prop('checked', false);
         var url = common.modifyRelativeUrl('/SpecialCustomerClass/GetCustomerClass?userName=' + username + '&isSkipTracking=' + isSkip);
 
         $.ajax(url, {
@@ -409,20 +485,20 @@
             }
         });
 
-        $(document).off('mouseup').on('mouseup', function (e) {
-            let isOutSiteInput = !domElements.spanAddSpecialCustomerAccountUserName.is(e.target) && domElements.spanAddSpecialCustomerAccountUserName.has(e.target).length === 0;
-            let isTagsFocus = domElements.spanAddSpecialCustomerAccountUserName.find('tags.tagify--focus').length > 0;
-            let isChange = domElements.spanAddSpecialCustomerAccountChangeHidden.text();
-            if (isOutSiteInput && isTagsFocus || isChange === "1") {
-                domElements.txtComment.focus();
-                domElements.spanAddSpecialCustomerAccountUserName.addClass("loading-value");
-                setTimeout(() => {
-                    // ValidateProblemAccountInput('');
-                    domElements.spanAddSpecialCustomerAccountUserName.removeClass("loading-value");
-                    domElements.spanAddSpecialCustomerAccountChangeHidden.text("0");
-                }, 500);
-            }
-        });
+        // $(document).off('mouseup').on('mouseup', function (e) {
+        //     let isOutSiteInput = !domElements.spanAddSpecialCustomerAccountUserName.is(e.target) && domElements.spanAddSpecialCustomerAccountUserName.has(e.target).length === 0;
+        //     let isTagsFocus = domElements.spanAddSpecialCustomerAccountUserName.find('tags.tagify--focus').length > 0;
+        //     let isChange = domElements.spanAddSpecialCustomerAccountChangeHidden.text();
+        //     if (isOutSiteInput && isTagsFocus || isChange === "1") {
+        //         domElements.txtComment.focus();
+        //         domElements.spanAddSpecialCustomerAccountUserName.addClass("loading-value");
+        //         setTimeout(() => {
+        //             // ValidateProblemAccountInput('');
+        //             domElements.spanAddSpecialCustomerAccountUserName.removeClass("loading-value");
+        //             domElements.spanAddSpecialCustomerAccountChangeHidden.text("0");
+        //         }, 500);
+        //     }
+        // });
 
         domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
         // domElements.spanAddProblemAccountUserName.find('tags').attr('tabindex', "1");
@@ -444,11 +520,39 @@
         return userNameList.join();
     }
 
+    function ToggleGridSelectAll(input, table) {
+        var nodes = table.rows({ 'search': 'applied' }).nodes();
+
+        $('input[type="checkbox"][name="chkbx"]', nodes).prop('checked', input.is(":checked"));
+
+        // var valueSelected = {};
+        // domElements.specialCustomerClassTable.DataTable().rows(function (idx, x, node) {
+        //     valueSelected[`${x.Username}_${x.CustID}`] = $(node).find('input[type="checkbox"][name="chkbx"]').prop('checked');
+        // });
+
+        // alert(JSON.stringify(valueSelected))
+        // table.rows(function (idx, x, node) {
+        //     if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+        //         valueSelected[`${x.Username}_${x.CustID}`] = input.is(":checked") ? 'checked' : '';
+        //     }
+        // });
+
+        // nodes.data().toArray().forEach(x => {
+        //     // $(`#${x.SubscriberName}_${x.CustomerClass}_${x.Username.replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&")}`).prop('checked', input.is(":checked"));
+        // });
+    }
+
     function Initial() {
-        SetupMultiselect(domElements.cbbSporType, "Sport Type")
+        SetupMultiselect(domElements.cbbSportTypeMulti, "Sport Type")
         InitGrid();
 
+        domElements.inputSelectAll.on('click', function () {
+            ToggleGridSelectAll(domElements.inputSelectAll, domElements.specialCustomerClassTable.DataTable());
+        });
+
         if (isHostPermission) {
+            LoadGrid(domElements.txtSearchUsername.val(), false);
+
             domElements.btnGenerate.on('click', function () {
                 LoadGrid(domElements.txtSearchUsername.val(), false);
             });
@@ -461,11 +565,12 @@
 
             domElements.btnSave.on('click', function () {
                 if (domElements.formValidate.css('display') != 'none') {
-                    common.showSuccess('Add the Customer Class successful');
-                    AddCustomerClass();
+                    if (ValidateInputs()) {
+                        AddCustomerClass();
+                    }
                 }
                 else {
-                    common.showSuccess('Remove the Customer Class successful');
+                    RemoveCustomerClass(null, true);
                 }
             });
 

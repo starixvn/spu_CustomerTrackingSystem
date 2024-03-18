@@ -307,8 +307,7 @@
                         filter: hue-rotate(240deg);
                     }
 
-                    .col-username
-                    {
+                    .col-username {
                         width: 170px !important;
                         min-width: 170px !important;
                     }
@@ -458,8 +457,7 @@ button#btnGenerate {
 //     }
 // }
 
-.form-group
-{
+.form-group {
     display: flex;
 }
 
@@ -481,4 +479,8 @@ button#btnGenerate {
             height: 30px;
         }
     }
+}
+
+.jq-toast-wrap {
+    max-width: 580px;
 }
