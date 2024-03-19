@@ -11,6 +11,9 @@
         [SpParam(SqlParamName = "ip_Username")]
         public string Username { get; set; }
 
+        [SpParam(SqlParamName = "ip_SportList")]
+        public string SportList { get; set; }
+
         public override string GetSettingKey()
             => "CTS_DC_SpecialCustClass_GetAll";
 

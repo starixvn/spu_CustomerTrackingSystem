@@ -122,7 +122,7 @@
 	</Function>
 
 	<Function name="SpecialCustomerClass">
-		<Setting Key="CTS_DC_SpecialCustClass_GetAll" SpName="CTS_DC_SpecialCustClass_GetAll" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_SpecialCustClass_GetAll" SpName="CTS_DC_SpecialCustClass_GetAll_UAT1" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_SpecialCustClass_Insert" SpName="CTS_DC_SpecialCustClass_Insert_UAT1" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_SpecialCustClass_Remove" SpName="CTS_DC_SpecialCustClass_Remove_UAT1" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_SpecialCustClass_ValidateUsername" SpName="CTS_DC_SpecialCustClass_ValidateUsername_UAT1" DbName="MySQL.CTS_DataCenter.Admin" />

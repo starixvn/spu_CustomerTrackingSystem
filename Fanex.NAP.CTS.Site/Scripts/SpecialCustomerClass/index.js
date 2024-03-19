@@ -197,7 +197,7 @@
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(params),
             success: function (response) {
-                LoadGrid(domElements.txtSearchUsername.val(), true);
+                LoadGrid(true);
                 common.showSuccess('Remove the Customer Class successful');
             },
             beforeSend: function () {
@@ -277,7 +277,7 @@
             data: JSON.stringify(params),
             success: function (response) {
                 common.showSuccess('Add the Customer Class successful');
-                LoadGrid(domElements.txtSearchUsername.val(), false);
+                LoadGrid(false);
             },
             beforeSend: function () {
                 common.showLoading();
@@ -336,12 +336,23 @@
         return result;
     }
 
-    function LoadGrid(username, isSkip) {
+    function LoadGrid(isSkip) {
         domElements.inputSelectAll.prop('checked', false);
-        var url = common.modifyRelativeUrl('/SpecialCustomerClass/GetCustomerClass?userName=' + username + '&isSkipTracking=' + isSkip);
+        var url = common.modifyRelativeUrl('/SpecialCustomerClass/GetCustomerClass');
+
+        var params = {
+            isSkipTracking: isSkip,
+            Username: domElements.txtSearchUsername.val(),
+            SportIds: domElements.cbbSportTypeMulti.val().join()
+        };
 
         $.ajax(url, {
             type: 'GET',
+            tryCount: 0,
+            retryLimit: 3,
+            // dataType: 'json',
+            // contentType: 'application/json; charset=utf-8',
+            data: params,
             success: function (response) {
                 domElements.specialCustomerClassTable.DataTable().clear().rows.add(response.data).draw();
             },
@@ -358,6 +369,26 @@
                 domElements.specialCustomerClassTable.find('tbody').removeClass('loading');
             }
         });
+
+
+        // $.ajax(url, {
+        //     type: 'GET',
+        //     success: function (response) {
+        //         domElements.specialCustomerClassTable.DataTable().clear().rows.add(response.data).draw();
+        //     },
+        //     beforeSend: function () {
+        //         domElements.btnGenerate.prop('disabled', true);
+        //         domElements.specialCustomerClassTable.find('tbody').addClass('loading');
+        //     },
+        //     complete: function () {
+        //         domElements.btnGenerate.prop('disabled', false);
+        //         domElements.specialCustomerClassTable.find('tbody').removeClass('loading');
+        //     },
+        //     error: function (err) {
+        //         console.log(err);
+        //         domElements.specialCustomerClassTable.find('tbody').removeClass('loading');
+        //     }
+        // });
     }
 
     function SetupMultiselect(ccb, selectName, menuWidth = 260, menuHeight = 280) {
@@ -513,15 +544,15 @@
         });
 
         if (isHostPermission) {
-            LoadGrid(domElements.txtSearchUsername.val(), false);
+            LoadGrid(false);
 
             domElements.btnGenerate.on('click', function () {
-                LoadGrid(domElements.txtSearchUsername.val(), false);
+                LoadGrid(false);
             });
 
             domElements.txtSearchUsername.keypress(function (event) {
                 if (event.keyCode === 13) {
-                    LoadGrid(domElements.txtSearchUsername.val(), false);
+                    LoadGrid(false);
                 }
             });
 

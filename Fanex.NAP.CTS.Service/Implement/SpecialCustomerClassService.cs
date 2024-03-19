@@ -71,7 +71,7 @@
 
         public IEnumerable<CustomerClassViewModel> GetSpecialCustomerClass(SearchSpecialCCParamsModel model)
         {
-            var specialCustomers = GetSpecialCustomerClass(model.Username); // continue...
+            var specialCustomers = GetSpecialCustomerClassDataAccess(model);
 
             var result = specialCustomers?.Select(x => new CustomerClassViewModel
             {
@@ -80,7 +80,7 @@
                 SportID = x.SportID,
                 Username = x.Username,
                 SubscriberName = x.SubscriberName,
-                Comment = x.Comment,
+                Comment = x.Remark,
                 CustomerClass = x.CustomerClass,
                 CreatedBy = x.CreatedBy,
                 CreatedDateString = x.CreatedDate != DateTime.MinValue
@@ -250,12 +250,13 @@
             }
         }
 
-        private IEnumerable<CustomerClassModel> GetSpecialCustomerClass(string username)
+        private IEnumerable<CustomerClassModel> GetSpecialCustomerClassDataAccess(SearchSpecialCCParamsModel model)
         {
             var criteria = new GetAllSpecialCustomerClassCriteria()
             {
                 IsGetAllInfo = true,
-                Username = username ?? string.Empty
+                Username = model.Username ?? string.Empty,
+                SportList = model.SportIds
             };
 
             return _repository.Fetch<CustomerClassModel>(criteria);
