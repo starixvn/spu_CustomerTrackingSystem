@@ -83,6 +83,8 @@
         list.push({ 'id': '277', 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'High Risk Punter (77)' });
         list.push({ 'id': '278', 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'High Risk Punter (78)' });
         list.push({ 'id': '1002', 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Pro Punter InActive' });
+        list.push({ 'id': '65', 'indexColor': 5, 'cssClass': 'circle bg-yellow', 'name': 'Early Warning Members' });
+        list.push({ 'id': '105', 'indexColor': 5, 'cssClass': 'circle bg-yellow', 'name': 'Early Warning Members (Losing)' });
 
         list.push({ 'id': '211', 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'Good Member (111)' });
         list.push({ 'id': '212', 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'Good Member (112)' });

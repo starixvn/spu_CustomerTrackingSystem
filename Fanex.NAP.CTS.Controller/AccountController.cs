@@ -1692,6 +1692,7 @@
             var isVVip = false;
             var isProblemAccount = false;
             var isPAProbation = false;
+            var isPADangerous = false;
             var categoryList = new List<CustomerCategoryViewModel>();
             var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
 
@@ -1707,10 +1708,10 @@
                     IsProblemAccount = x.CategoryType == 2
                 }).ToList();
 
-                isVVip = categoryList.Any(x => x.CategoryId == (int)CustomerCategoryID.VVIP);
-                isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
-
-                isPAProbation = isProblemAccount && classification.Any(x => x.IsProbation);
+                isVVip = categoryList.Any(x => x.CategoryId == (int)CustomerCategoryID.VVIP);                
+                isProblemAccount = categoryList.Any(x => x.IsProblemAccount && x.CategoryType != 2);
+                isPADangerous = categoryList.Any(x => x.CategoryType == 2);
+                isPAProbation = isProblemAccount && classification.Any(x => x.IsProbation);               
             }
 
             var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustID);
@@ -1741,6 +1742,7 @@
                 isExcludedTagAssPA,
                 isVVip,
                 isProblemAccount,
+                isPADangerous,
                 isPAProbation,
                 categoryList,
                 data = classificationHistoryList,
