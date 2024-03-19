@@ -12,6 +12,7 @@
     using Fanex.NAP.CTS.Criteria.SpecialCustomerClass;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
+    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SpecialCustomerClass;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
@@ -208,7 +209,8 @@
                 {
                     try
                     {
-                        _rescanBySportService.ResanNormalBySportForNewCustomers(validateUsers.Users.Where(x => x.SportID != 0).Select(x => x.CustID), BySport_FunctionId.Manual);
+                        var rescanUserList = validateUsers.Users.Where(x => x.SportID != 0).Select(x => new RescanNormalBySportListCustModel { CustID = x.CustID, SportID = x.SportID });
+                        _rescanBySportService.ResanNormalBySportForNewCustomers(rescanUserList, BySport_FunctionId.Manual);
                     }
                     catch (Exception ex)
                     {

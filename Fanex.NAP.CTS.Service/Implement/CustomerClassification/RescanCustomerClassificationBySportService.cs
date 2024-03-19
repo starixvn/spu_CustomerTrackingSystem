@@ -2,7 +2,9 @@
 {
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Criteria.CustomerClassification.RescanNormalClassificationBySport;
+    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.CTS.Service.Interface.CustomerClassification;
+    using Newtonsoft.Json;
     using System.Collections.Generic;
     using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -16,11 +18,11 @@
             _repository = new DynamicRepository();
         }
 
-        public void ResanNormalBySportForNewCustomers(IEnumerable<long> custIds, BySport_FunctionId functionId)
+        public void ResanNormalBySportForNewCustomers(IEnumerable<RescanNormalBySportListCustModel> custIds, BySport_FunctionId functionId)
         {
             if (custIds != null && custIds.Any())
             {
-                var custToString = string.Join(",", custIds.Distinct());
+                var custToString = JsonConvert.SerializeObject(custIds.Distinct());
 
                 PreprocesRescanNormalClassificationBySport(custToString, functionId);
             }
@@ -33,7 +35,8 @@
                 var criteria = new PreprocessRescanNormalClassificationBySportCriteria
                 {
                     ListCustId = custIds,
-                    FunctionId = (int)functionId
+                    FunctionId = (int)functionId,
+                    QueryType = (int)BySport_RescanNormalType.Manual
                 };
 
                 _repository.Execute(criteria);

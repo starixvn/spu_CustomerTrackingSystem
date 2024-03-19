@@ -347,6 +347,7 @@
     <Compile Include="CustomerClassification\ProblemAccount\ProblemAccountLosingClassificationModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\UnmarkPAResultModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\UnmarkProblemAccountModel.cs" />
+    <Compile Include="CustomerClassification\RescanCustomerClassification\RescanNormalBySportListCustModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\RescanPADangerousModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\RescanResultModel.cs" />
     <Compile Include="CustomerClassification\Robot\RobotInsetViewEntity.cs" />

@@ -92,6 +92,6 @@
 	</Function>
 
 	<Function name="RescanNormalClassificationBySport">
-		<Setting Key="CTS_BySportNormalClassification_RescanNormal_Preprocess" SpName="CTS_BySportNormalClassification_RescanNormal_Preprocess" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
+		<Setting Key="CTS_BySportNormalClassification_RescanNormal_Preprocess" SpName="CTS_BySportNormalClassification_RescanNormal_Preprocess_UAT1" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
 	</Function>
 </Functions>
