@@ -12,7 +12,7 @@
 
         void InsertCustomerClass(AddSpecialCCParamsModel model, ValidateSpecialCCResultViewModel validateSpecialCC, int createdBy);
 
-        void RemoveCustomerClass(RemoveSpecialCCParamsModel model, ValidateSpecialCCResultViewModel validateUsers, int createdBy);
+        void RemoveCustomerClass(RemoveSpecialCCParamsModel model, ValidateSpecialCCResultViewModel validateUsers, int removedBy);
 
         ValidateSpecialCCResultViewModel ValidateSpecialCC(FunctionValidateSpecialCC functionID, List<UserListSpecialCCParamsModel> userList);
     }

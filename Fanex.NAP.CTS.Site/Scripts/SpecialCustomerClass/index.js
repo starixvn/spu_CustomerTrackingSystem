@@ -100,7 +100,7 @@
                                 $('td #sub-icon').addClass('none-pointer');
                                 let html = "<div class='popup - content'>Do you want remove <strong>" + row.Username + "</strong> from Special Customer Class list? </div>";
 
-                                userList = [{ Username: row.Username, SportID: 0 }];
+                                userList = [{ Username: row.Username, SportID: row.SportID }];
                                 domElements.txtComment.val("");
 
                                 domElements.divAddProblemAccount.dialog({
@@ -155,7 +155,7 @@
                 userList = [];
                 domElements.specialCustomerClassTable.DataTable().rows(function (idx, x, node) {
                     if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
-                        userList.push({ Username: x.Username, SportID: 0 });
+                        userList.push({ Username: x.Username, SportID: x.SportID });
                     }
                 });
 
@@ -199,6 +199,7 @@
             success: function (response) {
                 LoadGrid(true);
                 common.showSuccess('Remove the Customer Class successful');
+                domElements.divAddProblemAccount.dialog('close');
             },
             beforeSend: function () {
                 common.showLoading();
@@ -277,6 +278,7 @@
             data: JSON.stringify(params),
             success: function (response) {
                 common.showSuccess('Add the Customer Class successful');
+                domElements.divAddProblemAccount.dialog('close');
                 LoadGrid(false);
             },
             beforeSend: function () {
@@ -369,26 +371,6 @@
                 domElements.specialCustomerClassTable.find('tbody').removeClass('loading');
             }
         });
-
-
-        // $.ajax(url, {
-        //     type: 'GET',
-        //     success: function (response) {
-        //         domElements.specialCustomerClassTable.DataTable().clear().rows.add(response.data).draw();
-        //     },
-        //     beforeSend: function () {
-        //         domElements.btnGenerate.prop('disabled', true);
-        //         domElements.specialCustomerClassTable.find('tbody').addClass('loading');
-        //     },
-        //     complete: function () {
-        //         domElements.btnGenerate.prop('disabled', false);
-        //         domElements.specialCustomerClassTable.find('tbody').removeClass('loading');
-        //     },
-        //     error: function (err) {
-        //         console.log(err);
-        //         domElements.specialCustomerClassTable.find('tbody').removeClass('loading');
-        //     }
-        // });
     }
 
     function SetupMultiselect(ccb, selectName, menuWidth = 260, menuHeight = 280) {

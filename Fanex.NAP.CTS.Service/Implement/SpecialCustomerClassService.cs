@@ -113,106 +113,114 @@
             var insertCTSResult = _repository.Fetch<ResultSpecialCCViewModel>(criteria);
 
             // PushCC
-            Parallel.Invoke(() =>
-            {
-                try
+            Parallel.Invoke(
+                () =>
                 {
-                    PushDataToExternal(insertCTSResult.Where(x => x.SportID == 0));
+                    try
+                    {
+                        PushDataToExternal(insertCTSResult.Where(x => x.SportID == 0));
+                    }
+                    catch (Exception ex)
+                    {
+                        var logMessage = new LogMessage(ex.Message)
+                              .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                              .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                        LogService.Error(logMessage);
+
+                        throw;
+                    }
                 }
-                catch (Exception ex)
+                ,
+                () =>
                 {
-                    var logMessage = new LogMessage(ex.Message)
-                          .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                          .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+                    try
+                    {
+                        PushCCBySportToMainDB(insertCTSResult.Where(x => x.SportID != 0));
+                    }
+                    catch (Exception ex)
+                    {
+                        var logMessage = new LogMessage(ex.Message)
+                              .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                              .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
-                    LogService.Error(logMessage);
+                        LogService.Error(logMessage);
 
-                    throw;
-                }
-            }
-            ,
-            () =>
-            {
-                try
-                {
-                    PushCCBySportToMainDB(insertCTSResult.Where(x => x.SportID != 0));
-                }
-                catch (Exception ex)
-                {
-                    var logMessage = new LogMessage(ex.Message)
-                          .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                          .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                    LogService.Error(logMessage);
-
-                    throw;
-                }
-            });
+                        throw;
+                    }
+                });
         }
 
-        public void RemoveCustomerClass(RemoveSpecialCCParamsModel model, ValidateSpecialCCResultViewModel validateUsers, int createdBy)
+        public void RemoveCustomerClass(RemoveSpecialCCParamsModel model, ValidateSpecialCCResultViewModel validateUsers, int removedBy)
         {
             var userList = validateUsers.Users.Select(x => new RemoveUserListSpecialCCModel
             {
                 CTSCustID = x.CTSCustID,
                 CustID = x.CustID,
                 SportID = x.SportID,
+                SubscriberID = x.SubscriberID,
             });
 
             var criteria = new RemoveSpecialCustomerClassCriteria()
             {
                 ListCust = JsonConvert.SerializeObject(userList),
                 Comment = model.Comment,
-                CreatedBy = createdBy
+                RemovedBy = removedBy
             };
 
             _repository.Execute(criteria);
 
             // Rescan
-            Parallel.Invoke(() =>
-            {
-                try
+            Parallel.Invoke(
+                () =>
                 {
-                    _rescanGeneralService.RescanCustomerClassification(new RescanCustClassificationModel
+                    try
                     {
-                        CustIds = validateUsers.Users.Where(x => x.SportID == 0).Select(x => x.CustID),
-                        IsRescanPA = true,
-                        IsPushCCToSoon88 = true,
-                        IsUpdateDangerToMainDB = true,
-                        IsToQueue = false,
-                        FunctionId = FunctionId.RemoveSpecialCCWeb,
-                        ServiceName = "RemoveSpecialCustomer"
-                    });
+                        var generalCustRescan = validateUsers.Users.Where(x => x.SportID == 0).Select(x => x.CustID);
+
+                        if (generalCustRescan != null && generalCustRescan.Any())
+                        {
+                            _rescanGeneralService.RescanCustomerClassification(new RescanCustClassificationModel
+                            {
+                                CustIds = generalCustRescan,
+                                IsRescanPA = true,
+                                IsPushCCToSoon88 = true,
+                                IsUpdateDangerToMainDB = true,
+                                IsToQueue = false,
+                                FunctionId = FunctionId.RemoveSpecialCCWeb,
+                                ServiceName = "RemoveSpecialCustomer"
+                            });
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        var logMessage = new LogMessage(ex.Message)
+                              .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                              .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                        LogService.Error(logMessage);
+
+                        throw;
+                    }
                 }
-                catch (Exception ex)
+                ,
+                () =>
                 {
-                    var logMessage = new LogMessage(ex.Message)
-                          .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                          .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+                    try
+                    {
+                        _rescanBySportService.ResanNormalBySportForNewCustomers(validateUsers.Users.Where(x => x.SportID != 0).Select(x => x.CustID), BySport_FunctionId.Manual);
+                    }
+                    catch (Exception ex)
+                    {
+                        var logMessage = new LogMessage(ex.Message)
+                              .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                              .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
-                    LogService.Error(logMessage);
+                        LogService.Error(logMessage);
 
-                    throw;
-                }
-            }
-            ,
-            () =>
-            {
-                try
-                {
-                    _rescanBySportService.ResanNormalBySportForNewCustomers(validateUsers.Users.Where(x => x.SportID != 0).Select(x => x.CustID), BySport_FunctionId.Manual);
-                }
-                catch (Exception ex)
-                {
-                    var logMessage = new LogMessage(ex.Message)
-                          .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                          .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                    LogService.Error(logMessage);
-
-                    throw;
-                }
-            });
+                        throw;
+                    }
+                });
         }
         #endregion
 
@@ -238,7 +246,7 @@
 
         private void PushCCBySportToMainDB(IEnumerable<ResultSpecialCCViewModel> custInfoParams)
         {
-            if (custInfoParams != null || custInfoParams.Any())
+            if (custInfoParams != null && custInfoParams.Any())
             {
                 var custInfos = custInfoParams.Select(x => new InsertNormalAccountCustInfoModel
                 {

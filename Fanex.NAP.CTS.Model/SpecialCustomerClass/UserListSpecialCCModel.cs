@@ -21,5 +21,7 @@
         public long CustID { get; set; }
 
         public int SportID { get; set; }
+
+        public int SubscriberID { get; set; }
     }
 }

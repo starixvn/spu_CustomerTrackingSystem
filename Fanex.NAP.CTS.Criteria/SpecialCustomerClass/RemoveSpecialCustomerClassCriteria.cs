@@ -11,8 +11,8 @@
         [SpParam(SqlParamName = "ip_Remark")]
         public string Comment { get; set; }
 
-        [SpParam(SqlParamName = "ip_CreatedBy")]
-        public int CreatedBy { get; set; }
+        [SpParam(SqlParamName = "ip_RemovedBy")]
+        public int RemovedBy { get; set; }
 
         public override string GetSettingKey()
             => "CTS_DC_SpecialCustClass_Remove";
