@@ -1711,7 +1711,7 @@
                 isVVip = categoryList.Any(x => x.CategoryId == (int)CustomerCategoryID.VVIP);                
                 isProblemAccount = categoryList.Any(x => x.IsProblemAccount && x.CategoryType != 2);
                 isPADangerous = categoryList.Any(x => x.CategoryType == 2);
-                isPAProbation = isProblemAccount && classification.Any(x => x.IsProbation);               
+                isPAProbation = classification.Any(x => x.IsProbation && x.CategoryType == 2);
             }
 
             var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustID);
@@ -2253,6 +2253,7 @@
                         {
                             CustIds = new List<long> { model.CustId },
                             IsRescanPA = true,
+                            IsRescanPADangerous = true,
                             IsToQueue = (model.RoleId != 1 && !model.IsAffectToAllDownlines), // add to queue for case SMA and not checking affect to downline to affect PA for downline
                             IsPushCCToSoon88 = true,
                             IsUpdateDangerToMainDB = true,

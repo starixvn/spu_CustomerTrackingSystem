@@ -160,8 +160,7 @@
       #divAddSubscriber .group-border .mbform .ischeckInput {
         display: flex;
         align-items: flex-end;
-        position: relative;
-        justify-content: space-between; }
+        position: relative; }
         #divAddSubscriber .group-border .mbform .ischeckInput .container-checkbox {
           margin-bottom: 1rem;
           margin-left: 1rem; }

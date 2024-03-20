@@ -928,14 +928,12 @@
     background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent); }
 
 .yellow-light {
-  background-color: #FDB703;
+  background-color: #FEDB81;
   background-size: 5px 5px;
-  background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
   font-weight: bold; }
   .yellow-light:after {
-    background-color: #FDB703;
-    background-size: 5px 5px;
-    background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent); }
+    background-color: #FEDB81;
+    background-size: 5px 5px; }
 
 .green-line {
   background-color: #2BC769;
@@ -978,6 +976,10 @@
       background-color: #FDB703; }
       .content-info .header-info .bg-yellow:after {
         background-color: #FDB703; }
+    .content-info .header-info .bg-yellow-light {
+      background-color: #FEDB81; }
+      .content-info .header-info .bg-yellow-light:after {
+        background-color: #FEDB81; }
     .content-info .header-info .bg-green {
       background-color: #2BC769; }
       .content-info .header-info .bg-green:after {
@@ -990,6 +992,8 @@
       border-bottom: 2px solid #2BC769; }
     .content-info .header-info.border-yellow {
       border-bottom: 2px solid #FDB703; }
+    .content-info .header-info.border-yellow-light {
+      border-bottom: 2px solid #FEDB81; }
     .content-info .header-info .header-username {
       display: flex;
       position: relative;

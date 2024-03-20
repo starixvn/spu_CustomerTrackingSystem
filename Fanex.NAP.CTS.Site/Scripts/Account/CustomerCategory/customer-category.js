@@ -404,8 +404,8 @@
                     .removeClass('border-red').removeClass('border-lightred').removeClass('border-green');
 
                 if (isPAProbation) {
-                    $('#divHeaderUsername').addClass('bg-yellow');//.addClass('yellow-light');
-                    $('#divHeaderInfo').addClass('border-yellow');
+                    $('#divHeaderUsername').addClass('bg-yellow-light');
+                    $('#divHeaderInfo').addClass('border-yellow-light');
                 } else {
                     $('#divHeaderUsername').addClass('bg-yellow');
                     $('#divHeaderInfo').addClass('border-yellow');

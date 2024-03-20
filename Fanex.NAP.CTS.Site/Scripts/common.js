@@ -84,7 +84,7 @@
         list.push({ 'id': '278', 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'High Risk Punter (78)' });
         list.push({ 'id': '1002', 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Pro Punter InActive' });
         list.push({ 'id': '65', 'indexColor': 5, 'cssClass': 'circle bg-yellow', 'name': 'Early Warning Members' });
-        list.push({ 'id': '105', 'indexColor': 5, 'cssClass': 'circle bg-yellow', 'name': 'Early Warning Members (Losing)' });
+        list.push({ 'id': '105', 'indexColor': 5, 'cssClass': 'circle bg-yellow-light', 'name': 'Early Warning Members (Losing)' });
 
         list.push({ 'id': '211', 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'Good Member (111)' });
         list.push({ 'id': '212', 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'Good Member (112)' });
@@ -462,8 +462,8 @@
     this.renderCategoryColor = function (cell, row) {
         let indexColorForDiv = 0;
 
-        if (row.IsProblemAccount) {
-            indexColorForDiv = row.IsPAProbation ? 6 : 5;
+        if (row.IsProblemAccount && row.CategoryType != 2) {
+            indexColorForDiv = row.IsPAProbation ? 7 : 6;
         } else {
             let categoryColorCached = $this.categoryColor();
             let categoryList = (row.CategoryIds != undefined) ? row.CategoryIds.split(',') : [];
@@ -493,9 +493,16 @@
                 $(cell).addClass('yellow-line');
                 break;
             case 5:
-                $(cell).addClass('td-bg-red');
+                if (row.IsPAProbation) {
+                    $(cell).addClass('yellow-light');         
+                } else {
+                    $(cell).addClass('td-bg-yellow');         
+                }
                 break;
             case 6:
+                $(cell).addClass('td-bg-red');
+                break;
+            case 7:
                 $(cell).addClass('td-bg-lightred');
                 break;
             default:
