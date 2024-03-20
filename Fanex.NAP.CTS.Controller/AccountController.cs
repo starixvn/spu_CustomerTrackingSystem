@@ -1849,6 +1849,10 @@
                 case (int)ClassificationSourceType.HighRiskPunter78:
                     spanReason += $"Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Desktop Percent: {twDesktopTicket} | Reject Percent: {twTicketRejectRate}";
                     break;
+                case (int)ClassificationSourceType.EarlyWarningMembers:
+                case (int)ClassificationSourceType.EarlyWarningMembersLosing:
+                    spanReason += $"{cc.Remark} | Turnover: {turnOver} | Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount}";
+                    break;
 
                 case (int)ClassificationSourceType.NormalAccountInactive:
                 case (int)ClassificationSourceType.ProPunterInactive:
@@ -1887,9 +1891,8 @@
                         if (!string.IsNullOrEmpty(cc.Remark))
                             spanReason += $" | {cc.Remark}";
                     }
-
                     break;
-
+            
                 default:
                     break;
             }

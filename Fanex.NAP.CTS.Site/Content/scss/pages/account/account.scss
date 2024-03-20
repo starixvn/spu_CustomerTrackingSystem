@@ -239,6 +239,19 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 }
 
+.yellow-light {
+    background-color: $account-high;
+    background-size: 5px 5px;
+    background-image: linear-gradient( -45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+    font-weight: bold;
+
+    &:after {
+        background-color: $account-high;
+        background-size: 5px 5px;
+        background-image: linear-gradient( -45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+    }
+}
+
 .green-line {
     background-color: $account-limited;
     background-size: 5px 5px;
