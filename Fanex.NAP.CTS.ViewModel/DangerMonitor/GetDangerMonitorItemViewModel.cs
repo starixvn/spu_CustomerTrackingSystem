@@ -35,6 +35,40 @@
             SportName = sportBettype.SportName;
         }
 
+        public GetDangerMonitorItemViewModel(DangerMMTicketInfoViewModel matchSummary, DangerMonitorBetTypeViewModel sportBettype)
+        {
+            MatchID = matchSummary.MatchId;
+
+            TotalAmtHome = matchSummary.TotalAmountHome;
+            TotalAmtAway = matchSummary.TotalAmountAway;
+            TotalTicketHome = matchSummary.TotalTicketHome;
+            TotalTicketAway = matchSummary.TotalTicketAway;
+            Market = matchSummary.LiveIndicator;
+            BettypeID = matchSummary.Bettype;
+            BetID = matchSummary.BetID;
+            BetChoiceType = matchSummary.BetChoiceType;
+
+            HomeID = matchSummary.homeid;
+            HomeName = matchSummary.HomeName;
+            AwayID = matchSummary.AwayId;
+            AwayName = matchSummary.AwayName;
+            LeagueID = matchSummary.LeagueId;
+            LeagueName = matchSummary.LeagueName;
+            SportType = matchSummary.SportType;
+            LeagueGroupID = matchSummary.LeagueGroupID;
+            EventDate = matchSummary.EventDate;
+            MatchSection = matchSummary.MatchSection;
+            KickOffTime = matchSummary.GlobalShowTime;
+
+            BettypeName = sportBettype.BetTypeName;
+            //BetID = sportBettype.BetID;
+            SportName = sportBettype.SportName;
+
+            // LeagueGroupID 
+            // EventStatus, LiveHomeScore, LiveAwayScore -- remove
+        }
+
+
         public int BetChoiceType { get; set; }
 
         public long MatchID { get; set; }
@@ -54,6 +88,8 @@
         public int Market { get; set; }
 
         public DateTime EventDate { get; set; }
+
+        public int LeagueGroupID { get; set; }
 
         public int SportType { get; set; }
 

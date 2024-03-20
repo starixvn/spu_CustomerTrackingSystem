@@ -8,19 +8,22 @@
 
         public DangerMonitorSearchModel(DangerMonitorSearchModel model)
         {
-            FromDate = model.FromDate;
-            ToDate = model.ToDate;
+            DangerType = model.DangerType;
             DangerList = model.DangerList;
             Sports = model.Sports;
             Event = model.Event;
             Market = model.Market;
             MatchSection = model.MatchSection;
             BetTypes = model.BetTypes;
+            SabaLeagueGroup = model.SabaLeagueGroup;
+            ExcludeLeagueGroup = model.ExcludeLeagueGroup;
         }
 
         public DateTime? FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }
+
+        public int DangerType { get; set; }
 
         public string DangerList { get; set; }
 
@@ -34,10 +37,10 @@
 
         public string BetTypes { get; set; }
 
-        public long? LastMatchID { get; set; }
+        public int DBSource { get; set; }
+        
+        public int? SabaLeagueGroup { get; set; }
 
-        public string LastMatchSection { get; set; }
-
-        public string LastEventDate { get; set; }
+        public string ExcludeLeagueGroup { get; set; }
     }
 }

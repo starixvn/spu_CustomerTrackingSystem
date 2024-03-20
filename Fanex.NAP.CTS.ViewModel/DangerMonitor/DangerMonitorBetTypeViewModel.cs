@@ -2,9 +2,15 @@
 {
     public class DangerMonitorBetTypeViewModel
     {
+        public int SportGroup { get; set; }
+
         public int SportType { get; set; }
 
         public string SportName { get; set; }
+
+        public string SportNameDisplay { get; set; }
+
+        public int? LeagueGroupID { get; set; }
 
         public int BetTypeID { get; set; }
 

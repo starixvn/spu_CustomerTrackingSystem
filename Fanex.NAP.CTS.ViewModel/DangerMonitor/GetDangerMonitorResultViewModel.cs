@@ -6,11 +6,5 @@
     public class GetDangerMonitorResultViewModel
     {
         public IEnumerable<GetDangerMonitorItemViewModel> Items { get; set; }
-
-        public long? LastMatchID { get; set; }
-
-        public string LastMatchSection { get; set; }
-
-        public string LastEventDate { get; set; }
     }
 }

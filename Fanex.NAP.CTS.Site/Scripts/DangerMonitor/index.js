@@ -40,19 +40,57 @@
 
     function FetchSports() {
         if (sportBetType) {
-            domElements.cbbSport.empty();
+            let data = {
+                MainSport: {
+                    Items: {}
+                },
+                VirtualSport: {
+                    Items: {}
+                },
+                OtherSport: {
+                    Items: {}
+                }
+            }
 
-            let sportList = {};
-            sportBetType.map(x => sportList[x.SportType] = ({ Name: x.SportName, IsSelected: x.SportType == 1 }));
+            sportBetType.filter(x => x.SportGroup == 1).map(x => data.MainSport.Items[`${x.SportType}_${x.LeagueGroupID}`] = ({ Name: x.SportNameDisplay, IsSelected: x.SportType == 1 && x.LeagueGroupID == null, LeagueGroupID: x.LeagueGroupID, SportType: x.SportType }))
 
-            Object.keys(sportList).forEach(index => {
-                domElements.cbbSport.append(`<option ${sportList[index].IsSelected ? 'selected' : ''} value="${index}">${sportList[index].Name}</option>`);
-            });
+            sportBetType.filter(x => x.SportGroup == 2).map(x => data.VirtualSport.Items[`${x.SportType}_${x.LeagueGroupID}`] = ({ Name: x.SportNameDisplay, IsSelected: x.SportType == 1 && x.LeagueGroupID == null, LeagueGroupID: x.LeagueGroupID, SportType: x.SportType }))
+
+            sportBetType.filter(x => x.SportGroup == 3).map(x => data.OtherSport.Items[`${x.SportType}_${x.LeagueGroupID}`] = ({ Name: x.SportNameDisplay, IsSelected: x.SportType == 1 && x.LeagueGroupID == null, LeagueGroupID: x.LeagueGroupID, SportType: x.SportType }))
+
+            let sportGroupSelector = domElements.cbbSport.empty();
+
+            if (data.MainSport.Items && Object.keys(data.MainSport.Items).length !== 0)
+                sportGroupSelector.append(BuildOptgroupSport(1, "Main Sport", data.MainSport.Items));
+
+            if (data.VirtualSport.Items && Object.keys(data.VirtualSport.Items).length !== 0)
+                sportGroupSelector.append(BuildOptgroupSport(2, "Virtual Sport", data.VirtualSport.Items));
+
+            if (data.OtherSport.Items && Object.keys(data.OtherSport.Items).length !== 0)
+                sportGroupSelector.append(BuildOptgroupSport(3, "Other Sport", data.OtherSport.Items));
+
+            // let sportList = {};
+            // sportBetType.map(x => sportList[`${x.SportType}_${x.LeagueGroupID}`] = ({ Name: x.SportNameDisplay, IsSelected: x.SportType == 1 && x.LeagueGroupID == null, LeagueGroupID: x.LeagueGroupID, SportType: x.SportType }));
+
+            // Object.keys(sportList).forEach(index => {
+            //     domElements.cbbSport.append(`<option ${sportList[index].IsSelected ? 'selected' : ''} value="${index}">${sportList[index].Name}</option>`);
+            // });
 
             domElements.cbbSport.multiselect("refresh");
         }
 
         FetchBetTypes();
+    }
+
+    function BuildOptgroupSport(optgroupValue, optgroupName, sportList) {
+        let optgroup = `<optgroup label="${optgroupName}" SportType=${optgroupValue}>`;
+        Object.keys(sportList).forEach(index => {
+            optgroup += `<option ${sportList[index].IsSelected ? 'selected' : ''} value="${index}">${sportList[index].Name}</option>`;
+        })
+
+        optgroup += "</optgroup>";
+
+        return optgroup;
     }
 
     function FetchBetTypes() {
@@ -62,7 +100,7 @@
             let sportSelectedList = domElements.cbbSport.val();
             bettypeList = {};
 
-            sportBetType.filter(x => sportSelectedList.includes(x.SportType.toString()))
+            sportBetType.filter(x => sportSelectedList.includes(`${x.SportType}_${x.LeagueGroupID}`))
                 .map(x =>
                     bettypeList[`${x.BetTypeID}_${x.BetID}`] =
                     ({
@@ -143,6 +181,8 @@
 
         let dangerSelector = domElements.cbbDgr.empty();
 
+        dangerSelector.append('<option></option>');
+
         if (data.Danger3.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(3, "Other Sports", data.Danger3.DangerItems));
 
         if (data.Danger2.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(2, "ABI", data.Danger2.DangerItems));
@@ -152,8 +192,6 @@
         if (data.Danger4.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(4, "Basketball", data.Danger4.DangerItems));
 
         if (data.Danger5.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(5, "E-Sports", data.Danger5.DangerItems));
-
-        domElements.cbbDgr.multiselect('refresh');
     }
 
     function BuildOptgroup(optgroupValue, optgroupName, items) {
@@ -172,8 +210,9 @@
             let data = {
                 FromDate: domElements.dpkFromDate.val(),
                 ToDate: !domElements.dpkToDate.val().includes(dateEmptyString) ? domElements.dpkToDate.val() : null,
-                DangerList: JSON.stringify(GetDangerList()),
-                Sports: domElements.cbbSport.val().join(),
+                DangerList: GetDangerSelected(1),
+                DangerType: GetDangerSelected(0),
+                Sports: GetSportList(),
                 Event: domElements.txtEvent.val().trim().toUpperCase(),
                 Market: domElements.cbbMarket.val() == "" ? "0,1" : domElements.cbbMarket.val(),
                 MatchSection: domElements.cbbMatchSection.val().join(),
@@ -184,10 +223,7 @@
                     "BetChoiceAway": bettypeList[x].BetChoiceType == 2 ? bettypeList[x].BetChoiceAway : undefined,
                     "BetID": bettypeList[x].BetID
                 }))),
-                isSkipTracking: isSkipTracking,
-                LastMatchID: lastMatchID,
-                LastMatchSection: lastMatchSection ?? domElements.cbbMatchSection.val()[0],
-                LastEventDate: lastEventDate
+                isSkipTracking: isSkipTracking
             };
 
             xhr = $.ajax(common.modifyRelativeUrl('DangerMonitor/GetDangerMonitor'), {
@@ -205,16 +241,19 @@
                         domElements.tblMonitor.DataTable().rows.add(response?.data?.Items).draw(false);
                     }
 
-                    if (response?.data?.LastMatchSection) {
-                        GetDangerMonitor(response?.data?.LastMatchID, response?.data?.LastEventDate, response?.data?.LastMatchSection, false);
-                        if (response?.data?.Items.length > 0) {
-                            domElements.tblMonitor.find('tbody').removeClass('loading hide');
-                        }
-                    }
-                    else {
-                        domElements.tblMonitor.find('tbody').removeClass('loading hide');
-                        $('.loading').addClass('hide');
-                    }
+                    domElements.tblMonitor.find('tbody').removeClass('loading hide');
+                    $('.loading').addClass('hide');
+
+                    // if (response?.data?.LastMatchSection) {
+                    //     // GetDangerMonitor(response?.data?.LastMatchID, response?.data?.LastEventDate, response?.data?.LastMatchSection, false);
+                    //     if (response?.data?.Items.length > 0) {
+                    //         domElements.tblMonitor.find('tbody').removeClass('loading hide');
+                    //     }
+                    // }
+                    // else {
+                    //     domElements.tblMonitor.find('tbody').removeClass('loading hide');
+                    //     $('.loading').addClass('hide');
+                    // }
                 },
                 error: function (xhr, textStatus, error) {
                     domElements.tblMonitor.find('tbody').removeClass('loading');
@@ -252,20 +291,10 @@
             })
             .datepicker("setDate", moment().toDate());
 
-        domElements.cbbDgr.multiselect({
-            menuWidth: 260,
-            menuHeight: 260,
-            selectedText: "# of # selected",
-            noneSelectedText: `Select Dgr`,
-            enableClickableOptGroups: true,
-            includeSelectAllOption: true,
-            groupsCollapsable: true,
-            optGroupChecked: true
-        }).multiselectfilter({
-            width: 150,
-            placeholder: '',
-            label: ''
-        });
+        domElements.cbbDgr.select2(
+            {
+                placeholder: "Select Dgr",
+            });
 
         domElements.cbbSport.multiselect({
             menuWidth: 260,
@@ -332,11 +361,12 @@
 
         domElements.btnGenerate.on('click', function () {
             if (ValidateRangeDate()) {
-                dangerListSelected.Danger1 = GetDangerListById(1);
-                dangerListSelected.Danger2 = GetDangerListById(2);
-                dangerListSelected.Danger3 = GetDangerListById(3);
-                dangerListSelected.Danger4 = GetDangerListById(4);
-                dangerListSelected.Danger5 = GetDangerListById(5);
+                var dangerSelected = GetDangerListById();
+                dangerListSelected.Danger1 = dangerSelected[1];
+                dangerListSelected.Danger2 = dangerSelected[2];
+                dangerListSelected.Danger3 = dangerSelected[3];
+                dangerListSelected.Danger4 = dangerSelected[4];
+                dangerListSelected.Danger5 = dangerSelected[5];
 
                 if (!dataTable) {
                     dataTable = GenerateGrid();
@@ -427,11 +457,11 @@
                             obj.BetID,
                             obj.SportType,
                             obj.KOTime,
-                            dangerListSelected.Danger1.join(),
-                            dangerListSelected.Danger2.join(),
-                            dangerListSelected.Danger3.join(),
-                            dangerListSelected.Danger4.join(),
-                            dangerListSelected.Danger5.join());
+                            dangerListSelected.Danger1,
+                            dangerListSelected.Danger2,
+                            dangerListSelected.Danger3,
+                            dangerListSelected.Danger4,
+                            dangerListSelected.Danger5);
 
                         return '<a class="click-view-details" href="DangerMonitor/Detail?' + para + '" target="_blank">' + obj.MatchName + '</a>';
                     }
@@ -470,17 +500,30 @@
         });
     }
 
-    function GetDangerList() {
-        return domElements.cbbDgr.val().map((x) => {
-            let key = x.split('-')[0];
-            let val = Number(x.split('-')[1]);
-            return { [`Danger${key}`]: val };
-        });
+    function GetSportList() {
+        return domElements.cbbSport.val().map((x) => x.split('_')[0]).join();
     }
 
-    function GetDangerListById(id) {
-        return domElements.cbbDgr.val().filter(x => x.split('-')[0] == id)
-            .map((x) => Number(x.split('-')[1]));
+    function GetDangerSelected(pos) {
+        if (domElements.cbbDgr.val()) {
+            var dangerString = domElements.cbbDgr.val().split('-');
+
+            return dangerString[pos];
+        }
+
+        return undefined;
+    }
+
+    function GetDangerListById() {
+        var result = {};
+        if (domElements.cbbDgr.val()) {
+            var dangerString = domElements.cbbDgr.val().split('-');
+
+            result[dangerString[0]] = Number(dangerString[1]);
+        }
+
+
+        return result;
     }
 
     function ValidateRangeDate() {

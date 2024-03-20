@@ -3,6 +3,7 @@
     using Fanex.NAP.CTS.Model.DangerMonitor;
     using Fanex.NAP.CTS.ViewModel.DangerMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
+    using System;
     using System.Collections.Generic;
 
     public interface IDangerMonitorService
@@ -10,6 +11,8 @@
         IEnumerable<DangerMonitorBetTypeViewModel> GetSportBettypesFromCache(bool isGetNew = false);
 
         GetDangerMonitorResultViewModel GetDangerMonitor(DangerMonitorSearchModel filter);
+
+        DangerMMBalanceUpMoveBetViewModel GetDangerMMDateRange(DateTime? fromDate, DateTime? toDate);
 
         byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath);
 
