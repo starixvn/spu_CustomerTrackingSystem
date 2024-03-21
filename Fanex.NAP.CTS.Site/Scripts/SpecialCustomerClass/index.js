@@ -121,6 +121,12 @@
                     }
                 }
             ],
+            drawCallback: function(settings){
+                var nodes = domElements.specialCustomerClassTable.DataTable().rows({ 'search': 'applied' }).nodes();
+
+                var isSelectAll = $('input[type="checkbox"][name="chkbx"]:not(:hidden)', nodes).toArray().filter((item) => !item.checked).length <= 0;
+                domElements.inputSelectAll.prop('checked', isSelectAll);
+            }
         });
 
         domElements.btnAddCustomerClass = $('#btnAdd');
@@ -514,7 +520,7 @@
     function ToggleGridSelectAll(input, table) {
         var nodes = table.rows({ 'search': 'applied' }).nodes();
 
-        $('input[type="checkbox"][name="chkbx"]', nodes).prop('checked', input.is(":checked"));
+        $('input[type="checkbox"][name="chkbx"]:not(:hidden)', nodes).prop('checked', input.is(":checked"));
     }
 
     function Initial() {
