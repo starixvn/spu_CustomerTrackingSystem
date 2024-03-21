@@ -29,5 +29,11 @@
         public DateTime LastModifiedDate { get; set; }
 
         public string CreatedBy { get; set; }
+
+        public string Remark { get; set; }
+
+        public int SourceTypeID { get; set; }
+
+        public string SourceTypeName { get; set; }
     }
 }

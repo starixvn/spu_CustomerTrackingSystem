@@ -113,6 +113,8 @@ namespace Fanex.NAP.CTS.Model
 
     public enum SourceTypeID
     {
+        SpecialCustomerClass_Add = 10,
+        SpecialCustomerClass_Remove = 12,
         Classification_PAMarkDirectly = 31,
         Classification_PAAffectedByUplines = 32,
         Classification_PAUnmarkDirectly = 33,

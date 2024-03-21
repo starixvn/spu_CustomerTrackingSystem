@@ -42,8 +42,6 @@
                     next: "",
                     previous: ""
                 },
-                // info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
-                // infoEmpty: "",
                 zeroRecords: "There's no data"
             },
             infoCallback: function (settings, start, end, max, total, pre) {
@@ -358,8 +356,6 @@
             type: 'GET',
             tryCount: 0,
             retryLimit: 3,
-            // dataType: 'json',
-            // contentType: 'application/json; charset=utf-8',
             data: params,
             success: function (response) {
                 domElements.specialCustomerClassTable.DataTable().clear().rows.add(response.data).draw();
@@ -448,8 +444,6 @@
                     let currentTag = $(e.target).parent();
 
                     ResetMaxTag();
-                    // ValidateProblemAccountInput(currentTag.text().trim());
-                    // EnableButtonAdd();
                 });
 
                 domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text(maxCountTags - 1);
@@ -461,11 +455,8 @@
                     let currentTag = $(e.target).parent();
 
                     ResetMaxTag();
-                    // ValidateProblemAccountInput(currentTag.text().trim());
-                    // EnableButtonAdd();
                 });
             }
-            // domElements.btnSave.prop('disabled', true);
         }
 
         domElements.inputTagUsername.tagify({
