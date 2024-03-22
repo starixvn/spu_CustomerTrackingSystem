@@ -41,21 +41,24 @@
         public bool RescanCustomerClassification(RescanCustClassificationModel parameters)
         {
             var result = new RescanResultModel();
+            var custToRescanPA = new List<long>();
 
             if (parameters.IsRescanPA)
             {
                 result = RescanProblemAccount(parameters);
+                custToRescanPA.AddRange(result.CustIds);
             }
 
             if (parameters.IsRescanPADangerous)
             {
-                result.IsSuccess = RescanPADangerous(parameters.CustIds, parameters);
+                result = RescanPADangerous(parameters.CustIds, parameters);
+                custToRescanPA.AddRange(result.CustIds);
             }
 
             if (result.IsSuccess)
             {
                 var smCustIds = GetAgentCusts(parameters.CustIds);
-                result.IsSuccess = RescanNormalAccount(parameters, result.CustIds, smCustIds);
+                result.IsSuccess = RescanNormalAccount(parameters, custToRescanPA, smCustIds);
             }
 
             return result.IsSuccess;
@@ -94,7 +97,7 @@
             return rescanResult;
         }
 
-        private bool RescanPADangerous(IEnumerable<long> custIds, RescanCustClassificationModel parameters)
+        public RescanResultModel RescanPADangerous(IEnumerable<long> custIds, RescanCustClassificationModel parameters)
         {
             var rescanResult = new RescanResultModel();
 
@@ -123,19 +126,17 @@
                             IsFromTVS = false,
                             IsFromTW = false,
                             CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]),
-                            Remark = $"Detection Date: { x.ClassifiedDate.ToString(Consts.FormatDateToString_MMMddyyyy)} - Dangerous Score: {decimal.ToInt32(x.ClassifiedScore) * 100}%"
+                            Remark = $"Detection Date: { x.ClassifiedDate.ToString(Consts.FormatDateToString_MMMddyyyy)} - Dangerous Score: {(x.ClassifiedScore * 100).ToString(FormatDecimalToString_2Places)}%"
                         };
                     });
 
                     var custPaDangerous = InsertProblemAccountLogics(pas, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
 
                     rescanResult.IsSuccess = PushDataToExternalPackge(custPaDangerous.Distinct(), parameters);
-
-                    return rescanResult.IsSuccess;
                 }
             }
 
-            return true;
+            return rescanResult;
         }
 
         public bool RescanNormalAccount(RescanCustClassificationModel parameters, IEnumerable<long> custIdsToRescanPA, IEnumerable<long> smaCustIds)

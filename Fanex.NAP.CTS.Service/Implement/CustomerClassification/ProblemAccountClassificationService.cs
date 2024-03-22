@@ -286,6 +286,7 @@
                                                      Remark = group.pa.Remark,
 
                                                      IsDirectPA = group.pa.IsDirectPA,
+                                                     IsFromAI = group.pa.IsFromAI,
                                                      IsFromCTS = group.pa.IsFromCTS,
                                                      IsFromTVS = group.pa.IsFromTVS,
                                                      TVSRequestID = group.pa.TVSRequestID,

@@ -456,6 +456,7 @@
                         CTSCustId = x.CTSCustID,
                         IsLinked = x.AssociationStatus == 1,
                         IsProblemAccount = x.ParentIDs != null ? x.ParentIDs.Split(',').Any(y => y == "50") : false,
+                        CategoryType = x.CategoryType,
                         IsPAProbation = x.IsProbation,
                         CategoryIds = x.CategoryIDs,
                         CategoryNames = !string.IsNullOrEmpty(x.CategoryNames) ? x.CategoryNames : "-",
@@ -557,6 +558,7 @@
                                           AssociationStatus = group.a.AssociationStatus,
                                           ParentIDs = group.a.ParentIDs,
                                           IsProbation = group.a.IsProbation,
+                                          CategoryType = group.a.CategoryType,
                                           CategoryIDs = group.a.CategoryIDs,
                                           CategoryNames = group.a.CategoryNames,
                                           CustomerClasses = (temp != null && group.a.CustSubId == 0) ? temp.CustomerClass.ToString() : "-",
@@ -1705,13 +1707,13 @@
                     CategoryId = x.CategoryID,
                     CategoryType = x.CategoryType,
                     CategoryName = x.CategoryName ?? string.Empty,
-                    IsProblemAccount = x.CategoryType == 2
+                    IsProblemAccount = x.ParentID == 50
                 }).ToList();
 
                 isVVip = categoryList.Any(x => x.CategoryId == (int)CustomerCategoryID.VVIP);                
                 isProblemAccount = categoryList.Any(x => x.IsProblemAccount && x.CategoryType != 2);
                 isPADangerous = categoryList.Any(x => x.CategoryType == 2);
-                isPAProbation = classification.Any(x => x.IsProbation && x.CategoryType == 2);
+                isPAProbation = classification.Any(x => x.IsProbation);
             }
 
             var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustID);
@@ -2152,6 +2154,7 @@
                     CategoryID = model.CategoryID,
                     CategoryGroup = model.CategoryGroup,
                     Remark = model.Remark,
+                    IsFromAI = false,
                     IsDirectPA = true,
                     IsFromCTS = true,
                     CreatedBy = CurrentSession.UserId
@@ -2310,13 +2313,16 @@
                 {
                     CustIds = custIds,
                     IsPushCCToSoon88 = true,
+                    IsRescanPADangerous = true,
                     FunctionId = FunctionId.UnmarkCustomerCategory,
                     IsUpdateDangerToMainDB = true
                 };
 
+                var custRescanPADangous = _rescanClassificationService.RescanPADangerous(custIds, paramRescan);
+
                 var smCustIds = _rescanClassificationService.GetAgentCusts(custIds);
 
-                _rescanClassificationService.RescanNormalAccount(paramRescan, Enumerable.Empty<long>(), smCustIds);
+                _rescanClassificationService.RescanNormalAccount(paramRescan, custRescanPADangous.CustIds.Distinct(), smCustIds);
             }
 
             return Json(new

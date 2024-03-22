@@ -273,7 +273,7 @@
             complete: function () {
                 tblcustomercategory.find('tbody').removeClass('loading');
                 
-                let disabledUnmarkCategory = (!cacheData.isVVip && !cacheData.isProblemAccount && !cacheData.isPAProbation)
+                let disabledUnmarkCategory = (!cacheData.isVVip && !cacheData.isProblemAccount)// && !cacheData.isPAProbation)
                     || (!cacheData.isVVip && cacheData.isPinCategory);                
 
                 let disabledMarkCategory = cacheData.isVVip
