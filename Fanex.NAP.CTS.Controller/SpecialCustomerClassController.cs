@@ -32,6 +32,7 @@
             _specialCCService = new SpecialCustomerClassService();
         }
 
+        #region public methods
         public ActionResult Index()
         {
             IUserService userService = new UserService();
@@ -83,12 +84,12 @@
             var result = new ValidateSpecialCCResultViewModel();
             try
             {
+                paramsModel.UserList = SelectItemForUserList(paramsModel.UserList);
                 var validateUsers = _specialCCService.ValidateSpecialCC(FunctionValidateSpecialCC.Add, paramsModel.UserList);
 
                 if (validateUsers.Users.Any(x => !x.IsValid))
                 {
                     result = validateUsers;
-                    Response.StatusCode = (int)HttpStatus.BadRequest;
                 }
                 else
                 {
@@ -120,12 +121,12 @@
 
             try
             {
+                paramsModel.UserList = SelectItemForUserList(paramsModel.UserList);
                 var validateUsers = _specialCCService.ValidateSpecialCC(FunctionValidateSpecialCC.Remove, paramsModel.UserList);
 
                 if (validateUsers.Users.Any(x => !x.IsValid))
                 {
                     result = validateUsers;
-                    Response.StatusCode = (int)HttpStatus.BadRequest;
                 }
                 else
                 {
@@ -148,5 +149,25 @@
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        #endregion
+
+        #region private methods
+        private List<UserListSpecialCCParamsModel> SelectItemForUserList(List<UserListSpecialCCParamsModel> model)
+        {
+            if (model != null && model.Any())
+            {
+                return model.SelectMany(x =>
+                {
+                    return x.Username.Split(',').Select(y => new UserListSpecialCCParamsModel
+                    {
+                        Username = y,
+                        SportID = x.SportID
+                    });
+                }).Distinct(x => new { x.Username, x.SportID }).ToList();
+            }
+
+            return model;
+        }
+        #endregion
     }
 }

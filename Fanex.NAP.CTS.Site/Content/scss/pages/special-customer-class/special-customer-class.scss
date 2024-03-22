@@ -483,4 +483,28 @@ button#btnGenerate {
 
 .jq-toast-wrap {
     max-width: 580px;
+
+    .toast-content
+    {
+        max-height: 120px;
+        overflow-x: auto;
+    }
+}
+
+.input-class {
+    font-size: 13px;
+    display: block;
+    border: 1px solid #E5E5E5 !important;
+    border-radius: 2px !important;
+    outline: none;
+    height: 28px;
+    line-height: 28px;
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 2px;
+    border: 1px solid #d6d6d6;
+    background-color: #fff;
+    font-size: inherit;
+    color: #545454;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }

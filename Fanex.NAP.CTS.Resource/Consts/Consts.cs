@@ -310,6 +310,7 @@
             BadRequest = 400,
             NotFound = 404,
             MethodNotAllowed = 405,
+            Unprocessable = 422,
             OK = 200,
             Created = 201,
             ServerUnavailable = 503,

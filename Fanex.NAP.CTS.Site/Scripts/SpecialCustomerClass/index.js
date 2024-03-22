@@ -1,5 +1,6 @@
 ﻿function SpecialCustomerClass() {
     let userList;
+    let isInitGrid = false;
 
     let domElements = {
         ccbSportTypeSingle: $('#ccbSportTypeSingle'),
@@ -45,7 +46,8 @@
                 zeroRecords: "There's no data"
             },
             infoCallback: function (settings, start, end, max, total, pre) {
-                if (!total) {
+                if (!isInitGrid) {
+                    isInitGrid = true;
                     $('.wrapper-info').append(`
                         <div class=\"tblSpecialCustomerClass_buttons\">
                             <button class=\"button button-primary-outline\" id=\"btnAdd\">Add</button>
@@ -55,7 +57,8 @@
                     return "<div class=\"display-total-ticket\"></div>";
                 }
                 else {
-                    $('.display-total-ticket').html(`Displaying ${start} to ${end} of ${total} item(s)`);
+                    var textDisplay = total ? `Displaying ${start} to ${end} of ${total} item(s)` : '';
+                    $('.display-total-ticket').html(textDisplay);
                 }
             },
             ordering: false,
@@ -119,18 +122,18 @@
                     }
                 }
             ],
-            drawCallback: function(settings){
+            drawCallback: function (settings) {
                 var nodes = domElements.specialCustomerClassTable.DataTable().rows({ 'search': 'applied' }).nodes();
 
                 var isSelectAll = $('input[type="checkbox"][name="chkbx"]:not(:hidden)', nodes).toArray().filter((item) => !item.checked).length <= 0;
-                domElements.inputSelectAll.prop('checked', isSelectAll);
+                domElements.inputSelectAll.prop('checked', isSelectAll && $('input[type="checkbox"][name="chkbx"]:not(:hidden)', nodes).length > 0);
             }
         });
 
         domElements.btnAddCustomerClass = $('#btnAdd');
         domElements.btnAddCustomerClass.prop('disabled', !isHostPermission);
         domElements.btnRemoveCustomerClass = $('#btnRemove');
-        domElements.btnAddCustomerClass.prop('disabled', !isHostPermission);
+        domElements.btnRemoveCustomerClass.prop('disabled', !isHostPermission);
 
         if (isHostPermission) {
             domElements.btnAddCustomerClass.on('click', function () {
@@ -157,11 +160,22 @@
 
             domElements.btnRemoveCustomerClass.on('click', function () {
                 userList = [];
+
+                var items = {};
+
                 domElements.specialCustomerClassTable.DataTable().rows(function (idx, x, node) {
                     if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
-                        userList.push({ Username: x.Username, SportID: x.SportID });
+                        if (!items[x.SportID]) {
+                            items[x.SportID] = [];
+                        }
+
+                        items[x.SportID].push(x.Username);
                     }
                 });
+
+                for (var item in items) {
+                    userList.push({ Username: items[item].join(), SportID: item });
+                }
 
                 if (userList.length <= 0) {
                     common.showError("Please select at least 1 record to proceed!");
@@ -201,9 +215,26 @@
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(params),
             success: function (response) {
-                LoadGrid(true);
-                common.showSuccess('Remove the Customer Class successful');
-                domElements.divAddProblemAccount.dialog('close');
+                if (response?.IsNotValidate) {
+                    $.toast({
+                        text: `<div class='toast-content'>${ShowInValidUserNameString(response)}</div>`, // Text that is to be shown in the toast
+                        heading: 'Invalid Accounts', // Optional heading to be shown on the toast
+                        icon: 'error', // Type of toast icon
+                        showHideTransition: 'fade', // fade, slide or plain
+                        allowToastClose: true, // Boolean value true or false
+                        hideAfter: false, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                        stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                        position: 'top-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                        textAlign: 'left',  // Text alignment i.e. left, right or center
+                        loader: true,  // Whether to show loader or not. True by default
+                        loaderBg: '#fff',  // Background color of the toast loader
+                    });
+                }
+                else {
+                    LoadGrid(true);
+                    common.showSuccess('Remove the Customer Class successful');
+                    domElements.divAddProblemAccount.dialog('close');
+                }
             },
             beforeSend: function () {
                 common.showLoading();
@@ -221,25 +252,7 @@
                     }
                 }
 
-                console.log(xhr);
-                if (xhr.status === 400 && xhr.responseJSON?.Users) {
-                    $.toast({
-                        text: `<div class='toast-content'>${ShowInValidUserNameString(xhr.responseJSON)}</div>`, // Text that is to be shown in the toast
-                        heading: 'Invalid Accounts', // Optional heading to be shown on the toast
-                        icon: 'error', // Type of toast icon
-                        showHideTransition: 'fade', // fade, slide or plain
-                        allowToastClose: true, // Boolean value true or false
-                        hideAfter: false, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
-                        stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
-                        position: 'top-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
-                        textAlign: 'left',  // Text alignment i.e. left, right or center
-                        loader: true,  // Whether to show loader or not. True by default
-                        loaderBg: '#fff',  // Background color of the toast loader
-                    });
-                }
-
-                if (xhr.status === 500)
-                {
+                if (xhr.status === 500) {
                     common.showError("Please contact admin!");
                 }
 
@@ -269,7 +282,7 @@
     function AddCustomerClass() {
         var url = common.modifyRelativeUrl('/SpecialCustomerClass/AddCustomerClass');
         var params = {};
-        params.UserList = JSON.parse(domElements.inputTagUsername.val()).map(x => { return { Username: x.value, SportID: domElements.ccbSportTypeSingle.val() } });
+        params.UserList = [{ Username: JSON.parse(domElements.inputTagUsername.val()).map(x => x.value).join(), SportID: domElements.ccbSportTypeSingle.val() }];
         params.Comment = domElements.txtComment.val();
         params.CustomerClass = domElements.txtCustomerClass.val();
 
@@ -281,9 +294,26 @@
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(params),
             success: function (response) {
-                common.showSuccess('Add the Customer Class successful');
-                domElements.divAddProblemAccount.dialog('close');
-                LoadGrid(false);
+                if (response?.IsNotValidate) {
+                    $.toast({
+                        text: `<div class='toast-content'>${ShowInValidUserNameString(response)}</div>`, // Text that is to be shown in the toast
+                        heading: 'Invalid Accounts', // Optional heading to be shown on the toast
+                        icon: 'error', // Type of toast icon
+                        showHideTransition: 'fade', // fade, slide or plain
+                        allowToastClose: true, // Boolean value true or false
+                        hideAfter: false, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                        stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                        position: 'top-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                        textAlign: 'left',  // Text alignment i.e. left, right or center
+                        loader: true,  // Whether to show loader or not. True by default
+                        loaderBg: '#fff',  // Background color of the toast loader
+                    });
+                }
+                else {
+                    common.showSuccess('Add the Customer Class successful');
+                    domElements.divAddProblemAccount.dialog('close');
+                    LoadGrid(false);
+                }
             },
             beforeSend: function () {
                 common.showLoading();
@@ -301,25 +331,7 @@
                     }
                 }
 
-                console.log(xhr);
-                if (xhr.status === 400 && xhr.responseJSON?.Users) {
-                    $.toast({
-                        text: `<div class='toast-content'>${ShowInValidUserNameString(xhr.responseJSON)}</div>`, // Text that is to be shown in the toast
-                        heading: 'Invalid Accounts', // Optional heading to be shown on the toast
-                        icon: 'error', // Type of toast icon
-                        showHideTransition: 'fade', // fade, slide or plain
-                        allowToastClose: true, // Boolean value true or false
-                        hideAfter: false, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
-                        stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
-                        position: 'top-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
-                        textAlign: 'left',  // Text alignment i.e. left, right or center
-                        loader: true,  // Whether to show loader or not. True by default
-                        loaderBg: '#fff',  // Background color of the toast loader
-                    });
-                }
-                
-                if (xhr.status === 500)
-                {
+                if (xhr.status === 500) {
                     common.showError("Please contact admin!");
                 }
 
@@ -343,6 +355,11 @@
     }
 
     function LoadGrid(isSkip) {
+        if (domElements.cbbSportTypeMulti.val().length <= 0) {
+            domElements.specialCustomerClassTable.DataTable().clear().draw(false);
+            return;
+        }
+
         domElements.inputSelectAll.prop('checked', false);
         var url = common.modifyRelativeUrl('/SpecialCustomerClass/GetCustomerClass');
 

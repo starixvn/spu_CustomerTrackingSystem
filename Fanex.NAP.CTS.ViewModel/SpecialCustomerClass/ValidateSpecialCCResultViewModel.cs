@@ -1,10 +1,13 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.SpecialCustomerClass
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     public class ValidateSpecialCCResultViewModel
     {
         public IEnumerable<ValidateSpecialCCItemViewModel> Users { get; set; }
+
+        public bool IsNotValidate { get { return Users != null && Users.Any(); } }
     }
 
     public class ValidateSpecialCCItemViewModel
