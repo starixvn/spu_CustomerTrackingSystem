@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Fanex.NAP.CTS.ViewModel.DangerMonitor
+﻿namespace Fanex.NAP.CTS.ViewModel.DangerMonitor
 {
+    using System;
+
     public class GetDangerSummaryItemViewModel
     {
         public long MatchId { get; set; }

@@ -156,11 +156,9 @@
     <Compile Include="Common\SportStaticListViewModel.cs" />
     <Compile Include="Common\SubscriberGroupViewModel.cs" />
     <Compile Include="Common\SubscriberViewModel.cs" />
-    <Compile Include="DangerMonitor\DangerMMBalanceUpMoveBetViewModel.cs" />
     <Compile Include="DangerMonitor\DangerMMTicketInfoViewModel.cs" />
     <Compile Include="DangerMonitor\DangerMonitorBetTypeViewModel.cs" />
     <Compile Include="DangerMonitor\DangerMonitorDetailViewModel.cs" />
-    <Compile Include="DangerMonitor\GetDangerSummaryResultViewModel.cs" />
     <Compile Include="DangerMonitor\GetDangerSummaryItemViewModel.cs" />
     <Compile Include="DangerMonitor\GetDangerMonitorItemViewModel.cs" />
     <Compile Include="DangerMonitor\GetDangerMonitorResultViewModel.cs" />

@@ -69,50 +69,19 @@
         public ActionResult GetDangerMonitor(DangerMonitorSearchModel filter, bool? isSkipTracking)
         {
             var data = new GetDangerMonitorResultViewModel();
-            var items = new List<GetDangerMonitorItemViewModel>();
 
-            var dateRange = _dangerMonitorService.GetDangerMMDateRange(filter.FromDate, filter.ToDate);
-
-            Parallel.Invoke(() =>
+            if (filter.Validate)
             {
-                if (dateRange.IsGetDataFromOrigin)
-                {
-                    var filterOrg = new DangerMonitorSearchModel(filter);
-                    filterOrg.FromDate = dateRange.FromDateOrigin;
-                    filterOrg.ToDate = dateRange.ToDateOrigin;
-                    filterOrg.DBSource = 1;
-                    items.AddRange(_dangerMonitorService.GetDangerMonitor(filterOrg).Items);
-                }
-            },
-            () =>
-            {
-                if (dateRange.IsGetDataFrom14)
-                {
-                    var filter14 = new DangerMonitorSearchModel(filter);
-                    filter14.FromDate = dateRange.FromDate14;
-                    filter14.ToDate = dateRange.ToDate14;
-                    filter14.DBSource = 2;
-                    items.AddRange(_dangerMonitorService.GetDangerMonitor(filter14).Items);
-                }
-            });
+                data = _dangerMonitorService.GetDangerMonitor(filter);
 
-            data.Items = items.OrderBy(x => x.MatchSection).ThenByDescending(x => x.MatchID).ThenByDescending(x => x.BetID);
+                data.Items = data.Items.OrderBy(x => x.MatchSection).ThenByDescending(x => x.MatchID).ThenByDescending(x => x.BetID);
+            }
 
             return Json(new
             {
                 data = data
             }, JsonRequestBehavior.AllowGet);
         }
-
-        //[HttpPost]
-        //public ActionResult GetDangerMMDateRange(DateTime? FromDate, DateTime? ToDate)
-        //{
-        //    return Json(new
-        //    {
-        //        data = _dangerMonitorService.GetDangerMMDateRange(FromDate, ToDate)
-        //    }, JsonRequestBehavior.AllowGet);
-        //}
-
 
         #endregion
 

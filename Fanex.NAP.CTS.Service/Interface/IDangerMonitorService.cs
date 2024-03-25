@@ -12,8 +12,6 @@
 
         GetDangerMonitorResultViewModel GetDangerMonitor(DangerMonitorSearchModel filter);
 
-        DangerMMBalanceUpMoveBetViewModel GetDangerMMDateRange(DateTime? fromDate, DateTime? toDate);
-
         byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath);
 
         byte[] ExportExcelMMDetailDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems

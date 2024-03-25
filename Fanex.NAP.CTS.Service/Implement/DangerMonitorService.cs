@@ -84,11 +84,6 @@
             };
         }
 
-        public DangerMMBalanceUpMoveBetViewModel GetDangerMMDateRange(DateTime? fromDate, DateTime? toDate)
-        {
-            return GetBalanceUpMoveBetDateRange(fromDate, toDate);
-        }
-
         public byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath)
         {
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Sheet1");
@@ -116,29 +111,6 @@
         #endregion
 
         #region private method
-        private DangerMMBalanceUpMoveBetViewModel GetBalanceUpMoveBetDateRange(DateTime? fromDate, DateTime? toDate)
-        {
-            var criteria = new DangerMMBalanceUpMoveBetCriteria
-            {
-                FromDate = fromDate,
-                ToDate = toDate
-            };
-
-            var result = _repository.Fetch<DangerMMBalanceUpMoveBetViewModel>(criteria);
-
-            return result?.FirstOrDefault();
-        }
-
-        //private IEnumerable<GetDangerMonitorItemViewModel> MappingDangerMonitorWithSportBettype(IEnumerable<GetDangerSummaryItemViewModel> dangerMonitors, int matchSection)
-        //{
-        //    var sportBettypes = GetSportBettypesFromCache();
-
-        //    return dangerMonitors.Join(sportBettypes,
-        //                                item => $"{item.SportType}_{item.Bettype}_{item.BetID}",
-        //                                sportBettype => $"{sportBettype.SportType}_{sportBettype.BetTypeID}_{sportBettype.BetID}",
-        //                                (item, sportBettype) => new GetDangerMonitorItemViewModel(item, matchSection, sportBettype));
-        //}
-
         private IEnumerable<GetDangerMonitorItemViewModel> MappingDangerMonitorWithSportBettype(IEnumerable<DangerMMTicketInfoViewModel> dangerMonitors)
         {
             var sportBettypes = GetSportBettypesFromCache();
@@ -170,15 +142,13 @@
             {
                 FromDate = filter.FromDate,
                 ToDate = filter.ToDate,
-                SportList = filter.Sports,
+                SportList = filter.SportList?.Where(x => x.Contains("null"))?.Select(x => x.Split('_')[0])?.Join(),
+                SportSabaLgGroup = filter.SportList?.Where(x => !x.Contains("null"))?.Join(),
                 LeagueEvent = filter.Event ?? string.Empty,
                 BettypeList = filter.BetTypes,
-                DangerList = filter.DangerList,
+                MatchSection = filter.MatchSection,
                 MarketList = filter.Market,
-                DangerType = filter.DangerType,
-                DBSource = filter.DBSource,
-                ExcludeLeagueGroup = filter.ExcludeLeagueGroup,
-                SabaLeagueGroup = filter.SabaLeagueGroup,
+                QueryDanger = filter.QueryDanger,
             };
 
             var result = _repository.Fetch<DangerMMTicketInfoViewModel>(criteria);
@@ -860,7 +830,7 @@
             var mainBetTypes = _commonService.GetMainSportBettype(filter);
 
             return mainBetTypes
-                .GroupJoin(betTypes, main => main.BettypeID, cts => cts.BetTypeID, (main, ctsGroup) => new { main, ctsGroup })
+                .GroupJoin(betTypes, main => main.BettypeId, cts => cts.BetTypeID, (main, ctsGroup) => new { main, ctsGroup })
                 .SelectMany(item =>
                     item.ctsGroup.Select(group => new DangerMonitorBetTypeViewModel
                     {

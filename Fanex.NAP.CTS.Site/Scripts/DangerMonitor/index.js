@@ -69,13 +69,6 @@
             if (data.OtherSport.Items && Object.keys(data.OtherSport.Items).length !== 0)
                 sportGroupSelector.append(BuildOptgroupSport(3, "Other Sport", data.OtherSport.Items));
 
-            // let sportList = {};
-            // sportBetType.map(x => sportList[`${x.SportType}_${x.LeagueGroupID}`] = ({ Name: x.SportNameDisplay, IsSelected: x.SportType == 1 && x.LeagueGroupID == null, LeagueGroupID: x.LeagueGroupID, SportType: x.SportType }));
-
-            // Object.keys(sportList).forEach(index => {
-            //     domElements.cbbSport.append(`<option ${sportList[index].IsSelected ? 'selected' : ''} value="${index}">${sportList[index].Name}</option>`);
-            // });
-
             domElements.cbbSport.multiselect("refresh");
         }
 
@@ -197,7 +190,7 @@
     function BuildOptgroup(optgroupValue, optgroupName, items) {
         let optgroup = `<optgroup label="${optgroupName}" DangerType=${optgroupValue}>`;
         items.map(function (x) {
-            optgroup += `<option value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
+            optgroup += `<option value=${optgroupValue}_${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
         })
 
         optgroup += "</optgroup>";
@@ -205,14 +198,13 @@
         return optgroup;
     }
 
-    function GetDangerMonitor(lastMatchID = null, lastEventDate = null, lastMatchSection = null, isSkipTracking = true) {
+    function GetDangerMonitor(isSkipTracking = true) {
         timeoutRenderTicketDetail = setTimeout(() => {
             let data = {
                 FromDate: domElements.dpkFromDate.val(),
                 ToDate: !domElements.dpkToDate.val().includes(dateEmptyString) ? domElements.dpkToDate.val() : null,
-                DangerList: GetDangerSelected(1),
-                DangerType: GetDangerSelected(0),
-                Sports: GetSportList(),
+                QueryDanger: domElements.cbbDgr.val(),
+                SportList: domElements.cbbSport.val(),
                 Event: domElements.txtEvent.val().trim().toUpperCase(),
                 Market: domElements.cbbMarket.val() == "" ? "0,1" : domElements.cbbMarket.val(),
                 MatchSection: domElements.cbbMatchSection.val().join(),
@@ -237,23 +229,12 @@
                     $('.loading').removeClass('hide');
                 },
                 success: function (response) {
-                    if (response?.data) {
+                    if (response?.data?.Item) {
                         domElements.tblMonitor.DataTable().rows.add(response?.data?.Items).draw(false);
                     }
 
                     domElements.tblMonitor.find('tbody').removeClass('loading hide');
                     $('.loading').addClass('hide');
-
-                    // if (response?.data?.LastMatchSection) {
-                    //     // GetDangerMonitor(response?.data?.LastMatchID, response?.data?.LastEventDate, response?.data?.LastMatchSection, false);
-                    //     if (response?.data?.Items.length > 0) {
-                    //         domElements.tblMonitor.find('tbody').removeClass('loading hide');
-                    //     }
-                    // }
-                    // else {
-                    //     domElements.tblMonitor.find('tbody').removeClass('loading hide');
-                    //     $('.loading').addClass('hide');
-                    // }
                 },
                 error: function (xhr, textStatus, error) {
                     domElements.tblMonitor.find('tbody').removeClass('loading');
@@ -500,24 +481,10 @@
         });
     }
 
-    function GetSportList() {
-        return domElements.cbbSport.val().map((x) => x.split('_')[0]).join();
-    }
-
-    function GetDangerSelected(pos) {
-        if (domElements.cbbDgr.val()) {
-            var dangerString = domElements.cbbDgr.val().split('-');
-
-            return dangerString[pos];
-        }
-
-        return undefined;
-    }
-
     function GetDangerListById() {
         var result = {};
         if (domElements.cbbDgr.val()) {
-            var dangerString = domElements.cbbDgr.val().split('-');
+            var dangerString = domElements.cbbDgr.val();
 
             result[dangerString[0]] = Number(dangerString[1]);
         }

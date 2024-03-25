@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.DangerMonitor
 {
-    using System;
     using System.Collections.Generic;
 
     public class GetDangerMonitorResultViewModel

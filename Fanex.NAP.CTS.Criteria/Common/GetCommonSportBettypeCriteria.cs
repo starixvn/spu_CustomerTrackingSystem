@@ -10,8 +10,6 @@
 
         public string BettypeList { get; set; }
 
-        public int QueryType { get; set; }
-
         public override string GetSettingKey() => "CTS_SportBettype_Get";
 
         public override bool IsValid() => true;

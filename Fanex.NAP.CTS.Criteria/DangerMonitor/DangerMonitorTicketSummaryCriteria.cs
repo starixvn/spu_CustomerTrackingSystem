@@ -21,23 +21,17 @@
         [SpParam(SqlParamName = "ip_BettypeList")]
         public string BettypeList { get; set; }
 
-        [SpParam(SqlParamName = "ip_DangerType")]
-        public int DangerType { get; set; }
-
-        [SpParam(SqlParamName = "ip_DangerList")]
-        public string DangerList { get; set; }
+        [SpParam(SqlParamName = "ip_QueryDanger")]
+        public string QueryDanger { get; set; }
 
         [SpParam(SqlParamName = "ip_MarketList")]
         public string MarketList { get; set; }
 
-        [SpParam(SqlParamName = "ip_DBSource")]
-        public int DBSource { get; set; }
+        [SpParam(SqlParamName = "ip_SportSabaLgGroup")]
+        public string SportSabaLgGroup { get; set; }
 
-        [SpParam(SqlParamName = "ip_SabaLeagueGroup")]
-        public int? SabaLeagueGroup { get; set; }
-
-        [SpParam(SqlParamName = "ip_ExcludeLeagueGroup")]
-        public string ExcludeLeagueGroup { get; set; }
+        [SpParam(SqlParamName = "ip_MatchSection")]
+        public string MatchSection { get; set; }
 
         public override string GetSettingKey() => "CTS_MatchTicketInfo_Get";
 

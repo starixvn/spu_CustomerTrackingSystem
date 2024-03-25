@@ -12,7 +12,7 @@
 
         public int? LeagueGroupID { get; set; }
 
-        public int BettypeID { get; set; }
+        public int BettypeId { get; set; }
 
         //[JsonProperty("BettypeId")]
         //public int Typeid { get; set; }

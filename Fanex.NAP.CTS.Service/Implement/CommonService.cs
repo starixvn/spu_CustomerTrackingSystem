@@ -189,8 +189,7 @@
             {
                 ProductId = model.ProductId,
                 BettypeList = model.BettypeList,
-                SportTypeList = model.SportTypeList,
-                QueryType = 1
+                SportTypeList = model.SportTypeList
             };
 
             return repository.Fetch<SportBettypeViewModel>(criteria);

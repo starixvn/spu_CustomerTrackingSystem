@@ -185,7 +185,6 @@
     <Compile Include="CustomerClassification\RescanNormalClassificationBySport\PreprocessRescanNormalClassificationBySportCriteria.cs" />
     <Compile Include="CustomerClassification\RescanPADangerousCriteria.cs" />
     <Compile Include="CustomerClassification\Robot\RobotAccountInsertCriteria.cs" />
-    <Compile Include="DangerMonitor\DangerMMBalanceUpMoveBetCriteria.cs" />
     <Compile Include="DangerMonitor\DangerMonitorTicketSummaryCriteria.cs" />
     <Compile Include="ImportEvidences\CheckCleanCustFlaggedEvidenceCriteria.cs" />
     <Compile Include="LogInputData\LogInputDataCriteria.cs" />

@@ -1,33 +1,19 @@
 ﻿namespace Fanex.NAP.CTS.Model.DangerMonitor
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class DangerMonitorSearchModel
     {
-        public DangerMonitorSearchModel() { }
-
-        public DangerMonitorSearchModel(DangerMonitorSearchModel model)
-        {
-            DangerType = model.DangerType;
-            DangerList = model.DangerList;
-            Sports = model.Sports;
-            Event = model.Event;
-            Market = model.Market;
-            MatchSection = model.MatchSection;
-            BetTypes = model.BetTypes;
-            SabaLeagueGroup = model.SabaLeagueGroup;
-            ExcludeLeagueGroup = model.ExcludeLeagueGroup;
-        }
 
         public DateTime? FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }
 
-        public int DangerType { get; set; }
+        public string QueryDanger { get; set; }
 
-        public string DangerList { get; set; }
-
-        public string Sports { get; set; }
+        public IEnumerable<string> SportList { get; set; }
 
         public string Event { get; set; } /* League / Match */
 
@@ -37,10 +23,32 @@
 
         public string BetTypes { get; set; }
 
-        public int DBSource { get; set; }
-        
-        public int? SabaLeagueGroup { get; set; }
+        public bool Validate
+        {
+            get
+            {
+                if (FromDate != null && ToDate != null && FromDate > ToDate)
+                {
+                    return false;
+                }
 
-        public string ExcludeLeagueGroup { get; set; }
+                if (string.IsNullOrEmpty(QueryDanger) || string.IsNullOrEmpty(Market) || string.IsNullOrEmpty(MatchSection))
+                {
+                    return false;
+                }
+
+                if (SportList == null || !SportList.Any())
+                {
+                    return false;
+                }
+
+                if (string.IsNullOrEmpty(BetTypes) || BetTypes.Equals("[]"))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
     }
 }
