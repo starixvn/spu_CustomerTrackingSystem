@@ -25,8 +25,6 @@
     using System.Web.Security;
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
-    using Fanex.NAP.CTS.User.Helper;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// Login controller.
@@ -283,10 +281,6 @@
                 //    });
                 //}
 
-
-
-                //LogService.Error($"ReCheckLogin {new { _currentSession.OnUserId, _currentSession.SessionId, _currentSession.UserId }}");
-
                 if (_currentSession == null || _currentSession.OnUserId == 0)
                 {
                     return Json(new
@@ -295,12 +289,7 @@
                     });
                 }
 
-                var isKickedOut = _securityService.ReCheckIn(_currentSession.OnUserId, SiteId);
-
-                if (isKickedOut == 1)
-                {
-                    LogService.Error($"ReCheckLogin {new { _currentSession.OnUserId, _currentSession.SessionId, _currentSession.UserId, isKickedOut }}");
-                }                
+                var isKickedOut = _securityService.ReCheckIn(_currentSession.OnUserId, SiteId);              
 
                 return Json(new
                 {
