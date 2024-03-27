@@ -424,6 +424,7 @@
                 IsCashout = para.IsCashout,
                 FromTransDate = para.TranstimeFrom != null ? para.TranstimeFrom.Value.ToUniversalTime() : (DateTime?)null,
                 ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null,
+                IsExclTestCurr = _mmQueryType == MMQueryType.DangerMMReport
             };
 
             if (para.BetChoiceType == 1)
