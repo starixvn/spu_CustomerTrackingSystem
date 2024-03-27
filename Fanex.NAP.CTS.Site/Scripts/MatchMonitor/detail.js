@@ -29,6 +29,7 @@ function MatchMonitorDetail() {
     let domElements = {
         detailpage: $('#detailpage'),
         divContent: $('#divContent'),
+        divPageLoading: $('#divPageLoading'),
         groupControl: $('#groupControl'),
         divFilterMonitor: $('#divFilterMonitor'),
         divFilterLoading: $('#divFilterLoading'),
@@ -47,6 +48,7 @@ function MatchMonitorDetail() {
         sportName: $('#hdSportName').val(),
         reason: $("#hdreason").val(),
         liveIndicator: $("#hdLiveIndicator").val(),
+        matchSection: $("#hdMatchSection").val(),
         isSupportShowAllTickets: $("#hdIsSupportShowAllTickets").val(),
         defaultReasonNames: $('#hdReasonNames').val(),
         mapX: $('#hdMapX').val(),
@@ -103,6 +105,7 @@ function MatchMonitorDetail() {
         btnGenerateDetail: $('#btnGenerate-detail'),
         btnAssDetection: $('#btnAssDetection'),
         btnExportExcel: $('#btnExportExcel'),
+        btnVoidTicket: $('#btnVoidTicket'),
         btnVerifyAndClose: $('#btnVerifyAndClose'),
         btnReasonFeedback: $('#btnReasonFeedback'),
         inputTranstimeFrom: $('#inputTranstimeFrom'),
@@ -113,6 +116,8 @@ function MatchMonitorDetail() {
         iconHTranstimeAutofill: $('#iconHTranstimeAutofill'),
         iconATranstimeAutofill: $('#iconATranstimeAutofill'),
         iconSGTranstimeAutofill: $('#iconSGTranstimeAutofill'),
+        tggHoldKey: $('#tggHoldKey'),
+        ttHoldKey: $('#ttHoldKey')
     };
 
     let transtime = {
@@ -2785,6 +2790,130 @@ function MatchMonitorDetail() {
         domElements.groupTable.height($(window).height() - detailpageHeight - breadcrumbButtonHeight - 77);
     }
 
+    //#region Hold Key
+    function UpdateHoldKeyStatus(matchId, matchSection, sportType, isHold) {
+        common.showConfirmation('<div class="popup - content"> Are you sure to turn ' + (isHold ? 'on' : 'off')+ ' the Hold Key?</div>', function () { 
+            $.ajax(common.modifyRelativeUrl('MatchMonitor/UpdateHoldKeyStatus'), {
+                type: 'POST',
+                data:
+                {
+                    MatchId: matchId,
+                    MatchSection: matchSection,
+                    SportType: sportType,
+                    IsHold: isHold,
+                    IsCurrentStatus: domElements.tggHoldKey.is('.toggle-on'),
+                    Username: domElements.ttHoldKey.text()
+                },
+                beforeSend: function () {
+                    domElements.divPageLoading.addClass('loading-icon');
+                },
+                success: function (response) {
+                    if (response.data.HoldKeyStatus.IsHold) {
+                        domElements.tggHoldKey.addClass('toggle-on');
+                        domElements.ttHoldKey.addClass('tooltiptext');
+                        domElements.ttHoldKey.text(response.data.HoldKeyStatus.UserName);
+                    }
+                    else {
+                        domElements.tggHoldKey.removeClass('toggle-on');
+                        domElements.ttHoldKey.removeClass('tooltiptext');
+                        domElements.ttHoldKey.text("");
+                    }
+
+                    if (!response.data.IsSuccess) {
+                        common.showError((isHold ? "Turn on" : "Turn off") + " Hold Key failed.");
+                        console.log(response.data.Message);
+                    }
+                    else {
+                        common.showSuccess((isHold ? "Turn on" : "Turn off") + " Hold Key successfully.");
+                    }
+                },
+                complete: function () {
+                    domElements.divPageLoading.removeClass('loading-icon');
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                    domElements.divPageLoading.removeClass('loading-icon');
+                }
+            });
+        });
+    }
+    //#endregion Hold Key
+
+    //#region Ticket Voiding
+    function RedirectToTicketVoiding() {
+        let tranIds = [];
+
+        if (isDisplaySingleGrid) {
+            domElements.tblMMSG.DataTable().rows(function (idx, data, node) {
+                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                    tranIds.push(data.BetID);
+                }
+            });
+        } else {
+            domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
+                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                    tranIds.push(data.BetID);
+                }
+            });
+            domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
+                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                    tranIds.push(data.BetID);
+                }
+            });
+        }
+
+        if (tranIds.length > 2000) {
+            common.showError("Exceeded max 2000 Tickets.Please try again with a smaller range.");
+        } else if (tranIds.length == 0) {
+            common.showError("Please select at least 1 record to proceed.");
+        } else {
+
+            $.ajax(common.modifyRelativeUrl('MatchMonitor/RedirectToTicketVoiding'), {
+                type: 'POST',
+                data: {
+                    tranIds: tranIds.join()
+                },
+                beforeSend: function () {
+                    domElements.divPageLoading.addClass('loading-icon');
+                },
+                success: function (response) {
+                    if (response.isValid) {
+                        OpenWindowWithPost(response.data.TVSRedirectURL, response.data);
+                    }
+                },
+                complete: function () {
+                    domElements.divPageLoading.removeClass('loading-icon');
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                    domElements.divPageLoading.removeClass('loading-icon');
+                }
+            });
+        }
+    }
+
+    function OpenWindowWithPost(url, data) {
+        var form = document.createElement("form");
+        form.target = "_blank";
+        form.method = "POST";
+        form.action = url;
+        form.style.display = "none";
+
+        for (var key in data) {
+            var input = document.createElement("input");
+            input.type = "hidden";
+            input.name = key;
+            input.value = data[key];
+            form.appendChild(input);
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
+    }
+
+    //#endregion Ticket Voiding
+
     function Initial() {
         SetupMultiselectFilter(domElements.cbbCC, "CC");
         SetupMultiselectFilter(domElements.cbbDanger, "Danger");
@@ -2963,6 +3092,14 @@ function MatchMonitorDetail() {
             let rangeTransTime = GetRangeTransTime();
 
             reasonFeedback.Initial(domElements.matchID, domElements.cbbMarket.val(), betTypeID, betID, domElements.sportType, reasonList, reasonCheckedList, rangeTransTime);
+        });
+
+        domElements.tggHoldKey.on('click', function () {
+            UpdateHoldKeyStatus(domElements.matchID, domElements.matchSection, domElements.sportType, domElements.tggHoldKey.is('.toggle-on') == true ? false : true);
+        });
+
+        domElements.btnVoidTicket.on('click', function () {
+            RedirectToTicketVoiding();
         });
     }
 

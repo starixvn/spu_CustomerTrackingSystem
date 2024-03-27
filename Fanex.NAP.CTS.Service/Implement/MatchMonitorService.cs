@@ -17,6 +17,8 @@
     using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Implement;
+    using System.Threading.Tasks;
+    using Fanex.NAP.CTS.Core.Helpers.Api;
 
     public class MatchMonitorService : IMatchMonitorService
     {
@@ -812,6 +814,67 @@
             repository.Fetch<DBResult>(criteria);
 
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
+        }
+
+        #endregion
+
+        #region Hold Key
+
+        public HoldKeyStatusGetResultModel GetHoldKeyStatus(Int64 matchID, string url)
+        {
+            if (matchID != 0 && !string.IsNullOrEmpty(url))
+            {
+                var para = new List<Int64> { matchID };
+
+                var result = ApiHelper.Post<HoldKeyStatusGetResultModel>(url, para, 120);
+
+                Task.WhenAll(result);
+
+                return result.Result;
+            }
+
+            return new HoldKeyStatusGetResultModel();
+        }
+
+        public HoldKeyUpdateResultModel UpdateHoldKeyStatus(HoldKeyUpdateViewModel parameters, string url)
+        {
+            if (parameters.MatchId != 0 && parameters.UserId != 0 && !string.IsNullOrEmpty(url))
+            {
+                var para = new List<HoldKeyUpdateModel>()
+                {
+                    new HoldKeyUpdateModel
+                    {
+                        matchId =  parameters.MatchId,
+                        sporttype = parameters.SportType,
+                        enabled = parameters.IsHold,
+                        userId = parameters.UserId,
+                        userName = parameters.UserName
+                    }
+                };
+
+                var result = ApiHelper.Post<HoldKeyUpdateResultModel>(url, para, 120);
+
+                Task.WhenAll(result);
+
+                return result.Result;
+            }
+
+            return new HoldKeyUpdateResultModel();
+        }
+
+        public void LogHoldKeyAction(int userId, bool status, int matchId)
+        {
+            if (userId != 0) 
+            {
+                var criteria = new HoldKeyLogInsertCriteria
+                {
+                    UserID = userId,
+                    Status = status,
+                    MatchID = matchId
+                };
+
+                repository.Execute(criteria);
+            }
         }
 
         #endregion

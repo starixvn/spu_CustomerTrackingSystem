@@ -25,7 +25,6 @@
     using System.Web.Security;
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
-    using Fanex.NAP.CTS.User.Helper;
 
     /// <summary>
     /// Login controller.
@@ -131,9 +130,9 @@
                 Response.BufferOutput = true;
                 object msg = null;
 
-                if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password) && CheckValidToken(loginToken))
+                if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password) && CheckValidToken(loginToken))              
                 {
-                    var user = _userService.Get(username.Trim());
+                    var user = _userService.Get(username.Trim());                                  
 
                     try
                     {
@@ -199,7 +198,7 @@
                             else
                             {
                                 // wrong password
-                                msg = ViewResources.Invalid_Username_or_Password;
+                                msg = ViewResources.Invalid_Username_or_Password;                               
                             }
                         }
                         else
@@ -220,7 +219,7 @@
                     }
                 }
                 else
-                {
+                {                   
                     msg = "Invalid input!";
                 }
 
@@ -290,7 +289,7 @@
                     });
                 }
 
-                var isKickedOut = _securityService.ReCheckIn(_currentSession.OnUserId, SiteId);
+                var isKickedOut = _securityService.ReCheckIn(_currentSession.OnUserId, SiteId);              
 
                 return Json(new
                 {

@@ -16,6 +16,7 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.Logging;
+    using Newtonsoft.Json;
 
     [NapSuperAuth]
     public class HomeController : BaseController
@@ -86,7 +87,7 @@
             }            
 
             var result = accountService.SearchAccounts(inputValue);
-
+            
             if (result.Count.Equals(1))
             {
                 return RedirectToAction("Index", "Account", new { Id = result.FirstOrDefault().CTSCustId });

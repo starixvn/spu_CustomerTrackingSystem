@@ -144,6 +144,10 @@
 
                     return View(customerGeneralStatusViewModel);
                 }
+                else
+                {
+                    LogService.Info($"Account Index customerInfoFromCTS {Id} is null");
+                }
             }
 
             return RedirectToAction("Index", "Home");

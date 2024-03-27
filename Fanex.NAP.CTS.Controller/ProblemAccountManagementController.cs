@@ -46,7 +46,7 @@
         public ActionResult Index()
         {
             var result = new ProblemAccountViewModel();
-           
+
             var sites = _commonService.GetSites(false);
 
             if (sites != null && sites.Any())
@@ -70,7 +70,7 @@
             if (categories != null && categories.Any())
             {
                 result.CategoryList = categories
-                       .Where(x=>x.CategoryGroup == Consts.ProblemAccountManagement_CategoryPA)
+                       .Where(x => x.CategoryGroup == Consts.ProblemAccountManagement_CategoryPA)
                        .GroupBy(g => new { g.CategoryGroup })
                        .Select(x => new { Group = x.Key, CategoryList = x.ToList() })
                        .Select(x => new CategoryGroupViewModel
@@ -82,7 +82,7 @@
                                CategoryName = y.CategoryName
                            }).OrderBy(y => y.CategoryName)
                        }).ToList();
-            }    
+            }
 
             return View(result);
         }

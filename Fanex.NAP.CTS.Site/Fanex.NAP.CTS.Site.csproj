@@ -435,6 +435,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="App_Data\SIT\ExternalSPNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\SIT\InternalSPNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\SIT\NAPFrameworkSpNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="App_Data\UAT\InternalSPNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1149,6 +1158,15 @@
     <Content Include="Views\Account\CustomerCategory\UnmarkCustomerCategory.cshtml" />
     <Content Include="Views\AssociatedGroupMonitor\Index.cshtml" />
     <Content Include="Views\AssociationDetection\Index_old.cshtml" />
+    <Content Include="WebConfigs\Web.AppSettings.SIT.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WebConfigs\Web.ConnectionString.SIT.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WebConfigs\Web.SIT.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Views\RobotReport\Index.cshtml" />
     <Content Include="Template\RobotReport\AIRobotReportDailyTemplate.xlsx" />
     <Content Include="Template\RobotReport\AIRobotReportMonthlyTemplate.xlsx" />

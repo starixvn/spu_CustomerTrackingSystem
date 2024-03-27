@@ -96,6 +96,12 @@
 
         public static string DeleteAFCAccountsURL => GetConfigStringByName("AFC_DeleteAccountsURL");
 
+        public static string GetHoldKeyMMDetailURL => GetConfigStringByName("MMDetail_HoldKeyGetURL");
+
+        public static string UpdateHoldKeyMMDetailURL => GetConfigStringByName("MMDetail_HoldKeyUpdateURL");
+
+        public static string TVSTicketVoidingURL => GetConfigStringByName("MMDetail_TVSTicketVoidingURL");
+
         public static int ImportEvidenceChunkSize
         {
             get
@@ -136,6 +142,8 @@
                         return "UAT";
                     case "3":
                         return "PRO";
+                    case "4":
+                        return "SIT";
                     default:
                         return "LOCAL";
                 }

@@ -11,6 +11,7 @@
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.Common;
@@ -364,6 +365,9 @@
                 ViewBag.SportName = para?.SportName ?? string.Empty;
                 ViewBag.KOTime = para?.KOTime;
                 ViewBag.IsSupportShowAllTickets = para?.IsSupportShowAllTickets;
+                ViewBag.MatchSection = para?.MatchSection ?? 0;
+                ViewBag.IsVisibleHoldKey = para?.MatchSection != (int)MATCHMONITOR_SECTION.Closed;
+                ViewBag.HoldKeyStatus = GetHoldKeyStatus(para?.MatchID ?? 0, para?.MatchSection ?? 0);
                 ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                                                                             NapSettings.Settings.SiteId,
                                                                             FSFunctionKeys.MatchMonitor,
@@ -1027,6 +1031,164 @@
         #endregion User Feedback
 
         #endregion Detail Page
+
+
+        #region Hold-Key
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailHoldKeyUpdate)]
+        public ActionResult UpdateHoldKeyStatus(HoldKeyUpdateViewModel paramter)
+        {
+            var result = new HoldKeyResultViewModel(
+                            new HoldKeyStatusGetViewModel
+                            {
+                                IsHold = paramter.IsCurrentStatus,
+                                UserName = paramter.UserName
+                            });
+            try
+            {
+                if (paramter.MatchId != 0
+                    && paramter.MatchSection != (int)MATCHMONITOR_SECTION.Closed
+                    && !string.IsNullOrEmpty(ConfigSettings.UpdateHoldKeyMMDetailURL))
+                {
+                    paramter.UserId = CurrentSession.UserId;
+                    paramter.UserName = CurrentSession.Username;
+
+                    _matchMonitorService.LogHoldKeyAction(CurrentSession.UserId, paramter.IsHold, paramter.MatchId);
+
+                    var updateResult = _matchMonitorService.UpdateHoldKeyStatus(paramter, ConfigSettings.UpdateHoldKeyMMDetailURL);
+
+                    if (!updateResult.isSuccess)
+                    {
+                        LogService.Error($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Update hold key status - Exception: "
+                                         + updateResult.msg
+                                         + $" DataInput: {JsonConvert.SerializeObject(paramter) + "\n"}");
+                    }
+
+                    var statusResult = GetHoldKeyStatus(paramter.MatchId, paramter.MatchSection);
+
+                    result.HoldKeyStatus = statusResult;
+                    result.IsSuccess = updateResult.isSuccess;
+                    result.Message = updateResult.msg;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Update hold key status - Exception: "
+                                 + ex.Message
+                                 + ex.StackTrace + "\n"
+                                 + ex?.InnerException?.Message + "\n"
+                                 + $"DataInput: {JsonConvert.SerializeObject(paramter) + "\n"}"
+                                 + ex?.InnerException?.Source
+                                 + ex?.InnerException?.StackTrace);
+            }
+
+            return Json(new
+            {
+                data = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private HoldKeyStatusGetViewModel GetHoldKeyStatus(Int64 matchId, int matchStatus)
+        {
+            var result = new HoldKeyStatusGetViewModel();
+
+            try
+            {
+                if (matchId != 0 
+                    && matchStatus != (int)MATCHMONITOR_SECTION.Closed
+                    && !string.IsNullOrEmpty(ConfigSettings.GetHoldKeyMMDetailURL))
+                {
+                    var statusResult = _matchMonitorService.GetHoldKeyStatus(matchId, ConfigSettings.GetHoldKeyMMDetailURL);
+
+                    if (statusResult != null && !statusResult.isSuccess)
+                    {
+                        throw new Exception($"GetHoldKeyStatus - call Adminsite's api unsuccessfully (IP = {matchId})");
+                    }   
+                    
+                    if (statusResult != null 
+                        && statusResult.holdKeyInfo != null
+                        && statusResult.holdKeyInfo.Any())
+                    {
+                        var matchInfo = statusResult.holdKeyInfo.FirstOrDefault();
+
+                        if (matchInfo.matchId == matchId)
+                        {
+                            result = new HoldKeyStatusGetViewModel
+                            {
+                                IsHold = matchInfo.isHold,
+                                UserName = matchInfo.userName
+                            };
+                        }
+                        else
+                        {
+                            throw new Exception($"GetHoldKeyStatus - Adminsite's api returns incorrect matchId (IP = {matchId} || OP = {matchInfo.matchId})");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Get hold key status - Exception: "
+                  + ex.Message
+                  + ex.StackTrace + "\n"
+                  + ex?.InnerException?.Message + "\n"
+                  + $"DataInput: {JsonConvert.SerializeObject(matchId) + "\n"}"
+                  + ex?.InnerException?.Source
+                  + ex?.InnerException?.StackTrace);
+            }
+
+            return result;
+        }
+
+        #endregion
+
+        #region Ticket Voiding
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailTicketVoiding)]
+        public ActionResult RedirectToTicketVoiding(string tranIds)
+        {
+            var result = new TicketVoidingViewModel();
+            bool isValid = false;
+            const int maxTranIds = 2000;
+
+            try
+            {
+                if (!string.IsNullOrEmpty(tranIds))
+                {
+
+                    List<string> tranList = tranIds.Split(',').ToList();
+
+                    if (tranList.Count() <= maxTranIds)
+                    {
+                        result.OnUserId = Common.Cryptography.CfsEnCrypt(CurrentSession.OnUserId.ToString());
+                        result.UserId = Common.Cryptography.CfsEnCrypt(CurrentSession.UserId.ToString());
+                        result.Time = Common.Cryptography.CfsEnCrypt(DateTime.Now.ToString());
+                        result.TransIds = tranIds;
+                        isValid = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Redirect to Ticket Voiding - Exception: "
+                                 + ex.Message
+                                 + ex.StackTrace + "\n"
+                                 + ex?.InnerException?.Message + "\n"
+                                 + $"DataInput: {JsonConvert.SerializeObject(tranIds) + "\n"}"
+                                 + ex?.InnerException?.Source
+                                 + ex?.InnerException?.StackTrace);
+            }
+
+            return Json(new
+            {
+                data = result,
+                isValid = isValid
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
 
         #region Export to Excel
         [HttpPost]

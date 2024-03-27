@@ -163,6 +163,8 @@
 		<Setting Key="CTS_DC_MatchMonitor_UserComment_Insert" SpName="CTS_DC_MatchMonitor_UserComment_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_MatchMonitor_UserComment_Update" SpName="CTS_DC_MatchMonitor_UserComment_Update_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_MatchMonitor_UserComment_Delete" SpName="CTS_DC_MatchMonitor_UserComment_Delete_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
+
+		<Setting Key="CTS_DC_MatchMonitor_HoldKey_InsertLog" SpName="CTS_DC_MatchMonitor_HoldKey_InsertLog_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 	</Function>
 
 	<Function name="RobotClassification">
