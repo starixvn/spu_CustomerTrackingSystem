@@ -837,7 +837,7 @@
                         SportGroup = item.main.SportGroup,
                         SportNameDisplay = item.main.SportNameDisplay,
                         LeagueGroupID = item.main.LeagueGroupID,
-                        SportType = item.main.SportType,
+                        SportType = item.main.SporttypeId,
                         SportName = item.main.SportName,
                         BetTypeID = group.BetTypeID,
                         BetTypeName = group.BetTypeNameDisplay,

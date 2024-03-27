@@ -229,7 +229,7 @@
                     $('.loading').removeClass('hide');
                 },
                 success: function (response) {
-                    if (response?.data?.Item) {
+                    if (response?.data?.Items) {
                         domElements.tblMonitor.DataTable().rows.add(response?.data?.Items).draw(false);
                     }
 
@@ -424,7 +424,7 @@
                 { data: obj => obj.LeagueName },
                 {
                     data: obj => () => {
-                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&BettypeName={5}&MatchSection={6}&Market={7}&LeagueID={8}&BetID={9}&SportType={10}&KOTime={11}&Danger1={12}&Danger2={13}&Danger3={14}&Danger4={15}&Danger5={16}";
+                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&BettypeName={5}&MatchSection={6}&Market={7}&LeagueID={8}&BetID={9}&SportType={10}&KOTime={11}";
                         let para = paramTemplate.format(
                             obj.EventDateToString,
                             obj.MatchID,
@@ -437,12 +437,14 @@
                             obj.LeagueID,
                             obj.BetID,
                             obj.SportType,
-                            obj.KOTime,
-                            dangerListSelected.Danger1,
-                            dangerListSelected.Danger2,
-                            dangerListSelected.Danger3,
-                            dangerListSelected.Danger4,
-                            dangerListSelected.Danger5);
+                            obj.KOTime);
+
+                        Object.keys(dangerListSelected).forEach(item => {
+                            if (dangerListSelected[item])
+                            {
+                                para += `&${item}=${dangerListSelected[item]}`;
+                            }
+                        });
 
                         return '<a class="click-view-details" href="DangerMonitor/Detail?' + para + '" target="_blank">' + obj.MatchName + '</a>';
                     }
@@ -484,7 +486,7 @@
     function GetDangerListById() {
         var result = {};
         if (domElements.cbbDgr.val()) {
-            var dangerString = domElements.cbbDgr.val();
+            var dangerString = domElements.cbbDgr.val().split('_');
 
             result[dangerString[0]] = Number(dangerString[1]);
         }

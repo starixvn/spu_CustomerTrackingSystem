@@ -6,35 +6,6 @@
 
     public class GetDangerMonitorItemViewModel
     {
-        public GetDangerMonitorItemViewModel(GetDangerSummaryItemViewModel matchSummary, int matchSection, DangerMonitorBetTypeViewModel sportBettype)
-        {
-            MatchID = matchSummary.MatchId;
-
-            TotalAmtHome = matchSummary.TotalAmountHome;
-            TotalAmtAway = matchSummary.TotalAmountAway;
-            TotalTicketHome = matchSummary.TotalTicketHome;
-            TotalTicketAway = matchSummary.TotalTicketAway;
-            Market = matchSummary.LiveIndicator;
-            BettypeID = matchSummary.Bettype;
-            BetID = matchSummary.BetID;
-            BetChoiceType = matchSummary.BetChoiceType;
-
-            HomeID = matchSummary.HomeId;
-            HomeName = matchSummary.HomeName;
-            AwayID = matchSummary.AwayId;
-            AwayName = matchSummary.AwayName;
-            LeagueID = matchSummary.LeagueId;
-            LeagueName = matchSummary.LeagueName;
-            SportType = matchSummary.SportType;
-            EventDate = matchSummary.EventDate;
-            MatchSection = matchSection;
-            KickOffTime = matchSummary.GlobalShowTime;
-
-            BettypeName = sportBettype.BetTypeName;
-            //BetID = sportBettype.BetID;
-            SportName = sportBettype.SportName;
-        }
-
         public GetDangerMonitorItemViewModel(DangerMMTicketInfoViewModel matchSummary, DangerMonitorBetTypeViewModel sportBettype)
         {
             MatchID = matchSummary.MatchId;
@@ -48,7 +19,7 @@
             BetID = matchSummary.BetID;
             BetChoiceType = matchSummary.BetChoiceType;
 
-            HomeID = matchSummary.homeid;
+            HomeID = matchSummary.Homeid;
             HomeName = matchSummary.HomeName;
             AwayID = matchSummary.AwayId;
             AwayName = matchSummary.AwayName;

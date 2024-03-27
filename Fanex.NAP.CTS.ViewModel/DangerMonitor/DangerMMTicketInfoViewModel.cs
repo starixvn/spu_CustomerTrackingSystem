@@ -28,7 +28,7 @@
 
         public DateTime GlobalShowTime { get; set; }
         
-        public int homeid { get; set; }
+        public int Homeid { get; set; }
 
         public string HomeName { get; set; }
 

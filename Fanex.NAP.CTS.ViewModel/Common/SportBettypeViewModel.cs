@@ -8,7 +8,7 @@
 
         public string SportNameDisplay { get; set; }
 
-        public int SportType { get; set; }
+        public int SporttypeId { get; set; }
 
         public int? LeagueGroupID { get; set; }
 

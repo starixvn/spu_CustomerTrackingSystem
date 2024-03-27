@@ -6,31 +6,31 @@
 
     public class DangerMonitorTicketSummaryCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_FromDate")]
+        [SpParam(SqlParamName = "FromDate")]
         public DateTime? FromDate { get; set; }
 
-        [SpParam(SqlParamName = "ip_ToDate")]
+        [SpParam(SqlParamName = "ToDate")]
         public DateTime? ToDate { get; set; }
 
-        [SpParam(SqlParamName = "ip_SportList")]
+        [SpParam(SqlParamName = "SportList")]
         public string SportList { get; set; }
 
-        [SpParam(SqlParamName = "ip_LeagueEvent")]
+        [SpParam(SqlParamName = "LeagueEvent")]
         public string LeagueEvent { get; set; }
 
-        [SpParam(SqlParamName = "ip_BettypeList")]
+        [SpParam(SqlParamName = "BettypeList")]
         public string BettypeList { get; set; }
 
-        [SpParam(SqlParamName = "ip_QueryDanger")]
+        [SpParam(SqlParamName = "DangerLevels")]
         public string QueryDanger { get; set; }
 
-        [SpParam(SqlParamName = "ip_MarketList")]
+        [SpParam(SqlParamName = "MarketList")]
         public string MarketList { get; set; }
 
-        [SpParam(SqlParamName = "ip_SportSabaLgGroup")]
+        [SpParam(SqlParamName = "SportSabaLeagueGroup")]
         public string SportSabaLgGroup { get; set; }
 
-        [SpParam(SqlParamName = "ip_MatchSection")]
+        [SpParam(SqlParamName = "MatchSection")]
         public string MatchSection { get; set; }
 
         public override string GetSettingKey() => "CTS_MatchTicketInfo_Get";
