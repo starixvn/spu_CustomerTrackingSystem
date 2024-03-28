@@ -120,10 +120,6 @@
                     }
 
                     .group {
-                        .width-select {
-                            width: 11rem;
-                        }
-
                         .text-box {
                             height: 2.8rem;
                             display: flex;
@@ -507,4 +503,8 @@ button#btnGenerate {
     font-size: inherit;
     color: #545454;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.width-select {
+    width: 15rem;
 }

@@ -72,9 +72,11 @@
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0], className: "text-center" },
                 { targets: [0], width: "1%" },
-                { targets: [1, 2, 5], className: "text-left col-username" },
-                { targets: [3, 4], className: "text-center col-username" },
-                { targets: [6], className: "text-left", width: "30%" },
+                { targets: [1, 2], className: "text-left col-username" },
+                { targets: [5], className: "text-center col-username" },
+                { targets: [3], className: "text-center col-username" },
+                { targets: [4], className: "text-right col-username" },
+                { targets: [6], className: "text-center", width: "30%" },
                 { targets: [7], className: "text-center col-date" },
                 { targets: [8], className: "text-center col-action" },
             ],
@@ -145,12 +147,13 @@
                 InitInputTagUsername();
                 domElements.divAddProblemAccount.dialog({
                     modal: true,
-                    width: '500px',
+                    width: '800px',
                     title: 'ADD CUSTOMER CLASS',
                     resizable: true,
                     draggable: true,
                     open: function () {
                         domElements.formValidate.css('display', 'block');
+                        domElements.ccbSportTypeSingle.val(0);
                     },
                     close: function () {
                         $(this).dialog('close');
@@ -186,7 +189,7 @@
 
                 domElements.divAddProblemAccount.dialog({
                     modal: true,
-                    width: '500px',
+                    width: '800px',
                     title: 'REMOVE CUSTOMER CLASS',
                     resizable: true,
                     draggable: true,
@@ -365,7 +368,7 @@
 
         var params = {
             isSkipTracking: isSkip,
-            Username: domElements.txtSearchUsername.val(),
+            Username: domElements.txtSearchUsername.val().trim(),
             SportIds: domElements.cbbSportTypeMulti.val().join()
         };
 
