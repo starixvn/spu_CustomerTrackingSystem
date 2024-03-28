@@ -363,7 +363,7 @@
         {
             if (customerInfo != null && customerInfo.Any())
             {
-                var custInfoJson = JsonConvert.SerializeObject(customerInfo);
+                var custInfoJson = JsonConvert.SerializeObject(customerInfo.Where(x=>x.CategoryType != 2));
 
                 var criteria = new CheckNewPAAssociationCustomerForRollbackCriteria
                 {

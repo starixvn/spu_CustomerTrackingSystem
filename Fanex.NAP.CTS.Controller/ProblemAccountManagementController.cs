@@ -270,13 +270,16 @@
                         {                           
                             CustIds = custIdList,
                             IsPushCCToSoon88 = true,
+                            IsRescanPADangerous = true,
                             FunctionId = FunctionId.UnmarkCustomerCategory,
                             IsUpdateDangerToMainDB = true
                         };
 
+                        var custRescanPADangous = _rescanClassificationService.RescanPADangerous(custIdList, paramRescan);
+
                         var smCustIds = _rescanClassificationService.GetAgentCusts(custIdList);
 
-                        _rescanClassificationService.RescanNormalAccount(paramRescan, Enumerable.Empty<long>(), smCustIds);
+                        _rescanClassificationService.RescanNormalAccount(paramRescan, custRescanPADangous.CustIds.Distinct(), smCustIds);
                     }
                 }
             }
