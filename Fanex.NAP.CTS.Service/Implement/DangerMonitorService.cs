@@ -378,19 +378,6 @@
 
             return result;
         }
-
-        public long GetMatchMonitorTotalTicket(MMDetailInfoViewModel info, MMDetailFilterViewModel filter)
-        {
-            long recordsTotal = 0;
-
-            var fraudTicket = GetFraudMMDetailForCache(info);
-
-            var transJson = _matchMonitorService.GetTransFilterSuspicousMGr(filter, fraudTicket);
-
-            recordsTotal = _matchMonitorService.GetTotalTicketDetail(info, filter, 0, transJson);
-
-            return recordsTotal;
-        }
         #endregion
 
         #region private method

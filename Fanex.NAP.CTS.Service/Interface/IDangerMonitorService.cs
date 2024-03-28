@@ -22,7 +22,5 @@
         MMDetailTicketListViewModel GetMatchMonitorDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter);
 
         MMDetailFilterViewModel GetMatchMonitorFilter(MMDetailInfoViewModel para);
-
-        long GetMatchMonitorTotalTicket(MMDetailInfoViewModel info, MMDetailFilterViewModel filter);
     }
 }

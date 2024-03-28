@@ -174,35 +174,6 @@
         }
         #endregion Detail Filter
 
-        #region Detail Total Tickets
-        [HttpPost]
-        public ActionResult GetMatchMonitorTotalTicket(MMDetailInfoViewModel info, MMDetailFilterViewModel filter)
-        {
-            long recordsTotal = 0;
-
-            try
-            {
-                recordsTotal = _dangerMonitorService.GetMatchMonitorTotalTicket(info, filter);
-            }
-            catch (Exception ex)
-            {
-                var logMessage = new LogMessage(ex.Message)
-                   .AddMessage($"{Region} Get Match Monitor Total Ticket Error: " + ex.Message + ex.StackTrace + "\n"
-                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                    + ex.InnerException.StackTrace)
-                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
-            }
-
-            return Json(new
-            {
-                recordsTotal = recordsTotal,
-            }, JsonRequestBehavior.AllowGet);
-        }
-        #endregion Detail Total Tickets
-
         #region Detail Tickets
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.DangerMonitorDetailRpt)]
