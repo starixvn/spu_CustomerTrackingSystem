@@ -93,15 +93,15 @@
 
             try
             {
-                var sportBettype = _dangerMonitorService.GetSportBettypesFromCache();
+                var bettypes = _dangerMonitorService.GetBettypesFromCache();
 
                 ViewBag.GroupCCList = _commonService.GetGroupCustomerClass();
                 ViewBag.EventDateToString = para?.EventDateToString;
                 ViewBag.MatchID = para?.MatchID;
                 ViewBag.BetTypeID = para?.BetTypeID;
-                ViewBag.BettypeName = sportBettype.FirstOrDefault(x => x.BetTypeID == para?.BetTypeID)?.BetTypeName;
+                ViewBag.BettypeName = bettypes.FirstOrDefault(x => x.BetTypeID == para?.BetTypeID)?.BetTypeName;
                 ViewBag.BetIDToString = para?.BetID.ToString();
-                ViewBag.BetTypeSettings = sportBettype.Where(x => x.SportType == para.SportType);
+                ViewBag.BetTypeSettings = bettypes?.Where(x => x.SportType == para.SportType);
                 ViewBag.MapX = para?.MX;
                 ViewBag.MapYY = para?.MY;
                 ViewBag.HomeName = para?.HomeName.ToUpper() ?? string.Empty;
@@ -116,7 +116,7 @@
                 ViewBag.BetChoice = para?.BetChoice;
                 ViewBag.IsDisableScoreFilter = para?.SportType != null && para.SportType == (int)MatchMonitorSportType.Basketball;
                 ViewBag.SportType = para?.SportType ?? 0;
-                ViewBag.SportName = sportBettype.FirstOrDefault(x => x.SportType == para?.SportType)?.SportName;
+                ViewBag.SportName = bettypes.FirstOrDefault(x => x.SportType == para?.SportType)?.SportName;
                 ViewBag.KOTime = para?.KOTime;
                 ViewBag.IsSupportShowAllTickets = true;
                 ViewBag.Danger1 = para.Danger1;

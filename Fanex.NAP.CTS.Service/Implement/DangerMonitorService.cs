@@ -70,6 +70,11 @@
             return result;
         }
 
+        public IEnumerable<DangerMonitorBetTypeViewModel> GetBettypesFromCache()
+        {
+            return GetSportBettypesFromCache()?.GroupBy(item => $"{item.SportType}_{item.BetTypeID}_{item.BetID}")?.Select(x => x.FirstOrDefault());
+        }
+
         public GetDangerMonitorResultViewModel GetDangerMonitor(DangerMonitorSearchModel filter)
         {
             var result = Enumerable.Empty<GetDangerMonitorItemViewModel>();
@@ -113,7 +118,7 @@
         #region private method
         private IEnumerable<GetDangerMonitorItemViewModel> MappingDangerMonitorWithSportBettype(IEnumerable<DangerMMTicketInfoViewModel> dangerMonitors)
         {
-            var sportBettypes = GetSportBettypesFromCache();
+            var sportBettypes = GetBettypesFromCache();
 
             return dangerMonitors.Join(sportBettypes,
                                         item => $"{item.SportType}_{item.Bettype}_{item.BetID}",

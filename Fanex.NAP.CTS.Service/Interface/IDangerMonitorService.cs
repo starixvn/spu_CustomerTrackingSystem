@@ -10,6 +10,8 @@
     {
         IEnumerable<DangerMonitorBetTypeViewModel> GetSportBettypesFromCache(bool isGetNew = false);
 
+        IEnumerable<DangerMonitorBetTypeViewModel> GetBettypesFromCache();
+
         GetDangerMonitorResultViewModel GetDangerMonitor(DangerMonitorSearchModel filter);
 
         byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath);
