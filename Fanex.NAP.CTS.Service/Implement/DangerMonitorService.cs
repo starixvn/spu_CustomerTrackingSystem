@@ -453,9 +453,7 @@
 
                 custInfo = GetCustInfoByCustID(custIDs);
 
-                var mergeInfo = _matchMonitorService.DrawColorFraudMMDetailWithMergeReasonAGroup(matchDetailInfo.VerifiedTrans, custInfo, ticketDetailGroup.TicketDetails, mergeGroup, reasons);
-
-                var mdItemList = MappingRobotStatus(mergeInfo, para.BetTypeID);
+                var mdItemList = _matchMonitorService.DrawColorFraudMMDetailWithMergeReasonAGroup(matchDetailInfo.VerifiedTrans, custInfo, ticketDetailGroup.TicketDetails, mergeGroup, reasons);
 
                 if (para.BetChoiceType == 1)
                 {
@@ -579,36 +577,6 @@
         private bool StopLoopCallDataMMCondition(TicketDetailViewModel result)
         {
             return result.MinSequenceId is null && result.MinTransDate is null;
-        }
-
-        private IEnumerable<MatchMonitorDetailItemViewModel> MappingRobotStatus(IEnumerable<MatchMonitorDetailItemViewModel> ticket, int betTypeID)
-        {
-            if (ticket.Any())
-            {
-                var para = ticket.Select(c => new { TransID = c.TransId, TransDate = c.TransTime, CustID = c.CustID });
-
-                var robotStatus = _matchMonitorService.GetRobotStatus(JsonConvert.SerializeObject(para));
-
-                if (robotStatus.Any())
-                {
-                    return ticket.GroupJoin(robotStatus,
-                               t => t.TransId,
-                               r => r.TransID,
-                               (t, r) => new { t, r })
-                               .SelectMany(
-                                    group => group.r.DefaultIfEmpty(),
-                                    (g, r) =>
-                                    {
-                                        var nt = g.t;
-                                        nt.RobotType = (r != null) ? r?.RobotType : null;
-                                        nt.IsRobot = (r != null) && r.IsRobot;
-                                        nt.BetTypeID = betTypeID;
-                                        return nt;
-                                    });
-                }
-            }
-
-            return ticket;
         }
 
         private IEnumerable<MatchMonitorDetailItemViewModel> DrawColorAllMMDetailAndUpdateValue(IEnumerable<MatchMonitorDetailVerifyTransResultModel> verifiedTrans,
