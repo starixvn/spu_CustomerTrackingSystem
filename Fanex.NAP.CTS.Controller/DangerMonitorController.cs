@@ -74,7 +74,7 @@
             {
                 data = _dangerMonitorService.GetDangerMonitor(filter);
 
-                data.Items = data.Items.OrderBy(x => x.MatchSection).ThenByDescending(x => x.MatchID).ThenByDescending(x => x.BetID);
+                data.Items = data.Items.OrderBy(x => x.MatchSection).ThenByDescending(x => x.EventDate).ThenByDescending(x => x.MatchID).ThenByDescending(x => x.BetID);
             }
 
             return Json(new
