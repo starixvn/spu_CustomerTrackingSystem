@@ -273,8 +273,9 @@
         }
 
         let inputClass = domElements.txtCustomerClass.val();
+        let parseInputClass = parseInt(inputClass)
 
-        if (!inputClass || !parseInt(inputClass)) {
+        if (!inputClass || !parseInputClass || parseInputClass < -32768 || parseInputClass > 32767) {
             common.showError('Class ' + domElements.txtCustomerClass.val() + ' is invalid.');
             result = false;
         }
