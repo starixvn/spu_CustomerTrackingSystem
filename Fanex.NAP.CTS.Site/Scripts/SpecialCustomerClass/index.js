@@ -19,7 +19,7 @@
         spanAddSpecialCustomerAccountUserNameMaxTag: $('#spanAddProblemAccountUserNameMaxTag'),
         spanAddSpecialCustomerAccountChangeHidden: $('#spanAddProblemAccountChangeHidden'),
         spanSpecialCustomerAccountActionHidden: $('#spanProblemAccountActionHidden'),
-        maxTags: 1001,
+        maxTags: 15,
         divAddProblemAccount: $('#divAddProblemAccount'),
         txtComment: $('#txtComment'),
         formValidate: $('.form-validate'),
