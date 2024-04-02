@@ -5,20 +5,17 @@
 
     public class InsertSpecialCustomerClassCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_Username")]
-        public string Username { get; set; }
+        [SpParam(SqlParamName = "ip_ListCust")]
+        public string ListCust { get; set; }
 
         [SpParam(SqlParamName = "ip_CustomerClass")]
         public int CustomerClass { get; set; }
 
-        [SpParam(SqlParamName = "ip_IsAffectedToAssociation")]
-        public bool IsAffectToAssociation { get; set; }
+        [SpParam(SqlParamName = "ip_Remark")]
+        public string Remark { get; set; }
 
-        [SpParam(SqlParamName = "ip_UserID")]
+        [SpParam(SqlParamName = "ip_CreatedBy")]
         public int CreatedBy { get; set; }
-
-        [SpParam(SqlParamName = "op_ErrorMessage")]
-        public string ErrorMessage { get; set; }
 
         public override string GetSettingKey()
             => "CTS_DC_SpecialCustClass_Insert";

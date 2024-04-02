@@ -609,13 +609,6 @@
             <param name="paras"></param>
             <returns></returns>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.ForceSpecialCC(Fanex.NAP.CTS.Model.API.ForceSpecialCustomerClassModel)">
-            <summary>
-            Insert special CC (build firstly for Haifa)
-            </summary>
-            <param name="paras"></param>
-            <returns></returns>
-        </member>
         <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.GraphController">
             <summary>
             Graph Controller - Using for CTS site

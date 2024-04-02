@@ -285,6 +285,12 @@
             RemoveLicBABySite_API = 50,
         };
 
+        public enum BySport_FunctionId
+        {
+            InsertNewCustJob = 4,
+            Manual = 5,
+        };
+
         public enum RescanNormalType
         {
             Manual = 4,

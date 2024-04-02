@@ -5,8 +5,8 @@
 
     public class ValidateSpecialCCCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_FunctionID")]
-        public int FunctionValidateSpecialCC { get; set; }
+        [SpParam(SqlParamName = "ip_ActionType")]
+        public int ActionType { get; set; }
 
         [SpParam(SqlParamName = "ip_ListUser")]
         public string ListUser { get; set; }

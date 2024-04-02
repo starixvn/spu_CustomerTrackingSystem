@@ -243,7 +243,7 @@ namespace Fanex.NAP.CTS.Model
 
     public enum FunctionValidateSpecialCC
     {
-        Add = 1,
+        Add = 0,
         Remove = 2
     }
 }

@@ -17,6 +17,10 @@
 
         public int SportID { get; set; }
 
+        public int SubscriberID { get; set; }
+
+        public bool IsLicenseeVIP { get; set; }
+
         public int ValidateID { get; set; }
 
         public bool IsValid { get; set; }

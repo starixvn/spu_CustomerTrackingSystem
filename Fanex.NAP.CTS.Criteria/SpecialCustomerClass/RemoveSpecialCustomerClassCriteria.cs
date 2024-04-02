@@ -3,16 +3,16 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class RemoveSpecialCustomerClassCriteria : CriteriaBase
+    public class RemoveSpecialCustomerClassCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_CTSCustID")]
-        public long CTSCustID { get; set; }      
+        [SpParam(SqlParamName = "ip_ListCust")]
+        public string ListCust { get; set; }      
 
-        [SpParam(SqlParamName = "ip_UserID")]
+        [SpParam(SqlParamName = "ip_Remark")]
+        public string Comment { get; set; }
+
+        [SpParam(SqlParamName = "ip_CreatedBy")]
         public int CreatedBy { get; set; }
-
-        [SpParam(SqlParamName = "op_ErrorMessage")]
-        public string ErrorMessage { get; set; }
 
         public override string GetSettingKey()
             => "CTS_DC_SpecialCustClass_Remove";

@@ -8,11 +8,11 @@
 
     public interface ISpecialCustomerClassService
     {
-        IEnumerable<CustomerClassModel> GetAllCustomerClass(string username);
+        IEnumerable<CustomerClassViewModel> GetSpecialCustomerClass(SearchSpecialCCParamsModel model);
 
-        ResultInsertCustomerClass InsertCustomerClass(string username, int custClass, bool isAffectToAssociation, int createdBy);
+        void InsertCustomerClass(AddSpecialCCParamsModel model, ValidateSpecialCCResultViewModel validateSpecialCC, int createdBy);
 
-        DBResult RemoveCustomerClass(long ctsCustID, int createdBy);
+        void RemoveCustomerClass(RemoveSpecialCCParamsModel model, ValidateSpecialCCResultViewModel validateUsers, int createdBy);
 
         ValidateSpecialCCResultViewModel ValidateSpecialCC(FunctionValidateSpecialCC functionID, List<UserListSpecialCCParamsModel> userList);
     }

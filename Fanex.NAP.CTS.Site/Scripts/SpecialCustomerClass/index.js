@@ -1,12 +1,11 @@
 ﻿function SpecialCustomerClass() {
-    let dataTable;
+    let userList;
 
     let domElements = {
         ccbSportTypeSingle: $('#ccbSportTypeSingle'),
         cbbSportTypeMulti: $('#ccbSportType'),
         specialCustomerClassTable: $('#tblSpecialCustomerClass'),
         divCustomerClass: $('#divAddCustomerClass'),
-        btnAddCustomerClass: $('#btnAdd'),
         btnGenerate: $('#btnGenerate'),
         btnSave: $('#btnSave'),
         btnCancel: $('#btnCancel'),
@@ -23,14 +22,15 @@
         divAddProblemAccount: $('#divAddProblemAccount'),
         txtComment: $('#txtComment'),
         formValidate: $('.form-validate'),
-        btnRemoveCustomerClass: $('#btnRemove'),
         inputSelectAll: $('#inputSelectAll'),
+        btnAddCustomerClass: $('#btnAdd'),
+        btnRemoveCustomerClass: $('#btnRemove'),
     };
 
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
 
     function InitGrid() {
-        return domElements.specialCustomerClassTable.DataTable({
+        domElements.specialCustomerClassTable.DataTable({
             serverSide: false,
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
@@ -85,10 +85,10 @@
                 },
                 { data: obj => obj.Username },
                 { data: obj => obj.SubscriberName },
-                { data: obj => obj.SubscriberName },
+                { data: obj => obj.SportType },
                 { data: obj => obj.CustomerClass },
                 { data: obj => obj.CreatedBy },
-                { data: obj => obj.CreatedDateString },
+                { data: obj => obj.Comment },
                 { data: obj => obj.CreatedDateString },
                 {
                     data: obj => () => {
@@ -100,80 +100,94 @@
                                 $('td #sub-icon').addClass('none-pointer');
                                 let html = "<div class='popup - content'>Do you want remove <strong>" + row.Username + "</strong> from Special Customer Class list? </div>";
 
-                                common.showConfirmation(html, function () {
-                                    RemoveCustomerClass(row);
-                                }, () => {
-                                    $('td #sub-icon').removeClass('none-pointer');
+                                userList = [{ Username: row.Username, SportID: 0 }];
+                                domElements.txtComment.val("");
+
+                                domElements.divAddProblemAccount.dialog({
+                                    modal: true,
+                                    width: '500px',
+                                    title: 'REMOVE CUSTOMER CLASS',
+                                    resizable: true,
+                                    draggable: true,
+                                    open: function () {
+                                        domElements.formValidate.css('display', 'none');
+                                    },
+                                    close: function () {
+                                        $(this).dialog('close');
+                                    }
                                 });
                             });
                         }
                     }
                 }
             ],
-            fnDrawCallback: function () {
-                domElements.btnAddCustomerClass = $('#btnAdd');
-                domElements.btnAddCustomerClass.prop('disabled', !isHostPermission);
-                domElements.btnRemoveCustomerClass = $('#btnRemove');
-                domElements.btnAddCustomerClass.prop('disabled', !isHostPermission);
-
-                if (isHostPermission) {
-                    domElements.btnAddCustomerClass.on('click', function () {
-                        domElements.inputTagUsername.val("");
-                        domElements.txtCustomerClass.val("");
-                        domElements.btnIsAffectToAssociation.prop('checked', false);
-
-                        InitInputTagUsername();
-                        domElements.divAddProblemAccount.dialog({
-                            modal: true,
-                            width: '500px',
-                            title: 'ADD CUSTOMER CLASS',
-                            resizable: true,
-                            draggable: true,
-                            open: function () {
-                                domElements.formValidate.css('display', 'block');
-                            },
-                            close: function () {
-                                $(this).dialog('close');
-                            }
-                        });
-                    });
-
-                    domElements.btnRemoveCustomerClass.on('click', function () {
-                        domElements.divAddProblemAccount.dialog({
-                            modal: true,
-                            width: '500px',
-                            title: 'REMOVE CUSTOMER CLASS',
-                            resizable: true,
-                            draggable: true,
-                            open: function () {
-                                domElements.formValidate.css('display', 'none');
-                            },
-                            close: function () {
-                                $(this).dialog('close');
-                            }
-                        });
-                    })
-                }
-            }
         });
+
+        domElements.btnAddCustomerClass = $('#btnAdd');
+        domElements.btnAddCustomerClass.prop('disabled', !isHostPermission);
+        domElements.btnRemoveCustomerClass = $('#btnRemove');
+        domElements.btnAddCustomerClass.prop('disabled', !isHostPermission);
+
+        if (isHostPermission) {
+            domElements.btnAddCustomerClass.on('click', function () {
+                domElements.inputTagUsername.val("");
+                domElements.txtCustomerClass.val("");
+                domElements.txtComment.val("");
+                domElements.btnIsAffectToAssociation.prop('checked', false);
+
+                InitInputTagUsername();
+                domElements.divAddProblemAccount.dialog({
+                    modal: true,
+                    width: '500px',
+                    title: 'ADD CUSTOMER CLASS',
+                    resizable: true,
+                    draggable: true,
+                    open: function () {
+                        domElements.formValidate.css('display', 'block');
+                    },
+                    close: function () {
+                        $(this).dialog('close');
+                    }
+                });
+            });
+
+            domElements.btnRemoveCustomerClass.on('click', function () {
+                userList = [];
+                domElements.specialCustomerClassTable.DataTable().rows(function (idx, x, node) {
+                    if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                        userList.push({ Username: x.Username, SportID: 0 });
+                    }
+                });
+
+                if (userList.length <= 0) {
+                    common.showError("Please select at least 1 record to proceed!");
+                    return;
+                }
+
+                domElements.txtComment.val("");
+
+                domElements.divAddProblemAccount.dialog({
+                    modal: true,
+                    width: '500px',
+                    title: 'REMOVE CUSTOMER CLASS',
+                    resizable: true,
+                    draggable: true,
+                    open: function () {
+                        domElements.formValidate.css('display', 'none');
+                    },
+                    close: function () {
+                        $(this).dialog('close');
+                    }
+                });
+            })
+        }
     }
 
-    function RemoveCustomerClass(model, isRemoveAll = false) {
+    function RemoveCustomerClass(userList) {
         var url = common.modifyRelativeUrl('/SpecialCustomerClass/RemoveCustomerClass');
         var params = {};
         params.Comment = domElements.txtComment.val();
-        params.UserList = [];
-
-        if (isRemoveAll) {
-            domElements.specialCustomerClassTable.DataTable().rows(function (idx, x, node) {
-                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
-                    params.UserList.push({ Username: x.Username, SportID: 0 });
-                }
-            });
-        }
-        else {
-            params.UserList = [{ Username: model.Username, SportID: 0 }];
-        }
+        params.UserList = userList;
 
         $.ajax(url, {
             type: 'POST',
@@ -218,8 +232,10 @@
                         loaderBg: '#fff',  // Background color of the toast loader
                     });
                 }
-                else {
-                    common.showError(xhr.responseText, false);
+
+                if (xhr.status === 500)
+                {
+                    common.showError("Please contact admin!");
                 }
 
                 common.closeLoading();
@@ -262,14 +278,6 @@
             success: function (response) {
                 common.showSuccess('Add the Customer Class successful');
                 LoadGrid(domElements.txtSearchUsername.val(), false);
-
-                // if (response !== undefined) {
-                //     if (response.ErrorCode === 0) {
-                //         domElements.divCustomerClass.dialog('close');
-                //     } else {
-                //         common.showError("Failed! " + response.ErrorMessage);
-                //     }
-                // }
             },
             beforeSend: function () {
                 common.showLoading();
@@ -303,8 +311,10 @@
                         loaderBg: '#fff',  // Background color of the toast loader
                     });
                 }
-                else {
-                    common.showError(xhr.responseText, false);
+                
+                if (xhr.status === 500)
+                {
+                    common.showError("Please contact admin!");
                 }
 
                 common.closeLoading();
@@ -485,61 +495,13 @@
             }
         });
 
-        // $(document).off('mouseup').on('mouseup', function (e) {
-        //     let isOutSiteInput = !domElements.spanAddSpecialCustomerAccountUserName.is(e.target) && domElements.spanAddSpecialCustomerAccountUserName.has(e.target).length === 0;
-        //     let isTagsFocus = domElements.spanAddSpecialCustomerAccountUserName.find('tags.tagify--focus').length > 0;
-        //     let isChange = domElements.spanAddSpecialCustomerAccountChangeHidden.text();
-        //     if (isOutSiteInput && isTagsFocus || isChange === "1") {
-        //         domElements.txtComment.focus();
-        //         domElements.spanAddSpecialCustomerAccountUserName.addClass("loading-value");
-        //         setTimeout(() => {
-        //             // ValidateProblemAccountInput('');
-        //             domElements.spanAddSpecialCustomerAccountUserName.removeClass("loading-value");
-        //             domElements.spanAddSpecialCustomerAccountChangeHidden.text("0");
-        //         }, 500);
-        //     }
-        // });
-
         domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
-        // domElements.spanAddProblemAccountUserName.find('tags').attr('tabindex', "1");
-    }
-
-    function GetinputTagUsername(textTagRemove) {
-        let userNameList = [];
-        let tags = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag');
-
-        tags.map(function (_, ele) {
-            let text = $(ele).text().trim();
-            if (textTagRemove !== "" && text === textTagRemove) {
-                textTagRemove = "";
-                return;
-            }
-            userNameList.push(text);
-        });
-
-        return userNameList.join();
     }
 
     function ToggleGridSelectAll(input, table) {
         var nodes = table.rows({ 'search': 'applied' }).nodes();
 
         $('input[type="checkbox"][name="chkbx"]', nodes).prop('checked', input.is(":checked"));
-
-        // var valueSelected = {};
-        // domElements.specialCustomerClassTable.DataTable().rows(function (idx, x, node) {
-        //     valueSelected[`${x.Username}_${x.CustID}`] = $(node).find('input[type="checkbox"][name="chkbx"]').prop('checked');
-        // });
-
-        // alert(JSON.stringify(valueSelected))
-        // table.rows(function (idx, x, node) {
-        //     if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
-        //         valueSelected[`${x.Username}_${x.CustID}`] = input.is(":checked") ? 'checked' : '';
-        //     }
-        // });
-
-        // nodes.data().toArray().forEach(x => {
-        //     // $(`#${x.SubscriberName}_${x.CustomerClass}_${x.Username.replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&")}`).prop('checked', input.is(":checked"));
-        // });
     }
 
     function Initial() {
@@ -570,7 +532,9 @@
                     }
                 }
                 else {
-                    RemoveCustomerClass(null, true);
+                    if (userList.length > 0) {
+                        RemoveCustomerClass(userList);
+                    }
                 }
             });
 

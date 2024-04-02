@@ -335,7 +335,10 @@
     <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorModel.cs" />
     <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
+    <Compile Include="CustomerClassification\InsertNormalAccountCustInfoModel.cs" />
     <Compile Include="CustomerClassification\LogErrorDataModel.cs" />
+    <Compile Include="CustomerClassification\PushDataToExternal\CustomerClassificationUpdateBySportToMainDBModel.cs" />
+    <Compile Include="CustomerClassification\PushDataToExternal\GetCustomerClassificationBySportModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\LatestCCDangerLevelModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\ExistedPAResultModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\CustInfoModel.cs" />
@@ -495,6 +498,7 @@
     <Compile Include="ReportModel.cs" />
     <Compile Include="DTO\Subscriber.cs" />
     <Compile Include="SpecialCustomerClass\SearchSpecialCCParamsModel.cs" />
+    <Compile Include="SpecialCustomerClass\UserListSpecialCCModel.cs" />
     <Compile Include="SpecialCustomerClass\UserListSpecialCCParamsModel.cs" />
     <Compile Include="Subscriber\Subscriber.cs" />
     <Compile Include="Subscriber\SubscriberAssignment.cs" />

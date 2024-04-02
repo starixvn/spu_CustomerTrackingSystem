@@ -10,11 +10,13 @@
 
         public string Username { get; set; }
 
-        public long RootCTSCustID { get; set; }
+        public int SportID { get; set; }
 
         public string SubscriberName { get; set; }
 
         public int CustomerClass { get; set; }
+
+        public string Comment { get; set; }
 
         public string CreatedBy { get; set; }
 
