@@ -44,73 +44,7 @@
             associationService = new AssociatedAccountService();
             associationDetectionService = new AssociationDetectionService();
             associationReportService = new AssociationReportService();
-        }
-
-        #region WEB - Association Profile Page
-
-        /// <summary>
-        /// Get Direct All Association for WEB Profile Page
-        /// </summary>
-        /// <param name="paras"></param>
-        /// <returns></returns>
-        [System.Web.Http.AcceptVerbs("GetDirectAssociationProfile")]
-        [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetDirectAssociationProfileAPI)]
-        public AssociatedAccountPagingModel GetDirectAssociationProfile([FromBody] AssociationProfileParameterModel paras)
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(paras.SubscriberIDs) && !string.IsNullOrEmpty(paras.CategoryIDs))
-                {
-                    string queryScript = GetQueryScriptForAssProfile(paras.AssociationType);
-                    
-                    var result = DbSessionFactory.Execute<AssociatedAccountPagingModel>(queryScript, new
-                    {
-                        ip_CTSCustID = paras.CTSCustId,
-                        ip_AssociationStatus = paras.AssociationStatus,
-                        ip_AssociationType = paras.AssociationType,
-                        ip_AccountStatuses = paras.AccountStatusIds.Split(',').Select(int.Parse),
-                        ip_SubscriberIDs = paras.SubscriberIDs.Split(',').Select(int.Parse),
-                        ip_CategoryIDs = paras.CategoryIDs.Split(',').Select(int.Parse),
-                        ip_Skip = paras.Skip,
-                        ip_PageSize = paras.Take
-                    })?.Data.FirstOrDefault();
-
-                    return result ?? new AssociatedAccountPagingModel() { AssociationList = new List<AssociatedAccountModel>(), TotalItems = 0 };
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Error($"WEB - {ConfigSettings.EnvironmentName} - Get Association Tab Profile failed: " + ex.Message + ex.StackTrace + "\n"
-                       + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                       + ex.InnerException.StackTrace);
-            }
-
-            return new AssociatedAccountPagingModel() { AssociationList = new List<AssociatedAccountModel>(), TotalItems = 0 };
-        }
-
-        private string GetQueryScriptForAssProfile(int associationType)
-        {
-            switch (associationType)
-            {
-                case 1:
-                    return "GetDirectAssociationProfileByDevice";
-
-                case 2:
-                    return "GetDirectAssociationProfileByAI";
-
-                case 3:
-                    return "GetDirectAssociationProfileByManual";
-
-                case 4:
-                    return "GetDirectAssociationProfileByIP";
-
-                default:
-                    return "GetDirectAssociationProfile";
-            }
-        }
-
-        #endregion WEB - Association Profile Page
+        }   
 
         #region API - Flagged Evidence Level
 
@@ -790,37 +724,7 @@
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Get association report
-        /// </summary>
-        /// <param name="paras"></param>
-        /// <returns></returns>
-        [System.Web.Http.AcceptVerbs("GetProbationReport")]
-        [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetProbationReportAPI)]
-        public IEnumerable<AssociationWithPAModel> GetProbationReport([FromBody] ProbationParameterModel paras)
-        {
-            IEnumerable<AssociationWithPAModel> result = null;
-            try
-            {
-                result = DbSessionFactory.Execute<AssociationWithPAModel>("GetProbationWithAssociatedPA",
-                    new
-                    {
-                        ip_CustIDs = paras.CustIDs,
-                        ip_isAssociatedWithPA = paras.IsAssociatedWithPA
-                    }).Data;
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("GetAssociationReport failed: " + ex.Message + ex.StackTrace);
-            }
-
-            return result;
-        }
+        }      
 
         [HttpGet]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.ScanCTSCustomerAPI)]

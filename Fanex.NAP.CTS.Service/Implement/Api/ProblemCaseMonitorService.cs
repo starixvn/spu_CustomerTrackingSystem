@@ -24,33 +24,6 @@
 
                 return result.ToList();
             }
-        }
-
-        public IEnumerable<ProblemCaseMonitorModel> GetProblemCaseMonitor(ProblemCaseMonitorParamsModel paras)
-        {
-            if (paras == null
-                || string.IsNullOrEmpty(paras.ProblemCaseIDList)
-                || string.IsNullOrEmpty(paras.SubscriberIDList))
-            {
-                return Enumerable.Empty<ProblemCaseMonitorModel>();
-            }
-
-            var criteria = new ProblemCaseMonitorCriteria
-            {
-                FromDate = paras.FromDate,
-                ToDate = paras.ToDate,
-                SubscriberIDList = paras.SubscriberIDList,
-                ProblemCaseIDList = paras.ProblemCaseIDList
-            };
-
-            var problemCaseList = new List<int>();
-           
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var data = db.Query<ProblemCaseMonitorModel>(criteria);
-
-                return data.ToList();
-            }
-        }
+        }        
     }
 }

@@ -112,7 +112,6 @@
     <Compile Include="Account\Search\SearchAccountFilter.cs" />
     <Compile Include="Account\Search\SubscriberAccount.cs" />
     <Compile Include="Account\TransactionHistory\TransactionHistoryViewModel.cs" />
-    <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorViewModel.cs" />
     <Compile Include="API\SearchAccount\SearchAccountResultViewModel.cs" />
     <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorDetailViewModel.cs" />
     <Compile Include="AssociatedAccountMonitor\InsertManualAssociatedAccountViewModel.cs" />

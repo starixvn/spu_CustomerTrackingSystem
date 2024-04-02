@@ -6,16 +6,12 @@
     {
         bool CheckValid(LicenseeVIPBAInputModel parameter);
 
-        bool CheckValid(RemoveLicenseeBABySiteInputModel parameter);
-
         void InsertLicVIP(LicenseeVIPBAInputModel parameter);
 
         void RemoveLicVIP(LicenseeVIPBAInputModel parameter);
 
         void InsertLicBA(LicenseeVIPBAInputModel parameter);
 
-        void RemoveLicBA(LicenseeVIPBAInputModel parameter);
-
-        void RemoveLicBABySite(RemoveLicenseeBABySiteInputModel parameter);
+        void RemoveLicBA(LicenseeVIPBAInputModel parameter);     
     }
 }

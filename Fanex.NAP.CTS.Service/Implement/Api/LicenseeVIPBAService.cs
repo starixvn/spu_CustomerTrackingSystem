@@ -36,17 +36,7 @@
             }
 
             return true;
-        }
-
-        public bool CheckValid(RemoveLicenseeBABySiteInputModel parameter)
-        {
-            if (parameter == null || string.IsNullOrWhiteSpace(parameter.SiteName))
-            {
-                return false;
-            }
-
-            return true;
-        }
+        }       
 
         public void InsertLicVIP(LicenseeVIPBAInputModel parameter)
         {
@@ -154,42 +144,7 @@
                     });
                 }
             }
-        }
-
-        public void RemoveLicBABySite(RemoveLicenseeBABySiteInputModel parameter)
-        {
-            if (parameter == null)
-            {
-                return;
-            }
-
-            var custList = GetCustomerInfoBySiteName(parameter.SiteName);
-
-            if (custList != null && custList.Any())
-            {
-                var custIDs = string.Join(",", custList.Select(c => c.CustID).Distinct());
-
-                var custInfo = MappingLicVIPBAModel(new LicenseeVIPBAInputModel { CustIDs = custIDs, CreatedBy = parameter.CreatedBy });
-
-                foreach (var batchCustIds in custInfo)
-                {
-                    var result = RemoveLicBA(batchCustIds);
-
-                    if (result != null && result.Any())
-                    {                        
-                        rescanCustomerClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
-                        {
-                            CustIds = batchCustIds.Select(x=>x.CustID),
-                            IsRescanPA = false,
-                            IsPushCCToSoon88 = false,
-                            IsUpdateDangerToMainDB = false,
-                            FunctionId = FunctionId.RemoveLicBABySite_API,
-                            ServiceName = "RemoveLicBA"
-                        });
-                    }
-                }
-            }
-        }
+        }       
 
         #region Private Methods
 
@@ -253,16 +208,7 @@
 
             return repository.Fetch<long>(criteria);
         }
-
-        private IEnumerable<CustInfoBySiteNameModel> GetCustomerInfoBySiteName(string siteName)
-        {
-            var criteria = new CustomerInfoBySiteNameGetCriteria
-            {
-                SiteName = siteName
-            };
-
-            return repository.Fetch<CustInfoBySiteNameModel>(criteria);
-        }       
+        
         #endregion Private Methods
     }
 }

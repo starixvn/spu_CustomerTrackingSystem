@@ -420,7 +420,7 @@
             GetFlaggedCustByLvAndEvidenceAPI = 202,
             //AddCustomersEvidencesAPI = 203,
             GetAssociationForExtAccAPI = 204,
-            AddSystemFormulaBetAccountAPI = 205,
+            //AddSystemFormulaBetAccountAPI = 205,
             GetAssociationByCustIdAPI = 206,
             GetCustomerClassificationAPI = 207,
             GetCustomerClassificationByCategoryIDsAPI = 208,
@@ -432,10 +432,10 @@
             GetSubscriberInfoAPI = 214,
             GetAssociationPerTypeAPI = 215,
             GetProblemCaseAPI = 216,
-            GetProblemCaseMonitorAPI = 217,
-            ForceSpecialCCAPI = 218,
+            //GetProblemCaseMonitorAPI = 217,
+            //ForceSpecialCCAPI = 218,
             GetDirectAssociationDevicesAPI = 219,
-            GetDirectAssociationProfileAPI = 220,
+            //GetDirectAssociationProfileAPI = 220,
             GetFlaggedEvidenceForLevel01API = 221,
             GetFlaggedEvidenceForLevel2API = 222,
             GetAssociationReportAPI = 223,
@@ -451,13 +451,13 @@
             GetShortestPathAPI = 233,
             GroupingCustomerAPI = 234,
             GetDetailAssociationReportAPI = 235,
-            GetProbationReportAPI = 236,
+            //GetProbationReportAPI = 236,
             ScanCTSCustomerAPI = 237,
             AddLicVIP_API = 238,
             RemoveLicVIP_API = 239,
             AddLicBA_API = 240,
             RemoveLicBAP_API = 241,
-            RemoveLicBABySite_API = 242
+            //RemoveLicBABySite_API = 242
         };
 
         public enum SystemId

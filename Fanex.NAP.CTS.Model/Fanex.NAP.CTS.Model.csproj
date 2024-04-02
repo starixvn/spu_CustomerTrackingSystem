@@ -238,7 +238,6 @@
     <Compile Include="API\FPS\Transaction\TransactionItemModel.cs" />
     <Compile Include="API\FPS\Transaction\TransactionParamModel.cs" />
     <Compile Include="API\FPS\Transaction\TransactionResultModel.cs" />
-    <Compile Include="API\LicenseeVIPBA\CustInfoBySiteNameModel.cs" />
     <Compile Include="API\LicenseeVIPBA\LicenseeVIPBAModel.cs" />
     <Compile Include="API\LicenseeVIPBA\RemoveLicenseeBABySiteLogDataModel.cs" />
     <Compile Include="API\LicenseeVIPBA\RemoveLicenseeBABySiteInputModel.cs" />
@@ -282,7 +281,6 @@
     <Compile Include="AssociationDetection\GetAssociationDetectDetailModel.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectionModel.cs" />
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseModel.cs" />
-    <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorParamsModel.cs" />
     <Compile Include="AssociationDetection\GetCustStatisticsInfoRealtimeModel.cs" />
     <Compile Include="AssociationDetection\MergeGroupInfoModel.cs" />
     <Compile Include="AssociationDetection\SharedIPInfoModel.cs" />
@@ -423,8 +421,6 @@
     <Compile Include="ProbationManagement\ChangeCategoryModel.cs" />
     <Compile Include="ProbationManagement\ProbationCategoryModel.cs" />
     <Compile Include="ProbationManagement\ProbationModel.cs" />
-    <Compile Include="ProbationManagement\ProbationParameterModel.cs" />
-    <Compile Include="ProbationManagement\AssociationWithPAModel.cs" />
     <Compile Include="ProbationManagement\ResultChangeCategoryToCTS.cs" />
     <Compile Include="ManageSubscriber\SubscriberUpdateModel.cs" />
     <Compile Include="ManageSubscriber\SubscriberModel.cs" />
