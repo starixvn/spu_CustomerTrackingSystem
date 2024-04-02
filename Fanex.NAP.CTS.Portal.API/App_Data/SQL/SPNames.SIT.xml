@@ -1,5 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions>
+	<Function Name="HealthCheck">
+		<!--DO NOT REMOVE - Dummy used for check db connection status-->
+		<Setting Key="checkHealth" SpName="checkHealth" DbName="MySQL.CTS_DataCenter.Admin" />
+	</Function>
+	
 	<Function Name="Evidence">
 		<Setting Key="CTS_DC_CustEvidence_InsertMultilpleEvidencesForCustomers" SpName="CTS_DC_CustEvidence_InsertMultilpleEvidencesForCustomers" DbName="MySQL.CTS_DataCenter.Admin" />
 

@@ -194,5 +194,12 @@
 
             return repository.Fetch<SportBettypeViewModel>(criteria);
         }
+
+        public void CheckConnection()
+        {
+            var db = ObjectDbFactory.CreateInstance(new HealthCheckCriteria().GetSettingKey());
+
+            db.CreateDbConnection().Open();
+        }
     }
 }
