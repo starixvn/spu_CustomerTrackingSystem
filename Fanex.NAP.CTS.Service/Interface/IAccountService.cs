@@ -29,7 +29,7 @@
 
         CustomerInfoByCustIdsModel GetCustomerInfoDangerous(long custID);
 
-        CustomerInfoAssociationAccountModel GetCustomerInfoAssociationAccount(long ctsCustId, bool getFromMySQL);
+        CustomerInfoAssociationAccountModel GetCustomerInfoAssociationAccount(long ctsCustId);
 
         IEnumerable<CustomerInfoEvidenceModel> GetCustomerInfoEvidence(long ctsCustId);
 

@@ -63,30 +63,12 @@
             {
                 if (!string.IsNullOrEmpty(custIdList))
                 {
-                    if (ConfigSettings.GetFlaggedEviByAssFromMySQL)
-                    {
-                        result = associationService.GetFlaggedEvidenceByDirectAssForAPI(custIdList)?.ToList();
-                    }
-                    else
-                    {
-                        var custIds = custIdList.Split(',').Select(a => Convert.ToInt32(a));
-
-                        Parallel.Invoke(() =>
-                        {
-                            var ceLv0 = DbSessionFactory.Execute<CustomerEvidenceForTW>("GetCustomerEvidenceLevel0", new { CustID = custIds }).Data;
-                            result.AddRange(ceLv0);
-                        },
-                        () =>
-                        {
-                            var ceLv1 = DbSessionFactory.Execute<CustomerEvidenceForTW>("GetCustomerEvidenceLevel1", new { CustID = custIds }).Data;
-                            result.AddRange(ceLv1);
-                        });
-                    }
+                    result = associationService.GetFlaggedEvidenceByDirectAssForAPI(custIdList)?.ToList();                  
                 }
             }
             catch (Exception ex)
             {
-                LogService.Error($"WEB - GetFlaggedEvidenceForLevel01 - Data input: {custIdList} - failed: " + ex.Message + ex.StackTrace);
+                LogService.Error($"WEB API - GetFlaggedEvidenceForLevel01 - Data input: {custIdList} - failed: " + ex.Message + ex.StackTrace);
             }
 
             return Json(result ?? new List<CustomerEvidenceForTW>());
@@ -107,21 +89,12 @@
             {
                 if (!string.IsNullOrEmpty(custIdList))
                 {
-                    if (ConfigSettings.GetFlaggedEviByAssFromMySQL)
-                    {
-                        result = associationService.GetFlaggedEvidenceByLevel2AssForAPI(custIdList)?.ToList();
-                    }
-                    else
-                    {
-                        var custIds = custIdList.Split(',').Select(a => Convert.ToInt32(a));
-
-                        result = DbSessionFactory.Execute<CustomerEvidenceForTW>("GetCustomerEvidenceLevel2", new { CustID = custIds }).Data.ToList();
-                    }
+                    result = associationService.GetFlaggedEvidenceByLevel2AssForAPI(custIdList)?.ToList();                    
                 }
             }
             catch (Exception ex)
             {
-                LogService.Error($"WEB - GetFlaggedEvidenceForLevel2 - Data input: {custIdList} - failed: " + ex.Message + ex.StackTrace);
+                LogService.Error($"WEB API - GetFlaggedEvidenceForLevel2 - Data input: {custIdList} - failed: " + ex.Message + ex.StackTrace);
             }
 
             return Json(result ?? new List<CustomerEvidenceForTW>());

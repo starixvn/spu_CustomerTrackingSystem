@@ -241,10 +241,8 @@
 
         [HttpPost]
         public ActionResult GetCustProfileAssociationAccount(long ctsCustId)
-        {
-            var getAssociationFromMySQL = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
-
-            var data = _accountService.GetCustomerInfoAssociationAccount(ctsCustId, getAssociationFromMySQL);
+        {           
+            var data = _accountService.GetCustomerInfoAssociationAccount(ctsCustId);
 
             if (data != null)
             {
@@ -1383,69 +1381,22 @@
 
             if (flaggedEvidences != null && flaggedEvidences.Any())
             {
-                result.FlaggedEvidenceList = flaggedEvidences.OrderBy(x => x.EvidenceID).Select(x => new FlaggedEvidenceViewModel
-                {
-                    EvidenceID = x.EvidenceID,
-                    EvidenceCode = x.EvidenceCode,
-                    EvidenceName = x.EvidenceName,
-                    EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
-                    Comment = x.Remark,
-                    Creator = x.Creator,
-                    FlaggedDate = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss)
-                }).ToList();
+                result.FlaggedEvidenceList = flaggedEvidences.OrderBy(x => x.EvidenceID).Select(x => new FlaggedEvidenceViewModel(x)).ToList();
 
-                evidenceList.AddRange(result.FlaggedEvidenceList.Select(x => new EvidenceViewModel
-                {
-                    EvidenceID = x.EvidenceID,
-                    EvidenceCode = x.EvidenceCode,
-                    EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName
-                }));
+                evidenceList.AddRange(result.FlaggedEvidenceList.Select(x => new EvidenceViewModel(x)));
             }
 
             if (affectedRetractEvidences.AffectedEvidenceList != null && affectedRetractEvidences.AffectedEvidenceList.Any())
             {
-                result.AffectedRetractEvidenceList.AddRange(affectedRetractEvidences.AffectedEvidenceList.OrderBy(x => x.EvidenceID).Select(x => new AffectedRetractEvidenceViewModel
-                {
-                    EvidenceID = x.EvidenceID,
-                    EvidenceCode = x.EvidenceCode,
-                    EvidenceName = x.EvidenceName,
-                    EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
-                    LoginID = string.IsNullOrEmpty(x.LoginID) ? x.UserName : x.LoginID,
-                    CTSCustID = x.CTSCustID,
-                    UserName = string.IsNullOrEmpty(x.UserName) ? x.LoginID : x.UserName,
-                    AssociationType = x.AssociationType,
-                    AffectedTime = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    LastLoginTime = x.LastLoginTime.Year != 0001 ? x.LastLoginTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss) : "None",
-                    IsRetract = false
-                }));
+                result.AffectedRetractEvidenceList.AddRange(affectedRetractEvidences.AffectedEvidenceList.OrderBy(x => x.EvidenceID).Select(x => new AffectedRetractEvidenceViewModel(x, false)));
             }
 
             if (affectedRetractEvidences.RetractEvidenceList != null && affectedRetractEvidences.RetractEvidenceList.Any())
             {
-                result.AffectedRetractEvidenceList.AddRange(affectedRetractEvidences.RetractEvidenceList.OrderBy(x => x.EvidenceID).Select(x => new AffectedRetractEvidenceViewModel
-                {
-                    EvidenceID = x.EvidenceID,
-                    EvidenceCode = x.EvidenceCode,
-                    EvidenceName = x.EvidenceName,
-                    EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
-                    LoginID = string.IsNullOrEmpty(x.LoginID) ? x.UserName : x.LoginID,
-                    CTSCustID = x.CTSCustID,
-                    UserName = string.IsNullOrEmpty(x.UserName) ? x.LoginID : x.UserName,
-                    AssociationType = x.AssociationType,
-                    AffectedTime = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    LastLoginTime = x.LastLoginTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    Creator = x.Creator,
-                    Comment = string.IsNullOrWhiteSpace(x.Remark) ? string.Empty : x.Remark,
-                    IsRetract = true
-                }));
+                result.AffectedRetractEvidenceList.AddRange(affectedRetractEvidences.RetractEvidenceList.OrderBy(x => x.EvidenceID).Select(x => new AffectedRetractEvidenceViewModel(x, true)));
             }
 
-            evidenceList.AddRange(result.AffectedRetractEvidenceList.Select(x => new EvidenceViewModel
-            {
-                EvidenceID = x.EvidenceID,
-                EvidenceCode = x.EvidenceCode,
-                EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName
-            }));
+            evidenceList.AddRange(result.AffectedRetractEvidenceList.Select(x => new EvidenceViewModel(x)));
 
             result.EvidenceList.AddRange(evidenceList.Distinct(x => x.EvidenceCode).OrderBy(x => x.EvidenceID));
 

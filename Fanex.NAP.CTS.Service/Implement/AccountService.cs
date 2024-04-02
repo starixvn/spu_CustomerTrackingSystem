@@ -94,29 +94,16 @@
             }
         }
 
-        public CustomerInfoAssociationAccountModel GetCustomerInfoAssociationAccount(long ctsCustId, bool getFromMySQL)
+        public CustomerInfoAssociationAccountModel GetCustomerInfoAssociationAccount(long ctsCustId)
         {
-            if (getFromMySQL)
+            var criteria = new GetCustomerInfoAssociatedAccountCriteria
             {
-                var criteria = new GetCustomerInfoAssociatedAccountCriteria
-                {
-                    CTSCustId = ctsCustId
-                };
+                CTSCustId = ctsCustId
+            };
 
-                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-                {
-                    return db.QueryEntity<CustomerInfoAssociationAccountModel>(criteria);
-                }
-            }
-            else
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var apiPath = string.Format(ConfigSettings.GetStatisticAssociation, ctsCustId);
-
-                var data = ApiHelper.Get<CustomerInfoAssociationAccountModel>(apiPath);
-
-                Task.WhenAll(data);
-
-                return data.Result;
+                return db.QueryEntity<CustomerInfoAssociationAccountModel>(criteria);
             }
         }
 

@@ -233,17 +233,7 @@
 
                 return isWriteLog;
             }
-        }
-
-        public static bool GetFlaggedEviByAssFromMySQL
-        {
-            get
-            {
-                var isFromMySQL = ConfigurationManager.AppSettings["GetFlaggedEviByAssFromMySQL"];
-
-                return isFromMySQL == "1";
-            }
-        }
+        }       
 
         public static bool IsSyncAFCData
         {
