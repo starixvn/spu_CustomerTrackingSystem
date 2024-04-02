@@ -50,7 +50,7 @@
 	<Function name="MatchMonitor">
 		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_Rpt_MatchMonitor_MatchInfo" SpName="CTS_Rpt_MatchMonitor_MatchInfo" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_TicketDetails_Info" SpName="CTS_TicketDetails_Info" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_TicketDetails_Info" SpName="CTS_TicketDetails_Info_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_Rpt_MatchMonitor_FraudTicketsSummary" SpName="CTS_Rpt_MatchMonitor_FraudTicketsSummary" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 
