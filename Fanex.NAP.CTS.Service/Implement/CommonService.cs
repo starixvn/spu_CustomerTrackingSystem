@@ -197,9 +197,10 @@
 
         public void CheckConnection()
         {
-            var db = ObjectDbFactory.CreateInstance(new HealthCheckCriteria().GetSettingKey());
-
-            db.CreateDbConnection().Open();
+            using (var db = ObjectDbFactory.CreateInstance(new HealthCheckCriteria().GetSettingKey()))
+            {
+                db.CreateDbConnection().Open();
+            }
         }
     }
 }
