@@ -419,7 +419,7 @@
 
         function ResetMaxTag() {
             let currentTagsLength = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag').length;
-            if (currentTagsLength < domElements.maxTags)
+            // if (currentTagsLength < domElements.maxTags)
                 domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text(domElements.maxTags - currentTagsLength + 1);
         }
 
@@ -468,16 +468,19 @@
                 });
 
                 domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text(maxCountTags - 1);
-            } else {
-                domElements.inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
-                let $tag = $(tagName.tag);
-                let btnRemove = $tag.find('x');
-                btnRemove.on('click', function (e) {
-                    let currentTag = $(e.target).parent();
-
-                    ResetMaxTag();
-                });
             }
+            // else {
+            //     domElements.inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
+            //     let $tag = $(tagName.tag);
+            //     let btnRemove = $tag.find('x');
+            //     btnRemove.on('click', function (e) {
+            //         let currentTag = $(e.target).parent();
+
+            //         // ResetMaxTag();
+            //     });
+            // }
+
+            ResetMaxTag();
         }
 
         domElements.inputTagUsername.tagify({
