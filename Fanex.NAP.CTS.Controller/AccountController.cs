@@ -2511,64 +2511,50 @@
         [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetPerformanceBySport(long custId, int getTop)
         {
-            var tasks = new List<Task>();
-            var result = _accountService.GetPerformanceBySport(custId, getTop)?.OrderBy(c => c.Ranking);
             var totalSportBettingStatistic = new SportBettingStatisticViewModel();
             var bestSportBettingStatistic = new SportBettingStatisticViewModel();
             var pieChartSportStatisticSessions = new List<SportStatisticPieChartViewModel>();
 
-            if (result != null && result.Any())
+            var dataBySport = _accountService.GetPerformanceBySport(custId, getTop)?.OrderBy(c => c.Ranking);
+          
+            if (dataBySport != null && dataBySport.Any())
             {
-                tasks.Add(Task.Run(() =>
+                try
                 {
-                    try
+                    var tasks = new Task[] 
                     {
-                        totalSportBettingStatistic.TurnOver = result.Sum(c => c.TurnOver);
-                        totalSportBettingStatistic.WinLoss = result.Sum(c => c.WinLoss);
-                        totalSportBettingStatistic.BetCount = result.Sum(c => c.BetCount);
-                    }
-                    catch (Exception ex)
-                    {
-                        LogService.Error(ex.Message);
+                        Task.Run(() => 
+                        {
+                            totalSportBettingStatistic.TurnOver = dataBySport.Sum(c => c.TurnOver);
+                            totalSportBettingStatistic.WinLoss = dataBySport.Sum(c => c.WinLoss);
+                            totalSportBettingStatistic.BetCount = dataBySport.Sum(c => c.BetCount);
+                        }),
+                        Task.Run(() => 
+                        {
+                            var tempBestSport = dataBySport.FirstOrDefault(c => c.Ranking == dataBySport.Min(x => x.Ranking));
+                            bestSportBettingStatistic.SportID = tempBestSport.SportID;
+                            bestSportBettingStatistic.SportName = tempBestSport.SportName;
+                            bestSportBettingStatistic.TurnOver = tempBestSport.TurnOver;
+                            bestSportBettingStatistic.WinLoss = tempBestSport.WinLoss;
+                            bestSportBettingStatistic.BetCount = tempBestSport.BetCount;
+                        }),
+                        Task.Run(() => 
+                        {
+                             CalculatePieChartTurnOverPercentage(dataBySport, pieChartSportStatisticSessions);
+                        })
+                    };
 
-                        throw;
-                    }
-                }));
-
-                tasks.Add(Task.Run(() =>
+                    Task.WhenAll(tasks).Wait();
+                }
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        var tempBestSport = result.FirstOrDefault(c => c.Ranking == result.Min(x => x.Ranking));
-                        bestSportBettingStatistic.SportID = tempBestSport.SportID;
-                        bestSportBettingStatistic.SportName = tempBestSport.SportName;
-                        bestSportBettingStatistic.TurnOver = tempBestSport.TurnOver;
-                        bestSportBettingStatistic.WinLoss = tempBestSport.WinLoss;
-                        bestSportBettingStatistic.BetCount = tempBestSport.BetCount;
-                    }
-                    catch (Exception ex)
-                    {
-                        LogService.Error(ex.Message);
+                    var logMessage = new LogMessage(ex.Message)
+                           .AddMessage("CTS - Profile Page Get Performance By Sport")
+                           .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                           .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
-                        throw;
-                    }
-                }));
-
-                tasks.Add(Task.Run(() =>
-                {
-                    try
-                    {
-                        CalculatePieChartTurnOverPercentage(result, pieChartSportStatisticSessions);
-                    }
-                    catch (Exception ex)
-                    {
-                        LogService.Error(ex.Message);
-
-                        throw;
-                    }
-                }));
-
-                Task.WhenAll(tasks.ToArray()).Wait();
+                    LogService.Error(logMessage);
+                }               
             }
 
             return Json(new
@@ -2577,7 +2563,7 @@
                 bestSportBettingStatistic,
                 pieChartSportStatisticSessions
             }, JsonRequestBehavior.AllowGet);
-        }
+        }      
 
         [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetPerformanceByBettype(long custId, int getTop)
