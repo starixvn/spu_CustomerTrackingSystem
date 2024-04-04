@@ -419,7 +419,7 @@
 
         function ResetMaxTag() {
             let currentTagsLength = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag').length;
-            // if (currentTagsLength < domElements.maxTags)
+            if (currentTagsLength <= domElements.maxTags)
                 domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text(domElements.maxTags - currentTagsLength + 1);
         }
 
@@ -462,13 +462,33 @@
 
                 let btnRemove = $tag.find('x');
                 btnRemove.on('click', function (e) {
-                    let currentTag = $(e.target).parent();
+                    // let currentTag = $(e.target).parent();
 
                     ResetMaxTag();
+
+                    if (domElements.spanAddSpecialCustomerAccountUserName.find('tags tag').length <= domElements.maxTags + 1)
+                        domElements.btnSave.prop('disabled', false);
+                    else
+                        domElements.btnSave.prop('disabled', true);
                 });
 
                 domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text(maxCountTags - 1);
             }
+            else {
+                let $tag = $(tagName.tag);
+                let btnRemove = $tag.find('x');
+                btnRemove.on('click', function (e) {                    
+                    if (domElements.spanAddSpecialCustomerAccountUserName.find('tags tag').length <= domElements.maxTags + 1)
+                        domElements.btnSave.prop('disabled', false);
+                    else
+                        domElements.btnSave.prop('disabled', true);
+                });
+            }
+
+            if (domElements.spanAddSpecialCustomerAccountUserName.find('tags tag').length <= domElements.maxTags)
+                domElements.btnSave.prop('disabled', false);
+            else
+                domElements.btnSave.prop('disabled', true);
             // else {
             //     domElements.inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
             //     let $tag = $(tagName.tag);
@@ -479,8 +499,6 @@
             //         // ResetMaxTag();
             //     });
             // }
-
-            ResetMaxTag();
         }
 
         domElements.inputTagUsername.tagify({

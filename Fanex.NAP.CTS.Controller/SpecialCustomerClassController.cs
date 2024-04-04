@@ -156,7 +156,7 @@
         {
             if (model != null && model.Any())
             {
-                return model.SelectMany(x =>
+                model = model.SelectMany(x =>
                 {
                     return x.Username.Split(',').Select(y => new UserListSpecialCCParamsModel
                     {
