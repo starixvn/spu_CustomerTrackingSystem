@@ -239,7 +239,7 @@
                     try
                     {
                         var custIds = ticketsModel.Select(x => x.CustID).Distinct();
-                        associatedGroupModels = _probleAccountMonitorService.GetAssociatedGroup(custIds, ConfigSettings.GetAssociatedGroup);
+                        //associatedGroupModels = _probleAccountMonitorService.GetAssociatedGroup(custIds, ConfigSettings.GetAssociatedGroup);
                     }
                     catch (Exception ex)
                     {

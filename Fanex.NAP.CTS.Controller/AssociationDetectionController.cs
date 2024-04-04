@@ -9,9 +9,7 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.Common;
-    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Resource.Consts;
-    using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
@@ -20,9 +18,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading.Tasks;
     using System.Web.Mvc;
-    using System.Web.Script.Serialization;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
@@ -32,13 +28,11 @@
         private const string AssociationDetectionTemplate = "~/App_Data/Excel Template/AssociationDetection/Template.xlsx";
         private readonly ICommonService _commonService;
         private readonly IAssociationDetectionService _associationDetectionService;
-        private readonly ICustomerClassificationService _custClassificationService;
 
         public AssociationDetectionController()
         {
             _commonService = new CommonService();
             _associationDetectionService = new AssociationDetectionService();
-            _custClassificationService = new CustomerClassificationService();
         }
 
         public ActionResult Index()
@@ -242,7 +236,7 @@
                 viewModel.AddRange(GetAssociationDetectSharedMatches(model));
             }
           
-            var dataCust = _associationDetectionService.GetAssociationDetectionDetail(model, AppSettings.Get("GetAssDetectionFromMySQL") == "1");
+            var dataCust = _associationDetectionService.GetAssociationDetectionDetail(model);
             
             if (dataCust != null && dataCust.Any())
             {

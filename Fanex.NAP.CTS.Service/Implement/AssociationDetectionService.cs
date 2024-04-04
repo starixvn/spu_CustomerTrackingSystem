@@ -1,19 +1,14 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
     using Fanex.Data;
-    using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Helpers;
-    using Fanex.NAP.CTS.Core.Helpers.Api;
-    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.AssociationDetection;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.Common;
-    using Fanex.NAP.CTS.Model.GraphDB.AssDetection;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
-    using Fanex.NAP.SPU.Graph.Core;
     using Fanex.NAP.TGRS.Core.ExcelUtility;
     using Newtonsoft.Json;
     using System.Collections.Generic;
@@ -26,17 +21,13 @@
 
         IEnumerable<DetectAssociationMergeGroupModel> DetectAssociation(DetectAssociationByUserNamesViewModel model, IEnumerable<ValidateUserNameModel> orgUserList, bool isExportExcel, bool IsGetLogTransInfo);
 
-        List<GetAssociationDetectionModel> ClassifyGroupAssociation(IEnumerable<AssociationLevelGraphDbViewModel> association, IEnumerable<long> ip_CTSCustIDs);
-
-        IEnumerable<GetAssociationDetectionModel> GetCustInfoAssDetectionReport(List<GetAssociationDetectionModel> assDetection);
-
         IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimary(DetectAssociationByPrimaryFilterModel filter);
 
         IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByAgent(string ctsCustIDs);
 
         IEnumerable<long> GetAssociationDetectSharedMatches(int rootCustID, string custIDList);
 
-        IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel assDetectionDetailModel, bool fromMySQL = true);
+        IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel assDetectionDetailModel);
 
         IEnumerable<SharedIPInfoModel> DetectAssociationByIP(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds);
 
@@ -252,30 +243,25 @@
             }
         }
 
-        public IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel model, bool fromMySQL = true)
+        public IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel model)
         {
             var ctsCustIDs = model.CTSCustIDList.Split(',').Select(long.Parse);
             var ctsCustIDList = string.Join(",", ctsCustIDs.Where(x => x != model.CTSCustID));
 
-            if (fromMySQL)
+            var criteria = new GetAssociationDetectionDetailCriteria
             {
-                var criteria = new GetAssociationDetectionDetailCriteria
-                {
-                    CTSCustID = model.CTSCustID,
-                    ListCTSCustID = ctsCustIDList,
-                    IsBP = model.IsBP,
-                    IsDevice = model.IsDevice,
-                    IsIP = model.IsIP,
-                    IsAgent = model.IsAgent
-                };
+                CTSCustID = model.CTSCustID,
+                ListCTSCustID = ctsCustIDList,
+                IsBP = model.IsBP,
+                IsDevice = model.IsDevice,
+                IsIP = model.IsIP,
+                IsAgent = model.IsAgent
+            };
 
-                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-                {
-                    return db.Query<GetAssociationDetectDetailModel>(criteria);
-                }
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<GetAssociationDetectDetailModel>(criteria);
             }
-
-            return GetAssociationDetectionDetailFromGraphDB(model.CTSCustID, ctsCustIDList, model.IsDevice, model.IsAgent);
         }
 
         public IEnumerable<GetAssociationDetectDetailMatchModel> GetDetectAssociationDetailMatch(long rootCustID, string custIDList, int queryType)
@@ -446,168 +432,5 @@
         #endregion
 
         #endregion
-
-        #region Query From GraphDB
-
-        public IEnumerable<GetAssociationDetectionModel> GetAssociationDetectionFromGraphDB(string ctsCustIds)
-        {
-            var ip_CTSCustIDs = ctsCustIds;
-
-            var data = ApiHelper.Post<List<GetAssociationDetectionModel>>(ConfigSettings.GetAssociationDetection, ip_CTSCustIDs, 300);
-
-            Task.WhenAll(data);
-
-            return data.Result ?? new List<GetAssociationDetectionModel>();
-        }
-
-        public List<GroupClassificationGraphDbViewModel> GroupClassification(IEnumerable<AssociationLevelGraphDbViewModel> association)
-        {
-            var groupClassification = new List<GroupClassificationGraphDbViewModel>();
-
-            if (association != null && association.Any())
-            {
-                association.ToList().ForEach(i =>
-                {
-                    bool isNewGroup = true;
-
-                    foreach (var j in groupClassification)
-                    {
-                        if (j.CTSCustIDs.Contains(i.CTSCustIdLv0))
-                        {
-                            j.CTSCustIDs.AddRange(i.Associations.Except(j.CTSCustIDs));
-                            isNewGroup = false;
-                            break;
-                        }
-
-                        if (i.Associations.Intersect(j.CTSCustIDs).Any())
-                        {
-                            j.CTSCustIDs.Add(i.CTSCustIdLv0);
-                            j.CTSCustIDs.AddRange(i.Associations.Except(j.CTSCustIDs));
-                            isNewGroup = false;
-                            break;
-                        }
-                    }
-
-                    if (isNewGroup)
-                    {
-                        groupClassification.Add(new GroupClassificationGraphDbViewModel
-                        {
-                            GroupID = groupClassification.Count > 0 ? groupClassification.Max(c => c.GroupID) + 1 : 1,
-                            CTSCustIDs = new List<long> { i.CTSCustIdLv0 }.Concat(i.Associations).ToList()
-                        });
-                    }
-                });
-            }
-
-            return groupClassification;
-        }
-
-        public List<GetAssociationDetectionModel> ClassifyGroupAssociation(IEnumerable<AssociationLevelGraphDbViewModel> association, IEnumerable<long> ip_CTSCustIDs)
-        {
-            var assDetection = new List<GetAssociationDetectionModel>();
-
-            var groupAssociation = GroupClassification(association);
-
-            if (groupAssociation != null && groupAssociation.Any())
-            {
-                groupAssociation.ToList().ForEach(i =>
-                {
-                    var rootCTSCustIds = i.CTSCustIDs.Where(ctsCustId => ip_CTSCustIDs.Contains(ctsCustId)).Distinct();
-
-                    foreach (var rootCTSCustId in rootCTSCustIds)
-                    {
-                        assDetection.Add(new GetAssociationDetectionModel
-                        {
-                            GroupId = i.GroupID,
-                            CTSCustId = rootCTSCustId
-                        });
-                    }
-                });
-            }
-
-            return assDetection;
-        }
-
-        public IEnumerable<GetAssociationDetectionModel> GetCustInfoAssDetectionReport(List<GetAssociationDetectionModel> assDetection)
-        {
-            if (assDetection != null && assDetection.Any())
-            {
-                var custInfo = GetCustInformation(assDetection);
-
-                if (custInfo.Any())
-                {
-                    var result = custInfo.Join(
-                                    assDetection,
-                                    x => x.CTSCustId,
-                                    y => y.CTSCustId,
-                                    (x, y) => new GetAssociationDetectionModel
-                                    {
-                                        CTSCustId = x.CTSCustId,
-                                        GroupId = y.GroupId,
-                                        CategoryIds = x.CategoryIds,
-                                        CustId = x.CustId,
-                                        CustomerCategory = string.IsNullOrEmpty(x.CustomerCategory) ? "-" : x.CustomerCategory,
-                                        CustStatus = x.CustStatus,
-                                        CustSubId = x.CustSubId,
-                                        Evidence = string.IsNullOrEmpty(x.Evidence) ? "-" : x.Evidence,
-                                        ParentIds = x.ParentIds,
-                                        UserName = x.UserName
-                                    });
-
-                    return result ?? new List<GetAssociationDetectionModel>();
-                }
-            }
-
-            return new List<GetAssociationDetectionModel>();
-        }
-
-        public IEnumerable<GetAssociationDetectionModel> GetCustInformation(List<GetAssociationDetectionModel> assDetection)
-        {
-            if (assDetection != null && assDetection.Any())
-            {
-                var ip_CTSCustIDs = assDetection.Select(c => c.CTSCustId);
-
-                var result = DbSessionFactory.Execute<GetAssociationDetectionModel>("GetCustInformation", new { ip_CTSCustIDs = ip_CTSCustIDs }).Data;
-
-                return result ?? new List<GetAssociationDetectionModel>();
-            }
-
-            return new List<GetAssociationDetectionModel>();
-        }
-
-        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimaryFromGraphDB(string ctsCustIDs, int assType)
-        {
-            var paras = new DetectAssByPrimaryOrAgentParams
-            {
-                CTSCustIDs = ctsCustIDs,
-                AssType = assType
-            };
-
-            var data = ApiHelper.Post<List<DetectAssociationByPrimaryModel>>(ConfigSettings.DetectAssociationByPrimaryOrAgentType, paras);
-
-            Task.WhenAll(data);
-
-            return data.Result ?? new List<DetectAssociationByPrimaryModel>();
-        }
-
-        public IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetailFromGraphDB(long rootCTSCustID, string assCTSCustIDs, bool getPrimaryType, bool getAgentType)
-        {
-            var paras = new DetectAssGetDetailParams
-            {
-                RootCTSCustID = rootCTSCustID,
-                AssCTSCustIDs = assCTSCustIDs,
-                GetPrimaryType = getPrimaryType,
-                GetAgentType = getAgentType
-            };
-
-            var data = ApiHelper.Post<List<GetAssociationDetectDetailModel>>(ConfigSettings.DetectAssociationGetDetail, paras);
-
-            Task.WhenAll(data);
-
-            return data.Result ?? new List<GetAssociationDetectDetailModel>();
-        }
-
-        #endregion
-
     }
 }

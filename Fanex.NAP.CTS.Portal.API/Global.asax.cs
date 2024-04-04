@@ -5,11 +5,8 @@
     using Fanex.Data.SqlServer;
     using Fanex.Logging;
     using Fanex.Logging.Sentry.RavenClient;
-    using Fanex.NAP.SPU.Graph.Core;
-    using Fanex.NAP.SPU.Graph.Core.Neo4j;
     using Newtonsoft.Json.Serialization;
     using SharpRaven;
-    using Swashbuckle.Application;
     using System.Collections.Generic;
     using System.Configuration;
     using System.Web.Http;
@@ -27,14 +24,6 @@
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            DbSessionFactory.Init()
-                .RegisterConfigs("GraphDB")
-                .RegisterXmlFile("~/App_Data/Graph", "Script.xml")
-                .RegisterDriverFactory(new Neo4jDriverFactory())
-                .RegisterCommandBuilder(new Neo4jCommandBuilder("~/App_Data/Graph/scripts"))
-                .RegisterCommandExecutor(new Neo4jExecutor())
-                .Run();
 
             DbSettingProviderManager
                 .StartNewSession()

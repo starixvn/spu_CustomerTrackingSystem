@@ -1,8 +1,0 @@
-﻿MATCH (c:CTSCustomer)-[:USED_DEVICE]->(d:Device)<-[:USED_DEVICE]-(c1:CTSCustomer)
-WHERE c.CTSCustID IN $CTSCustIDs
-WITH DISTINCT c,c1
-RETURN c.CTSCustID AS FromCTSCustId, c1.CTSCustID AS ToCTSCustId, 
-	CASE c1.SubscriberID
-		WHEN null THEN -1	
-	ELSE c1.SubscriberID 
-	END AS SubscriberId

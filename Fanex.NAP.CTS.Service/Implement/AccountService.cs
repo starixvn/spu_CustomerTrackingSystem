@@ -8,7 +8,6 @@
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Core.Helpers.Api;
-    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.Account.Associated;
     using Fanex.NAP.CTS.Criteria.Account.BettingStatistic;
@@ -27,7 +26,6 @@
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.DTO;
-    using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Model.Transaction;
     using Fanex.NAP.CTS.Resource.Consts;
@@ -36,7 +34,6 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -44,8 +41,6 @@
     public class AccountService : IAccountService
     {
         private readonly IDynamicRepository repository;
-        private readonly char seperatorCoupleCoupleInfo = '_';
-        private readonly char seperatorRowsCoupleCoupleInfo = ';';
 
         public AccountService()
         {
@@ -284,65 +279,31 @@
             }
         }
 
-        public AssociatedAccountPagingModel GetAssociatedAccount(AssociatedFilterModel filterModel, bool fromMySQL = false)
+        public AssociatedAccountPagingModel GetAssociatedAccount(AssociatedFilterModel filterModel)
         {
-            if (fromMySQL)
+            var criteria = new GetAssociationProfileCriteria
             {
-                var criteria = new GetAssociationProfileCriteria
+                CTSCustId = filterModel.CTSCustId,
+                AssociationStatus = filterModel.AssociationStatus,
+                AccountStatusIds = filterModel.AccountStatusIds,
+                AssociationType = filterModel.AssociationType,
+                CategoryIDs = filterModel.CategoryIds,
+                SubscriberIDs = filterModel.SubscriberIds,
+                Skip = filterModel.start,
+                Take = filterModel.length,
+                TotalItems = 0
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.Query<AssociatedAccountModel>(criteria);
+
+                return new AssociatedAccountPagingModel
                 {
-                    CTSCustId = filterModel.CTSCustId,
-                    AssociationStatus = filterModel.AssociationStatus,
-                    AccountStatusIds = filterModel.AccountStatusIds,
-                    AssociationType = filterModel.AssociationType,
-                    CategoryIDs = filterModel.CategoryIds,
-                    SubscriberIDs = filterModel.SubscriberIds,
-                    Skip = filterModel.start,
-                    Take = filterModel.length,
-                    TotalItems = 0
+                    AssociationList = result.ToList(),
+                    TotalItems = criteria.TotalItems
                 };
-
-                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-                {
-                    var result = db.Query<AssociatedAccountModel>(criteria);
-
-                    return new AssociatedAccountPagingModel
-                    {
-                        AssociationList = result.ToList(),
-                        TotalItems = criteria.TotalItems
-                    };
-                }
             }
-            else
-            {
-                try
-                {
-                    var param = new AssociationProfileParameterModel
-                    {
-                        CTSCustId = filterModel.CTSCustId,
-                        AssociationStatus = filterModel.AssociationStatus,
-                        AccountStatusIds = filterModel.AccountStatusIds,
-                        AssociationType = filterModel.AssociationType,
-                        CategoryIDs = filterModel.CategoryIds,
-                        SubscriberIDs = filterModel.SubscriberIds,
-                        Skip = filterModel.start,
-                        Take = filterModel.length,
-                    };
-
-                    var data = ApiHelper.Post<AssociatedAccountPagingModel>(ConfigSettings.GetDirectAssociationProfile, param, 300);
-
-                    Task.WhenAll(data);
-
-                    return data.Result ?? new AssociatedAccountPagingModel();
-                }
-                catch (Exception ex)
-                {
-                    LogService.Error($"{ConfigSettings.EnvironmentName} - Web - Association Tab Profile - Exception: " + ex.Message + ex.StackTrace + "\n"
-                        + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                        + ex.InnerException.StackTrace);
-                }
-            }
-
-            return new AssociatedAccountPagingModel();
         }
 
         public List<AccountStaticStatusModel> GetAccountStaticStatuses(int listId, bool status)
@@ -370,25 +331,6 @@
             }
 
             return groupStatuses;
-        }
-
-        public List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, List<long> ctsCustIds)
-        {
-            var data = ApiHelper.Post<List<GraphDirectAssociationModel>>(apiURL, ctsCustIds, 300);
-
-            Task.WhenAll(data);
-
-            var customersAPI = data.Result;
-
-            return customersAPI ?? new List<GraphDirectAssociationModel>();
-        }
-
-        public ShortestPathOfAccount GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo)
-        {
-            var data = ApiHelper.Get<ShortestPathOfAccount>(string.Format(apiURL, custIdFrom, custIdTo));
-            Task.WhenAll(data);
-
-            return data.Result ?? new ShortestPathOfAccount();
         }
 
         public string MappingAssociationType(AssociatedAccountModel data)
@@ -711,7 +653,7 @@
                 return new AssociationByIPInfoModel
                 {
                     ItemList = db.Query<AssociationByIPItemModel>(criteria),
-                    ErrorMessage = criteria.ErrorMessage                   
+                    ErrorMessage = criteria.ErrorMessage
                 };
             }
         }
@@ -768,7 +710,7 @@
             {
                 CustId1 = custID1,
                 CustId2 = custID2,
-                AssType = (int) pattern
+                AssType = (int)pattern
             };
 
             return repository.Fetch<DateTime>(criteria);
@@ -820,11 +762,11 @@
             {
                 CustId1 = custID1,
                 CustId2 = custID2,
-                FraudType = (int) fraudType
+                FraudType = (int)fraudType
             };
 
             var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
-            
+
             var data = db.QueryMultiple(criteria);
 
             if (fraudType != AccountAssociationByOTGB.CheckExist)

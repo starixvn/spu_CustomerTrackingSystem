@@ -5,7 +5,6 @@
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.ExportExcel;
-    using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.ProbationManagement;
     using Fanex.NAP.CTS.Model.ProbationManagement;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
@@ -70,32 +69,6 @@
             }
 
             return new List<ProbationCategoryModel>();
-        }
-
-        public IEnumerable<AssociationWithPAViewModel> GetAssociatedWithPAByGraph(string apiEndPoint, IEnumerable<int> custIds, int statusWithPA)
-        {
-            try
-            {
-                var param = new
-                {
-                    CustIDs = custIds,
-                    IsAssociatedWithPA = statusWithPA
-                };
-
-                var data = ApiHelper.Post<IEnumerable<AssociationWithPAViewModel>>(apiEndPoint, param);
-
-                Task.WhenAll(data);
-
-                return data.Result ?? new List<AssociationWithPAViewModel>();
-            }
-            catch (Exception ex)
-            {
-                var errorMessage = "CTS - Probation Management - GetAssociationWithPAByGraph exception: " + ex.Message;
-
-                LogService.Error(errorMessage, ex);
-            }
-
-            return new List<AssociationWithPAViewModel>();
         }
 
         public IEnumerable<AccumulatedInfoModel> GetAccummulatedInfo(string customersXML)

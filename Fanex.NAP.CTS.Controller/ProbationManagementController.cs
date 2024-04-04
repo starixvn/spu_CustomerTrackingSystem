@@ -77,31 +77,7 @@
                 
             if (data != null && data.Any())
             {
-                var custIds = data.Select(x => x.CustID).Distinct();
-
-                var associationWithPAs = _probationService.GetAssociatedWithPAByGraph(ConfigSettings.GetAssociatedWithPA, custIds, filter.IsAssociatedPA);
-
-                var dataFiltered = data.Join(associationWithPAs,
-                        x1 => x1.CustID,
-                        x2 => x2.CustId,
-                        (x1, x2) => new ProbationCategoryModel
-                        {
-                            CustID = x1.CustID,
-                            Username = x1.Username,
-                            Site = x1.Site,
-                            Status = x1.Status,
-                            AssociatedWithPA = x2.IsAssociationWithPA,
-                            SportGroupID = x1.SportGroupID,
-                            Sport = x1.Sport,
-                            TargetCategoryID = x1.TargetCategoryID,
-                            TargetCategoryName = x1.TargetCategoryName,
-                            TaggedDate = x1.TaggedDate,
-                            FirstMargin = x1.FirstMargin,
-                            CurrentMargin = x1.CurrentMargin,
-                            DaysLeft = x1.DaysLeft
-                        });
-
-                probationCategoryList = FillAccumulatedInfo(dataFiltered, filter);
+                probationCategoryList = FillAccumulatedInfo(data, filter);
             }
 
             var csvData = _probationService.ExportCSV(probationCategoryList, filter);

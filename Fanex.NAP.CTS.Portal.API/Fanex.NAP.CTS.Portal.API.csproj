@@ -74,9 +74,6 @@
     <Reference Include="Fanex.Logging.Sentry.RavenClient, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.Logging.Sentry.RavenClient.1.0.1\lib\net461\Fanex.Logging.Sentry.RavenClient.dll</HintPath>
     </Reference>
-    <Reference Include="Fanex.NAP.SPU.Graph.Core, Version=4.0.3.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Fanex.NAP.SPU.Graph.Core.4.0.3.2\lib\Fanex.NAP.SPU.Graph.Core.dll</HintPath>
-    </Reference>
     <Reference Include="FromHeaderAttribute, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FromHeaderAttribute.2.0.4\lib\net45\FromHeaderAttribute.dll</HintPath>
     </Reference>
@@ -398,7 +395,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Fanex.NAP.CTS.Portal.API.xml" />
-    <Content Include="App_Data\Graph\Script.xml" />
     <Content Include="App_Data\SQL\SPNames.AWS.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -451,54 +447,6 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <Content Include="App_Data\Graph\scripts\GetAssociationNLevelByCustId.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustId.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetShortestPath.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIds.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetStatisticForCustomer.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIdByDevice.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIdByIP.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIdByManual.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetFlaggedAssociationByDeviceByCustIdLevel0.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetFlaggedAssociationByManualByCustIdLevel0.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GroupCustomerByAssociationOneLevel.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetFlaggedAssociationByDeviceByCustIdLevel1.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetFlaggedAssociationByDeviceByCustIdLevel2.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetFlaggedAssociationByManualByCustIdLevel1.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetFlaggedAssociationByManualByCustIdLevel2.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetAssociationByCustIdLevel1.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetAssociationByCustIdLevel2.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetDevicesIdByCustId.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetAssociatedDevicesByCustId.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetAssociationReportByDevice.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetAssociationReportByManual.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetAssociationReportByIP.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelForExtAcc.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetProbationWithAssociatedPA.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIdByAI.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetAssociationReportByDevice_CountTotal.scrypt" />
-    <Content Include="App_Data\Graph\scripts\AssociationProfilePage\GetDirectAssociationProfileByAI.scrypt" />
-    <Content Include="App_Data\Graph\scripts\AssociationProfilePage\GetDirectAssociationProfileByIP.scrypt" />
-    <Content Include="App_Data\Graph\scripts\AssociationProfilePage\GetDirectAssociationProfileByManual.scrypt" />
-    <Content Include="App_Data\Graph\scripts\AssociationProfilePage\GetDirectAssociationProfile.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetCustomerEvidenceAPI\GetCustomerEvidenceLevel2.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetCustomerEvidenceAPI\GetCustomerEvidenceLevel1.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetCustomerEvidenceAPI\GetCustomerEvidenceLevel0.scrypt" />
-    <Content Include="App_Data\Graph\scripts\AssociationReport\GetAssReportByManual.scrypt" />
-    <Content Include="App_Data\Graph\scripts\AssociationReport\GetAssReportCustInfo.scrypt" />
-    <Content Include="App_Data\Graph\scripts\AssociationReport\GetAssReportByDevice.scrypt" />
-    <Content Include="App_Data\Graph\scripts\AssociationProfilePage\GetDirectAssociationProfileByDevice.scrypt" />
-    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\GetAssociationDetectionReport.scrypt" />
-    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\GetCustInformation.scrypt" />
-    <Content Include="App_Data\Graph\scripts\adhoc\ScanCTSCustomer.scrypt" />
-    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\AssDetection_CreateInMemoryGraph.scrypt" />
-    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\AssDetection_RunWCCAlgo.scrypt" />
-    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\AssDetection_GetResult.scrypt" />
-    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\AssDetection_DropInMemoryGraph.scrypt" />
-    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\AssDetection_CheckIfGraphExists.scrypt" />
-    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\AssDetection_CreateInMemoryGraph_Agent.scrypt" />
-    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\AssDetection_GetDetail_AgentType.scrypt" />
-    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\AssDetection_GetDetail_PrimaryType.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -548,8 +496,8 @@
       <DependentUpon>Web.ConnectionString.config</DependentUpon>
     </Content>
     <Content Include="Web.ConnectionString.SIT.config">
-		<DependentUpon>Web.ConnectionString.config</DependentUpon>
-	</Content>
+      <DependentUpon>Web.ConnectionString.config</DependentUpon>
+    </Content>
     <Content Include="Web.ConnectionString.KLDR.config">
       <DependentUpon>Web.ConnectionString.config</DependentUpon>
     </Content>

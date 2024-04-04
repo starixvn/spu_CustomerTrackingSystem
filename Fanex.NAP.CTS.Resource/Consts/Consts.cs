@@ -19,10 +19,6 @@
         public const string SearchAccountOption = "Search account";
         public const string SearchDeviceOption = "Search device";
 
-        public const string GraphDBGetAssociationOneLevel = "GraphDB_GetAssociationOneLevel";
-        public const string GraphDBGetAssociationNLevel = "GraphDB_GetAssociationNLevel";
-        public const string GraphDBGetShortestPath = "GraphDB_GetShortestPath";
-
         public const string FormatDateToString_ddMMhhmmss = "dd/MM HH:mm:ss";
         public const string FormatDateToString_MMMddyyyy = "MMM dd, yyyy";
         public const string FormatDateToString_MMMddyyyy2 = "MMM-dd-yyyy";
@@ -416,12 +412,12 @@
             MatchMonitorDetailMarkPA = 86,
 
             //PlaceEvidenceForMultipleCustAPI = 200,
-            GetFlaggedCustomersByLevelAPI = 201,
-            GetFlaggedCustByLvAndEvidenceAPI = 202,
+            //GetFlaggedCustomersByLevelAPI = 201,
+            //GetFlaggedCustByLvAndEvidenceAPI = 202,
             //AddCustomersEvidencesAPI = 203,
             GetAssociationForExtAccAPI = 204,
             //AddSystemFormulaBetAccountAPI = 205,
-            GetAssociationByCustIdAPI = 206,
+            //GetAssociationByCustIdAPI = 206,
             GetCustomerClassificationAPI = 207,
             GetCustomerClassificationByCategoryIDsAPI = 208,
             GetVVIPCustomerAPI = 209,
@@ -434,25 +430,25 @@
             GetProblemCaseAPI = 216,
             //GetProblemCaseMonitorAPI = 217,
             //ForceSpecialCCAPI = 218,
-            GetDirectAssociationDevicesAPI = 219,
+            //GetDirectAssociationDevicesAPI = 219,
             //GetDirectAssociationProfileAPI = 220,
             GetFlaggedEvidenceForLevel01API = 221,
             GetFlaggedEvidenceForLevel2API = 222,
-            GetAssociationReportAPI = 223,
-            GetAssociationDetectionReportAPI = 224,
-            GetStatisticAssociationAPI = 225,
-            GetDirectAssociationAPI = 226,
-            GetDirectAssociationByManualAPI = 227,
-            GetDirectAssociationByDeviceAPI = 228,
-            GetDirectAssociationByIPAPI = 229,
-            GetDirectAssociationByAIAPI = 230,
-            GetDirectAssociationMultiCustAPI = 231,
-            GetInDirectAssociationAPI = 232,
-            GetShortestPathAPI = 233,
-            GroupingCustomerAPI = 234,
-            GetDetailAssociationReportAPI = 235,
+            //GetAssociationReportAPI = 223,
+            //GetAssociationDetectionReportAPI = 224,
+            //GetStatisticAssociationAPI = 225,
+            //GetDirectAssociationAPI = 226,
+            //GetDirectAssociationByManualAPI = 227,
+            //GetDirectAssociationByDeviceAPI = 228,
+            //GetDirectAssociationByIPAPI = 229,
+            //GetDirectAssociationByAIAPI = 230,
+            //GetDirectAssociationMultiCustAPI = 231,
+            //GetInDirectAssociationAPI = 232,
+            //GetShortestPathAPI = 233,
+            //GroupingCustomerAPI = 234,
+            //GetDetailAssociationReportAPI = 235,
             //GetProbationReportAPI = 236,
-            ScanCTSCustomerAPI = 237,
+            //ScanCTSCustomerAPI = 237,
             AddLicVIP_API = 238,
             RemoveLicVIP_API = 239,
             AddLicBA_API = 240,

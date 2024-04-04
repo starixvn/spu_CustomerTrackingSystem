@@ -49,7 +49,6 @@
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
-        private readonly IGraphService _graphService;
         private readonly ITransactionService _transService;
         private readonly ICustomerEvidenceService _customerEvidenceService;
         private readonly IRescanCustomerClassificationService _rescanClassificationService;
@@ -67,7 +66,6 @@
         public AccountController()
         {
             _accountService = new AccountService();
-            _graphService = new GraphService();
             _transService = new TransactionService();
             _customerEvidenceService = new CustomerEvidenceService();
             _rescanClassificationService = new RescanCustomerClassificationService();
@@ -422,8 +420,7 @@
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
 
-            var getAssociationFromMySql = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
-            var graphAssociationPage = _accountService.GetAssociatedAccount(model, getAssociationFromMySql);
+            var graphAssociationPage = _accountService.GetAssociatedAccount(model);
 
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
             {
@@ -573,9 +570,7 @@
         {
             var graphCustomer = new GraphCustomerItemViewModel();
 
-            var getAssociationFromMySql = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
-
-            var graphAssociationPaging = _accountService.GetAssociatedAccount(model, getAssociationFromMySql);
+            var graphAssociationPaging = _accountService.GetAssociatedAccount(model);
 
             if (graphAssociationPaging != null && graphAssociationPaging.AssociationList != null && graphAssociationPaging.AssociationList.Any())
             {
@@ -606,15 +601,6 @@
             graphCustomer.SubscriberIds = model.SubscriberIds;
             graphCustomer.Start = model.start;
             graphCustomer.Length = model.length;
-
-            return Json(graphCustomer, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public ActionResult GetShortestAssociationGraph(int custIdFrom, int custIdTo)
-        {
-            var shortestPathOfAccount = _accountService.GetShortestPathAssociationByGraph(ConfigSettings.GetShortestAssociation, custIdFrom, custIdTo);
-            var graphCustomer = _graphService.GetGraphCustomerItemByShortestPathOfAccount(shortestPathOfAccount);
 
             return Json(graphCustomer, JsonRequestBehavior.AllowGet);
         }
