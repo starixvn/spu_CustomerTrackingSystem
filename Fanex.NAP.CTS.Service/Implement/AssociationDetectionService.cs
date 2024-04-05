@@ -157,7 +157,7 @@
         }
 
         public IEnumerable<DetectAssociationMergeGroupModel> DetectGroupDetectAssociation(MergeGroupInfoModel model)
-        {           
+        {
             var criteria = new DetectAssociationMergeGroupCriteria
             {
                 CTSCustIDs = model.CTSCustIDs,
@@ -207,6 +207,9 @@
         public IEnumerable<SharedIPInfoModel> DetectAssociationByIP(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds)
         {
             var detectAssByIP = DetectAssociationByIP(custIds);
+            var validateDictionary = validateUserNames?
+                .GroupBy(p => p.CustID)?
+                .ToDictionary(x => x.Key, y => y.FirstOrDefault());
 
             var detectAssByIPGroupBy = detectAssByIP.GroupBy(x => new { x.CustID1, x.CustID2 })
                 .Select(g => new DetectAssociationBySharedIPModel
@@ -218,8 +221,8 @@
 
             return detectAssByIPGroupBy.Select(x =>
             {
-                var fromCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID1)) ?? new ValidateUserNameModel();
-                var toCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID2)) ?? new ValidateUserNameModel();
+                var fromCTSCust = GetValidateUserNameByDictionary(validateDictionary, x.CustID1);
+                var toCTSCust = GetValidateUserNameByDictionary(validateDictionary, x.CustID2);
 
                 return new SharedIPInfoModel
                 {
@@ -273,7 +276,7 @@
             }
 
             return GetAssociationDetectionDetailFromGraphDB(model.CTSCustID, ctsCustIDList, model.IsDevice, model.IsAgent);
-        }        
+        }
 
         public IEnumerable<GetAssociationDetectDetailMatchModel> GetDetectAssociationDetailMatch(long rootCustID, string custIDList, int queryType)
         {
@@ -298,7 +301,7 @@
         {
             var writer = new ExcelTemplateWriter(templatePath, fileName, "AD");
             writer.CopyRows(0, 1);
-           
+
             FillRowData(AssociationDetect, ref writer);
 
             writer.SyncColumnsWidth(17);
@@ -309,6 +312,14 @@
         #endregion
 
         #region Private Methods
+        private ValidateUserNameModel GetValidateUserNameByDictionary(Dictionary<int, ValidateUserNameModel> arrValid, int custID)
+        {
+            var ctsCustModel = default(ValidateUserNameModel);
+
+            arrValid?.TryGetValue(custID, out ctsCustModel);
+
+            return ctsCustModel ?? new ValidateUserNameModel();
+        }
 
         private void FillRowData(IEnumerable<ExportAssociationDetectModel> AssociationDetect, ref ExcelTemplateWriter writer)
         {
@@ -593,7 +604,7 @@
 
             Task.WhenAll(data);
 
-            return data.Result ?? new List<GetAssociationDetectDetailModel>();           
+            return data.Result ?? new List<GetAssociationDetectDetailModel>();
         }
 
         #endregion
