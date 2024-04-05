@@ -13,6 +13,7 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
+    using Fanex.NAP.CTS.ViewModel.Common;
     using Fanex.NAP.CTS.ViewModel.DangerMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.DetectGroup;
@@ -96,6 +97,7 @@
                 var bettypes = _dangerMonitorService.GetBettypesFromCache();
 
                 ViewBag.GroupCCList = _commonService.GetGroupCustomerClass();
+                ViewBag.ReasonGroups = this.GetReasonGroups(true);
                 ViewBag.EventDateToString = para?.EventDateToString;
                 ViewBag.MatchID = para?.MatchID;
                 ViewBag.BetTypeID = para?.BetTypeID;
@@ -280,6 +282,37 @@
         #endregion
 
         #region private method
+        private IEnumerable<ReasonGroupStaticListViewModel> GetReasonGroups(bool isInitGroupNone)
+        {
+            var reasonGroupItems = _commonService.GetStaticLists((int)StaticListID.Reason, true);
+            var result = new List<ReasonGroupStaticListViewModel>();
+
+            if (isInitGroupNone)
+            {
+                result.Add(new ReasonGroupStaticListViewModel
+                {
+                    ReasonGroupName = Consts.ReasonDetectNone,
+                    ReasonItems = new List<ReasonStaticListViewModel>() { new ReasonStaticListViewModel { ReasonID = "-1", ReasonName = "-", IsSelected = true } }
+                });
+            }
+
+            result.Add(new ReasonGroupStaticListViewModel
+            {
+                ReasonGroupName = Consts.ReasonDetectBySystem,
+                ReasonItems = reasonGroupItems.Where(x => x.ItemID < 100).Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
+                    .OrderBy(x => x.ReasonName)
+            });
+
+            result.Add(new ReasonGroupStaticListViewModel
+            {
+                ReasonGroupName = Consts.ReasonDetectByAI,
+                ReasonItems = reasonGroupItems.Where(x => x.ItemID >= 100).Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = false })
+                    .OrderBy(x => x.ReasonName)
+            });
+
+            return result;
+        }
+
         private IEnumerable<DetectGroupAssociationItemViewModel> RearrangeAssGroup(IEnumerable<DetectGroupAssociationItemViewModel> assGroupList, bool isDisableNone)
         {
             var result = new List<DetectGroupAssociationItemViewModel>();
