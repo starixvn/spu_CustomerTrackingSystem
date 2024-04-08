@@ -217,7 +217,7 @@
             {
                 CheckNewPAAssociationCustomerForRollback(customerInfo);
 
-                var custIds = customerInfo.Select(x => x.CustID).Distinct();
+                var custIds = customerInfo.Where(x=>x.CategoryType == 1).Select(x => x.CustID).Distinct();
 
                 UpdateBetLimitOfFlaggedCustomer(custIds);
             }
@@ -286,6 +286,7 @@
                                                      Remark = group.pa.Remark,
 
                                                      IsDirectPA = group.pa.IsDirectPA,
+                                                     IsFromAI = group.pa.IsFromAI,
                                                      IsFromCTS = group.pa.IsFromCTS,
                                                      IsFromTVS = group.pa.IsFromTVS,
                                                      TVSRequestID = group.pa.TVSRequestID,
@@ -362,7 +363,7 @@
         {
             if (customerInfo != null && customerInfo.Any())
             {
-                var custInfoJson = JsonConvert.SerializeObject(customerInfo);
+                var custInfoJson = JsonConvert.SerializeObject(customerInfo.Where(x=>x.CategoryType != 2));
 
                 var criteria = new CheckNewPAAssociationCustomerForRollbackCriteria
                 {

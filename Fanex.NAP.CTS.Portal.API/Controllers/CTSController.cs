@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
+    using Fanex.Data;
     using Fanex.Logging;
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
@@ -32,6 +33,7 @@
     using System;
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Data.SqlClient;
     using System.Linq;
     using System.Web.Http;
     using System.Web.Http.Results;
@@ -58,6 +60,7 @@
         private readonly ISpecialCustomerClassService _customerClassService;
         private readonly IProblemAccountClassificationService _paClassificationService;
         private readonly ICtsAssociationApiService _ctsAssociationApiService;
+        private readonly ICommonService _commonService;
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -79,6 +82,24 @@
             _problemAccountManagementService = new ProblemAccountManagementService();
             _paClassificationService = new ProblemAccountClassificationService();
             _ctsAssociationApiService = new CtsAssociationApiService();
+            _commonService = new CommonService();
+        }
+
+        [HttpGet]
+        public IHttpActionResult HealthCheck()
+        {
+            try
+            {
+                _commonService.CheckConnection();
+
+                return Ok("ok");
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("Health Check API" + ex.Message);
+            }
+
+            return InternalServerError();
         }
 
         /// <summary>

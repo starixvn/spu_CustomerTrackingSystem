@@ -246,7 +246,7 @@
             },
             dataFilter: function (response) {
                 if (response !== undefined) {
-                    let json = jQuery.parseJSON(response);                   
+                    let json = jQuery.parseJSON(response);
 
                     cacheData.isProblemAccount = json.isProblemAccount;
                     cacheData.isPinCategory = json.isPinCategory;
@@ -259,8 +259,8 @@
                     let isProblemAccount = RenderProblemCategoryProfilePage(json.categoryList, json.isPAProbation);
 
                     if (!isProblemAccount) {
-                        RenderNormalCategoryProfilePage(json.categoryList);
-                    }                    
+                        RenderNormalCategoryProfilePage(json.categoryList, json.isPAProbation);
+                    } 
                 }
                 return response;
             },
@@ -273,7 +273,7 @@
             complete: function () {
                 tblcustomercategory.find('tbody').removeClass('loading');
                 
-                let disabledUnmarkCategory = (!cacheData.isVVip && !cacheData.isProblemAccount && !cacheData.isPAProbation)
+                let disabledUnmarkCategory = (!cacheData.isVVip && !cacheData.isProblemAccount)// && !cacheData.isPAProbation)
                     || (!cacheData.isVVip && cacheData.isPinCategory);                
 
                 let disabledMarkCategory = cacheData.isVVip
@@ -300,8 +300,7 @@
         html = BuildButtonProfileInsertPA(html, data);
 
         data.map(function (x) {
-            if (x.IsProblemAccount) {
-
+            if (x.IsProblemAccount && x.CategoryType != 2) {
                 let classIconColor = isPAProbation ? "circle bg-lightred" : "circle bg-red";
 
                 html = BuildCategoryToHtmlDiv(html, classIconColor, x.CategoryName);
@@ -337,7 +336,7 @@
         return isExistProblemAccount;
     }
 
-    function RenderNormalCategoryProfilePage(data) {
+    function RenderNormalCategoryProfilePage(data, isPAProbation) {
         let indexColorProfile = 1;
         let html = "";
 
@@ -396,6 +395,21 @@
                 $('#divHeaderInfo')
                     .removeClass('border-red').removeClass('border-lightred').removeClass('border-yellow')
                     .addClass('border-yellow');
+                break;
+            case 5:
+                $('#divHeaderUsername')
+                    .removeClass('bg-red').removeClass('bg-lightred').removeClass('bg-green')
+                    .removeClass('green-line').removeClass('yellow-line');
+                $('#divHeaderInfo')
+                    .removeClass('border-red').removeClass('border-lightred').removeClass('border-green');
+
+                if (isPAProbation) {
+                    $('#divHeaderUsername').addClass('bg-yellow-light');
+                    $('#divHeaderInfo').addClass('border-yellow-light');
+                } else {
+                    $('#divHeaderUsername').addClass('bg-yellow');
+                    $('#divHeaderInfo').addClass('border-yellow');
+                }
                 break;
             default:
                 break;

@@ -239,6 +239,17 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 }
 
+.yellow-light {
+    background-color: $account-highlight;
+    background-size: 5px 5px;
+    font-weight: bold;
+
+    &:after {
+        background-color: $account-highlight;
+        background-size: 5px 5px;      
+    }
+}
+
 .green-line {
     background-color: $account-limited;
     background-size: 5px 5px;
@@ -294,6 +305,14 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             }
         }
 
+        .bg-yellow-light {
+            background-color: $account-highlight;
+
+            &:after {
+                background-color: $account-highlight;
+            }
+        }
+
         .bg-green {
             background-color: $account-limited;
 
@@ -316,6 +335,10 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
         &.border-yellow {
             border-bottom: 2px solid $account-high;
+        }
+
+        &.border-yellow-light {
+            border-bottom: 2px solid $account-highlight;
         }
 
 

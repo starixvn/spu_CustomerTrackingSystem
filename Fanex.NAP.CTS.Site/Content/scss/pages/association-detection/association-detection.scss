@@ -576,6 +576,17 @@ body {
     }
 }
 
+.yellow-light {
+    background-color: $account-highlight;
+    background-size: 5px 5px;
+    font-weight: bold;
+
+    &:after {
+        background-color: $account-highlight;
+        background-size: 5px 5px;
+    }
+}
+
 .green-line {
     background-color: $account-limited;
     background-size: 5px 5px;

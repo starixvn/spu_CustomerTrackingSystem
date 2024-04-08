@@ -7,9 +7,11 @@
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
+    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.CTS.Model.LogInputData;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Entities;
@@ -39,16 +41,24 @@
         public bool RescanCustomerClassification(RescanCustClassificationModel parameters)
         {
             var result = new RescanResultModel();
+            var custToRescanPA = new List<long>();
 
             if (parameters.IsRescanPA)
             {
                 result = RescanProblemAccount(parameters);
+                custToRescanPA.AddRange(result.CustIds);
+            }
+
+            if (parameters.IsRescanPADangerous)
+            {
+                result = RescanPADangerous(parameters.CustIds, parameters);
+                custToRescanPA.AddRange(result.CustIds);
             }
 
             if (result.IsSuccess)
             {
                 var smCustIds = GetAgentCusts(parameters.CustIds);
-                result.IsSuccess = RescanNormalAccount(parameters, result.CustIds, smCustIds);
+                result.IsSuccess = RescanNormalAccount(parameters, custToRescanPA, smCustIds);
             }
 
             return result.IsSuccess;
@@ -87,12 +97,55 @@
             return rescanResult;
         }
 
+        public RescanResultModel RescanPADangerous(IEnumerable<long> custIds, RescanCustClassificationModel parameters)
+        {
+            var rescanResult = new RescanResultModel();
+
+            if (custIds.Any())
+            {               
+                var custIDs = string.Join(",", custIds);
+
+                var pasDangerous = this.RescanPADangerous(custIDs);
+
+                if (pasDangerous != null && pasDangerous.Any())
+                {
+                    var pas = pasDangerous.Select(x =>
+                    {
+                        return new InsertProblemAccountModel
+                        {
+                            CustID = x.CustID,
+                            CTSCustID = x.CTSCustID,
+                            RoleID = x.RoleID,
+                            SubscriberID = x.SubscriberID,
+                            CategoryID = x.CategoryID,
+                            CategoryGroup = x.CategoryID,
+                            IsLicensee = x.IsLicensee,
+                            IsFromAI = true,
+                            IsDirectPA = null,
+                            IsFromCTS = true,
+                            IsFromTVS = false,
+                            IsFromTW = false,
+                            CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]),
+                            Remark = $"Detection Date: { x.ClassifiedDate.ToString(Consts.FormatDateToString_MMMddyyyy)} - Dangerous Score: {(x.ClassifiedScore * 100).ToString(FormatDecimalToString_2Places)}%"
+                        };
+                    });
+
+                    var custPaDangerous = InsertProblemAccountLogics(pas, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
+
+                    rescanResult.IsSuccess = PushDataToExternalPackge(custPaDangerous.Distinct(), parameters);
+                }
+            }
+
+            return rescanResult;
+        }
+
         public bool RescanNormalAccount(RescanCustClassificationModel parameters, IEnumerable<long> custIdsToRescanPA, IEnumerable<long> smaCustIds)
         {
             if (parameters != null && parameters.CustIds != null && parameters.CustIds.Any())
             {
                 var custToRescanNormal = parameters.CustIds.Distinct().ToList();
                 custToRescanNormal.RemoveAll(x => custIdsToRescanPA.Distinct().Contains(x));
+
                 custToRescanNormal.RemoveAll(x => smaCustIds.Distinct().Contains(x));
 
                 if (custToRescanNormal.Any())
@@ -286,6 +339,15 @@
             }
         }
 
+        public IEnumerable<RescanPADangerousModel> RescanPADangerous(string custIDs)
+        {
+            var criteria = new RescanPADangerousCriteria
+            {
+                CustIDs = custIDs
+            };
+
+            return repository.Fetch<RescanPADangerousModel>(criteria);
+        }
         #endregion Private Methods
     }
 }

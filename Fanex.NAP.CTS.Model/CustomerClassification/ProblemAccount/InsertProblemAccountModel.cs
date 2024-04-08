@@ -49,7 +49,9 @@
 
         public int? ReasonID { get; set; }
 
-        public bool IsDirectPA { get; set; }
+        public bool? IsDirectPA { get; set; }
+
+        public bool IsFromAI { get; set; }
 
         public bool IsFromTVS { get; set; }
 

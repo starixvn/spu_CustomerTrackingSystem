@@ -38,6 +38,8 @@
 
         public string CategoryNames { get; set; }
 
+        public int CategoryType { get; set; }
+
         public string CustomerClasses { get; set; }
 
         public string AssociationDate { get; set; }

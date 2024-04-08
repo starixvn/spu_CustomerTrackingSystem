@@ -132,6 +132,7 @@
                     {
                         CustIds = new List<long> { custID},
                         IsRescanPA = true,
+                        IsRescanPADangerous = true,
                         IsPushCCToSoon88 = true,
                         IsUpdateDangerToMainDB = true,
                         IsToQueue = false,

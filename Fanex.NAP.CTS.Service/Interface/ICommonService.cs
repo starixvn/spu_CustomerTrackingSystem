@@ -28,5 +28,7 @@
         IEnumerable<BetTypeSettingModel> GetBetTypeSettings(BetTypeSettingParaModel infos);
 
         IEnumerable<SportBettypeViewModel> GetMainSportBettype(SportBettypeModel model);
+
+        void CheckConnection();
     }
 }

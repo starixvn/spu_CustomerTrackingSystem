@@ -48,5 +48,7 @@
         public string GroupIDs { get; set; }
 
         public string OriginGroupIDs { get; set; }
+
+        public int CategoryType { get; set; }
     }
 }
