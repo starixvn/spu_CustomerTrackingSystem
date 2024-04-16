@@ -287,10 +287,17 @@
         private static void RegisterSpecialCustomerClassBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/special-customer-class-scripts").Include(
+                "~/Scripts/select2.min.js",
+                "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
+                "~/Scripts/tagify/jquery.tagify.min.js",
+                "~/Scripts/tagify/tagify.min.js",
                 "~/Scripts/SpecialCustomerClass/index.js"));
 
             bundles.Add(new StyleBundle("~/special-customer-class-styles").Include(
-                 "~/Content/scss/pages/special-customer-class/special-customer-class.css"));
+                "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
+                "~/Content/scss/MultipleSelect/jquery.multiselect.css",
+                "~/Content/scss/vendors/jquery-ui/base/tagify.css",
+                "~/Content/scss/pages/special-customer-class/special-customer-class.css"));
         }
 
         private static void RegisterProbationManagementBundles(BundleCollection bundles)
@@ -386,6 +393,8 @@
             bundles.Add(new ScriptBundle("~/problem-case-monitor-scripts").Include(
                   "~/Scripts/select2.min.js",
                   "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
+                  "~/Scripts/tagify/jquery.tagify.min.js",
+                  "~/Scripts/tagify/tagify.min.js",
                   "~/Scripts/ProblemCaseMonitor/index.js"));
 
             bundles.Add(new StyleBundle("~/problem-case-monitor-styles").Include(

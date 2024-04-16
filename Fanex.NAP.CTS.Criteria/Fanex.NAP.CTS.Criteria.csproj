@@ -180,6 +180,9 @@
     <Compile Include="CustomerClassification\BetLimitByEvidenceRemoveCriteria.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\ProblemAccountGetCriteria.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\ProblemAccountUmmarkCriteria.cs" />
+    <Compile Include="CustomerClassification\PushDataToExternal\CustClassificationToMainDB\CustomerClassificationUpdateBySportCriteria.cs" />
+    <Compile Include="CustomerClassification\PushDataToExternal\CustClassificationToMainDB\GetCustomerClassificationBySportCriteria.cs" />
+    <Compile Include="CustomerClassification\RescanNormalClassificationBySport\PreprocessRescanNormalClassificationBySportCriteria.cs" />
     <Compile Include="CustomerClassification\RescanPADangerousCriteria.cs" />
     <Compile Include="CustomerClassification\Robot\RobotAccountInsertCriteria.cs" />
     <Compile Include="DangerMonitor\DangerMonitorTicketSummaryCriteria.cs" />
@@ -289,6 +292,7 @@
     <Compile Include="ProblemAccountMonitor\ProblemAccountMonitorGetCriteria.cs" />
     <Compile Include="ProblemAccountMonitor\SportListGetCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpecialCustomerClass\ValidateSpecialCCCriteria.cs" />
     <Compile Include="SubscriberAssignment\GetAllSubscriberCriteria.cs" />
     <Compile Include="SyncCustomerToMainDb\SyncCustomerClassToMainDbCriteria.cs" />
     <Compile Include="TransactionReport\TransactionReportCriteria.cs" />

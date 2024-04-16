@@ -1,15 +1,15 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.Logging;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.Extentions;
-    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
-    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
+    using Fanex.NAP.CTS.Model.SpecialCustomerClass;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.ViewModel.SpecialCustomerClass;
@@ -23,21 +23,16 @@
     [NapAuth(FunctionKey = FSFunctionKeys.SpecialCustomerClass, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class SpecialCustomerClassController : BaseController
     {
-        private readonly ISpecialCustomerClassService _customerClassService;
-        private readonly IRescanCustomerClassificationService _customerClassifyService;
-        private readonly ICustomerClassificationService _custClassificationService; 
-        private readonly IDataLogTrackingServices dataLogTrackingServices;
+        private readonly ISpecialCustomerClassService _specialCCService;
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
         public SpecialCustomerClassController()
         {
-            _customerClassService = new SpecialCustomerClassService();
-            _custClassificationService = new CustomerClassificationService();
-            _customerClassifyService = new RescanCustomerClassificationService();
-            this.dataLogTrackingServices = new DataLogTrackingServices();
+            _specialCCService = new SpecialCustomerClassService();
         }
 
+        #region public methods
         public ActionResult Index()
         {
             IUserService userService = new UserService();
@@ -46,111 +41,133 @@
                             NapSettings.Settings.SiteId,
                             FSFunctionKeys.SpecialCustomerClass,
                             NAP.Core.Business.Constant.Policy.Host);
-            
+
+            ViewBag.CustomerCategorySportOrder = (from int item in Enum.GetValues(typeof(CustomerCategorySportType))
+                                                  select new KeyValuePair<int, string>(item, ((CustomerCategorySportType)item).GetStringSlow()))
+                                                 .OrderBy(x => CustomerCategorySportOrder[(CustomerCategorySportType)x.Key])
+                                                 .ToList();
+
             return View(isHostPermission);
         }
-        
-        [HttpGet]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.SpecialCustomerClassRpt,"isSkipTracking")]
-        public ActionResult GetCustomerClass(string userName, bool? isSkipTracking)
-        {
-            var viewModel = Enumerable.Empty<CustomerClassViewModel>();
-            var specialCustomers = _customerClassService.GetAllCustomerClass(userName);
 
-            if (specialCustomers != null && specialCustomers.Any())
+        [HttpGet]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.SpecialCustomerClassRpt, "isSkipTracking")]
+        public ActionResult GetCustomerClass(SearchSpecialCCParamsModel model, bool? isSkipTracking)
+        {
+            var result = Enumerable.Empty<CustomerClassViewModel>();
+            try
             {
-                viewModel = specialCustomers.Select(x => new CustomerClassViewModel
-                {
-                    CTSCustID = x.CTSCustID,
-                    CustID = x.CustID,
-                    RootCTSCustID = x.RootCTSCustID,
-                    Username = x.Username,
-                    SubscriberName = x.SubscriberName,
-                    CustomerClass = x.CustomerClass,
-                    CreatedBy = x.CreatedBy,
-                    CreatedDateString = x.CreatedDate != DateTime.MinValue 
-                        ? x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss) 
-                        : string.Empty
-                });
+                result = _specialCCService.GetSpecialCustomerClass(model);
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = (int)HttpStatus.InternalServerError;
+
+                var logMessage = new LogMessage(ex.Message)
+                   .AddMessage($"Special Customer Class Get Function Error: " + ex.Message + ex.StackTrace + "\n"
+                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                    + ex.InnerException.StackTrace)
+                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
             }
 
-            return Json(new { data = viewModel }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = result }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.SpecialCustomerClass, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.SpecialCustomerClassInsert)]
-        public ActionResult AddCustomerClass(string username, int custClass, bool isAffectToAss)
+        public ActionResult AddCustomerClass(AddSpecialCCParamsModel paramsModel)
         {
-            var resultInsert = new ResultInsertRemoveViewModel
+            var result = new ValidateSpecialCCResultViewModel();
+            try
             {
-                ErrorCode = 0,
-                ErrorMessage = string.Empty
-            };
+                paramsModel.UserList = SelectItemForUserList(paramsModel.UserList);
+                var validateUsers = _specialCCService.ValidateSpecialCC(FunctionValidateSpecialCC.Add, paramsModel.UserList);
 
-            var resultInsertToCTS = _customerClassService.InsertCustomerClass(username, custClass, isAffectToAss, CurrentSession.UserId);
-
-            if (string.IsNullOrEmpty(resultInsertToCTS.OpErrorMessage))
-            {
-                if (resultInsertToCTS.CustomerClassList != null && resultInsertToCTS.CustomerClassList.Any())
+                if (validateUsers.Users.Any(x => !x.IsValid))
                 {
-                    var custIdsChunk = resultInsertToCTS.CustomerClassList.Chunk(ConfigSettings.PushCCToExternalChunkSize);
-
-                    foreach (var custs in custIdsChunk)
-                    { 
-                        _custClassificationService.PushDataToExternal(custs.Select(c=>c.CustId).Distinct(), new PushDataToExternalModel
-                        {
-                            IsUpdateDangerToMainDB = false,
-                            IsSyncAFC = false,
-                            IsPushCCToSoon88 = false,
-                            ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize
-                        });
-                    }
+                    result = validateUsers;
+                }
+                else
+                {
+                    _specialCCService.InsertCustomerClass(paramsModel, validateUsers, CurrentSession.UserId);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                resultInsert.ErrorCode = -1;
-                resultInsert.ErrorMessage = resultInsertToCTS.OpErrorMessage;
-            }
+                Response.StatusCode = (int)HttpStatus.InternalServerError;
 
-            return Json(resultInsert, JsonRequestBehavior.AllowGet);
+                var logMessage = new LogMessage(ex.Message)
+                   .AddMessage($"Special Customer Class Add Function Error: " + ex.Message + ex.StackTrace + "\n"
+                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                    + ex.InnerException.StackTrace)
+                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.SpecialCustomerClass, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.SpecialCustomerClassRemove)]
-        public ActionResult RemoveCustomerClass(int custID, long ctsCustID)
+        public ActionResult RemoveCustomerClass(RemoveSpecialCCParamsModel paramsModel)
         {
+            var result = new ValidateSpecialCCResultViewModel();
+
             try
             {
-                var resultRemoveToCTS = _customerClassService.RemoveCustomerClass(ctsCustID, CurrentSession.UserId);
+                paramsModel.UserList = SelectItemForUserList(paramsModel.UserList);
+                var validateUsers = _specialCCService.ValidateSpecialCC(FunctionValidateSpecialCC.Remove, paramsModel.UserList);
 
-                if (resultRemoveToCTS.ErrorCode == 0)
-                {                   
-                    _customerClassifyService.RescanCustomerClassification(new RescanCustClassificationModel
-                    {
-                        CustIds = new List<long> { custID},
-                        IsRescanPA = true,
-                        IsRescanPADangerous = true,
-                        IsPushCCToSoon88 = true,
-                        IsUpdateDangerToMainDB = true,
-                        IsToQueue = false,
-                        FunctionId = FunctionId.RemoveSpecialCCWeb,
-                        ServiceName = "RemoveSpecialCustomer"
-                    });
+                if (validateUsers.Users.Any(x => !x.IsValid))
+                {
+                    result = validateUsers;
                 }
-
-                return Json(resultRemoveToCTS, JsonRequestBehavior.AllowGet);
+                else
+                {
+                    _specialCCService.RemoveCustomerClass(paramsModel, validateUsers, CurrentSession.UserId);
+                }
             }
             catch (Exception ex)
             {
-                LogService.Error($"CTS - RemoveSpecialCustomer exception: { ex.Message }", ex);
+                Response.StatusCode = (int)HttpStatus.InternalServerError;
 
-                dataLogTrackingServices.LogErrorData(ex, "WEB-RemoveSpecialCustomer");
+                var logMessage = new LogMessage(ex.Message)
+                   .AddMessage($"Special Customer Class Remove Function Error: " + ex.Message + ex.StackTrace + "\n"
+                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                    + ex.InnerException.StackTrace)
+                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
-                return Json(new { errorCode = -1, errorMessage = ex.Message }, JsonRequestBehavior.AllowGet);
+                LogService.Error(logMessage);
             }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
+        #endregion
+
+        #region private methods
+        private List<UserListSpecialCCParamsModel> SelectItemForUserList(List<UserListSpecialCCParamsModel> model)
+        {
+            if (model != null && model.Any())
+            {
+                model = model.SelectMany(x =>
+                {
+                    return x.Username.Split(',').Select(y => new UserListSpecialCCParamsModel
+                    {
+                        Username = y,
+                        SportID = x.SportID
+                    });
+                }).Distinct(x => new { x.Username, x.SportID }).ToList();
+            }
+
+            return model.Count() <= 15 ? model : null;
+        }
+        #endregion
     }
 }

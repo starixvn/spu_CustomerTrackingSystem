@@ -1920,6 +1920,15 @@
 
             switch (cc.SourceTypeID)
             {
+                case (int)SourceTypeID.SpecialCustomerClass_Add:
+                case (int)SourceTypeID.SpecialCustomerClass_Remove:
+                    {
+                        spanReason += $"<span> {cc.SourceTypeName} </span>";
+
+                        if (!string.IsNullOrEmpty(cc.Remark))
+                            spanReason += $"| {cc.Remark} ";
+                        break;
+                    }
                 case (int)SourceTypeID.Classification_PAMarkDirectly:
                 case (int)SourceTypeID.Classification_PAAffectedByUplines:
                     if (!string.IsNullOrEmpty(cc.Remark) && cc.Remark.Contains(Consts.MarkPA_AssociatedGroup))

@@ -21,8 +21,11 @@
             this.ActiveDays = data.ActiveDays;            
             this.CustomerClass = (data.TargetCC == -1 || data.TargetCC == 0) ? "-" : data.TargetCC.ToString();
             this.CreatedTimeString = data.LastModifiedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss);
-            this.Reason = MappingReasonByCategoryID();
             this.CreatedBy = data.CreatedBy;
+            this.SourceTypeID = data.SourceTypeID;
+            this.SourceTypeName = data.SourceTypeName;
+            this.Remark = data.Remark;
+            this.Reason = GetReason();
         }
 
         public long ID { get; set; }
@@ -52,6 +55,43 @@
         public string Reason { get; set; }
 
         public string CreatedBy { get; set; }
+
+        public string Remark { get; set; }
+
+        public int SourceTypeID { get; set; }
+
+        public string SourceTypeName { get; set; }
+
+        private string GetReason()
+        {
+            var spanReason = MappingReasonByCategoryID();
+
+            if (string.IsNullOrEmpty(spanReason))
+            {
+                spanReason = MappingReasonBySourceTypeID();
+            }
+
+            return spanReason;
+        }
+
+        private string MappingReasonBySourceTypeID()
+        {
+            var result = string.Empty;
+            switch (SourceTypeID)
+            {
+                case (int)Model.SourceTypeID.SpecialCustomerClass_Add:
+                case (int)Model.SourceTypeID.SpecialCustomerClass_Remove:
+                    {
+                        result += $"<span> {SourceTypeName} </span>";
+
+                        if (!string.IsNullOrEmpty(Remark))
+                            result += $"| {Remark} ";
+                        break;
+                    }
+            }
+
+            return result;
+        }
 
         private string MappingReasonByCategoryID()
         {

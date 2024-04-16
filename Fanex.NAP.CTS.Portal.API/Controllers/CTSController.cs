@@ -571,60 +571,61 @@
             }
         }
 
-        /// <summary>
-        /// Insert special CC (build firstly for Haifa)
-        /// </summary>
-        /// <param name="paras"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.ForceSpecialCCAPI)]
-        public bool ForceSpecialCC([FromBody] ForceSpecialCustomerClassModel paras)
-        {
-            var result = true;
-            try
-            {
-                var userId = Convert.ToInt32(ConfigurationManager.AppSettings["DefaultUserIDForForceCC"]);
-                var resultInsert = new ResultInsertRemoveViewModel
-                {
-                    ErrorCode = 0,
-                    ErrorMessage = string.Empty
-                };
+        // comment because not use, it will removed by EnhanceEC
+        ///// <summary>
+        ///// Insert special CC (build firstly for Haifa)
+        ///// </summary>
+        ///// <param name="paras"></param>
+        ///// <returns></returns>
+        //[HttpPost]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.ForceSpecialCCAPI)]
+        //public bool ForceSpecialCC([FromBody] ForceSpecialCustomerClassModel paras)
+        //{
+        //    var result = true;
+        //    try
+        //    {
+        //        var userId = Convert.ToInt32(ConfigurationManager.AppSettings["DefaultUserIDForForceCC"]);
+        //        var resultInsert = new ResultInsertRemoveViewModel
+        //        {
+        //            ErrorCode = 0,
+        //            ErrorMessage = string.Empty
+        //        };
 
-                var resultInsertToCTS = _customerClassService.InsertCustomerClass(paras.Username, paras.CustomerClass, paras.IsAffectedToAssociation, userId);
+        //        var resultInsertToCTS = _customerClassService.InsertCustomerClass(paras.Username, paras.CustomerClass, paras.IsAffectedToAssociation, userId);
 
-                if (string.IsNullOrEmpty(resultInsertToCTS.OpErrorMessage))
-                {
-                    if (resultInsertToCTS.CustomerClassList != null && resultInsertToCTS.CustomerClassList.Any())
-                    {
-                        var custIdsChunk = resultInsertToCTS.CustomerClassList.Chunk(ConfigSettings.PushCCToExternalChunkSize);
+        //        if (string.IsNullOrEmpty(resultInsertToCTS.OpErrorMessage))
+        //        {
+        //            if (resultInsertToCTS.CustomerClassList != null && resultInsertToCTS.CustomerClassList.Any())
+        //            {
+        //                var custIdsChunk = resultInsertToCTS.CustomerClassList.Chunk(ConfigSettings.PushCCToExternalChunkSize);
 
-                        foreach (var custs in custIdsChunk)
-                        {
-                            _custClassificationService.PushDataToExternal(custs.Select(c => c.CustId).Distinct(), new PushDataToExternalModel
-                            {
-                                IsUpdateDangerToMainDB = false,
-                                IsSyncAFC = false,
-                                IsPushCCToSoon88 = false,
-                                ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize
-                            });
-                        }
-                    }
-                }
-                else
-                {
-                    resultInsert.ErrorCode = -1;
-                    resultInsert.ErrorMessage = resultInsertToCTS.OpErrorMessage;
+        //                foreach (var custs in custIdsChunk)
+        //                {
+        //                    _custClassificationService.PushDataToExternal(custs.Select(c => c.CustId).Distinct(), new PushDataToExternalModel
+        //                    {
+        //                        IsUpdateDangerToMainDB = false,
+        //                        IsSyncAFC = false,
+        //                        IsPushCCToSoon88 = false,
+        //                        ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize
+        //                    });
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            resultInsert.ErrorCode = -1;
+        //            resultInsert.ErrorMessage = resultInsertToCTS.OpErrorMessage;
 
-                    result = false;
-                    LogService.Error("ForceSpecialCC failed: " + resultInsert.ErrorMessage);
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("ForceSpecialCC exception: " + ex.Message);
-            }
+        //            result = false;
+        //            LogService.Error("ForceSpecialCC failed: " + resultInsert.ErrorMessage);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogService.Error("ForceSpecialCC exception: " + ex.Message);
+        //    }
 
-            return result;
-        }
+        //    return result;
+        //}
     }
 }

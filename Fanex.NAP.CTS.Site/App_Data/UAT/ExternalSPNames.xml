@@ -44,6 +44,7 @@
 		<Setting Key="Acc_CustomerUpdateCustomerClass" SpName="Acc_CustomerUpdateCustomerClass_xtest" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
 		<Setting Key="CTS_GeneralNormalClassification_RescanNormal_Preprocess" SpName="CTS_GeneralNormalClassification_RescanNormal_Preprocess_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
 		<Setting Key="CTS_CustomerUpdDanger" SpName="CTS_CustomerUpdDanger_xtest" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
+		<Setting Key="Acc_CustomerUpdateCustomerClassBySport" SpName="Acc_CustomerUpdateCustomerClassBySport_xtest" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="600" />
 	</Function>
 	
 	<Function name="MatchMonitor">
@@ -80,5 +81,9 @@
 
 	<Function name="DangerMonitor">
 		<Setting Key="CTS_MatchTicketInfo_Get" SpName="CTS_MatchTicketInfo_Get_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
+	</Function>
+
+	<Function name="RescanNormalClassificationBySport">
+		<Setting Key="CTS_BySportNormalClassification_RescanNormal_Preprocess" SpName="CTS_BySportNormalClassification_RescanNormal_Preprocess_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
 	</Function>
 </Functions>

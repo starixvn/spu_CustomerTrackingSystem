@@ -285,11 +285,23 @@
             RemoveLicBABySite_API = 50,
         };
 
+        public enum BySport_FunctionId
+        {
+            InsertNewCustJob = 4,
+            Manual = 5,
+        };
+
         public enum RescanNormalType
         {
             Manual = 4,
             Auto_Customer = 5,
             Auto_AfftectedDownline = 6
+        }
+
+        public enum BySport_RescanNormalType
+        {
+            Service = 1,
+            Manual = 2
         }
 
         public enum HttpStatus
@@ -298,6 +310,7 @@
             BadRequest = 400,
             NotFound = 404,
             MethodNotAllowed = 405,
+            Unprocessable = 422,
             OK = 200,
             Created = 201,
             ServerUnavailable = 503,
