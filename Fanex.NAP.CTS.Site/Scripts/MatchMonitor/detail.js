@@ -106,6 +106,7 @@ function MatchMonitorDetail() {
         btnAssDetection: $('#btnAssDetection'),
         btnExportExcel: $('#btnExportExcel'),
         btnVoidTicket: $('#btnVoidTicket'),
+        btnMarkPA: $('#btnMarkPA'),
         btnVerifyAndClose: $('#btnVerifyAndClose'),
         btnReasonFeedback: $('#btnReasonFeedback'),
         inputTranstimeFrom: $('#inputTranstimeFrom'),
@@ -2892,6 +2893,56 @@ function MatchMonitorDetail() {
         }
     }
 
+    function RedirectToMarkPA() {
+        const urlMarkPA = common.modifyRelativeUrl('ProblemAccountManagement');
+
+        let userNames = [];
+
+        if (isDisplaySingleGrid) {
+            domElements.tblMMSG.DataTable().rows(function (idx, data, node) {
+                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                    userNames.push(data.Username);
+                }
+            });
+        } else {
+            domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
+                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                    userNames.push(data.Username);
+                }
+            });
+            domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
+                if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                    userNames.push(data.Username);
+                }
+            });
+        }
+
+        userNames = userNames.filter(OnlyUnique);
+        
+        if (IsValidMarkPA(userNames.length))
+        {
+            const data = {
+                "usernames" : userNames
+            };
+
+            OpenWindowWithPost(urlMarkPA, data);
+        }
+    }
+
+    function IsValidMarkPA(custSelectedLength) {
+        if (custSelectedLength <= 0) {
+            common.showError("Please select at least 1 Username to proceed!");
+            return false;
+        }
+
+        if (custSelectedLength > 1001) {
+            common.showError("Exceeded max 1001 usernames. Please try again with a smaller range.");
+            return false;
+        }
+
+        return true;
+    }
+
     function OpenWindowWithPost(url, data) {
         var form = document.createElement("form");
         form.target = "_blank";
@@ -3100,6 +3151,10 @@ function MatchMonitorDetail() {
 
         domElements.btnVoidTicket.on('click', function () {
             RedirectToTicketVoiding();
+        });
+
+        domElements.btnMarkPA.on('click', function () {
+            RedirectToMarkPA();
         });
     }
 
