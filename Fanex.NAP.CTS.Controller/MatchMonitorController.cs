@@ -32,6 +32,7 @@
     using System.Web.Mvc;
     using System.Web.Script.Serialization;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
+    using Fanex.NAP.CTS.ViewModel.MatchMonitor.MarkPA;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -64,20 +65,20 @@
         #region Main Page
         public ActionResult Index()
         {
-            IUserService userService = new UserService();            
+            IUserService userService = new UserService();
 
             var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                             NapSettings.Settings.SiteId,
                             FSFunctionKeys.MatchMonitor,
-                            NAP.Core.Business.Constant.Policy.Host);          
+                            NAP.Core.Business.Constant.Policy.Host);
 
             var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true)
                 .Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
-                .OrderBy(x=>x.ReasonName);
+                .OrderBy(x => x.ReasonName);
 
             var reasonGroupItems = _commonService.GetStaticLists((int)StaticListID.Reason, true);
 
-            var reasonGroups = GetReasonGroups(false);            
+            var reasonGroups = GetReasonGroups(false);
 
             var sports = _commonService.GetStaticLists((int)StaticListID.Sport, true)
                 .Select(x => new SportStaticListViewModel { SportID = x.ItemValue, SportName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" });
@@ -145,7 +146,7 @@
         }
 
         private IEnumerable<ReasonGroupStaticListViewModel> GetReasonGroups(bool isInitGroupNone)
-        {           
+        {
             var reasonGroupItems = _commonService.GetStaticLists((int)StaticListID.Reason, true);
             var result = new List<ReasonGroupStaticListViewModel>();
 
@@ -175,7 +176,7 @@
             return result;
         }
 
-        private IEnumerable<GetMatchMonitorViewModel> MergeMatchMonitorWithMMStaticAndTicketsSummary(IEnumerable<GetMatchMonitorModel> matchFromCTSInfos,      
+        private IEnumerable<GetMatchMonitorViewModel> MergeMatchMonitorWithMMStaticAndTicketsSummary(IEnumerable<GetMatchMonitorModel> matchFromCTSInfos,
             Dictionary<string, MMFraudTicketsSummaryViewModel> mmDictionaryTicketsSummarys)
         {
             var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
@@ -253,7 +254,7 @@
         }
 
         private IEnumerable<GetMatchMonitorModel> GetMMByScanDate(MatchMonitorSearchViewModel para)
-        {            
+        {
             var matchFromCTSInfos = _matchMonitorService.GetMatchMonitor(para, null);
 
             if (matchFromCTSInfos.Any())
@@ -978,7 +979,7 @@
                     LastModifiedBy = x.Item?.LastModifiedBy,
                     LastModifiedDate = x.Item?.LastModifiedDate.ToString(Consts.FormatDateTimeToString_yyyyMMdd)
                 });
-            }            
+            }
 
             return Json(new
             {
@@ -1095,7 +1096,7 @@
 
             try
             {
-                if (matchId != 0 
+                if (matchId != 0
                     && matchStatus != (int)MATCHMONITOR_SECTION.Closed
                     && !string.IsNullOrEmpty(ConfigSettings.GetHoldKeyMMDetailURL))
                 {
@@ -1104,9 +1105,9 @@
                     if (statusResult != null && !statusResult.isSuccess)
                     {
                         throw new Exception($"GetHoldKeyStatus - call Adminsite's api unsuccessfully (IP = {matchId})");
-                    }   
-                    
-                    if (statusResult != null 
+                    }
+
+                    if (statusResult != null
                         && statusResult.holdKeyInfo != null
                         && statusResult.holdKeyInfo.Any())
                     {
@@ -1177,6 +1178,49 @@
                                  + ex.StackTrace + "\n"
                                  + ex?.InnerException?.Message + "\n"
                                  + $"DataInput: {JsonConvert.SerializeObject(tranIds) + "\n"}"
+                                 + ex?.InnerException?.Source
+                                 + ex?.InnerException?.StackTrace);
+            }
+
+            return Json(new
+            {
+                data = result,
+                isValid = isValid
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
+
+        #region Mark PA
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailMarkPA)]
+        public ActionResult MarkPA(string usernames)
+        {
+            var result = new MMDetailMarkPAViewModel();
+            var isValid = false;
+
+            try
+            {
+                if (!string.IsNullOrEmpty(usernames))
+                {
+                    var userList = new HashSet<string>(usernames.Split(','));
+
+                    if (userList.Count > 0 && userList.Count <= 1001)
+                    {
+                        result.Usernames = usernames;
+                        result.MarkPARedirectURL = ConfigSettings.MarkPAURL;
+                        isValid = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Redirect to Mark PA - Exception: "
+                                 + ex.Message
+                                 + ex.StackTrace + "\n"
+                                 + ex?.InnerException?.Message + "\n"
+                                 + $"DataInput: {usernames + "\n"}"
                                  + ex?.InnerException?.Source
                                  + ex?.InnerException?.StackTrace);
             }

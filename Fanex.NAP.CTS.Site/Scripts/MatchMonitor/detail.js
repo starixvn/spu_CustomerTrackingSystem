@@ -2894,8 +2894,6 @@ function MatchMonitorDetail() {
     }
 
     function RedirectToMarkPA() {
-        const urlMarkPA = common.modifyRelativeUrl('ProblemAccountManagement');
-
         let userNames = [];
 
         if (isDisplaySingleGrid) {
@@ -2922,10 +2920,28 @@ function MatchMonitorDetail() {
         if (IsValidMarkPA(userNames.length))
         {
             const data = {
-                "usernames" : userNames
+                "usernames" : userNames.join()
             };
 
-            OpenWindowWithPost(urlMarkPA, data);
+            $.ajax(common.modifyRelativeUrl('MatchMonitor/MarkPA'), {
+                type: 'POST',
+                data: data,
+                beforeSend: function () {
+                    domElements.divPageLoading.addClass('loading-icon');
+                },
+                success: function (response) {
+                    if (response.isValid) {
+                        OpenWindowWithPost(common.modifyRelativeUrl(response.data.MarkPARedirectURL), data);
+                    }
+                },
+                complete: function () {
+                    domElements.divPageLoading.removeClass('loading-icon');
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                    domElements.divPageLoading.removeClass('loading-icon');
+                }
+            });
         }
     }
 
