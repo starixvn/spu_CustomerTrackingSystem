@@ -269,8 +269,6 @@
                         border: 1px solid #c4c4c4;
                         padding: 0 1rem;
                         background-color: #e3e9f6;
-                        position: -webkit-sticky;
-                        position: sticky;
                         top: 16.2rem;
                         z-index: 11;
 
@@ -544,4 +542,13 @@
             display: none;
         }
     }
+}
+
+.select2-container--default .select2-results__option[aria-selected="true"],
+.select2-container--default .select2-results__option[aria-selected="false"] {
+    color: #333333;
+}
+
+html {
+    overflow: hidden;
 }
