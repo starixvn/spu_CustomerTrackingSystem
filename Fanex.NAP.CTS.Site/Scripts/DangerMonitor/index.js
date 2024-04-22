@@ -69,7 +69,8 @@
             if (data.OtherSport.Items && Object.keys(data.OtherSport.Items).length !== 0)
                 sportGroupSelector.append(BuildOptgroupSport(3, "Other Sport", data.OtherSport.Items));
 
-            domElements.cbbSport.multiselect("refresh");
+            domElements.cbbSport.val("1_null").change();
+            // domElements.cbbSport.multiselect("refresh");
         }
 
         FetchBetTypes();
@@ -277,20 +278,21 @@
                 placeholder: "Select Dgr",
             });
 
-        domElements.cbbSport.multiselect({
-            menuWidth: 260,
-            menuHeight: 260,
-            selectedText: "# of # select",
-            noneSelectedText: `Select Sports`,
-            enableClickableOptGroups: true,
-            includeSelectAllOption: true,
-            groupsCollapsable: true,
-            optGroupChecked: true
-        }).multiselectfilter({
-            width: 150,
-            placeholder: '',
-            label: ''
-        });
+        domElements.cbbSport.select2();
+        // domElements.cbbSport.multiselect({
+        //     menuWidth: 260,
+        //     menuHeight: 260,
+        //     selectedText: "# of # select",
+        //     noneSelectedText: `Select Sports`,
+        //     enableClickableOptGroups: true,
+        //     includeSelectAllOption: true,
+        //     groupsCollapsable: true,
+        //     optGroupChecked: true
+        // }).multiselectfilter({
+        //     width: 150,
+        //     placeholder: '',
+        //     label: ''
+        // });
 
         domElements.cbbBetType.multiselect({
             menuWidth: 340,
