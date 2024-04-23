@@ -413,6 +413,7 @@
             DangerMonitorDetailManualDetectRpt = 83,
             DangerMonitorDetailExportToExcelRpt = 84,
             MatchMonitorDetailTicketVoiding = 85,
+            MatchMonitorDetailMarkPA = 86,
 
             //PlaceEvidenceForMultipleCustAPI = 200,
             GetFlaggedCustomersByLevelAPI = 201,

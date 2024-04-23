@@ -102,6 +102,8 @@
 
         public static string TVSTicketVoidingURL => GetConfigStringByName("MMDetail_TVSTicketVoidingURL");
 
+        public static string MarkPAURL => GetConfigStringByName("MMDetail_MarkPAURL");
+
         public static int ImportEvidenceChunkSize
         {
             get

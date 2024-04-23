@@ -1,5 +1,5 @@
 ﻿function ProblemAccountManagement() {
-    let dataTable;    
+    let dataTable;
 
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),
@@ -13,7 +13,7 @@
         btnGenerate: $('#btnGenerate'),
         btnExportToExcel: $('#btnExportToExcel'),
         tblProblemAccount: $('#tblProblemAccount'),
-        btnMarkNewProblemAccount: $('#btnMarkNewProblemAccount'),        
+        btnMarkNewProblemAccount: $('#btnMarkNewProblemAccount'),
         btnUnmarkProblemAccount: $('#btnUnmarkProblemAccount'),
         divAddProblemAccount: $('#divAddProblemAccount'),
         grpCategories: $('#grpCategories'),
@@ -28,12 +28,13 @@
         spanAddProblemAccountChangeHidden: $('#spanAddProblemAccountChangeHidden'),
         spanProblemAccountActionHidden: $('#spanProblemAccountActionHidden'),
         inputTagUsername: $('#inputTagUsername'),
-        maxTags: 1001
+        maxTags: 1001,
+        hdUserNames: $('#hdUserNames'),
     };
 
     function RenderGrid() {
         let url = common.modifyRelativeUrl('ProblemAccountManagement/GetProblemAccount');
-        
+
         return domElements.tblProblemAccount.DataTable({
             serverSide: false,
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
@@ -46,7 +47,7 @@
                 type: "POST",
                 beforeSend: function () {
                     domElements.tblProblemAccount.find('tbody').addClass('loading');
-                },              
+                },
                 complete: function () {
                     domElements.tblProblemAccount.find('tbody').removeClass('loading');
                 }
@@ -77,10 +78,10 @@
                 { targets: [2], width: "10%" },
                 { targets: [3], width: "15%" },
                 { targets: [4], width: "25%" },
-                { targets: [5], width: "10%" },               
-                { targets: [6], width: "10%" }               
+                { targets: [5], width: "10%" },
+                { targets: [6], width: "10%" }
             ],
-            columns: [                
+            columns: [
                 { data: obj => obj.UserName },
                 { data: obj => obj.Site },
                 { data: obj => obj.Currency },
@@ -96,17 +97,17 @@
         let params = {};
 
         params.FromDate = domElements.dpkFromDate.val();
-        params.ToDate = domElements.dpkToDate.val();       
-        params.Sites = domElements.cbbSite.val().join();        
+        params.ToDate = domElements.dpkToDate.val();
+        params.Sites = domElements.cbbSite.val().join();
         params.IsAllSites = domElements.cbbSite.find('option').not(':selected').length == 0;
-        params.CategoryIDs = domElements.cbbCategory.val().join();        
+        params.CategoryIDs = domElements.cbbCategory.val().join();
         params.UserName = domElements.inputUserName.val().trim();
         params.HasDownline = domElements.inputSearchDownlines.is(":checked");
 
         if (isExportExcel) {
             params.IsAllCategories = domElements.cbbCategory.find('option').not(':selected').length == 0;
             params.CategoryNames = $('#cbbCategory option:selected').toArray().map(item => item.text).join();
-            
+
             domElements.cbbSite.find('optgroup').each(function () {
                 let txtSelected = $(this).find('option:selected').toArray().map(item => item.text).join();
                 if ($(this).attr('label') == 'Credit') {
@@ -135,7 +136,7 @@
         let toDateValueAllow = domElements.dpkFromDate.datepicker("getDate");
         toDateValueAllow.setDate(toDateValueAllow.getDate() + 30);
 
-       let userName = domElements.inputUserName.val().trim();
+        let userName = domElements.inputUserName.val().trim();
 
         if (toDateValue > toDateValueAllow && userName == '') {
             common.showError('Due to size limitation, please press "Export to Excel" for more detail information');
@@ -172,8 +173,8 @@
         domElements.dpkToDate
             .datepicker("option", "minDate", fromDateValue)
             .datepicker("option", "maxDate", moment(fromDateValue).add(1, "year").toDate());
-    }    
-   
+    }
+
     function InitInputTagUsername() {
         domElements.spanAddProblemAccountUserNameMaxTag.text(domElements.maxTags);
         domElements.spanAddProblemAccountChangeHidden.text("0");
@@ -197,7 +198,7 @@
             let invalidDuplicatedTags = domElements.spanAddProblemAccountUserName.find('tags tag.invalid-duplicated');
             let invalidUsernameTags = domElements.spanAddProblemAccountUserName.find('tags tag.invalid-username');
             let numOfTagExceeded = domElements.spanAddProblemAccountUserName.find('tags tag.tagify--notAllowed');
-            
+
             let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length + numOfTagExceeded.length;
             if (notInvalid <= 1 && validTags.length > 1)
                 domElements.btnSave.prop('disabled', false);
@@ -238,12 +239,12 @@
                     EnableButtonAdd();
                 });
 
-                domElements.spanAddProblemAccountUserNameMaxTag.text(maxCountTags - 1);                
+                domElements.spanAddProblemAccountUserNameMaxTag.text(maxCountTags - 1);
             } else {
                 //domElements.inputTagUsername.tagify().data('tagify').removeTags(tagName.tag); 
                 let $tag = $(tagName.tag);
                 let btnRemove = $tag.find('x');
-                btnRemove.on('click', function (e) {                    
+                btnRemove.on('click', function (e) {
                     let currentTag = $(e.target).parent();
 
                     ResetMaxTag();
@@ -352,7 +353,7 @@
                     if (params.PAAction == 2) { // Unmark
                         domElements.txtComment.val(response.Comment);
                         if (response.IsExistedSMA && response.IsCreditSite) {
-                            domElements.grpCkboxAffectedDownline.removeClass('hide');                            
+                            domElements.grpCkboxAffectedDownline.removeClass('hide');
                         } else {
                             domElements.grpCkboxAffectedDownline.addClass('hide');
                         }
@@ -405,7 +406,7 @@
             }
         });
 
-        if (data.ProblemAccountInvalidList.length === 0) {            
+        if (data.ProblemAccountInvalidList.length === 0) {
             domElements.btnSave.prop('disabled', false);
         }
         else
@@ -418,7 +419,7 @@
         params.CategoryID = domElements.cbbProblemAccountCategories.val();
         params.Comment = domElements.txtComment.val().trim();
         params.PAAction = domElements.spanProblemAccountActionHidden.val();
-        params.IsUnmarkDownlines = domElements.ckbUnmarkDownlines.is(":checked");        
+        params.IsUnmarkDownlines = domElements.ckbUnmarkDownlines.is(":checked");
         params.CategoryGroup = $('option:selected', domElements.cbbProblemAccountCategories).attr('data-categorygroup');
 
         if (params.PAAction == 1) {
@@ -459,7 +460,7 @@
                 console.log(errMsg);
             }
         });
-    }   
+    }
 
     function SaveUnmarkProblemAccount(params) {
         common.showConfirmation("<div class='popup - content'>Are you sure to unmark this problem account?</div>",
@@ -496,7 +497,7 @@
             () => { });
     }
 
-    function GetProblemAccountCategories() {
+    function GetProblemAccountCategories(setVal) {
         domElements.cbbProblemAccountCategories.empty();
 
         $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/GetProblemAccountAllCategories'), {
@@ -509,16 +510,19 @@
                 domElements.cbbProblemAccountCategories.prop('selectedIndex', 0);
             },
             complete: function () {
+                if (setVal) {
+                    domElements.cbbProblemAccountCategories.val(setVal).change();
+                }
             },
             error: function (errMsg) {
                 console.log(errMsg);
             }
         });
-    }  
+    }
 
     function ExportToExcel() {
         if (ValidateRangeDateExport()) {
-            common.showSuccess('Your filter export is being processed. Please wait, this may take some minutes.', 5000);            
+            common.showSuccess('Your filter export is being processed. Please wait, this may take some minutes.', 5000);
 
             common.showLoading();
 
@@ -545,14 +549,14 @@
                         let downloadLink = window.document.createElement('a');
                         let contentTypeHeader = request.getResponseHeader("Content-Type");
                         downloadLink.href = window.URL.createObjectURL(new Blob([blob], { type: contentTypeHeader }));
-                        
+
                         var disposition = request.getResponseHeader('Content-Disposition');
                         if (disposition && disposition.indexOf('filename') !== -1) {
                             var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
                             var matches = filenameRegex.exec(disposition);
                             if (matches != null && matches[1]) {
                                 filename = matches[1].replace(/['"]/g, '');
-                            }                            
+                            }
                         }
 
                         downloadLink.download = filename;
@@ -570,11 +574,11 @@
 
             let params = GetParams(true);
             request.send(JSON.stringify(params));
-        }        
+        }
     }
 
     function GetFormattedDate() {
-        let date = new Date();        
+        let date = new Date();
 
         let stringDateFormat = date.getUTCFullYear().toString()
             + ('0' + (date.getUTCMonth() + 1)).slice(-2).toString()
@@ -585,6 +589,31 @@
             + ('0' + date.getUTCSeconds()).slice(-2).toString();
 
         return stringDateFormat;
+    }
+
+    function ShowPopupMarkNew(isNavigation) {
+        domElements.grpCategories.removeClass('hide');
+        domElements.grpCkboxAffectedDownline.addClass('hide');
+        GetProblemAccountCategories(isNavigation ? '52' : null);
+        domElements.txtComment.val('');
+        domElements.spanProblemAccountActionHidden.val('1'); // Mark
+
+        InitInputTagUsername();
+
+        if (isNavigation) {
+            domElements.inputTagUsername.data('tagify').addTags(domElements.hdUserNames.val());
+        }
+
+        domElements.divAddProblemAccount.dialog({
+            modal: true,
+            width: '800px',
+            title: 'MARK NEW PROBLEM ACCOUNT',
+            resizable: true,
+            draggable: true,
+            close: function () {
+                $(this).dialog('close');
+            }
+        });
     }
 
     function Initial() {
@@ -604,7 +633,7 @@
                 changeYear: true
             })
             .datepicker("setDate", new Date())
-            .change(SetRestrictFromDate);        
+            .change(SetRestrictFromDate);
 
         domElements.cbbSite.multiselect({
             menuWidth: 280,
@@ -625,7 +654,7 @@
             menuWidth: 300,
             menuHeight: 280,
             selectedText: "# of # selected",
-            noneSelectedText: "Select Category"            
+            noneSelectedText: "Select Category"
         }).multiselectfilter({
             width: 240,
             placeholder: '',
@@ -637,27 +666,10 @@
         domElements.btnExportToExcel.on('click', function () { ExportToExcel(); });
 
         domElements.btnMarkNewProblemAccount.on('click', function () {
-            domElements.grpCategories.removeClass('hide');
-            domElements.grpCkboxAffectedDownline.addClass('hide');
-            GetProblemAccountCategories();
-            domElements.txtComment.val('');  
-            domElements.spanProblemAccountActionHidden.val('1'); // Mark
-
-            InitInputTagUsername();
-
-            domElements.divAddProblemAccount.dialog({
-                modal: true,
-                width: '800px',
-                title: 'MARK NEW PROBLEM ACCOUNT',
-                resizable: true,
-                draggable: true,
-                close: function () {
-                    $(this).dialog('close');
-                }
-            });
+            ShowPopupMarkNew(false);
         });
 
-        domElements.btnUnmarkProblemAccount.on('click', function () {            
+        domElements.btnUnmarkProblemAccount.on('click', function () {
             domElements.grpCategories.addClass('hide');
             domElements.grpCkboxAffectedDownline.addClass('hide');
             domElements.ckbUnmarkDownlines.prop("checked", false);          
@@ -676,13 +688,22 @@
                     $(this).dialog('close');
                 }
             });
-        });      
+        });
 
         domElements.btnSave.on('click', () => SaveProblemAccount());
 
         domElements.btnCancel.on('click', () => {
             domElements.divAddProblemAccount.dialog('close');
         });
+
+        // Mark PA from other page
+        if (domElements.hdUserNames.val()) {
+            ShowPopupMarkNew(true);
+
+            setTimeout(() => {
+                $(document).mouseup();
+            }, 100);
+        }
     }
 
     $(document).ready(function () {

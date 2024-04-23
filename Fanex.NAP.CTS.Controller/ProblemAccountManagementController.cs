@@ -88,6 +88,13 @@
         }
 
         [HttpPost]
+        public ActionResult Index(string usernames)
+        {
+            ViewBag.UserNames = usernames;
+            return Index();
+        }
+
+        [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementRpt)]
         public ActionResult GetProblemAccount(ProblemAccountFilterViewModel filter)
         {
