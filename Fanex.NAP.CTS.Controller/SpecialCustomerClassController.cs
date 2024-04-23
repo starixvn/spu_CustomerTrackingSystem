@@ -166,7 +166,7 @@
                 }).Distinct(x => new { x.Username, x.SportID }).ToList();
             }
 
-            return model.Count() <= 15 ? model : null;
+            return model.Count() <= 1001 ? model : null;
         }
         #endregion
     }

@@ -546,7 +546,7 @@
             [Description("Other Sports")]
             OtherSports = 99,
 
-            [Description("Non-Sport")]
+            [Description("Non-Sports")]
             NonSport = 229,
 
             [Description("Saba Soccer")]
