@@ -10,7 +10,7 @@
 
         IEnumerable<long> GetAgentCusts(IEnumerable<long> custIds);
 
-        RescanResultModel RescanPADangerous(IEnumerable<long> custIds, RescanCustClassificationModel parameters);
+        RescanResultModel RescanPotentialProblemAccount(IEnumerable<long> custIds, RescanCustClassificationModel parameters);
 
         bool RescanNormalAccount(RescanCustClassificationModel parameters, IEnumerable<long> custIdsToRescanPA, IEnumerable<long> smaCustIds);
     }

@@ -1,6 +1,9 @@
 ﻿namespace Fanex.NAP.CTS.Model.CustomerClassification
 {
+    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
+    using Fanex.NAP.CTS.Resource.Consts;
     using System;
+    using System.Configuration;
 
     public class InsertProblemAccountModel
     {
@@ -10,6 +13,42 @@
             IsFromCTS = false;
             IsFromTW = false;
             IsDataChanged = false;
+        }
+
+        public InsertProblemAccountModel(RescanPADangerousModel rescanPADangerous)
+        {
+            this.CustID = rescanPADangerous.CustID;
+            this.CTSCustID = rescanPADangerous.CTSCustID;
+            this.RoleID = rescanPADangerous.RoleID;
+            this.SubscriberID = rescanPADangerous.SubscriberID;
+            this.CategoryID = rescanPADangerous.CategoryID;
+            this.CategoryGroup = rescanPADangerous.CategoryID;
+            this.IsLicensee = rescanPADangerous.IsLicensee;
+            this.IsFromAI = true;
+            this.IsDirectPA = null;
+            this.IsFromCTS = false;
+            this.IsFromTVS = false;
+            this.IsFromTW = false;
+            this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
+            this.Remark = $"Detection Date: { rescanPADangerous.ClassifiedDate.ToString(Consts.FormatDateToString_MMMddyyyy)} - Dangerous Score: {(rescanPADangerous.ClassifiedScore * 100).ToString(Consts.FormatDecimalToString_2Places)}%";
+        }
+
+        public InsertProblemAccountModel(GetInitialTWGroupBettingModel twGBCust, PotentialPACustInfoModel ctsCust)
+        {
+            this.CustID = twGBCust.CustID;
+            this.CTSCustID = ctsCust.CTSCustID;
+            this.RoleID = ctsCust.RoleID;
+            this.SubscriberID = ctsCust.SubscriberID;
+            this.CategoryID = ctsCust.CategoryID;
+            this.CategoryGroup = ctsCust.CategoryGroup;
+            this.IsLicensee = ctsCust.IsLicensee;
+            this.IsFromAI = false;
+            this.IsDirectPA = null;
+            this.IsFromCTS = false;
+            this.IsFromTVS = false;
+            this.IsFromTW = true;
+            this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
+            this.Remark = $"Detection Date: { twGBCust.DetectedDate.ToString(Consts.FormatDateToString_MMMddyyyy)} - GB Bet Count: {twGBCust.TWGBTicketCount}";
         }
 
         /* Cust info */

@@ -277,12 +277,12 @@
                         {                           
                             CustIds = custIdList,
                             IsPushCCToSoon88 = true,
-                            IsRescanPADangerous = true,
+                            IsRescanPotentialPA = true,
                             FunctionId = FunctionId.UnmarkCustomerCategory,
                             IsUpdateDangerToMainDB = true
                         };
 
-                        var custRescanPADangous = _rescanClassificationService.RescanPADangerous(custIdList, paramRescan);
+                        var custRescanPADangous = _rescanClassificationService.RescanPotentialProblemAccount(custIdList, paramRescan);
 
                         var smCustIds = _rescanClassificationService.GetAgentCusts(custIdList);
 

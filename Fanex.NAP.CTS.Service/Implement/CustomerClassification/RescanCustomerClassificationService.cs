@@ -15,6 +15,7 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Entities;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
@@ -49,9 +50,9 @@
                 custToRescanPA.AddRange(result.CustIds);
             }
 
-            if (parameters.IsRescanPADangerous)
+            if (parameters.IsRescanPotentialPA)
             {
-                result = RescanPADangerous(parameters.CustIds, parameters);
+                result = RescanPotentialProblemAccount(parameters.CustIds, parameters);
                 custToRescanPA.AddRange(result.CustIds);
             }
 
@@ -74,7 +75,7 @@
             {
                 var existedProbAccounts = GetExistedProblemAccounts(parameters.CustIds, parameters.IsDataChanged);
 
-                var custTORemovedOldPA = InsertProblemAccountLogics(existedProbAccounts.ProblemAccounts, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
+                InsertProblemAccountLogics(existedProbAccounts.ProblemAccounts, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
 
                 if (rescanResult.IsSuccess)
                 {
@@ -97,43 +98,59 @@
             return rescanResult;
         }
 
-        public RescanResultModel RescanPADangerous(IEnumerable<long> custIds, RescanCustClassificationModel parameters)
+        public RescanResultModel RescanPotentialProblemAccount(IEnumerable<long> custIds, RescanCustClassificationModel parameters)
         {
             var rescanResult = new RescanResultModel();
 
             if (custIds.Any())
-            {               
+            {
                 var custIDs = string.Join(",", custIds);
 
-                var pasDangerous = this.RescanPADangerous(custIDs);
+                rescanResult = RescanDangerousPA(custIDs, parameters);
 
-                if (pasDangerous != null && pasDangerous.Any())
+                if (rescanResult.IsSuccess)
                 {
-                    var pas = pasDangerous.Select(x =>
-                    {
-                        return new InsertProblemAccountModel
-                        {
-                            CustID = x.CustID,
-                            CTSCustID = x.CTSCustID,
-                            RoleID = x.RoleID,
-                            SubscriberID = x.SubscriberID,
-                            CategoryID = x.CategoryID,
-                            CategoryGroup = x.CategoryID,
-                            IsLicensee = x.IsLicensee,
-                            IsFromAI = true,
-                            IsDirectPA = null,
-                            IsFromCTS = false,
-                            IsFromTVS = false,
-                            IsFromTW = false,
-                            CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]),
-                            Remark = $"Detection Date: { x.ClassifiedDate.ToString(Consts.FormatDateToString_MMMddyyyy)} - Dangerous Score: {(x.ClassifiedScore * 100).ToString(FormatDecimalToString_2Places)}%"
-                        };
-                    });
-
-                    var custPaDangerous = InsertProblemAccountLogics(pas, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
-
-                    rescanResult.IsSuccess = PushDataToExternalPackge(custPaDangerous.Distinct(), parameters);
+                    rescanResult = RescanInitialTWGroupBettingPA(custIDs, parameters);
                 }
+            }
+
+            return rescanResult;
+        }
+
+        public RescanResultModel RescanDangerousPA(string custIDs, RescanCustClassificationModel parameters)
+        {
+            var rescanResult = new RescanResultModel();
+
+            var rescanDangerous = this.RescanDangerousPA(custIDs);
+
+            if (rescanDangerous != null && rescanDangerous.Any())
+            {
+                var paDangerous = rescanDangerous.Select(x => new InsertProblemAccountModel(x));
+
+                var custPaDangerous = InsertProblemAccountLogics(paDangerous, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
+
+                rescanResult.IsSuccess = PushDataToExternalPackge(custPaDangerous.Distinct(), parameters);
+            }
+
+            return rescanResult;
+        }
+
+        public RescanResultModel RescanInitialTWGroupBettingPA(string custIDs, RescanCustClassificationModel parameters)
+        {
+            var rescanResult = new RescanResultModel();
+
+            var rescanInitialTWGB = this.GetInitialTWGroupBetting(custIDs);
+
+            if (rescanInitialTWGB != null && rescanInitialTWGB.Any())
+            {
+                var custInfos = this.GetCustInfos(custIDs);
+
+                var paTWGBs = rescanInitialTWGB.Join(custInfos, twGBCust => twGBCust.CustID, ctsCust => ctsCust.CustID,
+                               (twGBCust, ctsCust) => new InsertProblemAccountModel(twGBCust, ctsCust));
+
+                var custPaTWGB = InsertProblemAccountLogics(paTWGBs, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
+
+                rescanResult.IsSuccess = PushDataToExternalPackge(custPaTWGB.Distinct(), parameters);
             }
 
             return rescanResult;
@@ -339,7 +356,7 @@
             }
         }
 
-        public IEnumerable<RescanPADangerousModel> RescanPADangerous(string custIDs)
+        public IEnumerable<RescanPADangerousModel> RescanDangerousPA(string custIDs)
         {
             var criteria = new RescanPADangerousCriteria
             {
@@ -348,6 +365,24 @@
 
             return repository.Fetch<RescanPADangerousModel>(criteria);
         }
+
+        public IEnumerable<GetInitialTWGroupBettingModel> GetInitialTWGroupBetting(string custIDs)
+        {
+            var criteria = new RescanInitialTWGroupBettingCriteria() { CustIDs = custIDs };
+
+            return repository.Fetch<GetInitialTWGroupBettingModel>(criteria);
+        }
+
+        public IEnumerable<PotentialPACustInfoModel> GetCustInfos(string custIDs)
+        {
+            var criteria = new GetCustInfoByCustIDCriteria
+            {
+                CustIDs = custIDs
+            };
+
+            return repository.Fetch<PotentialPACustInfoModel>(criteria);
+        }
+
         #endregion Private Methods
     }
 }
