@@ -188,8 +188,7 @@
             var criteria = new GetCommonSportBettypeCriteria
             {
                 ProductId = model.ProductId,
-                BettypeList = model.BettypeList,
-                SportTypeList = model.SportTypeList
+                BettypeList = model.BettypeList
             };
 
             return repository.Fetch<SportBettypeViewModel>(criteria);

@@ -3,11 +3,14 @@
     using Fanex.NAP.CTS.Model.DangerMonitor;
     using Fanex.NAP.CTS.ViewModel.DangerMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
+    using System;
     using System.Collections.Generic;
 
     public interface IDangerMonitorService
     {
         IEnumerable<DangerMonitorBetTypeViewModel> GetSportBettypesFromCache(bool isGetNew = false);
+
+        IEnumerable<DangerMonitorBetTypeViewModel> GetBettypesFromCache();
 
         GetDangerMonitorResultViewModel GetDangerMonitor(DangerMonitorSearchModel filter);
 
@@ -19,7 +22,5 @@
         MMDetailTicketListViewModel GetMatchMonitorDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter);
 
         MMDetailFilterViewModel GetMatchMonitorFilter(MMDetailInfoViewModel para);
-
-        long GetMatchMonitorTotalTicket(MMDetailInfoViewModel info, MMDetailFilterViewModel filter);
     }
 }

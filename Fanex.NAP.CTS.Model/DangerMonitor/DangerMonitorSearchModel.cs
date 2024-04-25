@@ -1,30 +1,19 @@
 ﻿namespace Fanex.NAP.CTS.Model.DangerMonitor
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class DangerMonitorSearchModel
     {
-        public DangerMonitorSearchModel() { }
-
-        public DangerMonitorSearchModel(DangerMonitorSearchModel model)
-        {
-            FromDate = model.FromDate;
-            ToDate = model.ToDate;
-            DangerList = model.DangerList;
-            Sports = model.Sports;
-            Event = model.Event;
-            Market = model.Market;
-            MatchSection = model.MatchSection;
-            BetTypes = model.BetTypes;
-        }
 
         public DateTime? FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }
 
-        public string DangerList { get; set; }
+        public string QueryDanger { get; set; }
 
-        public string Sports { get; set; }
+        public IEnumerable<string> SportList { get; set; }
 
         public string Event { get; set; } /* League / Match */
 
@@ -34,10 +23,32 @@
 
         public string BetTypes { get; set; }
 
-        public long? LastMatchID { get; set; }
+        public bool Validate
+        {
+            get
+            {
+                if (FromDate != null && ToDate != null && FromDate > ToDate)
+                {
+                    return false;
+                }
 
-        public string LastMatchSection { get; set; }
+                if (string.IsNullOrEmpty(QueryDanger) || string.IsNullOrEmpty(Market) || string.IsNullOrEmpty(MatchSection))
+                {
+                    return false;
+                }
 
-        public string LastEventDate { get; set; }
+                if (SportList == null || !SportList.Any())
+                {
+                    return false;
+                }
+
+                if (string.IsNullOrEmpty(BetTypes) || BetTypes.Equals("[]"))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
     }
 }

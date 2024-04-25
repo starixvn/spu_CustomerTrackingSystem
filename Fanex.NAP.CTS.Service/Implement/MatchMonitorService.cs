@@ -424,6 +424,7 @@
                 IsCashout = para.IsCashout,
                 FromTransDate = para.TranstimeFrom != null ? para.TranstimeFrom.Value.ToUniversalTime() : (DateTime?)null,
                 ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null,
+                IsExclTestCurr = _mmQueryType == MMQueryType.DangerMMReport
             };
 
             if (para.BetChoiceType == 1)
@@ -504,7 +505,7 @@
                 ListSuspiciousTransId = suspiciousTranInfos != null ? JsonConvert.SerializeObject(suspiciousTranInfos) : null,
                 TicketType = (int)GetTicketTypeFromDB(_mmQueryType, para.TypeOfTickets),
                 ListSportBettype = betTypeInfos,
-                IsExclTestCurr = false,
+                IsExclTestCurr = _mmQueryType == MMQueryType.DangerMMReport,
 
                 FromTransDate = para.TranstimeFrom != null ? para.TranstimeFrom.Value.ToUniversalTime() : (DateTime?)null,
                 ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null,

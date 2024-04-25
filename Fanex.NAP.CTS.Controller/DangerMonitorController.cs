@@ -13,12 +13,14 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
+    using Fanex.NAP.CTS.ViewModel.Common;
     using Fanex.NAP.CTS.ViewModel.DangerMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.DetectGroup;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Web.Mvc;
     using System.Web.Script.Serialization;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -67,11 +69,13 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.DangerMonitorRpt, "isSkipTracking")]
         public ActionResult GetDangerMonitor(DangerMonitorSearchModel filter, bool? isSkipTracking)
         {
-            var data = default(GetDangerMonitorResultViewModel);
+            var data = new GetDangerMonitorResultViewModel();
 
-            if (filter.LastMatchSection != null)
+            if (filter.Validate)
             {
                 data = _dangerMonitorService.GetDangerMonitor(filter);
+
+                data.Items = data.Items.OrderBy(x => x.MatchSection).ThenByDescending(x => x.EventDate).ThenByDescending(x => x.MatchID).ThenBy(x => x.BettypeID).ThenBy(x => x.BetID);
             }
 
             return Json(new
@@ -90,15 +94,16 @@
 
             try
             {
-                var sportBettype = _dangerMonitorService.GetSportBettypesFromCache();
+                var bettypes = _dangerMonitorService.GetBettypesFromCache();
 
                 ViewBag.GroupCCList = _commonService.GetGroupCustomerClass();
+                ViewBag.ReasonGroups = this.GetReasonGroups(true);
                 ViewBag.EventDateToString = para?.EventDateToString;
                 ViewBag.MatchID = para?.MatchID;
                 ViewBag.BetTypeID = para?.BetTypeID;
-                ViewBag.BettypeName = sportBettype.FirstOrDefault(x => x.BetTypeID == para?.BetTypeID)?.BetTypeName;
+                ViewBag.BettypeName = bettypes.FirstOrDefault(x => x.BetTypeID == para?.BetTypeID)?.BetTypeName;
                 ViewBag.BetIDToString = para?.BetID.ToString();
-                ViewBag.BetTypeSettings = sportBettype.Where(x => x.SportType == para.SportType);
+                ViewBag.BetTypeSettings = bettypes?.Where(x => x.SportType == para.SportType);
                 ViewBag.MapX = para?.MX;
                 ViewBag.MapYY = para?.MY;
                 ViewBag.HomeName = para?.HomeName.ToUpper() ?? string.Empty;
@@ -113,7 +118,7 @@
                 ViewBag.BetChoice = para?.BetChoice;
                 ViewBag.IsDisableScoreFilter = para?.SportType != null && para.SportType == (int)MatchMonitorSportType.Basketball;
                 ViewBag.SportType = para?.SportType ?? 0;
-                ViewBag.SportName = sportBettype.FirstOrDefault(x => x.SportType == para?.SportType)?.SportName;
+                ViewBag.SportName = bettypes.FirstOrDefault(x => x.SportType == para?.SportType)?.SportName;
                 ViewBag.KOTime = para?.KOTime;
                 ViewBag.IsSupportShowAllTickets = true;
                 ViewBag.Danger1 = para.Danger1;
@@ -170,35 +175,6 @@
             }, JsonRequestBehavior.AllowGet);
         }
         #endregion Detail Filter
-
-        #region Detail Total Tickets
-        [HttpPost]
-        public ActionResult GetMatchMonitorTotalTicket(MMDetailInfoViewModel info, MMDetailFilterViewModel filter)
-        {
-            long recordsTotal = 0;
-
-            try
-            {
-                recordsTotal = _dangerMonitorService.GetMatchMonitorTotalTicket(info, filter);
-            }
-            catch (Exception ex)
-            {
-                var logMessage = new LogMessage(ex.Message)
-                   .AddMessage($"{Region} Get Match Monitor Total Ticket Error: " + ex.Message + ex.StackTrace + "\n"
-                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                    + ex.InnerException.StackTrace)
-                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
-            }
-
-            return Json(new
-            {
-                recordsTotal = recordsTotal,
-            }, JsonRequestBehavior.AllowGet);
-        }
-        #endregion Detail Total Tickets
 
         #region Detail Tickets
         [HttpPost]
@@ -306,6 +282,37 @@
         #endregion
 
         #region private method
+        private IEnumerable<ReasonGroupStaticListViewModel> GetReasonGroups(bool isInitGroupNone)
+        {
+            var reasonGroupItems = _commonService.GetStaticLists((int)StaticListID.Reason, true);
+            var result = new List<ReasonGroupStaticListViewModel>();
+
+            if (isInitGroupNone)
+            {
+                result.Add(new ReasonGroupStaticListViewModel
+                {
+                    ReasonGroupName = Consts.ReasonDetectNone,
+                    ReasonItems = new List<ReasonStaticListViewModel>() { new ReasonStaticListViewModel { ReasonID = "-1", ReasonName = "-", IsSelected = true } }
+                });
+            }
+
+            result.Add(new ReasonGroupStaticListViewModel
+            {
+                ReasonGroupName = Consts.ReasonDetectBySystem,
+                ReasonItems = reasonGroupItems.Where(x => x.ItemID < 100).Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
+                    .OrderBy(x => x.ReasonName)
+            });
+
+            result.Add(new ReasonGroupStaticListViewModel
+            {
+                ReasonGroupName = Consts.ReasonDetectByAI,
+                ReasonItems = reasonGroupItems.Where(x => x.ItemID >= 100).Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = false })
+                    .OrderBy(x => x.ReasonName)
+            });
+
+            return result;
+        }
+
         private IEnumerable<DetectGroupAssociationItemViewModel> RearrangeAssGroup(IEnumerable<DetectGroupAssociationItemViewModel> assGroupList, bool isDisableNone)
         {
             var result = new List<DetectGroupAssociationItemViewModel>();

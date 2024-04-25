@@ -70,33 +70,22 @@
             return result;
         }
 
+        public IEnumerable<DangerMonitorBetTypeViewModel> GetBettypesFromCache()
+        {
+            return GetSportBettypesFromCache()?.GroupBy(item => $"{item.SportType}_{item.BetTypeID}_{item.BetID}")?.Select(x => x.FirstOrDefault());
+        }
+
         public GetDangerMonitorResultViewModel GetDangerMonitor(DangerMonitorSearchModel filter)
         {
             var result = Enumerable.Empty<GetDangerMonitorItemViewModel>();
 
-            if (!string.IsNullOrWhiteSpace(filter.LastMatchSection) && !string.IsNullOrWhiteSpace(filter.MatchSection))
-            {
-                var dangerMonitor = GetDangerMonitorSummary(filter, mainBatchSize);
+            var dangerMMItems = GetDangerMonitorSummary(filter);
 
-                int.TryParse(filter.LastMatchSection, out var matchSection);
-
-                result = dangerMonitor != null ? MappingDangerMonitorWithSportBettype(dangerMonitor.Items, matchSection) : null;
-
-                var isNextMatchSection = string.IsNullOrEmpty(dangerMonitor?.LastEventDate);
-
-                filter.LastMatchSection = isNextMatchSection ? filter.MatchSection.Split(',').Where(x => int.Parse(x) > int.Parse(filter.LastMatchSection)).FirstOrDefault() : filter.LastMatchSection;
-
-                filter.LastMatchID = isNextMatchSection ? null : dangerMonitor?.LastMatchId;
-
-                filter.LastEventDate = isNextMatchSection ? null : dangerMonitor?.LastEventDate;
-            }
+            result = dangerMMItems != null ? MappingDangerMonitorWithSportBettype(dangerMMItems) : null;
 
             return new GetDangerMonitorResultViewModel
             {
-                Items = result ?? new List<GetDangerMonitorItemViewModel>(),
-                LastMatchID = filter.LastMatchID,
-                LastMatchSection = filter.LastMatchSection,
-                LastEventDate = filter.LastEventDate
+                Items = result ?? new List<GetDangerMonitorItemViewModel>()
             };
         }
 
@@ -127,14 +116,14 @@
         #endregion
 
         #region private method
-        private IEnumerable<GetDangerMonitorItemViewModel> MappingDangerMonitorWithSportBettype(IEnumerable<GetDangerSummaryItemViewModel> dangerMonitors, int matchSection)
+        private IEnumerable<GetDangerMonitorItemViewModel> MappingDangerMonitorWithSportBettype(IEnumerable<DangerMMTicketInfoViewModel> dangerMonitors)
         {
-            var sportBettypes = GetSportBettypesFromCache();
+            var sportBettypes = GetBettypesFromCache();
 
             return dangerMonitors.Join(sportBettypes,
                                         item => $"{item.SportType}_{item.Bettype}_{item.BetID}",
                                         sportBettype => $"{sportBettype.SportType}_{sportBettype.BetTypeID}_{sportBettype.BetID}",
-                                        (item, sportBettype) => new GetDangerMonitorItemViewModel(item, matchSection, sportBettype));
+                                        (item, sportBettype) => new GetDangerMonitorItemViewModel(item, sportBettype));
         }
 
         private IEnumerable<BetTypeSettingModel> GetBetTypeSettings(string sportIDs, bool isFilterMMDetection)
@@ -152,31 +141,23 @@
             return _commonService.GetBetTypeSettings(paras);
         }
 
-        private GetDangerSummaryResultViewModel GetDangerMonitorSummary(DangerMonitorSearchModel filter, int batchSize = 500)
+        private IEnumerable<DangerMMTicketInfoViewModel> GetDangerMonitorSummary(DangerMonitorSearchModel filter)
         {
             var criteria = new DangerMonitorTicketSummaryCriteria
             {
                 FromDate = filter.FromDate,
                 ToDate = filter.ToDate,
-                SportList = filter.Sports,
+                SportList = filter.SportList?.Where(x => x.Contains("null"))?.Select(x => x.Split('_')[0])?.Join(),
+                SportSabaLgGroup = filter.SportList?.Where(x => !x.Contains("null"))?.Join(),
                 LeagueEvent = filter.Event ?? string.Empty,
                 BettypeList = filter.BetTypes,
-                DangerList = filter.DangerList,
+                MatchSection = filter.MatchSection,
                 MarketList = filter.Market,
-                MatchSection = filter.LastMatchSection,
-                LastEventDate = filter.LastEventDate,
-                LastMatchID = filter.LastMatchID,
-                BatchSize = batchSize,
+                QueryDanger = filter.QueryDanger,
             };
 
-            var response = _repository.FetchMultiple<GetDangerSummaryResultViewModel, GetDangerSummaryItemViewModel>(criteria);
+            var result = _repository.Fetch<DangerMMTicketInfoViewModel>(criteria);
 
-            var result = response.firstResultSet.FirstOrDefault();
-
-            if (result != null)
-            {
-                result.Items = response.secondResultSet;
-            }
             return result;
         }
 
@@ -397,19 +378,6 @@
 
             return result;
         }
-
-        public long GetMatchMonitorTotalTicket(MMDetailInfoViewModel info, MMDetailFilterViewModel filter)
-        {
-            long recordsTotal = 0;
-
-            var fraudTicket = GetFraudMMDetailForCache(info);
-
-            var transJson = _matchMonitorService.GetTransFilterSuspicousMGr(filter, fraudTicket);
-
-            recordsTotal = _matchMonitorService.GetTotalTicketDetail(info, filter, 0, transJson);
-
-            return recordsTotal;
-        }
         #endregion
 
         #region private method
@@ -485,9 +453,7 @@
 
                 custInfo = GetCustInfoByCustID(custIDs);
 
-                var mergeInfo = _matchMonitorService.DrawColorFraudMMDetailWithMergeReasonAGroup(matchDetailInfo.VerifiedTrans, custInfo, ticketDetailGroup.TicketDetails, mergeGroup, reasons);
-
-                var mdItemList = MappingRobotStatus(mergeInfo, para.BetTypeID);
+                var mdItemList = _matchMonitorService.DrawColorFraudMMDetailWithMergeReasonAGroup(matchDetailInfo.VerifiedTrans, custInfo, ticketDetailGroup.TicketDetails, mergeGroup, reasons);
 
                 if (para.BetChoiceType == 1)
                 {
@@ -611,36 +577,6 @@
         private bool StopLoopCallDataMMCondition(TicketDetailViewModel result)
         {
             return result.MinSequenceId is null && result.MinTransDate is null;
-        }
-
-        private IEnumerable<MatchMonitorDetailItemViewModel> MappingRobotStatus(IEnumerable<MatchMonitorDetailItemViewModel> ticket, int betTypeID)
-        {
-            if (ticket.Any())
-            {
-                var para = ticket.Select(c => new { TransID = c.TransId, TransDate = c.TransTime, CustID = c.CustID });
-
-                var robotStatus = _matchMonitorService.GetRobotStatus(JsonConvert.SerializeObject(para));
-
-                if (robotStatus.Any())
-                {
-                    return ticket.GroupJoin(robotStatus,
-                               t => t.TransId,
-                               r => r.TransID,
-                               (t, r) => new { t, r })
-                               .SelectMany(
-                                    group => group.r.DefaultIfEmpty(),
-                                    (g, r) =>
-                                    {
-                                        var nt = g.t;
-                                        nt.RobotType = (r != null) ? r?.RobotType : null;
-                                        nt.IsRobot = (r != null) && r.IsRobot;
-                                        nt.BetTypeID = betTypeID;
-                                        return nt;
-                                    });
-                }
-            }
-
-            return ticket;
         }
 
         private IEnumerable<MatchMonitorDetailItemViewModel> DrawColorAllMMDetailAndUpdateValue(IEnumerable<MatchMonitorDetailVerifyTransResultModel> verifiedTrans,
@@ -854,11 +790,14 @@
             var mainBetTypes = _commonService.GetMainSportBettype(filter);
 
             return mainBetTypes
-                .GroupJoin(betTypes, main => main.Typeid, cts => cts.BetTypeID, (main, ctsGroup) => new { main, ctsGroup })
+                .GroupJoin(betTypes, main => main.BettypeId, cts => cts.BetTypeID, (main, ctsGroup) => new { main, ctsGroup })
                 .SelectMany(item =>
                     item.ctsGroup.Select(group => new DangerMonitorBetTypeViewModel
                     {
-                        SportType = item.main.SportType,
+                        SportGroup = item.main.SportGroup,
+                        SportNameDisplay = item.main.SportNameDisplay,
+                        LeagueGroupID = item.main.LeagueGroupID,
+                        SportType = item.main.SporttypeId,
                         SportName = item.main.SportName,
                         BetTypeID = group.BetTypeID,
                         BetTypeName = group.BetTypeNameDisplay,

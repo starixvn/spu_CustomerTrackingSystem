@@ -40,19 +40,51 @@
 
     function FetchSports() {
         if (sportBetType) {
-            domElements.cbbSport.empty();
+            let data = {
+                MainSport: {
+                    Items: {}
+                },
+                VirtualSport: {
+                    Items: {}
+                },
+                OtherSport: {
+                    Items: {}
+                }
+            }
 
-            let sportList = {};
-            sportBetType.map(x => sportList[x.SportType] = ({ Name: x.SportName, IsSelected: x.SportType == 1 }));
+            sportBetType.filter(x => x.SportGroup == 1).map(x => data.MainSport.Items[`${x.SportType}_${x.LeagueGroupID}`] = ({ Name: x.SportNameDisplay, IsSelected: x.SportType == 1 && x.LeagueGroupID == null, LeagueGroupID: x.LeagueGroupID, SportType: x.SportType }))
 
-            Object.keys(sportList).forEach(index => {
-                domElements.cbbSport.append(`<option ${sportList[index].IsSelected ? 'selected' : ''} value="${index}">${sportList[index].Name}</option>`);
-            });
+            sportBetType.filter(x => x.SportGroup == 2).map(x => data.VirtualSport.Items[`${x.SportType}_${x.LeagueGroupID}`] = ({ Name: x.SportNameDisplay, IsSelected: x.SportType == 1 && x.LeagueGroupID == null, LeagueGroupID: x.LeagueGroupID, SportType: x.SportType }))
 
-            domElements.cbbSport.multiselect("refresh");
+            sportBetType.filter(x => x.SportGroup == 3).map(x => data.OtherSport.Items[`${x.SportType}_${x.LeagueGroupID}`] = ({ Name: x.SportNameDisplay, IsSelected: x.SportType == 1 && x.LeagueGroupID == null, LeagueGroupID: x.LeagueGroupID, SportType: x.SportType }))
+
+            let sportGroupSelector = domElements.cbbSport.empty();
+
+            if (data.MainSport.Items && Object.keys(data.MainSport.Items).length !== 0)
+                sportGroupSelector.append(BuildOptgroupSport(1, "Main Sport", data.MainSport.Items));
+
+            if (data.VirtualSport.Items && Object.keys(data.VirtualSport.Items).length !== 0)
+                sportGroupSelector.append(BuildOptgroupSport(2, "Virtual Sport", data.VirtualSport.Items));
+
+            if (data.OtherSport.Items && Object.keys(data.OtherSport.Items).length !== 0)
+                sportGroupSelector.append(BuildOptgroupSport(3, "Other Sport", data.OtherSport.Items));
+
+            domElements.cbbSport.val("1_null").change();
+            // domElements.cbbSport.multiselect("refresh");
         }
 
         FetchBetTypes();
+    }
+
+    function BuildOptgroupSport(optgroupValue, optgroupName, sportList) {
+        let optgroup = `<optgroup label="${optgroupName}" SportType=${optgroupValue}>`;
+        Object.keys(sportList).forEach(index => {
+            optgroup += `<option ${sportList[index].IsSelected ? 'selected' : ''} value="${index}">${sportList[index].Name}</option>`;
+        })
+
+        optgroup += "</optgroup>";
+
+        return optgroup;
     }
 
     function FetchBetTypes() {
@@ -62,7 +94,7 @@
             let sportSelectedList = domElements.cbbSport.val();
             bettypeList = {};
 
-            sportBetType.filter(x => sportSelectedList.includes(x.SportType.toString()))
+            sportBetType.filter(x => sportSelectedList.includes(`${x.SportType}_${x.LeagueGroupID}`))
                 .map(x =>
                     bettypeList[`${x.BetTypeID}_${x.BetID}`] =
                     ({
@@ -143,6 +175,8 @@
 
         let dangerSelector = domElements.cbbDgr.empty();
 
+        dangerSelector.append('<option></option>');
+
         if (data.Danger3.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(3, "Other Sports", data.Danger3.DangerItems));
 
         if (data.Danger2.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(2, "ABI", data.Danger2.DangerItems));
@@ -152,14 +186,12 @@
         if (data.Danger4.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(4, "Basketball", data.Danger4.DangerItems));
 
         if (data.Danger5.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(5, "E-Sports", data.Danger5.DangerItems));
-
-        domElements.cbbDgr.multiselect('refresh');
     }
 
     function BuildOptgroup(optgroupValue, optgroupName, items) {
         let optgroup = `<optgroup label="${optgroupName}" DangerType=${optgroupValue}>`;
         items.map(function (x) {
-            optgroup += `<option value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
+            optgroup += `<option value=${optgroupValue}_${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
         })
 
         optgroup += "</optgroup>";
@@ -167,13 +199,13 @@
         return optgroup;
     }
 
-    function GetDangerMonitor(lastMatchID = null, lastEventDate = null, lastMatchSection = null, isSkipTracking = true) {
+    function GetDangerMonitor(isSkipTracking = true) {
         timeoutRenderTicketDetail = setTimeout(() => {
             let data = {
                 FromDate: domElements.dpkFromDate.val(),
                 ToDate: !domElements.dpkToDate.val().includes(dateEmptyString) ? domElements.dpkToDate.val() : null,
-                DangerList: JSON.stringify(GetDangerList()),
-                Sports: domElements.cbbSport.val().join(),
+                QueryDanger: domElements.cbbDgr.val(),
+                SportList: domElements.cbbSport.val(),
                 Event: domElements.txtEvent.val().trim().toUpperCase(),
                 Market: domElements.cbbMarket.val() == "" ? "0,1" : domElements.cbbMarket.val(),
                 MatchSection: domElements.cbbMatchSection.val().join(),
@@ -184,10 +216,7 @@
                     "BetChoiceAway": bettypeList[x].BetChoiceType == 2 ? bettypeList[x].BetChoiceAway : undefined,
                     "BetID": bettypeList[x].BetID
                 }))),
-                isSkipTracking: isSkipTracking,
-                LastMatchID: lastMatchID,
-                LastMatchSection: lastMatchSection ?? domElements.cbbMatchSection.val()[0],
-                LastEventDate: lastEventDate
+                isSkipTracking: isSkipTracking
             };
 
             xhr = $.ajax(common.modifyRelativeUrl('DangerMonitor/GetDangerMonitor'), {
@@ -201,20 +230,12 @@
                     $('.loading').removeClass('hide');
                 },
                 success: function (response) {
-                    if (response?.data) {
+                    if (response?.data?.Items) {
                         domElements.tblMonitor.DataTable().rows.add(response?.data?.Items).draw(false);
                     }
 
-                    if (response?.data?.LastMatchSection) {
-                        GetDangerMonitor(response?.data?.LastMatchID, response?.data?.LastEventDate, response?.data?.LastMatchSection, false);
-                        if (response?.data?.Items.length > 0) {
-                            domElements.tblMonitor.find('tbody').removeClass('loading hide');
-                        }
-                    }
-                    else {
-                        domElements.tblMonitor.find('tbody').removeClass('loading hide');
-                        $('.loading').addClass('hide');
-                    }
+                    domElements.tblMonitor.find('tbody').removeClass('loading hide');
+                    $('.loading').addClass('hide');
                 },
                 error: function (xhr, textStatus, error) {
                     domElements.tblMonitor.find('tbody').removeClass('loading');
@@ -252,35 +273,26 @@
             })
             .datepicker("setDate", moment().toDate());
 
-        domElements.cbbDgr.multiselect({
-            menuWidth: 260,
-            menuHeight: 260,
-            selectedText: "# of # selected",
-            noneSelectedText: `Select Dgr`,
-            enableClickableOptGroups: true,
-            includeSelectAllOption: true,
-            groupsCollapsable: true,
-            optGroupChecked: true
-        }).multiselectfilter({
-            width: 150,
-            placeholder: '',
-            label: ''
-        });
+        domElements.cbbDgr.select2(
+            {
+                placeholder: "Select Dgr",
+            });
 
-        domElements.cbbSport.multiselect({
-            menuWidth: 260,
-            menuHeight: 260,
-            selectedText: "# of # select",
-            noneSelectedText: `Select Sports`,
-            enableClickableOptGroups: true,
-            includeSelectAllOption: true,
-            groupsCollapsable: true,
-            optGroupChecked: true
-        }).multiselectfilter({
-            width: 150,
-            placeholder: '',
-            label: ''
-        });
+        domElements.cbbSport.select2();
+        // domElements.cbbSport.multiselect({
+        //     menuWidth: 260,
+        //     menuHeight: 260,
+        //     selectedText: "# of # select",
+        //     noneSelectedText: `Select Sports`,
+        //     enableClickableOptGroups: true,
+        //     includeSelectAllOption: true,
+        //     groupsCollapsable: true,
+        //     optGroupChecked: true
+        // }).multiselectfilter({
+        //     width: 150,
+        //     placeholder: '',
+        //     label: ''
+        // });
 
         domElements.cbbBetType.multiselect({
             menuWidth: 340,
@@ -332,11 +344,12 @@
 
         domElements.btnGenerate.on('click', function () {
             if (ValidateRangeDate()) {
-                dangerListSelected.Danger1 = GetDangerListById(1);
-                dangerListSelected.Danger2 = GetDangerListById(2);
-                dangerListSelected.Danger3 = GetDangerListById(3);
-                dangerListSelected.Danger4 = GetDangerListById(4);
-                dangerListSelected.Danger5 = GetDangerListById(5);
+                var dangerSelected = GetDangerListById();
+                dangerListSelected.Danger1 = dangerSelected[1];
+                dangerListSelected.Danger2 = dangerSelected[2];
+                dangerListSelected.Danger3 = dangerSelected[3];
+                dangerListSelected.Danger4 = dangerSelected[4];
+                dangerListSelected.Danger5 = dangerSelected[5];
 
                 if (!dataTable) {
                     dataTable = GenerateGrid();
@@ -413,7 +426,7 @@
                 { data: obj => obj.LeagueName },
                 {
                     data: obj => () => {
-                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&BettypeName={5}&MatchSection={6}&Market={7}&LeagueID={8}&BetID={9}&SportType={10}&KOTime={11}&Danger1={12}&Danger2={13}&Danger3={14}&Danger4={15}&Danger5={16}";
+                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&BettypeName={5}&MatchSection={6}&Market={7}&LeagueID={8}&BetID={9}&SportType={10}&KOTime={11}";
                         let para = paramTemplate.format(
                             obj.EventDateToString,
                             obj.MatchID,
@@ -426,12 +439,14 @@
                             obj.LeagueID,
                             obj.BetID,
                             obj.SportType,
-                            obj.KOTime,
-                            dangerListSelected.Danger1.join(),
-                            dangerListSelected.Danger2.join(),
-                            dangerListSelected.Danger3.join(),
-                            dangerListSelected.Danger4.join(),
-                            dangerListSelected.Danger5.join());
+                            obj.KOTime);
+
+                        Object.keys(dangerListSelected).forEach(item => {
+                            if (dangerListSelected[item])
+                            {
+                                para += `&${item}=${dangerListSelected[item]}`;
+                            }
+                        });
 
                         return '<a class="click-view-details" href="DangerMonitor/Detail?' + para + '" target="_blank">' + obj.MatchName + '</a>';
                     }
@@ -470,17 +485,16 @@
         });
     }
 
-    function GetDangerList() {
-        return domElements.cbbDgr.val().map((x) => {
-            let key = x.split('-')[0];
-            let val = Number(x.split('-')[1]);
-            return { [`Danger${key}`]: val };
-        });
-    }
+    function GetDangerListById() {
+        var result = {};
+        if (domElements.cbbDgr.val()) {
+            var dangerString = domElements.cbbDgr.val().split('_');
 
-    function GetDangerListById(id) {
-        return domElements.cbbDgr.val().filter(x => x.split('-')[0] == id)
-            .map((x) => Number(x.split('-')[1]));
+            result[dangerString[0]] = Number(dangerString[1]);
+        }
+
+
+        return result;
     }
 
     function ValidateRangeDate() {

@@ -1,17 +1,23 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.Common
 {
-    using Newtonsoft.Json;
-
     public class SportBettypeViewModel
     {
-        public int SportType { get; set; }
+        public int SportGroup { get; set; }
 
         public string SportName { get; set; }
 
+        public string SportNameDisplay { get; set; }
+
+        public int SporttypeId { get; set; }
+
+        public int? LeagueGroupID { get; set; }
+
+        public int BettypeId { get; set; }
+
         //[JsonProperty("BettypeId")]
-        public int Typeid { get; set; }
+        //public int Typeid { get; set; }
 
         //[JsonProperty("BettypeName")]
-        public string Typenamee { get; set; }
+        //public string Typenamee { get; set; }
     }
 }

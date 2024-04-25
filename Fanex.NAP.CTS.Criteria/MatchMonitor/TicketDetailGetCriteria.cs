@@ -93,6 +93,9 @@
         [SpParam(SqlParamName = "IsCashout")]
         public int? IsCashout { get; set; }
 
+        [SpParam(SqlParamName = "IsExclTestCurr")]
+        public bool IsExclTestCurr { get; set; }
+
         public override string GetSettingKey()
                 => "CTS_Rpt_MatchMonitor_TicketDetails";
 

@@ -6,8 +6,6 @@
     {
         public int ProductId { get; set; }
 
-        public string SportTypeList { get; set; }
-
         public string BettypeList { get; set; }
 
         public override string GetSettingKey() => "CTS_SportBettype_Get";
