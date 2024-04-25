@@ -48,7 +48,7 @@
             this.IsFromTVS = false;
             this.IsFromTW = true;
             this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
-            this.Remark = $"Detection Date: { twGBCust.DetectedDate.ToString(Consts.FormatDateToString_MMMddyyyy)} - GB Bet Count: {twGBCust.TWGBTicketCount}";
+            this.Remark = $"Detection Date: { twGBCust.DetectedDate.ToString(Consts.FormatDateToString_MMMddyyyy)} - GB Bet Count: {twGBCust.GBTicketCount} - Sport: { twGBCust.SportName }";
         }
 
         /* Cust info */

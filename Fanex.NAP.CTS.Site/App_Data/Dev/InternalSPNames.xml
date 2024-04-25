@@ -16,7 +16,7 @@
 		<Setting Key="DCS_DC_Transaction_GetHistory" SpName="DCS_DC_Transaction_GetHistory" DbName="MySQL.DCS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Common_ValidateUsername" SpName="CTS_DC_Common_ValidateUsername" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Common_GetSites" SpName="CTS_DC_Common_GetSites" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_Common_CustomerClass_Get" SpName="CTS_DC_Common_CustomerClass_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_Common_CustomerClass_Get" SpName="CTS_DC_Common_CustomerClass_Get_UAT1" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Common_BettypeSetting_Get" SpName="CTS_DC_Common_BettypeSetting_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Common_GetStaticList" SpName="CTS_DC_Common_GetStaticList" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
@@ -71,11 +71,11 @@
 		<Setting Key="CTS_DC_Association_InsertManualMultiple" SpName="CTS_DC_Association_InsertManualMultiple" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_Association_UpdateAssociationRemove" SpName="CTS_DC_Association_UpdateAssociationRemove" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_GetForSoon88" SpName="CTS_DC_CustClassification_GetForSoon88" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_Association_Profile_Get" SpName="CTS_DC_Association_Profile_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_Association_Profile_Get" SpName="CTS_DC_Association_Profile_Get_UAT1" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_AssociationByIP_GetAssType" SpName="CTS_DC_AssociationByIP_GetAssType" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="SPU_AIML_GB_5GIP_GetDetails" SpName="SPU_AIML_GB_5GIP_GetDetails" DbName="MySQL.SPU_AIML.Reporter" />
 		<Setting Key="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" SpName="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_Category_Get" SpName="CTS_DC_Category_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_Category_Get" SpName="CTS_DC_Category_Get_UAT1" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="SPU_AIML_GB_3S_GetCoupleInfo" SpName="SPU_AIML_GB_3S_GetCoupleInfo" DbName="MySQL.SPU_AIML.Reporter" />
 		<Setting Key="SPU_AIML_GB_3S_GetCouple_FraudDetails" SpName="SPU_AIML_GB_3S_GetCouple_FraudDetails" DbName="MySQL.SPU_AIML.Reporter" />
 		<Setting Key="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" SpName="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" DbName="MySQL.SPU_AIML.Reporter" />
@@ -87,7 +87,7 @@
 		<Setting Key="CTS_DC_RPT_AssociationDetection" SpName="CTS_DC_RPT_AssociationDetection" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="600" />
 		<Setting Key="CTS_DC_Association_Primary_GetCustEdge" SpName="CTS_DC_Association_Primary_GetCustEdge" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Association_Agent_GetCustEdge" SpName="CTS_DC_Association_Agent_GetCustEdge" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_Association_DetectGroup" SpName="CTS_DC_Association_DetectGroup" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_Association_DetectGroup" SpName="CTS_DC_Association_DetectGroup_UAT1" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_AssociationDetection_GetDetail" SpName="CTS_DC_AssociationDetection_GetDetail" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
@@ -99,7 +99,7 @@
 
 	<Function Name="CustomerClassification">
 		<Setting Key="CTS_DC_CustClassification_GetCategory" SpName="CTS_DC_CustClassification_GetCategory" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_VVIP_Insert" SpName="CTS_DC_CustClassification_VVIP_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_VVIP_Insert" SpName="CTS_DC_CustClassification_VVIP_Insert_UAT1" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_Update" SpName="CTS_DC_CustClassification_Update" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_VVIP_Remove" SpName="CTS_DC_CustClassification_VVIP_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_Get" SpName="CTS_DC_CustClassification_Get_UAT1" DbName="MySQL.CTS_DataCenter.Reporter" />
@@ -192,7 +192,7 @@
 		<Setting Key="CTS_DC_CustInfo_Profile_GetAssociationAccount" SpName="CTS_DC_CustInfo_Profile_GetAssociationAccount" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_Profile_GetEvidence" SpName="CTS_DC_CustInfo_Profile_GetEvidence" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_Profile_GetLoginStats" SpName="CTS_DC_CustInfo_Profile_GetLoginStats" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustInfo_Profile_GetDate" SpName="CTS_DC_CustInfo_Profile_GetDate" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustInfo_Profile_GetDate" SpName="CTS_DC_CustInfo_Profile_GetDate_UAT1" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function name="MonitorCTSFunction">
@@ -210,7 +210,7 @@
 	<Function name="RescanCustomerClassification">
 		<Setting Key="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" SpName="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" DbName="MySQL.CTS_Archive.Admin" />
 		<Setting Key="CTS_DC_CustClassification_PA_ReScan" SpName="CTS_DC_CustClassification_PA_ReScan" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_PA_InsertRobot" SpName="CTS_DC_CustClassification_PA_InsertRobot" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_PA_InsertRobot" SpName="CTS_DC_CustClassification_PA_InsertRobot_UAT1" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_PA_ClearOld" SpName="CTS_DC_CustClassification_PA_ClearOld" DbName="MySQL.CTS_DataCenter.Admin" />
 
 		<Setting Key="CTS_DC_CustClassification_GetCCAndDangerLevel" SpName="CTS_DC_CustClassification_GetCCAndDangerLevel" DbName="MySQL.CTS_DataCenter.Reporter" />

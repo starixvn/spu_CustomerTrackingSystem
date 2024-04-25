@@ -96,6 +96,6 @@
 	</Function>
 
 	<Function name="RescanClassification">
-		<Setting Key="CTS_CustomerClassification_CheckNewGroupBetting" SpName="CTS_CustomerClassification_CheckNewGroupBetting" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
+		<Setting Key="CTS_CustomerClassification_CheckNewGroupBetting" SpName="CTS_CustomerClassification_CheckNewGroupBetting_UAT1" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
 	</Function>
 </Functions>

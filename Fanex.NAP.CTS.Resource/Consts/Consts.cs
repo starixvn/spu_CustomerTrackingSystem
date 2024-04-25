@@ -114,6 +114,7 @@
         public const string ReasonDetectNone = "None";
         public const string ReasonDetectBySystem = "Detect by System";
         public const string ReasonDetectByAI = "Detect by AI";
+        public const string TWInitialGBMissSport = "Soccer/Basketball";
 
         public struct Platform
         {
