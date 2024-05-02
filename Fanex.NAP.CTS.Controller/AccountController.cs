@@ -2267,11 +2267,11 @@
                     IsUpdateDangerToMainDB = true
                 };
 
-                var custRescanPADangous = _rescanClassificationService.RescanPotentialProblemAccount(custIds, paramRescan);
+                var custIdsToRescanPotentialPA = _rescanClassificationService.RescanPotentialProblemAccount(custIds, paramRescan);
 
                 var smCustIds = _rescanClassificationService.GetAgentCusts(custIds);
 
-                _rescanClassificationService.RescanNormalAccount(paramRescan, custRescanPADangous.CustIds.Distinct(), smCustIds);
+                _rescanClassificationService.RescanNormalAccount(paramRescan, custIdsToRescanPotentialPA.CustIds, smCustIds);
             }
 
             return Json(new

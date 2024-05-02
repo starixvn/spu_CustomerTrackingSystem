@@ -106,11 +106,18 @@
             {
                 var custIDs = string.Join(",", custIds);
 
-                rescanResult = RescanDangerousPA(custIDs, parameters);
+                var rescanPADangerousResult = RescanDangerousPA(custIDs, parameters);
 
-                if (rescanResult.IsSuccess)
+                if (rescanPADangerousResult.IsSuccess)
                 {
-                    rescanResult = RescanInitialTWGroupBettingPA(custIDs, parameters);
+                    rescanResult.CustIds.AddRange(rescanPADangerousResult.CustIds);
+                }
+
+                var rescanPaTWGB = RescanInitialTWGroupBettingPA(custIDs, parameters);
+
+                if (rescanPaTWGB.IsSuccess)
+                {
+                    rescanResult.CustIds.AddRange(rescanPaTWGB.CustIds);
                 }
             }
 
