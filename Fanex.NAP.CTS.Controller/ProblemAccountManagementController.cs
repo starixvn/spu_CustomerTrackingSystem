@@ -282,7 +282,7 @@
                             IsUpdateDangerToMainDB = true
                         };
 
-                        var custRescanPADangous = _rescanClassificationService.RescanPotentialProblemAccount(custIdList, paramRescan);
+                        var custRescanPADangous = _rescanClassificationService.RescanPotentialProblemAccount(custIdList.ToList(), new List<long>(), paramRescan);
 
                         var smCustIds = _rescanClassificationService.GetAgentCusts(custIdList);
 

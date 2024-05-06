@@ -83,6 +83,7 @@
                     {
                         CustIds = custIDs,
                         IsRescanPA = true,
+                        IsRescanPotentialPA = true,
                         IsPushCCToSoon88 = true,
                         IsUpdateDangerToMainDB = true,
                         FunctionId = FunctionId.RemoveLicVIP_API,

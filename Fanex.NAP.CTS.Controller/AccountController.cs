@@ -2267,7 +2267,7 @@
                     IsUpdateDangerToMainDB = true
                 };
 
-                var custIdsToRescanPotentialPA = _rescanClassificationService.RescanPotentialProblemAccount(custIds, paramRescan);
+                var custIdsToRescanPotentialPA = _rescanClassificationService.RescanPotentialProblemAccount(custIds.ToList(), new List<long>(), paramRescan);
 
                 var smCustIds = _rescanClassificationService.GetAgentCusts(custIds);
 

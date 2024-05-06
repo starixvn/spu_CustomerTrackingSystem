@@ -52,7 +52,7 @@
 
             if (parameters.IsRescanPotentialPA)
             {
-                result = RescanPotentialProblemAccount(parameters.CustIds, parameters);
+                result = RescanPotentialProblemAccount(parameters.CustIds.ToList(), custToRescanPA, parameters);
                 custToRescanPA.AddRange(result.CustIds);
             }
 
@@ -98,27 +98,32 @@
             return rescanResult;
         }
 
-        public RescanResultModel RescanPotentialProblemAccount(IEnumerable<long> custIds, RescanCustClassificationModel parameters)
+        public RescanResultModel RescanPotentialProblemAccount(List<long> custIds, IEnumerable<long> custIdsToRescanPA, RescanCustClassificationModel parameters)
         {
             var rescanResult = new RescanResultModel();
 
             if (custIds.Any())
-            {
-                var custIDs = string.Join(",", custIds);
+            {                
+                custIds.RemoveAll(x => custIdsToRescanPA.Distinct().Contains(x));
 
-                var rescanPADangerousResult = RescanDangerousPA(custIDs, parameters);
+                var rescanPotentialPA = string.Join(",", custIds);
 
-                if (rescanPADangerousResult.IsSuccess)
+                if (rescanPotentialPA != string.Empty)
                 {
-                    rescanResult.CustIds.AddRange(rescanPADangerousResult.CustIds);
-                }
+                    var rescanPADangerousResult = RescanDangerousPA(rescanPotentialPA, parameters);
 
-                var rescanPaTWGB = RescanInitialTWGroupBettingPA(custIDs, parameters);
+                    if (rescanPADangerousResult.IsSuccess)
+                    {
+                        rescanResult.CustIds.AddRange(rescanPADangerousResult.CustIds);
+                    }
 
-                if (rescanPaTWGB.IsSuccess)
-                {
-                    rescanResult.CustIds.AddRange(rescanPaTWGB.CustIds);
-                }
+                    var rescanPaTWGB = RescanInitialTWGroupBettingPA(rescanPotentialPA, parameters);
+
+                    if (rescanPaTWGB.IsSuccess)
+                    {
+                        rescanResult.CustIds.AddRange(rescanPaTWGB.CustIds);
+                    }
+                }               
             }
 
             return rescanResult;
