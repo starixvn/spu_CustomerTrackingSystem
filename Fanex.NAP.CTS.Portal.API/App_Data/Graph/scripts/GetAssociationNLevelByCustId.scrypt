@@ -1,7 +1,0 @@
-﻿MATCH (c:CTSCustomer)-[:BELONG_TO]->(g:Group_Device)<-[:BELONG_TO]-(c1:CTSCustomer)
-WHERE c.CTSCustID = $CTSCustID
-RETURN c1.CTSCustID as CTSCustID, c1.CustId as CustId, c1.UserName as Username, c1.UserName2 as Username2, 1 as AssociationType
-UNION ALL
-MATCH (c:CTSCustomer)-[:BELONG_TO]->(g:Group_IP)<-[:BELONG_TO]-(c2:CTSCustomer)
-WHERE c.CTSCustID = $CTSCustID
-RETURN c2.CTSCustID as CTSCustID, c2.CustId as CustId, c2.UserName as Username, c2.UserName2 as Username2, 2 as AssociationType

@@ -16,8 +16,6 @@ namespace Fanex.NAP.CTS.Service.Interface
 
         DBResult RemoveAssociatedAccount(long ctsCustId, int userID);
 
-        List<CustomerEvidence> GetFlaggedCustomerByLevel(IEnumerable<int> custIds, int associatedLevel, IEnumerable<int> eviIdList);
-
         IEnumerable<CustomerEvidenceForTW> GetFlaggedEvidenceByDirectAssForAPI(string custIdList);
 
         IEnumerable<CustomerEvidenceForTW> GetFlaggedEvidenceByLevel2AssForAPI(string custIdList);

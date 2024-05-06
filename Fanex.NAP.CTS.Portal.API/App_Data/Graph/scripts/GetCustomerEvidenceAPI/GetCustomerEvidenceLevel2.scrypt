@@ -1,8 +1,0 @@
-﻿USE ctsgraphdb2022
-//USE ctslocal
-MATCH (c:CTSCustomer)-[:USED_DEVICE*4]-(c1:FlaggedCustomer)
-WHERE c.CustID IN $CustID AND c.CustSubID = 0 AND c <> c1
-WITH DISTINCT c, c1
-MATCH (c1)-[:HAS_EVIDENCE]->(e:Evidence)
-WHERE NOT (c)-[:HAS_EXCEPTION]-(c1)
-RETURN DISTINCT c.CustID AS Level0CustId, e.EvidenceCode AS EvidenceCode, 2 AS AssociatedLevel

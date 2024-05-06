@@ -167,41 +167,6 @@
 
             return Ok();
         }
-
-        /// <summary>
-        /// Remove Licencee BA by Site
-        /// </summary>
-        [HttpPost]
-        [Route("api/cts/RemoveLicBABySite")]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.RemoveLicBABySite_API)]
-        public IHttpActionResult RemoveLicBABySite([FromBody] RemoveLicenseeBABySiteInputModel parameters)
-        {
-            try
-            {
-                logInputDataService.LogInputData(new LogInputViewModel { RemoveLicenseeBABySiteModel = new RemoveLicenseeBABySiteLogDataModel { Data = parameters, FromSystem = FromSystem.External } }, FunctionId.RemoveLicBABySite_API);
-
-                if (!licenseeLAPCustomerClassificationService.CheckValid(parameters))
-                {
-                    LogService.Error($"CTS API - RemoveLicBABySite - Invalid input parameter from LAP: {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC");
-
-                    return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(parameters)}");
-                }
-
-                licenseeLAPCustomerClassificationService.RemoveLicBABySite(parameters);
-            }
-            catch (Exception ex)
-            {
-                var logMessage = new LogMessage($"CTS API - RemoveLicBABySite")
-                                       .AddMessage(ex.Message)
-                                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
-                                       .AddMessage($"Data {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC").ToString();
-
-                LogService.Error(logMessage);
-
-                return InternalServerError(ex);
-            }
-
-            return Ok();
-        }
+       
     }
 }

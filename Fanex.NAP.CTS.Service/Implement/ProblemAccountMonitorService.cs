@@ -6,13 +6,9 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.Helpers.Api;
-    using Fanex.NAP.CTS.Criteria.ProblemAccountManagement;
     using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Criteria.TWProblemAccountDetection;
-    using Fanex.NAP.CTS.Model.API.UpdateCategoryWhenPAUpdated;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
-    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
-    using Fanex.NAP.CTS.Resource.Consts;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;

@@ -112,7 +112,6 @@
     <Compile Include="Account\Search\SearchAccountFilter.cs" />
     <Compile Include="Account\Search\SubscriberAccount.cs" />
     <Compile Include="Account\TransactionHistory\TransactionHistoryViewModel.cs" />
-    <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorViewModel.cs" />
     <Compile Include="API\SearchAccount\SearchAccountResultViewModel.cs" />
     <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorDetailViewModel.cs" />
     <Compile Include="AssociatedAccountMonitor\InsertManualAssociatedAccountViewModel.cs" />
@@ -139,8 +138,6 @@
     <Compile Include="AssociationDetection\GetAssociationDetectDetailMatchViewModel.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectDetailViewModel.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectionDetailViewModel.cs" />
-    <Compile Include="AssociationDetection\GroupClassificationGraphDbViewModel.cs" />
-    <Compile Include="AssociationDetection\AssociationLevelGraphDbViewModel.cs" />
     <Compile Include="AssociationDetection\AssociationDetectionItemViewModel.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectionViewModel.cs" />
     <Compile Include="AssociationReport\AssociationDetailFilterViewModel.cs" />

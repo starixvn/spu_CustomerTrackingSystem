@@ -49,7 +49,6 @@
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
-        private readonly IGraphService _graphService;
         private readonly ITransactionService _transService;
         private readonly ICustomerEvidenceService _customerEvidenceService;
         private readonly IRescanCustomerClassificationService _rescanClassificationService;
@@ -67,7 +66,6 @@
         public AccountController()
         {
             _accountService = new AccountService();
-            _graphService = new GraphService();
             _transService = new TransactionService();
             _customerEvidenceService = new CustomerEvidenceService();
             _rescanClassificationService = new RescanCustomerClassificationService();
@@ -241,10 +239,8 @@
 
         [HttpPost]
         public ActionResult GetCustProfileAssociationAccount(long ctsCustId)
-        {
-            var getAssociationFromMySQL = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
-
-            var data = _accountService.GetCustomerInfoAssociationAccount(ctsCustId, getAssociationFromMySQL);
+        {           
+            var data = _accountService.GetCustomerInfoAssociationAccount(ctsCustId);
 
             if (data != null)
             {
@@ -424,8 +420,7 @@
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
 
-            var getAssociationFromMySql = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
-            var graphAssociationPage = _accountService.GetAssociatedAccount(model, getAssociationFromMySql);
+            var graphAssociationPage = _accountService.GetAssociatedAccount(model);
 
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
             {
@@ -575,9 +570,7 @@
         {
             var graphCustomer = new GraphCustomerItemViewModel();
 
-            var getAssociationFromMySql = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
-
-            var graphAssociationPaging = _accountService.GetAssociatedAccount(model, getAssociationFromMySql);
+            var graphAssociationPaging = _accountService.GetAssociatedAccount(model);
 
             if (graphAssociationPaging != null && graphAssociationPaging.AssociationList != null && graphAssociationPaging.AssociationList.Any())
             {
@@ -608,15 +601,6 @@
             graphCustomer.SubscriberIds = model.SubscriberIds;
             graphCustomer.Start = model.start;
             graphCustomer.Length = model.length;
-
-            return Json(graphCustomer, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public ActionResult GetShortestAssociationGraph(int custIdFrom, int custIdTo)
-        {
-            var shortestPathOfAccount = _accountService.GetShortestPathAssociationByGraph(ConfigSettings.GetShortestAssociation, custIdFrom, custIdTo);
-            var graphCustomer = _graphService.GetGraphCustomerItemByShortestPathOfAccount(shortestPathOfAccount);
 
             return Json(graphCustomer, JsonRequestBehavior.AllowGet);
         }
@@ -1383,69 +1367,22 @@
 
             if (flaggedEvidences != null && flaggedEvidences.Any())
             {
-                result.FlaggedEvidenceList = flaggedEvidences.OrderBy(x => x.EvidenceID).Select(x => new FlaggedEvidenceViewModel
-                {
-                    EvidenceID = x.EvidenceID,
-                    EvidenceCode = x.EvidenceCode,
-                    EvidenceName = x.EvidenceName,
-                    EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
-                    Comment = x.Remark,
-                    Creator = x.Creator,
-                    FlaggedDate = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss)
-                }).ToList();
+                result.FlaggedEvidenceList = flaggedEvidences.OrderBy(x => x.EvidenceID).Select(x => new FlaggedEvidenceViewModel(x)).ToList();
 
-                evidenceList.AddRange(result.FlaggedEvidenceList.Select(x => new EvidenceViewModel
-                {
-                    EvidenceID = x.EvidenceID,
-                    EvidenceCode = x.EvidenceCode,
-                    EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName
-                }));
+                evidenceList.AddRange(result.FlaggedEvidenceList.Select(x => new EvidenceViewModel(x)));
             }
 
             if (affectedRetractEvidences.AffectedEvidenceList != null && affectedRetractEvidences.AffectedEvidenceList.Any())
             {
-                result.AffectedRetractEvidenceList.AddRange(affectedRetractEvidences.AffectedEvidenceList.OrderBy(x => x.EvidenceID).Select(x => new AffectedRetractEvidenceViewModel
-                {
-                    EvidenceID = x.EvidenceID,
-                    EvidenceCode = x.EvidenceCode,
-                    EvidenceName = x.EvidenceName,
-                    EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
-                    LoginID = string.IsNullOrEmpty(x.LoginID) ? x.UserName : x.LoginID,
-                    CTSCustID = x.CTSCustID,
-                    UserName = string.IsNullOrEmpty(x.UserName) ? x.LoginID : x.UserName,
-                    AssociationType = x.AssociationType,
-                    AffectedTime = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    LastLoginTime = x.LastLoginTime.Year != 0001 ? x.LastLoginTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss) : "None",
-                    IsRetract = false
-                }));
+                result.AffectedRetractEvidenceList.AddRange(affectedRetractEvidences.AffectedEvidenceList.OrderBy(x => x.EvidenceID).Select(x => new AffectedRetractEvidenceViewModel(x, false)));
             }
 
             if (affectedRetractEvidences.RetractEvidenceList != null && affectedRetractEvidences.RetractEvidenceList.Any())
             {
-                result.AffectedRetractEvidenceList.AddRange(affectedRetractEvidences.RetractEvidenceList.OrderBy(x => x.EvidenceID).Select(x => new AffectedRetractEvidenceViewModel
-                {
-                    EvidenceID = x.EvidenceID,
-                    EvidenceCode = x.EvidenceCode,
-                    EvidenceName = x.EvidenceName,
-                    EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
-                    LoginID = string.IsNullOrEmpty(x.LoginID) ? x.UserName : x.LoginID,
-                    CTSCustID = x.CTSCustID,
-                    UserName = string.IsNullOrEmpty(x.UserName) ? x.LoginID : x.UserName,
-                    AssociationType = x.AssociationType,
-                    AffectedTime = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    LastLoginTime = x.LastLoginTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    Creator = x.Creator,
-                    Comment = string.IsNullOrWhiteSpace(x.Remark) ? string.Empty : x.Remark,
-                    IsRetract = true
-                }));
+                result.AffectedRetractEvidenceList.AddRange(affectedRetractEvidences.RetractEvidenceList.OrderBy(x => x.EvidenceID).Select(x => new AffectedRetractEvidenceViewModel(x, true)));
             }
 
-            evidenceList.AddRange(result.AffectedRetractEvidenceList.Select(x => new EvidenceViewModel
-            {
-                EvidenceID = x.EvidenceID,
-                EvidenceCode = x.EvidenceCode,
-                EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName
-            }));
+            evidenceList.AddRange(result.AffectedRetractEvidenceList.Select(x => new EvidenceViewModel(x)));
 
             result.EvidenceList.AddRange(evidenceList.Distinct(x => x.EvidenceCode).OrderBy(x => x.EvidenceID));
 
@@ -2574,64 +2511,50 @@
         [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetPerformanceBySport(long custId, int getTop)
         {
-            var tasks = new List<Task>();
-            var result = _accountService.GetPerformanceBySport(custId, getTop)?.OrderBy(c => c.Ranking);
             var totalSportBettingStatistic = new SportBettingStatisticViewModel();
             var bestSportBettingStatistic = new SportBettingStatisticViewModel();
             var pieChartSportStatisticSessions = new List<SportStatisticPieChartViewModel>();
 
-            if (result != null && result.Any())
+            var dataBySport = _accountService.GetPerformanceBySport(custId, getTop)?.OrderBy(c => c.Ranking);
+          
+            if (dataBySport != null && dataBySport.Any())
             {
-                tasks.Add(Task.Run(() =>
+                try
                 {
-                    try
+                    var tasks = new Task[] 
                     {
-                        totalSportBettingStatistic.TurnOver = result.Sum(c => c.TurnOver);
-                        totalSportBettingStatistic.WinLoss = result.Sum(c => c.WinLoss);
-                        totalSportBettingStatistic.BetCount = result.Sum(c => c.BetCount);
-                    }
-                    catch (Exception ex)
-                    {
-                        LogService.Error(ex.Message);
+                        Task.Run(() => 
+                        {
+                            totalSportBettingStatistic.TurnOver = dataBySport.Sum(c => c.TurnOver);
+                            totalSportBettingStatistic.WinLoss = dataBySport.Sum(c => c.WinLoss);
+                            totalSportBettingStatistic.BetCount = dataBySport.Sum(c => c.BetCount);
+                        }),
+                        Task.Run(() => 
+                        {
+                            var tempBestSport = dataBySport.FirstOrDefault(c => c.Ranking == dataBySport.Min(x => x.Ranking));
+                            bestSportBettingStatistic.SportID = tempBestSport.SportID;
+                            bestSportBettingStatistic.SportName = tempBestSport.SportName;
+                            bestSportBettingStatistic.TurnOver = tempBestSport.TurnOver;
+                            bestSportBettingStatistic.WinLoss = tempBestSport.WinLoss;
+                            bestSportBettingStatistic.BetCount = tempBestSport.BetCount;
+                        }),
+                        Task.Run(() => 
+                        {
+                             CalculatePieChartTurnOverPercentage(dataBySport, pieChartSportStatisticSessions);
+                        })
+                    };
 
-                        throw;
-                    }
-                }));
-
-                tasks.Add(Task.Run(() =>
+                    Task.WhenAll(tasks).Wait();
+                }
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        var tempBestSport = result.FirstOrDefault(c => c.Ranking == result.Min(x => x.Ranking));
-                        bestSportBettingStatistic.SportID = tempBestSport.SportID;
-                        bestSportBettingStatistic.SportName = tempBestSport.SportName;
-                        bestSportBettingStatistic.TurnOver = tempBestSport.TurnOver;
-                        bestSportBettingStatistic.WinLoss = tempBestSport.WinLoss;
-                        bestSportBettingStatistic.BetCount = tempBestSport.BetCount;
-                    }
-                    catch (Exception ex)
-                    {
-                        LogService.Error(ex.Message);
+                    var logMessage = new LogMessage(ex.Message)
+                           .AddMessage("CTS - Profile Page Get Performance By Sport")
+                           .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                           .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
-                        throw;
-                    }
-                }));
-
-                tasks.Add(Task.Run(() =>
-                {
-                    try
-                    {
-                        CalculatePieChartTurnOverPercentage(result, pieChartSportStatisticSessions);
-                    }
-                    catch (Exception ex)
-                    {
-                        LogService.Error(ex.Message);
-
-                        throw;
-                    }
-                }));
-
-                Task.WhenAll(tasks.ToArray()).Wait();
+                    LogService.Error(logMessage);
+                }               
             }
 
             return Json(new
@@ -2640,7 +2563,7 @@
                 bestSportBettingStatistic,
                 pieChartSportStatisticSessions
             }, JsonRequestBehavior.AllowGet);
-        }
+        }      
 
         [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetPerformanceByBettype(long custId, int getTop)

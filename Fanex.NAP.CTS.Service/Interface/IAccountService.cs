@@ -10,7 +10,6 @@
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.DTO;
-    using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Model.Transaction;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
@@ -29,7 +28,7 @@
 
         CustomerInfoByCustIdsModel GetCustomerInfoDangerous(long custID);
 
-        CustomerInfoAssociationAccountModel GetCustomerInfoAssociationAccount(long ctsCustId, bool getFromMySQL);
+        CustomerInfoAssociationAccountModel GetCustomerInfoAssociationAccount(long ctsCustId);
 
         IEnumerable<CustomerInfoEvidenceModel> GetCustomerInfoEvidence(long ctsCustId);
 
@@ -53,15 +52,9 @@
 
         CustomerFlagInfoModel GetCustomerFlagInfo(long ctsCustId);
 
-        //GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, long ctsCustId, int associationStatus, string accountStatusIds, string siteIds, int skipNumber, int takeNumber, bool fromMySQL = false);
-
-        AssociatedAccountPagingModel GetAssociatedAccount(AssociatedFilterModel filterModel, bool fromMySQL = false);
+        AssociatedAccountPagingModel GetAssociatedAccount(AssociatedFilterModel filterModel);
 
         List<AccountStaticStatusModel> GetAccountStaticStatuses(int listId, bool status);
-
-        List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, List<long> ctsCustIds);
-
-        ShortestPathOfAccount GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo);        
 
         string MappingAssociationType(AssociatedAccountModel data);
 

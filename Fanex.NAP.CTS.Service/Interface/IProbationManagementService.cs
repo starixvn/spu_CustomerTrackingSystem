@@ -11,8 +11,6 @@
 
         IEnumerable<ProbationCategoryModel> GetProbationCategory(ExportProbationCategoryFilter filter, out DBResult dBResult);
 
-        IEnumerable<AssociationWithPAViewModel> GetAssociatedWithPAByGraph(string apiEndPoint, IEnumerable<int> custIds, int statusWithPA);
-
         IEnumerable<AccumulatedInfoModel> GetAccummulatedInfo(string customersXML);
 
         ResultChangeCategoryToCts ChangeCategory(string jsonData, string remark, int createdBy);

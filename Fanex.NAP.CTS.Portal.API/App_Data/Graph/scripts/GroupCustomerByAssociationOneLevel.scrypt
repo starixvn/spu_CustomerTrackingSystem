@@ -1,6 +1,0 @@
-﻿CALL algo.unionFind.stream('
-MATCH (c:CTSCustomer) WHERE c.CustID IN $listCust RETURN id(c) as id', 
-'MATCH (c:CTSCustomer)-[:USED_DEVICE*2]-(c2:CTSCustomer) WHERE c.CustID IN $listCust AND c2.CustID IN $listCust RETURN id(c) AS source, id(c2) AS target', 
-{graph:'cypher', duplicateRelationships:'skip', concurrency:2, params:{listCust:$CustIds}})
-YIELD nodeId, setId
-RETURN algo.asNode(nodeId).CustID AS CustId, setId AS GroupId

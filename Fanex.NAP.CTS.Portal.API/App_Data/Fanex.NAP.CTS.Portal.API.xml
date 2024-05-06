@@ -506,11 +506,6 @@
             Remove Licencee BA
             </summary>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.LicenseeVIPBAController.RemoveLicBABySite(Fanex.NAP.CTS.Model.API.RemoveLicenseeBABySiteInputModel)">
-            <summary>
-            Remove Licencee BA by Site
-            </summary>
-        </member>
         <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.CtsController">
             <summary>
             CtsController
@@ -521,37 +516,12 @@
             Using for external site (TW, ExtAcc site...)
             </summary>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetFlaggedCustomersByLevel(System.String,System.Int32)">
-            <summary>
-            Get flagged customers by level
-            </summary>
-            <param name="CustIdList">CustId in string format (saparate by comma) </param>
-            <param name="AssociatedLevel"> Level 0, 1 or 2</param>
-            <returns>A list of customer evidence in JSON format</returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetFlaggedCustByLvlNEvi(System.String,System.Int32,System.String)">
-            <summary>
-            Get flagged customers by level and evidence
-            </summary>
-            <param name="custIdList">CustId in string format (saparate by comma) </param>
-            <param name="associatedLevel"> Level 0, 1 or 2</param>
-            <param name="eviIdList"> Evidence in string format (saparate by comma) (</param>
-            <returns>A list of customer evidence in JSON format</returns>
-        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetAssociationForExtAcc(System.Int32)">
             <summary>
             Get Association data from MySQL
             </summary>
             <param name="custId"></param>
             <returns></returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetAssociationByCustId(System.Int32,System.Int32)">
-            <summary>
-            Get association by custId and level
-            </summary>
-            <param name="custId"></param>
-            <param name="level">Level 1 for direct, level 2 for indirect</param>
-            <returns>Association list in XML format</returns>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetCustomerClassification(System.String)">
             <summary>
@@ -602,13 +572,6 @@
             </summary>
             <param name="custId"></param>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetProblemCaseMonitor(Fanex.NAP.CTS.Model.API.ProblemCaseMonitor.ProblemCaseMonitorParamsModel)">
-            <summary>
-            Get list Problem Case Monitor
-            </summary>
-            <param name="paras"></param>
-            <returns></returns>
-        </member>
         <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.GraphController">
             <summary>
             Graph Controller - Using for CTS site
@@ -618,13 +581,6 @@
             <summary>
             Constructor
             </summary>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetDirectAssociationProfile(Fanex.NAP.CTS.Model.GraphDB.AssociationProfileParameterModel)">
-            <summary>
-            Get Direct All Association for WEB Profile Page
-            </summary>
-            <param name="paras"></param>
-            <returns></returns>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetFlaggedEvidenceForLevel01(System.String)">
             <summary>
@@ -638,87 +594,6 @@
             API Get GetFlaggedEvidenceForLevel2 For Taiwan
             </summary>
             <param name="custIdList"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetAssociationReport(Fanex.NAP.CTS.Model.GraphDB.AssociationReportParameterModel)">
-            <summary>
-            Get association report
-            </summary>
-            <param name="paras"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetAssociationDetectionReport(System.String)">
-            <summary>
-            Get association report
-            </summary>
-            <param name="ctsCustIDs"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.DetectAssociationByPrimaryOrAgentType(Fanex.NAP.CTS.Model.GraphDB.AssDetection.DetectAssByPrimaryOrAgentParams)">
-            <summary>
-            DetectAssociationByPrimaryOrAgentType
-            </summary>
-            <param name="paras"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.DetectAssociationGetDetail(Fanex.NAP.CTS.Model.GraphDB.AssDetection.DetectAssGetDetailParams)">
-            <summary>
-            DetectAssociationGetDetail
-            </summary>
-            <param name="paras"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetStatisticAssociation(System.Int64)">
-            <summary>
-            Get association statistic
-            </summary>
-            <param name="ctsCustId"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetDirectAssociation(Fanex.NAP.CTS.Model.GraphDB.DirectAssociationParameterModel)">
-            <summary>
-            Get all association one level
-            </summary>
-            <param name="ctsCustId"></param>
-            <param name="assStatus"></param>
-            <param name="takeRow"></param>
-            <param name="skipRow"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetInDirectAssociation(System.Int32)">
-            <summary>
-            Get Association with N Level
-            </summary>
-            <param name="ctsCustId"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetShortestPath(System.Int32,System.Int32)">
-            <summary>
-            Get shortest path between 2 customers
-            </summary>
-            <param name="ctsCustIdFrom"></param>
-            <param name="ctsCustIdTo"></param>
-            <returns>Json string</returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GroupingCustomer(System.Collections.Generic.IEnumerable{System.Int32})">
-            <summary>
-            Grouping customer
-            </summary>
-            <param name="custIds">List custId</param>
-            <returns></returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetDetailAssociationReport(Fanex.NAP.CTS.Model.GraphDB.AssociationDetailReportParameterModel)">
-             <summary>
-            
-             </summary>
-             <param name="paras"></param>
-             <returns></returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetProbationReport(Fanex.NAP.CTS.ViewModel.ProbationManagement.ProbationParameterModel)">
-            <summary>
-            Get association report
-            </summary>
-            <param name="paras"></param>
             <returns></returns>
         </member>
         <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.HomeController">

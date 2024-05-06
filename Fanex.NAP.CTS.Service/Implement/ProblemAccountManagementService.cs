@@ -95,6 +95,13 @@
                 }
             }
 
+            var objectDb = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+            var connection = objectDb.CreateDbConnection();
+            connection.Open();
+
+            objectDb.Dispose();
+            connection.Dispose();           
+
             return result;
         }
 
