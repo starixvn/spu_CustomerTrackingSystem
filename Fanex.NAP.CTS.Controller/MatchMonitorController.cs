@@ -441,6 +441,10 @@
             var removeKeyAll = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMTicketTypeFromUI), MMTicketTypeFromUI.TicketAll));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyAll);
 
+            // log for check remove cache
+            LogMMClearCacheNotClean(para, removeKeyFraud);
+            LogMMClearCacheNotClean(para, removeKeyAll);
+
             switch (para.TypeOfTickets)
             {
                 case MMTicketTypeFromUI.TicketFraud:
@@ -477,6 +481,29 @@
             }
 
             return result;
+        }
+
+        private void LogMMClearCacheNotClean(MMDetailInfoViewModel para, string key)
+        {
+            var keyContainsValue = _memoryCacheService.GetKeyContainsValue(key);
+            if (keyContainsValue.Any())
+            {
+                var logMessage = new LogMessage($"{Region} Match Monitor Clear Cache Not Clean")
+                   .AddMessage("Params " + JsonConvert.SerializeObject(para) + "\n")
+                   .AddMessage("Keys " + JsonConvert.SerializeObject(keyContainsValue) + "\n")
+                   .ToString();
+
+                LogService.Error(logMessage);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult GetDataLogMM(string key)
+        {
+            return Json(new
+            {
+                data = _memoryCacheService.GetValue<object>(key)
+            }, JsonRequestBehavior.AllowGet);
         }
 
         private MMDetailFilterViewModel GetFraudMMFilter(MMDetailInfoViewModel para)

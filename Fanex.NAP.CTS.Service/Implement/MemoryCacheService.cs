@@ -1,9 +1,9 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
     using Fanex.Logging;
-    using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Service.Interface;
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Caching;
     using System.Threading.Tasks;
@@ -118,6 +118,11 @@
                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                     + ex.InnerException.StackTrace);
             }
+        }
+
+        public IEnumerable<string> GetKeyContainsValue(string value)
+        {
+            return _memoryCache.Where(x => x.Key.Contains(value)).Select(x => x.Key);
         }
     }
 }

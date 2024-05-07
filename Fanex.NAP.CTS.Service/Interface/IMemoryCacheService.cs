@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service.Interface
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public interface IMemoryCacheService
@@ -13,5 +14,7 @@
         Task<bool> RemoveValueAsync(string key);
 
         void RemoveKeyContainsValue(string value);
+
+        IEnumerable<string> GetKeyContainsValue(string value);
     }
 }
