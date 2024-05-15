@@ -82,11 +82,11 @@
 	</Function>
 
 	<Function Name="AssociationDetection">
-		<Setting Key="CTS_DC_RPT_AssociationDetection" SpName="CTS_DC_RPT_AssociationDetection_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />						
-		<Setting Key="CTS_DC_Association_Primary_GetCustEdge" SpName="CTS_DC_Association_Primary_GetCustEdge_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_Association_Agent_GetCustEdge" SpName="CTS_DC_Association_Agent_GetCustEdge_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_Association_DetectGroup" SpName="CTS_DC_Association_DetectGroup_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociationDetection_GetDetail" SpName="CTS_DC_AssociationDetection_GetDetail_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_RPT_AssociationDetection" SpName="CTS_DC_RPT_AssociationDetection_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_Association_Primary_GetCustEdge" SpName="CTS_DC_Association_Primary_GetCustEdge_xtest" DbName="MySQL.CTS_DataCenter.Reporter" Timeout="300" />
+		<Setting Key="CTS_DC_Association_Agent_GetCustEdge" SpName="CTS_DC_Association_Agent_GetCustEdge_xtest" DbName="MySQL.CTS_DataCenter.Reporter" Timeout="300" />
+		<Setting Key="CTS_DC_Association_DetectGroup" SpName="CTS_DC_Association_DetectGroup_xtest" DbName="MySQL.CTS_DataCenter.Reporter" Timeout="300" />
+		<Setting Key="CTS_DC_AssociationDetection_GetDetail" SpName="CTS_DC_AssociationDetection_GetDetail_xtest" DbName="MySQL.CTS_DataCenter.Reporter" Timeout="300" />
 	</Function>
 
 	<Function Name="AssociationDetail">

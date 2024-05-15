@@ -5,7 +5,7 @@
     let tableAssociationDetectDetailMatch = null;
     let tableAssociationDetectDetailAgent = null;
     let oldData = null;
-    let maxTags = 5000;
+    let maxTags = 10000;
     let isDetectEvent = true;
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),
