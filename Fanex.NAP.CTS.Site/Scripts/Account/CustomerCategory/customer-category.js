@@ -612,70 +612,8 @@
         return html;
     }
 
-    //function PinCategory(isChecked, ctsCustId, subscriberId) {
-    //    let html = "<div style='text-align:center'>Are you sure about this action? </div>";
-
-    //    if (isChecked) {
-    //        html += "By enabling pin option, this account will not be classified automatically by our service in future";
-    //    } else {
-    //        html += "By unpin option, this account will be classified automatically by our service in future";
-    //    }
-
-    //    common.showFormConfirmation(html, 'Confirmation',
-    //        function () {
-    //            var url = common.modifyRelativeUrl('/Account/PinCategoryCustomerClassification');
-    //            var params = {};
-    //            params.ctsCustId = ctsCustId;
-    //            params.subscriberId = subscriberId;
-    //            params.isPinCategory = isChecked;
-
-    //            $.ajax(url, {
-    //                type: 'POST',
-    //                data: params,
-    //                success: function (response) {
-    //                    if (response.errorCode === 0) {
-    //                        let message = isChecked
-    //                            ? "Pinned category successfully!"
-    //                            : "Unpinned category successfully!";
-
-    //                        common.showSuccess(message);
-
-    //                        LoadGrid(ctsCustId, true);
-    //                    }
-    //                    else {
-    //                        common.showError('Failed! ' + response.errorMessage);
-    //                        ResetCategorySetting();
-    //                    }
-    //                },
-    //                beforeSend: function () {
-    //                    common.showLoading();
-    //                },
-    //                complete: function () {
-    //                    common.closeLoading();
-    //                },
-    //                error: function (error) {
-    //                    common.closeLoading();
-    //                    console.log(error);
-    //                    ResetCategorySetting();
-    //                }
-    //            });
-    //        },
-    //        function () {
-    //            ResetCategorySetting();
-    //        }
-    //    );
-    //}
-
     function ExcludedTagAssPA(isChecked, custId, ctsCustId, subscriberId, custSubId) {
-        let html = "";
-        //let isPinCategory = false;
-
-        //$("option", cbbCategorySetting).each(function () {
-        //    if ($(this).val() === "PinCategory") {
-        //        isPinCategory = $(this).is(":checked");
-        //    }
-        //});
-
+        let html = "";      
         if (isChecked && cacheData.isPinCategory) {
             html = "<div style='text-align:center'>You are not allow to turn on this setting because of Pin Category.</div>";
             html += "<div style='text-align:center'>Please contact your system administrator for further assistance.</div>";

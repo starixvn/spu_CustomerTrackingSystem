@@ -1624,6 +1624,7 @@
             return null;
         }
 
+        [HttpPost]
         public ActionResult GetCustomerClassification(long ctsCustID, int roleID)
         {
             var isPinCategory = false;
@@ -1790,6 +1791,8 @@
                     break;
                 case (int)ClassificationSourceType.EarlyWarningMembers:
                 case (int)ClassificationSourceType.EarlyWarningMembersLosing:
+                case (int)ClassificationSourceType.TWInitialGroupBetting:
+                case (int)ClassificationSourceType.TWInitialGroupBettingLosing:
                     spanReason += $"{cc.Remark} | Turnover: {turnOver} | Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount}";
                     break;
 
@@ -2202,7 +2205,7 @@
                         {
                             CustIds = new List<long> { model.CustId },
                             IsRescanPA = true,
-                            IsRescanPADangerous = true,
+                            IsRescanPotentialPA = true,
                             IsToQueue = (model.RoleId != 1 && !model.IsAffectToAllDownlines), // add to queue for case SMA and not checking affect to downline to affect PA for downline
                             IsPushCCToSoon88 = true,
                             IsUpdateDangerToMainDB = true,
@@ -2259,16 +2262,16 @@
                 {
                     CustIds = custIds,
                     IsPushCCToSoon88 = true,
-                    IsRescanPADangerous = true,
+                    IsRescanPotentialPA = true,
                     FunctionId = FunctionId.UnmarkCustomerCategory,
                     IsUpdateDangerToMainDB = true
                 };
 
-                var custRescanPADangous = _rescanClassificationService.RescanPADangerous(custIds, paramRescan);
+                var custIdsToRescanPotentialPA = _rescanClassificationService.RescanPotentialProblemAccount(custIds.ToList(), new List<long>(), paramRescan);
 
                 var smCustIds = _rescanClassificationService.GetAgentCusts(custIds);
 
-                _rescanClassificationService.RescanNormalAccount(paramRescan, custRescanPADangous.CustIds.Distinct(), smCustIds);
+                _rescanClassificationService.RescanNormalAccount(paramRescan, custIdsToRescanPotentialPA.CustIds, smCustIds);
             }
 
             return Json(new

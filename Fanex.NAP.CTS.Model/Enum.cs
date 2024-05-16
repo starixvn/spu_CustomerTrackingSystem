@@ -91,6 +91,8 @@ namespace Fanex.NAP.CTS.Model
         HighRiskPunter78 = 278,
         EarlyWarningMembers = 65,
         EarlyWarningMembersLosing = 105,
+        TWInitialGroupBetting = 67,
+        TWInitialGroupBettingLosing = 107,
         GoodMember = 205,
         GoodMember111 = 211,
         GoodMember112 = 212,

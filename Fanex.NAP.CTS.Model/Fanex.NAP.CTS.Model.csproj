@@ -327,6 +327,7 @@
     <Compile Include="CustomerClassification\LogErrorDataModel.cs" />
     <Compile Include="CustomerClassification\PushDataToExternal\CustomerClassificationUpdateBySportToMainDBModel.cs" />
     <Compile Include="CustomerClassification\PushDataToExternal\GetCustomerClassificationBySportModel.cs" />
+    <Compile Include="CustomerClassification\RescanCustomerClassification\PotentialPACustInfoModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\LatestCCDangerLevelModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\ExistedPAResultModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\CustInfoModel.cs" />
@@ -335,6 +336,8 @@
     <Compile Include="CustomerClassification\ProblemAccount\ProblemAccountLosingClassificationModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\UnmarkPAResultModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\UnmarkProblemAccountModel.cs" />
+    <Compile Include="CustomerClassification\RescanCustomerClassification\GetInitialTWGroupBettingModel.cs" />
+    <Compile Include="CustomerClassification\RescanCustomerClassification\RescanInitialTWGroupBettingModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\RescanNormalBySportListCustModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\RescanPADangerousModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\RescanResultModel.cs" />

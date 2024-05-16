@@ -5,8 +5,10 @@
     using Fanex.Data.SqlServer;
     using Fanex.Logging;
     using Fanex.Logging.Sentry.RavenClient;
+    using Fanex.RemotingRef;
     using Newtonsoft.Json.Serialization;
     using SharpRaven;
+    using System;
     using System.Collections.Generic;
     using System.Configuration;
     using System.Web.Http;
@@ -40,7 +42,11 @@
                          {
                              Dsn = new Dsn(ConfigurationManager.AppSettings["Sentry-Log-Config"])
                          })
-                   });
+                   });    
+
+            RefDataTypeContainer
+                .ConnectTo(new Uri(ConfigurationManager.AppSettings["Fanex.RemotingRef.Service.Url"]))
+                .FromApplication("CTS Portal API");
 
             var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
             json.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();

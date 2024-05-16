@@ -185,6 +185,7 @@
                             {
                                 CustIds = generalCustRescan,
                                 IsRescanPA = true,
+                                IsRescanPotentialPA = true,
                                 IsPushCCToSoon88 = true,
                                 IsUpdateDangerToMainDB = true,
                                 IsToQueue = false,
