@@ -1,11 +1,12 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
+    using Fanex.Common.Extensions;
     using Fanex.Logging;
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.Extentions;
-    using Fanex.NAP.CTS.Core.Helpers;    
+    using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.Common;
@@ -51,21 +52,21 @@
             if (!string.IsNullOrEmpty(userNames))
             {
                 var userNameList = userNames.Split(',');
-                var userNameToUpperList = string.Join(",", userNameList.Select(x => x.ToUpper()).Distinct());             
+                var userNameToUpperList = string.Join(",", userNameList.Select(x => x.ToUpper()).Distinct());
 
                 var validatedList = _commonService.ValidateUsernames(userNameToUpperList, out isException);
 
-                var validatedUserNameList = validatedList.Select(x => x.UserName.ToUpper());               
-                
+                var validatedUserNameList = validatedList.Select(x => x.UserName.ToUpper());
+
                 if (isException)
                 {
                     invalidList = userNameList;
                 }
                 else
-                {                    
+                {
                     invalidList = userNameList.Where(x => !validatedUserNameList.Contains(x.ToUpper()));
                 }
-               
+
                 viewModel.IsException = isException;
                 viewModel.UserNameInvalidList = invalidList;
                 viewModel.UserNameValidList = validatedList.Select(x => x.UserName);
@@ -87,7 +88,22 @@
             "IsIPLast3Days:AssociationDetectionByIP3Days=70")]
         public ActionResult DetectAssociationByUserNames(DetectAssociationByUserNamesViewModel model)
         {
-            var result = DetectAssociation(model, false);
+            var result = new DetectAssociationViewModel();
+            try
+            {
+                result = DetectAssociation(model);
+            }
+            catch (Exception ex)
+            {
+                result.ErrorCode = 1;
+                result.ErrorMessage = ex.Message;
+
+                var logMessage = new LogMessage(ex.Message)
+                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+            }
 
             return Json(new
             {
@@ -102,7 +118,7 @@
 
             var CustClassFilter = data.ItemList.Select(c => c.CustomerClass).Distinct().ToList();
 
-            var filters = new DetectAssociationLoadFilterViewModel(custClassList, CustClassFilter);           
+            var filters = new DetectAssociationLoadFilterViewModel(custClassList, CustClassFilter);
 
             #region Danger List
             filters.DangerFilter.Danger1 = data.ItemList.Where(x => x.Danger1 > 0).Select(x => x.Danger1).Distinct()
@@ -134,83 +150,76 @@
             return filters;
         }
 
-        private DetectAssociationViewModel DetectAssociation(DetectAssociationByUserNamesViewModel model, bool isExportExcel)
+        private DetectAssociationViewModel DetectAssociation(DetectAssociationByUserNamesViewModel model)
         {
             var result = new DetectAssociationViewModel();
 
             if (!string.IsNullOrWhiteSpace(model.UserNames))
             {
-                try
+                var orgUserList = _associationDetectionService.ValidateUserName(model.UserNames);
+
+                var assMergeGroup = _associationDetectionService.DetectAssociation(model, orgUserList, true);
+
+                var assMergeGroupHasGroupID = assMergeGroup?.Where(x => x.GroupID.HasValue);
+
+                var assRearrangeGroup = RearrangeAssGroup(assMergeGroupHasGroupID);
+
+                result.ItemList = assRearrangeGroup.Select(x =>
                 {
-                    var orgUserList = _associationDetectionService.ValidateUserName(model.UserNames);
-
-                    var assMergeGroup = _associationDetectionService.DetectAssociation(model, orgUserList, isExportExcel, true);
-
-                    var assRearrangeGroup = RearrangeAssGroup(assMergeGroup, isExportExcel);
-
-                    if (isExportExcel)
-                    {
-                        var custIDs = string.Join(",", orgUserList.Select(x => x.CustID).Distinct());
-
-                        var custStatisticsList = _associationDetectionService.GetCustStatisticsInfoRealtime(custIDs);
-
-                        result.ExportItemList = GetExportItem(orgUserList, assRearrangeGroup, custStatisticsList);
-                    }
-                    else
-                    {
-                        result.ItemList = assRearrangeGroup.Select(x =>
-                        {
-                            return new DetectAssociationItemViewModel(x);
-                        });
-                    }
-                }
-                catch (Exception ex)
-                {
-                    result.ErrorCode = 1;
-                    result.ErrorMessage = ex.Message;
-
-                    var logMessage = new LogMessage(ex.Message)
-                       .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                    LogService.Error(logMessage);
-                }
+                    return new DetectAssociationItemViewModel(x);
+                });
             }
 
             return result;
         }
 
-        private IEnumerable<DetectAssociationMergeGroupModel> RearrangeAssGroup(IEnumerable<DetectAssociationMergeGroupModel> assGroupList, bool isExportExcel)
+        private DetectAssociationViewModel PrepareDataExportDetectAssociation(DetectAssociationByUserNamesViewModel model)
+        {
+            var result = new DetectAssociationViewModel();
+
+            if (!string.IsNullOrWhiteSpace(model.UserNames))
+            {
+                var orgUserList = _associationDetectionService.ValidateUserName(model.UserNames);
+
+                var assMergeGroup = _associationDetectionService.DetectAssociation(model, orgUserList, true);
+
+                var assRearrangeGroup = RearrangeAssGroup(assMergeGroup);
+
+                var custIDs = string.Join(",", orgUserList.Select(x => x.CustID).Distinct());
+
+                var custStatisticsList = _associationDetectionService.GetCustStatisticsInfoRealtime(custIDs);
+
+                result.ExportItemList = GetExportItem(orgUserList, assRearrangeGroup, custStatisticsList);
+            }
+
+            return result;
+        }
+
+        private IEnumerable<DetectAssociationMergeGroupModel> RearrangeAssGroup(IEnumerable<DetectAssociationMergeGroupModel> assGroupList)
         {
             var result = new List<DetectAssociationMergeGroupModel>();
-            if (!isExportExcel)
-                assGroupList = assGroupList.Where(x => x.GroupID.HasValue);
 
-            if (assGroupList.Any())
+            if (assGroupList.IsNotNullOrEmpty())
             {
-                var grouping = assGroupList
-                    .GroupBy(x => x.GroupID, (key, g) => new { GroupID = key, Items = g.ToList() })
-                    .OrderBy(x => x.GroupID);
+                var idx = 0;
+                var groupIdDict = new Dictionary<string, int>();
 
-                var idx = 1;
-
-                foreach (var group in grouping)
+                foreach (var item in assGroupList)
                 {
-                    var groupID = group.GroupID;
-
-                    if (groupID.HasValue)
+                    var key = item.GroupID?.ToString() ?? string.Empty;
+                    if (item.GroupID.HasValue && !groupIdDict.ContainsKey(item.GroupID?.ToString() ?? string.Empty))
                     {
-                        groupID = idx;
-                        idx += 1;
+                        idx++;
+                        groupIdDict[key] = idx;
                     }
 
-                    result.AddRange(group.Items.Select(x =>
+                    if (item.GroupID.HasValue)
                     {
-                        x.GroupID = groupID;
-
-                        return x;
-                    }));
+                        item.GroupID = groupIdDict[key];
+                    }
                 }
+
+                result.AddRange(assGroupList.OrderBy(x => x.GroupID));
             }
 
             return result;
@@ -225,7 +234,7 @@
         {
             var result = Enumerable.Empty<GetAssociationDetectDetailViewModel>();
             var viewModel = new List<GetAssociationDetectDetailViewModel>();
-            
+
             if (model.IsIPLast3Days)
             {
                 viewModel.AddRange(GetAssociationDetectSharedIP(model.UserNameList, model.CustIDList, model.UserName, model.CustID, model.CTSCustID));
@@ -235,16 +244,16 @@
             {
                 viewModel.AddRange(GetAssociationDetectSharedMatches(model));
             }
-          
+
             var dataCust = _associationDetectionService.GetAssociationDetectionDetail(model);
-            
+
             if (dataCust != null && dataCust.Any())
             {
                 foreach (var item in dataCust)
                 {
                     viewModel.Add(new GetAssociationDetectDetailViewModel(item));
-                }     
-            }            
+                }
+            }
 
             if (viewModel.Any())
             {
@@ -260,12 +269,12 @@
                         TransitiveUsername = x.FirstOrDefault()?.TransitiveUsername,
                         AgentInfoJson = string.Join(",", agentInfos),
                         AssociatedTypes = string.Join(", ",
-                                    x.Where(y=>!string.IsNullOrEmpty(y.AssociatedTypes))
+                                    x.Where(y => !string.IsNullOrEmpty(y.AssociatedTypes))
                                     .Select(y => y.AssociatedTypes))
                     };
                 });
             }
-            
+
             return Json(new
             {
                 data = result
@@ -276,8 +285,10 @@
         {
             var validatedList = _commonService.ValidateUsernames(userNames, out bool isException);
 
-            var assBySharedIP = _associationDetectionService.DetectAssociationByIP(validatedList, custIDs);
-          
+            var validateUserNames = validatedList.Distinct(x => x.CustID, y => y);
+
+            var assBySharedIP = _associationDetectionService.DetectAssociationByIP(validateUserNames, custIDs);
+
             var result = assBySharedIP.Where(x => x.FromCTSCustID == ctsCustID || x.ToCTSCustID == ctsCustID)
                        .Select(x =>
                        {
@@ -292,7 +303,7 @@
 
             return result;
         }
-      
+
         private IEnumerable<GetAssociationDetectDetailViewModel> GetAssociationDetectSharedMatches(GetAssociationDetectionDetailViewModel model)
         {
             if (!string.IsNullOrEmpty(model.UserNameList))
@@ -327,16 +338,16 @@
                         }
 
                         return new GetAssociationDetectDetailViewModel();
-                    });                                        
+                    });
                 }
             }
-            
+
             return Enumerable.Empty<GetAssociationDetectDetailViewModel>();
         }
         #endregion
-        
+
         #region Detail IP
-        
+
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetailIP)]
         public ActionResult GetDetectAssociationDetailIP(string ips)
@@ -368,7 +379,7 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetailMatch)]
         public ActionResult GetDetectAssociationDetailMatch(int custID1, int custID2, string custIDList)
         {
-            var result = Enumerable.Empty<GetAssociationDetectDetailMatchViewModel>();          
+            var result = Enumerable.Empty<GetAssociationDetectDetailMatchViewModel>();
             var tickets = Enumerable.Empty<GetAssociationDetectDetailMatchModel>();
 
             if (string.IsNullOrEmpty(custIDList))
@@ -381,16 +392,16 @@
             {
                 tickets = _associationDetectionService.GetDetectAssociationDetailMatch(custID1, custIDList, (int)DetectAssociation_QueryType.GetTicketDetailByListCust);
             }
-            
+
             tickets = tickets.Distinct(x => x.TransID)
-                .OrderByDescending(x=>x.MatchID)
-                .ThenByDescending(x=>x.TransDate);
+                .OrderByDescending(x => x.MatchID)
+                .ThenByDescending(x => x.TransDate);
 
             if (tickets != null && tickets.Any())
             {
                 result = tickets.Select(x => { return new GetAssociationDetectDetailMatchViewModel(x); });
             }
-            
+
             return Json(new
             {
                 data = result
@@ -410,7 +421,7 @@
             {
                 result = JsonConvert.DeserializeObject<IEnumerable<GetAssociationDetectDetailAgentViewModel>>(agentInfoJson);
             }
-          
+
             return Json(new
             {
                 data = result
@@ -424,30 +435,50 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionExportToExcel)]
         public ActionResult ExportToExcelAssociationDetect(DetectAssociationByUserNamesViewModel model)
         {
-            var templatePath = Server.MapPath(AssociationDetectionTemplate);
             var dateTime = DateTime.UtcNow.AddHours(-4);
 
-            var fileName = string.Format("AssociationDetect_{0}_{1}.xlsx"            
-                , dateTime.ToString(FormatDateTimeToString_YYYYmmdd)
-                , dateTime.ToString(Consts.FormatTimeToString_hhmmss));
+            var fileName = string.Format("AssociationDetect_{0}_{1}.xlsx"
+                    , dateTime.ToString(FormatDateTimeToString_YYYYmmdd)
+                    , dateTime.ToString(Consts.FormatTimeToString_hhmmss));
 
-            var data = DetectAssociation(model, true);
-          
-            var excelFile = _associationDetectionService.ExportToExcelAssociationDetect(data.ExportItemList, fileName, templatePath);
+            var excelFile = new byte[0];
+
+            try
+            {
+                var templatePath = Server.MapPath(AssociationDetectionTemplate);
+
+                var data = PrepareDataExportDetectAssociation(model);
+
+                excelFile = _associationDetectionService.ExportToExcelAssociationDetect(data.ExportItemList, fileName, templatePath);
+
+                return File(excelFile, "application/vnd.ms-excel", fileName);
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+            }
 
             return File(excelFile, "application/vnd.ms-excel", fileName);
-        }             
+        }
 
         private IEnumerable<ExportAssociationDetectModel> GetExportItem(IEnumerable<ValidateUserNameModel> orgUserList
             , IEnumerable<DetectAssociationMergeGroupModel> assMergeGroup
             , IEnumerable<GetCustStatisticsInfoRealtimeModel> custStatisticsList)
-        {            
+        {
             if (assMergeGroup.Any())
             {
+                var assMergeGroupDictionary = assMergeGroup.Distinct(x => x.CustID, y => y);
+                var custStatisticsDictionary = custStatisticsList.Distinct(x => x.CustID, y => y);
+
                 return orgUserList.Select(x =>
                 {
-                    var cust1 = assMergeGroup.FirstOrDefault(y => y.CustID == x.CustID);
-                    var cust2 = custStatisticsList.FirstOrDefault(y => y.CustID == x.CustID);
+                    var cust1 = assMergeGroupDictionary.GetValueOrDefault(x.CustID);
+                    var cust2 = custStatisticsDictionary.GetValueOrDefault(x.CustID);
+
                     var item = new ExportAssociationDetectModel { UserName = x.UserName };
                     if (cust1 != null)
                     {

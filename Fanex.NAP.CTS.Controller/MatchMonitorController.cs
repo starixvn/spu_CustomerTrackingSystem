@@ -907,7 +907,7 @@
                 IsAgent = model.IsOptAgent,
                 IsIPLast3Days = model.IsOptIPLast3Days,
                 Is3MatchesLast7Days = model.IsOpt3MatchesLast7Days
-            }, orgUserList, false, false).Select(x => new DetectGroupAssociationItemViewModel(x)); ;
+            }, orgUserList, false).Select(x => new DetectGroupAssociationItemViewModel(x)); ;
 
             result.ItemList = this.RearrangeAssGroup(data, true);
 

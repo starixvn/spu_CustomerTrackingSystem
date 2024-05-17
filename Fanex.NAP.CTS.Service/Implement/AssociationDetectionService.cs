@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
     using Fanex.Data;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Criteria.AssociationDetection;
     using Fanex.NAP.CTS.Model;
@@ -19,7 +20,7 @@
     {
         IEnumerable<ValidateUserNameModel> ValidateUserName(string userNameString);
 
-        IEnumerable<DetectAssociationMergeGroupModel> DetectAssociation(DetectAssociationByUserNamesViewModel model, IEnumerable<ValidateUserNameModel> orgUserList, bool isExportExcel, bool IsGetLogTransInfo);
+        IEnumerable<DetectAssociationMergeGroupModel> DetectAssociation(DetectAssociationByUserNamesViewModel model, IEnumerable<ValidateUserNameModel> orgUserList, bool IsGetLogTransInfo);
 
         IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimary(DetectAssociationByPrimaryFilterModel filter);
 
@@ -29,7 +30,7 @@
 
         IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel assDetectionDetailModel);
 
-        IEnumerable<SharedIPInfoModel> DetectAssociationByIP(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds);
+        IEnumerable<SharedIPInfoModel> DetectAssociationByIP(Dictionary<int, ValidateUserNameModel> validateUserNames, string custIds);
 
         IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList);
 
@@ -77,9 +78,10 @@
             return orgUserList;
         }
 
-        public IEnumerable<DetectAssociationMergeGroupModel> DetectAssociation(DetectAssociationByUserNamesViewModel model, IEnumerable<ValidateUserNameModel> orgUserList, bool isExportExcel, bool IsGetLogTransInfo)
+        public IEnumerable<DetectAssociationMergeGroupModel> DetectAssociation(DetectAssociationByUserNamesViewModel model, IEnumerable<ValidateUserNameModel> orgUserList, bool IsGetLogTransInfo)
         {
-            var custIgnoreInternals = orgUserList.Where(x => !x.IsInternal);
+            var validateUserNames = model.IsIPLast3Days || model.Is3MatchesLast7Days ?
+                orgUserList.Where(x => !x.IsInternal).Distinct(x => x.CustID, y => y) : null;
 
             var custIDs = string.Join(",", orgUserList.Select(x => x.CustID).Distinct());
 
@@ -89,11 +91,11 @@
 
             Parallel.Invoke(() =>
             {
-                var assBySharedIP = model.IsIPLast3Days ? DetectAssociationByIP(custIgnoreInternals, custIDs) : Enumerable.Empty<SharedIPInfoModel>();
+                var assBySharedIP = model.IsIPLast3Days ? DetectAssociationByIP(validateUserNames, custIDs) : Enumerable.Empty<SharedIPInfoModel>();
                 mergeGroupInfo.AssociationBySharedIPJson = GetAssociationCustByIP(assBySharedIP);
             }, () =>
             {
-                var assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(custIgnoreInternals, custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
+                var assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(validateUserNames, custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
                 mergeGroupInfo.AssociationBySharedMatchesJson = GetAssociationCustByMatch(assBySharedMatches);
             }, () =>
             {
@@ -195,25 +197,27 @@
             }
         }
 
-        public IEnumerable<SharedIPInfoModel> DetectAssociationByIP(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds)
+        public IEnumerable<SharedIPInfoModel> DetectAssociationByIP(Dictionary<int, ValidateUserNameModel> validateUsernames, string custIds)
         {
             var detectAssByIP = DetectAssociationByIP(custIds);
-            var validateDictionary = validateUserNames?
-                .GroupBy(p => p.CustID)?
-                .ToDictionary(x => x.Key, y => y.FirstOrDefault());
 
-            var detectAssByIPGroupBy = detectAssByIP.GroupBy(x => new { x.CustID1, x.CustID2 })
+            var mergeIP_DetectAssByIP = detectAssByIP.GroupBy(x => new { x.CustID1, x.CustID2 })
                 .Select(g => new DetectAssociationBySharedIPModel
                 {
                     CustID1 = g.Key.CustID1,
                     CustID2 = g.Key.CustID2,
-                    IP = string.Join(",", g.Select(x => x.IP.Trim()))
+                    IP = g.Select(x => x.IP.Trim()).Join()
                 });
 
-            return detectAssByIPGroupBy.Select(x =>
+            return DetectAssByIPMappingToSharedIPInfo(mergeIP_DetectAssByIP, validateUsernames);
+        }
+
+        private IEnumerable<SharedIPInfoModel> DetectAssByIPMappingToSharedIPInfo(IEnumerable<DetectAssociationBySharedIPModel> detectAssByIP, Dictionary<int, ValidateUserNameModel> validateUsernames)
+        {
+            return detectAssByIP.Select(x =>
             {
-                var fromCTSCust = GetValidateUserNameByDictionary(validateDictionary, x.CustID1);
-                var toCTSCust = GetValidateUserNameByDictionary(validateDictionary, x.CustID2);
+                var fromCTSCust = validateUsernames.GetValueOrDefault(x.CustID1) ?? new ValidateUserNameModel();
+                var toCTSCust = validateUsernames.GetValueOrDefault(x.CustID2) ?? new ValidateUserNameModel();
 
                 return new SharedIPInfoModel
                 {
@@ -283,12 +287,15 @@
             }
         }
 
-        public byte[] ExportToExcelAssociationDetect(IEnumerable<ExportAssociationDetectModel> AssociationDetect, string fileName, string templatePath)
+        public byte[] ExportToExcelAssociationDetect(IEnumerable<ExportAssociationDetectModel> associationDetect, string fileName, string templatePath)
         {
             var writer = new ExcelTemplateWriter(templatePath, fileName, "AD");
             writer.CopyRows(0, 1);
 
-            FillRowData(AssociationDetect, ref writer);
+            if (associationDetect.IsNotNullOrEmpty())
+            {
+                FillRowData(associationDetect, ref writer);
+            }
 
             writer.SyncColumnsWidth(17);
 
@@ -298,15 +305,6 @@
         #endregion
 
         #region Private Methods
-        private ValidateUserNameModel GetValidateUserNameByDictionary(Dictionary<int, ValidateUserNameModel> arrValid, int custID)
-        {
-            var ctsCustModel = default(ValidateUserNameModel);
-
-            arrValid?.TryGetValue(custID, out ctsCustModel);
-
-            return ctsCustModel ?? new ValidateUserNameModel();
-        }
-
         private void FillRowData(IEnumerable<ExportAssociationDetectModel> AssociationDetect, ref ExcelTemplateWriter writer)
         {
             var idx = 1;
@@ -365,14 +363,14 @@
             return ObjectHelper.SerializeObj(assCustBySharedIP);
         }
 
-        private IEnumerable<SharedIPMatchesInfoModel> DetectAssociationBySharedMatches(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds)
+        private IEnumerable<SharedIPMatchesInfoModel> DetectAssociationBySharedMatches(Dictionary<int, ValidateUserNameModel> validateUserNames, string custIds)
         {
             var detectAssByAssMatches = DetectAssociationBySharedMatches(custIds);
 
             return detectAssByAssMatches.Select(x =>
             {
-                var fromCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID1)) ?? new ValidateUserNameModel();
-                var toCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID2)) ?? new ValidateUserNameModel();
+                var fromCTSCust = validateUserNames.GetValueOrDefault(x.CustID1) ?? new ValidateUserNameModel();
+                var toCTSCust = validateUserNames.GetValueOrDefault(x.CustID2) ?? new ValidateUserNameModel();
 
                 return new SharedIPMatchesInfoModel
                 {
