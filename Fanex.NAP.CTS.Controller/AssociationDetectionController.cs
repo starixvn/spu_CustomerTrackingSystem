@@ -19,6 +19,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Web.Mvc;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
@@ -233,27 +234,41 @@
         public ActionResult GetDetectAssociationDetail(GetAssociationDetectionDetailViewModel model)
         {
             var result = Enumerable.Empty<GetAssociationDetectDetailViewModel>();
-            var viewModel = new List<GetAssociationDetectDetailViewModel>();
 
-            if (model.IsIPLast3Days)
+            var assBySharedIP = Enumerable.Empty<GetAssociationDetectDetailViewModel>();
+            var assBySharedMatch = Enumerable.Empty<GetAssociationDetectDetailViewModel>();
+            var assDetails = Enumerable.Empty<GetAssociationDetectDetailViewModel>();
+
+            var validateUserNames = default(Dictionary<int, ValidateUserNameModel>);
+            if (model.IsIPLast3Days || model.Is3MatchesLast7Days)
             {
-                viewModel.AddRange(GetAssociationDetectSharedIP(model.UserNameList, model.CustIDList, model.UserName, model.CustID, model.CTSCustID));
+                var arrUserNames = model.UserNameList.Split(',');
+                var userNameDistinct = string.Join(",", arrUserNames.Distinct());
+                var validatedList = _commonService.ValidateUsernames(userNameDistinct, out bool isException);
+                validateUserNames = validatedList.Distinct(x => x.CustID, y => y);
             }
 
-            if (model.Is3MatchesLast7Days)
+            Parallel.Invoke(() =>
             {
-                viewModel.AddRange(GetAssociationDetectSharedMatches(model));
-            }
-
-            var dataCust = _associationDetectionService.GetAssociationDetectionDetail(model);
-
-            if (dataCust != null && dataCust.Any())
-            {
-                foreach (var item in dataCust)
+                if (model.IsIPLast3Days)
                 {
-                    viewModel.Add(new GetAssociationDetectDetailViewModel(item));
+                    assBySharedIP = GetAssociationDetectSharedIP(validateUserNames, model);
                 }
-            }
+            },
+            () =>
+            {
+                if (model.Is3MatchesLast7Days)
+                {
+                    assBySharedMatch = GetAssociationDetectSharedMatches(validateUserNames, model);
+                }
+            },
+            () =>
+            {
+                var dataCust = _associationDetectionService.GetAssociationDetectionDetail(model);
+                assDetails = dataCust?.Select(x => new GetAssociationDetectDetailViewModel(x)) ?? Enumerable.Empty<GetAssociationDetectDetailViewModel>();
+            });
+
+            var viewModel = assBySharedIP.Concat(assBySharedMatch).Concat(assDetails);
 
             if (viewModel.Any())
             {
@@ -281,50 +296,44 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<GetAssociationDetectDetailViewModel> GetAssociationDetectSharedIP(string userNames, string custIDs, string userName, int custID, long ctsCustID)
-        {
-            var validatedList = _commonService.ValidateUsernames(userNames, out bool isException);
-
-            var validateUserNames = validatedList.Distinct(x => x.CustID, y => y);
-
-            var assBySharedIP = _associationDetectionService.DetectAssociationByIP(validateUserNames, custIDs);
-
-            var result = assBySharedIP.Where(x => x.FromCTSCustID == ctsCustID || x.ToCTSCustID == ctsCustID)
-                       .Select(x =>
-                       {
-                           return new GetAssociationDetectDetailViewModel
-                           {
-                               CustID = x.FromCTSCustID == ctsCustID ? x.ToCustID : x.FromCustID,
-                               CTSCustID = x.FromCTSCustID == ctsCustID ? x.ToCTSCustID : x.FromCTSCustID,
-                               UserName = x.FromCTSCustID == ctsCustID ? x.ToUserName : x.FromUserName,
-                               AssociatedTypes = $"<span class='association-detect-detail-ip' data-fromusername={userName} data-fromcustid={custID} data-ips={x.IP}>IP(last3days)</span>"
-                           };
-                       });
-
-            return result;
-        }
-
-        private IEnumerable<GetAssociationDetectDetailViewModel> GetAssociationDetectSharedMatches(GetAssociationDetectionDetailViewModel model)
+        private IEnumerable<GetAssociationDetectDetailViewModel> GetAssociationDetectSharedIP(Dictionary<int, ValidateUserNameModel> validateUsernames, GetAssociationDetectionDetailViewModel model)
         {
             if (!string.IsNullOrEmpty(model.UserNameList))
             {
-                var isException = false;
+                var assBySharedIP = _associationDetectionService.DetectAssociationByIP(validateUsernames, model.CustIDList);
 
-                var arrUserNames = model.UserNameList.Split(',');
+                if (assBySharedIP.IsNotNullOrEmpty())
+                {
+                    return assBySharedIP.Where(x => x.FromCTSCustID == model.CTSCustID || x.ToCTSCustID == model.CTSCustID)
+                               .Select(x =>
+                               {
+                                   return new GetAssociationDetectDetailViewModel
+                                   {
+                                       CustID = x.FromCTSCustID == model.CTSCustID ? x.ToCustID : x.FromCustID,
+                                       CTSCustID = x.FromCTSCustID == model.CTSCustID ? x.ToCTSCustID : x.FromCTSCustID,
+                                       UserName = x.FromCTSCustID == model.CTSCustID ? x.ToUserName : x.FromUserName,
+                                       AssociatedTypes = $"<span class='association-detect-detail-ip' data-fromusername={model.UserName} data-fromcustid={model.CustID} data-ips={x.IP}>IP(last3days)</span>"
+                                   };
+                               });
+                }
+            }
 
-                var userNameDistinct = string.Join(",", arrUserNames.Distinct());
+            return Enumerable.Empty<GetAssociationDetectDetailViewModel>();
+        }
 
-                var validatedList = _commonService.ValidateUsernames(userNameDistinct, out isException);
-
-                var custIDList = string.Join(",", validatedList.Select(x => x.CustID).Distinct());
+        private IEnumerable<GetAssociationDetectDetailViewModel> GetAssociationDetectSharedMatches(Dictionary<int, ValidateUserNameModel> validateUsernames, GetAssociationDetectionDetailViewModel model)
+        {
+            if (!string.IsNullOrEmpty(model.UserNameList))
+            {
+                var custIDList = string.Join(",", validateUsernames.Values.Select(x => x.CustID).Distinct());
 
                 var custSharedMatches = _associationDetectionService.GetAssociationDetectSharedMatches(model.CustID, custIDList);
 
-                if (custSharedMatches != null)
+                if (custSharedMatches.IsNotNullOrEmpty())
                 {
                     return custSharedMatches.Distinct().Select(x =>
                     {
-                        var custFirst = validatedList.FirstOrDefault(y => y.CustID == x);
+                        var custFirst = validateUsernames.GetValueOrDefault((int)x);
 
                         if (custFirst != null)
                         {
@@ -356,14 +365,7 @@
 
             if (!string.IsNullOrEmpty(ips))
             {
-                var arrIP = ips.Split(',');
-
-                foreach (var ip in arrIP)
-                {
-                    result.Add(new GetAssociationDetectDetailIPViewModel { IP = ip });
-                }
-
-                result = result.OrderBy(x => x.IP).ToList();
+                result = ips.Split(',').OrderBy(ip => ip).Select(ip => new GetAssociationDetectDetailIPViewModel { IP = ip }).ToList();
             }
 
             return Json(new
@@ -393,14 +395,10 @@
                 tickets = _associationDetectionService.GetDetectAssociationDetailMatch(custID1, custIDList, (int)DetectAssociation_QueryType.GetTicketDetailByListCust);
             }
 
-            tickets = tickets.Distinct(x => x.TransID)
+            result = tickets.Distinct(x => x.TransID)
                 .OrderByDescending(x => x.MatchID)
-                .ThenByDescending(x => x.TransDate);
-
-            if (tickets != null && tickets.Any())
-            {
-                result = tickets.Select(x => { return new GetAssociationDetectDetailMatchViewModel(x); });
-            }
+                .ThenByDescending(x => x.TransDate)?
+                .Select(x => { return new GetAssociationDetectDetailMatchViewModel(x); });
 
             return Json(new
             {
@@ -415,11 +413,11 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetailAgent)]
         public ActionResult GetDetectAssociationDetailAgent(string agentInfoJson)
         {
-            var result = Enumerable.Empty<GetAssociationDetectDetailAgentViewModel>();
+            var result = default(List<GetAssociationDetectDetailAgentViewModel>);
 
             if (!string.IsNullOrEmpty(agentInfoJson))
             {
-                result = JsonConvert.DeserializeObject<IEnumerable<GetAssociationDetectDetailAgentViewModel>>(agentInfoJson);
+                result = JsonConvert.DeserializeObject<List<GetAssociationDetectDetailAgentViewModel>>(agentInfoJson);
             }
 
             return Json(new
