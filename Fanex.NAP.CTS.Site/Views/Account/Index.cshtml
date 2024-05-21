@@ -70,7 +70,7 @@
                 <span class="tag-text-left">Level: </span>
                 <span class="username tag-text-right">@Model.Role.Name</span>
             </div>
-            @if (!Model.IsLicensee && Model.Role.Id == 1)
+            @if (Model.Role.Id == 1)
             {
                 <div class="wrapper-tag-info margin-top-0">
                     <span class="tag-text-left" title="Dangerous Score for Members without Tickets only">
