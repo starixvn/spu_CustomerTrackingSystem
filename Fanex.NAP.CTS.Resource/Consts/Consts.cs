@@ -433,6 +433,7 @@
             GetSubscriberInfoAPI = 214,
             GetAssociationPerTypeAPI = 215,
             GetProblemCaseAPI = 216,
+            CheckAssociationAPI = 217,
             //GetProblemCaseMonitorAPI = 217,
             //ForceSpecialCCAPI = 218,
             //GetDirectAssociationDevicesAPI = 219,

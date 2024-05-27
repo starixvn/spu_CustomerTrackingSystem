@@ -9,5 +9,13 @@
         public int Device { get; set; }
 
         public int IP { get; set; }
-    }
+
+        public int Total
+        {
+            get
+            {
+                return AI + Manual + Device + IP;
+            }
+        }
+    } 
 }

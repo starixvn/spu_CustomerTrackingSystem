@@ -568,7 +568,14 @@
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetAssociationByCustId(System.Int64)">
             <summary>
             Provide API to get association (Device, IP, AI)
-            Integration team: NAP 
+            Integration team: NAP
+            </summary>
+            <param name="custId"></param>
+        </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.CheckAssociationByCustId(System.Int64)">
+            <summary>
+            Provide API to check association (Device, IP, Betting Pattern)
+            Integration team: Alpha
             </summary>
             <param name="custId"></param>
         </member>
