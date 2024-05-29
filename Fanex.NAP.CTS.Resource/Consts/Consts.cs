@@ -433,7 +433,6 @@
             GetSubscriberInfoAPI = 214,
             GetAssociationPerTypeAPI = 215,
             GetProblemCaseAPI = 216,
-            CheckAssociationAPI = 217,
             //GetProblemCaseMonitorAPI = 217,
             //ForceSpecialCCAPI = 218,
             //GetDirectAssociationDevicesAPI = 219,
@@ -460,6 +459,7 @@
             AddLicBA_API = 240,
             RemoveLicBAP_API = 241,
             //RemoveLicBABySite_API = 242
+            CheckAssociationAPI = 243,
             AddCustomerInitialSmarts = 244
         };
 
