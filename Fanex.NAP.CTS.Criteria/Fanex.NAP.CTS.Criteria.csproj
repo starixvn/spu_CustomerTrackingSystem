@@ -103,6 +103,7 @@
     <Compile Include="Api\FPS\Transaction\GetTransactionHistoryBySubscriberDCSCenterCriteria.cs" />
     <Compile Include="Api\FPS\Transaction\GetTransactionHistoryBySubscriberDCSExtraCriteria.cs" />
     <Compile Include="Api\FPS\Transaction\GetTransHistoryByDevSubDCSExtraCriteria.cs" />
+    <Compile Include="Api\TW\InsertTWInitialSmartCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedAccountCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedGroupMonitorCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\GetAssociatedAccountCriteria.cs" />
@@ -185,7 +186,7 @@
     <Compile Include="CustomerClassification\RescanPotentialPA\GetInitialTWGroupBettingCriteria.cs" />
     <Compile Include="CustomerClassification\RescanNormalClassificationBySport\PreprocessRescanNormalClassificationBySportCriteria.cs" />
     <Compile Include="CustomerClassification\RescanPADangerousCriteria.cs" />
-    <Compile Include="CustomerClassification\RescanPotentialPA\RescanTWInitialSmartPACriteria.cs" />
+    <Compile Include="CustomerClassification\RescanPotentialPA\CheckExistTWInitialSmartPACriteria.cs" />
     <Compile Include="CustomerClassification\Robot\RobotAccountInsertCriteria.cs" />
     <Compile Include="DangerMonitor\DangerMonitorTicketSummaryCriteria.cs" />
     <Compile Include="ImportEvidences\CheckCleanCustFlaggedEvidenceCriteria.cs" />

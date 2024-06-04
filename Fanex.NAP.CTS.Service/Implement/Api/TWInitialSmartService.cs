@@ -1,8 +1,10 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement.Api
 {
     using Fanex.Data.Repository;
+    using Fanex.NAP.CTS.Criteria.Api.TW;
     using Fanex.NAP.CTS.Model.API.TWInitialSmart;
     using Fanex.NAP.CTS.Service.Interface.Api;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
 
@@ -15,9 +17,14 @@
             repository = new DynamicRepository();
         }
 
-        public bool AddCustTWInitialSmarts(IEnumerable<InitialSmartCustInfoModel> initialSmartCustInfos)
+        public IEnumerable<long> AddCustTWInitialSmarts(IEnumerable<InitialSmartCustInfoModel> initialSmartCustInfos)
         {
-            throw new NotImplementedException();
+            var criteria = new InsertTWInitialSmartCriteria
+            {
+                CustInfoJson = JsonConvert.SerializeObject(initialSmartCustInfos)
+            };
+
+            return repository.Fetch<long>(criteria);
         }
 
     }

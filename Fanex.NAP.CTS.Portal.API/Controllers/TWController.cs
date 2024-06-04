@@ -12,6 +12,7 @@
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Http;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
@@ -31,11 +32,15 @@
         {
             try
             {
-                var isSuccess = true;
+                var dbExistedCusts = tWInitialSmartService.AddCustTWInitialSmarts(custInfos);
 
-                if (!isSuccess)
+                if (dbExistedCusts != null && dbExistedCusts.Any())
                 {
-                    return BadRequest($"Add Customers Initial Smart failed. Data: {JsonConvert.SerializeObject(custInfos)}");
+                    var logMessage = new LogMessage($"CTS API - TW AddCustomerInitialSmarts")
+                                      .AddMessage($"Custs existed in DB: {JsonConvert.SerializeObject(dbExistedCusts)}")
+                                      .AddMessage($"Data {JsonConvert.SerializeObject(custInfos)} - DateTime {DateTime.UtcNow} UTC").ToString();
+
+                    LogService.Error(logMessage);
                 }               
             }
             catch (Exception ex)
@@ -47,10 +52,10 @@
 
                 LogService.Error(logMessage);
 
-                return InternalServerError(ex);
+                return BadRequest($"Add Customers Initial Smart failed.");
             }
 
-            return Ok();
+            return Ok("Success.");
         }
     }
 }

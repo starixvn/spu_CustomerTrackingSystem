@@ -3,7 +3,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class RescanTWInitialSmartPACriteria : CriteriaBase
+    public class CheckExistTWInitialSmartPACriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_CustIDs")]
         public string CustIDs { get; set; }

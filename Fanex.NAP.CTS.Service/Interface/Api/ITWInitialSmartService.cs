@@ -5,6 +5,6 @@
 
     public interface ITWInitialSmartService
     {
-        bool AddCustTWInitialSmarts(IEnumerable<InitialSmartCustInfoModel> initialSmartCustInfos);
+        IEnumerable<long> AddCustTWInitialSmarts(IEnumerable<InitialSmartCustInfoModel> initialSmartCustInfos);
     }
 }

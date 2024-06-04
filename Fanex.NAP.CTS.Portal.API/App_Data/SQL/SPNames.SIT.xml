@@ -132,4 +132,8 @@
 		<Setting Key="DCS_ET_Association_GetAssociationMatrixByDeviceSubscriber" SpName="DCS_ET_Association_GetAssociationMatrixByDeviceSubscriber" DbName="MySQL.DCS_Extra.Reporter" />
 		<Setting Key="DCS_ET_Transaction_GetHistoryByDeviceSubscriber" SpName="DCS_ET_Transaction_GetHistoryByDeviceSubscriber" DbName="MySQL.DCS_Extra.Reporter" />
 	</Function>
+
+	<Function name="TW">
+		<Setting Key="CTS_DC_CustClassification_InitialSmart_Insert" SpName="CTS_DC_CustClassification_InitialSmart_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
+	</Function>
 </Functions>

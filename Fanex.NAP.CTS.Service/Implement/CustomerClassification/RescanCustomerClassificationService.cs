@@ -159,7 +159,7 @@
         {
             var rescanResult = new RescanResultModel();
 
-            var rescanInitialSmart = this.RescanInitialSmartPA(custIDs);
+            var rescanInitialSmart = this.CheckExistInitialSmartPA(custIDs);
 
             if (rescanInitialSmart != null && rescanInitialSmart.Any())
             {
@@ -404,9 +404,9 @@
             return repository.Fetch<RescanPADangerousModel>(criteria);
         }
 
-        public IEnumerable<RescanTWInitialSmartPAModel> RescanInitialSmartPA(string custIDs)
+        public IEnumerable<RescanTWInitialSmartPAModel> CheckExistInitialSmartPA(string custIDs)
         {
-            var criteria = new RescanTWInitialSmartPACriteria
+            var criteria = new CheckExistTWInitialSmartPACriteria
             {
                 CustIDs = custIDs
             };
