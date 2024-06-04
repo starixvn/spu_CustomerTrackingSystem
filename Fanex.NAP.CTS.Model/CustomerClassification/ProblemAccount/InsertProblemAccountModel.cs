@@ -51,6 +51,24 @@
             this.Remark = $"Detection Date: { twGBCust.DetectedDate.ToString(Consts.FormatDateToString_MMMddyyyy)} - GB Bet Count: {twGBCust.GBTicketCount} - Sport: { twGBCust.SportName }";
         }
 
+        public InsertProblemAccountModel(RescanTWInitialSmartPAModel tWInitialSmartCust)
+        {
+            this.CustID = tWInitialSmartCust.CustID;
+            this.CTSCustID = tWInitialSmartCust.CTSCustID;
+            this.RoleID = tWInitialSmartCust.RoleID;
+            this.SubscriberID = tWInitialSmartCust.SubscriberID;
+            this.CategoryID = tWInitialSmartCust.CategoryID;
+            this.CategoryGroup = tWInitialSmartCust.CategoryGroup;
+            this.IsLicensee = tWInitialSmartCust.IsLicensee;
+            this.IsFromAI = false;
+            this.IsDirectPA = null;
+            this.IsFromCTS = false;
+            this.IsFromTVS = false;
+            this.IsFromTW = true;
+            this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
+            this.Remark = $"Detection Date: {tWInitialSmartCust.DetectedDate.ToString(Consts.FormatDateToString_MMMddyyyy)} - Probability: {tWInitialSmartCust.Probability}";
+        }
+
         /* Cust info */
         public long CustID { get; set; }
 

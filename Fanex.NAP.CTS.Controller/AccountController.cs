@@ -1793,6 +1793,8 @@
                 case (int)ClassificationSourceType.EarlyWarningMembersLosing:
                 case (int)ClassificationSourceType.TWInitialGroupBetting:
                 case (int)ClassificationSourceType.TWInitialGroupBettingLosing:
+                case (int)ClassificationSourceType.TWInitialSmart:
+                case (int)ClassificationSourceType.TWInitialSmartLosing:
                     spanReason += $"{cc.Remark} | Turnover: {turnOver} | Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount}";
                     break;
 

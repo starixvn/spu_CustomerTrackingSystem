@@ -241,6 +241,7 @@
     <Compile Include="API\LicenseeVIPBA\LicenseeVIPBAInputModel.cs" />
     <Compile Include="API\LicenseeVIPBA\LicenseeVIPBALogDataModel.cs" />
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorModel.cs" />
+    <Compile Include="API\TWInitialSmart\InitialSmartCustInfoModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedAccountModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedGroupModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AssociatedAccountMonitorModel.cs" />
@@ -341,6 +342,7 @@
     <Compile Include="CustomerClassification\RescanCustomerClassification\RescanNormalBySportListCustModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\RescanPADangerousModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\RescanResultModel.cs" />
+    <Compile Include="CustomerClassification\RescanCustomerClassification\RescanTWInitialSmartPAModel.cs" />
     <Compile Include="CustomerClassification\Robot\RobotInsetViewEntity.cs" />
     <Compile Include="CustomerClassification\Robot\InsertRobotModel.cs" />
     <Compile Include="CustomerClassification\Robot\RobotUserModel.cs" />

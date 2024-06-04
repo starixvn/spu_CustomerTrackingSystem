@@ -31,20 +31,11 @@
     /// </summary>
     public class CtsController : ApiController
     {
-        private readonly IAccountService _accountService;
-        private readonly ICustomerEvidenceService _custEvidenceService;
-        private readonly IAssociatedAccountService _associationService;
-        private readonly IProblemAccountMonitorService _problemAccountMonitorService;
-        private readonly ICategoryService _categoryService;
-        private readonly IRescanCustomerClassificationService _rescanClassificationService;
-        private readonly ICustomerClassificationService _custClassificationService;
+        private readonly IAccountService _accountService;      
+        private readonly IAssociatedAccountService _associationService;      
+        private readonly ICategoryService _categoryService;     
         private readonly ISubscriberService _subscriberService;
-        private readonly IProblemCaseMonitorService _problemCaseMonitorService;
-        private readonly IProblemAccountManagementService _problemAccountManagementService;
-        private readonly ILogInputDataService logInputDataService;
-        private readonly IAntiFraudCenterService _antiFraudCenterService;
-        private readonly ISpecialCustomerClassService _customerClassService;
-        private readonly IProblemAccountClassificationService _paClassificationService;
+        private readonly IProblemCaseMonitorService _problemCaseMonitorService;       
         private readonly ICtsAssociationApiService _ctsAssociationApiService;
         private readonly ICommonService _commonService;
 
@@ -54,19 +45,10 @@
         public CtsController()
         {
             _accountService = new AccountService();
-            _associationService = new AssociatedAccountService();
-            _custEvidenceService = new CustomerEvidenceService();
-            _problemAccountMonitorService = new ProblemAccountMonitorService();
-            _categoryService = new CategoryService();
-            _rescanClassificationService = new RescanCustomerClassificationService();
-            _custClassificationService = new CustomerClassificationService();
+            _associationService = new AssociatedAccountService();                  
+            _categoryService = new CategoryService();          
             _subscriberService = new SubscriberService();
-            _problemCaseMonitorService = new Service.Implement.Api.ProblemCaseMonitorService();
-            logInputDataService = new LogInputDataService();
-            _antiFraudCenterService = new AntiFraudCenterService();
-            _customerClassService = new SpecialCustomerClassService();
-            _problemAccountManagementService = new ProblemAccountManagementService();
-            _paClassificationService = new ProblemAccountClassificationService();
+            _problemCaseMonitorService = new Service.Implement.Api.ProblemCaseMonitorService();          
             _ctsAssociationApiService = new CtsAssociationApiService();
             _commonService = new CommonService();
         }

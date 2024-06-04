@@ -5,6 +5,7 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria;
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
+    using Fanex.NAP.CTS.Criteria.CustomerClassification.RescanPotentialPA;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
@@ -110,11 +111,18 @@
 
                 if (rescanPotentialPA != string.Empty)
                 {
-                    var rescanPADangerousResult = RescanDangerousPA(rescanPotentialPA, parameters);
+                    var rescanDangerousScorePA = RescanDangerousPA(rescanPotentialPA, parameters);
 
-                    if (rescanPADangerousResult.IsSuccess)
+                    if (rescanDangerousScorePA.IsSuccess)
                     {
-                        rescanResult.CustIds.AddRange(rescanPADangerousResult.CustIds);
+                        rescanResult.CustIds.AddRange(rescanDangerousScorePA.CustIds);
+                    }
+
+                    var rescanInitialSmartPA = RescanInitialSmartPA(rescanPotentialPA, parameters);
+
+                    if (rescanInitialSmartPA.IsSuccess)
+                    {
+                        rescanResult.CustIds.AddRange(rescanInitialSmartPA.CustIds);
                     }
 
                     var rescanPaTWGB = RescanInitialTWGroupBettingPA(rescanPotentialPA, parameters);
@@ -142,6 +150,24 @@
                 var custPaDangerous = InsertProblemAccountLogics(paDangerous, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
 
                 rescanResult.IsSuccess = PushDataToExternalPackge(custPaDangerous.Distinct(), parameters);
+            }
+
+            return rescanResult;
+        }
+
+        public RescanResultModel RescanInitialSmartPA(string custIDs, RescanCustClassificationModel parameters)
+        {
+            var rescanResult = new RescanResultModel();
+
+            var rescanInitialSmart = this.RescanInitialSmartPA(custIDs);
+
+            if (rescanInitialSmart != null && rescanInitialSmart.Any())
+            {
+                var pasInitialSmart = rescanInitialSmart.Select(x => new InsertProblemAccountModel(x));
+
+                var custPaInitialSmart = InsertProblemAccountLogics(pasInitialSmart, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
+
+                rescanResult.IsSuccess = PushDataToExternalPackge(custPaInitialSmart.Distinct(), parameters);
             }
 
             return rescanResult;
@@ -376,6 +402,16 @@
             };
 
             return repository.Fetch<RescanPADangerousModel>(criteria);
+        }
+
+        public IEnumerable<RescanTWInitialSmartPAModel> RescanInitialSmartPA(string custIDs)
+        {
+            var criteria = new RescanTWInitialSmartPACriteria
+            {
+                CustIDs = custIDs
+            };
+
+            return repository.Fetch<RescanTWInitialSmartPAModel>(criteria);
         }
 
         public IEnumerable<GetInitialTWGroupBettingModel> GetInitialTWGroupBetting(string custIDs)
