@@ -89,7 +89,7 @@
 	<Function name="RescanCustomerClassification">
 		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet"/>
 		<Setting Key="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" SpName="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" DbName="MySQL.CTS_Archive.Admin" />
-		<Setting Key="CTS_DC_CustClassification_PA_ReScan" SpName="CTS_DC_CustClassification_PA_ReScan" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_PA_ReScan" SpName="CTS_DC_CustClassification_PA_ReScan_xpre" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassification_PA_InsertRobot" SpName="CTS_DC_CustClassification_PA_InsertRobot" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_PA_ClearOld" SpName="CTS_DC_CustClassification_PA_ClearOld_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 
@@ -135,9 +135,5 @@
 		<Setting Key="DCS_ET_Association_GetAssociationDeviceByDeviceSubscriber" SpName="DCS_ET_Association_GetAssociationDeviceByDeviceSubscriber_xtest" DbName="MySQL.DCS_Extra.Reporter" />
 		<Setting Key="DCS_ET_Association_GetAssociationMatrixByDeviceSubscriber" SpName="DCS_ET_Association_GetAssociationMatrixByDeviceSubscriber_xtest" DbName="MySQL.DCS_Extra.Reporter" />
 		<Setting Key="DCS_ET_Transaction_GetHistoryByDeviceSubscriber" SpName="DCS_ET_Transaction_GetHistoryByDeviceSubscriber_xtest" DbName="MySQL.DCS_Extra.Reporter" />
-	</Function>
-
-	<Function name="TW">
-		<Setting Key="CTS_DC_CustClassification_InitialSmart_Insert" SpName="CTS_DC_CustClassification_InitialSmart_Insert_UAT1" DbName="MySQL.CTS_DataCenter.Admin" />
 	</Function>
 </Functions>

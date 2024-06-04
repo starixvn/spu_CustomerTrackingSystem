@@ -5,17 +5,18 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria;
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
+    using Fanex.NAP.CTS.Criteria.CustomerClassification.RescanPotentialPA;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.CTS.Model.LogInputData;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Implement;
-    using Fanex.NAP.CTS.Service.Implement.CustomerClassification;
     using Fanex.NAP.CTS.Service.Interface;
-    using Fanex.NAP.CTS.Service.Interface.CustomerClassification;
     using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Entities;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
@@ -26,7 +27,6 @@
     {
         private readonly ICustomerClassificationService custClassificationService;
         private readonly IProblemAccountClassificationService problemAccountService;
-        private readonly IPAPotentialClassificationService paPotentialService;
         private readonly ILogInputDataService logInputDataService;
         private readonly bool _isWriteLogInfo;
         private readonly IDynamicRepository repository;
@@ -35,7 +35,6 @@
         {
             custClassificationService = new CustomerClassificationService();
             problemAccountService = new ProblemAccountClassificationService();
-            paPotentialService = new PAPotentialClassificationService();
             _isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
             logInputDataService = new LogInputDataService();
             repository = new DynamicRepository();
@@ -142,7 +141,7 @@
         {
             var rescanResult = new RescanResultModel();
 
-            var rescanDangerous = paPotentialService.GetDangerousScorePA(custIDs);
+            var rescanDangerous = this.RescanDangerousPA(custIDs);
 
             if (rescanDangerous != null && rescanDangerous.Any())
             {
@@ -160,7 +159,7 @@
         {
             var rescanResult = new RescanResultModel();
 
-            var rescanInitialSmart = paPotentialService.GetInitialSmartPA(custIDs);
+            var rescanInitialSmart = this.RescanInitialSmartPA(custIDs);
 
             if (rescanInitialSmart != null && rescanInitialSmart.Any())
             {
@@ -178,7 +177,7 @@
         {
             var rescanResult = new RescanResultModel();
 
-            var rescanInitialTWGB = paPotentialService.GetInitialTWGroupBetting(custIDs);
+            var rescanInitialTWGB = this.GetInitialTWGroupBetting(custIDs);
 
             if (rescanInitialTWGB != null && rescanInitialTWGB.Any())
             {
@@ -395,7 +394,33 @@
             }
         }
 
-        
+        public IEnumerable<RescanPADangerousModel> RescanDangerousPA(string custIDs)
+        {
+            var criteria = new RescanPADangerousCriteria
+            {
+                CustIDs = custIDs
+            };
+
+            return repository.Fetch<RescanPADangerousModel>(criteria);
+        }
+
+        public IEnumerable<RescanTWInitialSmartPAModel> RescanInitialSmartPA(string custIDs)
+        {
+            var criteria = new RescanTWInitialSmartPACriteria
+            {
+                CustIDs = custIDs
+            };
+
+            return repository.Fetch<RescanTWInitialSmartPAModel>(criteria);
+        }
+
+        public IEnumerable<GetInitialTWGroupBettingModel> GetInitialTWGroupBetting(string custIDs)
+        {
+            var criteria = new RescanInitialTWGroupBettingCriteria() { CustIDs = custIDs };
+
+            return repository.Fetch<GetInitialTWGroupBettingModel>(criteria);
+        }
+
         public IEnumerable<PotentialPACustInfoModel> GetCustInfos(string custIDs)
         {
             var criteria = new GetCustInfoByCustIDCriteria
