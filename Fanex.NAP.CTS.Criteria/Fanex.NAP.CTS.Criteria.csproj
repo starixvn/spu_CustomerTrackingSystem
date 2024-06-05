@@ -182,11 +182,11 @@
     <Compile Include="CustomerClassification\ProblemAccount\ProblemAccountUmmarkCriteria.cs" />
     <Compile Include="CustomerClassification\PushDataToExternal\CustClassificationToMainDB\CustomerClassificationUpdateBySportCriteria.cs" />
     <Compile Include="CustomerClassification\PushDataToExternal\CustClassificationToMainDB\GetCustomerClassificationBySportCriteria.cs" />
-    <Compile Include="CustomerClassification\RescanPotentialPA\GetCustInfoByCustIDCriteria.cs" />
-    <Compile Include="CustomerClassification\RescanPotentialPA\GetInitialTWGroupBettingCriteria.cs" />
+    <Compile Include="CustomerClassification\PotentialPA\GetCustInfoByCustIDCriteria.cs" />
+    <Compile Include="CustomerClassification\PotentialPA\GetInitialTWGroupBettingCriteria.cs" />
     <Compile Include="CustomerClassification\RescanNormalClassificationBySport\PreprocessRescanNormalClassificationBySportCriteria.cs" />
-    <Compile Include="CustomerClassification\RescanPADangerousCriteria.cs" />
-    <Compile Include="CustomerClassification\RescanPotentialPA\CheckExistTWInitialSmartPACriteria.cs" />
+    <Compile Include="CustomerClassification\PotentialPA\RescanPADangerousCriteria.cs" />
+    <Compile Include="CustomerClassification\PotentialPA\CheckExistTWInitialSmartPACriteria.cs" />
     <Compile Include="CustomerClassification\Robot\RobotAccountInsertCriteria.cs" />
     <Compile Include="DangerMonitor\DangerMonitorTicketSummaryCriteria.cs" />
     <Compile Include="ImportEvidences\CheckCleanCustFlaggedEvidenceCriteria.cs" />

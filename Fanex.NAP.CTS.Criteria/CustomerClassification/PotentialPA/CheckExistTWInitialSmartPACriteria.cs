@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Criteria.CustomerClassification.RescanPotentialPA
+﻿namespace Fanex.NAP.CTS.Criteria.CustomerClassification
 {
     using Fanex.Data;
     using Fanex.Data.Repository;

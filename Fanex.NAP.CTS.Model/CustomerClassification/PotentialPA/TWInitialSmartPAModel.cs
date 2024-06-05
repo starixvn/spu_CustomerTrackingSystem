@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class RescanTWInitialSmartPAModel
+    public class TWInitialSmartPAModel
     {
         public long CustID { get; set; }
 

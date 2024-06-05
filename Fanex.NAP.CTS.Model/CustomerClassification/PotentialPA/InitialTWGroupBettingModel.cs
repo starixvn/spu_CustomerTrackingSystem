@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class RescanInitialTWGroupBettingModel
+    public class InitialTWGroupBettingModel
     {
         public long CustID { get; set; }
 

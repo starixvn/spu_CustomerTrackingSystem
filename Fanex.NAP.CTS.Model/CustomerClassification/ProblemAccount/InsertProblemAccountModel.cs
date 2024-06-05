@@ -51,7 +51,7 @@
             this.Remark = string.Format(Consts.TWTWInitialGBRemark, twGBCust.DetectedDate.ToString(Consts.FormatDateToString_MMMddyyyy), twGBCust.GBTicketCount, twGBCust.SportName);            
         }
 
-        public InsertProblemAccountModel(RescanTWInitialSmartPAModel tWInitialSmartCust)
+        public InsertProblemAccountModel(TWInitialSmartPAModel tWInitialSmartCust)
         {
             this.CustID = tWInitialSmartCust.CustID;
             this.CTSCustID = tWInitialSmartCust.CTSCustID;

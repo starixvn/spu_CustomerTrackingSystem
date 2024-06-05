@@ -338,11 +338,11 @@
     <Compile Include="CustomerClassification\ProblemAccount\UnmarkPAResultModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\UnmarkProblemAccountModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\GetInitialTWGroupBettingModel.cs" />
-    <Compile Include="CustomerClassification\RescanCustomerClassification\RescanInitialTWGroupBettingModel.cs" />
+    <Compile Include="CustomerClassification\PotentialPA\InitialTWGroupBettingModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\RescanNormalBySportListCustModel.cs" />
-    <Compile Include="CustomerClassification\RescanCustomerClassification\RescanPADangerousModel.cs" />
+    <Compile Include="CustomerClassification\PotentialPA\RescanPADangerousModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\RescanResultModel.cs" />
-    <Compile Include="CustomerClassification\RescanCustomerClassification\RescanTWInitialSmartPAModel.cs" />
+    <Compile Include="CustomerClassification\PotentialPA\TWInitialSmartPAModel.cs" />
     <Compile Include="CustomerClassification\Robot\RobotInsetViewEntity.cs" />
     <Compile Include="CustomerClassification\Robot\InsertRobotModel.cs" />
     <Compile Include="CustomerClassification\Robot\RobotUserModel.cs" />
