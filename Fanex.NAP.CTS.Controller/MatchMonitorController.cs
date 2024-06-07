@@ -351,7 +351,7 @@
                         AwayID = m1.AwayID,
                         LeagueID = m1.LeagueID,
                         LeagueName = m1.LeagueName,
-                        Sporttype = m1.Sporttype,
+                        SportTypeId = m1.SportTypeId,
                         BettypeID = m1.BettypeID,
                         BetID = m1.BetID,
                         Reason = m1.Reason,

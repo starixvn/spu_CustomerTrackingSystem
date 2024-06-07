@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.MatchMonitor
-{   
+{
+    using Newtonsoft.Json;
     using System;
 
     public class GetMatchMonitorModel
@@ -20,7 +21,8 @@
 
         public string LeagueName { get; set; }
 
-        public int Sporttype { get; set; }
+        [JsonProperty("Sporttype")]
+        public int SportTypeId { get; set; }
 
         public int BettypeID { get; set; }
 
