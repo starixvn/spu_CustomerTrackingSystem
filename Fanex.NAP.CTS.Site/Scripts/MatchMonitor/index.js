@@ -2,6 +2,8 @@
     let dataTable;
     let timeoutHolder = null;
     let isSkipTracking = false;
+    let sportBetType = [];
+    let bettypeList = {};
 
     let domElements = {
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
@@ -24,6 +26,110 @@
         rbtnScanDate: $('#rbtnScanDate'),
         rbtnEventDate: $('#rbtnEventDate')
     };
+
+    function FetchSports() {
+        if (sportBetType) {
+            let data = {
+                MainSport: {
+                    Items: {}
+                },
+                VirtualSport: {
+                    Items: {}
+                },
+                OtherSport: {
+                    Items: {}
+                }
+            }
+
+            sportBetType.filter(x => x.SportGroup == 1).map(x => data.MainSport.Items[`${x.SportType}_${x.LeagueGroupID}`] = ({ Name: x.SportNameDisplay, IsSelected: x.SportType == 1 && x.LeagueGroupID == null, LeagueGroupID: x.LeagueGroupID, SportType: x.SportType }))
+
+            sportBetType.filter(x => x.SportGroup == 2).map(x => data.VirtualSport.Items[`${x.SportType}_${x.LeagueGroupID}`] = ({ Name: x.SportNameDisplay, IsSelected: x.SportType == 1 && x.LeagueGroupID == null, LeagueGroupID: x.LeagueGroupID, SportType: x.SportType }))
+
+            sportBetType.filter(x => x.SportGroup == 3).map(x => data.OtherSport.Items[`${x.SportType}_${x.LeagueGroupID}`] = ({ Name: x.SportNameDisplay, IsSelected: x.SportType == 1 && x.LeagueGroupID == null, LeagueGroupID: x.LeagueGroupID, SportType: x.SportType }))
+
+            let sportGroupSelector = domElements.cbbSport.empty();
+
+            if (data.MainSport.Items && Object.keys(data.MainSport.Items).length !== 0)
+                sportGroupSelector.append(BuildOptgroupSport(1, "Main Sport", data.MainSport.Items));
+
+            if (data.VirtualSport.Items && Object.keys(data.VirtualSport.Items).length !== 0)
+                sportGroupSelector.append(BuildOptgroupSport(2, "Virtual Sport", data.VirtualSport.Items));
+
+            // if (data.OtherSport.Items && Object.keys(data.OtherSport.Items).length !== 0)
+            //     sportGroupSelector.append(BuildOptgroupSport(3, "Other Sport", data.OtherSport.Items));
+
+            domElements.cbbSport.multiselect("refresh");
+        }
+
+        FetchBetTypes();
+    }
+
+    function BuildOptgroupSport(optgroupValue, optgroupName, sportList) {
+        let optgroup = `<optgroup label="${optgroupName}" SportType=${optgroupValue}>`;
+        Object.keys(sportList).forEach(index => {
+            optgroup += `<option ${sportList[index].IsSelected ? 'selected' : ''} value="${index}">${sportList[index].Name}</option>`;
+        })
+
+        optgroup += "</optgroup>";
+
+        return optgroup;
+    }
+
+    function FetchBetTypes() {
+        if (sportBetType) {
+            domElements.cbbBetType.empty();
+
+            let sportSelectedList = domElements.cbbSport.val();
+            bettypeList = {};
+
+            sportBetType.filter(x => sportSelectedList.includes(`${x.SportType}_${x.LeagueGroupID}`))
+                .map(x =>
+                    bettypeList[`${x.BetTypeID}_${x.BetID}`] =
+                    ({
+                        "BetTypeName": x.BetTypeName,
+                        "BettypeID": x.BetTypeID,
+                        "BetID": x.BetID
+                    }));
+
+            Object.keys(bettypeList).forEach(value => {
+                domElements.cbbBetType.append(`<option selected value="${value}">${bettypeList[value].BetTypeName}</option>`);
+            })
+
+            domElements.cbbBetType.multiselect("refresh");
+        }
+    }
+
+    function GetSportBetTypeList() {
+        $.ajax(common.modifyRelativeUrl('MatchMonitor/GetSportBettype'), {
+            async: false,
+            type: 'POST',
+            tryCount: 0,
+            retryLimit: 3,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response?.data) {
+                    sportBetType = [...response.data];
+
+                    sportBetType.sort(function (a, b) {
+                        return a.PriorityOrder - b.PriorityOrder;
+                    })
+                }
+            },
+            error: function (xhr, textStatus, error) {
+                if (textStatus == 'timeout') {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        //try again
+                        $.ajax(this);
+                        return;
+                    }
+                }
+
+                console.log(error);
+            }
+        });
+    }
 
     function GetMatchMonitor(isSkip) {
         //if (!IsSkipGetMatch() && ValidateRangeDate()) {
@@ -59,24 +165,39 @@
         return isValid;
     }
 
+    function GenerateFilter()
+    {
+        var data = {
+            DateType: domElements.rbtnScanDate.is(":checked") ? 1 : 2,
+            FromDate: domElements.dpkFromDate.val(),
+            ToDate: domElements.dpkToDate.val(),
+            Sports: domElements.cbbSport.val().map(x => ({
+                    "LeagueGroupID": Number.parseInt(x.split('_')[1]),
+                    "SportTypeID": Number.parseInt(x.split('_')[0])
+                })),
+            Market: domElements.cbbMarket.val(),
+            MatchSection: domElements.cbbMatchSection.val().join(),
+            IsVerified: domElements.cbbIsVerified.val(),
+            BetTypes: domElements.cbbBetType.val().map(x => ({
+                    "BettypeID": bettypeList[x].BettypeID,
+                    "BetID": bettypeList[x].BetID
+                })),
+            Reasons: domElements.cbbReason.val().join(),
+            Event: domElements.txtEvent.val().trim().toUpperCase(),
+            isSkipTracking: isSkipTracking
+        };
+
+        return data;
+    }
+
     function GenerateGrid() {
         return domElements.tblMonitor.DataTable({
             serverSide: false,
             ajax: {
                 url: common.modifyRelativeUrl('MatchMonitor/GetMatchMonitor'),
-                data: {
-                    DateType: function () { return domElements.rbtnScanDate.is(":checked") ? 1 : 2; },
-                    FromDate: function () { return domElements.dpkFromDate.val(); },
-                    ToDate: function () { return domElements.dpkToDate.val(); },
-                    Sports: function () { return domElements.cbbSport.val().join(); },
-                    Market: function () { return domElements.cbbMarket.val(); },
-                    MatchSection: function () { return domElements.cbbMatchSection.val().join(); },
-                    IsVerified: function () { return domElements.cbbIsVerified.val(); },
-                    BetTypes: function () { return "[" + domElements.cbbBetType.val().join() + "]" },
-                    Reasons: function () { return domElements.cbbReason.val().join(); },
-                    Event: function () { return domElements.txtEvent.val().trim().toUpperCase(); },
-                    isSkipTracking: function () { return isSkipTracking; }
-                },
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: function () { return JSON.stringify(GenerateFilter()) },
                 type: "POST",
                 beforeSend: function () {
                     domElements.tblMonitor.find('tbody').addClass('loading');
@@ -187,7 +308,7 @@
     function RenderVerifiedUI(isVerified) {
         return '<label class="container-checkbox" id="containerCheckbox"><input id="isVerifiedCheckbox" type="checkbox" disabled' + (isVerified ? ' checked' : '') + '><span class="checkmark"></span></label>';
     }
-   
+
     function RefreshChange($target) {
         domElements.eventTarget = $target
         var selectedVal = parseInt($target.getAttribute("value"));
@@ -213,48 +334,6 @@
         }
     }
 
-    function RefreshBetTypeFilter() {   
-        let arrSportIDs = domElements.cbbSport.val();
-        let sportIDs = arrSportIDs.join();
-        if (sportIDs != '') {
-            $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMMFilterBetTypeBySportID'), {
-                type: 'POST',
-                data: {
-                    sportIDs: sportIDs
-                },
-                success: function (response) {
-                    domElements.cbbBetType.multiselect().empty();
-
-                    if (response != undefined) {
-                        response.forEach(i => {
-                            let value = '';
-
-                            if (i.BetIDPattern == undefined && i.NameDetailsX == '') {
-                                value = `{&quot;BettypeID&quot;:` + i.BetTypeID + `, &quot;BetID&quot;:0` + `}`;
-                            } else if (i.BetIDPattern != '' && i.NameDetailsX != ''){
-                                value = `{&quot;BettypeID&quot;:` + i.BetTypeID + `, &quot;BetID&quot;:` + i.BetID + `}`;
-                            } else {
-                                value = `{&quot;BettypeID&quot;:` + i.BetTypeID + `}`;
-                            }
-                            
-                            domElements.cbbBetType.append(`<option selected value="${value}">${i.BetTypeName}</option>`);
-                        })                        
-                    }
-
-                    domElements.cbbBetType.multiselect("refresh");
-                },
-                complete: function () {                
-                },
-                error: function (errMsg) {
-                    console.log(errMsg);
-                }
-            });
-        } else {
-            domElements.cbbBetType.multiselect().empty();
-            domElements.cbbBetType.multiselect("refresh");
-        }                    
-    }   
-
     function Initial() {
         domElements.dpkFromDate
             .datepicker({
@@ -272,11 +351,25 @@
             })
             .datepicker("setDate", new Date());
 
+        // domElements.cbbSport.multiselect({
+        //     menuWidth: 260,
+        //     menuHeight: 260,
+        //     selectedText: "# of # selected",
+        //     noneSelectedText: "Select Sport"
+        // });
         domElements.cbbSport.multiselect({
             menuWidth: 260,
             menuHeight: 260,
-            selectedText: "# of # selected",
-            noneSelectedText: "Select Sport"
+            selectedText: "# of # select",
+            noneSelectedText: `Select Sports`,
+            enableClickableOptGroups: true,
+            includeSelectAllOption: true,
+            groupsCollapsable: true,
+            optGroupChecked: true
+        }).multiselectfilter({
+            width: 150,
+            placeholder: '',
+            label: ''
         });
 
         domElements.cbbBetType.multiselect({
@@ -308,6 +401,10 @@
             optGroupChecked: true
         });
 
+        GetSportBetTypeList();
+
+        FetchSports();
+
         domElements.groupDropDown.hover(function () {
             domElements.refreshList.toggleClass('block-box');
         })
@@ -322,9 +419,7 @@
 
         RefreshChange(domElements.eventTarget);
 
-        domElements.cbbSport.on('change', function () { RefreshBetTypeFilter(); });
-
-        RefreshBetTypeFilter();
+        domElements.cbbSport.on('change', function () { FetchBetTypes(); });
     }
 
     $(document).ready(function () {

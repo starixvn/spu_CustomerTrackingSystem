@@ -6,7 +6,7 @@
 
     public class GetDangerMonitorItemViewModel
     {
-        public GetDangerMonitorItemViewModel(DangerMMTicketInfoViewModel matchSummary, DangerMonitorBetTypeViewModel sportBettype)
+        public GetDangerMonitorItemViewModel(DangerMMTicketInfoViewModel matchSummary, DangerMonitorSporTypeBetTypeViewModel sportBettype)
         {
             MatchID = matchSummary.MatchId;
 
@@ -155,7 +155,7 @@
             BetChoiceType = monitorSummary.BetChoiceType;
         }
 
-        public void MappingBettypeSportInfo(DangerMonitorBetTypeViewModel sportBettype)
+        public void MappingBettypeSportInfo(DangerMonitorSporTypeBetTypeViewModel sportBettype)
         {
             BettypeName = sportBettype.BetTypeName;
             BetID = sportBettype.BetID;

@@ -12,8 +12,5 @@
         public IEnumerable<ReasonGroupStaticListViewModel> ReasonGroups { get; set; }
        
         public IEnumerable<ReasonStaticListViewModel> Reasons { get; set; }
-
-        public IEnumerable<SportStaticListViewModel> Sports { get; set; }
-       
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.DangerMonitor
 {
-    public class DangerMonitorBetTypeViewModel
+    public class DangerMonitorSporTypeBetTypeViewModel
     {
         public int SportGroup { get; set; }
 

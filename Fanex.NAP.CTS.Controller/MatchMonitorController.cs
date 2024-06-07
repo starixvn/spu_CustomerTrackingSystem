@@ -63,6 +63,92 @@
         }
 
         #region Main Page
+
+        #region SportType BetType
+        [HttpPost]
+        public ActionResult GetSportBettype()
+        {
+            var sportBettypeList = GetSportBettypes();
+
+            return Json(new
+            {
+                data = sportBettypeList
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<MatchMonitorSporTypeBetTypeViewModel> GetSportBettypes()
+        {
+            var betTypes = GetBetTypeSettings(null, true);
+
+            var filter = new SportBettypeModel
+            {
+                ProductId = (int)ProductType.SportBook,
+                BettypeList = string.Join(",", betTypes.Select(x => x.BetTypeID).Distinct())
+            };
+
+            var mainBetTypes = _commonService.GetMainSportBettype(filter);
+
+            var mainBetTypeDictionary = mainBetTypes.ToDictionary(x => $"{x.SporttypeId}_{x.LeagueGroupID}_{x.BettypeId}", y => y);
+
+            return betTypes.Select(x =>
+            {
+                var item = mainBetTypeDictionary.GetValueOrDefault($"{x.SportTypeID}_{x.LeagueGroupID}_{x.BetTypeID}");
+
+                return new MatchMonitorSporTypeBetTypeViewModel
+                {
+                    SportGroup = item.SportGroup,
+                    SportNameDisplay = item.SportNameDisplay,
+                    LeagueGroupID = item.LeagueGroupID,
+                    SportType = item.SporttypeId,
+                    SportName = item.SportName,
+                    BetTypeID = x.BetTypeID,
+                    BetTypeName = x.BetTypeNameDisplay,
+                    BetID = _commonService.GetBetID(x.BetIDPattern, x.NameDetailsX),
+                    BetChoiceType = x.BetChoiceType,
+                    BetChoiceHome = x.BetChoiceHome,
+                    BetChoiceAway = x.BetChoiceAway,
+                    PriorityOrder = x.PriorityOrder,
+                    BetIDPattern = x.BetIDPattern
+                };
+            });
+        }
+
+        private IEnumerable<MatchMonitorBetTypeViewModel> GetBetTypeSettingsWithSupportSuspicious(string sportIDs, bool isFilterMMDetection)
+        {
+            var bettypeSetting = GetBetTypeSettings(sportIDs, isFilterMMDetection);
+
+            return bettypeSetting.Select(x => new MatchMonitorBetTypeViewModel
+            {
+                SportID = x.SportTypeID,
+                BetTypeID = x.BetTypeID,
+                BetTypeName = x.BetTypeNameDisplay,
+                BetID = _commonService.GetBetID(x.BetIDPattern, x.NameDetailsX),
+                BetIDPattern = x.BetIDPattern,
+                BetChoiceType = x.BetChoiceType,
+                BetChoiceHome = x.BetChoiceHome,
+                BetChoiceAway = x.BetChoiceAway,
+                IsSupportSuspicious = x.IsMMDetection,
+                IsSelected = true,
+                NameDetailsX = x.NameDetailsX
+            }).GroupBy(g => new { g.BetTypeID, g.BetID }).Select(g => g.First());
+        }
+
+        private IEnumerable<BetTypeSettingModel> GetBetTypeSettings(string sportIDs, bool isFilterMMDetection)
+        {
+            var paras = new BetTypeSettingParaModel
+            {
+                FunctionID = (int)BetTypeSettingsFunctionID.MMBetType,
+                BettypeIDList = null,
+                SportTypeIDList = sportIDs,
+                IsFilterMMDetection = isFilterMMDetection,
+                IsShowDetailsX = true,
+                Status = 1
+            };
+
+            return _commonService.GetBetTypeSettings(paras);
+        }
+        #endregion
+
         public ActionResult Index()
         {
             IUserService userService = new UserService();
@@ -80,16 +166,12 @@
 
             var reasonGroups = GetReasonGroups(false);
 
-            var sports = _commonService.GetStaticLists((int)StaticListID.Sport, true)
-                .Select(x => new SportStaticListViewModel { SportID = x.ItemValue, SportName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" });
-
             return View(new MatchMonitorViewModel
             {
                 IsHostPermission = isHostPermission,
                 CustId = CurrentSession.UserId,
                 ReasonGroups = reasonGroups,
                 Reasons = reasons,
-                Sports = sports
             });
         }
 
@@ -101,12 +183,7 @@
 
             try
             {
-                if (para != null
-                    && !string.IsNullOrEmpty(para.BetTypes)
-                    && !string.IsNullOrEmpty(para.MatchSection)
-                    && !string.IsNullOrEmpty(para.Sports)
-                    && !string.IsNullOrEmpty(para.Reasons)
-                    && IsValidDateRange(para.FromDate, para.ToDate))
+                if (para != null && para.IsValid())
                 {
                     var matchFromCTSInfos = Enumerable.Empty<GetMatchMonitorModel>();
 
@@ -180,7 +257,7 @@
             Dictionary<string, MMFraudTicketsSummaryViewModel> mmDictionaryTicketsSummarys)
         {
             var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
-            var bettypeSettings = GetBetTypeSettings(null, true);
+            var bettypeSettings = GetBetTypeSettingsWithSupportSuspicious(null, true);
 
             return
                 matchFromCTSInfos?
@@ -296,41 +373,6 @@
 
             return matchFromCTSInfos;
         }
-
-        [HttpPost]
-        public ActionResult GetMMFilterBetTypeBySportID(string sportIDs)
-        {
-            return Json(GetBetTypeSettings(sportIDs, true), JsonRequestBehavior.AllowGet);
-        }
-
-        private IEnumerable<MatchMonitorBetTypeViewModel> GetBetTypeSettings(string sportIDs, bool isFilterMMDetection)
-        {
-            var paras = new BetTypeSettingParaModel
-            {
-                FunctionID = (int)BetTypeSettingsFunctionID.MMBetType,
-                BettypeIDList = null,
-                SportTypeIDList = sportIDs,
-                IsFilterMMDetection = isFilterMMDetection,
-                IsShowDetailsX = true,
-                Status = 1
-            };
-
-            return _commonService.GetBetTypeSettings(paras).Select(x => new MatchMonitorBetTypeViewModel
-            {
-                SportID = x.SportTypeID,
-                BetTypeID = x.BetTypeID,
-                BetTypeName = x.BetTypeNameDisplay,
-                BetID = _commonService.GetBetID(x.BetIDPattern, x.NameDetailsX),
-                BetIDPattern = x.BetIDPattern,
-                BetChoiceType = x.BetChoiceType,
-                BetChoiceHome = x.BetChoiceHome,
-                BetChoiceAway = x.BetChoiceAway,
-                IsSupportSuspicious = x.IsMMDetection,
-                IsSelected = true,
-                NameDetailsX = x.NameDetailsX
-            }).GroupBy(g => new { g.BetTypeID, g.BetID }).Select(g => g.First());
-        }
-
         #endregion
 
         #region Detail Page
@@ -348,7 +390,7 @@
                 ViewBag.BetTypeID = para?.BetTypeID;
                 ViewBag.BettypeName = para?.BettypeName ?? string.Empty;
                 ViewBag.BetIDToString = para?.BetID.ToString();
-                ViewBag.BetTypeSettings = GetBetTypeSettings(para.SportType.ToString(), false);
+                ViewBag.BetTypeSettings = GetBetTypeSettingsWithSupportSuspicious(para.SportType.ToString(), false);
                 ViewBag.MapX = para?.MX;
                 ViewBag.MapYY = para?.MY;
                 ViewBag.HomeName = para?.HomeName.ToUpper() ?? string.Empty;
@@ -1301,18 +1343,6 @@
         #endregion
 
         #region Private Methods
-
-        private bool IsValidDateRange(DateTime? fromDate, DateTime? toDate)
-        {
-            if (toDate != null && fromDate != null)
-            {
-                TimeSpan t = (toDate?.Date - fromDate?.Date) ?? TimeSpan.MaxValue;
-                return t.TotalDays <= 6;
-            }
-
-            return false;
-        }
-
         private IEnumerable<MatchMonitorDetailItemViewModel> DrawColorAllMMDetailAndUpdateValue(IEnumerable<MatchMonitorDetailVerifyTransResultModel> verifiedTrans,
             IEnumerable<CustInfoModel> custInfos,
             IEnumerable<TicketDetailModel> tickets,

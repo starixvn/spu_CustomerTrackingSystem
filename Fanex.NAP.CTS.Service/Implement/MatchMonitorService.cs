@@ -52,9 +52,9 @@
             {
                 FromDate = filter?.FromDate ?? DateTime.Now,
                 ToDate = filter?.ToDate ?? DateTime.Now,
-                SportType = filter.Sports,
+                SportType = JsonConvert.SerializeObject(filter.Sports),
                 Market = filter.Market,
-                BetTypes = filter.BetTypes,
+                BetTypes = JsonConvert.SerializeObject(filter.BetTypes),
                 IsVerified = filter.IsVerified,
                 Reasons = filter.Reasons,
                 MatchInfosJson = matchInfoFromMainJson

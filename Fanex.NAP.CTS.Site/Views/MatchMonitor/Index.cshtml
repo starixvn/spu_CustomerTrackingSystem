@@ -39,19 +39,7 @@
                         </div>
                         <div class="group width-180">
                             <label class="text">Sport</label>
-                            <select class="control width-select" id="cbbSport" multiple="multiple">
-                                @foreach (var item in Model.Sports)
-                                {
-                                    if (item.IsSelected)
-                                    {
-                                        <option value=@item.SportID selected>@item.SportName</option>
-                                    }
-                                    else
-                                    {
-                                        <option value=@item.SportID>@item.SportName</option>
-                                    }
-                                }
-                            </select>
+                            <select class="control width-select" id="cbbSport" multiple="multiple"></select>
                         </div>
 
                         <div class="group width-380">
