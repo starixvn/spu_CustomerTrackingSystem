@@ -68,7 +68,7 @@
             _accountService = new AccountService();
             _transService = new TransactionService();
             _customerEvidenceService = new CustomerEvidenceService();
-            _rescanClassificationService = new RescanCustomerClassificationService();
+            _rescanClassificationService = new RescanCustomerClassificationService();          
             _customerClassificationService = new CustomerClassificationService();
             _commonService = new CommonService();
             _robotClassificationService = new RobotClassificationService();
@@ -1640,15 +1640,9 @@
 
             if (classification != null && classification.Any())
             {
-                categoryList = classification.Select(x => new CustomerCategoryViewModel
-                {
-                    CategoryId = x.CategoryID,
-                    CategoryType = x.CategoryType,
-                    CategoryName = x.CategoryName ?? string.Empty,
-                    IsProblemAccount = x.ParentID == 50
-                }).ToList();
+                categoryList = classification.Select(x => new CustomerCategoryViewModel(x)).ToList();
 
-                isVVip = categoryList.Any(x => x.CategoryId == (int)CustomerCategoryID.VVIP);                
+                isVVip = categoryList.Any(x => x.CategoryId == (int)CustomerCategoryID.VVIP);
                 isProblemAccount = categoryList.Any(x => x.IsProblemAccount && x.CategoryType != 2);
                 isPADangerous = categoryList.Any(x => x.CategoryType == 2);
                 isPAProbation = classification.Any(x => x.IsProbation);
@@ -1658,22 +1652,25 @@
 
             if (classificationHistory != null && classificationHistory.Any())
             {
-                classificationHistoryList = classificationHistory.Select(x => new CustomerClassificationHistoryViewModel
-                {
-                    CreatedTimeString = x.CreatedTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    SourceTypeName = x.SourceTypeName,
-                    CategoryName = (x.SourceTypeID == (int)SourceTypeID.NoShow_Detail) ? "-" : (x.CategoryName != null ? x.CategoryName : string.Empty),
-                    CustomerClass = x.CustomerClass,
-                    Reason = GetReason(x, roleID),
-                    TurnOver = x.TurnOver,
-                    Winloss = x.Winloss,
-                    Margin = x.Margin,
-                    BetCount = x.BetCount,
-                    ActiveDays = x.ActiveDays,
-                    LastXDaysMargin = x.LastXDaysMargin,
-                    ProbationPeriodWinloss = x.ProbationPeriodWinloss,
-                    CreatedBy = x.CreatedBy
-                }).ToList();
+                classificationHistoryList = classificationHistory.Select(x => new CustomerClassificationHistoryViewModel(x)).ToList();
+
+                //classificationHistoryList = classificationHistory.Select(x => new CustomerClassificationHistoryViewModel
+                //{
+                //    CreatedTimeString = x.CreatedTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                //    SourceTypeName = x.SourceTypeName,
+                //    CategoryName = (x.SourceTypeID == (int)SourceTypeID.NoShow_Detail) ? "-" : (x.CategoryName != null ? x.CategoryName : string.Empty),
+                //    CustomerClass = x.CustomerClass,
+                //    Reason = "TODO",
+                //    //Reason = GetReason(x, roleID),
+                //    TurnOver = x.TurnOver,
+                //    Winloss = x.Winloss,
+                //    Margin = x.Margin,
+                //    BetCount = x.BetCount,
+                //    ActiveDays = x.ActiveDays,
+                //    LastXDaysMargin = x.LastXDaysMargin,
+                //    ProbationPeriodWinloss = x.ProbationPeriodWinloss,
+                //    CreatedBy = x.CreatedBy
+                //}).ToList();
             }
 
             return Json(new
@@ -2006,12 +2003,7 @@
 
             if (classifications != null && classifications.Any())
             {
-                result.CategoryList = classifications.Select(x => new CustomerCategoryViewModel
-                {
-                    CategoryId = x.CategoryID,
-                    CategoryName = x.CategoryName ?? string.Empty,
-                    CategoryGroup = x.CategoryGroup
-                });
+                result.CategoryList = classifications.Select(x => new CustomerCategoryViewModel(x));
 
                 result.IsVVip = classifications.Any(x => x.CategoryID == (int)CustomerCategoryID.VVIP);
             }

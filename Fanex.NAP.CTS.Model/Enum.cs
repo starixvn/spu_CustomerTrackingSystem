@@ -252,4 +252,24 @@ namespace Fanex.NAP.CTS.Model
         Add = 0,
         Remove = 2
     }
+
+    public enum CategoryColorType
+    {
+        [Description("green")]
+        Default = 0,
+        [Description("green")]
+        Green = 1,
+        [Description("green-line")]
+        GreenLine = 3,
+        [Description("yellow")]
+        Yellow = 2,
+        [Description("yellow-line")]
+        YellowLine = 4,
+        [Description("yellow-light")]
+        YellowLight = 5,
+        [Description("red")]
+        Red = 6,
+        [Description("lightred")]
+        RedLight = 7
+    }
 }

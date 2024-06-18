@@ -10,9 +10,11 @@
 
         public int CategoryGroup { get; set; }
 
+        public int ColorType { get; set; }
+
         public int ParentID { get; set; }
 
-        public int CustID { get; set; }       
+        public int CustID { get; set; }
 
         public string ParentCategoryName { get; set; }
 
