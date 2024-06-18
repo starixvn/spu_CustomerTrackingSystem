@@ -26,11 +26,17 @@
     };
 
     function GetMatchMonitor(isSkip) {
-        if (ValidateRangeDate()) {
+        if (!IsSkipGetMatch() && ValidateRangeDate()) {
 
             isSkipTracking = isSkip;
             dataTable ? dataTable.ajax.reload(null, true) : dataTable = GenerateGrid();
         }
+    }
+
+    function IsSkipGetMatch() {
+        let isLoading = domElements.tblMonitor.find('tbody').hasClass('loading');
+
+        return isLoading;
     }
 
     function ValidateRangeDate() {
