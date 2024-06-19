@@ -26,12 +26,18 @@
     };
 
     function GetMatchMonitor(isSkip) {
+        //if (!IsSkipGetMatch() && ValidateRangeDate()) {
         if (ValidateRangeDate()) {
-
             isSkipTracking = isSkip;
             dataTable ? dataTable.ajax.reload(null, true) : dataTable = GenerateGrid();
-        }
+        }       
     }
+
+    //function IsSkipGetMatch() {
+    //    let isLoading = domElements.tblMonitor.find('tbody').hasClass('loading');
+
+    //    return isLoading;
+    //}
 
     function ValidateRangeDate() {
         let isValid = true;
