@@ -1631,8 +1631,7 @@
             var isExcludedTagAssPA = false;
             var isVVip = false;
             var isProblemAccount = false;
-            var isPAProbation = false;
-            var isPADangerous = false;
+            var isPAProbation = false;        
             var categoryList = new List<CustomerCategoryViewModel>();
             var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
 
@@ -1643,8 +1642,7 @@
                 categoryList = classification.Select(x => new CustomerCategoryViewModel(x)).ToList();
 
                 isVVip = categoryList.Any(x => x.CategoryId == (int)CustomerCategoryID.VVIP);
-                isProblemAccount = categoryList.Any(x => x.IsProblemAccount && x.CategoryType != 2);
-                isPADangerous = categoryList.Any(x => x.CategoryType == 2);
+                isProblemAccount = categoryList.Any(x => x.IsProblemAccount && x.CategoryType != 2);              
                 isPAProbation = classification.Any(x => x.IsProbation);
             }
 
@@ -1679,7 +1677,6 @@
                 isExcludedTagAssPA,
                 isVVip,
                 isProblemAccount,
-                isPADangerous,
                 isPAProbation,
                 categoryList,
                 data = classificationHistoryList,
@@ -2105,7 +2102,7 @@
             };
 
             var result = _problemAccountClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Category, "ProfileAddProblemAccount", FromFlow.CTSWEB, true);
-
+            
             return Json(new
             {
                 errorCode = result.ErrorCode,

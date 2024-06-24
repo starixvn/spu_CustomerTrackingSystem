@@ -5,18 +5,17 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria;
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
-    using Fanex.NAP.CTS.Criteria.CustomerClassification.RescanPotentialPA;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.CTS.Model.LogInputData;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
-    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Implement.CustomerClassification;
     using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.Service.Interface.CustomerClassification;
     using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Entities;
-    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
@@ -27,6 +26,7 @@
     {
         private readonly ICustomerClassificationService custClassificationService;
         private readonly IProblemAccountClassificationService problemAccountService;
+        private readonly IPAPotentialClassificationService paPotentialService;
         private readonly ILogInputDataService logInputDataService;
         private readonly bool _isWriteLogInfo;
         private readonly IDynamicRepository repository;
@@ -35,6 +35,7 @@
         {
             custClassificationService = new CustomerClassificationService();
             problemAccountService = new ProblemAccountClassificationService();
+            paPotentialService = new PAPotentialClassificationService();
             _isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
             logInputDataService = new LogInputDataService();
             repository = new DynamicRepository();
@@ -72,20 +73,55 @@
         {
             var rescanResult = new RescanResultModel();
 
+            #region Delete
+            //if (parameters != null && parameters.CustIds != null && parameters.CustIds.Any())
+            //{
+            //    var existedProbAccounts = GetExistedProblemAccounts(parameters.CustIds, parameters.IsDataChanged);
+
+            //    InsertProblemAccountLogics(existedProbAccounts.ProblemAccounts, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
+
+            //    if (rescanResult.IsSuccess)
+            //    {
+            //        var robotUsers = GetTWRobotUsers(parameters);
+
+            //        InsertRobot(robotUsers, existedProbAccounts.RobotClassification, ref rescanResult);
+            //    }
+
+            //    if (rescanResult.IsSuccess && rescanResult.CustIds.Any())
+            //    {
+            //        rescanResult.IsSuccess = PushDataToExternalPackge(rescanResult.CustIds.Distinct(), parameters);
+
+            //        if (rescanResult.IsSuccess)
+            //        {
+            //            problemAccountService.RemoveOldProblemAccount(rescanResult.CustIds);
+            //        }
+            //    }               
+            //} 
+
+            #endregion
+
             if (parameters != null && parameters.CustIds != null && parameters.CustIds.Any())
             {
-                var existedProbAccounts = GetExistedProblemAccounts(parameters.CustIds, parameters.IsDataChanged);
+                var insertRobots = new List<InsertRobotModel>();
 
-                InsertProblemAccountLogics(existedProbAccounts.ProblemAccounts, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
+                var existedPas = GetExistedProblemAccounts(parameters.CustIds, parameters.IsDataChanged);
 
-                if (rescanResult.IsSuccess)
+                var insertPaResult = problemAccountService.InsertProblemAccounts(existedPas.ProblemAccounts, parameters.IsToQueue);
+
+                rescanResult.CustIds.AddRange(insertPaResult.CustInfos.Select(x => x.CustID));
+
+                insertRobots.AddRange(GetTWRobotUsers(parameters));
+
+                insertRobots.AddRange(existedPas.RobotClassification);
+
+                if (insertRobots.Any())
                 {
-                    var robotUsers = GetTWRobotUsers(parameters);
+                    var insertRobotResult = problemAccountService.InsertRobots(insertRobots);
 
-                    InsertRobot(robotUsers, existedProbAccounts.RobotClassification, ref rescanResult);
+                    rescanResult.CustIds.AddRange(insertRobotResult.CustInfos.Select(x => x.CustID));
                 }
 
-                if (rescanResult.IsSuccess && rescanResult.CustIds.Any())
+                if (rescanResult.CustIds.Any())
                 {
                     rescanResult.IsSuccess = PushDataToExternalPackge(rescanResult.CustIds.Distinct(), parameters);
 
@@ -93,7 +129,7 @@
                     {
                         problemAccountService.RemoveOldProblemAccount(rescanResult.CustIds);
                     }
-                }               
+                }
             }
 
             return rescanResult;
@@ -111,7 +147,7 @@
 
                 if (rescanPotentialPA != string.Empty)
                 {
-                    var rescanDangerousScorePA = RescanDangerousPA(rescanPotentialPA, parameters);
+                    var rescanDangerousScorePA = RescanDangerousScorePA(rescanPotentialPA, parameters);
 
                     if (rescanDangerousScorePA.IsSuccess)
                     {
@@ -131,25 +167,35 @@
                     {
                         rescanResult.CustIds.AddRange(rescanPaTWGB.CustIds);
                     }
-                }               
+                }
             }
 
             return rescanResult;
         }
 
-        public RescanResultModel RescanDangerousPA(string custIDs, RescanCustClassificationModel parameters)
-        {
-            var rescanResult = new RescanResultModel();
+        public RescanResultModel RescanDangerousScorePA(string custIDs, RescanCustClassificationModel parameters)
+        {            
+            #region Delete
+            //var rescanDangerous = paPotentialService.GetDangerousScorePA(custIDs);
 
-            var rescanDangerous = this.RescanDangerousPA(custIDs);
+            //if (rescanDangerous != null && rescanDangerous.Any())
+            //{
+            //    var paDangerous = rescanDangerous.Select(x => new InsertProblemAccountModel(x));
 
-            if (rescanDangerous != null && rescanDangerous.Any())
+            //    var custPaDangerous = InsertProblemAccountLogics(paDangerous, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
+
+            //    rescanResult.IsSuccess = PushDataToExternalPackge(custPaDangerous.Distinct(), parameters);
+
+            //}
+            #endregion
+
+            var insertResult = paPotentialService.InsertDangerousScorePA(custIDs);
+
+            var rescanResult = new RescanResultModel { CustIds = insertResult.CustInfos.Select(x => x.CustID).ToList() };
+
+            if (insertResult.CustInfos != null && insertResult.CustInfos.Any())
             {
-                var paDangerous = rescanDangerous.Select(x => new InsertProblemAccountModel(x));
-
-                var custPaDangerous = InsertProblemAccountLogics(paDangerous, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
-
-                rescanResult.IsSuccess = PushDataToExternalPackge(custPaDangerous.Distinct(), parameters);
+                rescanResult.IsSuccess = PushDataToExternalPackge(insertResult.CustInfos.Select(x => x.CustID).Distinct(), parameters);
             }
 
             return rescanResult;
@@ -159,15 +205,24 @@
         {
             var rescanResult = new RescanResultModel();
 
-            var rescanInitialSmart = this.RescanInitialSmartPA(custIDs);
+            #region Delete
+            //var rescanInitialSmart = paPotentialService.GetInitialSmartPA(custIDs);
 
-            if (rescanInitialSmart != null && rescanInitialSmart.Any())
+            //if (rescanInitialSmart != null && rescanInitialSmart.Any())
+            //{
+            //    var pasInitialSmart = rescanInitialSmart.Select(x => new InsertProblemAccountModel(x));
+
+            //    var custPaInitialSmart = InsertProblemAccountLogics(pasInitialSmart, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
+
+            //    rescanResult.IsSuccess = PushDataToExternalPackge(custPaInitialSmart.Distinct(), parameters);
+            //}
+            #endregion
+
+            var insertResult = paPotentialService.InsertInitialSmartPA(custIDs);
+
+            if (insertResult.CustInfos != null && insertResult.CustInfos.Any())
             {
-                var pasInitialSmart = rescanInitialSmart.Select(x => new InsertProblemAccountModel(x));
-
-                var custPaInitialSmart = InsertProblemAccountLogics(pasInitialSmart, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
-
-                rescanResult.IsSuccess = PushDataToExternalPackge(custPaInitialSmart.Distinct(), parameters);
+                rescanResult.IsSuccess = PushDataToExternalPackge(insertResult.CustInfos.Select(x => x.CustID).Distinct(), parameters);
             }
 
             return rescanResult;
@@ -177,18 +232,29 @@
         {
             var rescanResult = new RescanResultModel();
 
-            var rescanInitialTWGB = this.GetInitialTWGroupBetting(custIDs);
+            #region Delete
 
-            if (rescanInitialTWGB != null && rescanInitialTWGB.Any())
+            //var rescanInitialTWGB = paPotentialService.GetInitialTWGroupBetting(custIDs);
+
+            //if (rescanInitialTWGB != null && rescanInitialTWGB.Any())
+            //{
+            //    var custInfos = this.GetCustInfos(custIDs);
+
+            //    var paTWGBs = rescanInitialTWGB.Join(custInfos, twGBCust => twGBCust.CustID, ctsCust => ctsCust.CustID,
+            //                   (twGBCust, ctsCust) => new InsertProblemAccountModel(twGBCust, ctsCust));
+
+            //    var custPaTWGB = InsertProblemAccountLogics(paTWGBs, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
+
+            //    rescanResult.IsSuccess = PushDataToExternalPackge(custPaTWGB.Distinct(), parameters);
+            //}
+
+            #endregion
+
+            var insertResult = paPotentialService.InsertInitialTWGroupBettingPA(custIDs);
+
+            if (insertResult.CustInfos != null && insertResult.CustInfos.Any())
             {
-                var custInfos = this.GetCustInfos(custIDs);
-
-                var paTWGBs = rescanInitialTWGB.Join(custInfos, twGBCust => twGBCust.CustID, ctsCust => ctsCust.CustID,
-                               (twGBCust, ctsCust) => new InsertProblemAccountModel(twGBCust, ctsCust));
-
-                var custPaTWGB = InsertProblemAccountLogics(paTWGBs, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
-
-                rescanResult.IsSuccess = PushDataToExternalPackge(custPaTWGB.Distinct(), parameters);
+                rescanResult.IsSuccess = PushDataToExternalPackge(insertResult.CustInfos.Select(x => x.CustID).Distinct(), parameters);
             }
 
             return rescanResult;
@@ -321,24 +387,24 @@
             return existedPA;
         }
 
-        private IEnumerable<long> InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, FunctionId funcId, ref RescanResultModel rescanResultModel, bool isToQueue)
-        {
-            if (problemAccounts != null && problemAccounts.Any())
-            {
-                var result = problemAccountService.InsertProblemAccountLogics(problemAccounts, funcId, InsertPA_ByType.Category, isToQueue);
+        //private IEnumerable<long> InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, FunctionId funcId, ref RescanResultModel rescanResultModel, bool isToQueue)
+        //{
+        //    if (problemAccounts != null && problemAccounts.Any())
+        //    {
+        //        var result = problemAccountService.InsertProblemAccountLogics(problemAccounts, funcId, InsertPA_ByType.Category, isToQueue);                
 
-                if (result != null && result.Any())
-                {
-                    var custIds = result.Select(c => c.CustID).Distinct();
+        //        if (result != null && result.Any())
+        //        {
+        //            var custIds = result.Select(c => c.CustID).Distinct();
 
-                    rescanResultModel.CustIds.AddRange(custIds);
+        //            rescanResultModel.CustIds.AddRange(custIds);
 
-                    return custIds;
-                }
-            }
+        //            return custIds;
+        //        }
+        //    }
 
-            return Enumerable.Empty<long>();
-        }
+        //    return Enumerable.Empty<long>();
+        //}
 
         public void ClassifyNormalCategory(string custList, FunctionId functionId, RescanNormalType type)
         {
@@ -370,66 +436,39 @@
             return Enumerable.Empty<InsertRobotModel>();
         }
 
-        private void InsertRobot(IEnumerable<InsertRobotModel> twRobotUsers, IEnumerable<InsertRobotModel> robotClassification, ref RescanResultModel rescanResultModel)
-        {
-            var robotToInsert = new List<InsertRobotModel>();
+        //private void InsertRobot(IEnumerable<InsertRobotModel> twRobotUsers, IEnumerable<InsertRobotModel> robotClassification, ref RescanResultModel rescanResultModel)
+        //{
+        //    var robotToInsert = new List<InsertRobotModel>();
 
-            if (twRobotUsers.Any())
-            {
-                robotToInsert.AddRange(twRobotUsers);
-            }
+        //    if (twRobotUsers.Any())
+        //    {
+        //        robotToInsert.AddRange(twRobotUsers);
+        //    }
 
-            if (robotClassification.Any())
-            {
-                robotToInsert.AddRange(robotClassification);
-            }
+        //    if (robotClassification.Any())
+        //    {
+        //        robotToInsert.AddRange(robotClassification);
+        //    }
 
-            var customerInfo = problemAccountService.InsertRobotAccountPackge(robotToInsert, true);
+        //    var customerInfo = problemAccountService.InsertRobotAccountPackge(robotToInsert, true);
 
-            if (customerInfo.Any())
-            {
-                var custIds = customerInfo.Select(c => c.CustID).Distinct();
+        //    if (customerInfo.Any())
+        //    {
+        //        var custIds = customerInfo.Select(c => c.CustID).Distinct();
 
-                rescanResultModel.CustIds.AddRange(custIds);
-            }
-        }
+        //        rescanResultModel.CustIds.AddRange(custIds);
+        //    }
+        //}
+        
+        //public IEnumerable<PotentialPACustInfoModel> GetCustInfos(string custIDs)
+        //{
+        //    var criteria = new GetCustInfoByCustIDCriteria
+        //    {
+        //        CustIDs = custIDs
+        //    };
 
-        public IEnumerable<RescanPADangerousModel> RescanDangerousPA(string custIDs)
-        {
-            var criteria = new RescanPADangerousCriteria
-            {
-                CustIDs = custIDs
-            };
-
-            return repository.Fetch<RescanPADangerousModel>(criteria);
-        }
-
-        public IEnumerable<RescanTWInitialSmartPAModel> RescanInitialSmartPA(string custIDs)
-        {
-            var criteria = new RescanTWInitialSmartPACriteria
-            {
-                CustIDs = custIDs
-            };
-
-            return repository.Fetch<RescanTWInitialSmartPAModel>(criteria);
-        }
-
-        public IEnumerable<GetInitialTWGroupBettingModel> GetInitialTWGroupBetting(string custIDs)
-        {
-            var criteria = new RescanInitialTWGroupBettingCriteria() { CustIDs = custIDs };
-
-            return repository.Fetch<GetInitialTWGroupBettingModel>(criteria);
-        }
-
-        public IEnumerable<PotentialPACustInfoModel> GetCustInfos(string custIDs)
-        {
-            var criteria = new GetCustInfoByCustIDCriteria
-            {
-                CustIDs = custIDs
-            };
-
-            return repository.Fetch<PotentialPACustInfoModel>(criteria);
-        }
+        //    return repository.Fetch<PotentialPACustInfoModel>(criteria);
+        //}
 
         #endregion Private Methods
     }

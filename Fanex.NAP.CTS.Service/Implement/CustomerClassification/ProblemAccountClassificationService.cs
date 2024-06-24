@@ -11,6 +11,7 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassification.ProblemAccount;
+    using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Criteria;
@@ -22,7 +23,7 @@
     using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
-    public class ProblemAccountClassificationService : IProblemAccountClassificationService
+    public class ProblemAccountClassificationService : BaseCustomerClassificationService, IProblemAccountClassificationService
     {
         private readonly IDynamicRepository _repository;
         private readonly ICustomerClassificationService _ccService;
@@ -33,7 +34,7 @@
             _repository = new DynamicRepository();
             _ccService = new CustomerClassificationService();
             dataLogTrackingServices = new DataLogTrackingServices();
-        }
+        }        
 
         public DBResult InsertProblemAccountPackage(IEnumerable<InsertProblemAccountModel> problemAccounts, InsertPA_ByType mappingCategoryByType, string serviceName, FromFlow fromFlow, bool isToQueue)
         {
@@ -43,15 +44,21 @@
                 {
                     var custIds = problemAccounts.Select(c => c.CustID)?.Distinct();
 
-                    var probAccountLosing = GetProblemAccountLosingClassification(custIds, FunctionId.InsertPAM);
+                    var paLosing = GetProblemAccountLosingClassification(custIds, FunctionId.InsertPAM);
 
-                    var custInfo = InsertProblemAccount(problemAccounts, probAccountLosing, mappingCategoryByType, isToQueue);
+                    var paClassification = MergeProblemAccountClassification(problemAccounts, paLosing);
 
-                    if (custInfo != null && custInfo.Any())
+                    var insertPAResult = InsertProblemAccounts(paClassification, isToQueue);
+
+                    if (insertPAResult.CustInfos != null && insertPAResult.CustInfos.Any())
                     {
-                        InsertPALogics(custInfo);
+                        var insertPACustIDs = insertPAResult.CustInfos.Select(x => x.CustID).Distinct();
 
-                        _ccService.PushDataToExternalPackge(custInfo.Select(c => c.CustID).Distinct(), new PushDataToExternalModel
+                        CheckNewPAAssociationCustomerForRollback(JsonConvert.SerializeObject(insertPAResult.CustInfos));
+                        
+                        UpdateBetLimitOfFlaggedCustomer(insertPACustIDs);
+
+                        _ccService.PushDataToExternalPackge(insertPACustIDs, new PushDataToExternalModel
                         {
                             ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                             IsPushCCToSoon88 = true,
@@ -59,6 +66,7 @@
                             IsSyncAFC = ConfigSettings.IsSyncAFCData
                         }, fromFlow);
                     }
+
                 }
             }
             catch (Exception ex)
@@ -77,25 +85,88 @@
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
-        public IEnumerable<CustInfoModel> InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, FunctionId funcId, InsertPA_ByType mappingCategoryByType, bool isToQueue)
+        //public DBResult InsertProblemAccountPackage(IEnumerable<InsertProblemAccountModel> problemAccounts, InsertPA_ByType mappingCategoryByType, string serviceName, FromFlow fromFlow, bool isToQueue)
+        //{
+        //    try
+        //    {
+        //        if (problemAccounts.Any())
+        //        {
+        //            var custIds = problemAccounts.Select(c => c.CustID)?.Distinct();
+
+        //            var probAccountLosing = GetProblemAccountLosingClassification(custIds, FunctionId.InsertPAM);
+
+        //            var custInfo = InsertProblemAccount(problemAccounts, probAccountLosing, mappingCategoryByType, isToQueue);
+
+        //            if (custInfo != null && custInfo.Any())
+        //            {
+        //                InsertPALogics(custInfo);
+
+        //                _ccService.PushDataToExternalPackge(custInfo.Select(c => c.CustID).Distinct(), new PushDataToExternalModel
+        //                {
+        //                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
+        //                    IsPushCCToSoon88 = true,
+        //                    IsUpdateDangerToMainDB = true,
+        //                    IsSyncAFC = ConfigSettings.IsSyncAFCData
+        //                }, fromFlow);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var logMessage = new LogMessage(ex.Message)
+        //                          .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+        //                          .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+        //        LogService.Error(logMessage);
+
+        //        dataLogTrackingServices.LogErrorData(ex, serviceName);
+
+        //        return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
+        //    }
+
+        //    return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
+        //}
+
+        //public IEnumerable<CustInfoModel> InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, FunctionId funcId, InsertPA_ByType mappingCategoryByType, bool isToQueue)
+        //{
+        //    if (problemAccounts.Any())
+        //    {
+        //        var custIds = problemAccounts.Select(c => c.CustID)?.Distinct();
+
+        //        var probAccountLosing = GetProblemAccountLosingClassification(custIds, funcId);
+
+        //        var custInfo = InsertProblemAccount(problemAccounts, probAccountLosing, mappingCategoryByType, isToQueue);
+
+        //        if (custInfo != null && custInfo.Any())
+        //        {
+        //            InsertPALogics(custInfo);
+
+        //            return custInfo;
+        //        }
+        //    }
+
+        //    return Enumerable.Empty<CustInfoModel>();
+        //}
+
+        public ResultInsertCustomerClassificationModel InsertProblemAccounts(IEnumerable<InsertProblemAccountModel> problemAccountModels, bool isToQueue)
         {
-            if (problemAccounts.Any())
+            var modelInsert = new InsertCustomerClassificationModel()
             {
-                var custIds = problemAccounts.Select(c => c.CustID)?.Distinct();
+                CustClassificationJson = JsonConvert.SerializeObject(problemAccountModels),
+                IsToQueue = isToQueue
+            };
 
-                var probAccountLosing = GetProblemAccountLosingClassification(custIds, funcId);
+            return base.InsertCustomerClassification(CCInsertInputFlow.ProblemAccount, modelInsert);      
+        }
 
-                var custInfo = InsertProblemAccount(problemAccounts, probAccountLosing, mappingCategoryByType, isToQueue);
+        public ResultInsertCustomerClassificationModel InsertRobots(IEnumerable<InsertRobotModel> robotModels)
+        {
+            var modelInsert = new InsertCustomerClassificationModel()
+            {
+                CustClassificationJson = JsonConvert.SerializeObject(robotModels)
+            };
 
-                if (custInfo != null && custInfo.Any())
-                {
-                    InsertPALogics(custInfo);
-
-                    return custInfo;
-                }
-            }
-
-            return Enumerable.Empty<CustInfoModel>();
+            return base.InsertCustomerClassification(CCInsertInputFlow.Robot, modelInsert);
         }
 
         public IEnumerable<ExistedProblemAccountModel> GetExistedProblemAccounts(IEnumerable<long> custIds)
@@ -168,7 +239,7 @@
 
                 var customerInfo = InsertRobotAccount(JsonConvert.SerializeObject(robotClassification), isRescan);
 
-                CheckNewPAAssociationCustomerForRollback(customerInfo);
+                CheckNewPAAssociationCustomerForRollback(JsonConvert.SerializeObject(customerInfo));
 
                 return customerInfo;
             }
@@ -215,7 +286,7 @@
         {
             if (customerInfo != null && customerInfo.Any())
             {
-                CheckNewPAAssociationCustomerForRollback(customerInfo);
+                CheckNewPAAssociationCustomerForRollback(JsonConvert.SerializeObject(customerInfo));
 
                 var custIds = customerInfo.Where(x=>x.CategoryType == 1).Select(x => x.CustID).Distinct();
 
@@ -359,19 +430,14 @@
             }
         }
 
-        private void CheckNewPAAssociationCustomerForRollback(IEnumerable<CustInfoModel> customerInfo)
+        private void CheckNewPAAssociationCustomerForRollback(string custInfoJson)
         {
-            if (customerInfo != null && customerInfo.Any())
+            var criteria = new CheckNewPAAssociationCustomerForRollbackCriteria
             {
-                var custInfoJson = JsonConvert.SerializeObject(customerInfo.Where(x=>x.CategoryType != 2));
+                CustInfoJson = custInfoJson
+            };
 
-                var criteria = new CheckNewPAAssociationCustomerForRollbackCriteria
-                {
-                    CustInfoJson = custInfoJson
-                };
-
-                _repository.Execute(criteria);
-            }
+            _repository.Execute(criteria);
         }
 
         private IEnumerable<CustInfoModel> InsertRobotAccount(string robotAccountJson, bool isRescan)

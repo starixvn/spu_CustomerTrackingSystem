@@ -279,7 +279,6 @@
             return new List<LatestCCDangerLevelModel>();
         }
 
-
         public IEnumerable<LatestCCDangerLevelModel> GetLatestCCAndDangerLevel(string custIds)
         {
             if (!string.IsNullOrEmpty(custIds))

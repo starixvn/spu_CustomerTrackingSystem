@@ -4,15 +4,20 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassification.ProblemAccount;
+    using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Entities;
     using System.Collections.Generic;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public interface IProblemAccountClassificationService
-    {
+    {       
         DBResult InsertProblemAccountPackage(IEnumerable<InsertProblemAccountModel> problemAccounts, InsertPA_ByType mappingCategoryByType, string serviceName, FromFlow fromFlow, bool isToQueue);
 
-        IEnumerable<CustInfoModel> InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, FunctionId funcId, InsertPA_ByType mappingCategoryByType, bool isToQueue);
+        //IEnumerable<CustInfoModel> InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, FunctionId funcId, InsertPA_ByType mappingCategoryByType, bool isToQueue);
+
+        ResultInsertCustomerClassificationModel InsertProblemAccounts(IEnumerable<InsertProblemAccountModel> problemAccountModels, bool isToQueue);
+
+        ResultInsertCustomerClassificationModel InsertRobots(IEnumerable<InsertRobotModel> robotModels);
 
         void RemoveOldProblemAccount(IEnumerable<long> custIds);
 

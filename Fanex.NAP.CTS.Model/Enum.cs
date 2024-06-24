@@ -272,4 +272,24 @@ namespace Fanex.NAP.CTS.Model
         [Description("lightred")]
         RedLight = 7
     }
+
+    public enum CCInsertInputFlow
+    {
+        [Description("VVIP")]
+        VVIP = 1,
+        [Description("SpecialCC")]
+        SpecialCC = 2,
+        [Description("LicVIP")]
+        LicVIP = 3,
+        [Description("LicBA")]
+        LicBA = 4,
+        [Description("ProblemAccount")]
+        ProblemAccount = 5,
+        [Description("Potential")]
+        Potential = 6,
+        [Description("Robot")]
+        Robot = 7,
+        [Description("Normal")]
+        Normal = 8
+    }
 }
