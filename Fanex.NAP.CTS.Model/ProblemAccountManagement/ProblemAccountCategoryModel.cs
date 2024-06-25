@@ -12,5 +12,11 @@
 
         public int Priorty { get; set; }
 
+        public bool IsRobotUser { get; set; }
+
+        public bool IsRobotOCRD { get; set; }
+
+        public bool IsSystemDetect { get; set; }
+
     }
 }

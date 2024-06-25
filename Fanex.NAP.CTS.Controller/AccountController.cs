@@ -1993,7 +1993,7 @@
                 UserName = userName,
                 IsRobotUser = isRobotUser,
                 IsPinCategory = isPinCategory,
-                ProblemAccountList = _pamService.GetProblemAccountCategories().OrderBy(x => x.Priorty)
+                ProblemAccountList = _pamService.GetProblemAccountCategories(false).OrderBy(x => x.Priorty)
             };
 
             var classifications = _accountService.GetCustomerClassification(ctsCustID);

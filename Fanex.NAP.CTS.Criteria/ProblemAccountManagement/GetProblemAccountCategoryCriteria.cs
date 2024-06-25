@@ -5,6 +5,9 @@
 
     public class GetProblemAccountCategoryCriteria : CriteriaBase
     {
+        [SpParam(SqlParamName = "ip_IsFromPAM")]
+        public bool IsFromPAM { get; set; }
+
         public override string GetSettingKey()
         {
             return "CTS_DC_ProblemAccountManagement_GetCategories";

@@ -14,7 +14,7 @@
 
         IEnumerable<GetProblemAccountModel> GetProblemAccounts(ProblemAccountFilterViewModel filter);
         
-        IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories();
+        IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories(bool isFromPAM);
 
         IEnumerable<ProblemAccountValidatedModel> ValidateProblemAccounts(ValidateProblemAccountInputViewModel model);
 

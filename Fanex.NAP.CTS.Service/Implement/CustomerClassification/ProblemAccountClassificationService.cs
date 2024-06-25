@@ -66,7 +66,6 @@
                             IsSyncAFC = ConfigSettings.IsSyncAFCData
                         }, fromFlow);
                     }
-
                 }
             }
             catch (Exception ex)

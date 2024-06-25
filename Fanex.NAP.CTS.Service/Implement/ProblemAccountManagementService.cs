@@ -57,9 +57,9 @@
             }
         }
 
-        public IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories()
+        public IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories(bool isFromPAM)
         {
-            var criteria = new GetProblemAccountCategoryCriteria();
+            var criteria = new GetProblemAccountCategoryCriteria() { IsFromPAM = isFromPAM};
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
