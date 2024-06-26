@@ -12,7 +12,6 @@
     let isHostPermission;
     let cacheData = {
         isVVip: false,
-        isPinCategory: false,
         isExcludedTagAssPA: false,
         isProblemAccount: false,
         isPAProbation: false
@@ -249,7 +248,6 @@
                     let json = jQuery.parseJSON(response);
 
                     cacheData.isProblemAccount = json.isProblemAccount;
-                    cacheData.isPinCategory = json.isPinCategory;
                     cacheData.isExcludedTagAssPA = json.isExcludedTagAssPA;
                     cacheData.isVVip = json.isVVip;
                     cacheData.isPAProbation = json.isPAProbation;
@@ -275,8 +273,7 @@
             complete: function () {
                 tblcustomercategory.find('tbody').removeClass('loading');
                 
-                let disabledUnmarkCategory = (!cacheData.isVVip && !cacheData.isProblemAccount)// && !cacheData.isPAProbation)
-                    || (!cacheData.isVVip && cacheData.isPinCategory);                
+                let disabledUnmarkCategory = (!cacheData.isVVip && !cacheData.isProblemAccount) || (!cacheData.isVVip);                             
 
                 let disabledMarkCategory = cacheData.isVVip
                     || ($("#hdIsLicensee").val() == 'TRUE' && $("#hdRoleID").val() > 1)
@@ -465,8 +462,7 @@
                 ctsCustID: $("#hdCTSCustId").val(),
                 roleID: $("#hdRoleID").val(),
                 userName: $("#hdUsername").val(),
-                isRobotUser: $("#hdIsRobotUser").val(),
-                isPinCategory: cacheData.isPinCategory
+                isRobotUser: $("#hdIsRobotUser").val()               
             },
             beforeSend: function () {
                 common.showLoading();
@@ -644,7 +640,7 @@
 
     function ExcludedTagAssPA(isChecked, custId, ctsCustId, subscriberId, custSubId) {
         let html = "";      
-        if (isChecked && cacheData.isPinCategory) {
+        if (isChecked) {
             html = "<div style='text-align:center'>You are not allow to turn on this setting because of Pin Category.</div>";
             html += "<div style='text-align:center'>Please contact your system administrator for further assistance.</div>";
 
@@ -712,9 +708,7 @@
 
     function ResetCategorySetting() {
         let cbbCategorySettingSelector = cbbCategorySetting.empty();
-
-        //cbbCategorySettingSelector.append("<option " + (cacheData.isPinCategory ? "selected" : "") + (cacheData.isVVip ? " disabled" : "") + " value='PinCategory'>Pin Category</option>");
-
+       
         cbbCategorySettingSelector.append("<option " + (cacheData.isExcludedTagAssPA ? "selected" : "") + " value='ExcludedTagAssPA'>Normal Category</option>");
 
         cbbCategorySetting.multiselect("refresh");

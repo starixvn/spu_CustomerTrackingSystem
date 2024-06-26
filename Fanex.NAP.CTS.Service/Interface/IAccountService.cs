@@ -90,7 +90,7 @@
 
         IEnumerable<long> GetAssociationException(string apiURL, long ctsCustId);
 
-        IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId, out bool isPinCategory, out bool isExcludedTagAssPA);
+        IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId, out bool isExcludedTagAssPA);
 
         IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId);
 

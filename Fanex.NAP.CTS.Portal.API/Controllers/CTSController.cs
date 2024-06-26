@@ -32,7 +32,7 @@
     {
         private readonly IAccountService _accountService;      
         private readonly IAssociatedAccountService _associationService;      
-        private readonly ICategoryService _categoryService;     
+        private readonly ICustomerCategoryService _categoryService;     
         private readonly ISubscriberService _subscriberService;
         private readonly IProblemCaseMonitorService _problemCaseMonitorService;       
         private readonly ICtsAssociationApiService _ctsAssociationApiService;
@@ -45,7 +45,7 @@
         {
             _accountService = new AccountService();
             _associationService = new AssociatedAccountService();                  
-            _categoryService = new CategoryService();          
+            _categoryService = new CustomerCategoryService();          
             _subscriberService = new SubscriberService();
             _problemCaseMonitorService = new Service.Implement.Api.ProblemCaseMonitorService();          
             _ctsAssociationApiService = new CtsAssociationApiService();

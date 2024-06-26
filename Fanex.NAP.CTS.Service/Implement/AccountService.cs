@@ -995,9 +995,8 @@
             }
         }
 
-        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId, out bool isPinCategory, out bool isExcludedTagAssPA)
-        {
-            isPinCategory = false;
+        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId, out bool isExcludedTagAssPA)
+        {         
             isExcludedTagAssPA = false;
 
             var criteria = new GetCTSCustomerClassificationCriteria
@@ -1008,16 +1007,10 @@
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 using (var result = db.QueryMultiple(criteria))
-                {
-                    var pinCategories = result.Read<bool>();
+                {                   
                     var excludedTagAssPA = result.Read<bool>();
                     var categories = result.Read<CustomerClassificationModel>();
-
-                    if (pinCategories != null && pinCategories.Any())
-                    {
-                        isPinCategory = pinCategories.ToList()[0];
-                    }
-
+                   
                     if (excludedTagAssPA != null && excludedTagAssPA.Any())
                     {
                         isExcludedTagAssPA = excludedTagAssPA.ToList()[0];

@@ -10,10 +10,13 @@
         {
             this.CategoryId = data.CategoryID;
             this.CategoryType = data.CategoryType;
-            this.CategoryGroup = data.CategoryGroup;
+            this.CategoryGroup = data.CategoryGroupID;
             this.CategoryName = data.CategoryName ?? string.Empty;
-            this.IsProblemAccount = data.ParentID == 50; 
-            this.CategoryColorType = (CategoryColorType)5;
+            this.IsPAProbation = data.IsProbation;
+            this.IsProblemAccount = data.IsPA;
+            this.IsVVIP = data.IsVVIP;
+            this.IsPotentialPA = data.IsPotentialPA;
+            this.CategoryColorType = (CategoryColorType)data.ColorTypeID;
         }
 
         public int CategoryId { get; set; }
@@ -26,7 +29,11 @@
 
         public bool IsProblemAccount { get; set; }
 
-        //public bool IsPAProbation { get; set; }
+        public bool IsPAProbation { get; set; }
+
+        public bool IsVVIP { get; set; }
+
+        public bool IsPotentialPA { get; set; }
 
         public CategoryColorType CategoryColorType { get; set; }
 

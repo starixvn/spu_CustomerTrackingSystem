@@ -15,18 +15,37 @@
             repository = new DynamicRepository();
         }
 
-        public ResultInsertCustomerClassificationModel InsertCustomerClassification(CCInsertInputFlow inputFlow, InsertCustomerClassificationModel model)
+        public ResultInsertCustomerClassificationModel InsertCustomerClassification(CCInputFlow inputFlow, InsertCustomerClassificationModel model)
         {
             var criteria = new InsertCustomerClassificationCriteria
             {
                 InputFlowID = (int)inputFlow,
                 CustClassificationJson = model.CustClassificationJson,
-                IsToQueue = model.IsToQueue
+                IsToQueue = model.IsToQueue,
+                QueueID = model.QueueID,
+                UplineRoleID = model.UplineRoleID,
+                AffectDownline = model.AffectDownline,
+                FromAction = model.FromAction
             };
 
             var custInfos = repository.Fetch<CustInfoClassificationModel>(criteria);
 
             return new ResultInsertCustomerClassificationModel { CustInfos = custInfos, ErrorMessage = criteria.ErrorMessage };
+        }
+
+        public ResultRemoveCustomerClassificationModel RemoveCustomerClassification(CCInputFlow inputFlow, RemoveCustomerClassificationModel model)
+        {
+            var criteria = new RemoveCustomerClassificationCriteria
+            {
+                InputFlowID = (int)inputFlow,
+                CustClassificationJson = model.CustClassificationJson,
+                AffectDownline = model.AffectDownline,
+                FromAction = model.FromAction
+            };
+
+            var custInfos = repository.Fetch<CustInfoClassificationModel>(criteria);
+
+            return new ResultRemoveCustomerClassificationModel { CustInfos = custInfos };
         }
     }
 }

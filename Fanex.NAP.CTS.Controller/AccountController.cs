@@ -50,6 +50,7 @@
     {
         private readonly IAccountService _accountService;
         private readonly ITransactionService _transService;
+        private readonly ICustomerCategoryService _customerCategoryService;
         private readonly ICustomerEvidenceService _customerEvidenceService;
         private readonly IRescanCustomerClassificationService _rescanClassificationService;
         private readonly ICustomerClassificationService _customerClassificationService;
@@ -67,6 +68,7 @@
         {
             _accountService = new AccountService();
             _transService = new TransactionService();
+            _customerCategoryService = new CustomerCategoryService();
             _customerEvidenceService = new CustomerEvidenceService();
             _rescanClassificationService = new RescanCustomerClassificationService();          
             _customerClassificationService = new CustomerClassificationService();
@@ -1626,24 +1628,22 @@
 
         [HttpPost]
         public ActionResult GetCustomerClassification(long ctsCustID, int roleID)
-        {
-            var isPinCategory = false;
-            var isExcludedTagAssPA = false;
+        {           
             var isVVip = false;
             var isProblemAccount = false;
             var isPAProbation = false;        
             var categoryList = new List<CustomerCategoryViewModel>();
             var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
 
-            var classification = _accountService.GetCustomerClassification(ctsCustID, out isPinCategory, out isExcludedTagAssPA);
+            var classification = _accountService.GetCustomerClassification(ctsCustID, out bool isExcludedTagAssPA);
 
             if (classification != null && classification.Any())
             {
                 categoryList = classification.Select(x => new CustomerCategoryViewModel(x)).ToList();
 
-                isVVip = categoryList.Any(x => x.CategoryId == (int)CustomerCategoryID.VVIP);
-                isProblemAccount = categoryList.Any(x => x.IsProblemAccount && x.CategoryType != 2);              
-                isPAProbation = classification.Any(x => x.IsProbation);
+                isVVip = categoryList.Any(x => x.IsVVIP);
+                isProblemAccount = categoryList.Any(x => x.IsProblemAccount);              
+                isPAProbation = categoryList.Any(x => x.IsPAProbation);
             }
 
             var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustID);
@@ -1672,8 +1672,7 @@
             }
 
             return Json(new
-            {
-                isPinCategory,
+            {             
                 isExcludedTagAssPA,
                 isVVip,
                 isProblemAccount,
@@ -1683,270 +1682,270 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private string GetReason(CustomerClassificationHistoryModel cc, int roleID)
-        {
-            var divReason = $"<div>";
-            var spanReason = string.Empty;
-            var winloss = cc.Winloss.ToString(Consts.FormatDecimalToString_Thousands3Places);
+        //private string GetReason(CustomerClassificationHistoryModel cc, int roleID)
+        //{
+        //    var divReason = $"<div>";
+        //    var spanReason = string.Empty;
+        //    var winloss = cc.Winloss.ToString(Consts.FormatDecimalToString_Thousands3Places);
 
-            if (cc.SourceTypeID == (int)SourceTypeID.Classification_Rescan)
-            {
-                spanReason += $"Win loss: {winloss}";
-            }
-            else if (cc.IsFromTVS)
-            {
-                if (cc.TVSRequestID > 0)
-                    spanReason += $"Void by RequestID: {cc.TVSRequestID} ";
-                else
-                    spanReason += $"Void by BetID ";
+        //    if (cc.SourceTypeID == (int)SourceTypeID.Classification_Rescan)
+        //    {
+        //        spanReason += $"Win loss: {winloss}";
+        //    }
+        //    else if (cc.IsFromTVS)
+        //    {
+        //        if (cc.TVSRequestID > 0)
+        //            spanReason += $"Void by RequestID: {cc.TVSRequestID} ";
+        //        else
+        //            spanReason += $"Void by BetID ";
 
-                if (roleID == 1)
-                    spanReason += $"| Win loss: {winloss} ";
+        //        if (roleID == 1)
+        //            spanReason += $"| Win loss: {winloss} ";
 
-                if (cc.SportType != null && cc.SportType > 0)
-                    spanReason += $"| Sport: {cc.SportName} ";
+        //        if (cc.SportType != null && cc.SportType > 0)
+        //            spanReason += $"| Sport: {cc.SportName} ";
 
-                if (cc.IsParlay != null && cc.IsParlay.Value)
-                    spanReason += $"| Parlay";
-            }
+        //        if (cc.IsParlay != null && cc.IsParlay.Value)
+        //            spanReason += $"| Parlay";
+        //    }
 
-            if (spanReason == string.Empty)
-                spanReason = MappingReasonByCategoryID(spanReason, cc);
+        //    if (spanReason == string.Empty)
+        //        spanReason = MappingReasonByCategoryID(spanReason, cc);
 
-            if (spanReason == string.Empty)
-                spanReason = MappingReasonBySourceTypeID(spanReason, cc, roleID);
+        //    if (spanReason == string.Empty)
+        //        spanReason = MappingReasonBySourceTypeID(spanReason, cc, roleID);
 
-            if (spanReason == string.Empty)
-                divReason += $"<div>{MappingAdditionalReason(cc)}</div>" + $"<div>{cc.SourceTypeName}</div>";
-            else
-                divReason += $"<div>{MappingAdditionalReason(cc) + spanReason}</div>";
+        //    if (spanReason == string.Empty)
+        //        divReason += $"<div>{MappingAdditionalReason(cc)}</div>" + $"<div>{cc.SourceTypeName}</div>";
+        //    else
+        //        divReason += $"<div>{MappingAdditionalReason(cc) + spanReason}</div>";
 
-            return divReason;
-        }
+        //    return divReason;
+        //}
 
-        private string MappingReasonByCategoryID(string spanReason, CustomerClassificationHistoryModel cc)
-        {
-            var margin = Math.Round(cc.Margin, 3);
-            var winloss = cc.Winloss.ToString(Consts.FormatDecimalToString_Thousands3Places);
-            var turnOver = cc.TurnOver.ToString(Consts.FormatDecimalToString_Thousands3Places);
-            var betCount = cc.BetCount.ToString("N0");
-            var activeDays = cc.ActiveDays;
-            var twGroupBettingRate = cc.TWGroupBettingRate;
-            var twTicketRejectRate = cc.TWTicketRejectRate;
-            var twDesktopTicket = cc.TWDesktopUsageRate;
-            var first5TWGBTicketCount = cc.First5TWGBTicketCount?.ToString() ?? string.Empty;
+        //private string MappingReasonByCategoryID(string spanReason, CustomerClassificationHistoryModel cc)
+        //{
+        //    var margin = Math.Round(cc.Margin, 3);
+        //    var winloss = cc.Winloss.ToString(Consts.FormatDecimalToString_Thousands3Places);
+        //    var turnOver = cc.TurnOver.ToString(Consts.FormatDecimalToString_Thousands3Places);
+        //    var betCount = cc.BetCount.ToString("N0");
+        //    var activeDays = cc.ActiveDays;
+        //    var twGroupBettingRate = cc.TWGroupBettingRate;
+        //    var twTicketRejectRate = cc.TWTicketRejectRate;
+        //    var twDesktopTicket = cc.TWDesktopUsageRate;
+        //    var first5TWGBTicketCount = cc.First5TWGBTicketCount?.ToString() ?? string.Empty;
 
-            switch (cc.CategoryID)
-            {
-                case (int)ClassificationSourceType.NewMember:
-                case (int)ClassificationSourceType.NewMember31:
-                case (int)ClassificationSourceType.NewMember32:
-                case (int)ClassificationSourceType.NewMember33:
-                case (int)ClassificationSourceType.NormalAccount:
-                case (int)ClassificationSourceType.NormalAccount121:
-                case (int)ClassificationSourceType.NormalAccount122:
-                case (int)ClassificationSourceType.NormalAccount123:
-                case (int)ClassificationSourceType.Probation:
-                case (int)ClassificationSourceType.Probation51:
-                case (int)ClassificationSourceType.Probation52:
-                case (int)ClassificationSourceType.Probation53:
-                case (int)ClassificationSourceType.SmartPunter:
-                case (int)ClassificationSourceType.SmartPunter61:
-                case (int)ClassificationSourceType.SmartPunter62:
-                case (int)ClassificationSourceType.SmartPunter63:
-                case (int)ClassificationSourceType.HighRiskPunter:
-                case (int)ClassificationSourceType.HighRiskPunter71:
-                case (int)ClassificationSourceType.HighRiskPunter72:
-                case (int)ClassificationSourceType.HighRiskPunter73:
-                    spanReason += $"Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount}";
-                    break;
+        //    switch (cc.CategoryID)
+        //    {
+        //        case (int)ClassificationSourceType.NewMember:
+        //        case (int)ClassificationSourceType.NewMember31:
+        //        case (int)ClassificationSourceType.NewMember32:
+        //        case (int)ClassificationSourceType.NewMember33:
+        //        case (int)ClassificationSourceType.NormalAccount:
+        //        case (int)ClassificationSourceType.NormalAccount121:
+        //        case (int)ClassificationSourceType.NormalAccount122:
+        //        case (int)ClassificationSourceType.NormalAccount123:
+        //        case (int)ClassificationSourceType.Probation:
+        //        case (int)ClassificationSourceType.Probation51:
+        //        case (int)ClassificationSourceType.Probation52:
+        //        case (int)ClassificationSourceType.Probation53:
+        //        case (int)ClassificationSourceType.SmartPunter:
+        //        case (int)ClassificationSourceType.SmartPunter61:
+        //        case (int)ClassificationSourceType.SmartPunter62:
+        //        case (int)ClassificationSourceType.SmartPunter63:
+        //        case (int)ClassificationSourceType.HighRiskPunter:
+        //        case (int)ClassificationSourceType.HighRiskPunter71:
+        //        case (int)ClassificationSourceType.HighRiskPunter72:
+        //        case (int)ClassificationSourceType.HighRiskPunter73:
+        //            spanReason += $"Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount}";
+        //            break;
 
-                case (int)ClassificationSourceType.GoodMember:
-                case (int)ClassificationSourceType.GoodMember111:
-                case (int)ClassificationSourceType.GoodMember112:
-                case (int)ClassificationSourceType.GoodMember113:
-                    spanReason += $"Turnover: {turnOver} | Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
-                    break;
+        //        case (int)ClassificationSourceType.GoodMember:
+        //        case (int)ClassificationSourceType.GoodMember111:
+        //        case (int)ClassificationSourceType.GoodMember112:
+        //        case (int)ClassificationSourceType.GoodMember113:
+        //            spanReason += $"Turnover: {turnOver} | Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
+        //            break;
 
-                case (int)ClassificationSourceType.NewMember39:
-                    spanReason += $"Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Group Betting Bet Count: {first5TWGBTicketCount} | Sport: {GetSportNameNewGroupBettingFromSportType(cc)}";
-                    break;
+        //        case (int)ClassificationSourceType.NewMember39:
+        //            spanReason += $"Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Group Betting Bet Count: {first5TWGBTicketCount} | Sport: {GetSportNameNewGroupBettingFromSportType(cc)}";
+        //            break;
 
-                case (int)ClassificationSourceType.Probation57:
-                case (int)ClassificationSourceType.SmartPunter67:
-                case (int)ClassificationSourceType.HighRiskPunter77:
-                    spanReason += $"Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Group Betting Percent: {twGroupBettingRate}";
-                    break;
+        //        case (int)ClassificationSourceType.Probation57:
+        //        case (int)ClassificationSourceType.SmartPunter67:
+        //        case (int)ClassificationSourceType.HighRiskPunter77:
+        //            spanReason += $"Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Group Betting Percent: {twGroupBettingRate}";
+        //            break;
 
-                case (int)ClassificationSourceType.Probation58:
-                case (int)ClassificationSourceType.SmartPunter68:
-                case (int)ClassificationSourceType.HighRiskPunter78:
-                    spanReason += $"Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Desktop Percent: {twDesktopTicket} | Reject Percent: {twTicketRejectRate}";
-                    break;
-                case (int)ClassificationSourceType.EarlyWarningMembers:
-                case (int)ClassificationSourceType.EarlyWarningMembersLosing:
-                case (int)ClassificationSourceType.TWInitialGroupBetting:
-                case (int)ClassificationSourceType.TWInitialGroupBettingLosing:
-                case (int)ClassificationSourceType.TWInitialSmart:
-                case (int)ClassificationSourceType.TWInitialSmartLosing:
-                    spanReason += $"{cc.Remark} | Turnover: {turnOver} | Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount}";
-                    break;
+        //        case (int)ClassificationSourceType.Probation58:
+        //        case (int)ClassificationSourceType.SmartPunter68:
+        //        case (int)ClassificationSourceType.HighRiskPunter78:
+        //            spanReason += $"Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Desktop Percent: {twDesktopTicket} | Reject Percent: {twTicketRejectRate}";
+        //            break;
+        //        case (int)ClassificationSourceType.EarlyWarningMembers:
+        //        case (int)ClassificationSourceType.EarlyWarningMembersLosing:
+        //        case (int)ClassificationSourceType.TWInitialGroupBetting:
+        //        case (int)ClassificationSourceType.TWInitialGroupBettingLosing:
+        //        case (int)ClassificationSourceType.TWInitialSmart:
+        //        case (int)ClassificationSourceType.TWInitialSmartLosing:
+        //            spanReason += $"{cc.Remark} | Turnover: {turnOver} | Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount}";
+        //            break;
 
-                case (int)ClassificationSourceType.NormalAccountInactive:
-                case (int)ClassificationSourceType.ProPunterInactive:
-                    spanReason += $"<span> {cc.SourceTypeName} </span>";
-                    break;
+        //        case (int)ClassificationSourceType.NormalAccountInactive:
+        //        case (int)ClassificationSourceType.ProPunterInactive:
+        //            spanReason += $"<span> {cc.SourceTypeName} </span>";
+        //            break;
 
-                case (int)ClassificationSourceType.RobotUser61:
-                case (int)ClassificationSourceType.RobotUser163:
-                case (int)ClassificationSourceType.RobotUser164:
-                case (int)ClassificationSourceType.RobotOCRD165:
-                case (int)ClassificationSourceType.RobotOCRD166:
-                    if (cc.IsFromTVS)
-                    {
-                        if (cc.TVSRequestID > 0)
-                            spanReason += $"Void by RequestID: {cc.TVSRequestID} | Win loss: {winloss}";
-                        else
-                            spanReason += $"Void by BetID |  Win loss: {winloss}";
-                    }
-                    else if (cc.IsFromTW)
-                    {
-                        spanReason += $"Counter: {cc.RobotCounter} | Win loss: {winloss}";
-                    }
-                    else if (cc.IsFromImperva)
-                    {
-                        spanReason += $"{cc.Remark} Win loss: {winloss}";
-                    }
-                    else if (cc.IsFromAI)
-                    {
-                        spanReason += $"Win loss: {winloss}";
-                    }
-                    else if (cc.IsFromCTS)
-                    {
-                        spanReason += $"Robot is marked directly ";
+        //        case (int)ClassificationSourceType.RobotUser61:
+        //        case (int)ClassificationSourceType.RobotUser163:
+        //        case (int)ClassificationSourceType.RobotUser164:
+        //        case (int)ClassificationSourceType.RobotOCRD165:
+        //        case (int)ClassificationSourceType.RobotOCRD166:
+        //            if (cc.IsFromTVS)
+        //            {
+        //                if (cc.TVSRequestID > 0)
+        //                    spanReason += $"Void by RequestID: {cc.TVSRequestID} | Win loss: {winloss}";
+        //                else
+        //                    spanReason += $"Void by BetID |  Win loss: {winloss}";
+        //            }
+        //            else if (cc.IsFromTW)
+        //            {
+        //                spanReason += $"Counter: {cc.RobotCounter} | Win loss: {winloss}";
+        //            }
+        //            else if (cc.IsFromImperva)
+        //            {
+        //                spanReason += $"{cc.Remark} Win loss: {winloss}";
+        //            }
+        //            else if (cc.IsFromAI)
+        //            {
+        //                spanReason += $"Win loss: {winloss}";
+        //            }
+        //            else if (cc.IsFromCTS)
+        //            {
+        //                spanReason += $"Robot is marked directly ";
 
-                        spanReason += $" | Win loss: {winloss}";
-                        if (!string.IsNullOrEmpty(cc.Remark))
-                            spanReason += $" | {cc.Remark}";
-                    }
-                    break;
+        //                spanReason += $" | Win loss: {winloss}";
+        //                if (!string.IsNullOrEmpty(cc.Remark))
+        //                    spanReason += $" | {cc.Remark}";
+        //            }
+        //            break;
             
-                default:
-                    break;
-            }
+        //        default:
+        //            break;
+        //    }
 
-            return spanReason;
-        }
+        //    return spanReason;
+        //}
 
-        private string GetSportNameNewGroupBettingFromSportType(CustomerClassificationHistoryModel cc)
-        {
-            switch (cc.SportType)
-            {
-                case (int)CustomerCategorySportType.Soccer:
-                case (int)CustomerCategorySportType.Basketball:
-                    return cc.SportName;
-                default:
-                    return "Soccer/Basketball";
-            }
-        }
+        //private string GetSportNameNewGroupBettingFromSportType(CustomerClassificationHistoryModel cc)
+        //{
+        //    switch (cc.SportType)
+        //    {
+        //        case (int)CustomerCategorySportType.Soccer:
+        //        case (int)CustomerCategorySportType.Basketball:
+        //            return cc.SportName;
+        //        default:
+        //            return "Soccer/Basketball";
+        //    }
+        //}
 
-        private string MappingReasonBySourceTypeID(string spanReason, CustomerClassificationHistoryModel cc, int roleID)
-        {
-            var winloss = cc.Winloss.ToString(Consts.FormatDecimalToString_Thousands3Places);
+        //private string MappingReasonBySourceTypeID(string spanReason, CustomerClassificationHistoryModel cc, int roleID)
+        //{
+        //    var winloss = cc.Winloss.ToString(Consts.FormatDecimalToString_Thousands3Places);
 
-            switch (cc.SourceTypeID)
-            {
-                case (int)SourceTypeID.SpecialCustomerClass_Add:
-                case (int)SourceTypeID.SpecialCustomerClass_Remove:
-                    {
-                        spanReason += $"<span> {cc.SourceTypeName} </span>";
+        //    switch (cc.SourceTypeID)
+        //    {
+        //        case (int)SourceTypeID.SpecialCustomerClass_Add:
+        //        case (int)SourceTypeID.SpecialCustomerClass_Remove:
+        //            {
+        //                spanReason += $"<span> {cc.SourceTypeName} </span>";
 
-                        if (!string.IsNullOrEmpty(cc.Remark))
-                            spanReason += $"| {cc.Remark} ";
-                        break;
-                    }
-                case (int)SourceTypeID.Classification_PAMarkDirectly:
-                case (int)SourceTypeID.Classification_PAAffectedByUplines:
-                    if (!string.IsNullOrEmpty(cc.Remark) && cc.Remark.Contains(Consts.MarkPA_AssociatedGroup))
-                    {
-                        spanReason += $"<span> {cc.Remark} </span>";
+        //                if (!string.IsNullOrEmpty(cc.Remark))
+        //                    spanReason += $"| {cc.Remark} ";
+        //                break;
+        //            }
+        //        case (int)SourceTypeID.Classification_PAMarkDirectly:
+        //        case (int)SourceTypeID.Classification_PAAffectedByUplines:
+        //            if (!string.IsNullOrEmpty(cc.Remark) && cc.Remark.Contains(Consts.MarkPA_AssociatedGroup))
+        //            {
+        //                spanReason += $"<span> {cc.Remark} </span>";
 
-                        if (roleID == 1)
-                            spanReason += $"| Win loss: {winloss} ";
-                    }
-                    else
-                    {
-                        spanReason += $"<span> {cc.SourceTypeName} </span>";
-                        if (roleID == 1)
-                            spanReason += $"| Win loss: {winloss} ";
+        //                if (roleID == 1)
+        //                    spanReason += $"| Win loss: {winloss} ";
+        //            }
+        //            else
+        //            {
+        //                spanReason += $"<span> {cc.SourceTypeName} </span>";
+        //                if (roleID == 1)
+        //                    spanReason += $"| Win loss: {winloss} ";
 
-                        if (!string.IsNullOrEmpty(cc.Remark))
-                            spanReason += $"| {cc.Remark}";
-                    }
+        //                if (!string.IsNullOrEmpty(cc.Remark))
+        //                    spanReason += $"| {cc.Remark}";
+        //            }
 
-                    break;
+        //            break;
 
-                case (int)SourceTypeID.Classification_PAUnmarkDirectly:
-                case (int)SourceTypeID.Classification_UnmarkingPAAffectedDirectly:
-                    spanReason += $"<span> {cc.SourceTypeName} </span>";
-                    if (!string.IsNullOrEmpty(cc.Remark))
-                    {
-                        spanReason += $"| {cc.Remark}";
-                    }
-                    break;
+        //        case (int)SourceTypeID.Classification_PAUnmarkDirectly:
+        //        case (int)SourceTypeID.Classification_UnmarkingPAAffectedDirectly:
+        //            spanReason += $"<span> {cc.SourceTypeName} </span>";
+        //            if (!string.IsNullOrEmpty(cc.Remark))
+        //            {
+        //                spanReason += $"| {cc.Remark}";
+        //            }
+        //            break;
 
-                case (int)SourceTypeID.Classification_ClassifyGBMatchMonitor:
-                    if (!string.IsNullOrEmpty(cc.Remark))
-                    {
-                        spanReason += $"Match ID {cc.Remark} | Win loss: {winloss}";
-                    }
-                    else
-                    {
-                        spanReason += $"Win loss: {winloss}";
-                    }
+        //        case (int)SourceTypeID.Classification_ClassifyGBMatchMonitor:
+        //            if (!string.IsNullOrEmpty(cc.Remark))
+        //            {
+        //                spanReason += $"Match ID {cc.Remark} | Win loss: {winloss}";
+        //            }
+        //            else
+        //            {
+        //                spanReason += $"Win loss: {winloss}";
+        //            }
 
-                    break;
+        //            break;
 
-                case (int)SourceTypeID.NoShow_Detail:
-                    spanReason += $"{cc.CategoryName}";
-                    break;
-                case (int)SourceTypeID.UnauthorizedLogin_Customer:
-                    if (!string.IsNullOrEmpty(cc.Remark))
-                    {
-                        var unauthLoginCust = JsonConvert.DeserializeObject<RemarkDetectUnauthorizedModel>(cc.Remark);
-                        spanReason += $"First Bet Date: {unauthLoginCust.FirstBetDate.ToString(Consts.FormatDateToString_MMMddyyyy)} " +
-                            $"| Detection Date: {unauthLoginCust.DetectionDate.ToString(Consts.FormatDateToString_MMMddyyyy)} " +
-                            $"- Bot Trans: { unauthLoginCust.Bot.ToString("N0") } ({unauthLoginCust.BotPCT}%) " +
-                            $"- Invalid Browser Info Trans: {unauthLoginCust.InvalidBrowser.ToString("N0")} ({unauthLoginCust.InvalidBrowserPCT}%) " +
-                            $" | Win loss: {winloss}";
-                    }
-                    else
-                    {
-                        spanReason += $"Win loss: {winloss}";
-                    }
+        //        case (int)SourceTypeID.NoShow_Detail:
+        //            spanReason += $"{cc.CategoryName}";
+        //            break;
+        //        case (int)SourceTypeID.UnauthorizedLogin_Customer:
+        //            if (!string.IsNullOrEmpty(cc.Remark))
+        //            {
+        //                var unauthLoginCust = JsonConvert.DeserializeObject<RemarkDetectUnauthorizedModel>(cc.Remark);
+        //                spanReason += $"First Bet Date: {unauthLoginCust.FirstBetDate.ToString(Consts.FormatDateToString_MMMddyyyy)} " +
+        //                    $"| Detection Date: {unauthLoginCust.DetectionDate.ToString(Consts.FormatDateToString_MMMddyyyy)} " +
+        //                    $"- Bot Trans: { unauthLoginCust.Bot.ToString("N0") } ({unauthLoginCust.BotPCT}%) " +
+        //                    $"- Invalid Browser Info Trans: {unauthLoginCust.InvalidBrowser.ToString("N0")} ({unauthLoginCust.InvalidBrowserPCT}%) " +
+        //                    $" | Win loss: {winloss}";
+        //            }
+        //            else
+        //            {
+        //                spanReason += $"Win loss: {winloss}";
+        //            }
 
-                    break;
-                default:
-                    break;
-            }
+        //            break;
+        //        default:
+        //            break;
+        //    }
 
-            return spanReason;
-        }
+        //    return spanReason;
+        //}
 
-        private string MappingAdditionalReason(CustomerClassificationHistoryModel cc)
-        {
-            if (cc.SourceTypeID != (int)SourceTypeID.NoShow_Detail && !string.IsNullOrEmpty(cc.LicVIP))
-            {
-                return $"<div>{cc.LicVIP}</div>";
-            }
+        //private string MappingAdditionalReason(CustomerClassificationHistoryModel cc)
+        //{
+        //    if (cc.SourceTypeID != (int)SourceTypeID.NoShow_Detail && !string.IsNullOrEmpty(cc.LicVIP))
+        //    {
+        //        return $"<div>{cc.LicVIP}</div>";
+        //    }
 
-            if (cc.SourceTypeID != (int)SourceTypeID.NoShow_Detail && !string.IsNullOrEmpty(cc.LicBA))
-            {
-                return $"<div>{cc.LicBA}</div>";
-            }
+        //    if (cc.SourceTypeID != (int)SourceTypeID.NoShow_Detail && !string.IsNullOrEmpty(cc.LicBA))
+        //    {
+        //        return $"<div>{cc.LicBA}</div>";
+        //    }
 
-            return string.Empty;
-        }
+        //    return string.Empty;
+        //}
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationNormalCategory)]
@@ -1985,14 +1984,13 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult MarkCustomerCategory(long ctsCustID, int roleID, string userName, bool isRobotUser, bool isPinCategory)
+        public ActionResult MarkCustomerCategory(long ctsCustID, int roleID, string userName, bool isRobotUser)
         {
             var result = new MarkCustomerCategoryViewModel
             {
                 RoleID = roleID,
                 UserName = userName,
-                IsRobotUser = isRobotUser,
-                IsPinCategory = isPinCategory,
+                IsRobotUser = isRobotUser,             
                 ProblemAccountList = _pamService.GetProblemAccountCategories(false).OrderBy(x => x.Priorty)
             };
 
@@ -2045,23 +2043,25 @@
         private bool MarkDirectVVIP(CustomerCategoryModel categoryModel)
         {
             try
-            {
-                var latestClassifications = _accountService.MarkVVIPCategory(categoryModel);
+            {               
+                var classificationCusts = _customerCategoryService.MarkVVIPCustomerCategory(categoryModel);
 
-                if (categoryModel.IsVVip)
-                {
-                    latestClassifications = latestClassifications?.Where(c => c.CustId != 0);
-
-                    if (latestClassifications != null && latestClassifications.Any())
+                if (categoryModel.IsVVip && classificationCusts.CustInfos != null && classificationCusts.CustInfos.Any())
+                {                    
+                    var latestClassificationModel = classificationCusts.CustInfos.Select(x => new LatestClassificationModel
                     {
-                        // Update CC in table custinfo to MainDB
-                        _customerClassificationService.RetryPushCCToMainDB(latestClassifications, 2);
+                        CustId = x.CustID,
+                        CustomerClass = x.TargetCC,
+                        Category =  x.CategoryID
+                    });
 
-                        Task.Run(() =>
-                        {
-                            _antiFraudCenterService.DeleteAFCAccounts(latestClassifications.Select(c => c.CustId), FromFlow.CTSWEB);
-                        });
-                    }
+                    // Update CC in table custinfo to MainDB
+                    _customerClassificationService.RetryPushCCToMainDB(latestClassificationModel, 2);
+
+                    Task.Run(() =>
+                    {
+                        _antiFraudCenterService.DeleteAFCAccounts(classificationCusts.CustInfos.Select(x => x.CustID), FromFlow.CTSWEB);
+                    });                    
                 }
             }
             catch (Exception ex)
@@ -2181,9 +2181,36 @@
                 model.CreatedBy = CurrentSession.UserId;
                 model.ActionType = ActionTypeQueueCustCategory.Remove;
 
-                var custIds = _accountService.RemoveVVIPCategory(model);
+                #region Delete
+                //var custIds = _accountService.RemoveVVIPCategory(model);
 
-                if (custIds != null && custIds.Any())
+                //if (custIds != null && custIds.Any())
+                //{
+                //    if (model.RoleId != 1 && model.IsAffectToAllDownlines)
+                //    {
+                //        result = _accountService.AddQueueAffectDownlinesCustomerCategory(model);
+                //    }
+
+                //    if (model.CustId != 0)
+                //    {
+                //        _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
+                //        {
+                //            CustIds = new List<long> { model.CustId },
+                //            IsRescanPA = true,
+                //            IsRescanPotentialPA = true,
+                //            IsToQueue = (model.RoleId != 1 && !model.IsAffectToAllDownlines), // add to queue for case SMA and not checking affect to downline to affect PA for downline
+                //            IsPushCCToSoon88 = true,
+                //            IsUpdateDangerToMainDB = true,
+                //            FunctionId = FunctionId.UnmarkCustomerCategory,
+                //            ServiceName = "RemoveCustomerCategory"
+                //        });
+                //    }
+                //}
+                #endregion
+
+                var resultUmmark = _customerCategoryService.UnmarkVVIPCustomerCategory(model);
+
+                if (resultUmmark.CustInfos != null && resultUmmark.CustInfos.Any())
                 {
                     if (model.RoleId != 1 && model.IsAffectToAllDownlines)
                     {

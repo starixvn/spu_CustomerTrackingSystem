@@ -17,6 +17,7 @@
     using Fanex.NAP.CTS.Model.SpecialCustomerClass;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Implement.CustomerClassification;
     using Fanex.NAP.CTS.Service.Interface.CustomerClassification;
     using Fanex.NAP.CTS.ViewModel.SpecialCustomerClass;
@@ -27,7 +28,7 @@
     using System.Threading.Tasks;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
-    public class SpecialCustomerClassService : ISpecialCustomerClassService
+    public class SpecialCustomerClassService : BaseCustomerClassificationService, ISpecialCustomerClassService
     {
         #region construction
         private readonly ICustomerClassificationService _customerClassificationService;
@@ -94,24 +95,63 @@
 
         public void InsertCustomerClass(AddSpecialCCParamsModel model, ValidateSpecialCCResultViewModel validateUsers, int createdBy)
         {
-            var userList = validateUsers.Users.Select(x => new AddUserListSpecialCCModel
+            #region Delete
+            //var userList = validateUsers.Users.Select(x => new AddUserListSpecialCCModel
+            //{
+            //    CTSCustID = x.CTSCustID,
+            //    CustID = x.CustID,
+            //    IsLicenseeVIP = x.IsLicenseeVIP,
+            //    SportID = x.SportID,
+            //    SubscriberID = x.SubscriberID
+            //});
+
+            //var criteria = new InsertSpecialCustomerClassCriteria
+            //{
+            //    ListCust = JsonConvert.SerializeObject(userList),
+            //    CustomerClass = model.CustomerClass,
+            //    Remark = model.Comment,
+            //    CreatedBy = createdBy
+            //};
+
+            //var insertCTSResult = _repository.Fetch<ResultSpecialCCViewModel>(criteria);
+            #endregion
+
+            var generalCusts = validateUsers.Users.Where(x => x.SportID == 0).Select(x => new AddGenreralUserSpecialCCModel
             {
                 CTSCustID = x.CTSCustID,
                 CustID = x.CustID,
-                IsLicenseeVIP = x.IsLicenseeVIP,
-                SportID = x.SportID,
-                SubscriberID = x.SubscriberID
+                IsLicenseeVIP = x.IsLicenseeVIP,                
+                SubscriberID = x.SubscriberID,
+                CustomerClass = model.CustomerClass,
+                CreatedBy = createdBy,
+                Remark = model.Comment
             });
 
-            var criteria = new InsertSpecialCustomerClassCriteria
+            var sportCusts = validateUsers.Users.Where(x => x.SportID != 0).Select(x => new AddSportUserSpecialCCModel
             {
-                ListCust = JsonConvert.SerializeObject(userList),
+                CTSCustID = x.CTSCustID,
+                CustID = x.CustID,
+                SportID = x.SportID,
+                IsLicenseeVIP = x.IsLicenseeVIP,
+                SubscriberID = x.SubscriberID,
                 CustomerClass = model.CustomerClass,
-                Remark = model.Comment,
-                CreatedBy = createdBy
+                CreatedBy = createdBy,
+                Remark = model.Comment
+            });
+
+            var generalModelInsert = new InsertCustomerClassificationModel()
+            {
+                CustClassificationJson = JsonConvert.SerializeObject(generalCusts)                
             };
 
-            var insertCTSResult = _repository.Fetch<ResultSpecialCCViewModel>(criteria);
+            var sportmodelInsert = new InsertCustomerClassificationModel()
+            {
+                CustClassificationJson = JsonConvert.SerializeObject(sportCusts)
+            };
+
+            var generalInsertResult = base.InsertCustomerClassification(CCInputFlow.SpecialCC, generalModelInsert);
+
+            var sportInsertResult = base.InsertCustomerClassification(CCInputFlow.SpecialCC, sportmodelInsert);
 
             // PushCC
             Parallel.Invoke(
@@ -119,7 +159,7 @@
                 {
                     try
                     {
-                        PushDataToExternal(insertCTSResult.Where(x => x.SportID == 0));
+                        PushDataToExternal(generalInsertResult.CustInfos.Select(x=>x.CustID));
                     }
                     catch (Exception ex)
                     {
@@ -137,7 +177,7 @@
                 {
                     try
                     {
-                        PushCCBySportToMainDB(insertCTSResult.Where(x => x.SportID != 0));
+                        PushCCBySportToMainDB(sportInsertResult.CustInfos);
                     }
                     catch (Exception ex)
                     {
@@ -228,15 +268,15 @@
         #endregion
 
         #region private
-        private void PushDataToExternal(IEnumerable<ResultSpecialCCViewModel> resultSpecialCC)
+        private void PushDataToExternal(IEnumerable<long> custIDList)
         {
-            if (resultSpecialCC != null && resultSpecialCC.Any())
+            if (custIDList != null && custIDList.Any())
             {
-                var custIdsChunk = resultSpecialCC.Chunk(ConfigSettings.PushCCToExternalChunkSize);
+                var custIdsChunk = custIDList.Chunk(ConfigSettings.PushCCToExternalChunkSize);
 
                 foreach (var custs in custIdsChunk)
                 {
-                    _customerClassificationService.PushDataToExternal(custs.Select(c => c.CustID).Distinct(), new PushDataToExternalModel
+                    _customerClassificationService.PushDataToExternal(custs, new PushDataToExternalModel
                     {
                         IsUpdateDangerToMainDB = false,
                         IsSyncAFC = false,
@@ -247,7 +287,7 @@
             }
         }
 
-        private void PushCCBySportToMainDB(IEnumerable<ResultSpecialCCViewModel> custInfoParams)
+        private void PushCCBySportToMainDB(IEnumerable<CustInfoClassificationModel> custInfoParams)
         {
             if (custInfoParams != null && custInfoParams.Any())
             {

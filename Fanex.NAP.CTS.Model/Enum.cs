@@ -273,7 +273,7 @@ namespace Fanex.NAP.CTS.Model
         RedLight = 7
     }
 
-    public enum CCInsertInputFlow
+    public enum CCInputFlow
     {
         [Description("VVIP")]
         VVIP = 1,
@@ -283,13 +283,17 @@ namespace Fanex.NAP.CTS.Model
         LicVIP = 3,
         [Description("LicBA")]
         LicBA = 4,
-        [Description("ProblemAccount")]
-        ProblemAccount = 5,
+        [Description("InsertProblemAccount")]
+        InsertProblemAccount = 5,
         [Description("Potential")]
         Potential = 6,
         [Description("Robot")]
         Robot = 7,
         [Description("Normal")]
-        Normal = 8
+        Normal = 8,
+        [Description("RemoveVVIP")]
+        RemoveVVIP = 9,
+        [Description("RemoveProblemAccount")]
+        RemoveProblemAccount = 10
     }
 }

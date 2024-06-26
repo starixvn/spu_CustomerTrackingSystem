@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Model.CustomerClassification
 {
+    using System;
+
     public class CustInfoClassificationModel
     {
         public long CTSCustID { get; set; }
@@ -9,6 +11,12 @@
         public int TargetCC { get; set; }
 
         public int SportID { get; set; }
-       
+
+        public int CategoryID { get; set; }
+
+        public DateTime ScannedTime { get; set; }
+
+        public int CategoryType { get; set; }
+
     }
 }

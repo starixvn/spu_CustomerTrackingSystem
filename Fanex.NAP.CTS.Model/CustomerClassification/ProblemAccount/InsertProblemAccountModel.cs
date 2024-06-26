@@ -116,6 +116,8 @@
 
         public int? ActiveDays { get; set; }
 
+        public DateTime? PerformanceTime { get; set; }
+
         /* Get Mapping Value */
 
         public int? CategoryID { get; set; }

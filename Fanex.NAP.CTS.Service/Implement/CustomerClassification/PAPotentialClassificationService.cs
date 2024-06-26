@@ -10,8 +10,9 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
-    public class PAPotentialClassificationService : BaseCustomerClassificationService, IPAPotentialClassificationService
+    public class PAPotentialClassificationService : ProblemAccountClassificationService, IPAPotentialClassificationService
     {
         private readonly IDynamicRepository repository;
 
@@ -28,12 +29,14 @@
             {
                 var paDangerousScores = rescanDangerous.Select(x => new InsertProblemAccountModel(x));
 
+                var paClassification = this.CombinePAWithLosingPerformace(paDangerousScores, FunctionId.DangerousScoreClassification);
+
                 var modelInsert = new InsertCustomerClassificationModel()
                 {
-                    CustClassificationJson = JsonConvert.SerializeObject(paDangerousScores)
+                    CustClassificationJson = JsonConvert.SerializeObject(paClassification)
                 };
 
-                return base.InsertCustomerClassification(CCInsertInputFlow.Potential, modelInsert);
+                return base.InsertCustomerClassification(CCInputFlow.Potential, modelInsert);
             }
 
             return new ResultInsertCustomerClassificationModel();
@@ -47,12 +50,14 @@
             {
                 var pasInitialSmart = rescanInitialSmart.Select(x => new InsertProblemAccountModel(x));
 
+                var paClassification =  this.CombinePAWithLosingPerformace(pasInitialSmart, FunctionId.TWInitialSmartClassification);
+
                 var modelInsert = new InsertCustomerClassificationModel()
                 {
-                    CustClassificationJson = JsonConvert.SerializeObject(pasInitialSmart)
+                    CustClassificationJson = JsonConvert.SerializeObject(paClassification)
                 };
 
-                return base.InsertCustomerClassification(CCInsertInputFlow.Potential, modelInsert);
+                return base.InsertCustomerClassification(CCInputFlow.Potential, modelInsert);
             }
 
             return new ResultInsertCustomerClassificationModel();
@@ -69,12 +74,14 @@
                 var paTWGBs = rescanInitialTWGB.Join(custInfos, twGBCust => twGBCust.CustID, ctsCust => ctsCust.CustID,
                                (twGBCust, ctsCust) => new InsertProblemAccountModel(twGBCust, ctsCust));
 
+                var paClassification = this.CombinePAWithLosingPerformace(paTWGBs, FunctionId.TWInitialGBClassification);
+
                 var modelInsert = new InsertCustomerClassificationModel()
                 {
-                    CustClassificationJson = JsonConvert.SerializeObject(paTWGBs)
+                    CustClassificationJson = JsonConvert.SerializeObject(paClassification)
                 };
 
-                return base.InsertCustomerClassification(CCInsertInputFlow.Potential, modelInsert);
+                return base.InsertCustomerClassification(CCInputFlow.Potential, modelInsert);
             }
 
             return new ResultInsertCustomerClassificationModel();
@@ -116,5 +123,8 @@
 
             return repository.Fetch<PotentialPACustInfoModel>(criteria);
         }
+
+
+
     }
 }

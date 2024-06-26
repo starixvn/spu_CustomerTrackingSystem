@@ -17,8 +17,7 @@
         public string UserName { get; set; }
 
         public bool IsRobotUser { get; set; }
-
-        public bool IsPinCategory { get; set; }
+       
 
         public IEnumerable<ProblemAccountCategoryModel> ProblemAccountList { get; set; }
 

@@ -106,7 +106,7 @@
 
                 var existedPas = GetExistedProblemAccounts(parameters.CustIds, parameters.IsDataChanged);
 
-                var insertPaResult = problemAccountService.InsertProblemAccounts(existedPas.ProblemAccounts, parameters.IsToQueue);
+                var insertPaResult = problemAccountService.InsertProblemAccounts(existedPas.ProblemAccounts, parameters.FunctionId, parameters.IsToQueue);
 
                 rescanResult.CustIds.AddRange(insertPaResult.CustInfos.Select(x => x.CustID));
 
