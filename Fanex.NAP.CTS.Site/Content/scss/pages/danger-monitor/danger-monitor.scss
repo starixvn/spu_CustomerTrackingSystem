@@ -306,6 +306,24 @@
                         .dataTables_info {
                             top: 0
                         }
+
+                        .wrapper-info {
+                            .filter {
+                                float: right;
+                                margin-top: 0.5rem;
+                                margin-bottom: 0.5rem;
+
+                                input {
+                                    height: 29px;
+                                    background: #ffffff7a;
+                                    width: 150px;
+                                }
+
+                                input::placeholder {
+                                    font-style: italic;
+                                }
+                            }
+                        }
                     }
 
                     .table-monitor,
@@ -319,7 +337,7 @@
                                 content: '';
                                 position: absolute;
                                 left: 50%;
-                                top: 75%;
+                                top: 20%;
                                 border-radius: 50%;
                                 width: 2.4rem;
                                 height: 2.4rem;
@@ -518,30 +536,6 @@
 
 .betchoice-1 {
     background: lightgray;
-}
-
-.wrapper-info-table {
-    .loading {
-        float: right;
-
-        &:after {
-            content: '';
-            position: absolute;
-            margin-left: 5px;
-            top: 7px;
-            border-radius: 50%;
-            width: 2.4rem;
-            height: 2.4rem;
-            border: 0.25rem solid rgba(57, 110, 248, 0.2);
-            border-top-color: rgba(57, 110, 248, 1);
-            -webkit-animation: spin 1s infinite linear;
-            animation: spin 1s infinite linear;
-        }
-
-        .hide {
-            display: none;
-        }
-    }
 }
 
 .select2-container--default .select2-results__option[aria-selected="true"],

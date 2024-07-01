@@ -573,6 +573,22 @@
       .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .dataTables_info,
       .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .dataTables_info {
         top: 0; }
+      .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter,
+      .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter,
+      .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter {
+        float: right;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem; }
+        .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input,
+        .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input,
+        .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input {
+          height: 29px;
+          background: #ffffff7a;
+          width: 150px; }
+        .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::placeholder,
+        .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::placeholder,
+        .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::placeholder {
+          font-style: italic; }
     .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor,
     .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail,
     .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor,
@@ -596,7 +612,7 @@
           content: '';
           position: absolute;
           left: 50%;
-          top: 75%;
+          top: 20%;
           border-radius: 50%;
           width: 2.4rem;
           height: 2.4rem;
@@ -791,23 +807,6 @@
 
 .betchoice-1 {
   background: lightgray; }
-
-.wrapper-info-table .loading {
-  float: right; }
-  .wrapper-info-table .loading:after {
-    content: '';
-    position: absolute;
-    margin-left: 5px;
-    top: 7px;
-    border-radius: 50%;
-    width: 2.4rem;
-    height: 2.4rem;
-    border: 0.25rem solid rgba(57, 110, 248, 0.2);
-    border-top-color: #396ef8;
-    -webkit-animation: spin 1s infinite linear;
-    animation: spin 1s infinite linear; }
-  .wrapper-info-table .loading .hide {
-    display: none; }
 
 .select2-container--default .select2-results__option[aria-selected="true"],
 .select2-container--default .select2-results__option[aria-selected="false"] {

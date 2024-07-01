@@ -11,6 +11,8 @@
         Danger5: null
     }
 
+    let items = [];
+
     let domElements = {
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
         userId: $("#hdCTSCustId").val(),
@@ -27,12 +29,13 @@
         btnGenerate: $('#btnGenerate'),
         eventTarget: $('#selectedRefresh')[0],
         txtEvent: $('#txtEvent'),
+        txtEventHeader: null,
         cbbMarket: $('#cbbMarket'),
         cbbMatchSection: $('#cbbMatchSection'),
         cbbReason: $('#cbbReason'),
         rbtnScanDate: $('#rbtnScanDate'),
         rbtnEventDate: $('#rbtnEventDate'),
-        iconClear: $('#iconClear')
+        iconClear: $('#iconClear'),
     };
 
     let timeoutRenderTicketDetail = undefined;
@@ -227,15 +230,17 @@
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(data),
                 beforeSend: function () {
-                    $('.loading').removeClass('hide');
+                    // $('.loading').removeClass('hide');
                 },
                 success: function (response) {
                     if (response?.data?.Items) {
-                        domElements.tblMonitor.DataTable().rows.add(response?.data?.Items).draw(false);
+                        items = response?.data?.Items;
+
+                        domElements.txtEventHeader ? SearchEventHeader() : domElements.tblMonitor.DataTable().rows.add(items).draw(false);
                     }
 
                     domElements.tblMonitor.find('tbody').removeClass('loading hide');
-                    $('.loading').addClass('hide');
+                    // $('.loading').addClass('hide');
                 },
                 error: function (xhr, textStatus, error) {
                     domElements.tblMonitor.find('tbody').removeClass('loading');
@@ -364,7 +369,7 @@
                 domElements.tblMonitor.DataTable().clear().draw();
 
                 domElements.tblMonitor.find('tbody').addClass('loading');
-                $('.loading').removeClass('hide');
+                // $('.loading').removeClass('hide');
 
                 GetDangerMonitor();
             }
@@ -374,7 +379,7 @@
     function GenerateGrid() {
         return domElements.tblMonitor.DataTable({
             serverSide: false,
-            dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
+            dom: '<"wrapper-info-table"<"wrapper-info"lip<"filter">>>t',
             pagingType: "full_numbers",
             language: {
                 lengthMenu: "Page size _MENU_",
@@ -385,18 +390,18 @@
                     previous: ""
                 },
                 // info: "<div class=\"loading\"></div> Total Item: _TOTAL_ item(s)",
-                // info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
-                // infoEmpty: "",
+                info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
+                infoEmpty: "",
                 zeroRecords: "There's no data"
             },
-            infoCallback: function (settings, start, end, max, total, pre) {
-                if (!total) {
-                    return `<div class="display-total-ticket"></div> <div class="loading hide"></div>`
-                }
-                else {
-                    $('.display-total-ticket').html(`Displaying ${start} to ${end} of ${total} item(s)`);
-                }
-            },
+            // infoCallback: function (settings, start, end, max, total, pre) {
+            //     if (!total) {
+            //         return `<div class="display-total-ticket"></div> <div class="loading hide"></div>`
+            //     }
+            //     else {
+            //         $('.display-total-ticket').html(`Displaying ${start} to ${end} of ${total} item(s)`);
+            //     }
+            // },
             ordering: false,
             searching: false,
             lengthMenu: [1000, 1500, 2000],
@@ -442,8 +447,7 @@
                             obj.KOTime);
 
                         Object.keys(dangerListSelected).forEach(item => {
-                            if (dangerListSelected[item])
-                            {
+                            if (dangerListSelected[item]) {
                                 para += `&${item}=${dangerListSelected[item]}`;
                             }
                         });
@@ -481,8 +485,30 @@
                     $('td:eq(7)', row).addClass("betchoice-1");
                     $('td:eq(9)', row).addClass("betchoice-1");
                 }
+            },
+            initComplete: function (settings, json) {
+                if (!domElements.txtEventHeader) {
+                    $('.filter').html(`<input type="text" placeholder="Enter League/Match" id="txtEventHeader">`);
+
+                    domElements.txtEventHeader = document.querySelector('#txtEventHeader');
+
+                    domElements.txtEventHeader.addEventListener('input', function () {
+                        SearchEventHeader();
+                    });
+                }
             }
         });
+    }
+
+    function SearchEventHeader()
+    {
+        var value = domElements.txtEventHeader.value;
+
+        var itemFilters = items.filter(x =>
+                            x.LeagueName.toUpperCase().includes(value.toUpperCase()) ||
+                            x.MatchName.toUpperCase().includes(value.toUpperCase()));
+
+        domElements.tblMonitor.DataTable().clear().rows.add(itemFilters).draw(false);
     }
 
     function GetDangerListById() {
