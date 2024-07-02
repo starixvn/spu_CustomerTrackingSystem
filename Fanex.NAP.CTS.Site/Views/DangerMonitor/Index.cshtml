@@ -20,6 +20,20 @@
                     <div class="title-association">                      
                     <div class="form-filter">
                         <div class="group width-180">
+                            <div class="radio-button">
+                                <input type="radio" id="rbtnDgr" name="radioSelect" value="0" checked>
+                                <label for="rbtnDgr" class="text">Dgr</label>
+                            </div>
+                            <select class="control width-select" id="cbbDgr"></select>
+                        </div>
+                        <div class="group width-180">
+                        <div class="radio-button">
+                            <input type="radio" id="rbtnUsername" name="radioSelect" value="1">
+                            <label for="rbtnUsername" class="text">Username</label>
+                        </div>
+                        <input class="control input-event" type="text" id="txtUsername" disabled/>
+                        </div>
+                        <div class="group width-180">
                             <div class="text">
                                 <!-- <input id="checkboxFrom" type="checkbox" style="display:inline" checked/> -->
                                 <label>Event Date</label>
@@ -43,12 +57,13 @@
                             </div>
                         </div>
                         <div class="group width-180">
-                            <label class="text">Dgr</label>
-                            <select class="control width-select" id="cbbDgr"></select>
-                        </div>
-                        <div class="group width-180">
                             <label class="text">Sport</label>
                             <select class="control width-select" id="cbbSport"></select>
+                        </div>
+
+                         <div class="group width-180">
+                            <label class="text">League Group</label>
+                            <select class="control width-select" id="cbbLeagueGroup" multiple="multiple"></select>
                         </div>
 
                         <div class="group width-380">

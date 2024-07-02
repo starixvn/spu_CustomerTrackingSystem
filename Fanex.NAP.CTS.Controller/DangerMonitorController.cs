@@ -66,6 +66,17 @@
         }
 
         [HttpPost]
+        public ActionResult GetLeageGroup()
+        {
+            var leagueGroup = _dangerMonitorService.GetLeagueGroups();
+
+            return Json(new
+            {
+                data = leagueGroup
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.DangerMonitorRpt, "isSkipTracking")]
         public ActionResult GetDangerMonitor(DangerMonitorSearchModel filter, bool? isSkipTracking)
         {

@@ -132,6 +132,7 @@
     <Compile Include="AssociationDetection\GetMainCustStatisticsInfoCriteria.cs" />
     <Compile Include="Common\GetCommonBetTypeSettingCriteria.cs" />
     <Compile Include="Common\GetCommonCustomerClassCriteria.cs" />
+    <Compile Include="Common\GetCommonLeagueGroupCriteria.cs" />
     <Compile Include="Common\GetCommonSportBettypeCriteria.cs" />
     <Compile Include="Common\HealthCheckCriteria.cs" />
     <Compile Include="Common\GetCommonStaticListCriteria.cs" />

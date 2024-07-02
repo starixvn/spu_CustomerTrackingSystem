@@ -2,6 +2,7 @@
     let dateEmptyString = "------,----";
     let dataTable;
     let sportBetType = [];
+    let leagueGroup = [];
     let bettypeList = {};
     let dangerListSelected = {
         Danger1: null,
@@ -32,10 +33,12 @@
         txtEventHeader: null,
         cbbMarket: $('#cbbMarket'),
         cbbMatchSection: $('#cbbMatchSection'),
-        cbbReason: $('#cbbReason'),
         rbtnScanDate: $('#rbtnScanDate'),
         rbtnEventDate: $('#rbtnEventDate'),
         iconClear: $('#iconClear'),
+        cbbLeagueGroup: $('#cbbLeagueGroup'),
+        txtUsername: $('#txtUsername'),
+        rbtnSelect: $('input[type=radio][name=radioSelect]'),
     };
 
     let timeoutRenderTicketDetail = undefined;
@@ -76,6 +79,7 @@
             // domElements.cbbSport.multiselect("refresh");
         }
 
+        FetchLeagueGroups();
         FetchBetTypes();
     }
 
@@ -88,6 +92,26 @@
         optgroup += "</optgroup>";
 
         return optgroup;
+    }
+
+    function FetchLeagueGroups() {
+        if (sportBetType) {
+             domElements.cbbLeagueGroup.empty();
+
+            let sportSelected = domElements.cbbSport.val().split('_')[0];
+            var filterLeagueGroup = leagueGroup.filter(x => x.SportType == 0 || sportSelected == x.SportType);
+
+            let firstItem = filterLeagueGroup.shift();
+
+            filterLeagueGroup.forEach(item => {
+                domElements.cbbLeagueGroup.append(`<option selected value="${item.GroupID}">${item.GroupName}</option>`);
+            })
+
+            // None option
+            domElements.cbbLeagueGroup.append(`<option selected value="${firstItem.GroupID}">${firstItem.GroupName}</option>`);
+
+            domElements.cbbLeagueGroup.multiselect("refresh");
+        }
     }
 
     function FetchBetTypes() {
@@ -131,6 +155,38 @@
 
                     sportBetType.sort(function (a, b) {
                         return a.PriorityOrder - b.PriorityOrder;
+                    })
+                }
+            },
+            error: function (xhr, textStatus, error) {
+                if (textStatus == 'timeout') {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        //try again
+                        $.ajax(this);
+                        return;
+                    }
+                }
+
+                console.log(error);
+            }
+        });
+    }
+
+    function GetLeagueGroupList() {
+        $.ajax(common.modifyRelativeUrl('DangerMonitor/GetLeageGroup'), {
+            async: false,
+            type: 'POST',
+            tryCount: 0,
+            retryLimit: 3,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response?.data) {
+                    leagueGroup = [...response.data];
+
+                    leagueGroup.sort(function (a, b) {
+                        return a.GroupID - b.GroupID;
                     })
                 }
             },
@@ -300,7 +356,7 @@
         // });
 
         domElements.cbbBetType.multiselect({
-            menuWidth: 340,
+            menuWidth: 250,
             menuHeight: 320,
             selectedText: "# of # selected",
             noneSelectedText: "Select Bet Type"
@@ -311,17 +367,21 @@
         });
 
         domElements.cbbMatchSection.multiselect({
-            menuWidth: 260,
+            menuWidth: 250,
             menuHeight: 260,
             selectedText: "# of # selected",
             noneSelectedText: "Select Section"
         });
 
-        domElements.cbbReason.multiselect({
-            menuWidth: 260,
+        domElements.cbbLeagueGroup.multiselect({
+            menuWidth: 250,
             menuHeight: 260,
             selectedText: "# of # selected",
-            noneSelectedText: "Select Reason"
+            noneSelectedText: "Select League Group"
+        }).multiselectfilter({
+            width: 260,
+            placeholder: '',
+            label: ''
         });
 
         domElements.groupDropDown.hover(function () {
@@ -339,13 +399,22 @@
         });
 
         domElements.cbbSport.on('change', function () {
+            FetchLeagueGroups();
             FetchBetTypes();
         });
 
         GetSportBetTypeList();
+        GetLeagueGroupList();
         GetDgrList();
 
         FetchSports();
+
+        domElements.rbtnSelect.on('change', function (e) {
+            domElements.txtUsername.prop('disabled', e.currentTarget.value == 0);
+            domElements.cbbDgr.prop('disabled', e.currentTarget.value == 1);
+
+            // domElements.rbtnSelect.filter(":checked").val()
+        })
 
         domElements.btnGenerate.on('click', function () {
             if (ValidateRangeDate()) {
@@ -500,13 +569,12 @@
         });
     }
 
-    function SearchEventHeader()
-    {
+    function SearchEventHeader() {
         var value = domElements.txtEventHeader.value;
 
         var itemFilters = items.filter(x =>
-                            x.LeagueName.toUpperCase().includes(value.toUpperCase()) ||
-                            x.MatchName.toUpperCase().includes(value.toUpperCase()));
+            x.LeagueName.toUpperCase().includes(value.toUpperCase()) ||
+            x.MatchName.toUpperCase().includes(value.toUpperCase()));
 
         domElements.tblMonitor.DataTable().clear().rows.add(itemFilters).draw(false);
     }

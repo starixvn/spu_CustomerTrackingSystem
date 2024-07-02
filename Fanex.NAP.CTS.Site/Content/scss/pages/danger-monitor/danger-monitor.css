@@ -440,31 +440,38 @@
           color: #868686;
           font-style: italic;
           font-size: 1.4rem; }
-    .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .width-select {
-      width: 11rem; }
-    .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .text-box {
-      height: 2.8rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: auto;
-      padding: 0 1rem; }
-    .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-event {
-      font-size: 13px; }
-      .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-event::placeholder {
-        /* Chrome, Firefox, Opera, Safari 10.1+ */
-        color: #9f9f9f;
-        font-style: italic;
-        opacity: 1;
-        /* Firefox */ }
-      .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-event:-ms-input-placeholder {
-        /* Internet Explorer 10-11 */
-        color: #9f9f9f;
-        font-style: italic; }
-      .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-event::-ms-input-placeholder {
-        /* Microsoft Edge */
-        color: #9f9f9f;
-        font-style: italic; }
+    .match-monitor .monitor-container .monitor-table .group-control .form-filter .group {
+      padding-right: 9px; }
+      .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .width-select {
+        width: 11rem; }
+      .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .text-box {
+        height: 2.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: auto;
+        padding: 0 1rem; }
+      .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-event {
+        font-size: 13px; }
+        .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-event::placeholder {
+          /* Chrome, Firefox, Opera, Safari 10.1+ */
+          color: #9f9f9f;
+          font-style: italic;
+          opacity: 1;
+          /* Firefox */ }
+        .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-event:-ms-input-placeholder {
+          /* Internet Explorer 10-11 */
+          color: #9f9f9f;
+          font-style: italic; }
+        .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-event::-ms-input-placeholder {
+          /* Microsoft Edge */
+          color: #9f9f9f;
+          font-style: italic; }
+      .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .radio-option {
+        display: block;
+        margin-bottom: 6px; }
+        .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .radio-option .text {
+          display: contents; }
     .match-monitor .monitor-container .monitor-table .group-control .form-filter .button-generate {
       background-color: #396ef8;
       border-radius: 2px;

@@ -75,6 +75,18 @@
             return GetSportBettypesFromCache()?.GroupBy(item => $"{item.SportType}_{item.BetTypeID}_{item.BetID}")?.Select(x => x.FirstOrDefault());
         }
 
+        public IEnumerable<DangerMonitorLeagueGroupViewModel> GetLeagueGroups()
+        {
+            var leagueGroups = _commonService.GetLeagueGroup();
+
+            return leagueGroups?.Select(x => new DangerMonitorLeagueGroupViewModel
+            {
+                GroupID = x.GroupID,
+                GroupName = x.GroupName,
+                SportType = x.SportType
+            }) ?? new List<DangerMonitorLeagueGroupViewModel>();
+        }
+
         public GetDangerMonitorResultViewModel GetDangerMonitor(DangerMonitorSearchModel filter)
         {
             var result = Enumerable.Empty<GetDangerMonitorItemViewModel>();

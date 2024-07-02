@@ -29,6 +29,8 @@
 
         IEnumerable<SportBettypeViewModel> GetMainSportBettype(SportBettypeModel model);
 
+        IEnumerable<LeagueGroupViewModel> GetLeagueGroup();
+
         void CheckConnection();
     }
 }

@@ -144,6 +144,8 @@
                     }
 
                     .group {
+                        padding-right: 9px;
+
                         .width-select {
                             width: 11rem;
                         }
@@ -178,6 +180,15 @@
                                 /* Microsoft Edge */
                                 color: #9f9f9f;
                                 font-style: italic;
+                            }
+                        }
+
+                        .radio-button {
+                            display: block;
+                            margin-bottom: 6px;
+
+                            .text {
+                                display: contents;
                             }
                         }
                     }
