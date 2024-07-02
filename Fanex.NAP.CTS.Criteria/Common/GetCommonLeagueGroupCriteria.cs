@@ -4,14 +4,8 @@
 
     public class GetCommonLeagueGroupCriteria : CriteriaBase
     {
-        public override string GetSettingKey()
-        {
-            throw new System.NotImplementedException();
-        }
+        public override string GetSettingKey() => "CTS_LeagueGroup_Get";
 
-        public override bool IsValid()
-        {
-            throw new System.NotImplementedException();
-        }
+        public override bool IsValid() => true;
     }
 }

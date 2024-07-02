@@ -83,7 +83,8 @@
             {
                 GroupID = x.GroupID,
                 GroupName = x.GroupName,
-                SportType = x.SportType
+                SportType = x.SportType,
+                SportGroup = x.SportGroup
             }) ?? new List<DangerMonitorLeagueGroupViewModel>();
         }
 

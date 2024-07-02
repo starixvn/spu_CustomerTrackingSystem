@@ -38,7 +38,17 @@
         iconClear: $('#iconClear'),
         cbbLeagueGroup: $('#cbbLeagueGroup'),
         txtUsername: $('#txtUsername'),
+        btnModifyUsername: $('#btnModifyUsername'),
         rbtnSelect: $('input[type=radio][name=radioSelect]'),
+        spanAddSpecialCustomerAccountUserName: $('#spanAddProblemAccountUserName'),
+        spanAddSpecialCustomerAccountUserNameMaxTag: $('#spanAddProblemAccountUserNameMaxTag'),
+        spanAddSpecialCustomerAccountChangeHidden: $('#spanAddProblemAccountChangeHidden'),
+        spanSpecialCustomerAccountActionHidden: $('#spanProblemAccountActionHidden'),
+        maxTags: 1000,
+        divAddProblemAccount: $('#divAddProblemAccount'),
+        inputTagUsername: $('#inputTagUsername'),
+        btnSave: $('#btnSave'),
+        btnCancel: $('#btnCancel'),
     };
 
     let timeoutRenderTicketDetail = undefined;
@@ -84,7 +94,7 @@
     }
 
     function BuildOptgroupSport(optgroupValue, optgroupName, sportList) {
-        let optgroup = `<optgroup label="${optgroupName}" SportType=${optgroupValue}>`;
+        let optgroup = `<optgroup label="${optgroupName}" SportGroup=${optgroupValue}>`;
         Object.keys(sportList).forEach(index => {
             optgroup += `<option ${sportList[index].IsSelected ? 'selected' : ''} value="${index}">${sportList[index].Name}</option>`;
         })
@@ -96,19 +106,27 @@
 
     function FetchLeagueGroups() {
         if (sportBetType) {
-             domElements.cbbLeagueGroup.empty();
+            domElements.cbbLeagueGroup.empty();
+
+            let sportGroupSelected = $('select[id="cbbSport"] option:selected').closest('optgroup').attr('SportGroup');
+            sportGroupSelected = sportGroupSelected == 3 ? 1 : sportGroupSelected;
 
             let sportSelected = domElements.cbbSport.val().split('_')[0];
-            var filterLeagueGroup = leagueGroup.filter(x => x.SportType == 0 || sportSelected == x.SportType);
+            var filterLeagueGroup = leagueGroup.filter(x => x.SportGroup == sportGroupSelected && (x.SportType == 0 || sportSelected == x.SportType));
 
-            let firstItem = filterLeagueGroup.shift();
+            let firstItem;
+            if (sportGroupSelected == 1) {
+                firstItem = filterLeagueGroup.shift();
+            }
 
             filterLeagueGroup.forEach(item => {
                 domElements.cbbLeagueGroup.append(`<option selected value="${item.GroupID}">${item.GroupName}</option>`);
             })
 
-            // None option
-            domElements.cbbLeagueGroup.append(`<option selected value="${firstItem.GroupID}">${firstItem.GroupName}</option>`);
+            if (firstItem) {
+                // None option
+                domElements.cbbLeagueGroup.append(`<option selected value="${firstItem.GroupID}">${firstItem.GroupName}</option>`);
+            }
 
             domElements.cbbLeagueGroup.multiselect("refresh");
         }
@@ -409,6 +427,22 @@
 
         FetchSports();
 
+        domElements.btnModifyUsername.on('click', function () {
+            InitInputTagUsername();
+            domElements.divAddProblemAccount.dialog({
+                modal: true,
+                width: '800px',
+                title: 'Add Username',
+                resizable: true,
+                draggable: true,
+                open: function () {
+                },
+                close: function () {
+                    $(this).dialog('close');
+                }
+            });
+        });
+
         domElements.rbtnSelect.on('change', function (e) {
             domElements.txtUsername.prop('disabled', e.currentTarget.value == 0);
             domElements.cbbDgr.prop('disabled', e.currentTarget.value == 1);
@@ -605,6 +639,151 @@
         }
 
         return isValid;
+    }
+
+    function InitInputTagUsername() {
+        domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text(domElements.maxTags);
+        domElements.spanAddSpecialCustomerAccountChangeHidden.text("0");
+
+        function AddBorderTags() {
+            domElements.spanAddSpecialCustomerAccountUserName.find('tags').addClass('ctrlA');
+            let allTags = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag.tagify__tag');
+            allTags.each(function (_, tag) {
+                $(tag).css('border', '1px solid #6187E7');
+            });
+        }
+
+        function ResetMaxTag() {
+            let currentTagsLength = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag').length;
+            if (currentTagsLength <= domElements.maxTags)
+                domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text(domElements.maxTags - currentTagsLength + 1);
+        }
+
+        function EnableButtonAdd() {
+            let validTags = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag.valid');
+            let invalidDuplicatedTags = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag.invalid-duplicated');
+            let invalidUsernameTags = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag.invalid-username');
+            let numOfTagExceeded = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag.tagify--notAllowed');
+
+            let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length + numOfTagExceeded.length;
+            if (notInvalid <= 1 && validTags.length > 1)
+                domElements.btnSave.prop('disabled', false);
+            else
+                domElements.btnSave.prop('disabled', true);
+        }
+
+        function IsTextUnicode(text) {
+            var pattern = /^[\x20-\x7E]*$/;
+            return pattern.test(text);
+        }
+
+        function OnChangeTags(tagName, cssClass) {
+            let maxCountTags = parseInt(domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text());
+            let isTextUnicode = IsTextUnicode($(tagName.tag).text());
+
+            if (!isTextUnicode) {
+                domElements.inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
+            }
+            else if (maxCountTags > 0) {
+                let $tag = $(tagName.tag);
+                let textReplaced = $tag.text();
+                textReplaced = textReplaced.replace(new RegExp("'", 'g'), "").replace(new RegExp("\"", 'g'), "");
+                if (textReplaced.length > 50)
+                    textReplaced = textReplaced.substr(0, 50);
+                $tag.val(textReplaced);
+                $tag.attr('data-user-name', textReplaced);
+                $tag.prop('title', textReplaced);
+                $tag.find('span.tagify__tag-text').text(textReplaced);
+                $tag.addClass(cssClass);
+
+                let btnRemove = $tag.find('x');
+                btnRemove.on('click', function (e) {
+                    // let currentTag = $(e.target).parent();
+
+                    ResetMaxTag();
+
+                    if (domElements.spanAddSpecialCustomerAccountUserName.find('tags tag').length <= domElements.maxTags + 1)
+                        domElements.btnSave.prop('disabled', false);
+                    else
+                        domElements.btnSave.prop('disabled', true);
+                });
+
+                domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text(maxCountTags - 1);
+            }
+            else {
+                let $tag = $(tagName.tag);
+                let btnRemove = $tag.find('x');
+                btnRemove.on('click', function (e) {
+                    if (domElements.spanAddSpecialCustomerAccountUserName.find('tags tag').length <= domElements.maxTags + 1)
+                        domElements.btnSave.prop('disabled', false);
+                    else
+                        domElements.btnSave.prop('disabled', true);
+                });
+            }
+
+            if (domElements.spanAddSpecialCustomerAccountUserName.find('tags tag').length <= domElements.maxTags)
+                domElements.btnSave.prop('disabled', false);
+            else
+                domElements.btnSave.prop('disabled', true);
+            // else {
+            //     domElements.inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
+            //     let $tag = $(tagName.tag);
+            //     let btnRemove = $tag.find('x');
+            //     btnRemove.on('click', function (e) {
+            //         let currentTag = $(e.target).parent();
+
+            //         // ResetMaxTag();
+            //     });
+            // }
+        }
+
+        domElements.inputTagUsername.tagify({
+            pattern: null,
+            delimiters: /\r?\n|\r| |,/,
+            keepInvalidTags: true,
+            skipInvalid: false,
+            callbacks: {},
+            addTagOnBlur: true,
+            duplicates: true,
+            editTags: 0,
+            whitelist: [],
+            blacklist: [],
+            maxTags: domElements.maxTags,
+            enforceWhitelist: false,
+            dropdown: {
+                position: "input",
+                enabled: 0
+            }
+        })
+
+            .off('add').on('add', function (_, tagName) {
+                OnChangeTags(tagName, 'valid');
+                domElements.spanAddSpecialCustomerAccountChangeHidden.text("1");
+            })
+            .off('invalid').on('invalid', function (_, tagName) {
+                OnChangeTags(tagName, 'invalid-duplicated');
+                domElements.spanAddSpecialCustomerAccountChangeHidden.text("1");
+            });
+
+        domElements.inputTagUsername.off('keydown').on('keydown', function () {
+            let keyCode = event.keyCode;
+
+            if (keyCode === 46) {
+                if (domElements.spanAddSpecialCustomerAccountUserName.find('tags').hasClass('ctrlA')) {
+                    domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
+                    domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text(domElements.maxTags);
+                    domElements.spanAddSpecialCustomerAccountUserName.find('tags').removeClass('ctrlA');
+                }
+            }
+
+            if (event.ctrlKey) {
+                if (keyCode === 65 || keyCode === 97) {
+                    return AddBorderTags();
+                }
+            }
+        });
+
+        domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
     }
 
     $(document).ready(function () {

@@ -183,12 +183,44 @@
                             }
                         }
 
-                        .radio-button {
-                            display: block;
-                            margin-bottom: 6px;
+                        .input-username {
+                            display: flex;
+                            align-items: center;
+                            width: auto;
+                            position: relative;
 
-                            .text {
-                                display: contents;
+                            .icon-clear {
+                                position: absolute;
+                                right: 1.8rem;
+
+                                &:hover {
+                                    background-color: rgba(57, 110, 248, 0.2);
+                                    border-radius: 5px;
+                                }
+
+                                .hide {
+                                    display: none;
+                                }
+                            }
+
+                            .icon-modify {
+                                position: absolute;
+                                right: 0.4rem;
+                                font-size: 10px;
+
+                                &:hover {
+                                    background-color: rgba(57, 110, 248, 0.2);
+                                    border-radius: 6px;
+                                }
+
+                                .hide {
+                                    display: none;
+                                }
+                            }
+
+                            input {
+                                padding-right: 30px;
+                                padding-bottom: 3px;
                             }
                         }
                     }

@@ -7,5 +7,7 @@
         public string GroupName { get; set; }
 
         public int SportType { get; set; }
+
+        public int SportGroup { get; set; }
     }
 }

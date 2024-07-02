@@ -27,11 +27,15 @@
                             <select class="control width-select" id="cbbDgr"></select>
                         </div>
                         <div class="group width-180">
-                        <div class="radio-button">
-                            <input type="radio" id="rbtnUsername" name="radioSelect" value="1">
-                            <label for="rbtnUsername" class="text">Username</label>
-                        </div>
-                        <input class="control input-event" type="text" id="txtUsername" disabled/>
+                            <div class="radio-button">
+                                <input type="radio" id="rbtnUsername" name="radioSelect" value="1">
+                                <label for="rbtnUsername" class="text">Username</label>
+                            </div>
+                            <div class="input-username width-180">
+                                <input class="control" type="text" id="txtUsername" disabled/>
+                                <span class="icon-clear icon-icon-clear"></span>
+                                <span class="icon-modify icon-plus" id="btnModifyUsername"></span>
+                            </div>
                         </div>
                         <div class="group width-180">
                             <div class="text">
@@ -142,6 +146,26 @@
     </section>
 </body>
 
+<div id="divAddProblemAccount" class="popup-add divAddProblemAccount" style="display:none;">
+    <div class="form-validate">
+        <div class="group-title">
+            <div class="label">Username<label style="color:red">*</label></div>
+        </div>
+        <span class="wrapper-value" id="spanAddProblemAccountUserName">
+            <input id="inputTagUsername" type="text" name='tags-outside' class="input-field full-width tagify--outside" placeholder="Type username (Separate by comma, tab, space and enter)" />
+            <span class="limit-username">
+                Max: <span id="spanAddProblemAccountUserNameMaxTag">1000</span> usernames
+            </span>
+            <span id="spanAddProblemAccountChangeHidden" hidden></span>
+            <span id="spanProblemAccountActionHidden" hidden></span>
+        </span>
+    </div>
+
+    <div class="modal-footer margin-top-10">
+        <button id="btnCancel" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+        <button id="btnSave" class="button -add" title="Save">Save</button>
+    </div>  
+</div>
 @section scripts{
     @Scripts.Render("~/danger-monitor-scripts")
 }
