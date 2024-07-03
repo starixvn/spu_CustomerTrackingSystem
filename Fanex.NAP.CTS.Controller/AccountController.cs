@@ -424,11 +424,13 @@
 
             var graphAssociationPage = _accountService.GetAssociatedAccount(model);
 
+            //graphAssociationPage = GetAssociatedAccount_Test();
+
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
             {
                 totalItem = graphAssociationPage.TotalItems;
 
-                var customerAssociation = graphAssociationPage.AssociationList;
+                var customerAssociation = graphAssociationPage.AssociationList;                
 
                 var ctsCustIdList = customerAssociation.Select(x => new { CTSCustId = x.CTSCustID, SubscriberId = x.SubscriberID });
 
@@ -438,31 +440,10 @@
 
                 result = customerAssociation.Select(x =>
                 {
-                    var newX = new CustomerAssociationByAccountDetailViewModel
-                    {
-                        CustId = x.CustId.HasValue ? x.CustId.Value : 0,
-                        Username = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2,
-                        LoginId = !string.IsNullOrWhiteSpace(x.Username2) ? x.Username2 : x.Username,
-                        AssociationDate = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                        AssociationType = x.AssociationType,
-                        AssociationTypeName = StandardizeAssociationTypeName(x.AssociationTypeName),
-                        Status = x.StatusName == "NA" ? "N/A" : x.StatusName,
-                        StatusId = x.StatusId.HasValue ? x.StatusId.Value : 0,
-                        SubscriberId = x.SubscriberID,
-                        SubscriberName = !string.IsNullOrEmpty(x.SubscriberName) ? x.SubscriberName : "-",
-                        CTSCustId = x.CTSCustID,
-                        IsLinked = x.AssociationStatus == 1,
-                        IsProblemAccount = x.ParentIDs != null ? x.ParentIDs.Split(',').Any(y => y == "50") : false,
-                        CategoryType = x.CategoryType,
-                        IsPAProbation = x.IsProbation,
-                        CategoryIds = x.CategoryIDs,
-                        CategoryNames = !string.IsNullOrEmpty(x.CategoryNames) ? x.CategoryNames : "-",
-                        CustomerClasses = x.CustomerClasses != "-1" ? x.CustomerClasses : "-",
-                        GroupIDs = x.GroupIDs,
-                        OriginGroupIDs = x.OriginGroupIDs
-                    };
-
+                    var newX = new CustomerAssociationByAccountDetailViewModel(x);
+                   
                     var flaggedAffected = flaggedAffectedTagList.FirstOrDefault(y => y.SubscriberID.Equals(newX.SubscriberId) && y.CTSCustID.Equals(newX.CTSCustId));
+
                     if (flaggedAffected != null)
                     {
                         newX.IsFlaggedTag = flaggedAffected.IsFlagged;
@@ -480,6 +461,30 @@
                 recordsFiltered = totalItem,
                 data = result
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        private AssociatedAccountPagingModel GetAssociatedAccount_Test()
+        {
+            return new AssociatedAccountPagingModel()
+            {
+                AssociationList = new List<AssociatedAccountModel>() 
+                {
+                    new AssociatedAccountModel() 
+                    {
+                        CustId = 1,
+                        CTSCustID = 1,
+                        AssociationDate =DateTime.Now,
+                        AssociationStatus = 1,
+                        AssociationType = new List<int>(){ 1},
+                        CategoryIDs = "21300,21302,21303",
+                        IsPA  = true,
+                        IsPotentialPA = false,
+                        CategoryNames = "Abnormal, Fixed Game",
+                        ColorTypeIDs = "6"
+                    }
+                },
+                TotalItems = 1
+            };
         }
 
         private IEnumerable<CategoryGroupViewModel> GetAllCategories()
@@ -506,21 +511,7 @@
 
             return categoryList;
         }
-
-        private string StandardizeAssociationTypeName(string name)
-        {
-            if (!string.IsNullOrEmpty(name))
-            {
-                var spanBettingPattern = $"<span class='association-type-name betting-pattern'>{Consts.AssociationTypeName_BettingPattern}</span>";
-                var spanIPAssociation = $"<span class='association-type-name ip-association'>{Consts.AssociationTypeName_IP}</span>";
-
-                name = name.Replace(Consts.AssociationTypeName_BettingPattern, spanBettingPattern);
-                name = name.Replace(Consts.AssociationTypeName_IP, spanIPAssociation);
-            }
-
-            return name;
-        }
-
+      
         private List<AssociatedAccountModel> GetCustClassification(string custIds, List<AssociatedAccountModel> assModel)
         {
             var custClassification = new List<LatestCCDangerLevelModel>();
@@ -560,7 +551,8 @@
                                           CategoryNames = group.a.CategoryNames,
                                           CustomerClasses = (temp != null && group.a.CustSubId == 0) ? temp.CustomerClass.ToString() : "-",
                                           GroupIDs = group.a.GroupIDs,
-                                          OriginGroupIDs = group.a.OriginGroupIDs
+                                          OriginGroupIDs = group.a.OriginGroupIDs,
+                                          ColorTypeIDs = group.a.ColorTypeIDs
                                       }).ToList();
 
             return result;
@@ -1650,25 +1642,7 @@
 
             if (classificationHistory != null && classificationHistory.Any())
             {
-                classificationHistoryList = classificationHistory.Select(x => new CustomerClassificationHistoryViewModel(x)).ToList();
-
-                //classificationHistoryList = classificationHistory.Select(x => new CustomerClassificationHistoryViewModel
-                //{
-                //    CreatedTimeString = x.CreatedTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                //    SourceTypeName = x.SourceTypeName,
-                //    CategoryName = (x.SourceTypeID == (int)SourceTypeID.NoShow_Detail) ? "-" : (x.CategoryName != null ? x.CategoryName : string.Empty),
-                //    CustomerClass = x.CustomerClass,
-                //    Reason = "TODO",
-                //    //Reason = GetReason(x, roleID),
-                //    TurnOver = x.TurnOver,
-                //    Winloss = x.Winloss,
-                //    Margin = x.Margin,
-                //    BetCount = x.BetCount,
-                //    ActiveDays = x.ActiveDays,
-                //    LastXDaysMargin = x.LastXDaysMargin,
-                //    ProbationPeriodWinloss = x.ProbationPeriodWinloss,
-                //    CreatedBy = x.CreatedBy
-                //}).ToList();
+                classificationHistoryList = classificationHistory.Select(x => new CustomerClassificationHistoryViewModel(x)).ToList();                
             }
 
             return Json(new

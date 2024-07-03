@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.AssociationDetection
 {
+    using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using System;
     using System.Linq;
@@ -35,10 +37,10 @@
             this.IsPAProbation = data.IsPAProbation;
             this.CategoryType = data.CategoryType;
 
-            if (this.CategoryType != 2)
-            {
-                this.IsProblemAccount = data.ParentIDs != null && data.ParentIDs.Split(',').Any(y => y == "50");
-            }
+            //if (this.CategoryType != 2)
+            //{
+            //    this.IsProblemAccount = data.ParentIDs != null && data.ParentIDs.Split(',').Any(y => y == "50");
+            //}
 
             this.AgentCTSCustID = data.AgentCTSCustID;
             if (!data.IsLicensee && data.AgentUsername != null)
@@ -50,6 +52,9 @@
                 this.AgentEvidence = data.AgentEvidence;
             else
                 this.AgentEvidence = "-";
+
+            int.TryParse(data.ColorTypeIDs, out int colorTypeID);
+            this.CategoryColorType = (CategoryColorType)colorTypeID;
         }
 
         public int RowNumber { get; set; }
@@ -109,6 +114,16 @@
         public int Danger5 { get; set; }
 
         public int CategoryType { get; set; } // 1: PA, 2: PA Dangerous
+
+        public CategoryColorType CategoryColorType { get; set; }
+
+        public string CategoryColorDesc
+        {
+            get
+            {
+                return EnumExtensions.GetStringSlow(CategoryColorType);
+            }
+        }
 
         private string GetAssociationType(string assType)
         {

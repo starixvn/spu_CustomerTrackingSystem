@@ -61,5 +61,7 @@
         public string DangerDisplay { get; set; }
 
         public int CategoryType { get; set; } // 1: PA, 2: PA Dangerous
+
+        public string ColorTypeIDs { get; set; }
     }
 }

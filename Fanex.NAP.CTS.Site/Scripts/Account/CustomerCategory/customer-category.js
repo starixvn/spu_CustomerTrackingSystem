@@ -296,17 +296,21 @@
         let html = BuildButtonProfileInsertPA("", data);
         let bgHeaderUsername = '';
         let bgHeaderInfo = '';
+        if (data.length > 0) {
+            data.map(function (x) {
+                if (isProblemAccount && x.IsProblemAccount) {
+                    html = BuildCategoryToHtmlDiv(html, "circle bg-" + x.CategoryColorDesc, x.CategoryName);
+                } else if (!isProblemAccount) {
+                    html = BuildCategoryToHtmlDiv(html, "circle bg-" + x.CategoryColorDesc, x.CategoryName);
+                }
 
-        data.map(function (x) {           
-            if (isProblemAccount && x.IsProblemAccount) {
-                html = BuildCategoryToHtmlDiv(html, "circle bg-" + x.CategoryColorDesc, x.CategoryName);
-            } else if(!isProblemAccount) {
-                html = BuildCategoryToHtmlDiv(html, "circle bg-" + x.CategoryColorDesc, x.CategoryName);
-            }
-                       
-            bgHeaderUsername = 'bg-' + x.CategoryColorDesc;
-            bgHeaderInfo = 'border-' + x.CategoryColorDesc;
-        });
+                bgHeaderUsername = 'bg-' + x.CategoryColorDesc;
+                bgHeaderInfo = 'border-' + x.CategoryColorDesc;
+            });
+        } else {            
+            bgHeaderUsername = 'bg-green';
+            bgHeaderInfo = 'border-green';
+        }        
 
         $('#divHeaderUsername').removeClass('bg-yellow').removeClass('bg-green')
             .removeClass('bg-green-line').removeClass('bg-yellow-line').removeClass('bg-red')
@@ -319,134 +323,7 @@
         $('#spanContentInfoLoading').css('visibility', 'hidden');
         $('#divHeaderInfo').css('visibility', 'visible');
     }
-
-    function RenderProblemCategoryProfilePage(data, isPAProbation) {
-        let isExistProblemAccount = false;
-        let html = "";
-        
-        html = BuildButtonProfileInsertPA(html, data);
-
-        data.map(function (x) {
-            if (x.IsProblemAccount && x.CategoryType != 2) {
-                let classIconColor = isPAProbation ? "circle bg-lightred" : "circle bg-red";
-
-                html = BuildCategoryToHtmlDiv(html, classIconColor, x.CategoryName);
-
-                isExistProblemAccount = true;
-            }
-        });
-
-        if (isExistProblemAccount) {
-            if (isPAProbation) {
-                $('#divHeaderUsername')
-                    .removeClass('bg-yellow').removeClass('bg-green')
-                    .removeClass('bg-green-line').removeClass('bg-yellow-line')
-                    .addClass('bg-lightred');
-                $('#divHeaderInfo')
-                    .removeClass('border-yellow').removeClass('border-green')
-                    .addClass('border-lightred');
-            } else {
-                $('#divHeaderUsername')
-                    .removeClass('bg-yellow').removeClass('bg-green')
-                    .removeClass('bg-green-line').removeClass('bg-yellow-line')
-                    .addClass('bg-red');
-                $('#divHeaderInfo')
-                    .removeClass('border-yellow').removeClass('border-green')
-                    .addClass('border-red');
-            }
-
-            $('#divCustomerCategorySummary').html(html);
-            $('#spanContentInfoLoading').css('visibility', 'hidden');
-            $('#divHeaderInfo').css('visibility', 'visible');
-        }        
-
-        return isExistProblemAccount;
-    }
-
-    function RenderNormalCategoryProfilePage(data, isPAProbation) {
-        let indexColorProfile = 1;
-        let html = "";
-
-        html = BuildButtonProfileInsertPA(html);
-
-        let cacheCategoryColors = common.categoryColor();
-
-        for (let i = 0; i < cacheCategoryColors.length; i++) {
-            data.map(function (x) {
-                let isEquals = x.CategoryId.toString() === cacheCategoryColors[i].id;
-                if (isEquals) {
-                    let classIconColor = cacheCategoryColors[i].cssClass;
-
-                    html = BuildCategoryToHtmlDiv(html, classIconColor, x.CategoryName);
-
-                    indexColorProfile = indexColorProfile < cacheCategoryColors[i].indexColor
-                        ? cacheCategoryColors[i].indexColor
-                        : indexColorProfile;
-                }
-            });
-        }
-
-        switch (indexColorProfile) {
-            case 1:
-                $('#divHeaderUsername')
-                    .removeClass('bg-red').removeClass('bg-lightred').removeClass('bg-yellow')
-                    .removeClass('bg-green-line').removeClass('bg-yellow-line')
-                    .addClass('bg-green');
-                $('#divHeaderInfo')
-                    .removeClass('border-red').removeClass('border-lightred').removeClass('border-yellow')
-                    .addClass('border-green');
-                break;
-            case 2:
-                $('#divHeaderUsername')
-                    .removeClass('bg-red').removeClass('bg-lightred').removeClass('bg-green')
-                    .removeClass('bg-green-line').removeClass('bg-yellow-line')
-                    .addClass('bg-yellow');
-                $('#divHeaderInfo')
-                    .removeClass('border-red').removeClass('border-lightred').removeClass('border-green')
-                    .addClass('border-yellow');
-                break;
-            case 3:
-                $('#divHeaderUsername')
-                    .removeClass('bg-red').removeClass('bg-lightred').removeClass('bg-yellow')
-                    .removeClass('bg-green').removeClass('bg-yellow-line')
-                    .addClass('bg-green-line')
-                $('#divHeaderInfo')
-                    .removeClass('border-red').removeClass('border-lightred').removeClass('border-yellow')
-                    .addClass('border-green');
-                break;
-            case 4:
-                $('#divHeaderUsername')
-                    .removeClass('bg-red').removeClass('bg-lightred').removeClass('bg-yellow')
-                    .removeClass('bg-green').removeClass('bg-green-line')
-                    .addClass('bg-yellow-line')
-                $('#divHeaderInfo')
-                    .removeClass('border-red').removeClass('border-lightred').removeClass('border-yellow')
-                    .addClass('border-yellow');
-                break;
-            case 5:
-                $('#divHeaderUsername')
-                    .removeClass('bg-red').removeClass('bg-lightred').removeClass('bg-green')
-                    .removeClass('bg-green-line').removeClass('bg-yellow-line');
-                $('#divHeaderInfo')
-                    .removeClass('border-red').removeClass('border-lightred').removeClass('border-green');
-
-                if (isPAProbation) {
-                    $('#divHeaderUsername').addClass('bg-yellow-light');
-                    $('#divHeaderInfo').addClass('border-yellow-light');
-                } else {
-                    $('#divHeaderUsername').addClass('bg-yellow');
-                    $('#divHeaderInfo').addClass('border-yellow');
-                }
-                break;
-            default:
-                break;
-        }
-
-        $('#divCustomerCategorySummary').html(html);
-        $('#spanContentInfoLoading').css('visibility', 'hidden');
-        $('#divHeaderInfo').css('visibility', 'visible');
-    }
-
+ 
     function BuildButtonProfileInsertPA(html) {
         if (isHostPermission) {
             html += "<div class='btn-add-pa' id='btnProfileInsertPA' title='Mark Category'></div>";

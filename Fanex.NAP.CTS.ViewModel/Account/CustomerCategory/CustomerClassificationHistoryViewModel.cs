@@ -12,15 +12,13 @@
             this.SourceTypeName = data.SourceTypeName;
             this.CategoryName = (data.SourceTypeID == (int)SourceTypeID.NoShow_Detail) ? "-" : (data.CategoryName != null ? data.CategoryName : string.Empty);
             this.CustomerClass = data.CustomerClass;
-            this.Reason = "TODO";
+            this.Reason = data.Remark;
             //Reason = GetReason(x, roleID);
-            this.TurnOver = data.TurnOver;
-            this.Winloss = data.Winloss;
-            this.Margin = data.Margin;
-            this.BetCount = data.BetCount;
-            this.ActiveDays = data.ActiveDays;
-            this.LastXDaysMargin = data.LastXDaysMargin;
-            this.ProbationPeriodWinloss = data.ProbationPeriodWinloss;
+            //this.TurnOver = data.TurnOver;
+            //this.Winloss = data.WinLoss;
+            //this.Margin = data.Margin;
+            //this.BetCount = data.BetCount;
+            //this.ActiveDays = data.ActiveDays;           
             this.CreatedBy = data.CreatedBy;
         }
 
@@ -44,11 +42,7 @@
 
         public decimal BetCount { get; set; }
 
-        public int ActiveDays { get; set; }
-
-        public decimal LastXDaysMargin { get; set; }
-
-        public decimal ProbationPeriodWinloss { get; set; }
+        public int ActiveDays { get; set; }      
 
         public string CreatedBy { get; set; }
 

@@ -5,21 +5,23 @@
 
     public class CustomerClassificationHistoryModel
     {
+        public long ID { get; set; }
+
         public DateTime CreatedTime { get; set; }
-
-        public int SourceTypeID { get; set; }
-
-        public string SourceTypeName { get; set; }
-
-        public int CategoryID { get; set; }
 
         public string CategoryName { get; set; }
 
-        public string CustomerClass { get; set; }        
+        public string CustomerClass { get; set; }
+
+        public int CategoryID { get; set; }
+
+        public string SourceTypeName { get; set; }
+
+        public int SourceTypeID { get; set; }
 
         public decimal TurnOver { get; set; }
 
-        public decimal Winloss { get; set; }
+        public decimal WinLoss { get; set; }
 
         public decimal Margin { get; set; }
 
@@ -27,9 +29,7 @@
 
         public int ActiveDays { get; set; }
 
-        public decimal LastXDaysMargin { get; set; }
-
-        public decimal ProbationPeriodWinloss { get; set; }
+        public int RobotCounter { get; set; }
 
         public string CreatedBy { get; set; }
 
@@ -42,10 +42,6 @@
         public decimal TWTicketRejectRate { get; set; }
 
         public decimal TWDesktopUsageRate { get; set; }
-
-        public int RobotCounter { get; set; }
-
-        public int LastModifiedBy { get; set; }
 
         public string Remark { get; set; }
 
@@ -62,12 +58,14 @@
         public bool IsFromImperva { get; set; }
 
         public string LicVIP { get; set; }
-        
-        public string LicBA { get; set; }
+
+        public string LicBA { get; set; }  
 
         public bool? IsParlay { get; set; }
 
         public int ? SportType { get; set; }
+
+        public int IssueTypeID { get; set; }
 
         public string SportName { 
             get 
@@ -80,7 +78,6 @@
                 return string.Empty;
             } 
         }
-
-        public int IssueTypeID { get; set; }
+        
     }
 }
