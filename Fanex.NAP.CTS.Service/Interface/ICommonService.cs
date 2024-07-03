@@ -31,6 +31,8 @@
 
         IEnumerable<LeagueGroupViewModel> GetLeagueGroup();
 
+        IEnumerable<ValidateUserNameModel> ValidateUsernameForMain(string userName);
+
         void CheckConnection();
     }
 }

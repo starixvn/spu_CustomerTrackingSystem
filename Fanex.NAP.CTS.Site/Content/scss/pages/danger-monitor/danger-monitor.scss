@@ -589,3 +589,199 @@
 html {
     overflow: hidden;
 }
+
+.divAddProblemAccount {
+    width: 100%;
+    background: #fff;
+
+    .title {
+        margin-bottom: -1.3rem;
+    }
+
+    .group-title .wrapper-rule .text {
+        font-weight: 100;
+    }
+
+    .wrapper-rule-left {
+        margin-right: 0px;
+
+        .text {
+            color: #545454;
+            font-family: Lato;
+            font-size: 13px;
+            line-height: 16px;
+            letter-spacing: 0em;
+            text-align: left;
+        }
+
+        .icon-delete::before {
+            color: #A8A8A8 !important;
+        }
+    }
+
+    .label {
+        color: #545454;
+        font-family: 'Lato';
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 16px;
+        letter-spacing: 0em;
+        text-align: left;
+    }
+
+    .tagify__input:empty::before {
+        font-family: 'Lato';
+        color: #8C8C8C;
+        font-size: 13px;
+        font-style: italic;
+        font-weight: 400;
+        line-height: 16px;
+        letter-spacing: 0em;
+        text-align: left;
+    }
+
+    .tagify__input {
+        margin-top: 0px;
+    }
+
+    .wrapper-value {
+        border-color: #DDDDDD;
+    }
+
+    .form-filter {
+        .box-username {
+            width: 100%;
+            padding: 0 !important;
+
+            .btn-detect {
+                padding-right: 0px;
+                padding-left: 0px;
+                height: 28px;
+                width: 67px;
+            }
+
+            .btn-detect:not(:disabled) {
+                background-color: #396EF8;
+                border-radius: 2px;
+                color: #fff;
+
+                &:hover {
+                    background-color: #5081ff
+                }
+            }
+        }
+
+        .icon-delete {
+            font-size: 1.4rem;
+            height: 18px;
+            margin-right: 4px;
+            cursor: pointer;
+            padding: 2px;
+
+            &::before {
+                color: #C0C0C0;
+            }
+
+            &:hover {
+                border-radius: 50%;
+                background: #E7EDFF;
+            }
+
+            &.delete-invalid::before {
+                color: #FF0000;
+            }
+        }
+
+        .checkbox-filter {
+            margin-right: 16px;
+        }
+
+        .checkbox-container {
+            margin-top: 12px;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 15.6px;
+            font-family: Lato;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 16px;
+            letter-spacing: 0em;
+            text-align: left;
+            color: #545454;
+
+            span {
+                &:before {
+                    top: 1px;
+                    height: 16px;
+                    width: 16px;
+                }
+
+                &:after {
+                    top: 5px;
+                    left: 3px;
+                }
+            }
+        }
+
+        .flex-container {
+            display: flex;
+            margin-bottom: 16px;
+            width: 800px;
+
+            .checkbox-all {
+                cursor: pointer;
+                color: #396EF8;
+                font-size: 12px;
+                line-height: 16.8px;
+                font-weight: 700;
+            }
+
+            .box-left {
+                background: #E3E9F6;
+                padding-left: 10px;
+                height: 80px;
+
+                .icon-Check {
+                    color: #396EF8;
+                    font-weight: 700;
+                }
+
+                .icon-Close {
+                    color: #396EF8;
+                    font-weight: 700;
+                }
+            }
+
+            .box-right {
+                margin-top: 0px;
+                margin-left: 15px;
+            }
+
+            input[type=checkbox]:checked+span:before {
+                background: #4F971F;
+                border-color: #4F971F;
+            }
+        }
+    }
+
+    .icon-delete {
+        font-size: 1.4rem;
+        height: 18px;
+        margin-right: 4px;
+        cursor: pointer;
+        padding: 2px;
+
+        &::before {
+            color: #C0C0C0;
+        }
+
+        &:hover {
+            border-radius: 50%;
+            background: #E7EDFF;
+        }
+
+        &.delete-invalid::before {
+            color: #FF0000;
+        }
+    }
+}

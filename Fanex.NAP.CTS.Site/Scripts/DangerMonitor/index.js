@@ -13,6 +13,8 @@
     }
 
     let items = [];
+    let isFocusValidUsername = false;
+    let isValidUsername = false;
 
     let domElements = {
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
@@ -38,6 +40,7 @@
         iconClear: $('#iconClear'),
         cbbLeagueGroup: $('#cbbLeagueGroup'),
         txtUsername: $('#txtUsername'),
+        btnClearUsername: $('#btnClearUsername'),
         btnModifyUsername: $('#btnModifyUsername'),
         rbtnSelect: $('input[type=radio][name=radioSelect]'),
         spanAddSpecialCustomerAccountUserName: $('#spanAddProblemAccountUserName'),
@@ -45,10 +48,11 @@
         spanAddSpecialCustomerAccountChangeHidden: $('#spanAddProblemAccountChangeHidden'),
         spanSpecialCustomerAccountActionHidden: $('#spanProblemAccountActionHidden'),
         maxTags: 1000,
-        divAddProblemAccount: $('#divAddProblemAccount'),
+        divAddUsername: $('#divAddProblemAccount'),
         inputTagUsername: $('#inputTagUsername'),
         btnSave: $('#btnSave'),
         btnCancel: $('#btnCancel'),
+        btnRemoveInvalidUserName: $('#btnRemoveInvalidUserName'),
     };
 
     let timeoutRenderTicketDetail = undefined;
@@ -427,21 +431,36 @@
 
         FetchSports();
 
+        domElements.btnClearUsername.on('click', function () {
+            domElements.txtUsername.val('');
+        })
+
         domElements.btnModifyUsername.on('click', function () {
-            InitInputTagUsername();
-            domElements.divAddProblemAccount.dialog({
-                modal: true,
-                width: '800px',
-                title: 'Add Username',
-                resizable: true,
-                draggable: true,
-                open: function () {
-                },
-                close: function () {
-                    $(this).dialog('close');
-                }
-            });
+            if (!domElements.divAddUsername.open) {
+                InitInputTagUsername();
+                domElements.divAddUsername.dialog({
+                    modal: true,
+                    width: '800px',
+                    title: 'Edit Username',
+                    resizable: true,
+                    draggable: true,
+                    open: function () {
+                        var txtUsername = domElements.txtUsername.val();
+
+                        if (txtUsername) {
+                            domElements.inputTagUsername.tagify().data('tagify').addTags(txtUsername);
+                            ValidateUsernameInput();
+                            domElements.spanAddSpecialCustomerAccountChangeHidden.text("0");
+                        }
+                    },
+                    close: function () {
+                        $(this).dialog('close');
+                    }
+                });
+            }
         });
+
+        domElements.btnRemoveInvalidUserName.on('click', () => RemoveAllInvalidUsername());
 
         domElements.rbtnSelect.on('change', function (e) {
             domElements.txtUsername.prop('disabled', e.currentTarget.value == 0);
@@ -450,33 +469,74 @@
             // domElements.rbtnSelect.filter(":checked").val()
         })
 
+        domElements.btnCancel.on('click', () => {
+            domElements.divAddUsername.dialog('close');
+        });
+
+        domElements.btnSave.on('click', () => {
+            var result = GetInputUserName('');
+
+            if (result) {
+                domElements.txtUsername.val(GetInputUserName(''));
+                domElements.divAddUsername.dialog('close');
+            }
+        })
+
         domElements.btnGenerate.on('click', function () {
-            if (ValidateRangeDate()) {
-                var dangerSelected = GetDangerListById();
-                dangerListSelected.Danger1 = dangerSelected[1];
-                dangerListSelected.Danger2 = dangerSelected[2];
-                dangerListSelected.Danger3 = dangerSelected[3];
-                dangerListSelected.Danger4 = dangerSelected[4];
-                dangerListSelected.Danger5 = dangerSelected[5];
+            if (domElements.rbtnSelect.filter(":checked").val() == 0) {
+                if (ValidateRangeDate()) {
+                    var dangerSelected = GetDangerListById();
+                    dangerListSelected.Danger1 = dangerSelected[1];
+                    dangerListSelected.Danger2 = dangerSelected[2];
+                    dangerListSelected.Danger3 = dangerSelected[3];
+                    dangerListSelected.Danger4 = dangerSelected[4];
+                    dangerListSelected.Danger5 = dangerSelected[5];
 
-                if (!dataTable) {
-                    dataTable = GenerateGrid();
+                    OnGenerate();
                 }
-
-                if (timeoutRenderTicketDetail || xhr) {
-                    clearTimeout(timeoutRenderTicketDetail);
-                    xhr.onreadystatechange = null;
-                    xhr.abort();
+            }
+            else {
+                if (ValidateRangeDate() && isValidUsername) {
+                    OnGenerate();
                 }
+                else if (!isFocusValidUsername) {
+                    ValidateTxtUsername(true);
+                }
+            }
 
-                domElements.tblMonitor.DataTable().clear().draw();
+        });
 
-                domElements.tblMonitor.find('tbody').addClass('loading');
-                // $('.loading').removeClass('hide');
+        domElements.txtUsername.off('keydown').on('keydown', function () {
+            isFocusValidUsername = true;
+        });
 
-                GetDangerMonitor();
+        $(document).on('click', function (e) {
+            if ($(e.target).closest('#txtUsername').length == 0 && isFocusValidUsername) {
+                /* Hide dropdown here */
+                ValidateTxtUsername()
+
+                isFocusValidUsername = !isFocusValidUsername;
             }
         });
+    }
+
+    function OnGenerate() {
+        if (!dataTable) {
+            dataTable = GenerateGrid();
+        }
+
+        if (timeoutRenderTicketDetail || xhr) {
+            clearTimeout(timeoutRenderTicketDetail);
+            xhr.onreadystatechange = null;
+            xhr.abort();
+        }
+
+        domElements.tblMonitor.DataTable().clear().draw();
+
+        domElements.tblMonitor.find('tbody').addClass('loading');
+        // $('.loading').removeClass('hide');
+
+        GetDangerMonitor();
     }
 
     function GenerateGrid() {
@@ -698,14 +758,11 @@
 
                 let btnRemove = $tag.find('x');
                 btnRemove.on('click', function (e) {
-                    // let currentTag = $(e.target).parent();
+                    let currentTag = $(e.target).parent();
 
                     ResetMaxTag();
-
-                    if (domElements.spanAddSpecialCustomerAccountUserName.find('tags tag').length <= domElements.maxTags + 1)
-                        domElements.btnSave.prop('disabled', false);
-                    else
-                        domElements.btnSave.prop('disabled', true);
+                    ValidateUsernameInput(currentTag.text().trim());
+                    EnableButtonAdd()
                 });
 
                 domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text(maxCountTags - 1);
@@ -714,27 +771,16 @@
                 let $tag = $(tagName.tag);
                 let btnRemove = $tag.find('x');
                 btnRemove.on('click', function (e) {
-                    if (domElements.spanAddSpecialCustomerAccountUserName.find('tags tag').length <= domElements.maxTags + 1)
-                        domElements.btnSave.prop('disabled', false);
-                    else
-                        domElements.btnSave.prop('disabled', true);
+                    let currentTag = $(e.target).parent();
+
+                    ResetMaxTag();
+                    ValidateUsernameInput(currentTag.text().trim());
+
+                    EnableButtonAdd()
                 });
             }
 
-            if (domElements.spanAddSpecialCustomerAccountUserName.find('tags tag').length <= domElements.maxTags)
-                domElements.btnSave.prop('disabled', false);
-            else
-                domElements.btnSave.prop('disabled', true);
-            // else {
-            //     domElements.inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
-            //     let $tag = $(tagName.tag);
-            //     let btnRemove = $tag.find('x');
-            //     btnRemove.on('click', function (e) {
-            //         let currentTag = $(e.target).parent();
-
-            //         // ResetMaxTag();
-            //     });
-            // }
+            domElements.btnSave.prop('disabled', true);
         }
 
         domElements.inputTagUsername.tagify({
@@ -773,6 +819,7 @@
                     domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
                     domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text(domElements.maxTags);
                     domElements.spanAddSpecialCustomerAccountUserName.find('tags').removeClass('ctrlA');
+                    domElements.btnSave.prop('disabled', true);
                 }
             }
 
@@ -783,7 +830,177 @@
             }
         });
 
+        $(document).off('mouseup').on('mouseup', function (e) {
+            let isOutSiteInput = !domElements.spanAddSpecialCustomerAccountUserName.is(e.target) && domElements.spanAddSpecialCustomerAccountUserName.has(e.target).length === 0;
+            let isTagsFocus = domElements.spanAddSpecialCustomerAccountUserName.find('tags.tagify--focus').length > 0;
+            let isChange = domElements.spanAddSpecialCustomerAccountChangeHidden.text();
+            if (isOutSiteInput && isTagsFocus || isChange === "1") {
+                // domElements.txtComment.focus();
+                domElements.spanAddSpecialCustomerAccountUserName.addClass("loading-value");
+                setTimeout(() => {
+                    ValidateUsernameInput('');
+                    domElements.spanAddSpecialCustomerAccountUserName.removeClass("loading-value");
+                    domElements.spanAddSpecialCustomerAccountChangeHidden.text("0");
+                }, 500);
+            }
+        });
+
         domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
+        domElements.spanAddSpecialCustomerAccountUserName.find('tags').attr('tabindex', "1");
+        domElements.btnSave.prop('disabled', true);
+    }
+
+    function ValidateUsernameInput(textTagRemove, textTagRemoveList) {
+        let numOfTagExceeded = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag.tagify--notAllowed');
+
+        if (textTagRemove != '' && numOfTagExceeded.length > 1) return;
+        else if (textTagRemove == '' && numOfTagExceeded.length > 0) return;
+
+        let userNames = GetInputUserName(textTagRemove, textTagRemoveList);
+
+        if (userNames !== '') {
+            let params = {};
+            params.username = userNames;
+
+            $.ajax(common.modifyRelativeUrl('DangerMonitor/ValidateUsername'), {
+                type: 'POST',
+                data: params,
+                beforeSend: function () {
+                    domElements.spanAddSpecialCustomerAccountUserName.addClass("loading-value");
+                },
+                success: function (response) {
+                    if (response?.data) {
+                        isValidUsername = response.data.InvalidateUsernames.length == 0;
+                        BindResultValidatedInputUserName(response.data);
+                    }
+                },
+                complete: function () {
+                    domElements.spanAddSpecialCustomerAccountUserName.removeClass("loading-value");
+                },
+                error: function (errMsg) {
+                    domElements.spanAddSpecialCustomerAccountUserName.removeClass("loading-value");
+                    console.log(errMsg);
+                }
+            });
+        }
+        else {
+            domElements.btnRemoveInvalidUserName.removeClass('delete-invalid');
+        }
+    }
+
+    function ValidateTxtUsername(isGenerate) {
+        var usernames = domElements.txtUsername.val().replace(/\r?\n|\r| |,/g, ",");
+
+        if (usernames) {
+            let params = {};
+            params.username = usernames;
+
+            $.ajax(common.modifyRelativeUrl('DangerMonitor/ValidateUsername'), {
+                type: 'POST',
+                data: params,
+                success: function (response) {
+                    if (response?.data) {
+                        isValidUsername = response.data.InvalidateUsernames.length == 0;
+                        if (response.data.InvalidateUsernames.length > 0) {
+                            domElements.btnModifyUsername.click();
+                        }
+                        else {
+                            domElements.txtUsername.val(usernames);
+
+                            if (isGenerate) {
+                                domElements.btnGenerate.click();
+                            }
+                        }
+                    }
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
+    }
+
+    function BindResultValidatedInputUserName(data) {
+        domElements.spanAddSpecialCustomerAccountUserName.find('tags tag').each(function (_, tag) {
+            $(tag).removeClass('invalid-username').removeClass('invalid-duplicated').addClass('valid');
+        });
+
+        data.InvalidateUsernames.map(function (x) {
+            let usernameEqual = $("tag[data-user-name='" + x + "']");
+            if (usernameEqual !== undefined) {
+                usernameEqual.removeClass('valid').addClass('invalid-username');
+                usernameEqual.prop('title', "Not exist");
+            }
+        });
+
+        if (data.InvalidateUsernames.length === 0) {
+            domElements.btnRemoveInvalidUserName.removeClass('delete-invalid');
+            domElements.btnSave.prop('disabled', false);
+        }
+        else {
+            domElements.btnRemoveInvalidUserName.addClass('delete-invalid');
+            domElements.btnSave.prop('disabled', true);
+        }
+    }
+
+    function RemoveAllInvalidUsername() {
+        if (domElements.btnRemoveInvalidUserName.hasClass('delete-invalid')) {
+            common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure you want to remove all invalid Usernames?</div></div>",
+                function () {
+                    let invalidTags = domElements.spanAddSpecialCustomerAccountUserName.find('.invalid-username', 'tags tag');
+                    invalidTags.each(function (idx, tag) {
+                        domElements.inputTagUsername.tagify().data('tagify').removeTags(tag);
+
+                        RefreshRemoveAllInvalidUsername(invalidTags);
+                    });
+                }
+            )
+        }
+    }
+
+    function RefreshRemoveAllInvalidUsername(invalidTags) {
+        let maxCountTags = parseInt(domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text());
+
+        domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text(maxCountTags + invalidTags.length);
+        domElements.btnRemoveInvalidUserName.removeClass('delete-invalid');
+
+        setTimeout(() => {
+            let invalidUsernameList = [];
+            invalidTags.map(function (_, ele) { invalidUsernameList.push($(ele).text().trim()); });
+
+            ValidateUsernameInput(null, invalidUsernameList);
+        }, 120);
+    }
+
+    function GetInputUserName(textTagRemove, textTagRemoveList) {
+        let userNameList = [];
+        let tags = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag');
+
+        tags.map(function (_, ele) {
+            let text = $(ele).text().trim();
+            if (textTagRemoveList != undefined && textTagRemoveList.length > 0) {
+                if (ContainsObject(text, textTagRemoveList))
+                    return;
+            } else if (textTagRemove !== "" && text === textTagRemove) {
+                textTagRemove = "";
+                return;
+            }
+
+            userNameList.push(text);
+        });
+
+        return userNameList.join();
+    }
+
+    function ContainsObject(obj, list) {
+        var i;
+        for (i = 0; i < list.length; i++) {
+            if (list[i] === obj) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     $(document).ready(function () {

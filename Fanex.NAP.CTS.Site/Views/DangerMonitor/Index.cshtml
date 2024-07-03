@@ -33,7 +33,7 @@
                             </div>
                             <div class="input-username width-180">
                                 <input class="control" type="text" id="txtUsername" disabled/>
-                                <span class="icon-clear icon-icon-clear"></span>
+                                <span class="icon-clear icon-icon-clear" id="btnClearUsername"></span>
                                 <span class="icon-modify icon-plus" id="btnModifyUsername"></span>
                             </div>
                         </div>
@@ -149,7 +149,13 @@
 <div id="divAddProblemAccount" class="popup-add divAddProblemAccount" style="display:none;">
     <div class="form-validate">
         <div class="group-title">
-            <div class="label">Username<label style="color:red">*</label></div>
+            <div class="label">Username</div>
+            <div class="wrapper-title">
+                <div class="wrapper-rule wrapper-rule-left">
+                    <span id="btnRemoveInvalidUserName" class="text icon-delete" title="Remove all invalid Usernames"></span>     
+                    <span class="text bg-red">Invalid Username</span>
+                </div>                                
+            </div>
         </div>
         <span class="wrapper-value" id="spanAddProblemAccountUserName">
             <input id="inputTagUsername" type="text" name='tags-outside' class="input-field full-width tagify--outside" placeholder="Type username (Separate by comma, tab, space and enter)" />

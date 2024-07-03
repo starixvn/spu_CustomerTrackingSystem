@@ -209,5 +209,12 @@
                 db.CreateDbConnection().Open();
             }
         }
+
+        public IEnumerable<ValidateUserNameModel> ValidateUsernameForMain(string userName)
+        {
+            var criteria = new ValidateUsernameForMainCriteria { UsernameList = userName };
+
+            return repository.Fetch<ValidateUserNameModel>(criteria);
+        }
     }
 }

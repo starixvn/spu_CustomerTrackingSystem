@@ -88,6 +88,23 @@
             }) ?? new List<DangerMonitorLeagueGroupViewModel>();
         }
 
+        public DangerMonitorValidateUsernameViewModel ValidateUsernameForMain(string usernames)
+        {
+            var result = new DangerMonitorValidateUsernameViewModel();
+
+            if (usernames.IsNotNullOrEmpty())
+            {
+                var validateUsernames = _commonService.ValidateUsernameForMain(usernames);
+
+                var arrUsername = usernames.Split(',');
+
+                result.ValidateUsernames = validateUsernames?.Select(x => x.UserName).ToList() ?? new List<string>();
+                result.InvalidateUsernames = arrUsername?.Except(result.ValidateUsernames).ToList() ?? new List<string>();
+            }
+
+            return result;
+        }
+
         public GetDangerMonitorResultViewModel GetDangerMonitor(DangerMonitorSearchModel filter)
         {
             var result = Enumerable.Empty<GetDangerMonitorItemViewModel>();

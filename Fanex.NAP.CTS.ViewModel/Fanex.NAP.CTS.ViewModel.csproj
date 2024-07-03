@@ -157,6 +157,7 @@
     <Compile Include="DangerMonitor\DangerMonitorSporTypeBetTypeViewModel.cs" />
     <Compile Include="DangerMonitor\DangerMonitorDetailViewModel.cs" />
     <Compile Include="DangerMonitor\DangerMonitorLeagueGroupViewModel.cs" />
+    <Compile Include="DangerMonitor\DangerMonitorValidateUsernameViewModel.cs" />
     <Compile Include="DangerMonitor\GetDangerSummaryItemViewModel.cs" />
     <Compile Include="DangerMonitor\GetDangerMonitorItemViewModel.cs" />
     <Compile Include="DangerMonitor\GetDangerMonitorResultViewModel.cs" />

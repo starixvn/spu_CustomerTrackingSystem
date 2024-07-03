@@ -77,6 +77,17 @@
         }
 
         [HttpPost]
+        public ActionResult ValidateUsername(string username)
+        {
+            var validateUsername = _dangerMonitorService.ValidateUsernameForMain(username);
+
+            return Json(new
+            {
+                data = validateUsername
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.DangerMonitorRpt, "isSkipTracking")]
         public ActionResult GetDangerMonitor(DangerMonitorSearchModel filter, bool? isSkipTracking)
         {
