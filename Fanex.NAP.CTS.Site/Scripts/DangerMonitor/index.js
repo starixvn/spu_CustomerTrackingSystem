@@ -471,11 +471,12 @@
         domElements.btnRemoveInvalidUserName.on('click', () => RemoveAllInvalidUsername());
 
         domElements.rbtnSelect.on('change', function (e) {
-            domElements.txtUsername.prop('disabled', e.currentTarget.value == 0);
-            domElements.cbbDgr.prop('disabled', e.currentTarget.value == 1);
-
-            // domElements.rbtnSelect.filter(":checked").val()
+            ChangeSelectRadioButton(e.currentTarget.value);
         })
+
+        setTimeout(() => {
+            ChangeSelectRadioButton(domElements.rbtnSelect.filter(":checked").val());
+        }, 100);
 
         domElements.btnCancel.on('click', () => {
             domElements.divAddUsername.dialog('close');
@@ -524,6 +525,22 @@
                 isFocusValidUsername = !isFocusValidUsername;
             }
         });
+    }
+
+    function ChangeSelectRadioButton(value)
+    {
+        domElements.txtUsername.prop('disabled', value == 0);
+            domElements.cbbDgr.prop('disabled', value == 1);
+
+            if (value == 0) {
+                domElements.btnClearUsername.addClass('hide');
+                domElements.btnModifyUsername.addClass('hide');
+            }
+
+            if (value == 1) {
+                domElements.btnClearUsername.removeClass('hide');
+                domElements.btnModifyUsername.removeClass('hide');
+            }
     }
 
     function OnGenerate() {
