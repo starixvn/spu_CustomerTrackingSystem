@@ -183,7 +183,9 @@
                 BettypeList = filter.BetTypes,
                 MatchSection = filter.MatchSection,
                 MarketList = filter.Market,
-                QueryDanger = filter.QueryDanger,
+                QueryDanger = filter.QueryDanger ?? string.Empty,
+                UserNameList = filter.UserNameList ?? string.Empty,
+                LeagueGroupList = filter.LeagueGroupList
             };
 
             var result = _repository.Fetch<DangerMMTicketInfoViewModel>(criteria);

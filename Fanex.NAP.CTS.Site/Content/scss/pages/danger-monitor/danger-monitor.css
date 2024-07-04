@@ -492,6 +492,8 @@
         .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username input {
           padding-right: 30px;
           padding-bottom: 3px; }
+        .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .input-invalid {
+          border: 1px solid red; }
     .match-monitor .monitor-container .monitor-table .group-control .form-filter .button-generate {
       background-color: #396ef8;
       border-radius: 2px;

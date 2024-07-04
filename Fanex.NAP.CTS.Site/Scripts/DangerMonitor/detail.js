@@ -330,7 +330,7 @@ function DangerousSettingDetail() {
             optGroupChecked: true
         });
     }
-    
+
     function SetupMultiselectFilter(ccb, selectName, menuWidth = 260, menuHeight = 280) {
         ccb.multiselect({
             menuWidth: menuWidth,
@@ -378,7 +378,7 @@ function DangerousSettingDetail() {
                         selected = false;
                     }
                 }
-              
+
                 let optgroup = `<optgroup label='Detect By v.v...'>`;
                 if (selected) {
                     optgroup += `<option selected value='${data[i]}'>${data[i]}</option>`;
@@ -535,13 +535,24 @@ function DangerousSettingDetail() {
     function BuildOptgroup(optgroupValue, optgroupName, items, cacheSelectedDanger) {
         let optgroup = `<optgroup label="${optgroupName}" DangerType=${optgroupValue}>`;
         if (cacheSelectedDanger.length > 0) {
-            items.map(function (x) {
-                if (cacheSelectedDanger.indexOf(optgroupValue + '-' + x.Danger) != -1) {
-                    optgroup += `<option selected value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
-                } else {
-                    optgroup += `<option value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
-                }
+            var isDangerSelect = items.some(function (x) {
+                return cacheSelectedDanger.indexOf(optgroupValue + '-' + x.Danger) != -1;
             })
+
+            if (isDangerSelect) {
+                items.map(function (x) {
+                    if (cacheSelectedDanger.indexOf(optgroupValue + '-' + x.Danger) != -1) {
+                        optgroup += `<option selected value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
+                    } else {
+                        optgroup += `<option value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
+                    }
+                })
+            }
+            else {
+                items.map(function (x) {
+                    optgroup += `<option selected value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
+                })
+            }
         } else {
             items.map(function (x) {
                 optgroup += `<option selected value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
@@ -2301,9 +2312,9 @@ function DangerousSettingDetail() {
         if (reasonItems.length > 0) {
             if (cacheSelectedReason.length > 0) {
                 reasonItems.forEach(item => {
-                    if ($.inArray(item.toString(), cacheSelectedReason) != -1) {                       
+                    if ($.inArray(item.toString(), cacheSelectedReason) != -1) {
                         domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "selected");
-                    } else {                      
+                    } else {
                         domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "");
                     }
                 });
@@ -2311,16 +2322,16 @@ function DangerousSettingDetail() {
                 let arrReason = cacheDefaultReason.split(',');
 
                 reasonItems.forEach(item => {
-                    if ($.inArray(item.toString(), arrReason) != -1) {                      
+                    if ($.inArray(item.toString(), arrReason) != -1) {
                         domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "selected");
-                    } else {                      
+                    } else {
                         domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "");
                     }
                 });
 
                 cacheDefaultReason = null;
             } else {
-                reasonItems.forEach(item => {                 
+                reasonItems.forEach(item => {
                     domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "selected");
                 });
             }
@@ -2329,7 +2340,7 @@ function DangerousSettingDetail() {
     }
 
     function BuildReasonGroup(reasonItems) {
-        domElements.cbbReason.multiselect().empty();      
+        domElements.cbbReason.multiselect().empty();
 
         domElements.cbbReasonGroupHidden.find('optgroup').each(function () {
             let optGroup = $(this);
@@ -2343,7 +2354,7 @@ function DangerousSettingDetail() {
 
             if (reasonMatched.length > 0) {
                 let optgroup = `<optgroup label='${groupName}'>`;
-                reasonMatched.forEach(reason => {                   
+                reasonMatched.forEach(reason => {
                     optgroup += `<option value='${reason}'>${reason}</option>`;
                 });
 
@@ -2665,7 +2676,7 @@ function DangerousSettingDetail() {
         domElements.inputCustAmountRM.val('');
         domElements.iconClearUsnAmt.addClass("hide");
         SetupMultiselect(domElements.cbbTicketsStatus, "Status");
-        
+
         SetupDoubleDataTable();
         SetupSingleTable();
 

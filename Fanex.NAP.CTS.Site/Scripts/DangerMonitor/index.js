@@ -14,7 +14,7 @@
 
     let items = [];
     let isFocusValidUsername = false;
-    let isValidUsername = false;
+    let timeOutIdInputEvent;
 
     let domElements = {
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
@@ -285,7 +285,6 @@
             let data = {
                 FromDate: domElements.dpkFromDate.val(),
                 ToDate: !domElements.dpkToDate.val().includes(dateEmptyString) ? domElements.dpkToDate.val() : null,
-                QueryDanger: domElements.cbbDgr.val(),
                 SportList: domElements.cbbSport.val(),
                 Event: domElements.txtEvent.val().trim().toUpperCase(),
                 Market: domElements.cbbMarket.val() == "" ? "0,1" : domElements.cbbMarket.val(),
@@ -297,8 +296,16 @@
                     "BetChoiceAway": bettypeList[x].BetChoiceType == 2 ? bettypeList[x].BetChoiceAway : undefined,
                     "BetID": bettypeList[x].BetID
                 }))),
+                LeagueGroupList: domElements.cbbLeagueGroup.val().join(),
                 isSkipTracking: isSkipTracking
             };
+
+            if (domElements.rbtnSelect.filter(":checked").val() == 0) {
+                data.QueryDanger = domElements.cbbDgr.val();
+            }
+            else {
+                data.UserNameList = domElements.txtUsername.val();
+            }
 
             xhr = $.ajax(common.modifyRelativeUrl('DangerMonitor/GetDangerMonitor'), {
                 type: 'POST',
@@ -433,6 +440,7 @@
 
         domElements.btnClearUsername.on('click', function () {
             domElements.txtUsername.val('');
+            domElements.txtUsername.removeClass("input-invalid");
         })
 
         domElements.btnModifyUsername.on('click', function () {
@@ -479,6 +487,7 @@
             if (result) {
                 domElements.txtUsername.val(GetInputUserName(''));
                 domElements.divAddUsername.dialog('close');
+                domElements.txtUsername.removeClass("input-invalid");
             }
         })
 
@@ -496,10 +505,7 @@
                 }
             }
             else {
-                if (ValidateRangeDate() && isValidUsername) {
-                    OnGenerate();
-                }
-                else if (!isFocusValidUsername) {
+                if (ValidateRangeDate()) {
                     ValidateTxtUsername(true);
                 }
             }
@@ -542,7 +548,7 @@
     function GenerateGrid() {
         return domElements.tblMonitor.DataTable({
             serverSide: false,
-            dom: '<"wrapper-info-table"<"wrapper-info"lip<"filter">>>t',
+            dom: '<"wrapper-info-table"<"wrapper-info"lip<"filter"f>>>t',
             pagingType: "full_numbers",
             language: {
                 lengthMenu: "Page size _MENU_",
@@ -566,12 +572,12 @@
             //     }
             // },
             ordering: false,
-            searching: false,
+            searching: true,
             lengthMenu: [1000, 1500, 2000],
             pageLength: 1000,
             scrollX: false,
             scrollCollapse: true,
-            // paging: false,
+            paging: true,
             scrollY: `${$(window).height() - 285}px`,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
@@ -609,11 +615,13 @@
                             obj.SportType,
                             obj.KOTime);
 
-                        Object.keys(dangerListSelected).forEach(item => {
-                            if (dangerListSelected[item]) {
-                                para += `&${item}=${dangerListSelected[item]}`;
-                            }
-                        });
+                        if (domElements.rbtnSelect.filter(":checked").val() == 0) {
+                            Object.keys(dangerListSelected).forEach(item => {
+                                if (dangerListSelected[item]) {
+                                    para += `&${item}=${dangerListSelected[item]}`;
+                                }
+                            });
+                        }
 
                         return '<a class="click-view-details" href="DangerMonitor/Detail?' + para + '" target="_blank">' + obj.MatchName + '</a>';
                     }
@@ -656,7 +664,17 @@
                     domElements.txtEventHeader = document.querySelector('#txtEventHeader');
 
                     domElements.txtEventHeader.addEventListener('input', function () {
-                        SearchEventHeader();
+                        if (timeOutIdInputEvent) {
+                            clearTimeout(timeOutIdInputEvent);
+                        }
+
+                        domElements.tblMonitor.DataTable().clear().draw();
+                        domElements.tblMonitor.find('tbody').addClass('loading');
+
+                        timeOutIdInputEvent = setTimeout(() => {
+                            SearchEventHeader();
+                            domElements.tblMonitor.find('tbody').removeClass('loading');
+                        }, 400);
                     });
                 }
             }
@@ -670,7 +688,7 @@
             x.LeagueName.toUpperCase().includes(value.toUpperCase()) ||
             x.MatchName.toUpperCase().includes(value.toUpperCase()));
 
-        domElements.tblMonitor.DataTable().clear().rows.add(itemFilters).draw(false);
+        domElements.tblMonitor.DataTable().clear().rows.add(itemFilters).draw();
     }
 
     function GetDangerListById() {
@@ -726,7 +744,7 @@
             let numOfTagExceeded = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag.tagify--notAllowed');
 
             let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length + numOfTagExceeded.length;
-            if (notInvalid <= 1 && validTags.length > 1)
+            if (notInvalid <= 0 && validTags.length > 0)
                 domElements.btnSave.prop('disabled', false);
             else
                 domElements.btnSave.prop('disabled', true);
@@ -889,7 +907,9 @@
     }
 
     function ValidateTxtUsername(isGenerate) {
-        var usernames = domElements.txtUsername.val().replace(/\r?\n|\r| |,/g, ",");
+        var usernames = domElements.txtUsername.val()
+            .replace(/\r?\n|\r| |,/g, ",").split(',')
+            .filter(x => x.length > 0).join();
 
         if (usernames) {
             let params = {};
@@ -901,14 +921,19 @@
                 success: function (response) {
                     if (response?.data) {
                         isValidUsername = response.data.InvalidateUsernames.length == 0;
+                        domElements.txtUsername.val(usernames);
+
                         if (response.data.InvalidateUsernames.length > 0) {
-                            domElements.btnModifyUsername.click();
+                            domElements.txtUsername.addClass("input-invalid");
+                            if (!isGenerate) {
+                                domElements.btnModifyUsername.click();
+                            }
                         }
                         else {
-                            domElements.txtUsername.val(usernames);
+                            domElements.txtUsername.removeClass("input-invalid");
 
                             if (isGenerate) {
-                                domElements.btnGenerate.click();
+                                OnGenerate();
                             }
                         }
                     }
@@ -917,6 +942,9 @@
                     console.log(errMsg);
                 }
             });
+        }
+        else if (isGenerate) {
+            OnGenerate();
         }
     }
 
