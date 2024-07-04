@@ -280,7 +280,7 @@
         return optgroup;
     }
 
-    function GetDangerMonitor(isSkipTracking = true) {
+    function GetDangerMonitor() {
         timeoutRenderTicketDetail = setTimeout(() => {
             let data = {
                 FromDate: domElements.dpkFromDate.val(),
@@ -297,7 +297,6 @@
                     "BetID": bettypeList[x].BetID
                 }))),
                 LeagueGroupList: domElements.cbbLeagueGroup.val().join(),
-                isSkipTracking: isSkipTracking
             };
 
             if (domElements.rbtnSelect.filter(":checked").val() == 0) {
@@ -305,6 +304,7 @@
             }
             else {
                 data.UserNameList = domElements.txtUsername.val();
+                data.isSkipTrackingUsername = domElements.txtUsername.val().length == 0;
             }
 
             xhr = $.ajax(common.modifyRelativeUrl('DangerMonitor/GetDangerMonitor'), {
