@@ -514,17 +514,19 @@ function DangerousSettingDetail() {
         if (data) {
             let dangerSelector = domElements.cbbDanger.empty();
 
-            if (data.Danger1.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(1, "Original", data.Danger1.DangerItems, cacheSelectedDanger));
+            var cacheDanger = IsHasDangerLevelDataFromPath() ? cacheSelectedDanger : [];
 
-            if (data.Danger2.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(2, "ABI", data.Danger2.DangerItems, cacheSelectedDanger));
+            if (data.Danger1.DangerItems.length > 0) dangerSelector.append(BuildOptgroupDgr(1, "Original", data.Danger1.DangerItems, cacheDanger));
 
-            if (data.Danger3.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(3, "Other Sports", data.Danger3.DangerItems, cacheSelectedDanger));
+            if (data.Danger2.DangerItems.length > 0) dangerSelector.append(BuildOptgroupDgr(2, "ABI", data.Danger2.DangerItems, cacheDanger));
 
-            if (data.Danger4.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(4, "Basketball", data.Danger4.DangerItems, cacheSelectedDanger));
+            if (data.Danger3.DangerItems.length > 0) dangerSelector.append(BuildOptgroupDgr(3, "Other Sports", data.Danger3.DangerItems, cacheDanger));
 
-            if (data.Danger5.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(5, "E-Sports", data.Danger5.DangerItems, cacheSelectedDanger));
+            if (data.Danger4.DangerItems.length > 0) dangerSelector.append(BuildOptgroupDgr(4, "Basketball", data.Danger4.DangerItems, cacheDanger));
 
-            if (data.NoneDanger.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(0, "None", data.NoneDanger.DangerItems, cacheSelectedDanger));
+            if (data.Danger5.DangerItems.length > 0) dangerSelector.append(BuildOptgroupDgr(5, "E-Sports", data.Danger5.DangerItems, cacheDanger));
+
+            if (data.NoneDanger.DangerItems.length > 0) dangerSelector.append(BuildOptgroupDgr(0, "None", data.NoneDanger.DangerItems, cacheDanger));
 
             domElements.cbbDanger.parent().find('button').removeClass('border-error');
 
@@ -532,27 +534,24 @@ function DangerousSettingDetail() {
         }
     }
 
-    function BuildOptgroup(optgroupValue, optgroupName, items, cacheSelectedDanger) {
+    function IsHasDangerLevelDataFromPath() {
+        return  cacheDefaultDanger.Danger1 ||
+                cacheDefaultDanger.Danger2 ||
+                cacheDefaultDanger.Danger3 ||
+                cacheDefaultDanger.Danger4 ||
+                cacheDefaultDanger.Danger5;
+    }
+
+    function BuildOptgroupDgr(optgroupValue, optgroupName, items, cacheSelectedDanger) {
         let optgroup = `<optgroup label="${optgroupName}" DangerType=${optgroupValue}>`;
         if (cacheSelectedDanger.length > 0) {
-            var isDangerSelect = items.some(function (x) {
-                return cacheSelectedDanger.indexOf(optgroupValue + '-' + x.Danger) != -1;
-            })
-
-            if (isDangerSelect) {
-                items.map(function (x) {
-                    if (cacheSelectedDanger.indexOf(optgroupValue + '-' + x.Danger) != -1) {
-                        optgroup += `<option selected value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
-                    } else {
-                        optgroup += `<option value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
-                    }
-                })
-            }
-            else {
-                items.map(function (x) {
+            items.map(function (x) {
+                if (cacheSelectedDanger.indexOf(optgroupValue + '-' + x.Danger) != -1) {
                     optgroup += `<option selected value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
-                })
-            }
+                } else {
+                    optgroup += `<option value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
+                }
+            })
         } else {
             items.map(function (x) {
                 optgroup += `<option selected value=${optgroupValue}-${x.Danger} DangerValue=${x.Danger}>${x.DangerName}</option>`;
