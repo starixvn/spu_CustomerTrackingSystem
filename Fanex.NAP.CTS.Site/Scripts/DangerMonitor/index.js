@@ -761,7 +761,7 @@
             let numOfTagExceeded = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag.tagify--notAllowed');
 
             let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length + numOfTagExceeded.length;
-            if (notInvalid <= 0 && validTags.length > 0)
+            if (notInvalid <= 1 && validTags.length > 1)
                 domElements.btnSave.prop('disabled', false);
             else
                 domElements.btnSave.prop('disabled', true);
