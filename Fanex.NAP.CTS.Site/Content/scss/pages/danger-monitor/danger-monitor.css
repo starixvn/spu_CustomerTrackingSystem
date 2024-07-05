@@ -492,6 +492,20 @@
         .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username input {
           padding-right: 30px;
           padding-bottom: 3px; }
+          .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username input::-webkit-input-placeholder {
+            /* Edge */
+            color: #868686;
+            font-style: italic;
+            font-size: 1.4rem; }
+          .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username input::-moz-placeholder {
+            /* Internet Explorer */
+            color: #868686;
+            font-style: italic;
+            font-size: 1.4rem; }
+          .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username input:-ms-input-placeholder {
+            color: #868686;
+            font-style: italic;
+            font-size: 1.4rem; }
         .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .input-invalid {
           border: 1px solid red; }
     .match-monitor .monitor-container .monitor-table .group-control .form-filter .button-generate {

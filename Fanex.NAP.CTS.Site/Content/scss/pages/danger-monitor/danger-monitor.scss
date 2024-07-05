@@ -221,6 +221,26 @@
                             input {
                                 padding-right: 30px;
                                 padding-bottom: 3px;
+
+                                &::-webkit-input-placeholder {
+                                    /* Edge */
+                                    color: #868686;
+                                    font-style: italic;
+                                    font-size: 1.4rem;
+                                }
+    
+                                &::-moz-placeholder {
+                                    /* Internet Explorer */
+                                    color: #868686;
+                                    font-style: italic;
+                                    font-size: 1.4rem;
+                                }
+    
+                                &:-ms-input-placeholder {
+                                    color: #868686;
+                                    font-style: italic;
+                                    font-size: 1.4rem;
+                                }
                             }
 
                             .input-invalid {
