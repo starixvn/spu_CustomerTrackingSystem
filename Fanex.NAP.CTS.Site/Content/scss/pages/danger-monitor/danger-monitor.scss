@@ -221,25 +221,26 @@
                             input {
                                 padding-right: 30px;
                                 padding-bottom: 3px;
+                                font-size: 13px;
 
-                                &::-webkit-input-placeholder {
-                                    /* Edge */
-                                    color: #868686;
+                                &::placeholder {
+                                    /* Chrome, Firefox, Opera, Safari 10.1+ */
+                                    color: #9f9f9f;
                                     font-style: italic;
-                                    font-size: 1.4rem;
-                                }
-    
-                                &::-moz-placeholder {
-                                    /* Internet Explorer */
-                                    color: #868686;
-                                    font-style: italic;
-                                    font-size: 1.4rem;
+                                    opacity: 1;
+                                    /* Firefox */
                                 }
     
                                 &:-ms-input-placeholder {
-                                    color: #868686;
+                                    /* Internet Explorer 10-11 */
+                                    color: #9f9f9f;
                                     font-style: italic;
-                                    font-size: 1.4rem;
+                                }
+    
+                                &::-ms-input-placeholder {
+                                    /* Microsoft Edge */
+                                    color: #9f9f9f;
+                                    font-style: italic;
                                 }
                             }
 
@@ -381,13 +382,27 @@
                                 margin-bottom: 0.5rem;
 
                                 input {
-                                    height: 29px;
+                                    height: 27px;
                                     background: #ffffff7a;
                                     width: 150px;
-                                }
+                                    font-size: 13px;
 
-                                input::placeholder {
-                                    font-style: italic;
+                                    &::placeholder {
+                                        /* Chrome, Firefox, Opera, Safari 10.1+ */
+                                        font-style: italic;
+                                        opacity: 1;
+                                        /* Firefox */
+                                    }
+        
+                                    &:-ms-input-placeholder {
+                                        /* Internet Explorer 10-11 */
+                                        font-style: italic;
+                                    }
+        
+                                    &::-ms-input-placeholder {
+                                        /* Microsoft Edge */
+                                        font-style: italic;
+                                    }
                                 }
                             }
                         }

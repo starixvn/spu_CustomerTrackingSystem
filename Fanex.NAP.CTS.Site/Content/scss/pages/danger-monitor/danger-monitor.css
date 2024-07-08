@@ -491,21 +491,22 @@
             display: none; }
         .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username input {
           padding-right: 30px;
-          padding-bottom: 3px; }
-          .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username input::-webkit-input-placeholder {
-            /* Edge */
-            color: #868686;
+          padding-bottom: 3px;
+          font-size: 13px; }
+          .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username input::placeholder {
+            /* Chrome, Firefox, Opera, Safari 10.1+ */
+            color: #9f9f9f;
             font-style: italic;
-            font-size: 1.4rem; }
-          .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username input::-moz-placeholder {
-            /* Internet Explorer */
-            color: #868686;
-            font-style: italic;
-            font-size: 1.4rem; }
+            opacity: 1;
+            /* Firefox */ }
           .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username input:-ms-input-placeholder {
-            color: #868686;
-            font-style: italic;
-            font-size: 1.4rem; }
+            /* Internet Explorer 10-11 */
+            color: #9f9f9f;
+            font-style: italic; }
+          .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username input::-ms-input-placeholder {
+            /* Microsoft Edge */
+            color: #9f9f9f;
+            font-style: italic; }
         .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .input-invalid {
           border: 1px solid red; }
     .match-monitor .monitor-container .monitor-table .group-control .form-filter .button-generate {
@@ -625,13 +626,27 @@
         .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input,
         .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input,
         .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input {
-          height: 29px;
+          height: 27px;
           background: #ffffff7a;
-          width: 150px; }
-        .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::placeholder,
-        .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::placeholder,
-        .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::placeholder {
-          font-style: italic; }
+          width: 150px;
+          font-size: 13px; }
+          .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::placeholder,
+          .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::placeholder,
+          .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::placeholder {
+            /* Chrome, Firefox, Opera, Safari 10.1+ */
+            font-style: italic;
+            opacity: 1;
+            /* Firefox */ }
+          .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input:-ms-input-placeholder,
+          .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input:-ms-input-placeholder,
+          .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input:-ms-input-placeholder {
+            /* Internet Explorer 10-11 */
+            font-style: italic; }
+          .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::-ms-input-placeholder,
+          .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::-ms-input-placeholder,
+          .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::-ms-input-placeholder {
+            /* Microsoft Edge */
+            font-style: italic; }
     .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor,
     .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail,
     .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor,
