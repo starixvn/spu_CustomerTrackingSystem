@@ -44,11 +44,11 @@
                 {
                     var custIds = problemAccounts.Select(c => c.CustID)?.Distinct();
 
-                    var paLosing = GetProblemAccountLosingClassification(custIds, FunctionId.InsertPAM);
+                    //var paLosing = GetProblemAccountLosingClassification(custIds, FunctionId.InsertPAM);
 
-                    var paClassification = MergeProblemAccountClassification(problemAccounts, paLosing);
+                    //var paClassification = MergeProblemAccountClassification(problemAccounts, paLosing);
 
-                    var insertPaResult = InsertProblemAccounts(paClassification, FunctionId.InsertPAM, isToQueue);
+                    var insertPaResult = InsertProblemAccounts(problemAccounts, FunctionId.InsertPAM, isToQueue);
 
                     if (insertPaResult.CustInfos != null && insertPaResult.CustInfos.Any())
                     {
