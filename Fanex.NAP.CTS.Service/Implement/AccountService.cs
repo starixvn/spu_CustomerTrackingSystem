@@ -1031,8 +1031,7 @@
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 using (var result = db.QueryMultiple(criteria))
-                {
-                    result.Read<bool>(); // Pin Categories
+                {                   
                     result.Read<bool>(); // Excluded Tag Ass PA
 
                     return result.Read<CustomerClassificationModel>();

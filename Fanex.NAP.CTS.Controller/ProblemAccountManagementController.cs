@@ -128,12 +128,7 @@
         [HttpGet]
         public ActionResult GetProblemAccountAllCategories()
         {
-            var data = _pamService.GetProblemAccountCategories(true).OrderBy(x => x.Priorty);
-                //.Where(x => x.CategoryID != (int)CustomerCategoryID.SystemDetectGroupBetting
-                //        && x.CategoryID != (int)CustomerCategoryID.RobotOCRD
-                //        && x.CategoryID != (int)CustomerCategoryID.SysDetectUnauthorizedLogin
-                //        && x.CategoryID != (int)CustomerCategoryID.SysDetectUnauthorizedLoginLosing)
-                //.OrderBy(x => x.Priorty);
+            var data = _pamService.GetProblemAccountCategories(true).OrderBy(x => x.Priorty);              
 
             return Json(data, JsonRequestBehavior.AllowGet);
         }

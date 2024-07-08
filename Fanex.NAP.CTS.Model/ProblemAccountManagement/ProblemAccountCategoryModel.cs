@@ -6,17 +6,13 @@
 
         public string CategoryName { get; set; }
 
-        public int CategoryGroup { get; set; }
+        public int CategoryGroupID { get; set; }
 
         public int RelevantCategoryGroup { get; set; }
 
         public int Priorty { get; set; }
 
-        public bool IsRobotUser { get; set; }
-
-        public bool IsRobotOCRD { get; set; }
-
-        public bool IsSystemDetect { get; set; }
-
+        public bool IsDisabled { get; set; }
+     
     }
 }

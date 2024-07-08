@@ -106,7 +106,8 @@
 
                 var existedPas = GetExistedProblemAccounts(parameters.CustIds, parameters.IsDataChanged);
 
-                var insertPaResult = problemAccountService.InsertProblemAccounts(existedPas.ProblemAccounts, parameters.FunctionId, parameters.IsToQueue);
+                // TO DO check agian
+                var insertPaResult = problemAccountService.InsertProblemAccounts(existedPas.ProblemAccounts, InsertPA_ByType.Category, parameters.FunctionId, parameters.IsToQueue);
 
                 rescanResult.CustIds.AddRange(insertPaResult.CustInfos.Select(x => x.CustID));
 

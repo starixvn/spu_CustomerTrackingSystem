@@ -43,12 +43,8 @@
                 if (problemAccounts.Any())
                 {
                     var custIds = problemAccounts.Select(c => c.CustID)?.Distinct();
-
-                    //var paLosing = GetProblemAccountLosingClassification(custIds, FunctionId.InsertPAM);
-
-                    //var paClassification = MergeProblemAccountClassification(problemAccounts, paLosing);
-
-                    var insertPaResult = InsertProblemAccounts(problemAccounts, FunctionId.InsertPAM, isToQueue);
+                  
+                    var insertPaResult = InsertProblemAccounts(problemAccounts, mappingCategoryByType, FunctionId.InsertPAM, isToQueue);
 
                     if (insertPaResult.CustInfos != null && insertPaResult.CustInfos.Any())
                     {
@@ -147,7 +143,7 @@
         //    return Enumerable.Empty<CustInfoModel>();
         //}
        
-        public ResultInsertCustomerClassificationModel InsertProblemAccounts(IEnumerable<InsertProblemAccountModel> problemAccounts, FunctionId funcId, bool isToQueue)
+        public ResultInsertCustomerClassificationModel InsertProblemAccounts(IEnumerable<InsertProblemAccountModel> problemAccounts, InsertPA_ByType mappingCategoryByType, FunctionId funcId, bool isToQueue)
         {
             var paClassification = CombinePAWithLosingPerformace(problemAccounts, funcId);
 
@@ -157,7 +153,7 @@
                 IsToQueue = isToQueue
             };
 
-            return base.InsertCustomerClassification(CCInputFlow.InsertProblemAccount, modelInsert);
+            return base.InsertCustomerClassification(CCInputFlow.InsertPACategory, modelInsert);
         }
 
         public IEnumerable<InsertProblemAccountModel> CombinePAWithLosingPerformace(IEnumerable<InsertProblemAccountModel> problemAccounts, FunctionId funcId)

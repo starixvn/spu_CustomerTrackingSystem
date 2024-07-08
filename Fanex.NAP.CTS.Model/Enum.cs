@@ -283,8 +283,10 @@ namespace Fanex.NAP.CTS.Model
         LicVIP = 3,
         [Description("LicBA")]
         LicBA = 4,
-        [Description("InsertProblemAccount")]
-        InsertProblemAccount = 5,
+        [Description("InsertPACategory")]
+        InsertPACategory = 50,
+        [Description("InsertPAReason")]
+        InsertPAReason = 51,
         [Description("Potential")]
         Potential = 6,
         [Description("Robot")]
