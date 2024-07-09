@@ -15,6 +15,7 @@
         public ProblemAccountAction PAAction { get; set; }
 
         public bool IsUnmarkDownlines { get; set; }
-       
+
+        public bool IsRobot { get; set; }
     }
 }

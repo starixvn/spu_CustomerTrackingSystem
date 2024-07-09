@@ -163,7 +163,7 @@
 
                 if (!resultValidate.ProblemAccountInvalidList.Any())
                 {
-                    if (model.CategoryGroup == 163)
+                    if (model.IsRobot)
                     {
                         dbResult = SaveMarkRobotAccount(model, validatedModels);
                     }

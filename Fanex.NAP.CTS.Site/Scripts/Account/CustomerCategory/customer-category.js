@@ -16,7 +16,7 @@
         isProblemAccount: false,
         isPAProbation: false
     };
-    let CONST_ROBOT_USER_GROUP = 163;
+
     let dataTable;
     let dataTableCustomerCategoryBySport;
 
@@ -436,11 +436,12 @@
             if (!$(this).attr('disabled')) {
                 params.CategoryID = $(this).val();
                 params.CategoryGroup = $(this).attr('data-categorygroup');
+                params.IsRobot = $(this).attr('data-isrobot');
             }
         });
 
         if (params.CategoryID != 0) {
-            let url = (params.CategoryGroup == CONST_ROBOT_USER_GROUP)
+            let url = params.IsRobot?.toLowerCase() == 'true'
                 ? common.modifyRelativeUrl('Account/SaveMarkRobotAccount')
                 : common.modifyRelativeUrl('Account/SaveMarkCustomerCategory');
 

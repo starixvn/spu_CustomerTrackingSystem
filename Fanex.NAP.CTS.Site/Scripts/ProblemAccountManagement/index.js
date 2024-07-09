@@ -421,6 +421,7 @@
         params.PAAction = domElements.spanProblemAccountActionHidden.val();
         params.IsUnmarkDownlines = domElements.ckbUnmarkDownlines.is(":checked");
         params.CategoryGroup = $('option:selected', domElements.cbbProblemAccountCategories).attr('data-categorygroup');
+        params.IsRobot = $('option:selected', domElements.cbbProblemAccountCategories).attr('data-isrobot');
 
         if (params.PAAction == 1) {
             SaveMarkProblemAccount(params);
@@ -504,7 +505,7 @@
             type: 'GET',
             success: function (response) {
                 response.map(function (x) {
-                    domElements.cbbProblemAccountCategories.append("<option value='" + x.CategoryID + "' data-categorygroup='" + x.CategoryGroup + "'>" + x.CategoryName + "</option>");
+                    domElements.cbbProblemAccountCategories.append("<option value='" + x.CategoryID + "' data-categorygroup='" + x.CategoryGroupID + "' data-isrobot='" + x.IsRobot + "'>" + x.CategoryName + "</option>");
                 });
 
                 domElements.cbbProblemAccountCategories.prop('selectedIndex', 0);

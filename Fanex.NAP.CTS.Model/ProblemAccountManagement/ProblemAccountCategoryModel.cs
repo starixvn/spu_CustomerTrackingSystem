@@ -13,6 +13,7 @@
         public int Priorty { get; set; }
 
         public bool IsDisabled { get; set; }
-     
+
+        public bool IsRobot { get; set; }
     }
 }
