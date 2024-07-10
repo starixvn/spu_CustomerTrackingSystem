@@ -2095,6 +2095,7 @@
                     new InsertRobotModel
                     {
                         CustID = model.CustID,
+                        CategoryID = model.CategoryID,
                         Remark = model.Remark,
                         IsDirect = true,
                         IsFromCTS = true,

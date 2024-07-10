@@ -364,7 +364,9 @@
                                                                 WinlossRM = itemLosing?.WinlossRM,
                                                                 WinlossStatus = itemLosing?.WinlossStatus,
                                                                 BetCount = itemLosing?.BetCount,
-                                                                ActiveDays = itemLosing?.ActiveDays
+                                                                ActiveDays = itemLosing?.ActiveDays,
+
+                                                                PerformanceTime = itemLosing?.PerformanceTime
                                                             });
             }
 
