@@ -5,6 +5,7 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.Api;
     using Fanex.NAP.CTS.Model.API;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Service.Interface.Api;
@@ -15,7 +16,7 @@
     using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
-    public class LicenseeVIPBAService : ILicenseeVIPBAService
+    public class LicenseeVIPBAService : BaseCustomerClassificationService, ILicenseeVIPBAService
     {
         private readonly IDynamicRepository repository;
         private readonly ICustomerClassificationService custClassificationService;
@@ -36,7 +37,7 @@
             }
 
             return true;
-        }       
+        }
 
         public void InsertLicVIP(LicenseeVIPBAInputModel parameter)
         {
@@ -49,11 +50,11 @@
 
             foreach (var batchCustIds in custInfo)
             {
-                var custIDs = InsertLicVIP(batchCustIds);
+                var custList = InsertLicVIP(batchCustIds);
 
-                if (custIDs != null && custIDs.Any())
+                if (custList != null && custList.CustInfos.IsNotNullOrEmpty())
                 {
-                    custClassificationService.PushDataToExternal(custIDs, new PushDataToExternalModel
+                    custClassificationService.PushDataToExternal(custList.CustInfos.Select(x => x.CustID), new PushDataToExternalModel
                     {
                         IsUpdateDangerToMainDB = false,
                         IsSyncAFC = false,
@@ -104,11 +105,11 @@
 
             foreach (var batchCustIds in custInfo)
             {
-                var custIDs = InsertLicBA(batchCustIds);
+                var custList = InsertLicBA(batchCustIds);
 
-                if (custIDs != null && custIDs.Any())
+                if (custList != null && custList.CustInfos.IsNotNullOrEmpty())
                 {
-                    custClassificationService.PushDataToExternal(custIDs, new PushDataToExternalModel
+                    custClassificationService.PushDataToExternal(custList.CustInfos.Select(x => x.CustID), new PushDataToExternalModel
                     {
                         IsUpdateDangerToMainDB = false,
                         IsSyncAFC = false,
@@ -131,9 +132,9 @@
             foreach (var batchCustIds in custInfo)
             {
                 var custIDs = RemoveLicBA(batchCustIds);
-               
+
                 if (custIDs != null && custIDs.Any())
-                {                    
+                {
                     rescanCustomerClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
                         CustIds = custIDs,
@@ -145,7 +146,7 @@
                     });
                 }
             }
-        }       
+        }
 
         #region Private Methods
 
@@ -170,14 +171,14 @@
             return Enumerable.Empty<List<LicenseeVIPBAModel>>();
         }
 
-        private IEnumerable<long> InsertLicVIP(IEnumerable<LicenseeVIPBAModel> parameter)
+        private ResultInsertCustomerClassificationModel InsertLicVIP(IEnumerable<LicenseeVIPBAModel> parameter)
         {
-            var criteria = new LicenseeVIPInsertCriteria
+            var model = new InsertCustomerClassificationModel
             {
-                CustJson = JsonConvert.SerializeObject(parameter)
+                CustClassificationJson = JsonConvert.SerializeObject(parameter)
             };
 
-            return repository.Fetch<long>(criteria);
+            return base.InsertCustomerClassification(Model.CCInputFlow.LicVIP, model);
         }
 
         private IEnumerable<long> RemoveLicVIP(IEnumerable<LicenseeVIPBAModel> parameter)
@@ -190,14 +191,14 @@
             return repository.Fetch<long>(criteria);
         }
 
-        private IEnumerable<long> InsertLicBA(IEnumerable<LicenseeVIPBAModel> parameter)
+        private ResultInsertCustomerClassificationModel InsertLicBA(IEnumerable<LicenseeVIPBAModel> parameter)
         {
-            var criteria = new LicenseeBAInsertCriteria
+            var model = new InsertCustomerClassificationModel
             {
-                CustJson = JsonConvert.SerializeObject(parameter)
+                CustClassificationJson = JsonConvert.SerializeObject(parameter)
             };
 
-            return repository.Fetch<long>(criteria);
+            return base.InsertCustomerClassification(Model.CCInputFlow.LicBA, model);
         }
 
         private IEnumerable<long> RemoveLicBA(IEnumerable<LicenseeVIPBAModel> parameter)
@@ -209,7 +210,7 @@
 
             return repository.Fetch<long>(criteria);
         }
-        
+
         #endregion Private Methods
     }
 }
