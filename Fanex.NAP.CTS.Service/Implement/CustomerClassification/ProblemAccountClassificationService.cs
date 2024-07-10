@@ -36,7 +36,7 @@
             dataLogTrackingServices = new DataLogTrackingServices();
         }        
 
-        public DBResult InsertProblemAccountPackage(IEnumerable<InsertProblemAccountModel> problemAccounts, InsertPA_ByType mappingCategoryByType, string serviceName, FromFlow fromFlow, bool isToQueue)
+        public DBResult InsertProblemAccountPackage(IEnumerable<InsertProblemAccountModel> problemAccounts, CCInputFlow ccInputFlow, string serviceName, FromFlow fromFlow, bool isToQueue)
         {
             try
             {
@@ -44,7 +44,7 @@
                 {
                     var custIds = problemAccounts.Select(c => c.CustID)?.Distinct();
                   
-                    var insertPaResult = InsertProblemAccounts(problemAccounts, mappingCategoryByType, FunctionId.InsertPAM, isToQueue);
+                    var insertPaResult = InsertProblemAccounts(problemAccounts, ccInputFlow, FunctionId.InsertPAM, isToQueue);
 
                     if (insertPaResult.CustInfos != null && insertPaResult.CustInfos.Any())
                     {
@@ -142,8 +142,8 @@
 
         //    return Enumerable.Empty<CustInfoModel>();
         //}
-       
-        public ResultInsertCustomerClassificationModel InsertProblemAccounts(IEnumerable<InsertProblemAccountModel> problemAccounts, InsertPA_ByType mappingCategoryByType, FunctionId funcId, bool isToQueue)
+
+        public ResultInsertCustomerClassificationModel InsertProblemAccounts(IEnumerable<InsertProblemAccountModel> problemAccounts, CCInputFlow ccInputFlow, FunctionId funcId, bool isToQueue)
         {
             var paClassification = CombinePAWithLosingPerformace(problemAccounts, funcId);
 
@@ -153,7 +153,7 @@
                 IsToQueue = isToQueue
             };
 
-            return base.InsertCustomerClassification(CCInputFlow.InsertPACategory, modelInsert);
+            return base.InsertCustomerClassification(ccInputFlow, modelInsert);
         }
 
         public IEnumerable<InsertProblemAccountModel> CombinePAWithLosingPerformace(IEnumerable<InsertProblemAccountModel> problemAccounts, FunctionId funcId)
@@ -172,7 +172,7 @@
                 CustClassificationJson = JsonConvert.SerializeObject(robotModels)
             };
 
-            return base.InsertCustomerClassification(CCInputFlow.Robot, modelInsert);
+            return base.InsertCustomerClassification(CCInputFlow.InsertRobot, modelInsert);
         }
 
         public IEnumerable<ExistedProblemAccountModel> GetExistedProblemAccounts(IEnumerable<long> custIds)
