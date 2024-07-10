@@ -143,7 +143,10 @@
             let sportSelectedList = domElements.cbbSport.val();
             bettypeList = {};
 
-            sportBetType.filter(x => sportSelectedList.includes(`${x.SportType}_${x.LeagueGroupID}`))
+            // only support multi value
+            // sportBetType.filter(x => sportSelectedList.includes(`${x.SportType}_${x.LeagueGroupID}`))
+            
+            sportBetType.filter(x => sportSelectedList ==  (`${x.SportType}_${x.LeagueGroupID}`))
                 .map(x =>
                     bettypeList[`${x.BetTypeID}_${x.BetID}`] =
                     ({
