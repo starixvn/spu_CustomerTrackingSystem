@@ -677,7 +677,7 @@
             },
             initComplete: function (settings, json) {
                 if (!domElements.txtEventHeader) {
-                    $('.filter').html(`<input type="text" placeholder="Enter League/Match" id="txtEventHeader">`);
+                    $('.filter').html(`<input type="text" placeholder="League/Match" id="txtEventHeader">`);
 
                     domElements.txtEventHeader = document.querySelector('#txtEventHeader');
 
