@@ -145,8 +145,8 @@
 
             // only support multi value
             // sportBetType.filter(x => sportSelectedList.includes(`${x.SportType}_${x.LeagueGroupID}`))
-            
-            sportBetType.filter(x => sportSelectedList ==  (`${x.SportType}_${x.LeagueGroupID}`))
+
+            sportBetType.filter(x => sportSelectedList == (`${x.SportType}_${x.LeagueGroupID}`))
                 .map(x =>
                     bettypeList[`${x.BetTypeID}_${x.BetID}`] =
                     ({
@@ -522,7 +522,6 @@
 
         $(document).on('click', function (e) {
             if ($(e.target).closest('#txtUsername').length == 0 && isFocusValidUsername) {
-                /* Hide dropdown here */
                 ValidateTxtUsername()
 
                 isFocusValidUsername = !isFocusValidUsername;
@@ -530,20 +529,19 @@
         });
     }
 
-    function ChangeSelectRadioButton(value)
-    {
+    function ChangeSelectRadioButton(value) {
         domElements.txtUsername.prop('disabled', value == 0);
-            domElements.cbbDgr.prop('disabled', value == 1);
+        domElements.cbbDgr.prop('disabled', value == 1);
 
-            if (value == 0) {
-                domElements.btnClearUsername.addClass('hide');
-                domElements.btnModifyUsername.addClass('hide');
-            }
+        if (value == 0) {
+            domElements.btnClearUsername.addClass('hide');
+            domElements.btnModifyUsername.addClass('hide');
+        }
 
-            if (value == 1) {
-                domElements.btnClearUsername.removeClass('hide');
-                domElements.btnModifyUsername.removeClass('hide');
-            }
+        if (value == 1) {
+            domElements.btnClearUsername.removeClass('hide');
+            domElements.btnModifyUsername.removeClass('hide');
+        }
     }
 
     function OnGenerate() {
@@ -926,6 +924,10 @@
         }
     }
 
+    function ValidateTxtUsernameMaxRange(usernames) {
+        return usernames && usernames.split(',').length <= domElements.maxTags;
+    }
+
     function ValidateTxtUsername(isGenerate) {
         var usernames = domElements.txtUsername.val()
             .replace(/\r?\n|\r| |,/g, ",").split(',')
@@ -940,10 +942,10 @@
                 data: params,
                 success: function (response) {
                     if (response?.data) {
-                        isValidUsername = response.data.InvalidateUsernames.length == 0;
+                        isValidUsername = response.data.InvalidateUsernames.length == 0 && ValidateTxtUsernameMaxRange(usernames);
                         domElements.txtUsername.val(usernames);
 
-                        if (response.data.InvalidateUsernames.length > 0) {
+                        if (!isValidUsername) {
                             domElements.txtUsername.addClass("input-invalid");
                             if (!isGenerate) {
                                 domElements.btnModifyUsername.click();
@@ -969,6 +971,8 @@
     }
 
     function BindResultValidatedInputUserName(data) {
+        var lengthUsername = data.InvalidateUsernames.length + data.ValidateUsernames.length;
+
         domElements.spanAddSpecialCustomerAccountUserName.find('tags tag').each(function (_, tag) {
             $(tag).removeClass('invalid-username').removeClass('invalid-duplicated').addClass('valid');
         });
@@ -981,7 +985,7 @@
             }
         });
 
-        if (data.InvalidateUsernames.length === 0) {
+        if (data.InvalidateUsernames.length === 0 && lengthUsername <= domElements.maxTags) {
             domElements.btnRemoveInvalidUserName.removeClass('delete-invalid');
             domElements.btnSave.prop('disabled', false);
         }
