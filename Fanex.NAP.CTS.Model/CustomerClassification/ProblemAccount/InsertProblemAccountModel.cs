@@ -69,22 +69,24 @@
             this.Remark = string.Format(Consts.TWInitialSmartRemark, tWInitialSmartCust.DetectedDate.ToString(Consts.FormatDateToString_MMMddyyyy), tWInitialSmartCust.Probability);           
         }
 
-        public InsertProblemAccountModel(RescanTWInitialSmartPAModel tWInitialSmartCust)
+        public InsertProblemAccountModel(RescanCustomerClassificationModel data)
         {
-            this.CustID = tWInitialSmartCust.CustID;
-            this.CTSCustID = tWInitialSmartCust.CTSCustID;
-            this.RoleID = tWInitialSmartCust.RoleID;
-            this.SubscriberID = tWInitialSmartCust.SubscriberID;
-            this.CategoryID = tWInitialSmartCust.CategoryID;
-            this.CategoryGroup = tWInitialSmartCust.CategoryGroup;
-            this.IsLicensee = tWInitialSmartCust.IsLicensee;
-            this.IsFromAI = false;
-            this.IsDirectPA = null;
-            this.IsFromCTS = false;
-            this.IsFromTVS = false;
-            this.IsFromTW = true;
-            this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
-            this.Remark = $"Detection Date: {tWInitialSmartCust.DetectedDate.ToString(Consts.FormatDateToString_MMMddyyyy)} - Probability: {tWInitialSmartCust.Probability}";
+            CTSCustID = data.CTSCustID;
+            CustID = data.CustID;
+            CategoryID = data.CategoryID;
+            ReasonID = data.TVSReasonID;
+            RoleID = data.RoleID;
+            SubscriberID = data.SubscriberID;
+            IsLicensee = data.IsLicensee;
+            Remark = data.Remark;
+            CreatedBy = data.CreatedBy;
+            IsDirectPA = data.IsMarkedDirectly;
+            IsFromTVS = data.IsFromTVS;
+            IsFromTW = data.IsFromTW;
+            IsFromCTS = data.IsFromCTS;
+            IsFromAI = data.IsFromAI;
+            IsFromImperva = data.IsFromImperva;
+            LastModifiedDate = data.LastModifiedDate;
         }
 
         /* Cust info */
@@ -143,6 +145,8 @@
         public bool IsFromTW { get; set; }
 
         public bool IsFromCTS { get; set; }
+
+        public bool IsFromImperva { get; set; }
 
         //True if only removing SpecialCC
         public bool IsDataChanged { get; set; }

@@ -1936,8 +1936,7 @@
                 {
                     _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
-                        CustIds = new List<long> { custId },
-                        IsRescanPA = false,
+                        CustIds = new List<long> { custId },                     
                         FunctionId = FunctionId.ExcludeTaggingAssPAWeb,
                         ServiceName = "ExcludeTaggingAssociationWithPA"
                     });
@@ -2156,33 +2155,6 @@
                 model.CreatedBy = CurrentSession.UserId;
                 model.ActionType = ActionTypeQueueCustCategory.Remove;
 
-                #region Delete
-                //var custIds = _accountService.RemoveVVIPCategory(model);
-
-                //if (custIds != null && custIds.Any())
-                //{
-                //    if (model.RoleId != 1 && model.IsAffectToAllDownlines)
-                //    {
-                //        result = _accountService.AddQueueAffectDownlinesCustomerCategory(model);
-                //    }
-
-                //    if (model.CustId != 0)
-                //    {
-                //        _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
-                //        {
-                //            CustIds = new List<long> { model.CustId },
-                //            IsRescanPA = true,
-                //            IsRescanPotentialPA = true,
-                //            IsToQueue = (model.RoleId != 1 && !model.IsAffectToAllDownlines), // add to queue for case SMA and not checking affect to downline to affect PA for downline
-                //            IsPushCCToSoon88 = true,
-                //            IsUpdateDangerToMainDB = true,
-                //            FunctionId = FunctionId.UnmarkCustomerCategory,
-                //            ServiceName = "RemoveCustomerCategory"
-                //        });
-                //    }
-                //}
-                #endregion
-
                 var resultUmmark = _customerCategoryService.UnmarkVVIPCustomerCategory(model);
 
                 if (resultUmmark.CustInfos != null && resultUmmark.CustInfos.Any())
@@ -2196,11 +2168,8 @@
                     {
                         _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                         {
-                            CustIds = new List<long> { model.CustId },
-                            IsRescanPA = true,
-                            IsRescanPotentialPA = true,
-                            IsToQueue = (model.RoleId != 1 && !model.IsAffectToAllDownlines), // add to queue for case SMA and not checking affect to downline to affect PA for downline
-                            IsPushCCToSoon88 = true,
+                            CustIds = new List<long> { model.CustId },                        
+                            IsToQueue = (model.RoleId != 1 && !model.IsAffectToAllDownlines), // add to queue for case SMA and not checking affect to downline to affect PA for downline                          
                             IsUpdateDangerToMainDB = true,
                             FunctionId = FunctionId.UnmarkCustomerCategory,
                             ServiceName = "RemoveCustomerCategory"
@@ -2227,8 +2196,8 @@
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
         public ActionResult SaveUnmarkCustomerCategory(SaveUnmarkCustomerCategoryViewModel model)
-        {
-            var paUnmark = new List<UnmarkProblemAccountModel>()
+        {                                
+            var resultUnmark = _problemAccountClassificationService.UnmarkProblemAccount(new List<UnmarkProblemAccountModel>()
                 {
                     new UnmarkProblemAccountModel()
                     {
@@ -2241,36 +2210,22 @@
                         IsExceptDirectDownline = model.IsExceptDirectDownline,
                         IsDirectPA = true
                     }
-                };
+                }, false);
 
-            var unmarkPAResult = _problemAccountClassificationService.UnmarkProblemAccount(paUnmark, false);
-
-            if (unmarkPAResult.ErrorCode == 0 && unmarkPAResult.CustomerInfo.Any())
+            if (resultUnmark.CustInfos != null && resultUnmark.CustInfos.Any())
             {
-                var custIds = unmarkPAResult.CustomerInfo.Select(x => x.CustID);
-
-                _problemAccountClassificationService.UpdateBetLimitOfUnflaggedCustomer(custIds.Distinct());
-
-                var paramRescan = new RescanCustClassificationModel
+                _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                 {
-                    CustIds = custIds,
-                    IsPushCCToSoon88 = true,
-                    IsRescanPotentialPA = true,
+                    CustIds = resultUnmark.CustInfos.Select(x=>x.CustID),                   
                     FunctionId = FunctionId.UnmarkCustomerCategory,
                     IsUpdateDangerToMainDB = true
-                };
-
-                var custIdsToRescanPotentialPA = _rescanClassificationService.RescanPotentialProblemAccount(custIds.ToList(), new List<long>(), paramRescan);
-
-                var smCustIds = _rescanClassificationService.GetAgentCusts(custIds);
-
-                _rescanClassificationService.RescanNormalAccount(paramRescan, custIdsToRescanPotentialPA.CustIds, smCustIds);
+                });
             }
 
             return Json(new
             {
-                errorCode = unmarkPAResult.ErrorCode,
-                errorMessage = unmarkPAResult.ErrorMessage
+                errorCode = string.IsNullOrEmpty(resultUnmark.ErrorMessage) ? 0 : -1,
+                errorMessage = resultUnmark.ErrorMessage
             }, JsonRequestBehavior.AllowGet);
         }
 

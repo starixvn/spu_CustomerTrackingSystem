@@ -22,7 +22,7 @@
     using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
-    public class RescanCustomerClassificationService : IRescanCustomerClassificationService
+    public class RescanCustomerClassificationService : ProblemAccountClassificationService, IRescanCustomerClassificationService
     {
         private readonly ICustomerClassificationService custClassificationService;
         private readonly IProblemAccountClassificationService problemAccountService;
@@ -41,33 +41,105 @@
             repository = new DynamicRepository();
         }
 
-        public bool RescanCustomerClassification(RescanCustClassificationModel parameters)
+        //public bool RescanCustomerClassification(RescanCustClassificationModel parameters)
+        //{
+        //    var result = new RescanResultModel();
+        //    var custToRescanPA = new List<long>();
+
+        //    if (parameters.IsRescanPA)
+        //    {
+        //        result = RescanProblemAccount(parameters);
+        //        custToRescanPA.AddRange(result.CustIds);
+        //    }
+
+        //    if (parameters.IsRescanPotentialPA)
+        //    {
+        //        result = RescanPotentialProblemAccount(parameters.CustIds.ToList(), custToRescanPA, parameters);
+        //        custToRescanPA.AddRange(result.CustIds);
+        //    }
+
+        //    if (result.IsSuccess)
+        //    {
+        //        var smCustIds = GetAgentCusts(parameters.CustIds);
+        //        result.IsSuccess = RescanNormalAccount(parameters, custToRescanPA, smCustIds);
+        //    }
+
+        //    return result.IsSuccess;
+        //}
+
+        public bool RescanCustomerClassification(RescanCustClassificationModel paras)
         {
             var result = new RescanResultModel();
-            var custToRescanPA = new List<long>();
+            var custIdsToRescanPA = new List<long>();
+            var smaCustIds = GetAgentCusts(paras.CustIds);
+            var custRescans = GetRescanCustomerClassification(string.Join(",", paras.CustIds));
 
-            if (parameters.IsRescanPA)
+            if (custRescans.CustInfos != null && custRescans.CustInfos.Any())
             {
-                result = RescanProblemAccount(parameters);
-                custToRescanPA.AddRange(result.CustIds);
-            }
+                var groupingCustRescans = custRescans.CustInfos.GroupBy(x => x.InputFlowID).Select(g => new { InputFlowID = g.Key, CustRescans = g.Select(x => x) });
 
-            if (parameters.IsRescanPotentialPA)
-            {
-                result = RescanPotentialProblemAccount(parameters.CustIds.ToList(), custToRescanPA, parameters);
-                custToRescanPA.AddRange(result.CustIds);
-            }
+                foreach (var group in groupingCustRescans)
+                {
+                    if ((CCInputFlow)group.InputFlowID == CCInputFlow.RescanNormal)
+                    {
+                        PreNormalClassification(group.CustRescans.Select(x => x.CustID), paras);
+                    }
+                    else
+                    {
+                        result = RescanProblemAccount(group.CustRescans, paras, (CCInputFlow)group.InputFlowID);
 
-            if (result.IsSuccess)
-            {
-                var smCustIds = GetAgentCusts(parameters.CustIds);
-                result.IsSuccess = RescanNormalAccount(parameters, custToRescanPA, smCustIds);
+                        custIdsToRescanPA.AddRange(result.CustIds);
+                    }
+                }
+
+                if (smaCustIds.Any())
+                {
+                    result.IsSuccess = PushDataToExternal(paras, custIdsToRescanPA, smaCustIds);
+                }
             }
 
             return result.IsSuccess;
         }
 
         #region Private Methods
+
+        private RescanResultModel RescanProblemAccount(IEnumerable<RescanCustomerClassificationModel> custNormals, RescanCustClassificationModel paras, CCInputFlow ccInputFlow)
+        {
+            var resultCustRescans = base.RescanCustomerClassification(custNormals, ccInputFlow, paras.IsToQueue);
+
+            PushDataToExternalPackge(resultCustRescans, paras);
+
+            return new RescanResultModel()
+            {
+                CustIds = resultCustRescans.ToList(),
+                IsSuccess = true
+            };
+        }
+
+        private void PreNormalClassification(IEnumerable<long> custNormals, RescanCustClassificationModel paras)
+        {
+            var custIDToString = string.Join(",", custNormals);
+
+            PreNormalClassification(custIDToString, paras.FunctionId, RescanNormalType.Manual);
+        }
+
+        private bool PushDataToExternal(RescanCustClassificationModel parameters, IEnumerable<long> custIdsToRescanPA, IEnumerable<long> smaCustIds)
+        {
+            var custToRescanNormal = parameters.CustIds.Distinct().ToList();
+
+            custToRescanNormal.RemoveAll(x => custIdsToRescanPA.Distinct().Contains(x));
+
+            custToRescanNormal.RemoveAll(x => smaCustIds.Distinct().Contains(x));
+
+            if (smaCustIds.Any())
+            {
+                var custToRemovePA = smaCustIds.Except(custIdsToRescanPA);
+
+                PushDataToExternalPackge(custToRemovePA?.Distinct(), parameters);
+            }
+
+            return true;
+        }
 
         private RescanResultModel RescanProblemAccount(RescanCustClassificationModel parameters)
         {
@@ -278,7 +350,7 @@
                     {
                         var custToString = string.Join(",", custIds);
 
-                        ClassifyNormalCategory(custToString, parameters.FunctionId, RescanNormalType.Manual);
+                        //ClassifyNormalCategory(custToString, parameters.FunctionId, RescanNormalType.Manual);
                     }
                 }
 
@@ -322,8 +394,7 @@
             {
                 isSuccess = custClassificationService.PushDataToExternalPackge(custIdsToSyncCC.Distinct(), new PushDataToExternalModel
                 {
-                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
-                    IsPushCCToSoon88 = parameters.IsPushCCToSoon88,
+                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,                   
                     IsUpdateDangerToMainDB = parameters.IsUpdateDangerToMainDB,
                     IsSyncAFC = ConfigSettings.IsSyncAFCData
                 }, FromFlow.CTSWEB);
@@ -407,7 +478,7 @@
         //    return Enumerable.Empty<long>();
         //}
 
-        public void ClassifyNormalCategory(string custList, FunctionId functionId, RescanNormalType type)
+        public void PreNormalClassification(string custList, FunctionId functionId, RescanNormalType type)
         {
             var criteria = new NormalClassificationRescanCriteria
             {

@@ -5,7 +5,7 @@
     using System.Collections.Generic;
 
     public interface IRescanCustomerClassificationService
-    {
+    {        
         bool RescanCustomerClassification(RescanCustClassificationModel parameters);
 
         IEnumerable<long> GetAgentCusts(IEnumerable<long> custIds);

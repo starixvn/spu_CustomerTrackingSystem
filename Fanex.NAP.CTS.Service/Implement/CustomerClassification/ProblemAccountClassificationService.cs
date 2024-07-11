@@ -34,7 +34,16 @@
             _repository = new DynamicRepository();
             _ccService = new CustomerClassificationService();
             dataLogTrackingServices = new DataLogTrackingServices();
-        }        
+        }
+
+        public IEnumerable<long> RescanCustomerClassification(IEnumerable<RescanCustomerClassificationModel> custRescans, CCInputFlow ccInputFlow, bool isToQueue)
+        {
+            var pas = custRescans.Select(x => new InsertProblemAccountModel(x));
+
+            var insertPaResult = InsertProblemAccounts(pas, ccInputFlow, FunctionId.InsertPAM, isToQueue);
+
+            return insertPaResult.CustInfos.Select(x => x.CustID).Distinct();
+        }
 
         public DBResult InsertProblemAccountPackage(IEnumerable<InsertProblemAccountModel> problemAccounts, CCInputFlow ccInputFlow, string serviceName, FromFlow fromFlow, bool isToQueue)
         {
@@ -262,45 +271,15 @@
             return Enumerable.Empty<CustInfoModel>();
         }
 
-        public UnmarkPAResultModel UnmarkProblemAccount(IEnumerable<UnmarkProblemAccountModel> paUnmark, bool isFromQueue)
+        public ResultRemoveCustomerClassificationModel UnmarkProblemAccount(IEnumerable<UnmarkProblemAccountModel> paUnmark, bool isFromQueue)
         {
-            #region Delete
-            //var criteria = new ProblemAccountUmmarkCriteria
-            //{
-            //    ProblemAccountJson = JsonConvert.SerializeObject(paUnmark),
-            //    IsFromQueue = isFromQueue
-            //};
-
-            //var custInfos = _repository.Fetch<CustInfoModel>(criteria);
-
-            //return new UnmarkPAResultModel
-            //{
-            //    ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1,
-            //    ErrorMessage = criteria.ErrorMessage,
-            //    CustomerInfo = custInfos
-            //};
-
-            #endregion
-
             var modelRemove = new RemoveCustomerClassificationModel()
             {
                 CustClassificationJson = JsonConvert.SerializeObject(paUnmark),
                 IsFromQueue = isFromQueue
             };
 
-            var resultRemove = base.RemoveCustomerClassification(CCInputFlow.RemoveProblemAccount, modelRemove);
-
-            return new UnmarkPAResultModel
-            {
-                ErrorCode = 0,
-                ErrorMessage = string.Empty,
-                CustomerInfo = resultRemove.CustInfos.Select(x => new CustInfoModel
-                {
-                    CustID = x.CustID,
-                    CTSCustID = x.CTSCustID,
-                    //CategoryType = ???
-                })
-            };
+            return base.RemoveCustomerClassification(CCInputFlow.RemovePACategory, modelRemove);           
         }
 
         #region Private Methods

@@ -246,7 +246,7 @@
                 var resultValidate = GetResultValidated(validatedModels);
 
                 if (!resultValidate.ProblemAccountInvalidList.Any())
-                {
+                {                   
                     var paUnmark = validatedModels.Select(x => new UnmarkProblemAccountModel
                     {
                         CustID = x.CustID,
@@ -259,29 +259,26 @@
                         IsDirectPA = true
                     });
 
-                    var unmarkPAResult = _paClassificationService.UnmarkProblemAccount(paUnmark, false);
-
-                    if (unmarkPAResult.ErrorCode == 0 && unmarkPAResult.CustomerInfo.Any())
+                    var resultUnmark = _paClassificationService.UnmarkProblemAccount(validatedModels.Select(x => new UnmarkProblemAccountModel
                     {
-                        var custIdList = unmarkPAResult.CustomerInfo.Select(c => c.CustID)?.Distinct();
-                        var custIds = string.Join(",", custIdList);
-                        
-                        _paClassificationService.UpdateBetLimitOfUnflaggedCustomer(custIdList);
+                        CustID = x.CustID,
+                        CTSCustID = x.CTSCustID,
+                        RoleID = x.RoleID,
+                        SubscriberID = x.SubscriberID,
+                        CreatedBy = CurrentSession.UserId,
+                        Remark = model.Comment,
+                        IsExceptDirectDownline = model.IsUnmarkDownlines,
+                        IsDirectPA = true
+                    }), false);
 
-                        var paramRescan = new RescanCustClassificationModel
-                        {                           
-                            CustIds = custIdList,
-                            IsPushCCToSoon88 = true,
-                            IsRescanPotentialPA = true,
+                    if (resultUnmark.CustInfos != null && resultUnmark.CustInfos.Any())
+                    {
+                        _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
+                        {
+                            CustIds = resultUnmark.CustInfos.Select(x => x.CustID),
                             FunctionId = FunctionId.UnmarkCustomerCategory,
                             IsUpdateDangerToMainDB = true
-                        };
-
-                        var custRescanPADangous = _rescanClassificationService.RescanPotentialProblemAccount(custIdList.ToList(), new List<long>(), paramRescan);
-
-                        var smCustIds = _rescanClassificationService.GetAgentCusts(custIdList);
-
-                        _rescanClassificationService.RescanNormalAccount(paramRescan, custRescanPADangous.CustIds.Distinct(), smCustIds);
+                        });
                     }
                 }
             }

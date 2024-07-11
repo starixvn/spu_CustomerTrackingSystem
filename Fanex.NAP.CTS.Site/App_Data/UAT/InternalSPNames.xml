@@ -111,6 +111,7 @@
 		<Setting Key="CTS_DC_CustClassification_BySport_GetCC" SpName="CTS_DC_CustClassification_BySport_GetCC_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
     <Setting Key="CTS_DC_CustClassification_Insert" SpName="CTS_DC_CustClassification_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" Timeout="600" />
     <Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove_xtest" DbName="MySQL.CTS_DataCenter.Admin" Timeout="600" />
+    <Setting Key="CTS_DC_CustClassification_ReScan_Get" SpName="CTS_DC_CustClassification_ReScan_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function name="AssociatedAccountMonitor">

@@ -327,9 +327,12 @@
     <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\CustInfoClassificationModel.cs" />
+    <Compile Include="CustomerClassification\BaseCustomerClassification\GetRescanCustomerClassificationModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\InsertCustomerClassificationModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\RemoveCustomerClassificationModel.cs" />
+    <Compile Include="CustomerClassification\BaseCustomerClassification\RescanCustomerClassificationModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\ResultInsertCustomerClassificationModel.cs" />
+    <Compile Include="CustomerClassification\BaseCustomerClassification\ResultRemoveCCInfoModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\ResultRemoveCustomerClassificationModel.cs" />
     <Compile Include="CustomerClassification\InsertNormalAccountCustInfoModel.cs" />
     <Compile Include="CustomerClassification\LogErrorDataModel.cs" />

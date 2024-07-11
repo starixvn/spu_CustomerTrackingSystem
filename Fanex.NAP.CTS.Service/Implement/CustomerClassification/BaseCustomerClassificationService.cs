@@ -15,6 +15,18 @@
             repository = new DynamicRepository();
         }
 
+        public GetRescanCustomerClassificationModel GetRescanCustomerClassification(string custIDs)
+        {
+            var criteria = new GetRescanCustomerClassificationCriteria
+            {
+                CustIDs = custIDs
+            };
+
+            var custInfos = repository.Fetch<RescanCustomerClassificationModel>(criteria);
+
+            return new GetRescanCustomerClassificationModel { CustInfos = custInfos };
+        }
+
         public ResultInsertCustomerClassificationModel InsertCustomerClassification(CCInputFlow inputFlow, InsertCustomerClassificationModel model)
         {
             var criteria = new InsertCustomerClassificationCriteria
@@ -38,14 +50,17 @@
             var criteria = new RemoveCustomerClassificationCriteria
             {
                 InputFlowID = (int)inputFlow,
-                CustClassificationJson = model.CustClassificationJson,
+                FromAction = model.FromAction,
+                UplineRoleID = model.UplineRoleID,
+                QueueID = model.QueueID,
                 AffectDownline = model.AffectDownline,
-                FromAction = model.FromAction
+                IsFromQueue = model.IsFromQueue,
+                CustClassificationJson = model.CustClassificationJson
             };
 
-            var custInfos = repository.Fetch<CustInfoClassificationModel>(criteria);
+            var custInfos = repository.Fetch<ResultRemoveCCInfoModel>(criteria);
 
-            return new ResultRemoveCustomerClassificationModel { CustInfos = custInfos };
+            return new ResultRemoveCustomerClassificationModel { CustInfos = custInfos, ErrorMessage = criteria.ErrorMessage };
         }
     }
 }

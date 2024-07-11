@@ -5,6 +5,8 @@
 
     public interface IBaseCustomerClassificationService
     {
+        GetRescanCustomerClassificationModel GetRescanCustomerClassification(string custIDs);
+
         ResultInsertCustomerClassificationModel InsertCustomerClassification(CCInputFlow inputFlow, InsertCustomerClassificationModel model);
 
         ResultRemoveCustomerClassificationModel RemoveCustomerClassification(CCInputFlow inputFlow, RemoveCustomerClassificationModel model);

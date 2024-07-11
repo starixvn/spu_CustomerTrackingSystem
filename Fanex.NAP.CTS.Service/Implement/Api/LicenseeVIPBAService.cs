@@ -4,6 +4,7 @@
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.Api;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
@@ -79,17 +80,14 @@
                 var custIDs = RemoveLicVIP(batchCustIds);
 
                 if (custIDs != null && custIDs.Any())
-                {
+                {                                        
                     rescanCustomerClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
-                        CustIds = custIDs,
-                        IsRescanPA = true,
-                        IsRescanPotentialPA = true,
-                        IsPushCCToSoon88 = true,
+                        CustIds = custIDs,                   
                         IsUpdateDangerToMainDB = true,
                         FunctionId = FunctionId.RemoveLicVIP_API,
                         ServiceName = "RemoveLicVIP"
-                    });
+                    });                
                 }
             }
         }
@@ -131,15 +129,13 @@
 
             foreach (var batchCustIds in custInfo)
             {
-                var custIDs = RemoveLicBA(batchCustIds);
+                var resultRemove = RemoveLicBA(batchCustIds);
 
-                if (custIDs != null && custIDs.Any())
+                if (resultRemove.CustInfos != null && resultRemove.CustInfos.Any())
                 {
                     rescanCustomerClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
-                        CustIds = custIDs,
-                        IsRescanPA = false,
-                        IsPushCCToSoon88 = false,
+                        CustIds = resultRemove.CustInfos.Select(x=>x.CustID),
                         IsUpdateDangerToMainDB = false,
                         FunctionId = FunctionId.RemoveLicBA_API,
                         ServiceName = "RemoveLicBA"
@@ -178,7 +174,7 @@
                 CustClassificationJson = JsonConvert.SerializeObject(parameter)
             };
 
-            return base.InsertCustomerClassification(Model.CCInputFlow.LicVIP, model);
+            return InsertCustomerClassification(Model.CCInputFlow.LicVIP, model);
         }
 
         private IEnumerable<long> RemoveLicVIP(IEnumerable<LicenseeVIPBAModel> parameter)
@@ -201,14 +197,14 @@
             return base.InsertCustomerClassification(Model.CCInputFlow.LicBA, model);
         }
 
-        private IEnumerable<long> RemoveLicBA(IEnumerable<LicenseeVIPBAModel> parameter)
-        {
-            var criteria = new LicenseeBARemoveCriteria
+        private ResultRemoveCustomerClassificationModel RemoveLicBA(IEnumerable<LicenseeVIPBAModel> parameter)
+        {           
+            var modelRemove = new RemoveCustomerClassificationModel 
             {
-                CustJson = JsonConvert.SerializeObject(parameter)
+                CustClassificationJson = JsonConvert.SerializeObject(parameter)
             };
 
-            return repository.Fetch<long>(criteria);
+            return RemoveCustomerClassification(CCInputFlow.RemoveLicBA, modelRemove);
         }
 
         #endregion Private Methods

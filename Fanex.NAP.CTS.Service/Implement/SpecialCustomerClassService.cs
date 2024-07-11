@@ -223,10 +223,7 @@
                         {
                             _rescanGeneralService.RescanCustomerClassification(new RescanCustClassificationModel
                             {
-                                CustIds = generalCustRescan,
-                                IsRescanPA = true,
-                                IsRescanPotentialPA = true,
-                                IsPushCCToSoon88 = true,
+                                CustIds = generalCustRescan,                             
                                 IsUpdateDangerToMainDB = true,
                                 IsToQueue = false,
                                 FunctionId = FunctionId.RemoveSpecialCCWeb,
