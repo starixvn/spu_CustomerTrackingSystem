@@ -193,78 +193,70 @@
         }
 
         public void RemoveCustomerClass(RemoveSpecialCCParamsModel model, ValidateSpecialCCResultViewModel validateUsers, int removedBy)
-        {
-            var userList = validateUsers.Users.Select(x => new RemoveUserListSpecialCCModel
+        {            
+            var custInfos = validateUsers.Users.Select(x => new RemoveSpecialCCModel
             {
                 CTSCustID = x.CTSCustID,
                 CustID = x.CustID,
-                SportID = x.SportID,
                 SubscriberID = x.SubscriberID,
+                SportID = x.SportID,
+                Remark = model.Comment,
+                CreatedBy = removedBy
             });
 
-            var criteria = new RemoveSpecialCustomerClassCriteria()
-            {
-                ListCust = JsonConvert.SerializeObject(userList),
-                Comment = model.Comment,
-                RemovedBy = removedBy
-            };
+            RemoveSpecialCCGeneral(custInfos.Where(x => x.SportID == 0).Select(x => x));
 
-            _repository.Execute(criteria);
-
-            // Rescan
-            Parallel.Invoke(
-                () =>
-                {
-                    try
-                    {
-                        var generalCustRescan = validateUsers.Users.Where(x => x.SportID == 0).Select(x => x.CustID);
-
-                        if (generalCustRescan != null && generalCustRescan.Any())
-                        {
-                            _rescanGeneralService.RescanCustomerClassification(new RescanCustClassificationModel
-                            {
-                                CustIds = generalCustRescan,                             
-                                IsUpdateDangerToMainDB = true,
-                                IsToQueue = false,
-                                FunctionId = FunctionId.RemoveSpecialCCWeb,
-                                ServiceName = "RemoveSpecialCustomer"
-                            });
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        var logMessage = new LogMessage(ex.Message)
-                              .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                              .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                        LogService.Error(logMessage);
-
-                        throw;
-                    }
-                }
-                ,
-                () =>
-                {
-                    try
-                    {
-                        var rescanUserList = validateUsers.Users.Where(x => x.SportID != 0).Select(x => new RescanNormalBySportListCustModel { CustID = x.CustID, SportID = x.SportID });
-                        _rescanBySportService.ResanNormalBySportForNewCustomers(rescanUserList, BySport_FunctionId.Manual);
-                    }
-                    catch (Exception ex)
-                    {
-                        var logMessage = new LogMessage(ex.Message)
-                              .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                              .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                        LogService.Error(logMessage);
-
-                        throw;
-                    }
-                });
+            RemoveSpecialCCBySport(custInfos.Where(x => x.SportID != 0).Select(x => x));
         }
         #endregion
 
         #region private
+
+        private void RemoveSpecialCCGeneral(IEnumerable<RemoveSpecialCCModel> custInfos)
+        {           
+            if (custInfos.Any())
+            {
+                var removeModel = new RemoveCustomerClassificationModel
+                {
+                    CustClassificationJson = JsonConvert.SerializeObject(custInfos)
+                };
+
+                var resultRemove = RemoveCustomerClassification(CCInputFlow.RemoveSpecialCC, removeModel);
+
+                if (resultRemove.CustInfos != null && resultRemove.CustInfos.Any())
+                {
+                    _rescanGeneralService.RescanCustomerClassification(new RescanCustClassificationModel
+                    {
+                        CustIds = resultRemove.CustInfos.Select(x=>x.CustID),
+                        IsUpdateDangerToMainDB = true,
+                        IsToQueue = false,
+                        FunctionId = FunctionId.RemoveSpecialCCWeb,
+                        ServiceName = "RemoveSpecialCustomer"
+                    });
+                }
+            }
+        }
+
+        private void RemoveSpecialCCBySport(IEnumerable<RemoveSpecialCCModel> custInfos)
+        {         
+            if (custInfos.Any())
+            {
+                var removeModel = new RemoveCustomerClassificationModel
+                {
+                    CustClassificationJson = JsonConvert.SerializeObject(custInfos)
+                };
+
+                var resultRemove = RemoveCustomerClassification(CCInputFlow.RemoveSpecialCC, removeModel);
+
+                if (resultRemove.CustInfos != null && resultRemove.CustInfos.Any())
+                {
+                    var rescanUserList = custInfos.Select(x => new RescanNormalBySportListCustModel { CustID = x.CustID, SportID = x.SportID });
+
+                    _rescanBySportService.ResanNormalBySportForNewCustomers(rescanUserList, BySport_FunctionId.Manual);
+                }
+            }
+        }
+
         private void PushDataToExternal(IEnumerable<long> custIDList)
         {
             if (custIDList != null && custIDList.Any())

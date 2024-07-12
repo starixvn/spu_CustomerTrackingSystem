@@ -278,7 +278,6 @@
     <Compile Include="RobotReport\GetRobotReportCriteria.cs" />
     <Compile Include="SpecialCustomerClass\InsertSpecialCustomerClassCriteria.cs" />
     <Compile Include="SpecialCustomerClass\GetAllSpecialCustomerClassCriteria.cs" />
-    <Compile Include="SpecialCustomerClass\RemoveSpecialCustomerClassCriteria.cs" />
     <Compile Include="Home\SearchResultCriteria.cs" />
     <Compile Include="ImportEvidences\InsertAccountEvidenceCriteria.cs" />
     <Compile Include="ImportEvidences\CheckAccountEvidenceCriteria.cs" />

@@ -433,8 +433,8 @@
     <Compile Include="RobotReport\RobotReportParamModel.cs" />
     <Compile Include="SpecialCustomerClass\AddSpecialCCParamsModel.cs" />
     <Compile Include="SpecialCustomerClass\CustomerClassModel.cs" />
+    <Compile Include="SpecialCustomerClass\RemoveSpecialCCModel.cs" />
     <Compile Include="SpecialCustomerClass\RemoveSpecialCCParamsModel.cs" />
-    <Compile Include="SpecialCustomerClass\RemoveUserListSpecialCCModel.cs" />
     <Compile Include="SpecialCustomerClass\ResultInsertCustomerClass.cs" />
     <Compile Include="DTO\CustomerCategory.cs" />
     <Compile Include="Association\AssociationCustomerModel.cs" />
