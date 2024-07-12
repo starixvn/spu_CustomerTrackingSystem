@@ -58,8 +58,7 @@
                     custClassificationService.PushDataToExternal(custList.CustInfos.Select(x => x.CustID), new PushDataToExternalModel
                     {
                         IsUpdateDangerToMainDB = false,
-                        IsSyncAFC = false,
-                        IsPushCCToSoon88 = false,
+                        IsSyncAFC = false,                    
                         ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize
                     });
                 }
@@ -110,8 +109,7 @@
                     custClassificationService.PushDataToExternal(custList.CustInfos.Select(x => x.CustID), new PushDataToExternalModel
                     {
                         IsUpdateDangerToMainDB = false,
-                        IsSyncAFC = false,
-                        IsPushCCToSoon88 = false,
+                        IsSyncAFC = false,                        
                         ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize
                     });
                 }

@@ -219,8 +219,7 @@
 
                 _customerClassificationService.PushDataToExternalPackge(custIds, new PushDataToExternalModel
                 {
-                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,                 
-                    IsPushCCToSoon88 = true,
+                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,                                   
                     IsUpdateDangerToMainDB = true,
                     IsSyncAFC = false
                 }, FromFlow.CTSWEB);

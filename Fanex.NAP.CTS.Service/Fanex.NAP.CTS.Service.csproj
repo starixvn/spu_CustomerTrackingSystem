@@ -72,7 +72,6 @@
     <Compile Include="Implement\CommonService.cs" />
     <Compile Include="Implement\AntiFraudCenterService.cs" />
     <Compile Include="Implement\LogInputDataService.cs" />
-    <Compile Include="Implement\FeedDataToSoon88Service.cs" />
     <Compile Include="Implement\MatchMonitorService.cs" />
     <Compile Include="Implement\NotificationRecipientService.cs" />
     <Compile Include="Implement\ProbationManagementService.cs" />

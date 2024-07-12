@@ -9,9 +9,7 @@
     public interface ICustomerClassificationService
     {
         bool RetryPushCCToMainDB(IEnumerable<LatestClassificationModel> customerClassifications, int retryTime);
-
-        void PushCustomerClassificationToSoon88(IEnumerable<LatestCCDangerLevelModel> customerClassifications);
-
+ 
         bool PushDataToExternalPackge(IEnumerable<long> custIds, PushDataToExternalModel paras, FromFlow fromFlow);
 
         bool PushDataToExternal(IEnumerable<long> custIdsToSyncCC, PushDataToExternalModel paras);

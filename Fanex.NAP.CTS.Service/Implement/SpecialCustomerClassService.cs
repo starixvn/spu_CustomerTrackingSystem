@@ -276,8 +276,7 @@
                     _customerClassificationService.PushDataToExternal(custs, new PushDataToExternalModel
                     {
                         IsUpdateDangerToMainDB = false,
-                        IsSyncAFC = false,
-                        IsPushCCToSoon88 = false,
+                        IsSyncAFC = false,                      
                         ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize
                     });
                 }

@@ -65,12 +65,7 @@
                 if (latestcustClassification != null && latestcustClassification.Any())
                 {
                     isSuccess = PushCCToMainDB(latestcustClassification, Consts.Retry);
-
-                    if (paras.IsPushCCToSoon88)
-                    {
-                        PushCustomerClassificationToSoon88(latestcustClassification);
-                    }
-
+                    
                     if (paras.IsUpdateDangerToMainDB && isSuccess)
                     {
                         isSuccess = UpdateDangerLevelToMainDB(latestcustClassification);
@@ -173,38 +168,7 @@
             }
 
             return true;
-        }
-
-        public void PushCustomerClassificationToSoon88(IEnumerable<LatestCCDangerLevelModel> customerClassifications)
-        {
-            var feedDataToSoon88Service = new FeedDataToSoon88Service();
-
-            if (customerClassifications == null || !customerClassifications.Any())
-            {
-                return;
-            }
-
-            try
-            {
-                var custClassList = customerClassifications.Select(c => new CustomerClassForMainDb()
-                {
-                    CustID = c.CustID,
-                    CustomerClass = c.CustomerClass
-                });
-                
-                feedDataToSoon88Service.FeedDataToSoon88(custClassList);
-            }
-            catch (Exception ex)
-            {
-                var jsonDataForLog = JsonConvert.SerializeObject(customerClassifications);
-
-                var logMessage = new LogMessage(ex.Message)
-                .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error($"Feed Data to Soon88 - Start Exception {logMessage} with listCust: {jsonDataForLog}", ex);
-            }
-        }
+        }       
 
         public bool RetryUpdateDangerLevelToMainDB(IEnumerable<DangerLevelModel> dangerLevels, int dangerType, int retryTime)
         {

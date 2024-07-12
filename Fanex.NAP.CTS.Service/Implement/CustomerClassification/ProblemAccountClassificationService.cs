@@ -65,8 +65,7 @@
 
                         _ccService.PushDataToExternalPackge(insertPACustIDs, new PushDataToExternalModel
                         {
-                            ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
-                            IsPushCCToSoon88 = true,
+                            ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,                          
                             IsUpdateDangerToMainDB = true,
                             IsSyncAFC = ConfigSettings.IsSyncAFCData
                         }, fromFlow);
