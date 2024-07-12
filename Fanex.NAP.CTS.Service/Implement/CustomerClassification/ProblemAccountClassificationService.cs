@@ -275,7 +275,8 @@
             var modelRemove = new RemoveCustomerClassificationModel()
             {
                 CustClassificationJson = JsonConvert.SerializeObject(paUnmark),
-                IsFromQueue = isFromQueue
+                IsFromQueue = isFromQueue,
+                FromAction = (int)FromAction.WebSite
             };
 
             return base.RemoveCustomerClassification(CCInputFlow.RemovePACategory, modelRemove);           

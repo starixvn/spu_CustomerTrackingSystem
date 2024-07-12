@@ -43,7 +43,7 @@
                     return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(new { parameters.CustIDs, parameters.CreatedBy })}");
                 }
 
-                licenseeLAPCustomerClassificationService.InsertLicVIP(parameters);
+                //licenseeLAPCustomerClassificationService.InsertLicVIP(parameters);
             }
             catch (Exception ex)
             {
@@ -79,7 +79,7 @@
                     return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(new { parameters.CustIDs, parameters.CreatedBy })}");
                 }
 
-                licenseeLAPCustomerClassificationService.RemoveLicVIP(parameters);
+                //licenseeLAPCustomerClassificationService.RemoveLicVIP(parameters);
             }
             catch (Exception ex)
             {
@@ -115,7 +115,7 @@
                     return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(new { parameters.CustIDs, parameters.CreatedBy })}");
                 }
 
-                licenseeLAPCustomerClassificationService.InsertLicBA(parameters);
+                //licenseeLAPCustomerClassificationService.InsertLicBA(parameters);
             }
             catch (Exception ex)
             {
@@ -151,7 +151,7 @@
                     return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(new { parameters.CustIDs, parameters.CreatedBy })}");
                 }
 
-                licenseeLAPCustomerClassificationService.RemoveLicBA(parameters);
+                //licenseeLAPCustomerClassificationService.RemoveLicBA(parameters);
             }
             catch (Exception ex)
             {

@@ -245,19 +245,7 @@
                 var resultValidate = GetResultValidated(validatedModels);
 
                 if (!resultValidate.ProblemAccountInvalidList.Any())
-                {                   
-                    var paUnmark = validatedModels.Select(x => new UnmarkProblemAccountModel
-                    {
-                        CustID = x.CustID,
-                        CTSCustID = x.CTSCustID,
-                        RoleID = x.RoleID,
-                        SubscriberID = x.SubscriberID,
-                        CreatedBy = CurrentSession.UserId,
-                        Remark = model.Comment,
-                        IsExceptDirectDownline = model.IsUnmarkDownlines,
-                        IsDirectPA = true
-                    });
-
+                {
                     var resultUnmark = _paClassificationService.UnmarkProblemAccount(validatedModels.Select(x => new UnmarkProblemAccountModel
                     {
                         CustID = x.CustID,
@@ -267,7 +255,7 @@
                         CreatedBy = CurrentSession.UserId,
                         Remark = model.Comment,
                         IsExceptDirectDownline = model.IsUnmarkDownlines,
-                        IsDirectPA = true
+                        IsMarkedDirectly = true
                     }), false);
 
                     if (resultUnmark.CustInfos != null && resultUnmark.CustInfos.Any())

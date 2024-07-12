@@ -273,7 +273,7 @@
             complete: function () {
                 tblcustomercategory.find('tbody').removeClass('loading');
                 
-                let disabledUnmarkCategory = (!cacheData.isVVip && !cacheData.isProblemAccount) || (!cacheData.isVVip);                             
+                let disabledUnmarkCategory = (cacheData.isProblemAccount == false) || (cacheData.isVVip == true);                             
 
                 let disabledMarkCategory = cacheData.isVVip
                     || ($("#hdIsLicensee").val() == 'TRUE' && $("#hdRoleID").val() > 1)

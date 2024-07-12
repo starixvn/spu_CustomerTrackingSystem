@@ -1942,7 +1942,7 @@
                         CreatedBy = CurrentSession.UserId,
                         Remark = model.Remark,
                         IsExceptDirectDownline = model.IsExceptDirectDownline,
-                        IsDirectPA = true
+                        IsMarkedDirectly = true
                     }
                 }, false);
 
