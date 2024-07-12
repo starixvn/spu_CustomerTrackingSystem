@@ -21,11 +21,10 @@
             this.CTSCustID = rescanPADangerous.CTSCustID;
             this.RoleID = rescanPADangerous.RoleID;
             this.SubscriberID = rescanPADangerous.SubscriberID;
-            this.CategoryID = rescanPADangerous.CategoryID;
-            this.CategoryGroup = rescanPADangerous.CategoryID;
+            this.CategoryID = rescanPADangerous.CategoryID;            
             this.IsLicensee = rescanPADangerous.IsLicensee;
             this.IsFromAI = true;
-            this.IsDirectPA = null;
+            this.IsMarkedDirectly = null;
             this.IsFromCTS = false;
             this.IsFromTVS = false;
             this.IsFromTW = false;
@@ -39,11 +38,10 @@
             this.CTSCustID = ctsCust.CTSCustID;
             this.RoleID = ctsCust.RoleID;
             this.SubscriberID = ctsCust.SubscriberID;
-            this.CategoryID = ctsCust.CategoryID;
-            this.CategoryGroup = ctsCust.CategoryGroup;
+            this.CategoryID = ctsCust.CategoryID;            
             this.IsLicensee = ctsCust.IsLicensee;
             this.IsFromAI = false;
-            this.IsDirectPA = null;
+            this.IsMarkedDirectly = null;
             this.IsFromCTS = false;
             this.IsFromTVS = false;
             this.IsFromTW = true;
@@ -58,10 +56,9 @@
             this.RoleID = tWInitialSmartCust.RoleID;
             this.SubscriberID = tWInitialSmartCust.SubscriberID;
             this.CategoryID = tWInitialSmartCust.CategoryID;
-            this.CategoryGroup = tWInitialSmartCust.CategoryGroup;
             this.IsLicensee = tWInitialSmartCust.IsLicensee;
             this.IsFromAI = false;
-            this.IsDirectPA = null;
+            this.IsMarkedDirectly = null;
             this.IsFromCTS = false;
             this.IsFromTVS = false;
             this.IsFromTW = true;
@@ -80,7 +77,7 @@
             IsLicensee = data.IsLicensee;
             Remark = data.Remark;
             CreatedBy = data.CreatedBy;
-            IsDirectPA = data.IsMarkedDirectly;
+            IsMarkedDirectly = data.IsMarkedDirectly;
             IsFromTVS = data.IsFromTVS;
             IsFromTW = data.IsFromTW;
             IsFromCTS = data.IsFromCTS;
@@ -124,11 +121,9 @@
 
         public int? CategoryID { get; set; }
 
-        public int CategoryGroup { get; set; }
-
         public int? ReasonID { get; set; }
 
-        public bool? IsDirectPA { get; set; }
+        public bool? IsMarkedDirectly { get; set; }
 
         public bool IsFromAI { get; set; }
 

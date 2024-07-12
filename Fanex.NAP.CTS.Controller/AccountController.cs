@@ -1740,6 +1740,10 @@
             {
                 result = _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
             }
+            else
+            {
+                result = new DBResult { ErrorCode = -1, ErrorMsg = "Mark VVIP failed" };
+            }
 
             return Json(new
             {
@@ -1751,7 +1755,7 @@
         private bool MarkDirectVVIP(CustomerCategoryModel categoryModel)
         {
             try
-            {               
+            {
                 var classificationCusts = _customerCategoryService.MarkVVIPCustomerCategory(categoryModel);
 
                 if (categoryModel.IsVVip && classificationCusts.CustInfos != null && classificationCusts.CustInfos.Any())
@@ -1799,11 +1803,10 @@
                     RoleID = model.RoleID,
                     SubscriberID = model.SubscriberID,
                     IsLicensee = model.IsLicensee,
-                    CategoryID = model.CategoryID,
-                    CategoryGroup = model.CategoryGroup,
+                    CategoryID = model.CategoryID,                   
                     Remark = model.Remark,
                     IsFromAI = false,
-                    IsDirectPA = true,
+                    IsMarkedDirectly = true,
                     IsFromCTS = true,
                     CreatedBy = CurrentSession.UserId
                 }
@@ -1831,7 +1834,7 @@
                         CustID = model.CustID,
                         CategoryID = model.CategoryID,
                         Remark = model.Remark,
-                        IsDirect = true,
+                        IsMarkedDirectly = true,
                         IsFromCTS = true,
                         CreatedBy = CurrentSession.UserId
                     }

@@ -158,7 +158,8 @@
             var modelInsert = new InsertCustomerClassificationModel()
             {
                 CustClassificationJson = JsonConvert.SerializeObject(paClassification),
-                IsToQueue = isToQueue
+                IsToQueue = isToQueue,
+                FromAction = (int)FromFlow.CTSWEB
             };
 
             return base.InsertCustomerClassification(ccInputFlow, modelInsert);
@@ -177,7 +178,8 @@
         {
             var modelInsert = new InsertCustomerClassificationModel()
             {
-                CustClassificationJson = JsonConvert.SerializeObject(robotModels)
+                CustClassificationJson = JsonConvert.SerializeObject(robotModels),
+                FromAction = (int)FromFlow.CTSWEB
             };
 
             return base.InsertCustomerClassification(CCInputFlow.InsertRobot, modelInsert);
@@ -232,7 +234,7 @@
                         CustID = c.CustId,
                         RobotCounter = c.Counter,
                         IsFromTW = true,
-                        IsDirect = true,
+                        IsMarkedDirectly = true,
                         CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"])
                     });
                 }
@@ -334,7 +336,7 @@
                                                                 IsFromImperva = group.ro.IsFromImperva,
                                                                 IsFromTVS = group.ro.IsFromTVS,
                                                                 TVSRequestID = group.ro.TVSRequestID,
-                                                                IsDirect = group.ro.IsDirect,
+                                                                IsMarkedDirectly = group.ro.IsMarkedDirectly,
                                                                 IsParlay = group.ro.IsParlay,
                                                                 SportType = group.ro.SportType,
                                                                 IssueTypeID = group.ro.IssueTypeID,
@@ -368,14 +370,13 @@
                                                      CTSCustID = group.pa.CTSCustID,
                                                      RoleID = group.pa.RoleID,
                                                      SubscriberID = group.pa.SubscriberID,
-                                                     CategoryID = group.pa.CategoryID,
-                                                     CategoryGroup = group.pa.CategoryGroup,
+                                                     CategoryID = group.pa.CategoryID,                                                    
                                                      IsLicensee = group.pa.IsLicensee,
                                                      CreatedBy = group.pa.CreatedBy,
                                                      LastModifiedDate = group.pa.LastModifiedDate,
                                                      Remark = group.pa.Remark,
 
-                                                     IsDirectPA = group.pa.IsDirectPA,
+                                                     IsMarkedDirectly = group.pa.IsMarkedDirectly,
                                                      IsFromAI = group.pa.IsFromAI,
                                                      IsFromCTS = group.pa.IsFromCTS,
                                                      IsFromTVS = group.pa.IsFromTVS,

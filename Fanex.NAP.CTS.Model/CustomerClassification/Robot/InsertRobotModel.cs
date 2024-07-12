@@ -38,7 +38,7 @@
 
         public int IssueTypeID { get; set; }
 
-        public bool IsDirect { get; set; }
+        public bool IsMarkedDirectly { get; set; }
 
         public string Remark { get; set; }
 

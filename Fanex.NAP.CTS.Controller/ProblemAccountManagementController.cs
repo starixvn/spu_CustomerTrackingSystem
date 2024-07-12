@@ -191,9 +191,8 @@
                 SubscriberID = x.SubscriberID,
                 IsLicensee = x.IsLicensee,
                 CategoryID = model.CategoryID,
-                CategoryGroup = model.CategoryGroup,
                 Remark = model.Comment,
-                IsDirectPA = true,
+                IsMarkedDirectly = true,
                 IsFromCTS = true,
                 CreatedBy = CurrentSession.UserId
             });
@@ -204,9 +203,10 @@
         private DBResult SaveMarkRobotAccount(ValidateProblemAccountInputViewModel model, IEnumerable<ProblemAccountValidatedModel> validatedModels)
         {
             var robotAccounts = validatedModels.Select(x => new InsertRobotModel {
-                CustID = x.CustID,               
+                CustID = x.CustID,
+                CategoryID = model.CategoryID,
                 Remark = model.Comment,
-                IsDirect = true,
+                IsMarkedDirectly = true,
                 IsFromCTS = true,
                 CreatedBy = CurrentSession.UserId                
             });

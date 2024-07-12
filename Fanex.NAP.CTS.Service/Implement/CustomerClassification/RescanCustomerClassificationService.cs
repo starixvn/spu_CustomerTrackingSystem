@@ -419,12 +419,11 @@
                         CTSCustID = c.CTSCustID,
                         RoleID = c.RoleID,
                         SubscriberID = c.SubscriberID,
-                        CategoryID = c.CategoryID,
-                        CategoryGroup = c.CategoryGroup,
+                        CategoryID = c.CategoryID,                     
                         IsLicensee = c.IsLicensee,
                         LastModifiedDate = c.LastModifiedDate,
                         Remark = c.Remark,
-                        IsDirectPA = c.IsDirect,
+                        IsMarkedDirectly = c.IsDirect,
                         IsFromCTS = c.IsFromCTS,
                         IsFromTVS = c.IsFromTVS,
                         TVSRequestID = c.TVSRequestID,
@@ -449,7 +448,7 @@
                         IsParlay = c.IsParlay,
                         SportType = c.SportType,
                         IssueTypeID = c.IssueTypeID,
-                        IsDirect = c.IsDirect,
+                        IsMarkedDirectly = c.IsDirect,
                         Remark = c.Remark,
                         CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"])
                     });
