@@ -5,7 +5,7 @@
     using System;
     using System.Configuration;
 
-    public class InsertProblemAccountModel
+    public class InsertProblemAccountModel : CustomerClassificationModel
     {
         public InsertProblemAccountModel()
         {
@@ -84,10 +84,7 @@
             IsFromAI = data.IsFromAI;
             IsFromImperva = data.IsFromImperva;
             LastModifiedDate = data.LastModifiedDate;
-        }
-
-        /* Cust info */
-        public long CustID { get; set; }
+        }     
 
         public long CTSCustID { get; set; }
 
@@ -105,21 +102,7 @@
 
         /* Data warehouse, mainDB  info */
 
-        public int? WinlossStatus { get; set; } // LOSING  = 0, KEEPSTATE = 1, WINNING = 2
-
-        public decimal? TurnoverRM { get; set; }
-
-        public decimal? WinlossRM { get; set; }
-
-        public Int64? BetCount { get; set; }
-
-        public int? ActiveDays { get; set; }
-
-        public DateTime? PerformanceTime { get; set; }
-
-        /* Get Mapping Value */
-
-        public int? CategoryID { get; set; }
+        public int? WinlossStatus { get; set; } // LOSING  = 0, KEEPSTATE = 1, WINNING = 2      
 
         public int? ReasonID { get; set; }
 

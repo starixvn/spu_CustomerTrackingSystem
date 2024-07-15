@@ -995,7 +995,7 @@
             }
         }
 
-        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId, out bool isExcludedTagAssPA)
+        public IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId, out bool isExcludedTagAssPA)
         {         
             isExcludedTagAssPA = false;
 
@@ -1009,7 +1009,7 @@
                 using (var result = db.QueryMultiple(criteria))
                 {                   
                     var excludedTagAssPA = result.Read<bool>();
-                    var categories = result.Read<CustomerClassificationModel>();
+                    var categories = result.Read<GetCustomerClassificationModel>();
                    
                     if (excludedTagAssPA != null && excludedTagAssPA.Any())
                     {
@@ -1021,7 +1021,7 @@
             }
         }
 
-        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId)
+        public IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId)
         {
             var criteria = new GetCTSCustomerClassificationCriteria
             {
@@ -1034,7 +1034,7 @@
                 {                   
                     result.Read<bool>(); // Excluded Tag Ass PA
 
-                    return result.Read<CustomerClassificationModel>();
+                    return result.Read<GetCustomerClassificationModel>();
                 }
             }
         }
@@ -1061,7 +1061,7 @@
             return new List<CustomerClassificationHistoryModel>();
         }
 
-        public IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, string parentCateIdList)
+        public IEnumerable<GetCustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, string parentCateIdList)
         {
             var criteria = new GetCTSCustomerClassificationForAPICriteria
             {
@@ -1071,7 +1071,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<CustomerClassificationModel>(criteria);
+                return db.Query<GetCustomerClassificationModel>(criteria);
             }
         }
 

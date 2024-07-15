@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.Account
 {
-    public class CustomerClassificationModel
+    public class GetCustomerClassificationModel
     {
         public int CategoryID { get; set; }
 

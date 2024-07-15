@@ -162,7 +162,7 @@
     <Compile Include="Account\CustomerCategory\AddCustomerCategoryInfoModel.cs" />
     <Compile Include="Account\CustomerCategory\CustomerClassificationGeneralInfoModel.cs" />
     <Compile Include="Account\CustomerCategory\CustomerClassificationHistoryModel.cs" />
-    <Compile Include="Account\CustomerCategory\CustomerClassificationModel.cs" />
+    <Compile Include="Account\CustomerCategory\GetCustomerClassificationModel.cs" />
     <Compile Include="Account\CustomerCategory\RemarkDetectUnauthorizedModel.cs" />
     <Compile Include="Account\CustomerCategory\RemoveCustomerCategoryInfoModel.cs" />
     <Compile Include="Account\CustomerCategory\RemoveCustomerCategoryModel.cs" />
@@ -326,6 +326,7 @@
     <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\CustInfoClassificationModel.cs" />
+    <Compile Include="CustomerClassification\BaseCustomerClassification\CustomerClassificationModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\GetRescanCustomerClassificationModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\InsertCustomerClassificationModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\RemoveCustomerClassificationModel.cs" />

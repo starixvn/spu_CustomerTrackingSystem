@@ -4,9 +4,9 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
 
-    public class CustomerCategoryViewModel
+    public class GetCustomerCategoryViewModel
     {
-        public CustomerCategoryViewModel(CustomerClassificationModel data)
+        public GetCustomerCategoryViewModel(GetCustomerClassificationModel data)
         {
             this.CategoryId = data.CategoryID;
             this.CategoryType = data.CategoryType;

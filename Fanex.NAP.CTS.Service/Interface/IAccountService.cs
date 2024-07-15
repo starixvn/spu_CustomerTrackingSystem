@@ -90,9 +90,9 @@
 
         IEnumerable<long> GetAssociationException(string apiURL, long ctsCustId);
 
-        IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId, out bool isExcludedTagAssPA);
+        IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId, out bool isExcludedTagAssPA);
 
-        IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId);
+        IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId);
 
         IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long ctsCustId);
 
@@ -114,7 +114,7 @@
 
         IEnumerable<CustomerClassModel> GetCustomerClassByCustId(string custIdList);
 
-        IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, string parentCateIdList);
+        IEnumerable<GetCustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, string parentCateIdList);
 
         IEnumerable<CustomerClassificationGeneralInfoModel> GetCustomerClassificationByCategory(string categoryIdList);
 

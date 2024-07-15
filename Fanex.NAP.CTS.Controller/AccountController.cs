@@ -1624,14 +1624,14 @@
             var isVVip = false;
             var isProblemAccount = false;
             var isPAProbation = false;        
-            var categoryList = new List<CustomerCategoryViewModel>();
+            var categoryList = new List<GetCustomerCategoryViewModel>();
             var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
 
             var classification = _accountService.GetCustomerClassification(ctsCustID, out bool isExcludedTagAssPA);
 
             if (classification != null && classification.Any())
             {
-                categoryList = classification.Select(x => new CustomerCategoryViewModel(x)).ToList();
+                categoryList = classification.Select(x => new GetCustomerCategoryViewModel(x)).ToList();
 
                 isVVip = categoryList.Any(x => x.IsVVIP);
                 isProblemAccount = categoryList.Any(x => x.IsProblemAccount);              
@@ -1706,7 +1706,7 @@
 
             if (classifications != null && classifications.Any())
             {
-                result.CategoryList = classifications.Select(x => new CustomerCategoryViewModel(x));
+                result.CategoryList = classifications.Select(x => new GetCustomerCategoryViewModel(x));
 
                 result.IsVVip = classifications.Any(x => x.CategoryID == (int)CustomerCategoryID.VVIP);
             }
@@ -1734,13 +1734,16 @@
                 ActionType = ActionTypeQueueCustCategory.Insert
             };
 
-            var isMarkDirect = MarkDirectVVIP(categoryModel);
+            var isSuccess = MarkDirectVVIP(categoryModel);
 
-            if (isMarkDirect && categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
+            if (isSuccess)
             {
-                result = _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
+                if (categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
+                {
+                    result = _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
+                }               
             }
-            else
+            else 
             {
                 result = new DBResult { ErrorCode = -1, ErrorMsg = "Mark VVIP failed" };
             }
