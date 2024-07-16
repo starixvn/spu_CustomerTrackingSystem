@@ -1,9 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement.Api
 {
-    using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
-    using Fanex.NAP.CTS.Criteria.Api;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.CustomerClassification;
@@ -18,14 +16,12 @@
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class LicenseeVIPBAService : BaseCustomerClassificationService, ILicenseeVIPBAService
-    {
-        private readonly IDynamicRepository repository;
+    {        
         private readonly ICustomerClassificationService custClassificationService;
         private readonly IRescanCustomerClassificationService rescanCustomerClassificationService;
 
         public LicenseeVIPBAService()
-        {
-            repository = new DynamicRepository();
+        {            
             custClassificationService = new CustomerClassificationService();
             rescanCustomerClassificationService = new RescanCustomerClassificationService();
         }
@@ -76,17 +72,17 @@
 
             foreach (var batchCustIds in custInfo)
             {
-                var custIDs = RemoveLicVIP(batchCustIds);
+                var resultRemove = RemoveLicVIP(batchCustIds);
 
-                if (custIDs != null && custIDs.Any())
-                {                                        
+                if (resultRemove != null && resultRemove.CustInfos.IsNotNullOrEmpty())
+                {
                     rescanCustomerClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
-                        CustIds = custIDs,                   
+                        CustIds = resultRemove.CustInfos.Select(x => x.CustID),
                         IsUpdateDangerToMainDB = true,
                         FunctionId = FunctionId.RemoveLicVIP_API,
                         ServiceName = "RemoveLicVIP"
-                    });                
+                    });
                 }
             }
         }
@@ -172,34 +168,34 @@
                 CustClassificationJson = JsonConvert.SerializeObject(parameter)
             };
 
-            return InsertCustomerClassification(Model.CCInputFlow.LicVIP, model);
+            return InsertCustomerClassification(CCInputFlow.LicVIP, model);
         }
 
-        private IEnumerable<long> RemoveLicVIP(IEnumerable<LicenseeVIPBAModel> parameter)
-        {
-            var criteria = new LicenseeVIPRemoveCriteria
-            {
-                CustJson = JsonConvert.SerializeObject(parameter)
-            };
-
-            return repository.Fetch<long>(criteria);
-        }
-
-        private ResultInsertCustomerClassificationModel InsertLicBA(IEnumerable<LicenseeVIPBAModel> parameter)
-        {
-            var model = new InsertCustomerClassificationModel
-            {
-                CustClassificationJson = JsonConvert.SerializeObject(parameter)
-            };
-
-            return base.InsertCustomerClassification(Model.CCInputFlow.LicBA, model);
-        }
-
-        private ResultRemoveCustomerClassificationModel RemoveLicBA(IEnumerable<LicenseeVIPBAModel> parameter)
+        private ResultRemoveCustomerClassificationModel RemoveLicVIP(IEnumerable<LicenseeVIPBAModel> model)
         {           
+            var modelRemove = new RemoveCustomerClassificationModel
+            {
+                CustClassificationJson = JsonConvert.SerializeObject(model)
+            };
+
+            return RemoveCustomerClassification(CCInputFlow.RemoveLicVIP, modelRemove);
+        }
+
+        private ResultInsertCustomerClassificationModel InsertLicBA(IEnumerable<LicenseeVIPBAModel> model)
+        {
+            var modelInsert = new InsertCustomerClassificationModel
+            {
+                CustClassificationJson = JsonConvert.SerializeObject(model)
+            };
+
+            return InsertCustomerClassification(CCInputFlow.LicBA, modelInsert);
+        }
+
+        private ResultRemoveCustomerClassificationModel RemoveLicBA(IEnumerable<LicenseeVIPBAModel> model)
+        {
             var modelRemove = new RemoveCustomerClassificationModel 
             {
-                CustClassificationJson = JsonConvert.SerializeObject(parameter)
+                CustClassificationJson = JsonConvert.SerializeObject(model)
             };
 
             return RemoveCustomerClassification(CCInputFlow.RemoveLicBA, modelRemove);

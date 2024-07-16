@@ -9,8 +9,7 @@
 		<Setting Key="CTS_AD_CTSUser_Insert" SpName="CTS_AD_CTSUser_Insert_xtest" DbName="MySQL.CTS_Admin.Admin" />
 	</Function>
 
-	<Function Name="Common">
-		<Setting Key="CTS_DC_Common_GetAllSportGroups" SpName="CTS_DC_Common_GetAllSportGroups_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />		
+	<Function Name="Common">		
 		<Setting Key="CTS_DC_Common_GetAllSubscriberGroups" SpName="CTS_DC_Common_GetAllSubscriberGroups_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Common_GetCustomerGroup" SpName="CTS_DC_Common_GetCustomerGroup_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="DCS_DC_Transaction_GetHistory" SpName="DCS_DC_Transaction_GetHistory_xtest" DbName="MySQL.DCS_DataCenter.Reporter" Timeout="300" />
@@ -109,7 +108,7 @@
 		<Setting Key="CTS_DC_CustClassification_BySport_GetCC" SpName="CTS_DC_CustClassification_BySport_GetCC_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
     <Setting Key="CTS_DC_CustClassification_Insert" SpName="CTS_DC_CustClassification_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" Timeout="600" />
     <Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove_xtest" DbName="MySQL.CTS_DataCenter.Admin" Timeout="600" />
-    <Setting Key="CTS_DC_CustClassification_ReScan_Get" SpName="CTS_DC_CustClassification_ReScan_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
+    <Setting Key="CTS_DC_CustClassification_Rescan_Get" SpName="CTS_DC_CustClassification_Rescan_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function name="AssociatedAccountMonitor">

@@ -39,33 +39,7 @@
             _isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
             logInputDataService = new LogInputDataService();
             repository = new DynamicRepository();
-        }
-
-        //public bool RescanCustomerClassification(RescanCustClassificationModel parameters)
-        //{
-        //    var result = new RescanResultModel();
-        //    var custToRescanPA = new List<long>();
-
-        //    if (parameters.IsRescanPA)
-        //    {
-        //        result = RescanProblemAccount(parameters);
-        //        custToRescanPA.AddRange(result.CustIds);
-        //    }
-
-        //    if (parameters.IsRescanPotentialPA)
-        //    {
-        //        result = RescanPotentialProblemAccount(parameters.CustIds.ToList(), custToRescanPA, parameters);
-        //        custToRescanPA.AddRange(result.CustIds);
-        //    }
-
-        //    if (result.IsSuccess)
-        //    {
-        //        var smCustIds = GetAgentCusts(parameters.CustIds);
-        //        result.IsSuccess = RescanNormalAccount(parameters, custToRescanPA, smCustIds);
-        //    }
-
-        //    return result.IsSuccess;
-        //}
+        }        
 
         public bool RescanCustomerClassification(RescanCustClassificationModel paras)
         {

@@ -306,7 +306,6 @@
     <Compile Include="Account\CustomerFlagInfoModel.cs" />
     <Compile Include="Account\CustomerInfoByCTSCustIdModel.cs" />
     <Compile Include="Account\CustomerAssociationByAccountDetailModel.cs" />
-    <Compile Include="Account\CustomerLastTicketDateModel.cs" />
     <Compile Include="Account\CustomerProfileFraudInfoModel.cs" />
     <Compile Include="Account\CustomerRobotUserStatusModel.cs" />
     <Compile Include="Account\CustomerStaticStatusModel.cs" />

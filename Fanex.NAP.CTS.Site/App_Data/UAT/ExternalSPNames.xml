@@ -16,8 +16,7 @@
 	</Function>
 
 	<Function name="Common">		
-		<Setting Key="CTS_CustomerClass_GetByCustId" SpName="CTS_CustomerClass_GetByCustId_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_CustomerLastTicketDate_Get" SpName="CTS_CustomerLastTicketDate_Get" DbName="DBCTS.bodb02.bodbSPUNet" />		
+		<Setting Key="CTS_CustomerClass_GetByCustId" SpName="CTS_CustomerClass_GetByCustId_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />	
 		<Setting Key="CTS_CustomerStatistics_GetPerformance_ByBettype" SpName="CTS_CustomerStatistics_GetPerformance_ByBettype_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
 		<Setting Key="CTS_CustomerStatistics_GetPerformanceDaily" SpName="CTS_CustomerStatistics_GetPerformanceDaily_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
 		<Setting Key="CTS_CustomerStatistics_GetPerformance_BySport" SpName="CTS_CustomerStatistics_GetPerformance_BySport_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />

@@ -25,7 +25,7 @@
 		<Setting Key="Acc_CustomerUpdateCustomerClassBySport" SpName="Acc_CustomerUpdateCustomerClassBySport" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="600" />
     <Setting Key="CTS_DC_CustClassification_Insert" SpName="CTS_DC_CustClassification_Insert_UAT4" DbName="MySQL.CTS_DataCenter.Admin" TimeOut="600"/>
     <Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove_UAT4" DbName="MySQL.CTS_DataCenter.Admin" TimeOut="600"/>
-    <Setting Key="CTS_DC_CustClassification_ReScan_Get" SpName="CTS_DC_CustClassification_ReScan_Get_UAT4" DbName="MySQL.CTS_DataCenter.Reporter" />
+    <Setting Key="CTS_DC_CustClassification_Rescan_Get" SpName="CTS_DC_CustClassification_Rescan_Get_UAT4" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function Name="CustomerClass">
@@ -76,8 +76,7 @@
 		<Setting Key="Nap_ProblemAccount_AutoInsertCustomer" SpName="Nap_ProblemAccount_AutoInsertCustomer_xtest" DbName="DBCust.CustDB.bodbAdminNet" />
 	</Function>
 
-	<Function name="SpecialCustomerClass">
-		<Setting Key="CTS_DC_SpecialCustClass_ValidateUsername" SpName="CTS_DC_SpecialCustClass_ValidateUsername" DbName="MySQL.CTS_DataCenter.Admin" />
+	<Function name="SpecialCustomerClass">	
 		<Setting Key="CTS_DC_SpecialCustClass_Insert" SpName="CTS_DC_SpecialCustClass_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
 	</Function>
 

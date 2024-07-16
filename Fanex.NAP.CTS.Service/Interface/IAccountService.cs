@@ -44,19 +44,13 @@
 
         CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(long custId);        
 
-        List<TagModel> GetDirectAssociatedAccountTagFlagged(string custIdsAssInfo);
-
-        CustomerLastTicketDateModel GetCustomerLastTicketDate(long custId);        
-
-        CustomerRobotUserStatusModel GetCustomerRobotUserStatus(long custId);
+        List<TagModel> GetDirectAssociatedAccountTagFlagged(string custIdsAssInfo);            
 
         CustomerFlagInfoModel GetCustomerFlagInfo(long ctsCustId);
 
         AssociatedAccountPagingModel GetAssociatedAccount(AssociatedFilterModel filterModel);
 
         List<AccountStaticStatusModel> GetAccountStaticStatuses(int listId, bool status);
-
-        string MappingAssociationType(AssociatedAccountModel data);
 
         IEnumerable<EvidenceModel> GetEvidenceList();
 
@@ -78,17 +72,13 @@
 
         IEnumerable<AffectedEvidenceListBetweenCustsModel> GetAffectedEvidenceListBetweenCusts(Int64 fromCTSCustID, Int64 toCTSCustID);
 
-        IEnumerable<SportGroup> GetAllSportGroup();
-
         IEnumerable<ValidateManualAssociationMultipleModel> ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList, out bool isException);
 
         DBResult InsertManualAssociationMultiple(string associationListJson);
 
-        IEnumerable<CustomerCategory> GetCustomerCategoryByCTSCustId(long ctsCustId);
+        //IEnumerable<CustomerCategory> GetCustomerCategoryByCTSCustId(long ctsCustId);
 
-        DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, int createdBy, bool isRemoveAction);
-
-        IEnumerable<long> GetAssociationException(string apiURL, long ctsCustId);
+        DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, int createdBy, bool isRemoveAction);       
 
         IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId, out bool isExcludedTagAssPA);
 
@@ -96,13 +86,13 @@
 
         IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long ctsCustId);
 
-        IEnumerable<LatestClassificationModel> MarkVVIPCategory(CustomerCategoryModel categoryModel);
+        //IEnumerable<LatestClassificationModel> MarkVVIPCategory(CustomerCategoryModel categoryModel);
 
         DBResult AddQueueAffectDownlinesCustomerCategory(CustomerCategoryModel categoryModel);
 
-        IEnumerable<long> RemoveVVIPCategory(CustomerCategoryModel removeCategoryModel);        
+        //IEnumerable<long> RemoveVVIPCategory(CustomerCategoryModel removeCategoryModel);        
 
-        DBResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory, int createdBy);
+        //DBResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory, int createdBy);
 
         DBResult ChangeExcludedTagAssPA(long ctsCustId, int subscriberId, bool isPinCategory, int createdBy);
 
@@ -112,7 +102,7 @@
 
         IEnumerable<PerformanceDailyModel> GetPerformanceDaily(long custId);
 
-        IEnumerable<CustomerClassModel> GetCustomerClassByCustId(string custIdList);
+        //IEnumerable<CustomerClassModel> GetCustomerClassByCustId(string custIdList);
 
         IEnumerable<GetCustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, string parentCateIdList);
 

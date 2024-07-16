@@ -57,33 +57,7 @@
         {
             return ConfigurationManager.AppSettings["RabbitMQ-Exchange"];
         }
-
-        public static string GetDirectAssociationProfile => GetConfigStringByName("Graph_GetDirectAssociationProfile");
-
-        public static string GetAssociationReport => GetConfigStringByName("Graph_GetAssociationReport");
-
-        public static string GetAssociationDetection => GetConfigStringByName("Graph_GetAssociationDetectionReport");
-
-        public static string DetectAssociationByPrimaryOrAgentType => GetConfigStringByName("Graph_DetectAssociationByPrimaryOrAgentType");
-
-        public static string DetectAssociationGetDetail => GetConfigStringByName("Graph_DetectAssociationGetDetail");
-
-        public static string GetAssociationException => GetConfigStringByName("Graph_GetAssociationException");
-
-        public static string GetInDirectAssociation => GetConfigStringByName("Graph_GetInDirectAssociation");
-
-        public static string GetShortestAssociation => GetConfigStringByName("Graph_GetShortestPath");
-
-        public static string GetDirectAssociationMultiCust => GetConfigStringByName("Graph_GetDirectAssociationMultiCust");
-
-        public static string GetStatisticAssociation => GetConfigStringByName("Graph_GetStatisticAssociation");
-
-        public static string GetAssociationDetail => GetConfigStringByName("Graph_GetAssociationDetail");
-
-        public static string GetAssociatedWithPA => GetConfigStringByName("Graph_GetAssociatedWithPA");
-
-        public static string Matomo_SiteId => GetConfigStringByName("Matomo-SiteId");
-
+  
         public static string StoredProcedurePath => GetConfigStringByName("StoredProcedurePath");
 
         public static string GetProblemCaseMonitor => GetConfigStringByName("CTS_GetProblemCaseMonitor");
