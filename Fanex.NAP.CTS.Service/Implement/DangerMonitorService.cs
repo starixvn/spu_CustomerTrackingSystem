@@ -49,15 +49,15 @@
         }
 
         #region public method
-        public IEnumerable<DangerMonitorBetTypeViewModel> GetSportBettypesFromCache(bool isGetNew = false)
+        public IEnumerable<DangerMonitorSporTypeBetTypeViewModel> GetSportBettypesFromCache(bool isGetNew = false)
         {
-            var result = default(IEnumerable<DangerMonitorBetTypeViewModel>);
+            var result = default(IEnumerable<DangerMonitorSporTypeBetTypeViewModel>);
 
             var cacheKey = $"{nameof(GetSportBettypesFromCache)}_{Region}";
 
             lock (cacheKey)
             {
-                result = isGetNew ? null : _memoryCacheService.GetValue<IEnumerable<DangerMonitorBetTypeViewModel>>(cacheKey);
+                result = isGetNew ? null : _memoryCacheService.GetValue<IEnumerable<DangerMonitorSporTypeBetTypeViewModel>>(cacheKey);
 
                 if (result == null)
                 {
@@ -70,7 +70,7 @@
             return result;
         }
 
-        public IEnumerable<DangerMonitorBetTypeViewModel> GetBettypesFromCache()
+        public IEnumerable<DangerMonitorSporTypeBetTypeViewModel> GetBettypesFromCache()
         {
             return GetSportBettypesFromCache()?.GroupBy(item => $"{item.SportType}_{item.BetTypeID}_{item.BetID}")?.Select(x => x.FirstOrDefault());
         }
@@ -777,7 +777,7 @@
             return Enumerable.Empty<CustInfoModel>();
         }
 
-        private IEnumerable<DangerMonitorBetTypeViewModel> GetSportBettypes()
+        private IEnumerable<DangerMonitorSporTypeBetTypeViewModel> GetSportBettypes()
         {
             var betTypes = GetBetTypeSettings(null, false);
 
@@ -792,7 +792,7 @@
             return mainBetTypes
                 .GroupJoin(betTypes, main => main.BettypeId, cts => cts.BetTypeID, (main, ctsGroup) => new { main, ctsGroup })
                 .SelectMany(item =>
-                    item.ctsGroup.Select(group => new DangerMonitorBetTypeViewModel
+                    item.ctsGroup.Select(group => new DangerMonitorSporTypeBetTypeViewModel
                     {
                         SportGroup = item.main.SportGroup,
                         SportNameDisplay = item.main.SportNameDisplay,

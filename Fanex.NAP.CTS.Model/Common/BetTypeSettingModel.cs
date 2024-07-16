@@ -1,7 +1,9 @@
 ﻿namespace Fanex.NAP.CTS.Model.Common
 {
     public class BetTypeSettingModel
-    {        
+    {
+        public int? LeagueGroupID { get; set; }
+
         public int SportTypeID { get; set; }
 
         public string SportName { get; set; }

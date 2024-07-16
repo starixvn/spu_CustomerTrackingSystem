@@ -28,7 +28,7 @@
             this.BetID = data.BetID;
             this.Reason = data.Reason;
             this.ReasonName = this.GetReasonName(reasons, data.Reason);
-            this.SportType = data.Sporttype;
+            this.SportType = data.SportTypeId;
             this.MatchSection = data.MatchSection;
             this.IsVerified = data.IsVerified;
             this.VerifiedBy = data.VerifiedBy;

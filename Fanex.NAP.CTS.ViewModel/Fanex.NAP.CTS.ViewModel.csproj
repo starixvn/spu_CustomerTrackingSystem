@@ -150,11 +150,10 @@
     <Compile Include="Common\SiteGroupViewModel.cs" />
     <Compile Include="Common\SiteViewModel.cs" />
     <Compile Include="Common\SportBettypeViewModel.cs" />
-    <Compile Include="Common\SportStaticListViewModel.cs" />
     <Compile Include="Common\SubscriberGroupViewModel.cs" />
     <Compile Include="Common\SubscriberViewModel.cs" />
     <Compile Include="DangerMonitor\DangerMMTicketInfoViewModel.cs" />
-    <Compile Include="DangerMonitor\DangerMonitorBetTypeViewModel.cs" />
+    <Compile Include="DangerMonitor\DangerMonitorSporTypeBetTypeViewModel.cs" />
     <Compile Include="DangerMonitor\DangerMonitorDetailViewModel.cs" />
     <Compile Include="DangerMonitor\GetDangerSummaryItemViewModel.cs" />
     <Compile Include="DangerMonitor\GetDangerMonitorItemViewModel.cs" />
@@ -203,6 +202,7 @@
     <Compile Include="MatchMonitor\HoldKey\HoldKeyResultViewModel.cs" />
     <Compile Include="MatchMonitor\HoldKey\HoldKeyUpdateViewModel.cs" />
     <Compile Include="MatchMonitor\MarkPA\MMDetailMarkPAViewModel.cs" />
+    <Compile Include="MatchMonitor\MatchMonitorSporTypeBetTypeViewModel.cs" />
     <Compile Include="MatchMonitor\MMDetailFilterDropdownListViewModel.cs" />
     <Compile Include="MatchMonitor\MMDetailFilterTicketInfoViewModel.cs" />
     <Compile Include="MatchMonitor\MMDetailFilterViewModel.cs" />
