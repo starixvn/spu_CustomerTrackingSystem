@@ -285,6 +285,8 @@
 
     function GetDangerMonitor() {
         timeoutRenderTicketDetail = setTimeout(() => {
+            $('#txtEventHeader').val('');
+
             let data = {
                 FromDate: domElements.dpkFromDate.val(),
                 ToDate: !domElements.dpkToDate.val().includes(dateEmptyString) ? domElements.dpkToDate.val() : null,
@@ -372,6 +374,8 @@
             });
 
         domElements.cbbSport.select2();
+
+        domElements.cbbMarket.select2();
         // domElements.cbbSport.multiselect({
         //     menuWidth: 260,
         //     menuHeight: 260,

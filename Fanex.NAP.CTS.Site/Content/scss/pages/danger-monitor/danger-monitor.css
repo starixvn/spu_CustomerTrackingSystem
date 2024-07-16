@@ -409,7 +409,22 @@
     .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar {
       display: flex;
       align-items: center;
-      width: auto; }
+      width: auto;
+      outline: none;
+      height: 30px;
+      line-height: 28px;
+      padding-left: 2px;
+      border: 1px solid #d6d6d6;
+      font-size: inherit;
+      color: #545454;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      padding-bottom: 0px;
+      background-color: #fff;
+      border-radius: 4px;
+      cursor: pointer; }
+      .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar input {
+        height: 28px;
+        border: 0px; }
       .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar .icon-clear {
         position: absolute;
         right: 2.6rem; }
@@ -422,8 +437,13 @@
         right: 0.5rem;
         bottom: auto; }
       .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar .text {
-        margin-right: .7rem;
-        margin-bottom: 0; }
+        padding-right: .7rem;
+        margin-bottom: 0;
+        padding-left: .7rem;
+        border-right: 1px solid #C4C4C4;
+        height: 23px;
+        align-items: center;
+        display: flex; }
       .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar .input {
         margin: 0; }
         .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar .input::-webkit-input-placeholder {
@@ -468,22 +488,32 @@
           color: #9f9f9f;
           font-style: italic; }
       .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username {
-        display: flex;
-        align-items: center;
-        width: auto;
-        position: relative; }
+        height: 32px;
+        vertical-align: middle;
+        box-sizing: border-box;
+        display: inline-block;
+        position: relative;
+        background-color: #fff;
+        border: 1px solid #E5E5E5;
+        border-radius: 2px;
+        text-align: left; }
         .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .icon-clear {
           position: absolute;
-          right: 1.8rem; }
+          right: 3.5rem;
+          top: 0.85rem;
+          bottom: 0.85rem;
+          cursor: pointer; }
           .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .icon-clear:hover {
             background-color: rgba(57, 110, 248, 0.2);
             border-radius: 5px; }
           .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .icon-clear .hide {
             display: none; }
         .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .icon-modify {
+          font-size: 30px;
           position: absolute;
-          right: 0.4rem;
-          font-size: 10px; }
+          right: 0;
+          top: 0;
+          cursor: pointer; }
           .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .icon-modify:hover {
             background-color: rgba(57, 110, 248, 0.2);
             border-radius: 6px; }
@@ -509,6 +539,11 @@
             font-style: italic; }
         .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .input-invalid {
           border: 1px solid red; }
+      .match-monitor .monitor-container .monitor-table .group-control .form-filter .group button {
+        background-color: #fff;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        cursor: pointer; }
     .match-monitor .monitor-container .monitor-table .group-control .form-filter .button-generate {
       background-color: #396ef8;
       border-radius: 2px;
@@ -627,13 +662,14 @@
         .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input,
         .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input {
           height: 27px;
-          background: #ffffff7a;
+          background: #FFFFFF;
           width: 150px;
           font-size: 13px; }
           .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::placeholder,
           .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::placeholder,
           .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::placeholder {
             /* Chrome, Firefox, Opera, Safari 10.1+ */
+            color: #A8A8A8;
             font-style: italic;
             opacity: 1;
             /* Firefox */ }
@@ -641,12 +677,28 @@
           .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input:-ms-input-placeholder,
           .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input:-ms-input-placeholder {
             /* Internet Explorer 10-11 */
+            color: #A8A8A8;
             font-style: italic; }
           .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::-ms-input-placeholder,
           .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::-ms-input-placeholder,
           .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::-ms-input-placeholder {
             /* Microsoft Edge */
+            color: #A8A8A8;
             font-style: italic; }
+        .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input[type="text"],
+        .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input[type="text"],
+        .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input[type="text"] {
+          outline: none;
+          height: 30px;
+          line-height: 28px;
+          padding-left: 6px;
+          padding-right: 6px;
+          border-radius: 2px;
+          border: 1px solid #E5E5E5;
+          background-color: #fff;
+          font-size: inherit;
+          color: #545454;
+          transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; }
     .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor,
     .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail,
     .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor,
