@@ -531,6 +531,15 @@
                 isFocusValidUsername = !isFocusValidUsername;
             }
         });
+
+        ResetFilterValueDefault();
+    }
+
+    function ResetFilterValueDefault() {
+        domElements.txtUsername.val('');
+        domElements.txtEvent.val('');
+        domElements.cbbMarket.val('').trigger('change');
+        domElements.cbbMatchSection.multiselect("checkAll");
     }
 
     function ChangeSelectRadioButton(value) {

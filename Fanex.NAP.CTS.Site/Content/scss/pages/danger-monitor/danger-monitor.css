@@ -509,10 +509,11 @@
           .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .icon-clear .hide {
             display: none; }
         .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .icon-modify {
-          font-size: 30px;
           position: absolute;
           right: 0;
-          top: 0;
+          font-size: 28px;
+          top: 50%;
+          transform: translateY(-50%);
           cursor: pointer; }
           .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .icon-modify:hover {
             background-color: rgba(57, 110, 248, 0.2);
