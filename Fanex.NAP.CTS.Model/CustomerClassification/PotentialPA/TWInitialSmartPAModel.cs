@@ -2,11 +2,11 @@
 {
     using System;
 
-    public class RescanInitialTWGroupBettingModel
+    public class TWInitialSmartPAModel
     {
         public long CustID { get; set; }
 
-        public int CTSCustID { get; set; }
+        public long CTSCustID { get; set; }
 
         public int SubscriberID { get; set; }
 
@@ -14,14 +14,12 @@
 
         public int CategoryID { get; set; }
 
-        public bool IsLicensee { get; set; }
-
-        public bool IsFromAI { get; set; }
-
         public int CategoryGroup { get; set; }
+
+        public bool IsLicensee { get; set; }
 
         public DateTime DetectedDate { get; set; }
 
-        public int TWGBTicketCount { get; set; }
+        public decimal Probability { get; set; }
     }
 }

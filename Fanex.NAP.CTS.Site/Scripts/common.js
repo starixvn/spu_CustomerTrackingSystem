@@ -85,6 +85,8 @@
         list.push({ 'id': '1002', 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Pro Punter InActive' });
         list.push({ 'id': '65', 'indexColor': 5, 'cssClass': 'circle bg-yellow', 'name': 'Early Warning Members' });
         list.push({ 'id': '105', 'indexColor': 5, 'cssClass': 'circle bg-yellow-light', 'name': 'Early Warning Members (Losing)' });
+        list.push({ 'id': '66', 'indexColor': 5, 'cssClass': 'circle bg-yellow', 'name': 'Initial Smart' });
+        list.push({ 'id': '106', 'indexColor': 5, 'cssClass': 'circle bg-yellow-light', 'name': 'Initial Smart (Losing)' });
         list.push({ 'id': '67', 'indexColor': 5, 'cssClass': 'circle bg-yellow', 'name': 'Initial Group Betting' });
         list.push({ 'id': '107', 'indexColor': 5, 'cssClass': 'circle bg-yellow-light', 'name': 'Initial Group Betting (Losing)' });
 

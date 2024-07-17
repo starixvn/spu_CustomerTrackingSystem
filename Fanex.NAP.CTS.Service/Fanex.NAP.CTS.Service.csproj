@@ -51,12 +51,14 @@
     <Compile Include="Implement\Api\LicenseeVIPBAService.cs" />
     <Compile Include="Implement\Api\ProblemCaseMonitorService.cs" />
     <Compile Include="Implement\Api\FpsService.cs" />
+    <Compile Include="Implement\Api\TWInitialSmartService.cs" />
     <Compile Include="Implement\AssociatedAccountService.cs" />
     <Compile Include="Implement\AssociatedGroupMonitorService.cs" />
     <Compile Include="Implement\AssociationDetectionService.cs" />
     <Compile Include="Implement\AssociationReportService.cs" />
     <Compile Include="Implement\CategoryService.cs" />
     <Compile Include="Implement\CustomerClassification\CustomerClassificationBySportService.cs" />
+    <Compile Include="Implement\CustomerClassification\PAPotentialClassificationService.cs" />
     <Compile Include="Implement\CustomerClassification\ProblemAccountClassificationService.cs" />
     <Compile Include="Implement\CustomerClassification\DataLogTrackingServices.cs" />
     <Compile Include="Implement\CustomerClassification\RescanCustomerClassificationBySportService.cs" />
@@ -94,8 +96,10 @@
     <Compile Include="Interface\Api\ILicenseeVIPBAService.cs" />
     <Compile Include="Interface\Api\IProblemCaseMonitorService.cs" />
     <Compile Include="Interface\Api\IFpsService.cs" />
+    <Compile Include="Interface\Api\ITWInitialSmartService.cs" />
     <Compile Include="Interface\CustomerClassification\ICustomerClassificationBySportService.cs" />
     <Compile Include="Interface\CustomerClassification\IDataLogTrackingServices.cs" />
+    <Compile Include="Interface\CustomerClassification\IPAPotentialClassificationService.cs" />
     <Compile Include="Interface\CustomerClassification\IProblemAccountClassificationService.cs" />
     <Compile Include="Interface\CustomerClassification\IRescanCustomerClassificationBySportService.cs" />
     <Compile Include="Interface\IAccountService.cs" />

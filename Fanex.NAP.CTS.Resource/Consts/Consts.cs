@@ -114,7 +114,10 @@
         public const string ReasonDetectNone = "None";
         public const string ReasonDetectBySystem = "Detect by System";
         public const string ReasonDetectByAI = "Detect by AI";
+        public const string DangerousScoreRemark = "Detection Date: {0} - Dangerous Score: {1}%";
         public const string TWInitialGBMissSport = "Soccer/Basketball";
+        public const string TWInitialSmartRemark = "Detection Date: {0} - Probability Threshold: {1}";
+        public const string TWTWInitialGBRemark = "Detection Date: {0} - GB Bet Count: {1} - Sport: {2}";
 
         public struct Platform
         {
@@ -455,6 +458,7 @@
             AddLicBA_API = 240,
             RemoveLicBAP_API = 241,
             //RemoveLicBABySite_API = 242
+            AddCustomerInitialSmarts = 244
         };
 
         public enum SystemId

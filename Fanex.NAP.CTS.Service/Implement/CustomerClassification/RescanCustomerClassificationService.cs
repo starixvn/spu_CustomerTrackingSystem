@@ -11,11 +11,11 @@
     using Fanex.NAP.CTS.Model.LogInputData;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
-    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Implement.CustomerClassification;
     using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.Service.Interface.CustomerClassification;
     using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Entities;
-    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
@@ -26,6 +26,7 @@
     {
         private readonly ICustomerClassificationService custClassificationService;
         private readonly IProblemAccountClassificationService problemAccountService;
+        private readonly IPAPotentialClassificationService paPotentialService;
         private readonly ILogInputDataService logInputDataService;
         private readonly bool _isWriteLogInfo;
         private readonly IDynamicRepository repository;
@@ -34,6 +35,7 @@
         {
             custClassificationService = new CustomerClassificationService();
             problemAccountService = new ProblemAccountClassificationService();
+            paPotentialService = new PAPotentialClassificationService();
             _isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
             logInputDataService = new LogInputDataService();
             repository = new DynamicRepository();
@@ -110,12 +112,19 @@
 
                 if (rescanPotentialPA != string.Empty)
                 {
-                    var rescanPADangerousResult = RescanDangerousPA(rescanPotentialPA, parameters);
+                    var rescanDangerousScorePA = RescanDangerousPA(rescanPotentialPA, parameters);
 
-                    if (rescanPADangerousResult.IsSuccess)
+                    if (rescanDangerousScorePA.IsSuccess)
                     {
-                        rescanResult.CustIds.AddRange(rescanPADangerousResult.CustIds);
+                        rescanResult.CustIds.AddRange(rescanDangerousScorePA.CustIds);
                     }
+
+                    //var rescanInitialSmartPA = RescanInitialSmartPA(rescanPotentialPA, parameters);
+
+                    //if (rescanInitialSmartPA.IsSuccess)
+                    //{
+                    //    rescanResult.CustIds.AddRange(rescanInitialSmartPA.CustIds);
+                    //}
 
                     var rescanPaTWGB = RescanInitialTWGroupBettingPA(rescanPotentialPA, parameters);
 
@@ -133,7 +142,7 @@
         {
             var rescanResult = new RescanResultModel();
 
-            var rescanDangerous = this.RescanDangerousPA(custIDs);
+            var rescanDangerous = paPotentialService.GetDangerousScorePA(custIDs);
 
             if (rescanDangerous != null && rescanDangerous.Any())
             {
@@ -147,11 +156,29 @@
             return rescanResult;
         }
 
+        public RescanResultModel RescanInitialSmartPA(string custIDs, RescanCustClassificationModel parameters)
+        {
+            var rescanResult = new RescanResultModel();
+
+            var rescanInitialSmart = paPotentialService.GetInitialSmartPA(custIDs);
+
+            if (rescanInitialSmart != null && rescanInitialSmart.Any())
+            {
+                var pasInitialSmart = rescanInitialSmart.Select(x => new InsertProblemAccountModel(x));
+
+                var custPaInitialSmart = InsertProblemAccountLogics(pasInitialSmart, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
+
+                rescanResult.IsSuccess = PushDataToExternalPackge(custPaInitialSmart.Distinct(), parameters);
+            }
+
+            return rescanResult;
+        }
+
         public RescanResultModel RescanInitialTWGroupBettingPA(string custIDs, RescanCustClassificationModel parameters)
         {
             var rescanResult = new RescanResultModel();
 
-            var rescanInitialTWGB = this.GetInitialTWGroupBetting(custIDs);
+            var rescanInitialTWGB = paPotentialService.GetInitialTWGroupBetting(custIDs);
 
             if (rescanInitialTWGB != null && rescanInitialTWGB.Any())
             {
@@ -368,23 +395,7 @@
             }
         }
 
-        public IEnumerable<RescanPADangerousModel> RescanDangerousPA(string custIDs)
-        {
-            var criteria = new RescanPADangerousCriteria
-            {
-                CustIDs = custIDs
-            };
-
-            return repository.Fetch<RescanPADangerousModel>(criteria);
-        }
-
-        public IEnumerable<GetInitialTWGroupBettingModel> GetInitialTWGroupBetting(string custIDs)
-        {
-            var criteria = new RescanInitialTWGroupBettingCriteria() { CustIDs = custIDs };
-
-            return repository.Fetch<GetInitialTWGroupBettingModel>(criteria);
-        }
-
+        
         public IEnumerable<PotentialPACustInfoModel> GetCustInfos(string custIDs)
         {
             var criteria = new GetCustInfoByCustIDCriteria

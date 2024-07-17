@@ -76,6 +76,12 @@
             return View();
         }
 
+        [HttpGet]
+        public ActionResult Search()
+        {
+            return View(new SearchResultViewModel { SearchResults = new List<SearchResultModel>(), InputValue = string.Empty });
+        }
+
         [HttpPost]
         public ActionResult Search(FormCollection form)
         {
