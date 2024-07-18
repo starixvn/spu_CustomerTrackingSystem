@@ -58,6 +58,6 @@
     {
         public int BettypeID { get; set; }
 
-        public long BetID { get; set; }
+        public long? BetID { get; set; }
     }
 }
