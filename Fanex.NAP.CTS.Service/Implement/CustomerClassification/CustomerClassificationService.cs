@@ -114,7 +114,7 @@
                 var custClassification = lastestClassifications.Select(c => new LatestClassificationModel()
                 {
                     CustId = c.CustID,
-                    Category = c.CategoryID,
+                    Category = c.Ext_CategoryGroupID, // CategoryID to Ext_CategoryGroupID for mainDB
                     CustomerClass = c.CustomerClass
                 });
 
