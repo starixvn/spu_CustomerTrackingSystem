@@ -253,6 +253,16 @@ namespace Fanex.NAP.CTS.Model
         Remove = 2
     }
 
+    public enum ViewCategoryPageSource
+    {
+        [Description("Problem Account Management")]
+        PAM = 1,
+        [Description("Associated Group Monitor")]
+        AssociatedGroupMonitor = 2,
+        [Description("Other: Profile page")]
+        Other = 3
+    }
+
     public enum CategoryColorType
     {
         [Description("green")]

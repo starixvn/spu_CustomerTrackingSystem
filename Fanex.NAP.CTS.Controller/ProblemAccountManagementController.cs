@@ -128,7 +128,7 @@
         [HttpGet]
         public ActionResult GetProblemAccountAllCategories()
         {
-            var data = _pamService.GetProblemAccountCategories(true).OrderBy(x => x.Priorty);              
+            var data = _pamService.GetProblemAccountCategories(ViewCategoryPageSource.PAM).OrderBy(x => x.Priorty);              
 
             return Json(data, JsonRequestBehavior.AllowGet);
         }

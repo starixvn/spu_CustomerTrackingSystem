@@ -5,6 +5,7 @@
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.ProblemAccountManagement;
     using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
@@ -57,9 +58,9 @@
             }
         }
 
-        public IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories(bool isFromPAM)
+        public IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories(ViewCategoryPageSource categoryPageSource)
         {
-            var criteria = new GetProblemAccountCategoryCriteria() { IsFromPAM = isFromPAM};
+            var criteria = new GetProblemAccountCategoryCriteria() {  PageSource = (int)categoryPageSource};
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {

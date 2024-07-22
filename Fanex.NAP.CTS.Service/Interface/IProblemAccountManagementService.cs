@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
@@ -14,7 +15,7 @@
 
         IEnumerable<GetProblemAccountModel> GetProblemAccounts(ProblemAccountFilterViewModel filter);
         
-        IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories(bool isFromPAM);
+        IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories(ViewCategoryPageSource categoryPageSource);
 
         IEnumerable<ProblemAccountValidatedModel> ValidateProblemAccounts(ValidateProblemAccountInputViewModel model);
 

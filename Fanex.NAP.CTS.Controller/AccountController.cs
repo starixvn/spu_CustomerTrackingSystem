@@ -1699,7 +1699,7 @@
                 RoleID = roleID,
                 UserName = userName,
                 IsRobotUser = isRobotUser,             
-                ProblemAccountList = _pamService.GetProblemAccountCategories(false).OrderBy(x => x.Priorty)
+                ProblemAccountList = _pamService.GetProblemAccountCategories(ViewCategoryPageSource.Other).OrderBy(x => x.Priorty)
             };
 
             var classifications = _accountService.GetCustomerClassification(ctsCustID);
