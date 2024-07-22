@@ -273,11 +273,16 @@
             complete: function () {
                 tblcustomercategory.find('tbody').removeClass('loading');
                 
-                let disabledUnmarkCategory = (cacheData.isProblemAccount == false) || (cacheData.isVVip == true);                             
+                let disabledUnmarkCategory = cacheData.isProblemAccount == false;                  
 
                 let disabledMarkCategory = cacheData.isVVip
                     || ($("#hdIsLicensee").val() == 'TRUE' && $("#hdRoleID").val() > 1)
                     || $("#hdIsInternal").val() == 'TRUE';
+
+                console.log("unmark" + disabledUnmarkCategory);
+
+                console.log("mark" + disabledMarkCategory);
+              
                 
                 btnUnmarkCategory.prop('disabled', disabledUnmarkCategory);
                 btnMarkCategory.prop('disabled', disabledMarkCategory);                
