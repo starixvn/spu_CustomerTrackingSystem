@@ -119,12 +119,12 @@
                         rescanResult.CustIds.AddRange(rescanDangerousScorePA.CustIds);
                     }
 
-                    //var rescanInitialSmartPA = RescanInitialSmartPA(rescanPotentialPA, parameters);
+                    var rescanInitialSmartPA = RescanInitialSmartPA(rescanPotentialPA, parameters);
 
-                    //if (rescanInitialSmartPA.IsSuccess)
-                    //{
-                    //    rescanResult.CustIds.AddRange(rescanInitialSmartPA.CustIds);
-                    //}
+                    if (rescanInitialSmartPA.IsSuccess)
+                    {
+                        rescanResult.CustIds.AddRange(rescanInitialSmartPA.CustIds);
+                    }
 
                     var rescanPaTWGB = RescanInitialTWGroupBettingPA(rescanPotentialPA, parameters);
 
