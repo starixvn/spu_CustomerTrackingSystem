@@ -108,7 +108,8 @@
                     BetChoiceHome = x.BetChoiceHome,
                     BetChoiceAway = x.BetChoiceAway,
                     PriorityOrder = x.PriorityOrder,
-                    BetIDPattern = x.BetIDPattern
+                    BetIDPattern = x.BetIDPattern,
+                    NameDetailsX = x.NameDetailsX
                 };
             });
         }

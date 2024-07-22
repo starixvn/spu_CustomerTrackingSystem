@@ -27,5 +27,7 @@
         public string BetChoiceAway { get; set; }
 
         public string BetIDPattern { get; set; }
+
+        public string NameDetailsX { get; set; }
     }
 }

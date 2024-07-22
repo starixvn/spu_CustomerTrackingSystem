@@ -88,7 +88,9 @@
                     ({
                         "BetTypeName": x.BetTypeName,
                         "BettypeID": x.BetTypeID,
-                        "BetID": x.BetID
+                        "BetID": x.BetID,
+                        "BetIDPattern": x.BetIDPattern,
+                        "NameDetailsX": x.NameDetailsX
                     }));
 
             Object.keys(bettypeList).forEach(value => {
@@ -136,7 +138,7 @@
         if (ValidateRangeDate()) {
             isSkipTracking = isSkip;
             dataTable ? dataTable.ajax.reload(null, true) : dataTable = GenerateGrid();
-        }       
+        }
     }
 
     //function IsSkipGetMatch() {
@@ -165,29 +167,41 @@
         return isValid;
     }
 
-    function GenerateFilter()
-    {
+    function GenerateFilter() {
         var data = {
             DateType: domElements.rbtnScanDate.is(":checked") ? 1 : 2,
             FromDate: domElements.dpkFromDate.val(),
             ToDate: domElements.dpkToDate.val(),
             Sports: domElements.cbbSport.val().map(x => ({
-                    "LeagueGroupID": Number.parseInt(x.split('_')[1]),
-                    "SportTypeID": Number.parseInt(x.split('_')[0])
-                })),
+                "LeagueGroupID": Number.parseInt(x.split('_')[1]),
+                "SportTypeID": Number.parseInt(x.split('_')[0])
+            })),
             Market: domElements.cbbMarket.val(),
             MatchSection: domElements.cbbMatchSection.val().join(),
             IsVerified: domElements.cbbIsVerified.val(),
-            BetTypes: domElements.cbbBetType.val().map(x => ({
-                    "BettypeID": bettypeList[x].BettypeID,
-                    "BetID": bettypeList[x].BetID
-                })),
+            BetTypes: domElements.cbbBetType.val().map(x => MapperBettypes(bettypeList[x])),
             Reasons: domElements.cbbReason.val().join(),
             Event: domElements.txtEvent.val().trim().toUpperCase(),
             isSkipTracking: isSkipTracking
         };
 
         return data;
+    }
+
+    function MapperBettypes(item) {
+        var result = {};
+
+        if (item.BetIDPattern == null && item.NameDetailsX == '') {
+            result.BetID = 0;
+        }
+
+        if (item.BetIDPattern != '' && item.NameDetailsX != '') {
+            result.BetID = item.BetID;
+        }
+
+        result.BettypeID = item.BettypeID;
+
+        return result;
     }
 
     function GenerateGrid() {
