@@ -1766,7 +1766,7 @@
                     var latestClassificationModel = classificationCusts.CustInfos.Select(x => new LatestClassificationModel
                     {
                         CustId = x.CustID,
-                        CustomerClass = x.TargetCC,
+                        CustomerClass = x.CustomerClass,
                         Category =  x.CategoryID
                     });
 
