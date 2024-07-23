@@ -90,7 +90,6 @@
                 sportGroupSelector.append(BuildOptgroupSport(3, "Other Sport", data.OtherSport.Items));
 
             domElements.cbbSport.val("1_null").change();
-            // domElements.cbbSport.multiselect("refresh");
         }
 
         FetchLeagueGroups();
@@ -319,9 +318,6 @@
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(data),
-                beforeSend: function () {
-                    // $('.loading').removeClass('hide');
-                },
                 success: function (response) {
                     if (response?.data?.Items) {
                         items = response?.data?.Items;
@@ -330,7 +326,6 @@
                     }
 
                     domElements.tblMonitor.find('tbody').removeClass('loading hide');
-                    // $('.loading').addClass('hide');
                 },
                 error: function (xhr, textStatus, error) {
                     domElements.tblMonitor.find('tbody').removeClass('loading');
@@ -481,10 +476,6 @@
             ChangeSelectRadioButton(e.currentTarget.value);
         })
 
-        setTimeout(() => {
-            ChangeSelectRadioButton(domElements.rbtnSelect.filter(":checked").val());
-        }, 100);
-
         domElements.btnCancel.on('click', () => {
             domElements.divAddUsername.dialog('close');
         });
@@ -540,6 +531,10 @@
         domElements.txtEvent.val('');
         domElements.cbbMarket.val('').trigger('change');
         domElements.cbbMatchSection.multiselect("checkAll");
+
+        // default radio button
+        domElements.rbtnSelect.filter("[value='0']").prop("checked", true);
+        ChangeSelectRadioButton(domElements.rbtnSelect.filter(":checked").val());
     }
 
     function ChangeSelectRadioButton(value) {
@@ -571,7 +566,6 @@
         domElements.tblMonitor.DataTable().clear().draw();
 
         domElements.tblMonitor.find('tbody').addClass('loading');
-        // $('.loading').removeClass('hide');
 
         GetDangerMonitor();
     }
@@ -589,19 +583,10 @@
                     next: "",
                     previous: ""
                 },
-                // info: "<div class=\"loading\"></div> Total Item: _TOTAL_ item(s)",
                 info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
                 infoEmpty: "",
                 zeroRecords: "There's no data"
             },
-            // infoCallback: function (settings, start, end, max, total, pre) {
-            //     if (!total) {
-            //         return `<div class="display-total-ticket"></div> <div class="loading hide"></div>`
-            //     }
-            //     else {
-            //         $('.display-total-ticket').html(`Displaying ${start} to ${end} of ${total} item(s)`);
-            //     }
-            // },
             ordering: false,
             searching: true,
             lengthMenu: [1000, 1500, 2000],
@@ -713,7 +698,7 @@
     }
 
     function SearchEventHeader() {
-        var value = domElements.txtEventHeader.value;
+        var value = domElements.txtEventHeader.value.trim();
 
         var itemFilters = items.filter(x =>
             x.LeagueName.toUpperCase().includes(value.toUpperCase()) ||
@@ -884,7 +869,6 @@
             let isTagsFocus = domElements.spanAddSpecialCustomerAccountUserName.find('tags.tagify--focus').length > 0;
             let isChange = domElements.spanAddSpecialCustomerAccountChangeHidden.text();
             if (isOutSiteInput && isTagsFocus || isChange === "1") {
-                // domElements.txtComment.focus();
                 domElements.spanAddSpecialCustomerAccountUserName.addClass("loading-value");
                 setTimeout(() => {
                     ValidateUsernameInput('');
