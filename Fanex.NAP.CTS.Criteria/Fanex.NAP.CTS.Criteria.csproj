@@ -189,7 +189,6 @@
     <Compile Include="CustomerClassification\RescanNormalClassificationBySport\PreprocessRescanNormalClassificationBySportCriteria.cs" />
     <Compile Include="CustomerClassification\PotentialPA\RescanPADangerousCriteria.cs" />
     <Compile Include="CustomerClassification\PotentialPA\CheckExistTWInitialSmartPACriteria.cs" />
-    <Compile Include="CustomerClassification\RescanPotentialPA\RescanTWInitialSmartPACriteria.cs" />
     <Compile Include="CustomerClassification\Robot\RobotAccountInsertCriteria.cs" />
     <Compile Include="DangerMonitor\DangerMonitorTicketSummaryCriteria.cs" />
     <Compile Include="ImportEvidences\CheckCleanCustFlaggedEvidenceCriteria.cs" />

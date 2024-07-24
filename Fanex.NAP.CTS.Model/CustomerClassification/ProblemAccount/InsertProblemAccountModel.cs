@@ -29,7 +29,7 @@
             this.IsFromTVS = false;
             this.IsFromTW = false;
             this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
-            this.Remark = string.Format(Consts.DangerousScoreRemark, rescanPADangerous.ClassifiedDate.ToString(Consts.FormatDateToString_MMMddyyyy), (rescanPADangerous.ClassifiedScore * 100).ToString(Consts.FormatDecimalToString_2Places));           
+            //this.Remark = string.Format(Consts.DangerousScoreRemark, rescanPADangerous.ClassifiedDate.ToString(Consts.FormatDateToString_MMMddyyyy), (rescanPADangerous.ClassifiedScore * 100).ToString(Consts.FormatDecimalToString_2Places));           
         }
 
         public InsertProblemAccountModel(GetInitialTWGroupBettingModel twGBCust, PotentialPACustInfoModel ctsCust)
@@ -46,7 +46,7 @@
             this.IsFromTVS = false;
             this.IsFromTW = true;
             this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
-            this.Remark = string.Format(Consts.TWTWInitialGBRemark, twGBCust.DetectedDate.ToString(Consts.FormatDateToString_MMMddyyyy), twGBCust.GBTicketCount, twGBCust.SportName);            
+            //this.Remark = string.Format(Consts.TWTWInitialGBRemark, twGBCust.DetectedDate.ToString(Consts.FormatDateToString_MMMddyyyy), twGBCust.GBTicketCount, twGBCust.SportName);            
         }
 
         public InsertProblemAccountModel(TWInitialSmartPAModel tWInitialSmartCust)
@@ -63,7 +63,7 @@
             this.IsFromTVS = false;
             this.IsFromTW = true;
             this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
-            this.Remark = string.Format(Consts.TWInitialSmartRemark, tWInitialSmartCust.DetectedDate.ToString(Consts.FormatDateToString_MMMddyyyy), tWInitialSmartCust.Probability);           
+            //this.Remark = string.Format(Consts.TWInitialSmartRemark, tWInitialSmartCust.DetectedDate.ToString(Consts.FormatDateToString_MMMddyyyy), tWInitialSmartCust.Probability);           
         }
 
         public InsertProblemAccountModel(RescanCustomerClassificationModel data)
