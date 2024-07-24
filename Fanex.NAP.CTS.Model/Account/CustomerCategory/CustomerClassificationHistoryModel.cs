@@ -78,6 +78,7 @@
                 return string.Empty;
             } 
         }
-        
+
+        public bool IsGetSportName { get; set; }
     }
 }

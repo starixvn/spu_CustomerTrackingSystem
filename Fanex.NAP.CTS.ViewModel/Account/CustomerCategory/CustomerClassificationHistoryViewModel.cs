@@ -12,14 +12,16 @@
             this.SourceTypeName = data.SourceTypeName;
             this.CategoryName = (data.SourceTypeID == (int)SourceTypeID.NoShow_Detail) ? "-" : (data.CategoryName != null ? data.CategoryName : string.Empty);
             this.CustomerClass = data.CustomerClass;
-            this.Reason = data.Remark;
-            //Reason = GetReason(x, roleID);
-            //this.TurnOver = data.TurnOver;
-            //this.Winloss = data.WinLoss;
-            //this.Margin = data.Margin;
-            //this.BetCount = data.BetCount;
-            //this.ActiveDays = data.ActiveDays;           
             this.CreatedBy = data.CreatedBy;
+          
+            if (data.IsGetSportName && !string.IsNullOrEmpty(data.Remark))
+            {
+                this.Reason = data.Remark.Replace("[SportName]", data.SportName);
+            }
+            else
+            {
+                this.Reason = data.Remark;
+            }            
         }
 
         public string CreatedTimeString { get; set; }
@@ -29,30 +31,10 @@
         public string CategoryName { get; set; }
 
         public string CustomerClass { get; set; }
-        
-        public int CategoryID { get; set; }
-
+            
         public string Reason { get; set; }
-
-        public decimal TurnOver { get; set; }
-
-        public decimal Winloss { get; set; }
-
-        public decimal Margin { get; set; }
-
-        public decimal BetCount { get; set; }
-
-        public int ActiveDays { get; set; }      
-
+      
         public string CreatedBy { get; set; }
-
-        public string TaggingType { get; set; }
-
-        public bool IsParlay { get; set; }
-
-        public string SportName { get; set; }
-
-        public int IssueTypeID { get; set; }
-         
+              
     }
 }
