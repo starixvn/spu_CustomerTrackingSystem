@@ -14,7 +14,6 @@
     using NAP.Core.Web.Auth;
     using NAP.Core.Web.Session;
     using ONEbook.UM.Services;
-    using ONEbook.UM.Services.Impl;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -25,6 +24,9 @@
     using System.Web.Security;
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
+    using ONEbook.UM.Transport;
+    using ONEbook.UM.Configurations;
+    using ONEbook.UM;
 
     /// <summary>
     /// Login controller.
@@ -62,7 +64,7 @@
             _groupService = groupService ?? new GroupService();
             _siteService = siteService ?? new SiteService();
             _currentSession = currentSession ?? new CurrentSession();
-            _maintenanceService = maintenanceService ?? new MaintenanceService();
+            _maintenanceService = maintenanceService ?? new MaintenanceService(UMClientManager.RestClient, UMClientManager.CacheService, UMClientManager.UMClientConfigs, UMClientManager.HttpContext);
             _securityService = new SecurityService();
             _hashAlgorithm = new SHA256Managed();
         }

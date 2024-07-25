@@ -20,9 +20,11 @@
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
     using ONEbook.UM.Services;
-    using ONEbook.UM.Services.Impl;
     using Fanex.NAP.CTS.User.Helper;
     using Fanex.NAP.CTS.Service;
+    using ONEbook.UM.Transport;
+    using ONEbook.UM.Configurations;
+    using ONEbook.UM;
 
     /// <summary>
     /// SSO Controller.
@@ -54,7 +56,7 @@
         {
             _userService = userService ?? new UserService();
             _currentSession = currentSession ?? new CurrentSession();
-            _maintenanceService = maintenanceService ?? new MaintenanceService();
+            _maintenanceService = maintenanceService ?? new MaintenanceService(UMClientManager.RestClient, UMClientManager.CacheService, UMClientManager.UMClientConfigs, UMClientManager.HttpContext);
             _securityService = new SecurityService();
         }
 
