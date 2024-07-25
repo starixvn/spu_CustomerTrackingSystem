@@ -424,8 +424,6 @@
 
             var graphAssociationPage = _accountService.GetAssociatedAccount(model);
 
-            //graphAssociationPage = GetAssociatedAccount_Test();
-
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
             {
                 totalItem = graphAssociationPage.TotalItems;
@@ -461,31 +459,7 @@
                 recordsFiltered = totalItem,
                 data = result
             }, JsonRequestBehavior.AllowGet);
-        }
-
-        private AssociatedAccountPagingModel GetAssociatedAccount_Test()
-        {
-            return new AssociatedAccountPagingModel()
-            {
-                AssociationList = new List<AssociatedAccountModel>() 
-                {
-                    new AssociatedAccountModel() 
-                    {
-                        CustId = 1,
-                        CTSCustID = 1,
-                        AssociationDate =DateTime.Now,
-                        AssociationStatus = 1,
-                        AssociationType = new List<int>(){ 1},
-                        CategoryIDs = "21300,21302,21303",
-                        IsPA  = true,
-                        IsPotentialPA = false,
-                        CategoryNames = "Abnormal, Fixed Game",
-                        ColorTypeIDs = "6"
-                    }
-                },
-                TotalItems = 1
-            };
-        }
+        }       
 
         private IEnumerable<CategoryGroupViewModel> GetAllCategories()
         {
@@ -1827,12 +1801,10 @@
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]
         public ActionResult SaveMarkRobotAccount(SaveMarkCustomerCategoryViewModel model)
-        {
-            var dbResult = new DBResult();
-
-            var robotAccounts = new List<InsertRobotModel>()
+        {            
+            var robotAccounts = new List<InsertProblemAccountModel>()
                 {
-                    new InsertRobotModel
+                    new InsertProblemAccountModel
                     {
                         CustID = model.CustID,
                         CategoryID = model.CategoryID,
@@ -1843,25 +1815,7 @@
                     }
                 };
 
-            var custInfos = _problemAccountClassificationService.InsertRobotAccountPackge(robotAccounts, false);
-
-            if (custInfos.Any())
-            {
-                var custIds = custInfos.Select(x => x.CustID).Distinct();
-
-                _customerClassificationService.PushDataToExternalPackge(custIds, new PushDataToExternalModel
-                {
-                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,                  
-                    IsUpdateDangerToMainDB = true,
-                    IsSyncAFC = false
-                }, FromFlow.CTSWEB);
-
-                dbResult = new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
-            }
-            else
-            {
-                dbResult = new DBResult { ErrorCode = -1, ErrorMsg = "Mark PA Robot failed" };
-            }
+            var dbResult = _problemAccountClassificationService.InsertProblemAccountPackage(robotAccounts, CCInputFlow.InsertRobot, "Mark Robot Profile Page", FromFlow.CTSWEB, false);          
 
             return Json(new
             {

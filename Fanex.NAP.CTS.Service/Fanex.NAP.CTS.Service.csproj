@@ -59,7 +59,6 @@
     <Compile Include="Implement\CustomerCategoryService.cs" />
     <Compile Include="Implement\CustomerClassification\BaseCustomerClassificationService.cs" />
     <Compile Include="Implement\CustomerClassification\CustomerClassificationBySportService.cs" />
-    <Compile Include="Implement\CustomerClassification\PAPotentialClassificationService.cs" />
     <Compile Include="Implement\CustomerClassification\ProblemAccountClassificationService.cs" />
     <Compile Include="Implement\CustomerClassification\DataLogTrackingServices.cs" />
     <Compile Include="Implement\CustomerClassification\RescanCustomerClassificationBySportService.cs" />
@@ -100,7 +99,6 @@
     <Compile Include="Interface\CustomerClassification\IBaseCustomerClassificationService.cs" />
     <Compile Include="Interface\CustomerClassification\ICustomerClassificationBySportService.cs" />
     <Compile Include="Interface\CustomerClassification\IDataLogTrackingServices.cs" />
-    <Compile Include="Interface\CustomerClassification\IPAPotentialClassificationService.cs" />
     <Compile Include="Interface\CustomerClassification\IProblemAccountClassificationService.cs" />
     <Compile Include="Interface\CustomerClassification\IRescanCustomerClassificationBySportService.cs" />
     <Compile Include="Interface\IAccountService.cs" />

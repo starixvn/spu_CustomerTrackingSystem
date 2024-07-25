@@ -13,15 +13,8 @@
             this.CategoryName = (data.SourceTypeID == (int)SourceTypeID.NoShow_Detail) ? "-" : (data.CategoryName != null ? data.CategoryName : string.Empty);
             this.CustomerClass = data.CustomerClass;
             this.CreatedBy = data.CreatedBy;
-          
-            if (data.IsGetSportName && !string.IsNullOrEmpty(data.Remark))
-            {
-                this.Reason = data.Remark.Replace("[SportName]", data.SportName);
-            }
-            else
-            {
-                this.Reason = data.Remark;
-            }            
+
+            this.Reason = GetReason(data);
         }
 
         public string CreatedTimeString { get; set; }
@@ -35,6 +28,29 @@
         public string Reason { get; set; }
       
         public string CreatedBy { get; set; }
+
+        private string GetReason(CustomerClassificationHistoryModel data)
+        {
+            var reason = string.Empty;
+
+            if (!string.IsNullOrEmpty(data.Remark))
+            {
+                if (data.IsGetSportName)
+                {
+                    reason = data.Remark.Replace("[SportName]", data.SportName);
+                }
+                else if (data.IsFromTVS)
+                {
+                    reason = data.Remark.Replace("| Sport: [SportName]", string.Empty);
+                }
+                else
+                {
+                    reason = data.Remark.Replace("[SportName]", "Soccer/Basketball");
+                }
+            }          
+
+            return reason;
+        }
               
     }
 }

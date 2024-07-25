@@ -197,12 +197,13 @@
                 CreatedBy = CurrentSession.UserId
             });
 
-            return _paClassificationService.InsertProblemAccountPackage(pas, CCInputFlow.InsertPACategory, "ProblemAccountManagement", FromFlow.CTSWEB, true);
+            return _paClassificationService.InsertProblemAccountPackage(pas, CCInputFlow.InsertPACategory, "Problem Account Management", FromFlow.CTSWEB, true);
         }
 
         private DBResult SaveMarkRobotAccount(ValidateProblemAccountInputViewModel model, IEnumerable<ProblemAccountValidatedModel> validatedModels)
         {
-            var robotAccounts = validatedModels.Select(x => new InsertRobotModel {
+            var robotAccounts = validatedModels.Select(x => new InsertProblemAccountModel
+            {
                 CustID = x.CustID,
                 CategoryID = model.CategoryID,
                 Remark = model.Comment,
@@ -210,26 +211,8 @@
                 IsFromCTS = true,
                 CreatedBy = CurrentSession.UserId                
             });
-
-            var custInfos = _paClassificationService.InsertRobotAccountPackge(robotAccounts, false);
-
-            if (custInfos.Any())
-            {
-                var custIds = custInfos.Select(x => x.CustID).Distinct();
-
-                _customerClassificationService.PushDataToExternalPackge(custIds, new PushDataToExternalModel
-                {
-                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,                                   
-                    IsUpdateDangerToMainDB = true,
-                    IsSyncAFC = false
-                }, FromFlow.CTSWEB);
-
-                return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
-            }
-            else
-            {
-                return new DBResult { ErrorCode = -1, ErrorMsg = "Mark PA Robot failed" };
-            }                           
+                        
+            return _paClassificationService.InsertProblemAccountPackage(robotAccounts, CCInputFlow.InsertRobot, "Mark Robot Management", FromFlow.CTSWEB, false);                          
         }
 
         [HttpPost]
