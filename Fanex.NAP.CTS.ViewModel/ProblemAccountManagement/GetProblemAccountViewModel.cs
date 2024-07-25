@@ -40,7 +40,7 @@
        
         public string SportName { get; set; }
 
-        public int IssueTypeID { get; set; }
+        public int? IssueTypeID { get; set; }
 
         private string BuildComment(GetProblemAccountModel data)
         {

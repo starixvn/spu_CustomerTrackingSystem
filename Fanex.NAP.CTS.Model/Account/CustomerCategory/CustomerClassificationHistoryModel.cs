@@ -65,7 +65,7 @@
 
         public int ? SportType { get; set; }
 
-        public int IssueTypeID { get; set; }
+        public int? IssueTypeID { get; set; }
 
         public string SportName { 
             get 
