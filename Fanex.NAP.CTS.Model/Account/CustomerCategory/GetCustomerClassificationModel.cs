@@ -2,9 +2,7 @@
 {
     public class GetCustomerClassificationModel
     {
-        public int CategoryID { get; set; }
-
-        public int CategoryType { get; set; }
+        public int CategoryID { get; set; }       
 
         public string CategoryName { get; set; }
 

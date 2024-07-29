@@ -14,9 +14,7 @@
 
         public int CategoryID { get; set; }
 
-        public DateTime ScannedTime { get; set; }
-
-        public int CategoryType { get; set; }
+        public DateTime ScannedTime { get; set; }       
 
     }
 }

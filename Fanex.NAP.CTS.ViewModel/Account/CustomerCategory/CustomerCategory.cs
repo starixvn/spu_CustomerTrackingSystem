@@ -5,9 +5,7 @@
         public int ParentCategoryId { get; set; }
 
         public string ParentCategoryName { get; set; }
-
-        public int CategoryType { get; set; }
-
+      
         public int CategoryId { get; set; }
 
         public string CategoryName { get; set; }

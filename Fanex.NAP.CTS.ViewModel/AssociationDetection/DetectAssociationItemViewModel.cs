@@ -34,14 +34,8 @@
             this.CustomerCategory = data.CustomerCategory;
             this.CustomerClassToString = data.CustomerClass > 0 ? data.CustomerClass.ToString() : null;
             this.CustomerClass = data.CustomerClass;
-            this.IsPAProbation = data.IsPAProbation;
-            this.CategoryType = data.CategoryType;
-
-            //if (this.CategoryType != 2)
-            //{
-            //    this.IsProblemAccount = data.ParentIDs != null && data.ParentIDs.Split(',').Any(y => y == "50");
-            //}
-
+            this.IsPAProbation = data.IsPAProbation;           
+    
             this.AgentCTSCustID = data.AgentCTSCustID;
             if (!data.IsLicensee && data.AgentUsername != null)
                 this.AgentUsername = data.AgentUsername;
@@ -113,14 +107,17 @@
 
         public int Danger5 { get; set; }
 
-        public int CategoryType { get; set; } // 1: PA, 2: PA Dangerous
-
         public CategoryColorType CategoryColorType { get; set; }
 
         public string CategoryColorDesc
         {
             get
             {
+                if (this.CategoryColorType == CategoryColorType.Default)
+                {
+                    return string.Empty;
+                }
+
                 return EnumExtensions.GetStringSlow(CategoryColorType);
             }
         }

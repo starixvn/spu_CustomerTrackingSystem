@@ -38,11 +38,7 @@
                 if (data.IsGetSportName)
                 {
                     reason = data.Remark.Replace("[SportName]", data.SportName);
-                }
-                else if (data.IsFromTVS)
-                {
-                    reason = data.Remark.Replace("| Sport: [SportName]", string.Empty);
-                }
+                }              
                 else
                 {
                     reason = data.Remark.Replace("[SportName]", "Soccer/Basketball");

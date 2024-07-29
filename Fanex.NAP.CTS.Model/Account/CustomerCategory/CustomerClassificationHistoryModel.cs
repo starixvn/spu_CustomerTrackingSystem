@@ -18,9 +18,7 @@
         public string CreatedBy { get; set; }
   
         public string Remark { get; set; }
-      
-        public bool IsFromTVS { get; set; }
-
+          
         public int ? SportType { get; set; }     
 
         public string SportName { 

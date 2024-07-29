@@ -734,7 +734,6 @@
     <Content Include="Scripts\AssociatedAccountMonitor\index.js" />
     <Content Include="Scripts\AssociatedGroupMonitor\index.js" />
     <Content Include="Scripts\AssociatedGroupMonitor\transfer-account.js" />
-    <Content Include="Scripts\AssociationDetection\index_old.js" />
     <Content Include="Scripts\AssociationDetection\index.js" />
     <Content Include="Scripts\AssociationReport\detail.js" />
     <Content Include="Scripts\AssociationReport\index.js" />
@@ -1170,7 +1169,6 @@
     <Content Include="Views\Account\CustomerCategory\MarkCustomerCategory.cshtml" />
     <Content Include="Views\Account\CustomerCategory\UnmarkCustomerCategory.cshtml" />
     <Content Include="Views\AssociatedGroupMonitor\Index.cshtml" />
-    <Content Include="Views\AssociationDetection\Index_old.cshtml" />
     <Content Include="WebConfigs\Web.AppSettings.SIT.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

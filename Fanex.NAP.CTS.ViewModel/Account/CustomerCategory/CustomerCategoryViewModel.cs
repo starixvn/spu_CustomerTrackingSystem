@@ -8,8 +8,7 @@
     {
         public GetCustomerCategoryViewModel(GetCustomerClassificationModel data)
         {
-            this.CategoryId = data.CategoryID;
-            this.CategoryType = data.CategoryType;
+            this.CategoryId = data.CategoryID;          
             this.CategoryGroup = data.CategoryGroupID;
             this.CategoryName = data.CategoryName ?? string.Empty;
             this.IsPAProbation = data.IsProbation;
@@ -20,9 +19,7 @@
         }
 
         public int CategoryId { get; set; }
-
-        public int CategoryType { get; set; }        
-
+        
         public string CategoryName { get; set; }
 
         public int CategoryGroup { get; set; }

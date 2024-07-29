@@ -24,8 +24,7 @@
             this.CTSCustId = data.CTSCustID;
             this.IsLinked = data.AssociationStatus == 1;
             this.IsProblemAccount = data.IsPA;
-            this.IsPotentialPA = data.IsPotentialPA;
-            this.CategoryType = data.CategoryType;
+            this.IsPotentialPA = data.IsPotentialPA;         
             this.IsPAProbation = data.IsProbation;
             this.CategoryIds = data.CategoryIDs;
             this.CategoryNames = !string.IsNullOrEmpty(data.CategoryNames) ? data.CategoryNames : "-";
@@ -70,9 +69,7 @@
 
         public string CategoryIds { get; set; }
 
-        public string CategoryNames { get; set; }
-
-        public int CategoryType { get; set; }
+        public string CategoryNames { get; set; }     
 
         public string CustomerClasses { get; set; }
 

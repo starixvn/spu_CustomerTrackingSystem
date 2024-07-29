@@ -11,7 +11,6 @@
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers;
-    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Account.RobotBetting;
@@ -20,7 +19,6 @@
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassification.ProblemAccount;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
-    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Model.Transaction;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
@@ -519,8 +517,7 @@
                                           StatusId = group.a.StatusId,
                                           AssociationStatus = group.a.AssociationStatus,
                                           ParentIDs = group.a.ParentIDs,
-                                          IsProbation = group.a.IsProbation,
-                                          CategoryType = group.a.CategoryType,
+                                          IsProbation = group.a.IsProbation,                                         
                                           CategoryIDs = group.a.CategoryIDs,
                                           CategoryNames = group.a.CategoryNames,
                                           CustomerClasses = (temp != null && group.a.CustSubId == 0) ? temp.CustomerClass.ToString() : "-",
