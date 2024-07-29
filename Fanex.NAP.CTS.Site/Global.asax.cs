@@ -66,15 +66,7 @@
                .UseConfig(umConfig)
                .UseCacheService(new UMCacheService(new CacheService()))
                .UseRestClient(new UMRestClient(umConfig))
-               .UseHttpContext(new HttpContextHelper());
-
-            var maintenanceService = new MaintenanceService(
-                                  UMClientManager.RestClient,
-                                  UMClientManager.CacheService,
-                                  UMClientManager.UMClientConfigs,
-                                  UMClientManager.HttpContext);
-
-            GlobalFilters.Filters.Add(new CheckUMFilterAttribute(maintenanceService, umConfig));
+               .UseHttpContext(new HttpContextHelper());           
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)

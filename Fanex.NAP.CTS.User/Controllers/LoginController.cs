@@ -27,6 +27,7 @@
     using ONEbook.UM.Transport;
     using ONEbook.UM.Configurations;
     using ONEbook.UM;
+    using Fanex.NAP.CTS.User.Helper;
 
     /// <summary>
     /// Login controller.
@@ -106,12 +107,12 @@
             {
                 // if login-directly feature is disabled then redirect users to NAP Hub
                 return Redirect(NapSettings.Settings.HubUrl);
-            }
-            /*
-            if (UMHelper.IsUnderMaintainaceHappen(_maintenanceService))
+            }           
+
+            if (_maintenanceService.IsUnderMaintenance())
             {
                 return RedirectToAction("Offline", "Common");
-            }*/
+            }
 
             GenerateToken();
 
