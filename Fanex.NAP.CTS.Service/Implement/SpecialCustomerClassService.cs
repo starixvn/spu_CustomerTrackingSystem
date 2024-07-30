@@ -94,28 +94,7 @@
         }
 
         public void InsertCustomerClass(AddSpecialCCParamsModel model, ValidateSpecialCCResultViewModel validateUsers, int createdBy)
-        {
-            #region Delete
-            //var userList = validateUsers.Users.Select(x => new AddUserListSpecialCCModel
-            //{
-            //    CTSCustID = x.CTSCustID,
-            //    CustID = x.CustID,
-            //    IsLicenseeVIP = x.IsLicenseeVIP,
-            //    SportID = x.SportID,
-            //    SubscriberID = x.SubscriberID
-            //});
-
-            //var criteria = new InsertSpecialCustomerClassCriteria
-            //{
-            //    ListCust = JsonConvert.SerializeObject(userList),
-            //    CustomerClass = model.CustomerClass,
-            //    Remark = model.Comment,
-            //    CreatedBy = createdBy
-            //};
-
-            //var insertCTSResult = _repository.Fetch<ResultSpecialCCViewModel>(criteria);
-            #endregion
-
+        {          
             var generalCusts = validateUsers.Users.Where(x => x.SportID == 0).Select(x => new AddGenreralUserSpecialCCModel
             {
                 CTSCustID = x.CTSCustID,

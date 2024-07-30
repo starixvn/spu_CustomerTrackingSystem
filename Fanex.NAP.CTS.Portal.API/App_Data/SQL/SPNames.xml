@@ -75,12 +75,7 @@
 		<Setting Key="Nap_ProblemAccount_AutoInsertCustomer" SpName="Nap_ProblemAccount_AutoInsertCustomer_xtest" DbName="DBCust.CustDB.bodbAdminNet" />
 	</Function>
 
-	<Function name="SpecialCustomerClass">
-		<Setting Key="CTS_DC_SpecialCustClass_Insert" SpName="CTS_DC_SpecialCustClass_Insert" DbName="MySQL.CTS_DataCenter.Admin" />	
-	</Function>
-
-	<Function name="ProblemAccountManagement">
-		<Setting Key="CTS_DC_ProblemAccountManagement_Evidence_Update" SpName="CTS_DC_ProblemAccountManagement_Evidence_Update" DbName="MySQL.CTS_DataCenter.Admin" />
+	<Function name="ProblemAccountManagement">		
 		<Setting Key="CTS_DC_ProblemAccountManagement_Evidence_Remove" SpName="CTS_DC_ProblemAccountManagement_Evidence_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
 	</Function>
 	<Function name="MonitorCTSFunction">
@@ -91,22 +86,11 @@
 		<Setting Key="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" SpName="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" DbName="MySQL.CTS_Archive.Admin" />					
 
 		<Setting Key="CTS_DC_CustClassification_GetCCAndDangerLevel" SpName="CTS_DC_CustClassification_GetCCAndDangerLevel_UAT4" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_GeneralNormalClassification_RescanNormal_Preprocess" SpName="CTS_GeneralNormalClassification_RescanNormal_Preprocess" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
-		<Setting Key="CTS_DC_CustClassification_PA_Dangerous_ReScan" SpName="CTS_DC_CustClassification_PA_Dangerous_ReScan" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_CustomerClassification_CheckNewGroupBetting" SpName="CTS_CustomerClassification_CheckNewGroupBetting" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
-		<Setting Key="CTS_DC_CustClassification_InitialGB_GetCustInfo" SpName="CTS_DC_CustClassification_InitialGB_GetCustInfo" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_InitialSmart_CheckExist" SpName="CTS_DC_CustClassification_InitialSmart_CheckExist_UAT1" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_GeneralNormalClassification_RescanNormal_Preprocess" SpName="CTS_GeneralNormalClassification_RescanNormal_Preprocess" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />							
 	</Function>
 	<Function name="LogData">
 		<Setting Key="CTS_Archive_Log_Insert" SpName="CTS_Archive_Log_Insert" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />
 	</Function>
-	<Function name="Licensee VIP/BA">		
-		<Setting Key="CTS_DC_CustClassification_LicVIP_Insert" SpName="CTS_DC_CustClassification_LicVIP_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_LicVIP_Remove" SpName="CTS_DC_CustClassification_LicVIP_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_LicBA_Insert" SpName="CTS_DC_CustClassification_LicBA_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_LicBA_Remove" SpName="CTS_DC_CustClassification_LicBA_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
-	</Function>
-
 	<Function name="FPS">
 		<Setting Key="CTS_DC_CustInfo_GetByNameSubscriber" SpName="CTS_DC_CustInfo_GetByNameSubscriber" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_GetPartialByUserNameSubscriber" SpName="CTS_DC_CustInfo_GetPartialByUserNameSubscriber" DbName="MySQL.CTS_DataCenter.Reporter" />

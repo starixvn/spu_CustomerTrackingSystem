@@ -33,8 +33,7 @@
             this.AssociatedTypes = GetAssociationType(data.AssociationType);
             this.CustomerCategory = data.CustomerCategory;
             this.CustomerClassToString = data.CustomerClass > 0 ? data.CustomerClass.ToString() : null;
-            this.CustomerClass = data.CustomerClass;
-            this.IsPAProbation = data.IsPAProbation;           
+            this.CustomerClass = data.CustomerClass;          
     
             this.AgentCTSCustID = data.AgentCTSCustID;
             if (!data.IsLicensee && data.AgentUsername != null)
@@ -47,8 +46,18 @@
             else
                 this.AgentEvidence = "-";
 
-            int.TryParse(data.ColorTypeIDs, out int colorTypeID);
-            this.CategoryColorType = (CategoryColorType)colorTypeID;
+            if (!string.IsNullOrEmpty(data.ColorTypeIDs))
+            {
+                var arrColorTypeIDs = data.ColorTypeIDs.Split(',');
+
+                int.TryParse(arrColorTypeIDs[0], out int colorTypeID);
+
+                this.CategoryColorType = (CategoryColorType)colorTypeID;
+            }
+            else
+            {
+                this.CategoryColorType = CategoryColorType.Default;
+            }          
         }
 
         public int RowNumber { get; set; }
@@ -84,10 +93,6 @@
         public string CustomerClassToString { get; set; }
 
         public int CustomerClass { get; set; }
-
-        public bool IsProblemAccount { get; set; }
-
-        public bool IsPAProbation { get; set; }
 
         public long AgentCTSCustID { get; set; }
 

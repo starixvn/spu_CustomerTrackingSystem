@@ -76,7 +76,7 @@
             return isSuccess;
         }
 
-        public bool UpdateDangerLevelToMainDB(IEnumerable<LatestCCDangerLevelModel> lastestClassifications)
+        private bool UpdateDangerLevelToMainDB(IEnumerable<LatestCCDangerLevelModel> lastestClassifications)
         {
             if (lastestClassifications != null && lastestClassifications.Any())
             {
@@ -105,7 +105,7 @@
             return true;
         }
 
-        public bool PushCCToMainDB(IEnumerable<LatestCCDangerLevelModel> lastestClassifications, int retryTime)
+        private bool PushCCToMainDB(IEnumerable<LatestCCDangerLevelModel> lastestClassifications, int retryTime)
         {
             bool isSuccess = true;
 
@@ -216,7 +216,7 @@
 
         #region DataAccess Layer
 
-        public DBResult UpdateCCToMainDB(IEnumerable<LatestClassificationModel> customerClassList)
+        private DBResult UpdateCCToMainDB(IEnumerable<LatestClassificationModel> customerClassList)
         {
             var criteria = new SyncCustomerClassToMainDbCriteria
             {

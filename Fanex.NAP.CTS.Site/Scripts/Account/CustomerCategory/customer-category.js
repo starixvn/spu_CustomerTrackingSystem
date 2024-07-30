@@ -519,14 +519,6 @@
     function ExcludedTagAssPA(isChecked, custId, ctsCustId, subscriberId, custSubId) {
         let html = "";      
         if (isChecked) {
-            html = "<div style='text-align:center'>You are not allow to turn on this setting because of Pin Category.</div>";
-            html += "<div style='text-align:center'>Please contact your system administrator for further assistance.</div>";
-
-            common.showError(html, 2000);
-            ResetCategorySetting();
-
-            return;
-        } else if (isChecked) {
             html = "<div style='text-align:center'>Are you sure about this action? </div>";
             html += "<div>By selecting this option, this account will not be classified with PA</div>";
             html += "<div>Associated Category by our service in future</div>";
@@ -701,8 +693,7 @@
             menuHeight: 60,
             header: false,
             click: function (_, ui) {
-                if (ui.value == "ExcludedTagAssPA")
-                    //PinCategory(ui.checked, ctsCustId, subscriberId);
+                if (ui.value == "ExcludedTagAssPA")                    
                     ExcludedTagAssPA(ui.checked, custId, ctsCustId, subscriberId, custSubId);                 
             },
             selectedText: "Category Setting",

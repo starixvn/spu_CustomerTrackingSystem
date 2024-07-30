@@ -74,9 +74,7 @@
 
         IEnumerable<ValidateManualAssociationMultipleModel> ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList, out bool isException);
 
-        DBResult InsertManualAssociationMultiple(string associationListJson);
-
-        //IEnumerable<CustomerCategory> GetCustomerCategoryByCTSCustId(long ctsCustId);
+        DBResult InsertManualAssociationMultiple(string associationListJson);      
 
         DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, int createdBy, bool isRemoveAction);       
 
@@ -85,14 +83,8 @@
         IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId);
 
         IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long ctsCustId);
-
-        //IEnumerable<LatestClassificationModel> MarkVVIPCategory(CustomerCategoryModel categoryModel);
-
-        DBResult AddQueueAffectDownlinesCustomerCategory(CustomerCategoryModel categoryModel);
-
-        //IEnumerable<long> RemoveVVIPCategory(CustomerCategoryModel removeCategoryModel);        
-
-        //DBResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory, int createdBy);
+      
+        DBResult AddQueueAffectDownlinesCustomerCategory(CustomerCategoryModel categoryModel);       
 
         DBResult ChangeExcludedTagAssPA(long ctsCustId, int subscriberId, bool isPinCategory, int createdBy);
 
@@ -101,9 +93,7 @@
         IEnumerable<PerformanceByBettypeModel> GetPerformanceByBettype(long custId, int getTop);
 
         IEnumerable<PerformanceDailyModel> GetPerformanceDaily(long custId);
-
-        //IEnumerable<CustomerClassModel> GetCustomerClassByCustId(string custIdList);
-
+      
         IEnumerable<GetCustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, string parentCateIdList);
 
         IEnumerable<CustomerClassificationGeneralInfoModel> GetCustomerClassificationByCategory(string categoryIdList);

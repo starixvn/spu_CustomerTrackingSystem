@@ -36,8 +36,6 @@
 
         public string ParentIDs { get; set; }
 
-        public bool IsPAProbation { get; set; }
-
         public bool IsLicensee { get; set; }
 
         public long AgentCTSCustID { get; set; }

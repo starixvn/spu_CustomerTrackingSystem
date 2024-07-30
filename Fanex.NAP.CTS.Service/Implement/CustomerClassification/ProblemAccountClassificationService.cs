@@ -15,7 +15,6 @@
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
