@@ -75,6 +75,36 @@
             return GetSportBettypesFromCache()?.GroupBy(item => $"{item.SportType}_{item.BetTypeID}_{item.BetID}")?.Select(x => x.FirstOrDefault());
         }
 
+        public IEnumerable<DangerMonitorLeagueGroupViewModel> GetLeagueGroups()
+        {
+            var leagueGroups = _commonService.GetLeagueGroup();
+
+            return leagueGroups?.Select(x => new DangerMonitorLeagueGroupViewModel
+            {
+                GroupID = x.GroupID,
+                GroupName = x.GroupName,
+                SportType = x.SportType,
+                SportGroup = x.SportGroup
+            }) ?? new List<DangerMonitorLeagueGroupViewModel>();
+        }
+
+        public DangerMonitorValidateUsernameViewModel ValidateUsernameForMain(string usernames)
+        {
+            var result = new DangerMonitorValidateUsernameViewModel();
+
+            if (usernames.IsNotNullOrEmpty())
+            {
+                var validateUsernames = _commonService.ValidateUsernameForMain(usernames);
+
+                var arrUsername = usernames.Split(',');
+
+                result.ValidateUsernames = validateUsernames?.Select(x => x.UserName).ToList() ?? new List<string>();
+                result.InvalidateUsernames = arrUsername?.Except(result.ValidateUsernames).ToList() ?? new List<string>();
+            }
+
+            return result;
+        }
+
         public GetDangerMonitorResultViewModel GetDangerMonitor(DangerMonitorSearchModel filter)
         {
             var result = Enumerable.Empty<GetDangerMonitorItemViewModel>();
@@ -153,7 +183,9 @@
                 BettypeList = filter.BetTypes,
                 MatchSection = filter.MatchSection,
                 MarketList = filter.Market,
-                QueryDanger = filter.QueryDanger,
+                QueryDanger = filter.QueryDanger ?? string.Empty,
+                UserNameList = filter.UserNameList ?? string.Empty,
+                LeagueGroupList = filter.LeagueGroupList
             };
 
             var result = _repository.Fetch<DangerMMTicketInfoViewModel>(criteria);

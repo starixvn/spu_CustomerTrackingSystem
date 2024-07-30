@@ -29,6 +29,10 @@
 
         IEnumerable<SportBettypeViewModel> GetMainSportBettype(SportBettypeModel model);
 
+        IEnumerable<LeagueGroupViewModel> GetLeagueGroup();
+
+        IEnumerable<ValidateUserNameModel> ValidateUsernameForMain(string userName);
+
         void CheckConnection();
     }
 }

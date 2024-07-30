@@ -12,6 +12,7 @@
     using System.Web.Mvc;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class TrackingFunctionUsageFilterAttribute : ActionFilterAttribute
     {
         public TrackingCtsFunctionId FunctionId { get; set; }

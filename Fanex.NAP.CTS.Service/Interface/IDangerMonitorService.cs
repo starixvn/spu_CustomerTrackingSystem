@@ -12,6 +12,10 @@
 
         IEnumerable<DangerMonitorSporTypeBetTypeViewModel> GetBettypesFromCache();
 
+        IEnumerable<DangerMonitorLeagueGroupViewModel> GetLeagueGroups();
+
+        DangerMonitorValidateUsernameViewModel ValidateUsernameForMain(string usernames);
+
         GetDangerMonitorResultViewModel GetDangerMonitor(DangerMonitorSearchModel filter);
 
         byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath);

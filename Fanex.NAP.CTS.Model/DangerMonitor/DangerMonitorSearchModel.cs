@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.DangerMonitor
 {
+    using Fanex.NAP.CTS.Core.Extentions;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -12,6 +13,10 @@
         public DateTime? ToDate { get; set; }
 
         public string QueryDanger { get; set; }
+
+        public string UserNameList { get; set; }
+
+        public string LeagueGroupList { get; set; }
 
         public IEnumerable<string> SportList { get; set; }
 
@@ -32,17 +37,32 @@
                     return false;
                 }
 
-                if (string.IsNullOrEmpty(QueryDanger) || string.IsNullOrEmpty(Market) || string.IsNullOrEmpty(MatchSection))
+                if ((QueryDanger.IsNullOrEmpty() && UserNameList.IsNullOrEmpty()))
                 {
                     return false;
                 }
 
-                if (SportList == null || !SportList.Any())
+                if (Market.IsNullOrEmpty())
                 {
                     return false;
                 }
 
-                if (string.IsNullOrEmpty(BetTypes) || BetTypes.Equals("[]"))
+                if (MatchSection.IsNullOrEmpty())
+                {
+                    return false;
+                }
+
+                if (LeagueGroupList.IsNullOrEmpty())
+                {
+                    return false;
+                }
+
+                if (SportList.IsNullOrEmpty())
+                {
+                    return false;
+                }
+
+                if (BetTypes.IsNullOrEmpty() || BetTypes.Equals("[]"))
                 {
                     return false;
                 }

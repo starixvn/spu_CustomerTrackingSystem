@@ -145,6 +145,7 @@
     <Compile Include="AssociationReport\AssociationFilterViewModel.cs" />
     <Compile Include="AssociationReport\AssociationReportViewModel.cs" />
     <Compile Include="AssociationReport\AssociationViewModel.cs" />
+    <Compile Include="Common\LeagueGroupViewModel.cs" />
     <Compile Include="Common\ReasonGroupStaticListViewModel.cs" />
     <Compile Include="Common\ReasonStaticListViewModel.cs" />
     <Compile Include="Common\SiteGroupViewModel.cs" />
@@ -155,6 +156,8 @@
     <Compile Include="DangerMonitor\DangerMMTicketInfoViewModel.cs" />
     <Compile Include="DangerMonitor\DangerMonitorSporTypeBetTypeViewModel.cs" />
     <Compile Include="DangerMonitor\DangerMonitorDetailViewModel.cs" />
+    <Compile Include="DangerMonitor\DangerMonitorLeagueGroupViewModel.cs" />
+    <Compile Include="DangerMonitor\DangerMonitorValidateUsernameViewModel.cs" />
     <Compile Include="DangerMonitor\GetDangerSummaryItemViewModel.cs" />
     <Compile Include="DangerMonitor\GetDangerMonitorItemViewModel.cs" />
     <Compile Include="DangerMonitor\GetDangerMonitorResultViewModel.cs" />

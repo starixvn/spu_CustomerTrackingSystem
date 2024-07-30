@@ -7,6 +7,7 @@
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.DangerMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
@@ -66,8 +67,31 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.DangerMonitorRpt, "isSkipTracking")]
-        public ActionResult GetDangerMonitor(DangerMonitorSearchModel filter, bool? isSkipTracking)
+        public ActionResult GetLeageGroup()
+        {
+            var leagueGroup = _dangerMonitorService.GetLeagueGroups();
+
+            return Json(new
+            {
+                data = leagueGroup
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult ValidateUsername(string username)
+        {
+            var validateUsername = _dangerMonitorService.ValidateUsernameForMain(username);
+
+            return Json(new
+            {
+                data = validateUsername
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.DangerMonitorRpt, Order = 1)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.DangerMonitorUsernameRpt, "isSkipTrackingUsername", Order = 2)]
+        public ActionResult GetDangerMonitor(DangerMonitorSearchModel filter, bool? isSkipTrackingUsername)
         {
             var data = new GetDangerMonitorResultViewModel();
 

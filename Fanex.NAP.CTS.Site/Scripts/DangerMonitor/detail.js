@@ -330,7 +330,7 @@ function DangerousSettingDetail() {
             optGroupChecked: true
         });
     }
-    
+
     function SetupMultiselectFilter(ccb, selectName, menuWidth = 260, menuHeight = 280) {
         ccb.multiselect({
             menuWidth: menuWidth,
@@ -378,7 +378,7 @@ function DangerousSettingDetail() {
                         selected = false;
                     }
                 }
-              
+
                 let optgroup = `<optgroup label='Detect By v.v...'>`;
                 if (selected) {
                     optgroup += `<option selected value='${data[i]}'>${data[i]}</option>`;
@@ -514,17 +514,19 @@ function DangerousSettingDetail() {
         if (data) {
             let dangerSelector = domElements.cbbDanger.empty();
 
-            if (data.Danger1.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(1, "Original", data.Danger1.DangerItems, cacheSelectedDanger));
+            var cacheDanger = IsHasDangerLevelDataFromPath() ? cacheSelectedDanger : [];
 
-            if (data.Danger2.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(2, "ABI", data.Danger2.DangerItems, cacheSelectedDanger));
+            if (data.Danger1.DangerItems.length > 0) dangerSelector.append(BuildOptgroupDgr(1, "Original", data.Danger1.DangerItems, cacheDanger));
 
-            if (data.Danger3.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(3, "Other Sports", data.Danger3.DangerItems, cacheSelectedDanger));
+            if (data.Danger2.DangerItems.length > 0) dangerSelector.append(BuildOptgroupDgr(2, "ABI", data.Danger2.DangerItems, cacheDanger));
 
-            if (data.Danger4.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(4, "Basketball", data.Danger4.DangerItems, cacheSelectedDanger));
+            if (data.Danger3.DangerItems.length > 0) dangerSelector.append(BuildOptgroupDgr(3, "Other Sports", data.Danger3.DangerItems, cacheDanger));
 
-            if (data.Danger5.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(5, "E-Sports", data.Danger5.DangerItems, cacheSelectedDanger));
+            if (data.Danger4.DangerItems.length > 0) dangerSelector.append(BuildOptgroupDgr(4, "Basketball", data.Danger4.DangerItems, cacheDanger));
 
-            if (data.NoneDanger.DangerItems.length > 0) dangerSelector.append(BuildOptgroup(0, "None", data.NoneDanger.DangerItems, cacheSelectedDanger));
+            if (data.Danger5.DangerItems.length > 0) dangerSelector.append(BuildOptgroupDgr(5, "E-Sports", data.Danger5.DangerItems, cacheDanger));
+
+            if (data.NoneDanger.DangerItems.length > 0) dangerSelector.append(BuildOptgroupDgr(0, "None", data.NoneDanger.DangerItems, cacheDanger));
 
             domElements.cbbDanger.parent().find('button').removeClass('border-error');
 
@@ -532,7 +534,15 @@ function DangerousSettingDetail() {
         }
     }
 
-    function BuildOptgroup(optgroupValue, optgroupName, items, cacheSelectedDanger) {
+    function IsHasDangerLevelDataFromPath() {
+        return  cacheDefaultDanger.Danger1 ||
+                cacheDefaultDanger.Danger2 ||
+                cacheDefaultDanger.Danger3 ||
+                cacheDefaultDanger.Danger4 ||
+                cacheDefaultDanger.Danger5;
+    }
+
+    function BuildOptgroupDgr(optgroupValue, optgroupName, items, cacheSelectedDanger) {
         let optgroup = `<optgroup label="${optgroupName}" DangerType=${optgroupValue}>`;
         if (cacheSelectedDanger.length > 0) {
             items.map(function (x) {
@@ -2301,9 +2311,9 @@ function DangerousSettingDetail() {
         if (reasonItems.length > 0) {
             if (cacheSelectedReason.length > 0) {
                 reasonItems.forEach(item => {
-                    if ($.inArray(item.toString(), cacheSelectedReason) != -1) {                       
+                    if ($.inArray(item.toString(), cacheSelectedReason) != -1) {
                         domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "selected");
-                    } else {                      
+                    } else {
                         domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "");
                     }
                 });
@@ -2311,16 +2321,16 @@ function DangerousSettingDetail() {
                 let arrReason = cacheDefaultReason.split(',');
 
                 reasonItems.forEach(item => {
-                    if ($.inArray(item.toString(), arrReason) != -1) {                      
+                    if ($.inArray(item.toString(), arrReason) != -1) {
                         domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "selected");
-                    } else {                      
+                    } else {
                         domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "");
                     }
                 });
 
                 cacheDefaultReason = null;
             } else {
-                reasonItems.forEach(item => {                 
+                reasonItems.forEach(item => {
                     domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "selected");
                 });
             }
@@ -2329,7 +2339,7 @@ function DangerousSettingDetail() {
     }
 
     function BuildReasonGroup(reasonItems) {
-        domElements.cbbReason.multiselect().empty();      
+        domElements.cbbReason.multiselect().empty();
 
         domElements.cbbReasonGroupHidden.find('optgroup').each(function () {
             let optGroup = $(this);
@@ -2343,7 +2353,7 @@ function DangerousSettingDetail() {
 
             if (reasonMatched.length > 0) {
                 let optgroup = `<optgroup label='${groupName}'>`;
-                reasonMatched.forEach(reason => {                   
+                reasonMatched.forEach(reason => {
                     optgroup += `<option value='${reason}'>${reason}</option>`;
                 });
 
@@ -2665,7 +2675,7 @@ function DangerousSettingDetail() {
         domElements.inputCustAmountRM.val('');
         domElements.iconClearUsnAmt.addClass("hide");
         SetupMultiselect(domElements.cbbTicketsStatus, "Status");
-        
+
         SetupDoubleDataTable();
         SetupSingleTable();
 

@@ -132,12 +132,14 @@
     <Compile Include="AssociationDetection\GetMainCustStatisticsInfoCriteria.cs" />
     <Compile Include="Common\GetCommonBetTypeSettingCriteria.cs" />
     <Compile Include="Common\GetCommonCustomerClassCriteria.cs" />
+    <Compile Include="Common\GetCommonLeagueGroupCriteria.cs" />
     <Compile Include="Common\GetCommonSportBettypeCriteria.cs" />
     <Compile Include="Common\HealthCheckCriteria.cs" />
     <Compile Include="Common\GetCommonStaticListCriteria.cs" />
     <Compile Include="Common\GetMatchesInfoCriteria.cs" />
     <Compile Include="Common\GetSitesCriteria.cs" />
     <Compile Include="Common\GetTicketDetailsCriteria.cs" />
+    <Compile Include="Common\ValidateUsernameForMainCriteria.cs" />
     <Compile Include="CustomerClassification\GetLastestCCDangerLevelCriteria.cs" />
     <Compile Include="CustomerClassification\InputErrorLogInsertCriteria.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\CheckNewPAAssociationCustomerForRollbackCriteria.cs" />

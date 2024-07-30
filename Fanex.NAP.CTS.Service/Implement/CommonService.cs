@@ -8,6 +8,7 @@
     using Fanex.NAP.CTS.Model.DangerMonitor;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.Common;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -194,12 +195,26 @@
             return repository.Fetch<SportBettypeViewModel>(criteria);
         }
 
+        public IEnumerable<LeagueGroupViewModel> GetLeagueGroup()
+        {
+            var criteria = new GetCommonLeagueGroupCriteria();
+
+            return repository.Fetch<LeagueGroupViewModel>(criteria);
+        }
+
         public void CheckConnection()
         {
             using (var db = ObjectDbFactory.CreateInstance(new HealthCheckCriteria().GetSettingKey()))
             {
                 db.CreateDbConnection().Open();
             }
+        }
+
+        public IEnumerable<ValidateUserNameModel> ValidateUsernameForMain(string userName)
+        {
+            var criteria = new ValidateUsernameForMainCriteria { UsernameList = userName };
+
+            return repository.Fetch<ValidateUserNameModel>(criteria);
         }
     }
 }

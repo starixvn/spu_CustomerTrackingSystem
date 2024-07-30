@@ -112,9 +112,12 @@
             bundles.Add(new ScriptBundle("~/danger-monitor-scripts").Include(
                "~/Scripts/select2.min.js",
                "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
+               "~/Scripts/tagify/jquery.tagify.min.js",
+               "~/Scripts/tagify/tagify.min.js",
                "~/Scripts/DangerMonitor/index.js"));
 
             bundles.Add(new StyleBundle("~/danger-monitor-styles").Include(
+                "~/Content/scss/vendors/jquery-ui/base/tagify.css",
                 "~/Content/scss/vendors/select2.min.css",
                  "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
                 "~/Content/scss/MultipleSelect/jquery.multiselect.css",

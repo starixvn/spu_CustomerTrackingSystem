@@ -409,7 +409,22 @@
     .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar {
       display: flex;
       align-items: center;
-      width: auto; }
+      width: auto;
+      outline: none;
+      height: 30px;
+      line-height: 28px;
+      padding-left: 2px;
+      border: 1px solid #d6d6d6;
+      font-size: inherit;
+      color: #545454;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      padding-bottom: 0px;
+      background-color: #fff;
+      border-radius: 4px;
+      cursor: pointer; }
+      .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar input {
+        height: 28px;
+        border: 0px; }
       .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar .icon-clear {
         position: absolute;
         right: 2.6rem; }
@@ -422,8 +437,13 @@
         right: 0.5rem;
         bottom: auto; }
       .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar .text {
-        margin-right: .7rem;
-        margin-bottom: 0; }
+        padding-right: .7rem;
+        margin-bottom: 0;
+        padding-left: .7rem;
+        border-right: 1px solid #C4C4C4;
+        height: 23px;
+        align-items: center;
+        display: flex; }
       .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar .input {
         margin: 0; }
         .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar .input::-webkit-input-placeholder {
@@ -440,31 +460,91 @@
           color: #868686;
           font-style: italic;
           font-size: 1.4rem; }
-    .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .width-select {
-      width: 11rem; }
-    .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .text-box {
-      height: 2.8rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: auto;
-      padding: 0 1rem; }
-    .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-event {
-      font-size: 13px; }
-      .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-event::placeholder {
-        /* Chrome, Firefox, Opera, Safari 10.1+ */
-        color: #9f9f9f;
-        font-style: italic;
-        opacity: 1;
-        /* Firefox */ }
-      .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-event:-ms-input-placeholder {
-        /* Internet Explorer 10-11 */
-        color: #9f9f9f;
-        font-style: italic; }
-      .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-event::-ms-input-placeholder {
-        /* Microsoft Edge */
-        color: #9f9f9f;
-        font-style: italic; }
+    .match-monitor .monitor-container .monitor-table .group-control .form-filter .group {
+      padding-right: 9px; }
+      .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .width-select {
+        width: 11rem; }
+      .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .text-box {
+        height: 2.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: auto;
+        padding: 0 1rem; }
+      .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-event {
+        font-size: 13px; }
+        .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-event::placeholder {
+          /* Chrome, Firefox, Opera, Safari 10.1+ */
+          color: #9f9f9f;
+          font-style: italic;
+          opacity: 1;
+          /* Firefox */ }
+        .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-event:-ms-input-placeholder {
+          /* Internet Explorer 10-11 */
+          color: #9f9f9f;
+          font-style: italic; }
+        .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-event::-ms-input-placeholder {
+          /* Microsoft Edge */
+          color: #9f9f9f;
+          font-style: italic; }
+      .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username {
+        height: 32px;
+        vertical-align: middle;
+        box-sizing: border-box;
+        display: inline-block;
+        position: relative;
+        background-color: #fff;
+        border: 1px solid #E5E5E5;
+        border-radius: 2px;
+        text-align: left; }
+        .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .icon-clear {
+          position: absolute;
+          right: 3.5rem;
+          top: 0.85rem;
+          bottom: 0.85rem;
+          cursor: pointer; }
+          .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .icon-clear:hover {
+            background-color: rgba(57, 110, 248, 0.2);
+            border-radius: 5px; }
+          .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .icon-clear .hide {
+            display: none; }
+        .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .icon-modify {
+          position: absolute;
+          right: 0;
+          font-size: 28px;
+          top: 50%;
+          transform: translateY(-50%);
+          cursor: pointer; }
+          .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .icon-modify:hover {
+            background-color: rgba(57, 110, 248, 0.2);
+            border-radius: 6px; }
+          .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .icon-modify .hide {
+            display: none; }
+        .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username input {
+          padding-right: 30px;
+          padding-bottom: 3px;
+          font-size: 13px; }
+          .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username input::placeholder {
+            /* Chrome, Firefox, Opera, Safari 10.1+ */
+            color: #9f9f9f;
+            font-style: italic;
+            opacity: 1;
+            /* Firefox */ }
+          .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username input:-ms-input-placeholder {
+            /* Internet Explorer 10-11 */
+            color: #9f9f9f;
+            font-style: italic; }
+          .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username input::-ms-input-placeholder {
+            /* Microsoft Edge */
+            color: #9f9f9f;
+            font-style: italic; }
+        .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .input-invalid {
+          border: 1px solid red; }
+      .match-monitor .monitor-container .monitor-table .group-control .form-filter .group button {
+        background-color: #fff;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        cursor: pointer; }
     .match-monitor .monitor-container .monitor-table .group-control .form-filter .button-generate {
       background-color: #396ef8;
       border-radius: 2px;
@@ -573,6 +653,53 @@
       .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .dataTables_info,
       .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .dataTables_info {
         top: 0; }
+      .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter,
+      .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter,
+      .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter {
+        float: right;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem; }
+        .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input,
+        .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input,
+        .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input {
+          height: 27px;
+          background: #FFFFFF;
+          width: 150px;
+          font-size: 13px; }
+          .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::placeholder,
+          .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::placeholder,
+          .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::placeholder {
+            /* Chrome, Firefox, Opera, Safari 10.1+ */
+            color: #A8A8A8;
+            font-style: italic;
+            opacity: 1;
+            /* Firefox */ }
+          .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input:-ms-input-placeholder,
+          .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input:-ms-input-placeholder,
+          .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input:-ms-input-placeholder {
+            /* Internet Explorer 10-11 */
+            color: #A8A8A8;
+            font-style: italic; }
+          .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::-ms-input-placeholder,
+          .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::-ms-input-placeholder,
+          .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input::-ms-input-placeholder {
+            /* Microsoft Edge */
+            color: #A8A8A8;
+            font-style: italic; }
+        .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input[type="text"],
+        .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input[type="text"],
+        .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .wrapper-info .filter input[type="text"] {
+          outline: none;
+          height: 30px;
+          line-height: 28px;
+          padding-left: 6px;
+          padding-right: 6px;
+          border-radius: 2px;
+          border: 1px solid #E5E5E5;
+          background-color: #fff;
+          font-size: inherit;
+          color: #545454;
+          transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; }
     .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor,
     .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail,
     .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor,
@@ -596,7 +723,7 @@
           content: '';
           position: absolute;
           left: 50%;
-          top: 75%;
+          top: 20%;
           border-radius: 50%;
           width: 2.4rem;
           height: 2.4rem;
@@ -792,26 +919,136 @@
 .betchoice-1 {
   background: lightgray; }
 
-.wrapper-info-table .loading {
-  float: right; }
-  .wrapper-info-table .loading:after {
-    content: '';
-    position: absolute;
-    margin-left: 5px;
-    top: 7px;
-    border-radius: 50%;
-    width: 2.4rem;
-    height: 2.4rem;
-    border: 0.25rem solid rgba(57, 110, 248, 0.2);
-    border-top-color: #396ef8;
-    -webkit-animation: spin 1s infinite linear;
-    animation: spin 1s infinite linear; }
-  .wrapper-info-table .loading .hide {
-    display: none; }
-
 .select2-container--default .select2-results__option[aria-selected="true"],
 .select2-container--default .select2-results__option[aria-selected="false"] {
   color: #333333; }
 
 html {
   overflow: hidden; }
+
+.divAddProblemAccount {
+  width: 100%;
+  background: #fff; }
+  .divAddProblemAccount .title {
+    margin-bottom: -1.3rem; }
+  .divAddProblemAccount .group-title .wrapper-rule .text {
+    font-weight: 100; }
+  .divAddProblemAccount .wrapper-rule-left {
+    margin-right: 0px; }
+    .divAddProblemAccount .wrapper-rule-left .text {
+      color: #545454;
+      font-family: Lato;
+      font-size: 13px;
+      line-height: 16px;
+      letter-spacing: 0em;
+      text-align: left; }
+    .divAddProblemAccount .wrapper-rule-left .icon-delete::before {
+      color: #A8A8A8 !important; }
+  .divAddProblemAccount .label {
+    color: #545454;
+    font-family: 'Lato';
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: 0em;
+    text-align: left; }
+  .divAddProblemAccount .tagify__input:empty::before {
+    font-family: 'Lato';
+    color: #8C8C8C;
+    font-size: 13px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: 0em;
+    text-align: left; }
+  .divAddProblemAccount .tagify__input {
+    margin-top: 0px; }
+  .divAddProblemAccount .wrapper-value {
+    border-color: #DDDDDD; }
+  .divAddProblemAccount .form-filter .box-username {
+    width: 100%;
+    padding: 0 !important; }
+    .divAddProblemAccount .form-filter .box-username .btn-detect {
+      padding-right: 0px;
+      padding-left: 0px;
+      height: 28px;
+      width: 67px; }
+    .divAddProblemAccount .form-filter .box-username .btn-detect:not(:disabled) {
+      background-color: #396EF8;
+      border-radius: 2px;
+      color: #fff; }
+      .divAddProblemAccount .form-filter .box-username .btn-detect:not(:disabled):hover {
+        background-color: #5081ff; }
+  .divAddProblemAccount .form-filter .icon-delete {
+    font-size: 1.4rem;
+    height: 18px;
+    margin-right: 4px;
+    cursor: pointer;
+    padding: 2px; }
+    .divAddProblemAccount .form-filter .icon-delete::before {
+      color: #C0C0C0; }
+    .divAddProblemAccount .form-filter .icon-delete:hover {
+      border-radius: 50%;
+      background: #E7EDFF; }
+    .divAddProblemAccount .form-filter .icon-delete.delete-invalid::before {
+      color: #FF0000; }
+  .divAddProblemAccount .form-filter .checkbox-filter {
+    margin-right: 16px; }
+  .divAddProblemAccount .form-filter .checkbox-container {
+    margin-top: 12px;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 15.6px;
+    font-family: Lato;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #545454; }
+    .divAddProblemAccount .form-filter .checkbox-container span:before {
+      top: 1px;
+      height: 16px;
+      width: 16px; }
+    .divAddProblemAccount .form-filter .checkbox-container span:after {
+      top: 5px;
+      left: 3px; }
+  .divAddProblemAccount .form-filter .flex-container {
+    display: flex;
+    margin-bottom: 16px;
+    width: 800px; }
+    .divAddProblemAccount .form-filter .flex-container .checkbox-all {
+      cursor: pointer;
+      color: #396EF8;
+      font-size: 12px;
+      line-height: 16.8px;
+      font-weight: 700; }
+    .divAddProblemAccount .form-filter .flex-container .box-left {
+      background: #E3E9F6;
+      padding-left: 10px;
+      height: 80px; }
+      .divAddProblemAccount .form-filter .flex-container .box-left .icon-Check {
+        color: #396EF8;
+        font-weight: 700; }
+      .divAddProblemAccount .form-filter .flex-container .box-left .icon-Close {
+        color: #396EF8;
+        font-weight: 700; }
+    .divAddProblemAccount .form-filter .flex-container .box-right {
+      margin-top: 0px;
+      margin-left: 15px; }
+    .divAddProblemAccount .form-filter .flex-container input[type=checkbox]:checked + span:before {
+      background: #4F971F;
+      border-color: #4F971F; }
+  .divAddProblemAccount .icon-delete {
+    font-size: 1.4rem;
+    height: 18px;
+    margin-right: 4px;
+    cursor: pointer;
+    padding: 2px; }
+    .divAddProblemAccount .icon-delete::before {
+      color: #C0C0C0; }
+    .divAddProblemAccount .icon-delete:hover {
+      border-radius: 50%;
+      background: #E7EDFF; }
+    .divAddProblemAccount .icon-delete.delete-invalid::before {
+      color: #FF0000; }

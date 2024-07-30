@@ -24,6 +24,12 @@
         [SpParam(SqlParamName = "DangerLevels")]
         public string QueryDanger { get; set; }
 
+        [SpParam(SqlParamName = "UserNameList")]
+        public string UserNameList { get; set; }
+
+        [SpParam(SqlParamName = "LeagueGroupList")]
+        public string LeagueGroupList { get; set; }
+
         [SpParam(SqlParamName = "MarketList")]
         public string MarketList { get; set; }
 

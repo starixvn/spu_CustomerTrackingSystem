@@ -43,6 +43,8 @@
 		<Setting Key="CTS_Customer_RobotCheckExist" SpName="CTS_Customer_RobotCheckExist" DbName="DBONUSER.ON_USER.bodbSPUNet" />
 		<Setting Key="CTS_MatchInfo_Get" SpName="CTS_MatchInfo_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_SportBettype_Get" SpName="CTS_SportBettype_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_LeagueGroup_Get" SpName="CTS_LeagueGroup_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_ValidateUsername" SpName="CTS_ValidateUsername" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 
 	<Function name="ProbationManagement">

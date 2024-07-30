@@ -2,6 +2,7 @@
     let dateEmptyString = "------,----";
     let dataTable;
     let sportBetType = [];
+    let leagueGroup = [];
     let bettypeList = {};
     let dangerListSelected = {
         Danger1: null,
@@ -10,6 +11,10 @@
         Danger4: null,
         Danger5: null
     }
+
+    let items = [];
+    let isFocusValidUsername = false;
+    let timeOutIdInputEvent;
 
     let domElements = {
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
@@ -27,12 +32,27 @@
         btnGenerate: $('#btnGenerate'),
         eventTarget: $('#selectedRefresh')[0],
         txtEvent: $('#txtEvent'),
+        txtEventHeader: null,
         cbbMarket: $('#cbbMarket'),
         cbbMatchSection: $('#cbbMatchSection'),
-        cbbReason: $('#cbbReason'),
         rbtnScanDate: $('#rbtnScanDate'),
         rbtnEventDate: $('#rbtnEventDate'),
-        iconClear: $('#iconClear')
+        iconClear: $('#iconClear'),
+        cbbLeagueGroup: $('#cbbLeagueGroup'),
+        txtUsername: $('#txtUsername'),
+        btnClearUsername: $('#btnClearUsername'),
+        btnModifyUsername: $('#btnModifyUsername'),
+        rbtnSelect: $('input[type=radio][name=radioSelect]'),
+        spanAddSpecialCustomerAccountUserName: $('#spanAddProblemAccountUserName'),
+        spanAddSpecialCustomerAccountUserNameMaxTag: $('#spanAddProblemAccountUserNameMaxTag'),
+        spanAddSpecialCustomerAccountChangeHidden: $('#spanAddProblemAccountChangeHidden'),
+        spanSpecialCustomerAccountActionHidden: $('#spanProblemAccountActionHidden'),
+        maxTags: 1000,
+        divAddUsername: $('#divAddProblemAccount'),
+        inputTagUsername: $('#inputTagUsername'),
+        btnSave: $('#btnSave'),
+        btnCancel: $('#btnCancel'),
+        btnRemoveInvalidUserName: $('#btnRemoveInvalidUserName'),
     };
 
     let timeoutRenderTicketDetail = undefined;
@@ -70,14 +90,14 @@
                 sportGroupSelector.append(BuildOptgroupSport(3, "Other Sport", data.OtherSport.Items));
 
             domElements.cbbSport.val("1_null").change();
-            // domElements.cbbSport.multiselect("refresh");
         }
 
+        FetchLeagueGroups();
         FetchBetTypes();
     }
 
     function BuildOptgroupSport(optgroupValue, optgroupName, sportList) {
-        let optgroup = `<optgroup label="${optgroupName}" SportType=${optgroupValue}>`;
+        let optgroup = `<optgroup label="${optgroupName}" SportGroup=${optgroupValue}>`;
         Object.keys(sportList).forEach(index => {
             optgroup += `<option ${sportList[index].IsSelected ? 'selected' : ''} value="${index}">${sportList[index].Name}</option>`;
         })
@@ -87,6 +107,34 @@
         return optgroup;
     }
 
+    function FetchLeagueGroups() {
+        if (sportBetType) {
+            domElements.cbbLeagueGroup.empty();
+
+            let sportGroupSelected = $('select[id="cbbSport"] option:selected').closest('optgroup').attr('SportGroup');
+            sportGroupSelected = sportGroupSelected == 3 ? 1 : sportGroupSelected;
+
+            let sportSelected = domElements.cbbSport.val().split('_')[0];
+            var filterLeagueGroup = leagueGroup.filter(x => x.SportGroup == sportGroupSelected && (x.SportType == 0 || sportSelected == x.SportType));
+
+            let firstItem;
+            if (sportGroupSelected == 1) {
+                firstItem = filterLeagueGroup.shift();
+            }
+
+            filterLeagueGroup.forEach(item => {
+                domElements.cbbLeagueGroup.append(`<option selected value="${item.GroupID}">${item.GroupName}</option>`);
+            })
+
+            if (firstItem) {
+                // None option
+                domElements.cbbLeagueGroup.append(`<option selected value="${firstItem.GroupID}">${firstItem.GroupName}</option>`);
+            }
+
+            domElements.cbbLeagueGroup.multiselect("refresh");
+        }
+    }
+
     function FetchBetTypes() {
         if (sportBetType) {
             domElements.cbbBetType.empty();
@@ -94,7 +142,10 @@
             let sportSelectedList = domElements.cbbSport.val();
             bettypeList = {};
 
-            sportBetType.filter(x => sportSelectedList.includes(`${x.SportType}_${x.LeagueGroupID}`))
+            // only support multi value
+            // sportBetType.filter(x => sportSelectedList.includes(`${x.SportType}_${x.LeagueGroupID}`))
+
+            sportBetType.filter(x => sportSelectedList == (`${x.SportType}_${x.LeagueGroupID}`))
                 .map(x =>
                     bettypeList[`${x.BetTypeID}_${x.BetID}`] =
                     ({
@@ -128,6 +179,38 @@
 
                     sportBetType.sort(function (a, b) {
                         return a.PriorityOrder - b.PriorityOrder;
+                    })
+                }
+            },
+            error: function (xhr, textStatus, error) {
+                if (textStatus == 'timeout') {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        //try again
+                        $.ajax(this);
+                        return;
+                    }
+                }
+
+                console.log(error);
+            }
+        });
+    }
+
+    function GetLeagueGroupList() {
+        $.ajax(common.modifyRelativeUrl('DangerMonitor/GetLeageGroup'), {
+            async: false,
+            type: 'POST',
+            tryCount: 0,
+            retryLimit: 3,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response?.data) {
+                    leagueGroup = [...response.data];
+
+                    leagueGroup.sort(function (a, b) {
+                        return a.GroupID - b.GroupID;
                     })
                 }
             },
@@ -199,12 +282,13 @@
         return optgroup;
     }
 
-    function GetDangerMonitor(isSkipTracking = true) {
+    function GetDangerMonitor() {
         timeoutRenderTicketDetail = setTimeout(() => {
+            $('#txtEventHeader').val('');
+
             let data = {
                 FromDate: domElements.dpkFromDate.val(),
                 ToDate: !domElements.dpkToDate.val().includes(dateEmptyString) ? domElements.dpkToDate.val() : null,
-                QueryDanger: domElements.cbbDgr.val(),
                 SportList: domElements.cbbSport.val(),
                 Event: domElements.txtEvent.val().trim().toUpperCase(),
                 Market: domElements.cbbMarket.val() == "" ? "0,1" : domElements.cbbMarket.val(),
@@ -216,8 +300,16 @@
                     "BetChoiceAway": bettypeList[x].BetChoiceType == 2 ? bettypeList[x].BetChoiceAway : undefined,
                     "BetID": bettypeList[x].BetID
                 }))),
-                isSkipTracking: isSkipTracking
+                LeagueGroupList: domElements.cbbLeagueGroup.val().join(),
             };
+
+            if (domElements.rbtnSelect.filter(":checked").val() == 0) {
+                data.QueryDanger = domElements.cbbDgr.val();
+            }
+            else {
+                data.UserNameList = domElements.txtUsername.val();
+                data.isSkipTrackingUsername = domElements.txtUsername.val().length == 0;
+            }
 
             xhr = $.ajax(common.modifyRelativeUrl('DangerMonitor/GetDangerMonitor'), {
                 type: 'POST',
@@ -226,16 +318,14 @@
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(data),
-                beforeSend: function () {
-                    $('.loading').removeClass('hide');
-                },
                 success: function (response) {
                     if (response?.data?.Items) {
-                        domElements.tblMonitor.DataTable().rows.add(response?.data?.Items).draw(false);
+                        items = response?.data?.Items;
+
+                        domElements.txtEventHeader ? SearchEventHeader() : domElements.tblMonitor.DataTable().rows.add(items).draw(false);
                     }
 
                     domElements.tblMonitor.find('tbody').removeClass('loading hide');
-                    $('.loading').addClass('hide');
                 },
                 error: function (xhr, textStatus, error) {
                     domElements.tblMonitor.find('tbody').removeClass('loading');
@@ -279,6 +369,8 @@
             });
 
         domElements.cbbSport.select2();
+
+        domElements.cbbMarket.select2();
         // domElements.cbbSport.multiselect({
         //     menuWidth: 260,
         //     menuHeight: 260,
@@ -295,7 +387,7 @@
         // });
 
         domElements.cbbBetType.multiselect({
-            menuWidth: 340,
+            menuWidth: 250,
             menuHeight: 320,
             selectedText: "# of # selected",
             noneSelectedText: "Select Bet Type"
@@ -306,17 +398,21 @@
         });
 
         domElements.cbbMatchSection.multiselect({
-            menuWidth: 260,
+            menuWidth: 250,
             menuHeight: 260,
             selectedText: "# of # selected",
             noneSelectedText: "Select Section"
         });
 
-        domElements.cbbReason.multiselect({
-            menuWidth: 260,
+        domElements.cbbLeagueGroup.multiselect({
+            menuWidth: 250,
             menuHeight: 260,
             selectedText: "# of # selected",
-            noneSelectedText: "Select Reason"
+            noneSelectedText: "Select League Group"
+        }).multiselectfilter({
+            width: 260,
+            placeholder: '',
+            label: ''
         });
 
         domElements.groupDropDown.hover(function () {
@@ -334,47 +430,150 @@
         });
 
         domElements.cbbSport.on('change', function () {
+            FetchLeagueGroups();
             FetchBetTypes();
         });
 
         GetSportBetTypeList();
+        GetLeagueGroupList();
         GetDgrList();
 
         FetchSports();
 
-        domElements.btnGenerate.on('click', function () {
-            if (ValidateRangeDate()) {
-                var dangerSelected = GetDangerListById();
-                dangerListSelected.Danger1 = dangerSelected[1];
-                dangerListSelected.Danger2 = dangerSelected[2];
-                dangerListSelected.Danger3 = dangerSelected[3];
-                dangerListSelected.Danger4 = dangerSelected[4];
-                dangerListSelected.Danger5 = dangerSelected[5];
+        domElements.btnClearUsername.on('click', function () {
+            domElements.txtUsername.val('');
+            domElements.txtUsername.removeClass("input-invalid");
+        })
 
-                if (!dataTable) {
-                    dataTable = GenerateGrid();
-                }
+        domElements.btnModifyUsername.on('click', function () {
+            if (!domElements.divAddUsername.open) {
+                InitInputTagUsername();
+                domElements.divAddUsername.dialog({
+                    modal: true,
+                    width: '800px',
+                    title: 'Edit Username',
+                    resizable: true,
+                    draggable: true,
+                    open: function () {
+                        var txtUsername = domElements.txtUsername.val();
 
-                if (timeoutRenderTicketDetail || xhr) {
-                    clearTimeout(timeoutRenderTicketDetail);
-                    xhr.onreadystatechange = null;
-                    xhr.abort();
-                }
-
-                domElements.tblMonitor.DataTable().clear().draw();
-
-                domElements.tblMonitor.find('tbody').addClass('loading');
-                $('.loading').removeClass('hide');
-
-                GetDangerMonitor();
+                        if (txtUsername) {
+                            domElements.inputTagUsername.tagify().data('tagify').addTags(txtUsername);
+                            ValidateUsernameInput();
+                            domElements.spanAddSpecialCustomerAccountChangeHidden.text("0");
+                        }
+                    },
+                    close: function () {
+                        $(this).dialog('close');
+                    }
+                });
             }
         });
+
+        domElements.btnRemoveInvalidUserName.on('click', () => RemoveAllInvalidUsername());
+
+        domElements.rbtnSelect.on('change', function (e) {
+            ChangeSelectRadioButton(e.currentTarget.value);
+        })
+
+        domElements.btnCancel.on('click', () => {
+            domElements.divAddUsername.dialog('close');
+        });
+
+        domElements.btnSave.on('click', () => {
+            var result = GetInputUserName('');
+
+            if (result) {
+                domElements.txtUsername.val(GetInputUserName(''));
+                domElements.divAddUsername.dialog('close');
+                domElements.txtUsername.removeClass("input-invalid");
+            }
+        })
+
+        domElements.btnGenerate.on('click', function () {
+            if (domElements.rbtnSelect.filter(":checked").val() == 0) {
+                if (ValidateRangeDate()) {
+                    var dangerSelected = GetDangerListById();
+                    dangerListSelected.Danger1 = dangerSelected[1];
+                    dangerListSelected.Danger2 = dangerSelected[2];
+                    dangerListSelected.Danger3 = dangerSelected[3];
+                    dangerListSelected.Danger4 = dangerSelected[4];
+                    dangerListSelected.Danger5 = dangerSelected[5];
+
+                    OnGenerate();
+                }
+            }
+            else {
+                if (ValidateRangeDate()) {
+                    ValidateTxtUsername(true);
+                }
+            }
+
+        });
+
+        domElements.txtUsername.off('keydown').on('keydown', function () {
+            isFocusValidUsername = true;
+        });
+
+        $(document).on('click', function (e) {
+            if ($(e.target).closest('#txtUsername').length == 0 && isFocusValidUsername) {
+                ValidateTxtUsername()
+
+                isFocusValidUsername = !isFocusValidUsername;
+            }
+        });
+
+        ResetFilterValueDefault();
+    }
+
+    function ResetFilterValueDefault() {
+        domElements.txtUsername.val('');
+        domElements.txtEvent.val('');
+        domElements.cbbMarket.val('').trigger('change');
+        domElements.cbbMatchSection.multiselect("checkAll");
+
+        // default radio button
+        domElements.rbtnSelect.filter("[value='0']").prop("checked", true);
+        ChangeSelectRadioButton(domElements.rbtnSelect.filter(":checked").val());
+    }
+
+    function ChangeSelectRadioButton(value) {
+        domElements.txtUsername.prop('disabled', value == 0);
+        domElements.cbbDgr.prop('disabled', value == 1);
+
+        if (value == 0) {
+            domElements.btnClearUsername.addClass('hide');
+            domElements.btnModifyUsername.addClass('hide');
+        }
+
+        if (value == 1) {
+            domElements.btnClearUsername.removeClass('hide');
+            domElements.btnModifyUsername.removeClass('hide');
+        }
+    }
+
+    function OnGenerate() {
+        if (!dataTable) {
+            dataTable = GenerateGrid();
+        }
+
+        if (timeoutRenderTicketDetail || xhr) {
+            clearTimeout(timeoutRenderTicketDetail);
+            xhr.onreadystatechange = null;
+            xhr.abort();
+        }
+
+        domElements.tblMonitor.DataTable().clear().draw();
+
+        domElements.tblMonitor.find('tbody').addClass('loading');
+
+        GetDangerMonitor();
     }
 
     function GenerateGrid() {
         return domElements.tblMonitor.DataTable({
             serverSide: false,
-            dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
+            dom: '<"wrapper-info-table"<"wrapper-info"lip<"filter"f>>>t',
             pagingType: "full_numbers",
             language: {
                 lengthMenu: "Page size _MENU_",
@@ -384,26 +583,17 @@
                     next: "",
                     previous: ""
                 },
-                // info: "<div class=\"loading\"></div> Total Item: _TOTAL_ item(s)",
-                // info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
-                // infoEmpty: "",
+                info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
+                infoEmpty: "",
                 zeroRecords: "There's no data"
             },
-            infoCallback: function (settings, start, end, max, total, pre) {
-                if (!total) {
-                    return `<div class="display-total-ticket"></div> <div class="loading hide"></div>`
-                }
-                else {
-                    $('.display-total-ticket').html(`Displaying ${start} to ${end} of ${total} item(s)`);
-                }
-            },
             ordering: false,
-            searching: false,
+            searching: true,
             lengthMenu: [1000, 1500, 2000],
             pageLength: 1000,
             scrollX: false,
             scrollCollapse: true,
-            // paging: false,
+            paging: true,
             scrollY: `${$(window).height() - 285}px`,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
@@ -441,12 +631,13 @@
                             obj.SportType,
                             obj.KOTime);
 
-                        Object.keys(dangerListSelected).forEach(item => {
-                            if (dangerListSelected[item])
-                            {
-                                para += `&${item}=${dangerListSelected[item]}`;
-                            }
-                        });
+                        if (domElements.rbtnSelect.filter(":checked").val() == 0) {
+                            Object.keys(dangerListSelected).forEach(item => {
+                                if (dangerListSelected[item]) {
+                                    para += `&${item}=${dangerListSelected[item]}`;
+                                }
+                            });
+                        }
 
                         return '<a class="click-view-details" href="DangerMonitor/Detail?' + para + '" target="_blank">' + obj.MatchName + '</a>';
                     }
@@ -481,8 +672,39 @@
                     $('td:eq(7)', row).addClass("betchoice-1");
                     $('td:eq(9)', row).addClass("betchoice-1");
                 }
+            },
+            initComplete: function (settings, json) {
+                if (!domElements.txtEventHeader) {
+                    $('.filter').html(`<input type="text" placeholder="League/Match" id="txtEventHeader">`);
+
+                    domElements.txtEventHeader = document.querySelector('#txtEventHeader');
+
+                    domElements.txtEventHeader.addEventListener('input', function () {
+                        if (timeOutIdInputEvent) {
+                            clearTimeout(timeOutIdInputEvent);
+                        }
+
+                        domElements.tblMonitor.DataTable().clear().draw();
+                        domElements.tblMonitor.find('tbody').addClass('loading');
+
+                        timeOutIdInputEvent = setTimeout(() => {
+                            SearchEventHeader();
+                            domElements.tblMonitor.find('tbody').removeClass('loading');
+                        }, 400);
+                    });
+                }
             }
         });
+    }
+
+    function SearchEventHeader() {
+        var value = domElements.txtEventHeader.value.trim();
+
+        var itemFilters = items.filter(x =>
+            x.LeagueName.toUpperCase().includes(value.toUpperCase()) ||
+            x.MatchName.toUpperCase().includes(value.toUpperCase()));
+
+        domElements.tblMonitor.DataTable().clear().rows.add(itemFilters).draw();
     }
 
     function GetDangerListById() {
@@ -511,6 +733,323 @@
         }
 
         return isValid;
+    }
+
+    function InitInputTagUsername() {
+        domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text(domElements.maxTags);
+        domElements.spanAddSpecialCustomerAccountChangeHidden.text("0");
+
+        function AddBorderTags() {
+            domElements.spanAddSpecialCustomerAccountUserName.find('tags').addClass('ctrlA');
+            let allTags = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag.tagify__tag');
+            allTags.each(function (_, tag) {
+                $(tag).css('border', '1px solid #6187E7');
+            });
+        }
+
+        function ResetMaxTag() {
+            let currentTagsLength = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag').length;
+            if (currentTagsLength <= domElements.maxTags)
+                domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text(domElements.maxTags - currentTagsLength + 1);
+        }
+
+        function EnableButtonAdd() {
+            let validTags = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag.valid');
+            let invalidDuplicatedTags = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag.invalid-duplicated');
+            let invalidUsernameTags = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag.invalid-username');
+            let numOfTagExceeded = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag.tagify--notAllowed');
+
+            let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length + numOfTagExceeded.length;
+            if (notInvalid <= 1 && validTags.length > 1)
+                domElements.btnSave.prop('disabled', false);
+            else
+                domElements.btnSave.prop('disabled', true);
+        }
+
+        function IsTextUnicode(text) {
+            var pattern = /^[\x20-\x7E]*$/;
+            return pattern.test(text);
+        }
+
+        function OnChangeTags(tagName, cssClass) {
+            let maxCountTags = parseInt(domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text());
+            let isTextUnicode = IsTextUnicode($(tagName.tag).text());
+
+            if (!isTextUnicode) {
+                domElements.inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
+            }
+            else if (maxCountTags > 0) {
+                let $tag = $(tagName.tag);
+                let textReplaced = $tag.text();
+                textReplaced = textReplaced.replace(new RegExp("'", 'g'), "").replace(new RegExp("\"", 'g'), "");
+                if (textReplaced.length > 50)
+                    textReplaced = textReplaced.substr(0, 50);
+                $tag.val(textReplaced);
+                $tag.attr('data-user-name', textReplaced);
+                $tag.prop('title', textReplaced);
+                $tag.find('span.tagify__tag-text').text(textReplaced);
+                $tag.addClass(cssClass);
+
+                let btnRemove = $tag.find('x');
+                btnRemove.on('click', function (e) {
+                    let currentTag = $(e.target).parent();
+
+                    ResetMaxTag();
+                    ValidateUsernameInput(currentTag.text().trim());
+                    EnableButtonAdd()
+                });
+
+                domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text(maxCountTags - 1);
+            }
+            else {
+                let $tag = $(tagName.tag);
+                let btnRemove = $tag.find('x');
+                btnRemove.on('click', function (e) {
+                    let currentTag = $(e.target).parent();
+
+                    ResetMaxTag();
+                    ValidateUsernameInput(currentTag.text().trim());
+
+                    EnableButtonAdd()
+                });
+            }
+
+            domElements.btnSave.prop('disabled', true);
+        }
+
+        domElements.inputTagUsername.tagify({
+            pattern: null,
+            delimiters: /\r?\n|\r| |,/,
+            keepInvalidTags: true,
+            skipInvalid: false,
+            callbacks: {},
+            addTagOnBlur: true,
+            duplicates: true,
+            editTags: 0,
+            whitelist: [],
+            blacklist: [],
+            maxTags: domElements.maxTags,
+            enforceWhitelist: false,
+            dropdown: {
+                position: "input",
+                enabled: 0
+            }
+        })
+
+            .off('add').on('add', function (_, tagName) {
+                OnChangeTags(tagName, 'valid');
+                domElements.spanAddSpecialCustomerAccountChangeHidden.text("1");
+            })
+            .off('invalid').on('invalid', function (_, tagName) {
+                OnChangeTags(tagName, 'invalid-duplicated');
+                domElements.spanAddSpecialCustomerAccountChangeHidden.text("1");
+            });
+
+        domElements.inputTagUsername.off('keydown').on('keydown', function () {
+            let keyCode = event.keyCode;
+
+            if (keyCode === 46) {
+                if (domElements.spanAddSpecialCustomerAccountUserName.find('tags').hasClass('ctrlA')) {
+                    domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
+                    domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text(domElements.maxTags);
+                    domElements.spanAddSpecialCustomerAccountUserName.find('tags').removeClass('ctrlA');
+                    domElements.btnSave.prop('disabled', true);
+                }
+            }
+
+            if (event.ctrlKey) {
+                if (keyCode === 65 || keyCode === 97) {
+                    return AddBorderTags();
+                }
+            }
+        });
+
+        $(document).off('mouseup').on('mouseup', function (e) {
+            let isOutSiteInput = !domElements.spanAddSpecialCustomerAccountUserName.is(e.target) && domElements.spanAddSpecialCustomerAccountUserName.has(e.target).length === 0;
+            let isTagsFocus = domElements.spanAddSpecialCustomerAccountUserName.find('tags.tagify--focus').length > 0;
+            let isChange = domElements.spanAddSpecialCustomerAccountChangeHidden.text();
+            if (isOutSiteInput && isTagsFocus || isChange === "1") {
+                domElements.spanAddSpecialCustomerAccountUserName.addClass("loading-value");
+                setTimeout(() => {
+                    ValidateUsernameInput('');
+                    domElements.spanAddSpecialCustomerAccountUserName.removeClass("loading-value");
+                    domElements.spanAddSpecialCustomerAccountChangeHidden.text("0");
+                }, 500);
+            }
+        });
+
+        domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
+        domElements.spanAddSpecialCustomerAccountUserName.find('tags').attr('tabindex', "1");
+        domElements.btnSave.prop('disabled', true);
+    }
+
+    function ValidateUsernameInput(textTagRemove, textTagRemoveList) {
+        let numOfTagExceeded = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag.tagify--notAllowed');
+
+        if (textTagRemove != '' && numOfTagExceeded.length > 1) return;
+        else if (textTagRemove == '' && numOfTagExceeded.length > 0) return;
+
+        let userNames = GetInputUserName(textTagRemove, textTagRemoveList);
+
+        if (userNames !== '') {
+            let params = {};
+            params.username = userNames;
+
+            $.ajax(common.modifyRelativeUrl('DangerMonitor/ValidateUsername'), {
+                type: 'POST',
+                data: params,
+                beforeSend: function () {
+                    domElements.spanAddSpecialCustomerAccountUserName.addClass("loading-value");
+                },
+                success: function (response) {
+                    if (response?.data) {
+                        isValidUsername = response.data.InvalidateUsernames.length == 0;
+                        BindResultValidatedInputUserName(response.data);
+                    }
+                },
+                complete: function () {
+                    domElements.spanAddSpecialCustomerAccountUserName.removeClass("loading-value");
+                },
+                error: function (errMsg) {
+                    domElements.spanAddSpecialCustomerAccountUserName.removeClass("loading-value");
+                    console.log(errMsg);
+                }
+            });
+        }
+        else {
+            domElements.btnRemoveInvalidUserName.removeClass('delete-invalid');
+        }
+    }
+
+    function ValidateTxtUsernameMaxRange(usernames) {
+        return usernames && usernames.split(',').length <= domElements.maxTags;
+    }
+
+    function ValidateTxtUsername(isGenerate) {
+        var usernames = domElements.txtUsername.val()
+            .replace(/\r?\n|\r| |,/g, ",").split(',')
+            .filter(x => x.length > 0).join();
+
+        if (usernames) {
+            let params = {};
+            params.username = usernames;
+
+            $.ajax(common.modifyRelativeUrl('DangerMonitor/ValidateUsername'), {
+                type: 'POST',
+                data: params,
+                success: function (response) {
+                    if (response?.data) {
+                        isValidUsername = response.data.InvalidateUsernames.length == 0 && ValidateTxtUsernameMaxRange(usernames);
+                        domElements.txtUsername.val(usernames);
+
+                        if (!isValidUsername) {
+                            domElements.txtUsername.addClass("input-invalid");
+                            if (!isGenerate) {
+                                domElements.btnModifyUsername.click();
+                            }
+                        }
+                        else {
+                            domElements.txtUsername.removeClass("input-invalid");
+
+                            if (isGenerate) {
+                                OnGenerate();
+                            }
+                        }
+                    }
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
+        else if (isGenerate) {
+            OnGenerate();
+        }
+    }
+
+    function BindResultValidatedInputUserName(data) {
+        var lengthUsername = data.InvalidateUsernames.length + data.ValidateUsernames.length;
+
+        domElements.spanAddSpecialCustomerAccountUserName.find('tags tag').each(function (_, tag) {
+            $(tag).removeClass('invalid-username').removeClass('invalid-duplicated').addClass('valid');
+        });
+
+        data.InvalidateUsernames.map(function (x) {
+            let usernameEqual = $("tag[data-user-name='" + x + "']");
+            if (usernameEqual !== undefined) {
+                usernameEqual.removeClass('valid').addClass('invalid-username');
+                usernameEqual.prop('title', "Not exist");
+            }
+        });
+
+        if (data.InvalidateUsernames.length === 0 && lengthUsername <= domElements.maxTags) {
+            domElements.btnRemoveInvalidUserName.removeClass('delete-invalid');
+            domElements.btnSave.prop('disabled', false);
+        }
+        else {
+            domElements.btnRemoveInvalidUserName.addClass('delete-invalid');
+            domElements.btnSave.prop('disabled', true);
+        }
+    }
+
+    function RemoveAllInvalidUsername() {
+        if (domElements.btnRemoveInvalidUserName.hasClass('delete-invalid')) {
+            common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure you want to remove all invalid Usernames?</div></div>",
+                function () {
+                    let invalidTags = domElements.spanAddSpecialCustomerAccountUserName.find('.invalid-username', 'tags tag');
+                    invalidTags.each(function (idx, tag) {
+                        domElements.inputTagUsername.tagify().data('tagify').removeTags(tag);
+
+                        RefreshRemoveAllInvalidUsername(invalidTags);
+                    });
+                }
+            )
+        }
+    }
+
+    function RefreshRemoveAllInvalidUsername(invalidTags) {
+        let maxCountTags = parseInt(domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text());
+
+        domElements.spanAddSpecialCustomerAccountUserNameMaxTag.text(maxCountTags + invalidTags.length);
+        domElements.btnRemoveInvalidUserName.removeClass('delete-invalid');
+
+        setTimeout(() => {
+            let invalidUsernameList = [];
+            invalidTags.map(function (_, ele) { invalidUsernameList.push($(ele).text().trim()); });
+
+            ValidateUsernameInput(null, invalidUsernameList);
+        }, 120);
+    }
+
+    function GetInputUserName(textTagRemove, textTagRemoveList) {
+        let userNameList = [];
+        let tags = domElements.spanAddSpecialCustomerAccountUserName.find('tags tag');
+
+        tags.map(function (_, ele) {
+            let text = $(ele).text().trim();
+            if (textTagRemoveList != undefined && textTagRemoveList.length > 0) {
+                if (ContainsObject(text, textTagRemoveList))
+                    return;
+            } else if (textTagRemove !== "" && text === textTagRemove) {
+                textTagRemove = "";
+                return;
+            }
+
+            userNameList.push(text);
+        });
+
+        return userNameList.join();
+    }
+
+    function ContainsObject(obj, list) {
+        var i;
+        for (i = 0; i < list.length; i++) {
+            if (list[i] === obj) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     $(document).ready(function () {
