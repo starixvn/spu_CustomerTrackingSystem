@@ -13,6 +13,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class CustomerCategoryService : BaseCustomerClassificationService, ICustomerCategoryService
     {
@@ -56,7 +57,7 @@
             var modelInsert = new InsertCustomerClassificationModel()
             {
                 CustClassificationJson = JsonConvert.SerializeObject(custList),
-                FromAction = (int)FromAction.WebSite,
+                FromAction = (int)FromFlow.CTSWEB,
                 AffectDownline = custCategoryModel.IsAffectToAllDownlines
             };
 
@@ -79,13 +80,12 @@
             var modelRemove = new RemoveCustomerClassificationModel()
             {
                 CustClassificationJson = JsonConvert.SerializeObject(custList),
-                FromAction = (int)FromAction.WebSite,
+                FromAction = (int)FromFlow.CTSWEB,
                 AffectDownline = custCategoryModel.IsAffectToAllDownlines
             };
 
             return base.RemoveCustomerClassification(CCInputFlow.RemoveVVIP, modelRemove);
         }
-
 
     }
 }

@@ -131,7 +131,7 @@
             {
                 CustClassificationJson = JsonConvert.SerializeObject(paUnmark),
                 IsFromQueue = isFromQueue,
-                FromAction = (int)FromAction.WebSite
+                FromAction = (int)FromFlow.CTSWEB
             };
 
             return base.RemoveCustomerClassification(CCInputFlow.RemovePACategory, modelRemove);           

@@ -1695,8 +1695,7 @@
             {
                 CustId = model.CustID,
                 CTSCustId = model.CTSCustID,
-                SubscriberId = model.SubscriberID,
-                CategoryId = model.CategoryID,
+                SubscriberId = model.SubscriberID,              
                 RoleId = model.RoleID,
                 IsAffectToAllDownlines = model.IsAffectAllDownlines,
                 Remark = model.Remark,

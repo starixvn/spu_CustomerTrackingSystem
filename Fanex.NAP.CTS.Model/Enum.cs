@@ -147,19 +147,7 @@ namespace Fanex.NAP.CTS.Model
     {
         Insert = 1,
         Remove = 2
-    }
-
-    public enum FromAction
-    {
-        WebSite = 1,
-        Service = 2
-    }
-
-    public enum InsertPA_ByType
-    {
-        Category,
-        Reason
-    }
+    }   
 
     public enum DetectAssociation_QueryType
     {
@@ -167,11 +155,6 @@ namespace Fanex.NAP.CTS.Model
         GetTicketDetail = 2,
         GetAssByGroup = 3,
         GetTicketDetailByListCust = 4
-    }
-
-    public enum CustomerCategoryGroup
-    {
-        RobotUser = 163
     }
 
     public enum CustomerCategoryID

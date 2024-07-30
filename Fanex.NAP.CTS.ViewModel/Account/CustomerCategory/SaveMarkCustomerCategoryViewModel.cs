@@ -14,15 +14,7 @@
 
         public bool IsVVip { get; set; }
 
-        public int CategoryID { get; set; }
-
-        public int CategoryGroup { get; set; }
-
-        public bool IsFromTVS { get; set; }
-
-        public bool IsFromTW { get; set; }
-
-        public bool IsFromCTS { get; set; }
+        public int CategoryID { get; set; }           
 
         public bool IsAffectAllDownlines { get; set; }
 

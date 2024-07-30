@@ -155,8 +155,7 @@
         let params = {};
         params.CustId = $('#hdCustId').val();
         params.CTSCustId = $('#hdCTSCustId').val();
-        params.SubscriberId = $('#hdSubscriberId').val();
-        params.CategoryId = 210; // VVIP
+        params.SubscriberId = $('#hdSubscriberId').val();      
         params.RoleId = $('#hdRoleID').val();
         params.IsAffectToAllDownlines = $('#inputVVIPUnmarkAffectToAllDownlines').is(":checked");
 

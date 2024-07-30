@@ -120,11 +120,13 @@
 
             var generalModelInsert = new InsertCustomerClassificationModel()
             {
+                FromAction = (int)FromFlow.CTSWEB,
                 CustClassificationJson = JsonConvert.SerializeObject(generalCusts)                
             };
 
             var sportmodelInsert = new InsertCustomerClassificationModel()
             {
+                FromAction = (int)FromFlow.CTSWEB,
                 CustClassificationJson = JsonConvert.SerializeObject(sportCusts)
             };
 
@@ -197,6 +199,7 @@
             {
                 var removeModel = new RemoveCustomerClassificationModel
                 {
+                    FromAction = (int)FromFlow.CTSWEB,
                     CustClassificationJson = JsonConvert.SerializeObject(custInfos)
                 };
 
@@ -222,6 +225,7 @@
             {
                 var removeModel = new RemoveCustomerClassificationModel
                 {
+                    FromAction = (int)FromFlow.CTSWEB,
                     CustClassificationJson = JsonConvert.SerializeObject(custInfos)
                 };
 

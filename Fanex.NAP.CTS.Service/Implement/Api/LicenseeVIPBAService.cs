@@ -165,6 +165,7 @@
         {
             var model = new InsertCustomerClassificationModel
             {
+                FromAction = (int)FromFlow.CTSAPI,
                 CustClassificationJson = JsonConvert.SerializeObject(parameter)
             };
 
@@ -175,6 +176,7 @@
         {           
             var modelRemove = new RemoveCustomerClassificationModel
             {
+                FromAction = (int)FromFlow.CTSAPI,
                 CustClassificationJson = JsonConvert.SerializeObject(model)
             };
 
@@ -185,6 +187,7 @@
         {
             var modelInsert = new InsertCustomerClassificationModel
             {
+                FromAction = (int)FromFlow.CTSAPI,
                 CustClassificationJson = JsonConvert.SerializeObject(model)
             };
 
@@ -195,6 +198,7 @@
         {
             var modelRemove = new RemoveCustomerClassificationModel 
             {
+                FromAction = (int)FromFlow.CTSAPI,
                 CustClassificationJson = JsonConvert.SerializeObject(model)
             };
 

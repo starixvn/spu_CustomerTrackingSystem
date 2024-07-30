@@ -324,9 +324,8 @@
         {
             CTSWEB = 1,
             CTSAPI = 2,
-            CTSServices = 3,
-            AFCSerivce = 4,
-            ManualTrigger = 5
+            CTSServices = 3,          
+            ManualTrigger = 4
         };
 
         public enum TrackingCtsFunctionId

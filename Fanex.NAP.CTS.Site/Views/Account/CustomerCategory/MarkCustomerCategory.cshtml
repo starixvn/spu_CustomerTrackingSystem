@@ -35,48 +35,7 @@
                                 <label for="@paCategory.CategoryID">
                                     @paCategory.CategoryName
                                 </label>
-                            }
-                            @*
-                                else if ((paCategory.CategoryGroup == (int)CustomerCategoryGroup.RobotUser && Model.IsRobotUser))
-                            else if(paCategory.IsRobotUser)
-        {
-            <label class="checkbox-container disabled" id="CategoryRobot">
-                <input id="CategoryRobot" type="checkbox" checked="checked" disabled>
-                <span class="checkmark"></span>
-                @paCategory.CategoryName
-            </label>
-        }
-        //else if (paCategory.CategoryID == (int)CustomerCategoryID.RobotOCRD)
-        else if(paCategory.IsRobotOCRD)
-        {
-            <label class="checkbox-container disabled">
-                <input type="checkbox" disabled>
-                <span class="checkmark"></span>
-                @paCategory.CategoryName
-            </label>
-        }
-        else
-        {
-            //if (Model.IsPinCategory || paCategory.CategoryID == (int)CustomerCategoryID.SystemDetectGroupBetting
-            //    || paCategory.CategoryID == (int)CustomerCategoryID.SysDetectUnauthorizedLogin
-            //    || paCategory.CategoryID == (int)CustomerCategoryID.SysDetectUnauthorizedLoginLosing)
-            if(Model.IsPinCategory || paCategory.IsSystemDetect)
-            {
-                <label class="checkbox-container disabled">
-                    <input type="checkbox" disabled>
-                    <span class="checkmark"></span>
-                    @paCategory.CategoryName
-                </label>
-            }
-            else
-            {
-                <input type="radio" value="@paCategory.CategoryID" id="@paCategory.CategoryID" data-categorygroup="@paCategory.CategoryGroup" name="group2" />
-                <label for="@paCategory.CategoryID">
-                    @paCategory.CategoryName
-                </label>
-            }
-        }*@
-
+                            }                           
                         </div>
                         }
 
