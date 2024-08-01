@@ -12,6 +12,6 @@
 
         public long QueueID { get; set; }
 
-        public bool AffectDownline { get; set; }
+        public bool IsAffectDownline { get; set; }
     }
 }

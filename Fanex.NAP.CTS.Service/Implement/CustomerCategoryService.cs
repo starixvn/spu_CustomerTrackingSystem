@@ -58,7 +58,7 @@
             {
                 CustClassificationJson = JsonConvert.SerializeObject(custList),
                 FromAction = (int)FromFlow.CTSWEB,
-                AffectDownline = custCategoryModel.IsAffectToAllDownlines
+                IsAffectDownline = custCategoryModel.IsAffectToAllDownlines
             };
 
             return base.InsertCustomerClassification(CCInputFlow.VVIP, modelInsert);
@@ -81,7 +81,7 @@
             {
                 CustClassificationJson = JsonConvert.SerializeObject(custList),
                 FromAction = (int)FromFlow.CTSWEB,
-                AffectDownline = custCategoryModel.IsAffectToAllDownlines
+                IsAffectDownline = custCategoryModel.IsAffectToAllDownlines
             };
 
             return base.RemoveCustomerClassification(CCInputFlow.RemoveVVIP, modelRemove);

@@ -72,7 +72,6 @@
     <Compile Include="Implement\AntiFraudCenterService.cs" />
     <Compile Include="Implement\LogInputDataService.cs" />
     <Compile Include="Implement\MatchMonitorService.cs" />
-    <Compile Include="Implement\NotificationRecipientService.cs" />
     <Compile Include="Implement\ProbationManagementService.cs" />
     <Compile Include="Implement\ManageSubscriberService.cs" />
     <Compile Include="Implement\ProblemAccountManagementService.cs" />
@@ -117,7 +116,6 @@
     <Compile Include="Interface\IImportEvidencesService.cs" />
     <Compile Include="Interface\IManageSubscriberService.cs" />
     <Compile Include="Interface\IMatchMonitorService.cs" />
-    <Compile Include="Interface\INotificationRecipientService.cs" />
     <Compile Include="Interface\INotificationService.cs" />
     <Compile Include="Interface\IProbationManagementService.cs" />
     <Compile Include="Interface\IProblemAccountManagementService.cs" />

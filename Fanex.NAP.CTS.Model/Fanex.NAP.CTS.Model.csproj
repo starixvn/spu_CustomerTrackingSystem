@@ -302,7 +302,6 @@
     <Compile Include="Common\MainTicketDetailModel.cs" />
     <Compile Include="Common\ValidateUserNameModel.cs" />
     <Compile Include="Customer.cs" />
-    <Compile Include="CustomerAssociationModel.cs" />
     <Compile Include="Account\CustomerFlagInfoModel.cs" />
     <Compile Include="Account\CustomerInfoByCTSCustIdModel.cs" />
     <Compile Include="Account\CustomerAssociationByAccountDetailModel.cs" />
@@ -446,7 +445,6 @@
     <Compile Include="Association\AssociatedFilterModel.cs" />
     <Compile Include="Account\AssociatedAccount\AssociatedAccountModel.cs" />
     <Compile Include="Account\SuspiciousCustomerModel.cs" />
-    <Compile Include="Action.cs" />
     <Compile Include="Association\AssociatedByAccountModel.cs" />
     <Compile Include="DTO\Currency.cs" />
     <Compile Include="DTO\CustomerList.cs" />
@@ -456,9 +454,6 @@
     <Compile Include="DTO\Role.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="Environment.cs" />
-    <Compile Include="FraudCaseHealth.cs" />
-    <Compile Include="FraudCaseId.cs" />
-    <Compile Include="FraudCaseMessage.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Home\SearchResultModel.cs" />
     <Compile Include="ImportEvidences\CheckAccountEvidenceModel.cs" />

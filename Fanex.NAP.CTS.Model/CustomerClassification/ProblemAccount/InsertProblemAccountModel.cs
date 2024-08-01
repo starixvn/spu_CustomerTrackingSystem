@@ -11,8 +11,7 @@
         {
             IsFromTVS = false;
             IsFromCTS = false;
-            IsFromTW = false;
-            IsDataChanged = false;
+            IsFromTW = false;           
         }
 
         public InsertProblemAccountModel(RescanPADangerousModel rescanPADangerous)
@@ -28,8 +27,7 @@
             this.IsFromCTS = false;
             this.IsFromTVS = false;
             this.IsFromTW = false;
-            this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
-            //this.Remark = string.Format(Consts.DangerousScoreRemark, rescanPADangerous.ClassifiedDate.ToString(Consts.FormatDateToString_MMMddyyyy), (rescanPADangerous.ClassifiedScore * 100).ToString(Consts.FormatDecimalToString_2Places));           
+            this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);            
         }
 
         public InsertProblemAccountModel(GetInitialTWGroupBettingModel twGBCust, PotentialPACustInfoModel ctsCust)
@@ -45,8 +43,7 @@
             this.IsFromCTS = false;
             this.IsFromTVS = false;
             this.IsFromTW = true;
-            this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
-            //this.Remark = string.Format(Consts.TWTWInitialGBRemark, twGBCust.DetectedDate.ToString(Consts.FormatDateToString_MMMddyyyy), twGBCust.GBTicketCount, twGBCust.SportName);            
+            this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);         
         }
 
         public InsertProblemAccountModel(TWInitialSmartPAModel tWInitialSmartCust)
@@ -62,8 +59,7 @@
             this.IsFromCTS = false;
             this.IsFromTVS = false;
             this.IsFromTW = true;
-            this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
-            //this.Remark = string.Format(Consts.TWInitialSmartRemark, tWInitialSmartCust.DetectedDate.ToString(Consts.FormatDateToString_MMMddyyyy), tWInitialSmartCust.Probability);           
+            this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);            
         }
 
         public InsertProblemAccountModel(RescanCustomerClassificationModel data)
@@ -71,7 +67,7 @@
             CTSCustID = data.CTSCustID;
             CustID = data.CustID;
             CategoryID = data.CategoryID;
-            ReasonID = data.TVSReasonID;
+            TVSReasonID = data.TVSReasonID;
             RoleID = data.RoleID;
             SubscriberID = data.SubscriberID;
             IsLicensee = data.IsLicensee;
@@ -104,7 +100,7 @@
 
         public int? WinlossStatus { get; set; } // LOSING  = 0, KEEPSTATE = 1, WINNING = 2      
 
-        public int? ReasonID { get; set; }
+        public int? TVSReasonID { get; set; }
 
         public bool? IsMarkedDirectly { get; set; }
 
@@ -126,7 +122,5 @@
 
         public bool IsFromImperva { get; set; }
 
-        //True if only removing SpecialCC
-        public bool IsDataChanged { get; set; }
     }
 }
