@@ -39,6 +39,12 @@
         [SpParam(SqlParamName = "MatchSection")]
         public string MatchSection { get; set; }
 
+        [SpParam(SqlParamName = "UserAmount")]
+        public decimal UserAmount { get; set; }
+
+        [SpParam(SqlParamName = "TotalAmount")]
+        public decimal TotalAmount { get; set; }
+
         public override string GetSettingKey() => "CTS_MatchTicketInfo_Get";
 
         public override bool IsValid() => true;

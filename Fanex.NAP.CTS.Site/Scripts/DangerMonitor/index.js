@@ -16,6 +16,9 @@
     let isFocusValidUsername = false;
     let timeOutIdInputEvent;
 
+    const regexValidAmount = /^[0-9]{1,15}/;
+    const regexInvalidAmount = /[^0-9]{1,15}/g;
+
     let domElements = {
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
         userId: $("#hdCTSCustId").val(),
@@ -53,6 +56,10 @@
         btnSave: $('#btnSave'),
         btnCancel: $('#btnCancel'),
         btnRemoveInvalidUserName: $('#btnRemoveInvalidUserName'),
+        txtUsernameAmt: $('#txtUsernameAmt'),
+        txtTotalAmt: $('#txtTotalAmt'),
+        btnClearUsernameAmt: $('#btnClearUsernameAmt'),
+        btnClearTotalAmt: $('#btnClearTotalAmt'),
     };
 
     let timeoutRenderTicketDetail = undefined;
@@ -301,6 +308,8 @@
                     "BetID": bettypeList[x].BetID
                 }))),
                 LeagueGroupList: domElements.cbbLeagueGroup.val().join(),
+                UserAmount: GetInputAmount(domElements.txtUsernameAmt.val()),
+                TotalAmount: GetInputAmount(domElements.txtTotalAmt.val()),
             };
 
             if (domElements.rbtnSelect.filter(":checked").val() == 0) {
@@ -434,6 +443,26 @@
             FetchBetTypes();
         });
 
+        domElements.txtTotalAmt.on('input', function () {
+            let validAmount = domElements.txtTotalAmt.val().replace(regexInvalidAmount, "");
+
+            domElements.txtTotalAmt.val(validAmount);
+        });
+
+        domElements.txtUsernameAmt.on('input', function () {
+            let validAmount = domElements.txtUsernameAmt.val().replace(regexInvalidAmount, "");
+
+            domElements.txtUsernameAmt.val(validAmount);
+        });
+
+        domElements.btnClearUsernameAmt.on('click', function () {
+            domElements.txtUsernameAmt.val('');
+        })
+
+        domElements.btnClearTotalAmt.on('click', function () {
+            domElements.txtTotalAmt.val('');
+        })
+
         GetSportBetTypeList();
         GetLeagueGroupList();
         GetDgrList();
@@ -524,6 +553,20 @@
         });
 
         ResetFilterValueDefault();
+    }
+
+    function GetInputAmount(amount) {
+        if (regexValidAmount.test(amount) && Number(amount)) {
+            if (amount < 0) {
+                amount = 0;
+            }
+            if (amount > 922337203685477) {
+                amount = 922337203685477;
+            }
+            return amount;
+        }
+
+        return undefined;
     }
 
     function ResetFilterValueDefault() {

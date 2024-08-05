@@ -282,6 +282,26 @@
                             }
                         }
 
+                        .input-amount {
+                            position: relative;
+
+                            .icon-clear {
+                                position: absolute;
+                                right: 0.6rem;
+                                top: 0.85rem;
+                                cursor: pointer;
+
+                                &:hover {
+                                    background-color: rgba(57, 110, 248, 0.2);
+                                    border-radius: 5px;
+                                }
+
+                                .hide {
+                                    display: none;
+                                }
+                            }
+                        }
+
                         button {
                             background-color: #fff;
                             border: 1px solid #aaa;

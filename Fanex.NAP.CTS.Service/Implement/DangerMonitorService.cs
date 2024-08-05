@@ -185,7 +185,9 @@
                 MarketList = filter.Market,
                 QueryDanger = filter.QueryDanger ?? string.Empty,
                 UserNameList = filter.UserNameList ?? string.Empty,
-                LeagueGroupList = filter.LeagueGroupList
+                LeagueGroupList = filter.LeagueGroupList,
+                TotalAmount = filter.TotalAmount,
+                UserAmount = filter.UserAmount
             };
 
             var result = _repository.Fetch<DangerMMTicketInfoViewModel>(criteria);
