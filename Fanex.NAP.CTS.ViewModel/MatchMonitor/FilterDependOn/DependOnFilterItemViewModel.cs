@@ -4,6 +4,7 @@
 
     public class DependOnFilterItemViewModel
     {
+        public DependOnFilterItemViewModel() { }
         public DependOnFilterItemViewModel(MMDetailFilterTicketInfoModel info, bool isLive)
         {
             this.Score = isLive ? $"{info.LiveHomeScore} - {info.LiveAwayScore}" : "-";
