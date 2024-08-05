@@ -30,7 +30,7 @@
             this.CategoryNames = !string.IsNullOrEmpty(data.CategoryNames) ? data.CategoryNames : "-";
             this.CustomerClasses = data.CustomerClasses != "-1" ? data.CustomerClasses : "-";
             this.GroupIDs = data.GroupIDs;
-            this.OriginGroupIDs = data.OriginGroupIDs;
+            this.OriginGroupIDs = data.OriginGroupIDs;            
             int.TryParse(data.ColorTypeIDs, out int colorTypeID);
             this.CategoryColorType = (CategoryColorType)colorTypeID;
         }
@@ -103,6 +103,11 @@
         {
             get
             {
+                if (this.CategoryColorType == CategoryColorType.Default)
+                {
+                    return string.Empty;
+                }
+
                 return EnumExtensions.GetStringSlow(CategoryColorType);
             }
         }

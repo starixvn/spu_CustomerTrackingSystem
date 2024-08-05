@@ -949,6 +949,12 @@
   background-color: #FDB703;
   font-weight: bold; }
 
+.td-bg-yellow-light {
+  background-color: #FEDB81;
+  font-weight: bold; }
+  .td-bg-yellow-light:after {
+    background-color: #FEDB81; }
+
 .td-bg-green {
   background-color: #2BC769;
   font-weight: bold; }

@@ -125,7 +125,7 @@
             type: 'POST',
             data: params,
             success: function (response) {
-                if (response.errorCode === 0) {
+                if (response.errorCode == 0) {
                     common.showSuccess('Unmark Category successful!', 2000);
                     divUnmarkCustomerCategory.dialog('close');
                 }
@@ -133,7 +133,7 @@
                     common.showError(response.errorMessage);
                 }
 
-                LoadGrid(params.CTSCustID, true);
+                LoadGrid(params.CTSCustID);
                 GetCustomerCategory(params.CustID);
                 LoadStatusRobotUser(params.CustID);
             },
@@ -163,7 +163,7 @@
             type: 'POST',
             data: params,
             success: function (response) {
-                if (response.errorCode === 0) {
+                if (response.errorCode == 0) {
                     common.showSuccess('Unmark VVIP successful!', 2000);
                     divUnmarkCustomerCategory.dialog('close');                    
                 }
@@ -171,7 +171,7 @@
                     common.showError(response.errorMessage);
                 }
 
-                LoadGrid(params.CTSCustId, true);
+                LoadGrid(params.CTSCustId);
                 GetCustomerCategory(params.CustId);
             },
             beforeSend: function () {
@@ -253,13 +253,7 @@
 
                     ResetCategorySetting();
 
-                    RenderCategoryColorSummary(json.categoryList, json.isProblemAccount);
-
-                    //let isProblemAccount = RenderProblemCategoryProfilePage(json.categoryList, json.isPAProbation);
-
-                    //if (!isProblemAccount) {
-                    //    RenderNormalCategoryProfilePage(json.categoryList, json.isPAProbation);
-                    //}
+                    RenderCategoryColorSummary(json.categoryList, json.isProblemAccount);                  
                 }
                 return response;
             },
@@ -312,7 +306,7 @@
         }        
 
         $('#divHeaderUsername').removeClass('bg-yellow').removeClass('bg-green')
-            .removeClass('bg-green-line').removeClass('bg-yellow-line').removeClass('bg-red')
+            .removeClass('bg-green-line').removeClass('bg-yellow-line').removeClass('bg-lightred').removeClass('bg-red')
             .addClass(bgHeaderUsername);
 
         $('#divHeaderInfo').removeClass('border-yellow').removeClass('border-green').removeClass('border-red')
@@ -404,7 +398,7 @@
                     common.showError(response.errorMessage);
                 }
 
-                LoadGrid(params.CTSCustID, true);
+                LoadGrid(params.CTSCustID);
                 GetCustomerCategory(params.CustID);
             },
             beforeSend: function () {
@@ -456,7 +450,7 @@
                         common.showError(response.errorMessage);
                     }
 
-                    LoadGrid(params.CTSCustID, true);
+                    LoadGrid(params.CTSCustID);
                     GetCustomerCategory(params.CustID);
                     LoadStatusRobotUser(params.CustID);
                 },
@@ -542,14 +536,14 @@
                     type: 'POST',
                     data: params,
                     success: function (response) {
-                        if (response.errorCode === 0) {
+                        if (response.errorCode == 0) {
                             let message = isChecked
                                 ? "Mark category successfully!"
                                 : "Unmark category successfully!";
 
                             common.showSuccess(message);
 
-                            LoadGrid(ctsCustId, true);
+                            LoadGrid(ctsCustId);
                         }
                         else {
                             common.showError('Failed! ' + response.errorMessage);

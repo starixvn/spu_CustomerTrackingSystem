@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.CustomerClassification
 {
     using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
-    using Fanex.NAP.CTS.Resource.Consts;
     using System;
     using System.Configuration;
 
@@ -68,6 +67,11 @@
             CustID = data.CustID;
             CategoryID = data.CategoryID;
             TVSReasonID = data.TVSReasonID;
+            RobotCounter = data.RobotCounter;
+            TVSRequestID = data.TVSRequestID;
+            IsParlay = data.IsParlay;
+            IssueTypeID = data.IssueTypeID;
+            SportType = data.SportType;
             RoleID = data.RoleID;
             SubscriberID = data.SubscriberID;
             IsLicensee = data.IsLicensee;
@@ -80,6 +84,7 @@
             IsFromAI = data.IsFromAI;
             IsFromImperva = data.IsFromImperva;
             LastModifiedDate = data.LastModifiedDate;
+            CreatedDate = data.CreatedDate;
         }     
 
         public long CTSCustID { get; set; }
@@ -116,11 +121,15 @@
 
         public int? IssueTypeID { get; set; }
 
+        public int? RobotCounter { get; set; }
+
         public bool IsFromTW { get; set; }
 
         public bool IsFromCTS { get; set; }
 
         public bool IsFromImperva { get; set; }
+
+        public DateTime? CreatedDate { get; set; }
 
     }
 }
