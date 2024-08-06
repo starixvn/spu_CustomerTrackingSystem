@@ -1,7 +1,9 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
     using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Service.Interface;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -22,10 +24,11 @@
 
         public T GetValue<T>(string key) where T : class
         {
-            var result = default(T);
             try
             {
-                result = (T)_memoryCache.Get(key);
+                var jsonObject = key.IsNotNullOrEmpty() ? _memoryCache.Get(key) : null;
+                
+                return jsonObject != null ? JsonConvert.DeserializeObject<T>((string)jsonObject) : null;
             }
             catch (Exception ex)
             {
@@ -34,7 +37,7 @@
                      + ex.InnerException.StackTrace);
             }
 
-            return result;
+            return null;
         }
 
         public bool PushValue<T>(string key, T value, int hours = 1) where T : class
@@ -43,7 +46,10 @@
 
             try
             {
-                result = _memoryCache.Add(key, value, DateTimeOffset.UtcNow.AddHours(hours));
+                if (value != null)
+                {
+                    result = _memoryCache.Add(key, JsonConvert.SerializeObject(value), DateTimeOffset.UtcNow.AddHours(hours));
+                }
             }
             catch (Exception ex)
             {
@@ -62,7 +68,10 @@
                 var result = false;
                 try
                 {
-                    result = _memoryCache.Add(key, value, DateTimeOffset.UtcNow.AddHours(hours));
+                    if (value != null)
+                    {
+                        result = _memoryCache.Add(key, JsonConvert.SerializeObject(value), DateTimeOffset.UtcNow.AddHours(hours));
+                    }
                 }
                 catch (Exception ex)
                 {

@@ -571,7 +571,7 @@
 
                         fraudFilterResult = _matchMonitorService.GetFraudFilterInfoDetail(para, fraudTicket, reasons);
 
-                        _memoryCacheService.PushValueAsync(key, fraudFilterResult);
+                        _memoryCacheService.PushValue(key, fraudFilterResult);
                     }
                 }
             }
@@ -602,7 +602,7 @@
 
                         allFilterResult = _matchMonitorService.GetFraudFilterInfoDetail(para, fraudTicket, reasons);
 
-                        _memoryCacheService.PushValueAsync(key, allFilterResult);
+                        _memoryCacheService.PushValue(key, allFilterResult);
                     }
                     else
                     {
