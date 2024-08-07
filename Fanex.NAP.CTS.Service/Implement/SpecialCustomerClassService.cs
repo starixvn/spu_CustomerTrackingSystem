@@ -237,17 +237,16 @@
         {         
             if (custInfos.Any())
             {
-                var removeModel = new RemoveCustomerClassificationModel
-                {
-                    FromAction = (int)FromFlow.CTSWEB,
+                var removeModel = new RemoveCustomerClassificationBySportModel
+                {                    
                     CustClassificationJson = JsonConvert.SerializeObject(custInfos)
                 };
 
-                var resultRemove = RemoveCustomerClassification(CCInputFlow.RemoveSpecialCC, removeModel);
+                var resultRemove = RemoveCustomerClassificationBySport(CCInputFlow.BySportRemoveSpecialCC, removeModel);
 
                 if (resultRemove.CustInfos != null && resultRemove.CustInfos.Any())
                 {
-                    var rescanUserList = custInfos.Select(x => new RescanNormalBySportListCustModel { CustID = x.CustID, SportID = x.SportID });
+                    var rescanUserList = resultRemove.CustInfos.Select(x => new RescanNormalBySportListCustModel { CustID = x.CustID, SportID = x.SportID });
 
                     _rescanBySportService.ResanNormalBySportForNewCustomers(rescanUserList, BySport_FunctionId.Manual);
                 }

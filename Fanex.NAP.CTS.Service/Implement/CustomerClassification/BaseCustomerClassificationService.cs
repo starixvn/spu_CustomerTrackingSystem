@@ -75,5 +75,18 @@
 
             return new ResultInsertCustomerClassificationBySportModel { CustInfos = custInfos, ErrorMessage = criteria.ErrorMessage };
         }
+
+        public ResultRemoveCustomerClassificationBySportModel RemoveCustomerClassificationBySport(CCInputFlow inputFlow, RemoveCustomerClassificationBySportModel model)
+        {
+            var criteria = new RemoveCustomerClassificationBySportCriteria
+            {
+                InputFlowID = (int)inputFlow,              
+                CustClassificationJson = model.CustClassificationJson
+            };
+
+            var custInfos = repository.Fetch<ResultRemoveCCInfoBySportModel>(criteria);
+
+            return new ResultRemoveCustomerClassificationBySportModel { CustInfos = custInfos, ErrorMessage = criteria.ErrorMessage };
+        }
     }
 }

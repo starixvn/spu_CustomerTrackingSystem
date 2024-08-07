@@ -136,6 +136,7 @@
     <Compile Include="Common\GetSitesCriteria.cs" />
     <Compile Include="Common\GetTicketDetailsCriteria.cs" />
     <Compile Include="Common\ValidateUsernameForMainCriteria.cs" />
+    <Compile Include="CustomerClassification\BaseCustomerClassification\BySport\RemoveCustomerClassificationBySportCriteria.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\GetRescanCustomerClassificationCriteria.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\BySport\InsertCustomerClassificationBySportCriteria.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\InsertCustomerClassificationCriteria.cs" />
