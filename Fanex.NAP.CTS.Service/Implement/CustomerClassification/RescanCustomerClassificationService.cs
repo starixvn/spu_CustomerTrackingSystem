@@ -7,18 +7,11 @@
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
-    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
-    using Fanex.NAP.CTS.Model.LogInputData;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Service.Implement;
-    using Fanex.NAP.CTS.Service.Implement.CustomerClassification;
-    using Fanex.NAP.CTS.Service.Interface;
-    using Fanex.NAP.CTS.Service.Interface.CustomerClassification;
-    using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Entities;
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
@@ -56,12 +49,12 @@
 
                         custIdsToRescanPA.AddRange(result.CustIds);
                     }
-                }
+                }                
+            }
 
-                if (smaCustIds.Any())
-                {
-                    result.IsSuccess = PushDataToExternal(paras, custIdsToRescanPA, smaCustIds);                   
-                }
+            if (smaCustIds.Any())
+            {
+                result.IsSuccess = PushDataToExternal(paras, custIdsToRescanPA, smaCustIds);
             }
 
             return result.IsSuccess;
@@ -119,13 +112,7 @@
         }
 
         private bool PushDataToExternal(RescanCustClassificationModel parameters, IEnumerable<long> custIdsToRescanPA, IEnumerable<long> smaCustIds)
-        {
-            var custToRescanNormal = parameters.CustIds.Distinct().ToList();
-
-            custToRescanNormal.RemoveAll(x => custIdsToRescanPA.Distinct().Contains(x));
-
-            custToRescanNormal.RemoveAll(x => smaCustIds.Distinct().Contains(x));
-
+        {            
             if (smaCustIds.Any())
             {
                 var custToRemovePA = smaCustIds.Except(custIdsToRescanPA);

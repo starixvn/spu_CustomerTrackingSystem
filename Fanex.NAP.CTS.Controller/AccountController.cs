@@ -1805,13 +1805,14 @@
                         CustID = model.CustID,
                         CategoryID = model.CategoryID,
                         Remark = model.Remark,
+                        RoleID = model.RoleID,
                         IsMarkedDirectly = true,
                         IsFromCTS = true,
                         CreatedBy = CurrentSession.UserId
                     }
                 };
 
-            var dbResult = _problemAccountClassificationService.InsertProblemAccountPackage(robotAccounts, CCInputFlow.InsertRobot, "Mark Robot Profile Page", FromFlow.CTSWEB, false);          
+            var dbResult = _problemAccountClassificationService.InsertProblemAccountPackage(robotAccounts, CCInputFlow.InsertPACategory, "Mark Robot Profile Page", FromFlow.CTSWEB, false);          
 
             return Json(new
             {

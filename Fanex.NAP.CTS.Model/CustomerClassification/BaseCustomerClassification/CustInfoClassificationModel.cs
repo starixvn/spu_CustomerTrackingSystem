@@ -14,7 +14,8 @@
 
         public int CategoryID { get; set; }
 
-        public DateTime ScannedTime { get; set; }       
+        public DateTime ScannedTime { get; set; }
 
+        public bool IsPA { get; set; }
     }
 }

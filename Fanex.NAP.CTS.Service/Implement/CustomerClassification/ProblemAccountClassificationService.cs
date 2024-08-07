@@ -52,16 +52,9 @@
 
                     if (insertPaResult.CustInfos != null && insertPaResult.CustInfos.Any())
                     {
-                        var insertPACustIDs = insertPaResult.CustInfos.Select(x => x.CustID).Distinct();
+                        InsertPALogics(insertPaResult.CustInfos);                       
 
-                        CheckNewPAAssociationCustomerForRollback(JsonConvert.SerializeObject(insertPaResult.CustInfos));
-
-                        if (ccInputFlow == CCInputFlow.InsertPACategory || ccInputFlow == CCInputFlow.InsertPAReason)
-                        {
-                            UpdateBetLimitOfFlaggedCustomer(insertPACustIDs);
-                        }
-
-                        _ccService.PushDataToExternalPackge(insertPACustIDs, new PushDataToExternalModel
+                        _ccService.PushDataToExternalPackge(insertPaResult.CustInfos.Select(x => x.CustID), new PushDataToExternalModel
                         {
                             ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,                          
                             IsUpdateDangerToMainDB = true,
@@ -138,7 +131,19 @@
         }
 
         #region Private Methods
-      
+
+        public void InsertPALogics(IEnumerable<CustInfoClassificationModel> customerInfo)
+        {
+            if (customerInfo != null && customerInfo.Any())
+            {
+                var custPas = customerInfo.Where(x => x.IsPA).Distinct();
+
+                CheckNewPAAssociationCustomerForRollback(JsonConvert.SerializeObject(customerInfo));
+
+                UpdateBetLimitOfFlaggedCustomer(custPas.Select(x => x.CustID));
+            }
+        }
+
         private IEnumerable<InsertProblemAccountModel> MergeProblemAccountClassification(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> probAccountLosing)
         {
             if (problemAccounts != null && problemAccounts.Any())

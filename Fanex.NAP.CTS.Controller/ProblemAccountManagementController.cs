@@ -212,7 +212,7 @@
                 CreatedBy = CurrentSession.UserId                
             });
                         
-            return _paClassificationService.InsertProblemAccountPackage(robotAccounts, CCInputFlow.InsertRobot, "Mark Robot Management", FromFlow.CTSWEB, false);                          
+            return _paClassificationService.InsertProblemAccountPackage(robotAccounts, CCInputFlow.InsertPACategory, "Mark Robot Management", FromFlow.CTSWEB, false);                          
         }
 
         [HttpPost]
