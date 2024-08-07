@@ -37,6 +37,8 @@
 
             var insertPaResult = InsertProblemAccounts(pas, ccInputFlow, FunctionId.InsertPAM, isToQueue);
 
+            InsertPALogics(insertPaResult.CustInfos);
+
             return insertPaResult.CustInfos.Select(x => x.CustID).Distinct();
         }
 
@@ -127,12 +129,16 @@
                 FromAction = (int)FromFlow.CTSWEB
             };
 
-            return base.RemoveCustomerClassification(CCInputFlow.RemovePACategory, modelRemove);           
+            var removePaResult = base.RemoveCustomerClassification(CCInputFlow.RemovePACategory, modelRemove);
+
+            RemovePALogics(removePaResult.CustInfos);
+
+            return removePaResult;
         }
 
         #region Private Methods
 
-        public void InsertPALogics(IEnumerable<CustInfoClassificationModel> customerInfo)
+        private void InsertPALogics(IEnumerable<CustInfoClassificationModel> customerInfo)
         {
             if (customerInfo != null && customerInfo.Any())
             {
@@ -141,6 +147,16 @@
                 CheckNewPAAssociationCustomerForRollback(JsonConvert.SerializeObject(customerInfo));
 
                 UpdateBetLimitOfFlaggedCustomer(custPas.Select(x => x.CustID));
+            }
+        }
+
+        private void RemovePALogics(IEnumerable<ResultRemoveCCInfoModel> customerInfo)
+        {
+            if (customerInfo != null && customerInfo.Any())
+            {
+                var custIds = customerInfo.Where(c => c.IsCleanPA).Select(x => x.CustID).Distinct();
+
+                UpdateBetLimitOfUnflaggedCustomer(custIds);
             }
         }
 
