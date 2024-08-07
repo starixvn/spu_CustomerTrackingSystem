@@ -672,7 +672,14 @@
                             obj.LeagueID,
                             obj.BetID,
                             obj.SportType,
-                            obj.KOTime);
+                            obj.KOTime
+                            );
+
+                        let usernameAmt = GetInputAmount(domElements.txtUsernameAmt.val());
+                        if (usernameAmt)
+                        {
+                            para += `&UsernameAmt=${usernameAmt}`;
+                        }
 
                         if (domElements.rbtnSelect.filter(":checked").val() == 0) {
                             Object.keys(dangerListSelected).forEach(item => {
