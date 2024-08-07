@@ -3,7 +3,7 @@
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Criteria.CustomerClassification.BaseCustomerClassification;
     using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.CustomerClassification;
+    using Fanex.NAP.CTS.Model.CustomerClassification;   
     using Fanex.NAP.CTS.Service.Interface;
 
     public class BaseCustomerClassificationService : IBaseCustomerClassificationService
@@ -61,6 +61,19 @@
             var custInfos = repository.Fetch<ResultRemoveCCInfoModel>(criteria);
 
             return new ResultRemoveCustomerClassificationModel { CustInfos = custInfos, ErrorMessage = criteria.ErrorMessage };
+        }
+
+        public ResultInsertCustomerClassificationBySportModel InsertCustomerClassificationBySport(CCInputFlow inputFlow, InsertCustomerClassificationBySportModel model)
+        {
+            var criteria = new InsertCustomerClassificationBySportCriteria
+            {
+                InputFlowID = (int)inputFlow,
+                CustClassificationJson = model.CustClassificationJson
+            };
+
+            var custInfos = repository.Fetch<CustInfoClassificationBySportModel>(criteria);
+
+            return new ResultInsertCustomerClassificationBySportModel { CustInfos = custInfos, ErrorMessage = criteria.ErrorMessage };
         }
     }
 }

@@ -323,12 +323,16 @@
     <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorModel.cs" />
     <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
+    <Compile Include="CustomerClassification\BaseCustomerClassification\BySport\CustInfoClassificationBySportModel.cs" />
+    <Compile Include="CustomerClassification\BaseCustomerClassification\BySport\RemoveCustomerClassificationBySportModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\CustInfoClassificationModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\CustomerClassificationModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\GetRescanCustomerClassificationModel.cs" />
+    <Compile Include="CustomerClassification\BaseCustomerClassification\BySport\InsertCustomerClassificationBySportModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\InsertCustomerClassificationModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\RemoveCustomerClassificationModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\RescanCustomerClassificationModel.cs" />
+    <Compile Include="CustomerClassification\BaseCustomerClassification\BySport\ResultInsertCustomerClassificationBySportModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\ResultInsertCustomerClassificationModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\ResultRemoveCCInfoModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\ResultRemoveCustomerClassificationModel.cs" />

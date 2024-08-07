@@ -94,7 +94,10 @@
         }
 
         public void InsertCustomerClass(AddSpecialCCParamsModel model, ValidateSpecialCCResultViewModel validateUsers, int createdBy)
-        {          
+        {
+            var generalInsertResult = new ResultInsertCustomerClassificationModel();
+            var sportInsertResult = new ResultInsertCustomerClassificationBySportModel();
+
             var generalCusts = validateUsers.Users.Where(x => x.SportID == 0).Select(x => new AddGenreralUserSpecialCCModel
             {
                 CTSCustID = x.CTSCustID,
@@ -116,23 +119,28 @@
                 CustomerClass = model.CustomerClass,
                 CreatedBy = createdBy,
                 Remark = model.Comment
-            });
+            });                        
 
-            var generalModelInsert = new InsertCustomerClassificationModel()
+            if (generalCusts.Any())
             {
-                FromAction = (int)FromFlow.CTSWEB,
-                CustClassificationJson = JsonConvert.SerializeObject(generalCusts)                
-            };
+                var generalModelInsert = new InsertCustomerClassificationModel()
+                {
+                    FromAction = (int)FromFlow.CTSWEB,
+                    CustClassificationJson = JsonConvert.SerializeObject(generalCusts)
+                };
 
-            var sportmodelInsert = new InsertCustomerClassificationModel()
+                generalInsertResult = base.InsertCustomerClassification(CCInputFlow.SpecialCC, generalModelInsert);
+            }
+
+            if (sportCusts.Any())
             {
-                FromAction = (int)FromFlow.CTSWEB,
-                CustClassificationJson = JsonConvert.SerializeObject(sportCusts)
-            };
+                var sportmodelInsert = new InsertCustomerClassificationBySportModel()
+                {
+                    CustClassificationJson = JsonConvert.SerializeObject(sportCusts)
+                };
 
-            var generalInsertResult = base.InsertCustomerClassification(CCInputFlow.SpecialCC, generalModelInsert);
-
-            var sportInsertResult = base.InsertCustomerClassification(CCInputFlow.SpecialCC, sportmodelInsert);
+                sportInsertResult = base.InsertCustomerClassificationBySport(CCInputFlow.BySportInsertSpecialCC, sportmodelInsert);
+            }          
 
             // PushCC
             Parallel.Invoke(
@@ -140,7 +148,10 @@
                 {
                     try
                     {
-                        PushDataToExternal(generalInsertResult.CustInfos.Select(x=>x.CustID));
+                        if (generalInsertResult.CustInfos != null && generalInsertResult.CustInfos.Any())
+                        {
+                            PushDataToExternal(generalInsertResult.CustInfos.Select(x => x.CustID));
+                        }                        
                     }
                     catch (Exception ex)
                     {
@@ -158,7 +169,10 @@
                 {
                     try
                     {
-                        PushCCBySportToMainDB(sportInsertResult.CustInfos);
+                        if (sportInsertResult.CustInfos != null && sportInsertResult.CustInfos.Any())
+                        {
+                            PushCCBySportToMainDB(sportInsertResult.CustInfos);
+                        }                        
                     }
                     catch (Exception ex)
                     {
@@ -258,14 +272,14 @@
             }
         }
 
-        private void PushCCBySportToMainDB(IEnumerable<CustInfoClassificationModel> custInfoParams)
+        private void PushCCBySportToMainDB(IEnumerable<CustInfoClassificationBySportModel> custInfoParams)
         {
             if (custInfoParams != null && custInfoParams.Any())
             {
                 var custInfos = custInfoParams.Select(x => new InsertNormalAccountCustInfoModel
                 {
                     CustID = x.CustID,
-                    SportGroup = x.SportID
+                    SportGroup = x.SportGroup
                 });
 
                 _customerClassificationBySportService.PushCCBySportToMainDB(custInfos, ConfigSettings.PushCCToExternalChunkSize);
