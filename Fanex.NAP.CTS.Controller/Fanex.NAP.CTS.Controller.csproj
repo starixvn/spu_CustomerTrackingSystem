@@ -194,7 +194,6 @@
     <Compile Include="ActionFilter\TrackingFunctionUsageFilterAttribute.cs" />
     <Compile Include="MatchMonitorController.cs" />
     <Compile Include="ProblemAccountManagementController.cs" />
-    <Compile Include="ProblemCaseMonitorController.cs" />
     <Compile Include="ManageSubscriberController.cs" />
     <Compile Include="NotificationSettingController.cs" />
     <Compile Include="ProbationManagementController.cs" />

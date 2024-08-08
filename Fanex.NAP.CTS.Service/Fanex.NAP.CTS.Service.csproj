@@ -75,7 +75,6 @@
     <Compile Include="Implement\ProbationManagementService.cs" />
     <Compile Include="Implement\ManageSubscriberService.cs" />
     <Compile Include="Implement\ProblemAccountManagementService.cs" />
-    <Compile Include="Implement\ProblemCaseMonitorService.cs" />
     <Compile Include="Implement\CustomerClassification\CustomerClassificationService.cs" />
     <Compile Include="Implement\RobotBettingService.cs" />
     <Compile Include="Implement\RobotClassificationService.cs" />
@@ -120,7 +119,6 @@
     <Compile Include="Interface\IProbationManagementService.cs" />
     <Compile Include="Interface\IProblemAccountManagementService.cs" />
     <Compile Include="Interface\IProblemAccountMonitorService.cs" />
-    <Compile Include="Interface\IProblemCaseMonitorService.cs" />
     <Compile Include="Interface\CustomerClassification\ICustomerClassificationService.cs" />
     <Compile Include="Interface\CustomerClassification\IRescanCustomerClassificationService.cs" />
     <Compile Include="Interface\IRobotBettingService.cs" />

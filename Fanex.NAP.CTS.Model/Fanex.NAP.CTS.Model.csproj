@@ -429,9 +429,6 @@
     <Compile Include="ProblemAccountManagement\ProblemAccountCategoryModel.cs" />
     <Compile Include="ProblemAccountManagement\ProblemAccountValidatedModel.cs" />
     <Compile Include="ProblemAccountMonitor\TWProblemAccount\TWProblemAccountModel.cs" />
-    <Compile Include="ProblemCaseMonitor\ProblemCasesMonitorModel.cs" />
-    <Compile Include="ProblemCaseMonitor\ProblemCasesMonitorFilterModel.cs" />
-    <Compile Include="ProblemCaseMonitor\ProblemCasesFilterModel.cs" />
     <Compile Include="CustomerClassification\PushDataToExternal\DangerLevelModel.cs" />
     <Compile Include="RobotReport\AIRobotReportModel.cs" />
     <Compile Include="RobotReport\RobotReportCounterView.cs" />
