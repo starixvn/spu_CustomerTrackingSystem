@@ -291,11 +291,9 @@
         let bgHeaderInfo = '';
         if (data.length > 0) {
             data.map(function (x) {
-                if (isProblemAccount && x.IsProblemAccount) {
+                if ((isProblemAccount && x.IsProblemAccount) || (!isProblemAccount)) {
                     html = BuildCategoryToHtmlDiv(html, "circle bg-" + x.CategoryColorDesc, x.CategoryName);
-                } else if (!isProblemAccount) {
-                    html = BuildCategoryToHtmlDiv(html, "circle bg-" + x.CategoryColorDesc, x.CategoryName);
-                }
+                } 
 
                 bgHeaderUsername = 'bg-' + x.CategoryColorDesc;
                 bgHeaderInfo = 'border-' + x.CategoryColorDesc;

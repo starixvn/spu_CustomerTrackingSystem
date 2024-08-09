@@ -10,8 +10,6 @@
 	</Function>
 
 	<Function Name="Common">		
-		<Setting Key="CTS_DC_Common_GetAllSubscriberGroups" SpName="CTS_DC_Common_GetAllSubscriberGroups_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_Common_GetCustomerGroup" SpName="CTS_DC_Common_GetCustomerGroup_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="DCS_DC_Transaction_GetHistory" SpName="DCS_DC_Transaction_GetHistory_xtest" DbName="MySQL.DCS_DataCenter.Reporter" Timeout="300" />
 		<Setting Key="CTS_DC_Common_ValidateUsername" SpName="CTS_DC_Common_ValidateUsername_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Common_GetSites" SpName="CTS_DC_Common_GetSites_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
@@ -110,22 +108,9 @@
     <Setting Key="CTS_DC_CustClassification_Rescan_Get" SpName="CTS_DC_CustClassification_Rescan_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
-	<Function name="AssociatedAccountMonitor">
-		<Setting Key="CTS_DC_AssociatedAccountMonitor_ValidateInput" SpName="CTS_DC_AssociatedAccountMonitor_ValidateInput_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_AssociatedAccountMonitor_Insert" SpName="CTS_DC_AssociatedAccountMonitor_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_AssociatedAccountMonitor_Get" SpName="CTS_DC_AssociatedAccountMonitor_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociatedAccountMonitor_Remove" SpName="CTS_DC_AssociatedAccountMonitor_Remove_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_AssociatedAccountMonitor_UpdatePin" SpName="CTS_DC_AssociatedAccountMonitor_UpdatePin_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-	</Function>
-
 	<Function name="SpecialCustomerClass">
 		<Setting Key="CTS_DC_SpecialCustClass_GetAll" SpName="CTS_DC_SpecialCustClass_GetAll_xtest" DbName="MySQL.CTS_DataCenter.Admin" />	
 		<Setting Key="CTS_DC_SpecialCustClass_ValidateUsername" SpName="CTS_DC_SpecialCustClass_ValidateUsername" DbName="MySQL.CTS_DataCenter.Admin" />
-	</Function>
-
-	<Function name="ProbationManagement">
-		<Setting Key="CTS_DC_CustClassification_Probation_Get" SpName="CTS_DC_CustClassification_Probation_Get_xtest" DbName="MySQL.CTS_DataCenter.Admin" />		
-		<Setting Key="CTS_DC_CustClassification_Probation_Update" SpName="CTS_DC_CustClassification_Probation_Update_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 	</Function>
 
 	<Function name="Subscriber">

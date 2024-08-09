@@ -4,11 +4,9 @@
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.ProblemAccountManagement;
-    using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
-    using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement;
     using Fanex.NAP.TGRS.Core.ExcelUtility;
@@ -19,17 +17,7 @@
     using System.Linq;    
 
     public class ProblemAccountManagementService : IProblemAccountManagementService
-    {
-        public IEnumerable<SubscriberGroupModel> GetAllSites()
-        {
-            var criteria = new GetAllSubscriberGroupsCriteria();
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<SubscriberGroupModel>(criteria);
-            }
-        }
-
+    {     
         public IEnumerable<CategoryInfoModel> GetAllCategory()
         {
             var criteria = new GetCategoryInfoCriteria();
