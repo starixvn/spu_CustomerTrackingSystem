@@ -477,7 +477,7 @@
             else {
                 let $tag = $(tagName.tag);
                 let btnRemove = $tag.find('x');
-                btnRemove.on('click', function (e) {                    
+                btnRemove.on('click', function (e) {
                     if (domElements.spanAddSpecialCustomerAccountUserName.find('tags tag').length <= domElements.maxTags + 1)
                         domElements.btnSave.prop('disabled', false);
                     else
@@ -564,9 +564,7 @@
             ToggleGridSelectAll(domElements.inputSelectAll, domElements.specialCustomerClassTable.DataTable());
         });
 
-        if (isHostPermission) {
-            LoadGrid(false);
-
+        if (isHostPermission) {            
             domElements.btnGenerate.on('click', function () {
                 LoadGrid(false);
             });
