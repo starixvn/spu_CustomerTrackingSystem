@@ -459,6 +459,7 @@
             AddLicBA_API = 240,
             RemoveLicBAP_API = 241,
             //RemoveLicBABySite_API = 242
+            CheckAssociationAPI = 243,
             AddCustomerInitialSmarts = 244
         };
 

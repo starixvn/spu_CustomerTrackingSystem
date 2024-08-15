@@ -1,15 +1,12 @@
 ﻿namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
-    using Fanex.Data;
     using Fanex.Logging;
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
-    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.API.ProblemCaseMonitor;
-    using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.Portal.API.ActionFilter;
@@ -68,7 +65,7 @@
             }
 
             return InternalServerError();
-        }   
+        }
 
         /// <summary>
         /// Get Association data from MySQL
@@ -104,7 +101,7 @@
                 LogService.Error("GetDirectAssociationByDevice failed: " + ex.Message + ex.StackTrace);
                 throw;
             }
-        }   
+        }
 
         /// <summary>
         /// Get classification of customer
@@ -269,7 +266,7 @@
 
         /// <summary>
         /// Provide API to get association (Device, IP, AI)
-        /// Integration team: NAP 
+        /// Integration team: NAP
         /// </summary>
         /// <param name="custId"></param>
         [HttpGet]
@@ -286,10 +283,49 @@
             }
             catch (Exception ex)
             {
-                LogService.Error("GetAssociationByCustId exception: " + ex.Message);
+                LogService.Error("API - GetAssociationByCustId throws exception: " + ex.Message);
             }
 
             return Enumerable.Empty<DetectAssociationByTypeModel>();
+        }
+
+        /// <summary>
+        /// Provide API to check association (Device, IP, Betting Pattern)
+        /// Integration team: Alpha
+        /// </summary>
+        /// <param name="custId"></param>
+        [HttpGet]
+        [Route("api/cts/Association/CheckByCustId")]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.CheckAssociationAPI)]
+        public JsonResult<CheckAssociationByCustIdModel> CheckAssociationByCustId(long custId)
+        {
+            var result = new CheckAssociationByCustIdModel();
+
+            try
+            {
+                if (custId >= 0)
+                {
+                    var ctscustid = _accountService.GetCustInfoByCustID(custId.ToString());
+
+                    if (ctscustid != null && ctscustid.Any())
+                    {
+                        var data = _accountService.GetCustomerInfoAssociationAccount(ctscustid.FirstOrDefault().CTSCustID);
+
+                        if (data != null)
+                        {
+                            result.IsAssociated = data.Total > 0;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("API - CheckAssociationByCustId throws exception: " + ex.Message);
+                result.ErrMessage = "CTS-API throws exception";
+                result.Status = 500;
+            }
+
+            return Json(result);
         }
 
         [HttpGet]
@@ -312,7 +348,6 @@
 
                 return Json(new List<ProblemCaseModel>());
             }
-        }        
-  
+        }
     }
 }
