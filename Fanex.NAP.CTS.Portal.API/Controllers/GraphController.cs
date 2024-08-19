@@ -55,6 +55,7 @@
             catch (Exception ex)
             {
                 LogService.Error($"WEB API - GetFlaggedEvidenceForLevel01 - Data input: {custIdList} - failed: " + ex.Message + ex.StackTrace);
+                throw;
             }
 
             return Json(result ?? new List<CustomerEvidenceForTW>());
@@ -81,6 +82,7 @@
             catch (Exception ex)
             {
                 LogService.Error($"WEB API - GetFlaggedEvidenceForLevel2 - Data input: {custIdList} - failed: " + ex.Message + ex.StackTrace);
+                throw;
             }
 
             return Json(result ?? new List<CustomerEvidenceForTW>());
