@@ -144,7 +144,7 @@
             {
                 var custPas = customerInfo.Where(x => x.IsPA).Distinct();
 
-                CheckNewPAAssociationCustomerForRollback(JsonConvert.SerializeObject(customerInfo));
+                CheckNewPAAssociationCustomerForRollback(JsonConvert.SerializeObject(custPas));
 
                 UpdateBetLimitOfFlaggedCustomer(custPas.Select(x => x.CustID));
             }
