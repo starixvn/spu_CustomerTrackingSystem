@@ -7,6 +7,7 @@
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Account.CustomerCategory;
     using Fanex.NAP.CTS.Model.API;
+    using Fanex.NAP.CTS.Model.API.CustomerClassCategory;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Resource;
     using Newtonsoft.Json;
@@ -87,5 +88,16 @@
             return base.RemoveCustomerClassification(CCInputFlow.RemoveVVIP, modelRemove);
         }
 
+        public IEnumerable<CustomerClassCategoryByCustIDModel> GetCustomerClassCategoryByCustID(long custid)
+        {
+            var criteria = new GetCategoryCustomerClassByCustIDCriteria()
+            {
+                CustIDs = custid.ToString()
+            };
+
+            var result = _repository.Fetch<CustomerClassCategoryByCustIDModel>(criteria);
+
+            return result;
+        }
     }
 }
