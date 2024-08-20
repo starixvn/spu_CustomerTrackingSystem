@@ -4,7 +4,9 @@
     using Fanex.Logging;
     using Fanex.NAP.CTS.Criteria.Category;
     using Fanex.NAP.CTS.Model.API;
+    using Fanex.NAP.CTS.Model.API.CustomerClassCategory;
     using Fanex.NAP.CTS.Resource;
+    using Fanex.NAP.CTS.ViewModel.API.CustomerClassCategory;
     using System;
     using System.Collections.Generic;
 
@@ -30,6 +32,18 @@
 
                 return new List<CategoryCustomerClassModel>();
             }
+        }
+
+        public IEnumerable<CustomerClassCategoryByCustIDModel> GetCustomerClassCategoryByCustID(long custid)
+        {
+            var criteria = new GetCategoryCustomerClassByCustIDCriteria()
+            {
+                CustIDs = custid.ToString()
+            };
+
+            var result = _repository.Fetch<CustomerClassCategoryByCustIDModel>(criteria);
+
+            return result;
         }
     }
 }
