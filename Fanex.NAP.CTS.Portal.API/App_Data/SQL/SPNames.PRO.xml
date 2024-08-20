@@ -43,7 +43,7 @@
 	</Function>
 
 	<Function Name="Association">
-		<Setting Key="CTS_DC_Association_GetForExtAcc" SpName="CTS_DC_Association_GetForExtAcc" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_Association_GetForExtAcc" SpName="CTS_DC_Association_GetForExtAcc" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_Association_GetByCustID" SpName="CTS_DC_Association_GetByCustID" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
