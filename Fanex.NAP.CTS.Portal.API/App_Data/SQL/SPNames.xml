@@ -42,6 +42,7 @@
 
 	<Function Name="Category">
 		<Setting Key="CTS_DC_Category_Get4CustomerClass" SpName="CTS_DC_Category_Get4CustomerClass_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_GetCategoryByCustIDs" SpName="CTS_DC_CustClassification_GetCategoryByCustIDs" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function Name="Association">

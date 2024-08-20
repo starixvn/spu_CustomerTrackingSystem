@@ -130,6 +130,7 @@
     <Compile Include="Api\LicenseeVIPBA\LicenseeVIPRemoveCriteria.cs" />
     <Compile Include="Api\LicenseeVIPBA\LicenseeVIPInsertCriteria.cs" />
     <Compile Include="AssociationDetection\GetMainCustStatisticsInfoCriteria.cs" />
+    <Compile Include="Category\GetCategoryCustomerClassByCustIDCriteria.cs" />
     <Compile Include="Common\GetCommonBetTypeSettingCriteria.cs" />
     <Compile Include="Common\GetCommonCustomerClassCriteria.cs" />
     <Compile Include="Common\GetCommonLeagueGroupCriteria.cs" />

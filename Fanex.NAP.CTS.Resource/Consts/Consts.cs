@@ -460,7 +460,8 @@
             RemoveLicBAP_API = 241,
             //RemoveLicBABySite_API = 242
             CheckAssociationAPI = 243,
-            AddCustomerInitialSmarts = 244
+            AddCustomerInitialSmarts = 244,
+            GetCustomerClassCategoryByCustID = 245
         };
 
         public enum SystemId

@@ -15,6 +15,8 @@
     using Fanex.NAP.CTS.Service.Implement.Api;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Interface.Api;
+    using Fanex.NAP.CTS.ViewModel.API.CustomerClassCategory;
+    using Fanex.NAP.CTS.ViewModel.API.Http;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -26,7 +28,7 @@
     /// <summary>
     /// CtsController
     /// </summary>
-    public class CtsController : ApiController
+    public class CtsController : BaseController
     {
         private readonly IAccountService _accountService;      
         private readonly IAssociatedAccountService _associationService;      
@@ -232,6 +234,32 @@
                 return Json(Enumerable.Empty<CategoryCustomerClassModel>());
             }
         }
+
+        [HttpGet]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetCustomerClassCategoryByCustID)]
+        public IHttpActionResult GetCustomerClassCategoryByCustID(long custid)
+        {
+            try
+            {
+                var customerCategories = _categoryService.GetCustomerClassCategoryByCustID(custid);
+
+                var responseModel = customerCategories?.Select(n => new CustomerClassCategoryViewModel
+                {
+                    categoryid = n.CategoryID,
+                    CC = n.CustomerClass,
+                    date = n.CreatedDate?.ToString("yyyy-MM-ddTHH:mm:ss.ffff")
+                });
+
+                return Result(responseModel);
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("Get Customer Class's Categories by CustID exception: " + ex.Message);
+
+                return Result(Enumerable.Empty<CustomerClassCategoryViewModel>(), ex.Message);
+            }
+        }
+
 
         /// <summary>
         /// Get Subscriber info By Subscriber name
