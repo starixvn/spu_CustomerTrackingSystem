@@ -1,12 +1,9 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.Logging;
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
-    using Fanex.NAP.CTS.Core;
-    using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.SpecialCustomerClass;

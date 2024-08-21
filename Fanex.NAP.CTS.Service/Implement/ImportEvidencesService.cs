@@ -17,9 +17,6 @@
     using System;
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Utilities;
-    using Fanex.NAP.CTS.Criteria.Common;
-    using Fanex.NAP.CTS.ViewModel.Common;
-    using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Model;
 
     public class ImportEvidencesService : IImportEvidencesService

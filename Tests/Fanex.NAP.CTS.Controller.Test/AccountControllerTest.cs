@@ -2,19 +2,10 @@
 {
     using Fanex.NAP.CTS.Controller;
     using Fanex.NAP.CTS.Controller.Test.DbSetting;
-    using Fanex.NAP.CTS.Core;
-    using Fanex.NAP.CTS.ViewModel.Evidence;
-    using Fanex.NAP.CTS.Model.Transaction;
-    using Fanex.NAP.CTS.SampleData;
     using Fanex.NAP.CTS.Test.Fake;
     using Fanex.NAP.CTS.ViewModel.Account;
-    using Fanex.NAP.CTS.ViewModel.Account.Associated;
-    using Fanex.NAP.CTS.ViewModel.Account.Evidence;
-    using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
-    using System.Collections.Generic;
     using System.Web.Mvc;
     using Xunit;
-    using Fanex.NAP.CTS.Model.Account;
 
     [Collection(nameof(DbSettingProviderCollection))]
     public class AccountControllerTest

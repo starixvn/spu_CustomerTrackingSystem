@@ -10,7 +10,6 @@
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Service.Implement;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;

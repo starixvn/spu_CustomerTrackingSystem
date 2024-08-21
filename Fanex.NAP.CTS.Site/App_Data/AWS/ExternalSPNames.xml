@@ -7,14 +7,6 @@
 		<Setting Key="FS_DelayGoalAccount_ImportFromFPS" SpName="FS_DelayGoalAccount_ImportFromFPS" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
 	</Function>
 
-	<Function Name="Notification">
-		<Setting Key="FS_Tbl_UserMessage_Get" SpName="FS_Tbl_UserMessage_Get" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-		<Setting Key="FS_Tbl_UserMessage_GetUnreadCount" SpName="FS_Tbl_UserMessage_GetUnreadCount" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-		<Setting Key="FS_Recipients_Add" SpName="FS_Recipients_Add" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-		<Setting Key="FS_Recipients_Get" SpName="FS_Recipients_Get" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-		<Setting Key="FS_Recipients_Delete" SpName="FS_Recipients_Delete" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-	</Function>
-
 	<Function name="Common">
 		<Setting Key="CTS_CustomerClass_GetByCustId" SpName="CTS_CustomerClass_GetByCustId" DbName="DBCTS.bodb02.bodbSPUNet" />	
 		<Setting Key="CTS_CustomerStatistics_GetPerformance_ByBettype" SpName="CTS_CustomerStatistics_GetPerformance_ByBettype" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />

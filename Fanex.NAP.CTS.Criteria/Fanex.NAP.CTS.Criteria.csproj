@@ -149,10 +149,8 @@
     <Compile Include="Account\ChainToEvidence\GetAffectedEvidenceBetweenCustsCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAffectedEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAllEvidenceCriteria.cs" />
-    <Compile Include="Account\CustomerCategory\MarkVVIPCategoryCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCTSCustomerClassificationHistoryCriteria.cs" />
     <Compile Include="Account\CustomerCategory\InsertQueueCustClassificationForDownlineCriteria.cs" />
-    <Compile Include="Account\CustomerCategory\RemoveCustomerCategoryCriteria.cs" />
     <Compile Include="Account\CustomerInfo\GetCustomerInfoAssociatedAccountCriteria.cs" />
     <Compile Include="Account\CustomerInfo\GetCustomerInfoDateCriteria.cs" />
     <Compile Include="Account\CustomerInfo\GetCustomerInfoEvidenceCriteria.cs" />
@@ -165,10 +163,8 @@
     <Compile Include="Account\RobotSetting\GetRobotUsersDetailsCriteria.cs" />
     <Compile Include="Api\GetAssociationForExtAccCriteria.cs" />
     <Compile Include="Api\GetSubscriberInfoBySubscriberName.cs" />
-    <Compile Include="Api\UpdateCategoryWhenPAUpdated\UpdateCategoryToCTSWhenPAUpdatedCriteria.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectionCriteria.cs" />
     <Compile Include="Api\ProblemCaseMonitor\ProblemCaseCriteria.cs" />
-    <Compile Include="Api\ProblemCaseMonitor\ProblemCaseMonitorCriteria.cs" />
     <Compile Include="AssociationReport\AssociationDetailReportGetCriteria.cs" />
     <Compile Include="AssociationReport\AssociationReportGetCriteria.cs" />
     <Compile Include="Api\GetFlaggedEvidenceByLevel2AssociationCriteria.cs" />
@@ -188,7 +184,6 @@
     <Compile Include="CustomerClassification\GetRoleCustomerCriteria.cs" />
     <Compile Include="CustomerClassification\NormalClassificationRescanCriteria.cs" />
     <Compile Include="ImportEvidences\InsertCustEvidenceFromFileCriteria.cs" />
-    <Compile Include="AssociationReport\AssociationReportGetCategoriesCriteria.cs" />
     <Compile Include="ImportEvidences\InsertCustEvidenceQueueCriteria.cs" />
     <Compile Include="LatestTransaction\GetLatestTransactionCriteria.cs" />
     <Compile Include="ManageSubscriber\ReUpdateSubriberIdBySiteIdCriteira.cs" />
@@ -212,11 +207,8 @@
     <Compile Include="MatchMonitor\UserFeedback\InsertMMUserFeedbackCriteria.cs" />
     <Compile Include="MatchMonitor\UserFeedback\UpdateMMUserFeedbackCriteria.cs" />
     <Compile Include="MonitorFunction\StatsAccessmentInsertCriteria.cs" />
-    <Compile Include="ProblemAccountManagement\GetCustEvidenceByReasonIdCriteria.cs" />
     <Compile Include="ProblemAccountManagement\GetProblemAccountCategoryCriteria.cs" />
     <Compile Include="ProblemAccountManagement\GetProblemAccountCriteria.cs" />
-    <Compile Include="ProblemAccountManagement\ProblemAccountAddCustomerCriteria.cs" />
-    <Compile Include="ProblemAccountManagement\RemoveProblemAccountEvidenceCriteria.cs" />
     <Compile Include="ProblemAccountManagement\ValidateUserNamesInputCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\RemoveFlaggedEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\RemoveAccountExceptionCriteria.cs" />
@@ -227,7 +219,6 @@
     <Compile Include="Account\CustomerCategory\GetCTSCustomerClassificationForAPICriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCTSCustomerClassificationCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCustomerClassByCustIdCriteria.cs" />
-    <Compile Include="Account\CustomerCategory\UpdateCTSCustomerClassificationCriteria.cs" />
     <Compile Include="Account\CustomerEvidenceByCTSCustIdCriteria.cs" />
     <Compile Include="Account\CustomerEvidence\UpdateBetLimitByEvidenceRemovingCriteria.cs" />
     <Compile Include="Account\CustomerEvidence\UpdateBetLimitByEvidenceAddingCriteria.cs" />
@@ -255,22 +246,14 @@
     <Compile Include="ImportEvidences\InsertAccountEvidenceCriteria.cs" />
     <Compile Include="ImportEvidences\CheckAccountEvidenceCriteria.cs" />
     <Compile Include="ImportEvidences\RemoveOldEvidencesCriteria.cs" />
-    <Compile Include="Notification\RecipientAddCriteria.cs" />
-    <Compile Include="Notification\RecipientGetCriteria.cs" />
-    <Compile Include="Notification\RecipientRemoveCriteria.cs" />
     <Compile Include="Notification\AssociatedMessagesGetCriteria.cs" />
-    <Compile Include="Notification\UserMessageUnreadCounterGetCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpecialCustomerClass\ValidateSpecialCCCriteria.cs" />
-    <Compile Include="SubscriberAssignment\GetAllSubscriberCriteria.cs" />
     <Compile Include="SyncCustomerToMainDb\SyncCustomerClassToMainDbCriteria.cs" />
     <Compile Include="TransactionReport\TransactionReportCriteria.cs" />
     <Compile Include="Transaction\GetTicketDetailsCriteria.cs" />
     <Compile Include="TWProblemAccountDetection\GetCustomerPerformanceCriteria.cs" />
     <Compile Include="TWProblemAccountDetection\NapProblemAccInsertCriteria.cs" />
-    <Compile Include="TWProblemAccountDetection\InsertSystemFormulaBetCriteria.cs" />
-    <Compile Include="TWProblemAccountDetection\GetCustClassificationBySiteCriteria.cs" />
-    <Compile Include="TWProblemAccountDetection\RemoveSystemFormulaBetCustomerCriteria.cs" />
     <Compile Include="TWProblemAccountDetection\TWProblemAccountParams.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -287,6 +270,8 @@
       <Version>4.2.2</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Api\UpdateCategoryWhenPAUpdated\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

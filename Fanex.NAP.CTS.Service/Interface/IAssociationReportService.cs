@@ -3,7 +3,6 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.AssociationReport;
-    using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.ViewModel.AssociationReport;
     using System.Collections.Generic;
 
@@ -16,8 +15,6 @@
         IEnumerable<AccountStaticStatusModel> GetAccountStaticStatuses();
 
         IEnumerable<EvidenceModel> GetEvidenceList();
-
-        IEnumerable<CategoriesModel> GetCategories(string ctsCustIdList);
 
         DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, int createdBy, bool isRemoveAction);
 

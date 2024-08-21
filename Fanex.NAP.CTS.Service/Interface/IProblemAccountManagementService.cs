@@ -16,12 +16,7 @@
 
         IEnumerable<ProblemAccountValidatedModel> ValidateProblemAccounts(ValidateProblemAccountInputViewModel model);
 
-        IEnumerable<GetCustEvidenceByReasonIdModel> GetCustEvidenceByReasonIds();             
-
 		byte[] ExportProblemAccount(IEnumerable<GetProblemAccountViewModel> problemAccounts, string fileName, string templatePath, ProblemAccountFilterViewModel filter);        
-
-        IEnumerable<long> RemoveProblemAccountEvidence(string custIds);
-
     }
 }
 

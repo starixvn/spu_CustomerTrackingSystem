@@ -86,16 +86,6 @@
           
             return result;
         }
-
-        public IEnumerable<GetCustEvidenceByReasonIdModel> GetCustEvidenceByReasonIds()
-        {
-            var criteria = new GetCustEvidenceByReasonIdCriteria();
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<GetCustEvidenceByReasonIdModel>(criteria).ToList();
-            }
-        }
      
         public byte[] ExportProblemAccount(IEnumerable<GetProblemAccountViewModel> data, string fileName, string templatePath, ProblemAccountFilterViewModel filter)
         {
@@ -195,18 +185,6 @@
             }
 
             lineCount += 1;
-        }
-       
-        public IEnumerable<long> RemoveProblemAccountEvidence(string custIds)
-        {
-            var repository = new DynamicRepository();
-            var criteria = new RemoveProblemAccountEvidenceCriteria
-            {
-                CustIDs = custIds,
-                SourceType = 1
-            };
-
-            return repository.Fetch<long>(criteria);
         }
     }
 }

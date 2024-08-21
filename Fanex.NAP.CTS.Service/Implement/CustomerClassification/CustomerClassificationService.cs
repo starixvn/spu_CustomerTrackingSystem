@@ -2,18 +2,14 @@
 {
     using Fanex.Data.Repository;
     using Fanex.Logging;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
-    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
     using Fanex.NAP.CTS.Criteria.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;
-    using Fanex.NAP.CTS.Service.Implement;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
