@@ -163,7 +163,7 @@
                 .Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
                 .OrderBy(x => x.ReasonName);
 
-            var reasonGroupItems = _commonService.GetStaticLists((int)StaticListID.Reason, true);
+            //var reasonGroupItems = _commonService.GetStaticLists((int)StaticListID.Reason, true);
 
             var reasonGroups = GetReasonGroups(false);
 
@@ -239,15 +239,23 @@
 
             result.Add(new ReasonGroupStaticListViewModel
             {
-                ReasonGroupName = Consts.ReasonDetectBySystem,
-                ReasonItems = reasonGroupItems.Where(x => x.ItemID < 100).Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
+                ReasonGroupName = ReasonDetectBySystem,
+                ReasonItems = reasonGroupItems.Where(x => x.ListNameDisplay == "")
+                    .Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
                     .OrderBy(x => x.ReasonName)
             });
 
             result.Add(new ReasonGroupStaticListViewModel
             {
-                ReasonGroupName = Consts.ReasonDetectByAI,
-                ReasonItems = reasonGroupItems.Where(x => x.ItemID >= 100).Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = false })
+                ReasonGroupName = ReasonDetectBySystemParlay_Display,
+                //ReasonItems = 
+            });
+
+            result.Add(new ReasonGroupStaticListViewModel
+            {
+                ReasonGroupName = ReasonDetectByAI,
+                ReasonItems = reasonGroupItems.Where(x => x.ListNameDisplay == "")
+                    .Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = false })
                     .OrderBy(x => x.ReasonName)
             });
 
