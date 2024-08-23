@@ -13,5 +13,7 @@
         public string Danger4 { get; set; }
 
         public string Danger5 { get; set; }
+
+        public long UsernameAmt { get; set; }
     }
 }

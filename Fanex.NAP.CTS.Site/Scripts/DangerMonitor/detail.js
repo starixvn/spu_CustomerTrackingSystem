@@ -107,7 +107,8 @@ function DangerousSettingDetail() {
         boderTranstimeInput: $('.info-input'),
         iconHTranstimeAutofill: $('#iconHTranstimeAutofill'),
         iconATranstimeAutofill: $('#iconATranstimeAutofill'),
-        iconSGTranstimeAutofill: $('#iconSGTranstimeAutofill')
+        iconSGTranstimeAutofill: $('#iconSGTranstimeAutofill'),
+        hdUsernameAmt: $("#hdUsernameAmt").val(),
     };
 
     let transtime = {
@@ -535,11 +536,11 @@ function DangerousSettingDetail() {
     }
 
     function IsHasDangerLevelDataFromPath() {
-        return  cacheDefaultDanger.Danger1 ||
-                cacheDefaultDanger.Danger2 ||
-                cacheDefaultDanger.Danger3 ||
-                cacheDefaultDanger.Danger4 ||
-                cacheDefaultDanger.Danger5;
+        return cacheDefaultDanger.Danger1 ||
+            cacheDefaultDanger.Danger2 ||
+            cacheDefaultDanger.Danger3 ||
+            cacheDefaultDanger.Danger4 ||
+            cacheDefaultDanger.Danger5;
     }
 
     function BuildOptgroupDgr(optgroupValue, optgroupName, items, cacheSelectedDanger) {
@@ -2417,8 +2418,14 @@ function DangerousSettingDetail() {
         cacheMGroup.allMGroup = {};
         cacheMGroup.selectMgroup = {};
         if (isResetAmountRM) {
-            domElements.inputCustAmountRM.val('');
-            domElements.iconClearUsnAmt.addClass("hide");
+            if (domElements.hdUsernameAmt > 0) {
+                domElements.inputCustAmountRM.val(domElements.hdUsernameAmt);
+                domElements.iconClearUsnAmt.removeClass("hide");
+            }
+            else {
+                domElements.inputCustAmountRM.val('');
+                domElements.iconClearUsnAmt.addClass("hide");
+            }
         }
     }
 
@@ -2732,6 +2739,11 @@ function DangerousSettingDetail() {
                 domElements.iconClearUsnAmt.addClass("hide");
             }
         });
+
+        if (domElements.hdUsernameAmt > 0) {
+            domElements.inputCustAmountRM.val(domElements.hdUsernameAmt);
+            domElements.iconClearUsnAmt.removeClass("hide");
+        }
 
         domElements.btnImportNewTicket.on('click', function () {
             isImportNewTicket = true;

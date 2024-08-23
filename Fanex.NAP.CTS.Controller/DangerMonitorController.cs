@@ -7,7 +7,6 @@
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.DangerMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
@@ -21,7 +20,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading.Tasks;
     using System.Web.Mvc;
     using System.Web.Script.Serialization;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -150,6 +148,7 @@
                 ViewBag.Danger3 = para.Danger3;
                 ViewBag.Danger4 = para.Danger4;
                 ViewBag.Danger5 = para.Danger5;
+                ViewBag.UsernameAmt = para.UsernameAmt;
                 ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                                                                             NapSettings.Settings.SiteId,
                                                                             FSFunctionKeys.MatchMonitor,

@@ -28,6 +28,10 @@
 
         public string BetTypes { get; set; }
 
+        public decimal UserAmount { get; set; }
+
+        public decimal TotalAmount { get; set; }
+
         public bool Validate
         {
             get
@@ -63,6 +67,11 @@
                 }
 
                 if (BetTypes.IsNullOrEmpty() || BetTypes.Equals("[]"))
+                {
+                    return false;
+                }
+
+                if (UserAmount < 0 || TotalAmount < 0)
                 {
                     return false;
                 }

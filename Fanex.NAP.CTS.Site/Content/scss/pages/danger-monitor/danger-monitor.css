@@ -540,6 +540,18 @@
             font-style: italic; }
         .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-username .input-invalid {
           border: 1px solid red; }
+      .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-amount {
+        position: relative; }
+        .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-amount .icon-clear {
+          position: absolute;
+          right: 0.6rem;
+          top: 0.85rem;
+          cursor: pointer; }
+          .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-amount .icon-clear:hover {
+            background-color: rgba(57, 110, 248, 0.2);
+            border-radius: 5px; }
+          .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .input-amount .icon-clear .hide {
+            display: none; }
       .match-monitor .monitor-container .monitor-table .group-control .form-filter .group button {
         background-color: #fff;
         border: 1px solid #aaa;
