@@ -563,6 +563,8 @@
             };
         }
 
+        #region Export Excel
+
         public byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath)
         {
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Sheet1");
@@ -754,6 +756,8 @@
                 };
         }
 
+        #endregion
+
         #region User Feedback
         public IEnumerable<GetMMUserFeedbackModel> GetUserFeedback(UserFeedbackViewModel para)
         {
@@ -876,6 +880,19 @@
 
                 repository.Execute(criteria);
             }
+        }
+
+        #endregion
+
+        #region Parlay
+        public IEnumerable<MMFraudTicketsSummaryViewModel> GetMMParlayFraudTicketsSummary(IEnumerable<MMFraudTicketsSummaryModel> mmModels)
+        {
+            var criteria = new MMParlayFraudTicketsSummaryCriteria
+            {
+                FraudTickets = JsonConvert.SerializeObject(mmModels)
+            };
+
+            return repository.Fetch<MMFraudTicketsSummaryViewModel>(criteria);
         }
 
         #endregion

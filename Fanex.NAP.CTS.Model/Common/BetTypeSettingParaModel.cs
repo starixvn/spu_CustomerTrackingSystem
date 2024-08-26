@@ -10,6 +10,8 @@
 
         public bool IsFilterMMDetection { get; set; }
 
+        public bool IsFilterMMParlayDetection { get; set; }
+
         public bool IsShowDetailsX { get; set; }
 
         public int Status { get; set; }

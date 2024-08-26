@@ -17,6 +17,9 @@
         [SpParam(SqlParamName = "ip_IsFilterMMDetection")]
         public bool IsFilterMMDetection { get; set; }
 
+        [SpParam(SqlParamName = "ip_IsFilterMMParlayDetection")]
+        public bool IsFilterMMParlayDetection { get; set; }
+
         [SpParam(SqlParamName = "ip_IsShowDetailsX")]
         public bool IsShowDetailsX { get; set; }
 

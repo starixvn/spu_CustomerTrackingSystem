@@ -78,7 +78,7 @@
 
         private IEnumerable<MatchMonitorSporTypeBetTypeViewModel> GetSportBettypes()
         {
-            var betTypes = GetBetTypeSettings(null, true);
+            var betTypes = GetBetTypeSettings(null, true, false);
 
             var filter = new SportBettypeModel
             {
@@ -114,9 +114,9 @@
             });
         }
 
-        private IEnumerable<MatchMonitorBetTypeViewModel> GetBetTypeSettingsWithSupportSuspicious(string sportIDs, bool isFilterMMDetection)
+        private IEnumerable<MatchMonitorBetTypeViewModel> GetBetTypeSettingsWithSupportSuspicious(string sportIDs, bool isFilterMMDetection, bool isFilterMMParlayDetection)
         {
-            var bettypeSetting = GetBetTypeSettings(sportIDs, isFilterMMDetection);
+            var bettypeSetting = GetBetTypeSettings(sportIDs, isFilterMMDetection, isFilterMMParlayDetection);
 
             return bettypeSetting.Select(x => new MatchMonitorBetTypeViewModel
             {
@@ -134,7 +134,7 @@
             }).GroupBy(g => new { g.BetTypeID, g.BetID }).Select(g => g.First());
         }
 
-        private IEnumerable<BetTypeSettingModel> GetBetTypeSettings(string sportIDs, bool isFilterMMDetection)
+        private IEnumerable<BetTypeSettingModel> GetBetTypeSettings(string sportIDs, bool isFilterMMDetection, bool isFilterMMParlayDetection)
         {
             var paras = new BetTypeSettingParaModel
             {
@@ -142,6 +142,7 @@
                 BettypeIDList = null,
                 SportTypeIDList = sportIDs,
                 IsFilterMMDetection = isFilterMMDetection,
+                IsFilterMMParlayDetection = isFilterMMParlayDetection,
                 IsShowDetailsX = true,
                 Status = 1
             };
@@ -162,9 +163,7 @@
             var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true)
                 .Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
                 .OrderBy(x => x.ReasonName);
-
-            //var reasonGroupItems = _commonService.GetStaticLists((int)StaticListID.Reason, true);
-
+           
             var reasonGroups = GetReasonGroups(false);
 
             return View(new MatchMonitorViewModel
@@ -240,7 +239,7 @@
             result.Add(new ReasonGroupStaticListViewModel
             {
                 ReasonGroupName = ReasonDetectBySystem,
-                ReasonItems = reasonGroupItems.Where(x => x.ListNameDisplay == "")
+                ReasonItems = reasonGroupItems.Where(x => x.ListNameDisplay == ReasonDetectBySystem)
                     .Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
                     .OrderBy(x => x.ReasonName)
             });
@@ -248,13 +247,15 @@
             result.Add(new ReasonGroupStaticListViewModel
             {
                 ReasonGroupName = ReasonDetectBySystemParlay_Display,
-                //ReasonItems = 
+                ReasonItems = reasonGroupItems.Where(x => x.ListNameDisplay == ReasonDetectBySystemParlay)
+                    .Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
+                    .OrderBy(x => x.ReasonName)
             });
 
             result.Add(new ReasonGroupStaticListViewModel
             {
                 ReasonGroupName = ReasonDetectByAI,
-                ReasonItems = reasonGroupItems.Where(x => x.ListNameDisplay == "")
+                ReasonItems = reasonGroupItems.Where(x => x.ListNameDisplay == ReasonDetectByAI)
                     .Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = false })
                     .OrderBy(x => x.ReasonName)
             });
@@ -266,7 +267,7 @@
             Dictionary<string, MMFraudTicketsSummaryViewModel> mmDictionaryTicketsSummarys)
         {
             var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
-            var bettypeSettings = GetBetTypeSettingsWithSupportSuspicious(null, true);
+            var bettypeSettings = GetBetTypeSettingsWithSupportSuspicious(null, true, false);
 
             return
                 matchFromCTSInfos?
@@ -399,7 +400,7 @@
                 ViewBag.BetTypeID = para?.BetTypeID;
                 ViewBag.BettypeName = para?.BettypeName ?? string.Empty;
                 ViewBag.BetIDToString = para?.BetID.ToString();
-                ViewBag.BetTypeSettings = GetBetTypeSettingsWithSupportSuspicious(para.SportType.ToString(), false);
+                ViewBag.BetTypeSettings = GetBetTypeSettingsWithSupportSuspicious(para.SportType.ToString(), false, false);
                 ViewBag.MapX = para?.MX;
                 ViewBag.MapYY = para?.MY;
                 ViewBag.HomeName = para?.HomeName.ToUpper() ?? string.Empty;

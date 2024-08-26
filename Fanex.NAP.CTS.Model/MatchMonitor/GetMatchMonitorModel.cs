@@ -49,5 +49,7 @@
         public int DetailsX { get; set; }
 
         public int DetailsY { get; set; }
+
+        public bool IsParlay { get; set; }
     }
 }

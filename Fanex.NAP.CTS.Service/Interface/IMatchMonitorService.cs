@@ -59,12 +59,16 @@
 
         IEnumerable<RobotStatusModel> GetRobotStatus(string transJson);
 
-        MatchMonitorStaticListModel GetMMStaticList();    
+        MatchMonitorStaticListModel GetMMStaticList();
+
+        #region Export Excel
 
         byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath);
 
         byte[] ExportExcelMMDetailDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems
             , string fileName, string templatePath);
+
+        #endregion
 
         #region User Feedback
         IEnumerable<GetMMUserFeedbackModel> GetUserFeedback(UserFeedbackViewModel para);
@@ -84,6 +88,11 @@
         HoldKeyStatusGetResultModel GetHoldKeyStatus(Int64 matchID, string url);
 
         void LogHoldKeyAction(int userId, bool status, int matchId);
+
+        #endregion
+
+        #region Parlay
+        IEnumerable<MMFraudTicketsSummaryViewModel> GetMMParlayFraudTicketsSummary(IEnumerable<MMFraudTicketsSummaryModel> mmModels);
 
         #endregion
 
