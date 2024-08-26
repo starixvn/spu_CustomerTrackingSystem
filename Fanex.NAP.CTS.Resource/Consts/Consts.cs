@@ -496,13 +496,13 @@
             TD = 300
         };
 
-        public enum MMTicketTypeFromUI
+        public enum MMViewModeFromUI
         {
             TicketFraud = 2,
             TicketAll = 3
         }
 
-        public enum MMTicketTypeFromDB
+        public enum MMViewModeFromDB
         {
             TicketAll = 0,
             TicketFraud = 1,
@@ -515,19 +515,19 @@
             DangerMMReport = 3
         }
 
-        public static MMTicketTypeFromDB GetTicketTypeFromDB(MMQueryType queryType, MMTicketTypeFromUI? ticketTypeFromUI)
+        public static MMViewModeFromDB GetViewModeFromDB(MMQueryType queryType, MMViewModeFromUI? viewModeFromUI)
         {
-            if (ticketTypeFromUI == MMTicketTypeFromUI.TicketAll && queryType == MMQueryType.MMReport)
+            if (viewModeFromUI == MMViewModeFromUI.TicketAll && queryType == MMQueryType.MMReport)
             {
-                return MMTicketTypeFromDB.TicketAll;
+                return MMViewModeFromDB.TicketAll;
             }
 
-            if (ticketTypeFromUI == MMTicketTypeFromUI.TicketAll && queryType == MMQueryType.DangerMMReport)
+            if (viewModeFromUI == MMViewModeFromUI.TicketAll && queryType == MMQueryType.DangerMMReport)
             {
-                return MMTicketTypeFromDB.TicketDanger;
+                return MMViewModeFromDB.TicketDanger;
             }
 
-            return MMTicketTypeFromDB.TicketFraud;
+            return MMViewModeFromDB.TicketFraud;
         }
 
         public enum RobotType

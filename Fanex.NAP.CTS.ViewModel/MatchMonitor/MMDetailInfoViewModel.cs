@@ -31,7 +31,7 @@
 
         public bool IsSupportShowAllTickets { get; set; }
 
-        public MMTicketTypeFromUI? TypeOfTickets { get; set; }
+        public MMViewModeFromUI? TypeOfTickets { get; set; }
 
         public long? LastScannedSequenceID { get; set; }
 
@@ -82,11 +82,11 @@
 
         public MMDetailInfoViewModel Clone() => new MMDetailInfoViewModel(this);
 
-        public string BuildCacheKey(string nameOfFuntion, string mmDetailRegion, string userID, string ticketType)
+        public string BuildCacheKey(string nameOfFuntion, string mmDetailRegion, string userID, string viewMode)
         {
             var transtimeFrom = TranstimeFrom?.Subtract(DateTime.MinValue).TotalSeconds.ToString() ?? string.Empty;
             var transtimeTo = TranstimeTo?.Subtract(DateTime.MinValue).TotalSeconds.ToString() ?? string.Empty;
-            return $"{nameOfFuntion}_{mmDetailRegion}_{userID}_{MatchID}_{LiveIndicator}_{BetTypeID}_{BetID}_{ticketType}_{transtimeFrom}_{transtimeTo}";
+            return $"{nameOfFuntion}_{mmDetailRegion}_{userID}_{MatchID}_{LiveIndicator}_{BetTypeID}_{BetID}_{viewMode}_{transtimeFrom}_{transtimeTo}";
         }
 
         public void SetLastMark(TicketDetailViewModel ticketDetail)

@@ -50,6 +50,6 @@
 
         public int DetailsY { get; set; }
 
-        public bool IsParlay { get; set; }
+        public int TicketType { get; set; } // 1: Single, 2: Parlay
     }
 }

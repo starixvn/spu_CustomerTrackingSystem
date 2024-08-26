@@ -36,8 +36,8 @@
         //[SpParam(SqlParamName = "BetType")]
         //public int BetType { get; set; }
 
-        [SpParam(SqlParamName = "TicketType")]
-        public int TicketType { get; set; } // (0:All, 1: Suspicious)
+        [SpParam(SqlParamName = "ViewMode")]
+        public int ViewMode { get; set; } // (0:All, 1: Suspicious)
 
         [SpParam(SqlParamName = "IsLicensee")]
         public int? IsLicensee { get; set; }

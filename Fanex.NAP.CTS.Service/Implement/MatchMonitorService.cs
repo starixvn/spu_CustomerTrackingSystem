@@ -417,7 +417,7 @@
                 ListSportBettype = betTypeInfos,
                 //BetType = para.BetTypeID,
                 //BetID = para.BetID,
-                TicketType = para.TypeOfTickets == MMTicketTypeFromUI.TicketAll ? 0 : 1,
+                ViewMode = para.TypeOfTickets == MMViewModeFromUI.TicketAll ? 0 : 1,
                 BatchSize = batchSize,
                 IsLicensee = (para.Sites == MMSites.All || para.Sites == null) ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
                 ListTransId = transJson,
@@ -503,7 +503,7 @@
                 EventDate = para.EventDate,
                 IsLive = para.LiveIndicator ? 1 : 0,
                 ListSuspiciousTransId = suspiciousTranInfos != null ? JsonConvert.SerializeObject(suspiciousTranInfos) : null,
-                TicketType = (int)GetTicketTypeFromDB(_mmQueryType, para.TypeOfTickets),
+                ViewMode = (int)GetViewModeFromDB(_mmQueryType, para.TypeOfTickets),
                 ListSportBettype = betTypeInfos,
                 IsExclTestCurr = _mmQueryType == MMQueryType.DangerMMReport,
 

@@ -231,7 +231,7 @@
 
         public int ChoiceOrder { get; set; }
 
-        public MMTicketTypeFromUI TypeOfTicket { get; set; } = MMTicketTypeFromUI.TicketFraud;
+        public MMViewModeFromUI TypeOfTicket { get; set; } = MMViewModeFromUI.TicketFraud;
 
         #endregion
 
