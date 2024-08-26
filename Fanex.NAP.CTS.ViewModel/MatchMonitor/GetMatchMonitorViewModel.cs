@@ -18,13 +18,12 @@
             this.EventDate = data.EventDate;
             this.Market = data.Market;
             this.HomeID = data.HomeID;
-            this.HomeName = CachedRef.GetTeamName(data.HomeID);
+            this.HomeName = data.HomeName;
             this.AwayID = data.AwayID;
-            this.AwayName = CachedRef.GetTeamName(data.AwayID);
+            this.AwayName = data.AwayName;
             this.LeagueID = data.LeagueID;
-            this.LeagueName = CachedRef.GetLeagueName(data.LeagueID);     
+            this.LeagueName = data.LeagueName;
             this.BettypeID = data.BettypeID;
-            //this.BettypeName = this.GetBettypeName(mmStatic.BetTypes, data.BettypeID, data.BetID);
             this.BetID = data.BetID;
             this.Reason = data.Reason;
             this.ReasonName = this.GetReasonName(reasons, data.Reason);

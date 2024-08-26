@@ -307,4 +307,10 @@ namespace Fanex.NAP.CTS.Model
         [Description("BySportRemoveSpecialCC")]
         BySportRemoveSpecialCC = 442
     }
+
+    public enum TicketType
+    {
+        Single = 1,
+        Parlay = 2
+    }
 }

@@ -13,10 +13,13 @@
         public DateTime FromDate { get; set; }
 
         [SpParam(SqlParamName = "ToDateTime")]
-        public DateTime ToDate { get; set; }
+        public DateTime ToDate { get; set; }      
 
         [SpParam(SqlParamName = "MatchSection")]
         public string MatchSection { get; set; }
+
+        [SpParam(SqlParamName = "Event")]
+        public string Event { get; set; }
 
         public string SportList { get; set; }
 

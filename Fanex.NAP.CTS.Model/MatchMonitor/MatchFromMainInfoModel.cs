@@ -15,5 +15,11 @@
         public int IsGetDataFromOrigin { get; set; }
 
         public short DataSource { get; set; }
+
+        public string LeagueName { get; set; }
+
+        public string HomeName { get; set; }
+
+        public string AwayName { get; set; }
     }
 }

@@ -15,7 +15,11 @@
 
         public int HomeID { get; set; }
 
+        public string HomeName { get; set; }
+
         public int AwayID { get; set; }
+
+        public string AwayName { get; set; }
 
         public int LeagueID { get; set; }
 

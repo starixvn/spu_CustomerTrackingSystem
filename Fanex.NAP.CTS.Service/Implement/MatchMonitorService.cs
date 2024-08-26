@@ -40,7 +40,8 @@
                 MatchIDs = matchIDs,
                 FromDate = filter?.FromDate ?? DateTime.Now,
                 ToDate = filter?.ToDate ?? DateTime.Now,
-                MatchSection = filter.MatchSection
+                MatchSection = filter.MatchSection,
+                Event = filter.Event
             };
 
             return repository.Fetch<MatchFromMainInfoModel>(criteria);

@@ -192,16 +192,11 @@
                     else
                         matchFromCTSInfos = GetMMByEventDate(para);
 
-                    var mmDictionaryTicketsSummarys = GetMMFraudTicketsSummary(matchFromCTSInfos);
+                    var dicSumTickets = GetMMFraudTicketsSummary(matchFromCTSInfos, TicketType.Single);
 
-                    matchMonitors = MergeMatchMonitorWithMMStaticAndTicketsSummary(matchFromCTSInfos, mmDictionaryTicketsSummarys);
+                    var dicSumParlayTickets = GetMMFraudTicketsSummary(matchFromCTSInfos, TicketType.Parlay);
 
-                    if (!string.IsNullOrEmpty(para.Event))
-                    {
-                        matchMonitors = matchMonitors.Where(x => x.HomeName.ToUpper().Contains(para.Event)
-                        || x.AwayName.ToUpper().Contains(para.Event)
-                        || x.LeagueName.ToUpper().Contains(para.Event));
-                    }
+                    matchMonitors = MergeMatchMonitorWithMMStaticAndTicketsSummary(matchFromCTSInfos, dicSumTickets, dicSumParlayTickets);
                 }
             }
             catch (Exception ex)
@@ -264,7 +259,8 @@
         }
 
         private IEnumerable<GetMatchMonitorViewModel> MergeMatchMonitorWithMMStaticAndTicketsSummary(IEnumerable<GetMatchMonitorModel> matchFromCTSInfos,
-            Dictionary<string, MMFraudTicketsSummaryViewModel> mmDictionaryTicketsSummarys)
+            Dictionary<string, MMFraudTicketsSummaryViewModel> dicSumTickets,
+            Dictionary<string, MMFraudTicketsSummaryViewModel> dicSumParlayTickets)
         {
             var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
             var bettypeSettings = GetBetTypeSettingsWithSupportSuspicious(null, true, false);
@@ -276,23 +272,34 @@
                             var result = new GetMatchMonitorViewModel(x, reasons);
                             var betChoiceHome = bettypeSettings.FirstOrDefault(y => y.BetTypeID == result.BettypeID)?.BetChoiceHome;
                             var betChoiceAway = bettypeSettings.FirstOrDefault(y => y.BetTypeID == result.BettypeID)?.BetChoiceAway;
-
-                            if (mmDictionaryTicketsSummarys != null)
+                            if (x.TicketType == (int)TicketType.Single)
                             {
-                                SetValueMMTicketsSummaryFromDictionary(result, betChoiceHome, mmDictionaryTicketsSummarys, PropertyNameOfSummaryHomeList);
+                                if (dicSumTickets != null)
+                                {
+                                    SetValueMMTicketsSummaryFromDictionary(result, betChoiceHome, dicSumTickets, PropertyNameOfSummaryHomeList);
 
-                                SetValueMMTicketsSummaryFromDictionary(result, betChoiceAway, mmDictionaryTicketsSummarys, PropertyNameOfSummaryAwayList);
+                                    SetValueMMTicketsSummaryFromDictionary(result, betChoiceAway, dicSumTickets, PropertyNameOfSummaryAwayList);
+                                }
                             }
+                            else
+                            {
+                                if (dicSumParlayTickets != null)
+                                {
+                                    SetValueMMTicketsSummaryFromDictionary(result, betChoiceHome, dicSumParlayTickets, PropertyNameOfSummaryHomeList);
 
+                                    SetValueMMTicketsSummaryFromDictionary(result, betChoiceAway, dicSumParlayTickets, PropertyNameOfSummaryAwayList);
+                                }
+                            }  
+                            
                             return result;
                         })
                     .OrderBy(c => c.MatchSection);
         }
 
         private void SetValueMMTicketsSummaryFromDictionary(GetMatchMonitorViewModel result, string betChoice,
-            Dictionary<string, MMFraudTicketsSummaryViewModel> mmDictionaryTicketsSummarys, string[] propertyNameOfSummaryList)
+            Dictionary<string, MMFraudTicketsSummaryViewModel> dicSumTickets, string[] propertyNameOfSummaryList)
         {
-            if (mmDictionaryTicketsSummarys.TryGetValue(result.BuildTicketsSummaryDictionaryKey(betChoice), out var mmFraudTicketsSummary))
+            if (dicSumTickets.TryGetValue(result.BuildTicketsSummaryDictionaryKey(betChoice), out var mmFraudTicketsSummary))
             {
                 result.SetPropertyValue(typeof(GetMatchMonitorViewModel).GetProperty(propertyNameOfSummaryList[0]), mmFraudTicketsSummary.Turnover);
 
@@ -300,22 +307,40 @@
             }
         }
 
-        private Dictionary<string, MMFraudTicketsSummaryViewModel> GetMMFraudTicketsSummary(IEnumerable<GetMatchMonitorModel> matchFromCTSInfos)
-        {
-            var mmFraudTicketsSummaryModel =
-                matchFromCTSInfos
-                    .GroupBy(x => new { x.BetID, x.BettypeID, x.DataSource, x.Market, x.MatchID })
-                    .Select(x => new MMFraudTicketsSummaryModel
-                    {
-                        BetID = x.Key.BetID,
-                        BettypeID = x.Key.BettypeID,
-                        Market = x.Key.Market,
-                        MatchID = x.Key.MatchID,
-                        DataSource = x.Key.DataSource,
-                        FraudTrans = String.Join(",", x.Select(y => y.FraudTrans)),
-                    });
+        private Dictionary<string, MMFraudTicketsSummaryViewModel> GetMMFraudTicketsSummary(IEnumerable<GetMatchMonitorModel> matchFromCTSInfos, TicketType ticketType)
+        {          
+            if (ticketType == TicketType.Single)
+            {
+                var mmFraudTicketsSummaryModel = matchFromCTSInfos.Where(x => x.TicketType == (int)TicketType.Single)
+                                   .GroupBy(x => new { x.BetID, x.BettypeID, x.DataSource, x.Market, x.MatchID })
+                                   .Select(x => new MMFraudTicketsSummaryModel
+                                   {
+                                       BetID = x.Key.BetID,
+                                       BettypeID = x.Key.BettypeID,
+                                       Market = x.Key.Market,
+                                       MatchID = x.Key.MatchID,
+                                       DataSource = x.Key.DataSource,
+                                       FraudTrans = String.Join(",", x.Select(y => y.FraudTrans)),
+                                   });
 
-            return _matchMonitorService.GetMMFraudTicketsSummary(mmFraudTicketsSummaryModel)?.ToDictionary(x => x.BuildDictionaryKey());
+                return _matchMonitorService.GetMMFraudTicketsSummary(mmFraudTicketsSummaryModel)?.ToDictionary(x => x.BuildDictionaryKey());
+            }
+            else
+            {
+                var mmFraudTicketsSummaryModel = matchFromCTSInfos.Where(x => x.TicketType == (int)TicketType.Parlay)
+                   .GroupBy(x => new { x.BetID, x.BettypeID, x.DataSource, x.Market, x.MatchID })
+                   .Select(x => new MMFraudTicketsSummaryModel
+                   {
+                       BetID = x.Key.BetID,
+                       BettypeID = x.Key.BettypeID,
+                       Market = x.Key.Market,
+                       MatchID = x.Key.MatchID,
+                       DataSource = x.Key.DataSource,
+                       FraudTrans = String.Join(",", x.Select(y => y.FraudTrans)),
+                   });
+
+                return _matchMonitorService.GetMMParlayFraudTicketsSummary(mmFraudTicketsSummaryModel)?.ToDictionary(x => x.BuildDictionaryKey());
+            }
         }
 
         private IEnumerable<GetMatchMonitorModel> GetMMByEventDate(MatchMonitorSearchViewModel para)
