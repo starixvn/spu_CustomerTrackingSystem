@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
+    using Fanex.NAP.CTS.Model;
     using System;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
@@ -79,6 +80,8 @@
                 return eventDate;
             }
         }
+
+        public TicketType TicketType { get; set; }
 
         public MMDetailInfoViewModel Clone() => new MMDetailInfoViewModel(this);
 

@@ -446,6 +446,7 @@
                 ViewBag.MatchSection = para?.MatchSection ?? 0;
                 ViewBag.IsVisibleHoldKey = para?.MatchSection != (int)MATCHMONITOR_SECTION.Closed;
                 ViewBag.HoldKeyStatus = GetHoldKeyStatus(para?.MatchID ?? 0, para?.MatchSection ?? 0);
+                ViewBag.TicketType = (int)para.TicketType;
                 ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                                                                             NapSettings.Settings.SiteId,
                                                                             FSFunctionKeys.MatchMonitor,
@@ -882,7 +883,9 @@
             var para = filter.Clone();
             var fraudMMDetailResult = new TicketDetailViewModel();
             var viewModeName = Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketFraud);
-            var key = para.BuildCacheKey("TicketFraud", Region, UserID, viewModeName);
+            var key = filter.TicketType == TicketType.Single
+                ? para.BuildCacheKey("TicketFraud", Region, UserID, viewModeName)
+                : para.BuildCacheKey("TicketFraudParlay", Region, UserID, viewModeName);
 
             try
             {
@@ -892,7 +895,9 @@
                 {
                     para.TypeOfTickets = MMViewModeFromUI.TicketFraud;
 
-                    var matchDetailInfo = _matchMonitorService.GetMatchMonitorDetail(para);
+                    var matchDetailInfo = filter.TicketType == TicketType.Single
+                        ? _matchMonitorService.GetMatchMonitorDetail(para)
+                        : _matchMonitorService.GetMatchMonitorParlayDetail(para);
 
                     if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
                     {
@@ -964,6 +969,22 @@
         }
 
         #endregion Detail Tickets
+
+        #region Parlay Detail Filter
+        [HttpPost]
+        public ActionResult GetMatchMonitorParlayFilter(MMDetailInfoViewModel para)
+        {
+            para.TicketType = TicketType.Parlay;
+
+            var result = GetMatchMonitorFilter(para);
+
+            return Json(new
+            {
+                data = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
 
         #region Association Detect
 
@@ -1136,7 +1157,6 @@
         #endregion User Feedback
 
         #endregion Detail Page
-
 
         #region Hold-Key
         [HttpPost]

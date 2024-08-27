@@ -94,6 +94,9 @@
         #region Parlay
         IEnumerable<MMFraudTicketsSummaryViewModel> GetMMParlayFraudTicketsSummary(IEnumerable<MMFraudTicketsSummaryModel> mmModels);
 
+        MMDetailResultModel GetMatchMonitorParlayDetail(MMDetailInfoViewModel filter);
+
+        
         #endregion
 
     }

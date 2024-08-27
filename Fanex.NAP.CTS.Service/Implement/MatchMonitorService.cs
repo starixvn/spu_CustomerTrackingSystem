@@ -19,6 +19,7 @@
     using Fanex.NAP.CTS.Service.Implement;
     using System.Threading.Tasks;
     using Fanex.NAP.CTS.Core.Helpers.Api;
+    using Fanex.NAP.CTS.Criteria.MatchMonitor.Parlay;
 
     public class MatchMonitorService : IMatchMonitorService
     {
@@ -407,62 +408,9 @@
                 BetID = para.BetID
             } });
 
-            var criteria = new TicketDetailGetCriteria()
-            {
-                QueryType = (int)_mmQueryType, // Get ticket for view MM report
-                EventDate = para.EventDate,
-                LastScannedSequenceID = para.LastScannedSequenceID,
-                LastTransDate = para.LastTransDate,
-                IsLive = para.LiveIndicator ? 1 : 0,
-                MatchID = para.MatchID,
-                ListSportBettype = betTypeInfos,
-                //BetType = para.BetTypeID,
-                //BetID = para.BetID,
-                ViewMode = para.TypeOfTickets == MMViewModeFromUI.TicketAll ? 0 : 1,
-                BatchSize = batchSize,
-                IsLicensee = (para.Sites == MMSites.All || para.Sites == null) ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
-                ListTransId = transJson,
-                IsCashout = para.IsCashout,
-                FromTransDate = para.TranstimeFrom != null ? para.TranstimeFrom.Value.ToUniversalTime() : (DateTime?)null,
-                ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null,
-                IsExclTestCurr = _mmQueryType == MMQueryType.DangerMMReport
-            };
-
-            if (para.BetChoiceType == 1)
-            {
-                criteria.ListHDPBetTeam = filter?.BetTeamList == null ? null : string.Join(",", filter.BetTeamList);
-            }
-            else
-            {
-                criteria.ListHDPBetTeam = filter?.HDPList == null ? null : string.Join(",", filter.HDPList);
-            }
-
-            if (filter?.CustAmountRM > 0)
-            {
-                criteria.CustAmountRM = filter?.CustAmountRM;
-            }
-
-            if (filter != null)
-            {
-                criteria.ListScore = (filter.ScoreList == null || !para.LiveIndicator || filter.SportType == 2) ? null : string.Join(",", filter.ScoreList);
-                criteria.ListCurrency = filter.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList);
-                criteria.ListDanger = GenerateDangerJson(filter);
-                criteria.ListStatus = filter.TicketStatusList == null ? null : string.Join(",", filter.TicketStatusList);
-                criteria.ListCustomerClass = filter.CustomerClassList == null ? null : string.Join(",", filter.CustomerClassList);
-                criteria.ListReason = filter.ReasonList == null ? null : string.Join(",", filter.ReasonList).Replace('-', '0');
-                criteria.ListAGroup = filter.AGroupList == null ? null : string.Join(",", filter.AGroupList).Replace('-', '0');
-                criteria.ListMGroup = filter.MGroupList == null ? null : string.Join(",", filter.MGroupList).Replace('-', '0');
-            }
-
-            var result = repository.Fetch<TicketDetailModel>(criteria);
-
-            return new TicketDetailViewModel
-            {
-                TicketDetails = result,
-                MinSequenceId = criteria.MinSequenceId,
-                MinTransDate = criteria.MinTransDate,
-                TotalTicket = criteria.TotalTicket
-            };
+            return para.TicketType == Model.TicketType.Single
+                ? GetSingleTicketDetail(para, filter, betTypeInfos, batchSize, transJson)
+                : GetParlayTicketDetail(para, filter, betTypeInfos, batchSize, transJson);
         }
 
         public int GetTotalTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int? batchSize, string transIDsJson)
@@ -895,6 +843,145 @@
 
             return repository.Fetch<MMFraudTicketsSummaryViewModel>(criteria);
         }
+
+        public MMDetailResultModel GetMatchMonitorParlayDetail(MMDetailInfoViewModel filter)
+        {
+            var criteria = new MMParlaySuspiciousTicketGetCriteria
+            {
+                MatchID = filter.MatchID,
+                LiveIndicator = filter.LiveIndicator,
+                BettypeID = filter.BetTypeID,
+                BetID = filter.BetID,
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.QueryMultiple(criteria);
+
+                return new MMDetailResultModel
+                {
+                    Custs = result?.Read<MMDetailCustModel>() ?? new List<MMDetailCustModel>(),
+                    MatchDetails = result?.Read<MatchMonitorDetailModel>() ?? new List<MatchMonitorDetailModel>(),
+                    VerifiedTrans = result?.Read<MatchMonitorDetailVerifyTransResultModel>() ?? new List<MatchMonitorDetailVerifyTransResultModel>()
+                };
+            }
+        }
+
+        private TicketDetailViewModel GetSingleTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, string betTypeInfos, int? batchSize, string transJson = null)
+        {
+            var criteria = new TicketDetailGetCriteria()
+            {
+                QueryType = (int)_mmQueryType, // Get ticket for view MM report
+                EventDate = para.EventDate,
+                LastScannedSequenceID = para.LastScannedSequenceID,
+                LastTransDate = para.LastTransDate,
+                IsLive = para.LiveIndicator ? 1 : 0,
+                MatchID = para.MatchID,
+                ListSportBettype = betTypeInfos,
+                ViewMode = para.TypeOfTickets == MMViewModeFromUI.TicketAll ? 0 : 1,
+                BatchSize = batchSize,
+                IsLicensee = (para.Sites == MMSites.All || para.Sites == null) ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
+                ListTransId = transJson,
+                IsCashout = para.IsCashout,
+                FromTransDate = para.TranstimeFrom != null ? para.TranstimeFrom.Value.ToUniversalTime() : (DateTime?)null,
+                ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null,
+                IsExclTestCurr = _mmQueryType == MMQueryType.DangerMMReport
+            };
+
+            if (para.BetChoiceType == 1)
+            {
+                criteria.ListHDPBetTeam = filter?.BetTeamList == null ? null : string.Join(",", filter.BetTeamList);
+            }
+            else
+            {
+                criteria.ListHDPBetTeam = filter?.HDPList == null ? null : string.Join(",", filter.HDPList);
+            }
+
+            if (filter?.CustAmountRM > 0)
+            {
+                criteria.CustAmountRM = filter?.CustAmountRM;
+            }
+
+            if (filter != null)
+            {
+                criteria.ListScore = (filter.ScoreList == null || !para.LiveIndicator || filter.SportType == 2) ? null : string.Join(",", filter.ScoreList);
+                criteria.ListCurrency = filter.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList);
+                criteria.ListDanger = GenerateDangerJson(filter);
+                criteria.ListStatus = filter.TicketStatusList == null ? null : string.Join(",", filter.TicketStatusList);
+                criteria.ListCustomerClass = filter.CustomerClassList == null ? null : string.Join(",", filter.CustomerClassList);
+                criteria.ListReason = filter.ReasonList == null ? null : string.Join(",", filter.ReasonList).Replace('-', '0');
+                criteria.ListAGroup = filter.AGroupList == null ? null : string.Join(",", filter.AGroupList).Replace('-', '0');
+                criteria.ListMGroup = filter.MGroupList == null ? null : string.Join(",", filter.MGroupList).Replace('-', '0');
+            }
+
+            var data = repository.Fetch<TicketDetailModel>(criteria);
+
+            return new TicketDetailViewModel
+            {
+                TicketDetails = data,
+                MinSequenceId = criteria.MinSequenceId,
+                MinTransDate = criteria.MinTransDate,
+                TotalTicket = criteria.TotalTicket
+            };
+        }
+
+        private TicketDetailViewModel GetParlayTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, string betTypeInfos, int? batchSize, string transJson = null)
+        {
+            var criteria = new ParlayTicketDetailGetCriteria()
+            {
+                EventDate = para.EventDate,
+                LastScannedSequenceID = para.LastScannedSequenceID,
+                LastTransDate = para.LastTransDate,
+                IsLive = para.LiveIndicator ? 1 : 0,
+                MatchID = para.MatchID,
+                ListSportBettype = betTypeInfos,
+                ViewMode = para.TypeOfTickets == MMViewModeFromUI.TicketAll ? 0 : 1,
+                BatchSize = batchSize,
+                IsLicensee = (para.Sites == MMSites.All || para.Sites == null) ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
+                ListTransId = transJson,
+                IsCashout = para.IsCashout,
+                FromTransDate = para.TranstimeFrom != null ? para.TranstimeFrom.Value.ToUniversalTime() : (DateTime?)null,
+                ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null,
+                IsExclTestCurr = _mmQueryType == MMQueryType.DangerMMReport
+            };
+
+            if (para.BetChoiceType == 1)
+            {
+                criteria.ListHDPBetTeam = filter?.BetTeamList == null ? null : string.Join(",", filter.BetTeamList);
+            }
+            else
+            {
+                criteria.ListHDPBetTeam = filter?.HDPList == null ? null : string.Join(",", filter.HDPList);
+            }
+
+            if (filter?.CustAmountRM > 0)
+            {
+                criteria.CustAmountRM = filter?.CustAmountRM;
+            }
+
+            if (filter != null)
+            {
+                criteria.ListScore = (filter.ScoreList == null || !para.LiveIndicator || filter.SportType == 2) ? null : string.Join(",", filter.ScoreList);
+                criteria.ListCurrency = filter.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList);
+                criteria.ListDanger = GenerateDangerJson(filter);
+                criteria.ListStatus = filter.TicketStatusList == null ? null : string.Join(",", filter.TicketStatusList);
+                criteria.ListCustomerClass = filter.CustomerClassList == null ? null : string.Join(",", filter.CustomerClassList);
+                criteria.ListReason = filter.ReasonList == null ? null : string.Join(",", filter.ReasonList).Replace('-', '0');
+                criteria.ListAGroup = filter.AGroupList == null ? null : string.Join(",", filter.AGroupList).Replace('-', '0');
+                criteria.ListMGroup = filter.MGroupList == null ? null : string.Join(",", filter.MGroupList).Replace('-', '0');
+            }
+
+            var data = repository.Fetch<TicketDetailModel>(criteria);
+
+            return new TicketDetailViewModel
+            {
+                TicketDetails = data,
+                MinSequenceId = criteria.MinSequenceId,
+                MinTransDate = criteria.MinTransDate,
+                TotalTicket = criteria.TotalTicket
+            };
+        }
+
 
         #endregion
 

@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
     using Fanex.NAP.CTS.Core.BaseClasses;
+    using Fanex.NAP.CTS.Model;
     using System;
     using System.Collections.Generic;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -248,5 +249,7 @@
                 return string.Empty;
             }
         }
+
+        public TicketType TicketType { get; set; }
     }
 }

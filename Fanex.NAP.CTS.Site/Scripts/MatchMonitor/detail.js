@@ -309,7 +309,7 @@ function MatchMonitorDetail() {
 
     //#endregion Initial Grid
 
-    //#region Setup Filter & Grid    
+    //#region Setup Filter & Grid
     function SetupMultiselect(ccb, selectName, menuWidth = 260, menuHeight = 280) {
         ccb.multiselect({
             menuWidth: menuWidth,

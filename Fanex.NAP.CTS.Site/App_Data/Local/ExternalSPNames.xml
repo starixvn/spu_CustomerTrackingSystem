@@ -32,8 +32,8 @@
 		<Setting Key="CTS_Rpt_MatchMonitor_MatchInfo" SpName="CTS_Rpt_MatchMonitor_MatchInfo_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_TicketDetails_Info" SpName="CTS_TicketDetails_Info_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_Rpt_MatchMonitor_FraudTicketsSummary" SpName="CTS_Rpt_MatchMonitor_FraudTicketsSummary" DbName="DBCTS.bodb02.bodbSPUNet" />
-    <Setting Key="CTS_Rpt_MatchMonitorParlay_FraudTicketsSummary" SpName="CTS_Rpt_MatchMonitorParlay_FraudTicketsSummary_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
-    <Setting Key="CTS_DC_MatchMonitorParlay_Details_Get" SpName="CTS_DC_MatchMonitorParlay_Details_Get_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
+    <Setting Key="CTS_Rpt_MatchMonitorParlay_FraudTicketsSummary" SpName="CTS_Rpt_MatchMonitorParlay_FraudTicketsSummary_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />    
+    <Setting Key="CTS_MatchMonitorParlay_TicketDetails" SpName="CTS_MatchMonitorParlay_TicketDetails_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
     <Setting Key="CTS_MatchTicketDetailsParlayInfo_Get" SpName="CTS_MatchTicketDetailsParlayInfo_Get_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 
