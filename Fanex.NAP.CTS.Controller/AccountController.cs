@@ -1593,8 +1593,7 @@
         public ActionResult GetCustomerClassification(long ctsCustID, int roleID)
         {           
             var isVVip = false;
-            var isProblemAccount = false;
-            var isPAProbation = false;        
+            var isProblemAccount = false;          
             var categoryList = new List<GetCustomerCategoryViewModel>();
             var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
 
@@ -1605,8 +1604,7 @@
                 categoryList = classification.Select(x => new GetCustomerCategoryViewModel(x)).ToList();
 
                 isVVip = categoryList.Any(x => x.IsVVIP);
-                isProblemAccount = categoryList.Any(x => x.IsProblemAccount);              
-                isPAProbation = categoryList.Any(x => x.IsPAProbation);
+                isProblemAccount = categoryList.Any(x => x.IsProblemAccount);                          
             }
 
             var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustID);
@@ -1620,8 +1618,7 @@
             {             
                 isExcludedTagAssPA,
                 isVVip,
-                isProblemAccount,
-                isPAProbation,
+                isProblemAccount,          
                 categoryList,
                 data = classificationHistoryList,
             }, JsonRequestBehavior.AllowGet);

@@ -13,8 +13,7 @@
     let cacheData = {
         isVVip: false,
         isExcludedTagAssPA: false,
-        isProblemAccount: false,
-        isPAProbation: false
+        isProblemAccount: false      
     };
 
     let dataTable;
@@ -248,8 +247,7 @@
 
                     cacheData.isProblemAccount = json.isProblemAccount;
                     cacheData.isExcludedTagAssPA = json.isExcludedTagAssPA;
-                    cacheData.isVVip = json.isVVip;
-                    cacheData.isPAProbation = json.isPAProbation;
+                    cacheData.isVVip = json.isVVip;                   
 
                     ResetCategorySetting();
 
