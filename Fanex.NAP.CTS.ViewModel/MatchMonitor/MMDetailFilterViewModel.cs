@@ -21,9 +21,7 @@
             this.MGroupList = new List<string>();
             this.MGrTranIDListFiltered = "";
             this.DropdownListFilter = new MMDetailFilterDropdownListViewModel();
-            this.DropdownListFilterDependOn = new List<DependOnFilterItemViewModel>();
-            this.DropdownListFilter = new MMDetailFilterDropdownListViewModel();
-            this.DropdownListFilterDependOn = new List<DependOnFilterItemViewModel>();
+            this.DropdownListFilterDependOn = new List<DependOnFilterItemViewModel>();          
         }
       
         protected MMDetailFilterViewModel(MMDetailFilterViewModel filter)

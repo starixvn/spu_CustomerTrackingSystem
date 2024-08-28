@@ -53,6 +53,7 @@ function MatchMonitorDetail() {
         defaultReasonNames: $('#hdReasonNames').val(),
         mapX: $('#hdMapX').val(),
         mapYY: $('#hdMapYY').val(),
+        ticketType: $("#hdTicketType").val(),
         cbbMarket: $('#cbbMarket'),
         cbbBetType: $('#cbbBetType'),
         cbbMapX: $('#cbbMapX'),
@@ -195,25 +196,25 @@ function MatchMonitorDetail() {
                 {
                     targets: [0], width: "3%", render: function (data, type, full, meta) {
                         return '<label><input type="checkbox" class="col-checkbox" name="chkbx" /></label>';
-                    }
+                    } // Checkbox
                 },
-                { targets: [1], width: "17%" },
-                { targets: [2], width: "4%" },
-                { targets: [3], width: "4%" },
-                { targets: [4], width: "10%", className: "text-center col-dgr" },
-                { targets: [5], width: "5%" },
-                { targets: [6], width: "5%" },
-                { targets: [7], width: "5%", className: "text-center col-betid" },
-                { targets: [8], width: "5%" },
-                { targets: [9], width: "5%", className: "text-right col-amt" },
-                { targets: [10], width: "4%" },
-                { targets: [11], width: "5%", className: "text-center col-score" },
-                { targets: [12], width: "13%", className: "text-center col-transtime" },
-                { targets: [13], width: "3%" },
-                { targets: [14], width: "5%" },
-                { targets: [15], width: "5%", className: "text-center" },
-                { targets: [16], width: "7%", className: "text-center col-reason" },
-                { targets: [17], width: "3%" },
+                { targets: [1], width: "17%" }, // UserName
+                { targets: [2], width: "4%" }, // CC
+                { targets: [3], width: "4%" }, // Bot
+                { targets: [4], width: "10%", className: "text-center col-dgr" }, // Dgr
+                { targets: [5], width: "5%" }, // Odds
+                { targets: [6], width: "5%" }, // MY.Odds
+                { targets: [7], width: "5%", className: "text-center col-betid" }, // BetID
+                { targets: [8], width: "5%" }, // Cur
+                { targets: [9], width: "5%", className: "text-right col-amt" }, // Amt
+                { targets: [10], width: "4%" }, // HDP
+                { targets: [11], width: "5%", className: "text-center col-score" }, // Score
+                { targets: [12], width: "13%", className: "text-center col-transtime" }, // Transtime
+                { targets: [13], width: "3%" }, // B.f.
+                { targets: [14], width: "5%" }, // A.Gr.
+                { targets: [15], width: "5%", className: "text-center" }, // M.Gr.
+                { targets: [16], width: "7%", className: "text-center col-reason" }, // Reason
+                { targets: [17], width: "3%" }, // Icon Verify
                 { targets: [18], visible: false },
                 { targets: [19], visible: false }
             ],
@@ -239,15 +240,7 @@ function MatchMonitorDetail() {
                 { data: obj => obj.Odds },
                 { data: obj => obj.MalayOdds },
                 {
-                    data: obj => {
-                        if (!isDisplaySingleGrid && obj.TransIdToString.length > 6) {
-                            let halfBetID = '...' + obj.TransIdToString.substring(obj.TransIdToString.length - 6);
-
-                            return `<span class='span-betid' data-bet-id=${obj.TransIdToString}>${halfBetID}</span>`;
-                        } else {
-                            return `<span class='span-betid' data-bet-id=${obj.TransIdToString}>${obj.TransIdToString}</span>`;
-                        }
-                    }
+                    data: obj => RenderBetInfo(obj),
                 },
                 { data: obj => obj.CurrencyName },
                 {
@@ -738,7 +731,7 @@ function MatchMonitorDetail() {
 
         domElements.cbbCashoutType.empty();
 
-        if (data) {
+        if (data && data.length > 0) {
             data.forEach(item => {
                 domElements.cbbCashoutType.append(`<option value='${item.CashoutStatus}'>${item.CashoutName}</option>`);
             });
@@ -1635,6 +1628,21 @@ function MatchMonitorDetail() {
         }
 
         return html;
+    }
+
+    function RenderBetInfo(obj) {
+        if (domElements.ticketType == 1) {
+            if (!isDisplaySingleGrid && obj.TransIdToString.length > 6) {
+                let halfBetID = '...' + obj.TransIdToString.substring(obj.TransIdToString.length - 6);
+
+                return `<span class='span-betid' data-bet-id=${obj.TransIdToString}>${halfBetID}</span>`;
+            } else {
+                return `<span class='span-betid' data-bet-id=${obj.TransIdToString}>${obj.TransIdToString}</span>`;
+            }            
+        } else {
+            return `<span class='span-betid' data-bet-id=${obj.TransIdToString}>Mix Parlay </span><span class="icon-chevron-right"></span>`;
+        }
+        
     }
 
     //#endregion Render Grid
@@ -3097,9 +3105,9 @@ function MatchMonitorDetail() {
             if (!ValidateTicketStatus()) {
                 return;
             }
-            if (ValidationFilter()) {
+            //if (ValidationFilter()) { // comment code for test
                 FetchMatchMonitorDetail(currentType);
-            }
+            //}
         })
 
         domElements.tickCheckAll.on('click', function () { ToggleTickCheckAll(true); });

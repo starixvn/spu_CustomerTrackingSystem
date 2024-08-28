@@ -406,7 +406,7 @@
                             @foreach (var reason in group.ReasonItems)
                             {
                                 <option value=@reason.ReasonName selected>@reason.ReasonName</option>
-                            }                           
+                            }
                         </optgroup>
                     }
                 </select>
@@ -427,6 +427,7 @@
             <input id="hdReasonNames" type="hidden" value="@ViewBag.ReasonName" />
             <input id="hdMapX" type="hidden" value="@ViewBag.MapX" />
             <input id="hdMapYY" type="hidden" value="@ViewBag.MapYY" />
+            <input id="hdTicketType" type="hidden" value="@ViewBag.TicketType" />
         </div>
     </div>
 </section>

@@ -33,6 +33,8 @@
     using System.Web.Script.Serialization;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.MarkPA;
+    using Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn;
+    using Fanex.NAP.CTS.ViewModel.MatchMonitor.Parlay;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -185,18 +187,24 @@
             {
                 if (para != null && para.IsValid())
                 {
-                    var matchFromCTSInfos = Enumerable.Empty<GetMatchMonitorModel>();
+                    #region Comment for write test
 
-                    if (para.DateType == 1)
-                        matchFromCTSInfos = GetMMByScanDate(para);
-                    else
-                        matchFromCTSInfos = GetMMByEventDate(para);
+                    //var matchFromCTSInfos = Enumerable.Empty<GetMatchMonitorModel>();
 
-                    var dicSumTickets = GetMMFraudTicketsSummary(matchFromCTSInfos, TicketType.Single);
+                    //if (para.DateType == 1)
+                    //    matchFromCTSInfos = GetMMByScanDate(para);
+                    //else
+                    //    matchFromCTSInfos = GetMMByEventDate(para);
 
-                    var dicSumParlayTickets = GetMMFraudTicketsSummary(matchFromCTSInfos, TicketType.Parlay);
+                    //var dicSumTickets = GetMMFraudTicketsSummary(matchFromCTSInfos, TicketType.Single);
 
-                    matchMonitors = MergeMatchMonitorWithMMStaticAndTicketsSummary(matchFromCTSInfos, dicSumTickets, dicSumParlayTickets);
+                    //var dicSumParlayTickets = GetMMFraudTicketsSummary(matchFromCTSInfos, TicketType.Parlay);
+
+                    //matchMonitors = MergeMatchMonitorWithMMStaticAndTicketsSummary(matchFromCTSInfos, dicSumTickets, dicSumParlayTickets);
+
+                    matchMonitors = GenerateMMParlay_Test();
+
+                    #endregion Comment for write test
                 }
             }
             catch (Exception ex)
@@ -216,7 +224,7 @@
                 data = matchMonitors
             }, JsonRequestBehavior.AllowGet);
         }
-
+       
         private IEnumerable<ReasonGroupStaticListViewModel> GetReasonGroups(bool isInitGroupNone)
         {
             var reasonGroupItems = _commonService.GetStaticLists((int)StaticListID.Reason, true);
@@ -475,21 +483,26 @@
 
             try
             {
-                if (para.IsImportNewTicket)
-                {
-                    result = GetMatchMonitorFilterImportNew(para);
-                }
-                else
-                {
-                    if (para.TypeOfTickets == MMViewModeFromUI.TicketFraud)
-                    {
-                        result = GetFraudMMFilter(para);
-                    }
-                    else if (para.IsSupportShowAllTickets)
-                    {
-                        result = GetAllMMFilter(para);
-                    }
-                }
+                #region Comment for Test
+                //if (para.IsImportNewTicket)
+                //{
+                //    result = GetMatchMonitorFilterImportNew(para);
+                //}
+                //else
+                //{
+                //    if (para.TypeOfTickets == MMViewModeFromUI.TicketFraud)
+                //    {
+                //        result = GetFraudMMFilter(para);
+                //    }
+                //    else if (para.IsSupportShowAllTickets)
+                //    {
+                //        result = GetAllMMFilter(para);
+                //    }
+                //}
+
+                result = GetMatchMonitorFilter_Test();
+
+                #endregion Comment for Test
             }
             catch (Exception ex)
             {
@@ -665,6 +678,104 @@
             return allFilterResult;
         }
 
+        #region Generate Data Test
+        private IEnumerable<GetMatchMonitorViewModel> GenerateMMParlay_Test()
+        {
+            var matchMonitors = new List<GetMatchMonitorViewModel>();
+
+            var mmModel = new GetMatchMonitorModel()
+            {
+                BetID = 0,
+                BettypeID = 1,
+                AwayID = 11,
+                AwayName = "Anh",
+                HomeID = 22,
+                HomeName = "TBN",
+                ID = 1,
+                BettypeNameDisplay = "U/O",
+                IsVerified = false,
+                LeagueID = 1,
+                LeagueName = "EURO 2024",
+                MatchID = 100,
+                MatchSection = 1,
+                SportTypeId = 1,
+                TicketType = (int)TicketType.Parlay,
+                EventDate = DateTime.Now,
+                Reason = "5"
+            };
+
+            var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
+
+            var mmViewModel = new GetMatchMonitorViewModel(mmModel, reasons)
+            {
+                HomeTotalAmount = 1000,
+                HomeBetCount = 10,
+                AwayTotalAmount = 2000,
+                AwayBetCount = 20
+            };
+
+            matchMonitors.Add(mmViewModel);
+
+            return matchMonitors;
+        }
+
+        private MMDetailFilterViewModel GetMatchMonitorFilter_Test()
+        {
+            var result = new MMDetailFilterViewModel()
+            {
+                TicketStatusList = new List<int>() { 1, 2 },
+                HDPList = new List<decimal>() { 1, 2 },
+                DropdownListFilter = new MMDetailFilterDropdownListViewModel()
+                {
+                    TicketStatusList = new List<TicketStatusViewModel>() { new TicketStatusViewModel { TicketStatus = 112, TicketStatusName = "Won" } }
+                }
+            };
+
+            return result;
+        }
+
+        private int GetMatchMonitorTotalTicket_Test()
+        {
+            return 1;
+        }
+
+        private MMDetailTicketListViewModel GetMatchMonitorDetail_Test()
+        {
+            var mdResult = new MMDetailTicketListViewModel();
+
+            var parlayTickets = new List<ParlayTicketInfoViewModel>()
+            {
+                new ParlayTicketInfoViewModel
+                {
+                    HomeName = "VN", AwayName = "TL",
+                    BetTeam = "Home",
+                    BetTypeName = "Handicap",
+                    SportName = "Giao Huu",
+                    LeagueName = "GH",
+                    GlobalShowTime = "8/16/2024 01:00 AM"
+                }
+            };
+
+            mdResult.HomeMatchItemList = new List<MatchMonitorDetailItemViewModel>()
+            {
+                new MatchMonitorDetailItemViewModel
+                {
+                    BetID = "0",
+                    BetTypeID = 1,
+                    BetTeam = "h",
+                    TransId = 45678912223456789,
+                    TransTime = DateTime.Now,
+                    TransTimeToString = DateTime.Now.ToString(Consts.FormatDateTimeToString_ddMMyyhhmmss),
+                    Username = "User Test 1",
+                    ParlayTickets = parlayTickets
+                }
+            };
+
+            return mdResult;
+        }
+
+        #endregion Generate Data Test
+
         #endregion Detail Filter
 
         #region Detail Total Tickets
@@ -675,11 +786,17 @@
 
             try
             {
-                var fraudTicket = GetFraudMMDetailForCache(info);
+                #region Comment for test
 
-                var transJson = _matchMonitorService.GetTransFilterSuspicousMGr(filter, fraudTicket);
+                //var fraudTicket = GetFraudMMDetailForCache(info);
 
-                recordsTotal = _matchMonitorService.GetTotalTicketDetail(info, filter, 0, transJson);
+                //var transJson = _matchMonitorService.GetTransFilterSuspicousMGr(filter, fraudTicket);
+
+                //recordsTotal = _matchMonitorService.GetTotalTicketDetail(info, filter, 0, transJson);
+
+                recordsTotal = GetMatchMonitorTotalTicket_Test();
+
+                #endregion Comment for test
             }
             catch (Exception ex)
             {
@@ -710,44 +827,50 @@
 
             try
             {
-                switch (para.TypeOfTickets)
-                {
-                    case MMViewModeFromUI.TicketFraud:
-                        {
-                            var fraudTicket = GetFraudMMDetailForCache(para);
+                #region Comment for test
 
-                            if (fraudTicket != null)
-                            {
-                                mdResult = GetFraudMMDetail(para, filter, fraudTicket);
-                            }
+                //switch (para.TypeOfTickets)
+                //{
+                //    case MMViewModeFromUI.TicketFraud:
+                //        {
+                //            var fraudTicket = GetFraudMMDetailForCache(para);
 
-                            break;
-                        }
-                    case MMViewModeFromUI.TicketAll when para.IsSupportShowAllTickets:
-                        {
-                            var internalCurrencyIDs = new List<int> { 20, 27, 28 };
+                //            if (fraudTicket != null)
+                //            {
+                //                mdResult = GetFraudMMDetail(para, filter, fraudTicket);
+                //            }
 
-                            mdResult = GetAllMMDetail(para, filter);
+                //            break;
+                //        }
+                //    case MMViewModeFromUI.TicketAll when para.IsSupportShowAllTickets:
+                //        {
+                //            var internalCurrencyIDs = new List<int> { 20, 27, 28 };
 
-                            if (mdResult != null)
-                            {
-                                var ctsCustIDHomeIsZero = mdResult.HomeMatchItemList.Where(x => x.CTSCustID == 0 && !internalCurrencyIDs.Any(c => c == x.CurrencyId)).Select(x => x);
-                                var ctsCustIDAwayIsZero = mdResult.AwayMatchItemList.Where(x => x.CTSCustID == 0 && !internalCurrencyIDs.Any(c => c == x.CurrencyId)).Select(x => x);
+                //            mdResult = GetAllMMDetail(para, filter);
 
-                                if (ctsCustIDHomeIsZero != null && ctsCustIDHomeIsZero.Any())
-                                {
-                                    LogService.Error($"{Region} Get Match Monitor Detail with CTSCustIDHome=0: {JsonConvert.SerializeObject(ctsCustIDHomeIsZero)}");
-                                }
+                //            if (mdResult != null)
+                //            {
+                //                var ctsCustIDHomeIsZero = mdResult.HomeMatchItemList.Where(x => x.CTSCustID == 0 && !internalCurrencyIDs.Any(c => c == x.CurrencyId)).Select(x => x);
+                //                var ctsCustIDAwayIsZero = mdResult.AwayMatchItemList.Where(x => x.CTSCustID == 0 && !internalCurrencyIDs.Any(c => c == x.CurrencyId)).Select(x => x);
 
-                                if (ctsCustIDAwayIsZero != null && ctsCustIDAwayIsZero.Any())
-                                {
-                                    LogService.Error($"{Region} Get Match Monitor Detail with CTSCustIDAway=0: {JsonConvert.SerializeObject(ctsCustIDAwayIsZero)}");
-                                }
-                            }
+                //                if (ctsCustIDHomeIsZero != null && ctsCustIDHomeIsZero.Any())
+                //                {
+                //                    LogService.Error($"{Region} Get Match Monitor Detail with CTSCustIDHome=0: {JsonConvert.SerializeObject(ctsCustIDHomeIsZero)}");
+                //                }
 
-                            break;
-                        }
-                }
+                //                if (ctsCustIDAwayIsZero != null && ctsCustIDAwayIsZero.Any())
+                //                {
+                //                    LogService.Error($"{Region} Get Match Monitor Detail with CTSCustIDAway=0: {JsonConvert.SerializeObject(ctsCustIDAwayIsZero)}");
+                //                }
+                //            }
+
+                //            break;
+                //        }
+                //}
+
+                mdResult = GetMatchMonitorDetail_Test();
+
+                #endregion Comment for test
             }
             catch (Exception ex)
             {

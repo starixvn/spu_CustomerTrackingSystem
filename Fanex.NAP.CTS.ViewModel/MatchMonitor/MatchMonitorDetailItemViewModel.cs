@@ -2,6 +2,7 @@
 {
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.ViewModel.MatchMonitor.Parlay;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -233,49 +234,70 @@
 
         public MMViewModeFromUI TypeOfTicket { get; set; } = MMViewModeFromUI.TicketFraud;
 
+        public IEnumerable<ParlayTicketInfoViewModel> ParlayTickets { get; set; }
+
         #endregion
 
         #region function
-        public bool FilterByHomeAway(string[] matchMonitorBetChoiceIds)
-        {
-            return matchMonitorBetChoiceIds.Any(x => string.Equals(BetTeam, x, StringComparison.OrdinalIgnoreCase));
-        }
+        //public bool FilterByHomeAway(string[] matchMonitorBetChoiceIds)
+        //{
+        //    return matchMonitorBetChoiceIds.Any(x => string.Equals(BetTeam, x, StringComparison.OrdinalIgnoreCase));
+        //}
 
-        public bool FilterBySite(string site)
-        {            
-            return !string.IsNullOrWhiteSpace(site) ? site.Contains("A") || site.Contains(SubscriberType) : false;
-        }        
+        //public bool FilterBySite(string site)
+        //{            
+        //    return !string.IsNullOrWhiteSpace(site) ? site.Contains("A") || site.Contains(SubscriberType) : false;
+        //}        
 
-        public bool FilterByReasonAGroup(List<string> reasonList, IEnumerable<string> reasonGroupIDDic)
-        {
-            return
-                (reasonList?.Any(y => (ReasonList ?? "-").Contains(y)) ?? true) &&
-                (reasonGroupIDDic?.Contains(ADetectGroupID.ToString()) ?? true);
-        }        
-        
-        public bool FilterByDanger(MMDetailFilterViewModel filter)
-        {
-            var isPass = filter.Danger1List == null &&
-                filter.Danger2List == null &&
-                filter.Danger3List == null &&
-                filter.Danger4List == null &&
-                filter.Danger5List == null;
+        //public bool FilterByReasonAGroup(List<string> reasonList, IEnumerable<string> reasonGroupIDDic)
+        //{
+        //    return
+        //        (reasonList?.Any(y => (ReasonList ?? "-").Contains(y)) ?? true) &&
+        //        (reasonGroupIDDic?.Contains(ADetectGroupID.ToString()) ?? true);
+        //}        
 
-            if (isPass)
-            {
-                return filter.IsDangerNone ? DangerToString == "-" : false;
-            }
-            else
-            {
-                return (filter.Danger1List?.Any(x => x == Danger1) ?? false) ||
-                (filter.Danger2List?.Any(x => x == Danger2) ?? false) ||
-                (filter.Danger3List?.Any(x => x == Danger3) ?? false) ||
-                (filter.Danger4List?.Any(x => x == Danger4) ?? false) ||
-                (filter.Danger5List?.Any(x => x == Danger5) ?? false) ||
-                (filter.IsDangerNone ? DangerToString == "-" : false);
-            }
-        }
-              
+        //public bool FilterByDanger(MMDetailFilterViewModel filter)
+        //{
+        //    var isPass = filter.Danger1List == null &&
+        //        filter.Danger2List == null &&
+        //        filter.Danger3List == null &&
+        //        filter.Danger4List == null &&
+        //        filter.Danger5List == null;
+
+        //    if (isPass)
+        //    {
+        //        return filter.IsDangerNone ? DangerToString == "-" : false;
+        //    }
+        //    else
+        //    {
+        //        return (filter.Danger1List?.Any(x => x == Danger1) ?? false) ||
+        //        (filter.Danger2List?.Any(x => x == Danger2) ?? false) ||
+        //        (filter.Danger3List?.Any(x => x == Danger3) ?? false) ||
+        //        (filter.Danger4List?.Any(x => x == Danger4) ?? false) ||
+        //        (filter.Danger5List?.Any(x => x == Danger5) ?? false) ||
+        //        (filter.IsDangerNone ? DangerToString == "-" : false);
+        //    }
+        //}
+
+        //public bool FilterItem(MMDetailFilterViewModel filter, IEnumerable<string> reasonGroupIDDic, string site)
+        //{
+        //    var isFilterScore = filter.ScoreList?.Contains(Score ?? "-") ?? true;
+        //    var isFilterSite = FilterBySite(site);           
+        //    var isFilterDanger = FilterByDanger(filter);
+        //    var isFilterCurrency = filter.CurrencyIdList?.Contains(CurrencyId) ?? true;
+        //    var isFilterReasonAGroup = FilterByReasonAGroup(filter.ReasonList, reasonGroupIDDic);
+        //    var isFilterHDPList = filter.HDPList?.Contains(BallHeadHDP()) ?? true;
+        //    var isFilterBetTeam = filter.BetTeamList?.Contains(BallHeadBetTeam()) ?? true;
+        //    var isFilterAmount = filter.AmountList == null || filter.AmountList.Count() < 2 ? true : Stake >= filter.AmountList[0] && Stake <= filter.AmountList[1];
+        //    var isFilterTicketStatus = filter.TicketStatusList?.Contains(TicketStatus) == null ? TicketStatus != 101 : filter.TicketStatusList.Contains(TicketStatus);
+        //    var filterData =
+        //        isFilterScore && isFilterSite && isFilterDanger && isFilterCurrency
+        //        && isFilterReasonAGroup && isFilterHDPList & isFilterBetTeam
+        //        && isFilterAmount && isFilterTicketStatus;
+
+        //    return filterData;
+        //}
+
         public MatchMonitorDetailItemViewModel MappingFraudTicketToAllTicket(Dictionary<long, MatchMonitorDetailItemViewModel> fraudMMTicketsDictionary)
         {
             if (fraudMMTicketsDictionary != null && fraudMMTicketsDictionary.TryGetValue(TransId, out var value))
@@ -286,47 +308,47 @@
             return this;
         }
 
-        public decimal BallHeadHDP()
-        {          
-            if (BetTypeID == (int)MatchMonitorBetType.OU
-                    || BetTypeID == (int)MatchMonitorBetType.FirstOU
-                    || BetTypeID == (int)MatchMonitorBetType.QuarterXOU)
-            {
-                return HDP;
-            }
+        //public decimal BallHeadHDP()
+        //{          
+        //    if (BetTypeID == (int)MatchMonitorBetType.OU
+        //            || BetTypeID == (int)MatchMonitorBetType.FirstOU
+        //            || BetTypeID == (int)MatchMonitorBetType.QuarterXOU)
+        //    {
+        //        return HDP;
+        //    }
 
-            if (this.HDP < 0)
-            {               
-                return Math.Abs(this.HDP);
-            }
+        //    if (this.HDP < 0)
+        //    {               
+        //        return Math.Abs(this.HDP);
+        //    }
 
-            return this.HDP;
-        }
+        //    return this.HDP;
+        //}
 
-        public string BallHeadBetTeam()
-        {
-            if (BetTypeID == (int)MatchMonitorBetType.TotalGoal
-                || BetTypeID == (int)MatchMonitorBetType.FirstTotalGoal
-                || BetTypeID == (int)MatchMonitorBetType.CorrectScore
-                || BetTypeID == (int)MatchMonitorBetType.FirstCorrectScore)
-            {
-                return this.BetTeam;
-            }
+        //public string BallHeadBetTeam()
+        //{
+        //    if (BetTypeID == (int)MatchMonitorBetType.TotalGoal
+        //        || BetTypeID == (int)MatchMonitorBetType.FirstTotalGoal
+        //        || BetTypeID == (int)MatchMonitorBetType.CorrectScore
+        //        || BetTypeID == (int)MatchMonitorBetType.FirstCorrectScore)
+        //    {
+        //        return this.BetTeam;
+        //    }
 
-            if (BetTypeID == (int)MatchMonitorBetType.OU
-                    || BetTypeID == (int)MatchMonitorBetType.FirstOU
-                    || BetTypeID == (int)MatchMonitorBetType.QuarterXOU)
-            {
-                return HDP.ToString();
-            }
+        //    if (BetTypeID == (int)MatchMonitorBetType.OU
+        //            || BetTypeID == (int)MatchMonitorBetType.FirstOU
+        //            || BetTypeID == (int)MatchMonitorBetType.QuarterXOU)
+        //    {
+        //        return HDP.ToString();
+        //    }
          
-            if (this.HDP < 0)
-            {
-                return Math.Abs(this.HDP).ToString();
-            }
+        //    if (this.HDP < 0)
+        //    {
+        //        return Math.Abs(this.HDP).ToString();
+        //    }
 
-            return this.HDP.ToString();
-        }
+        //    return this.HDP.ToString();
+        //}
 
         private void MappingTicketDetail(TicketDetailModel ticket)
         {
