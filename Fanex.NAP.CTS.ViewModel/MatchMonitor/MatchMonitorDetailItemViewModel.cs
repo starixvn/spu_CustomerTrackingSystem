@@ -198,7 +198,7 @@
             get
             {
                 return TransId.ToString();
-            }
+            }          
         }
 
         public int? RobotType { get; set; }
@@ -234,7 +234,11 @@
 
         public MMViewModeFromUI TypeOfTicket { get; set; } = MMViewModeFromUI.TicketFraud;
 
-        public IEnumerable<ParlayTicketInfoViewModel> ParlayTickets { get; set; }
+        public int SubParlayCount { get; set; }
+
+        public int Expand { get; set; }
+
+        public ParlayTicketInfoViewModel ParlayTicket { get; set; }
 
         #endregion
 

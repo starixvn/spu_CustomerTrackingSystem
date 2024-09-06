@@ -198,16 +198,16 @@ function MatchMonitorDetail() {
                         return '<label><input type="checkbox" class="col-checkbox" name="chkbx" /></label>';
                     } // Checkbox
                 },
-                { targets: [1], width: "17%" }, // UserName
-                { targets: [2], width: "4%" }, // CC
-                { targets: [3], width: "4%" }, // Bot
+                { targets: [1], width: "17%", className: "col-username" }, // UserName
+                { targets: [2], width: "4%", className: "col-customerclass" }, // CC
+                { targets: [3], width: "4%", className: "col-bot" }, // Bot
                 { targets: [4], width: "10%", className: "text-center col-dgr" }, // Dgr
-                { targets: [5], width: "5%" }, // Odds
-                { targets: [6], width: "5%" }, // MY.Odds
+                { targets: [5], width: "5%", className: "col-odds" }, // Odds
+                { targets: [6], width: "5%", className: "col-myodds" }, // MY.Odds
                 { targets: [7], width: "5%", className: "text-center col-betid" }, // BetID
-                { targets: [8], width: "5%" }, // Cur
+                { targets: [8], width: "5%", className: "col-currency"}, // Cur
                 { targets: [9], width: "5%", className: "text-right col-amt" }, // Amt
-                { targets: [10], width: "4%" }, // HDP
+                { targets: [10], width: "4%", className: "col-hdp" }, // HDP
                 { targets: [11], width: "5%", className: "text-center col-score" }, // Score
                 { targets: [12], width: "13%", className: "text-center col-transtime" }, // Transtime
                 { targets: [13], width: "3%" }, // B.f.
@@ -242,9 +242,9 @@ function MatchMonitorDetail() {
                 {
                     data: obj => RenderBetInfo(obj),
                 },
-                { data: obj => obj.CurrencyName },
+                { data: obj => RenderParlayCurrency(obj) },
                 {
-                    data: obj => ConvertNumberToThousandsString(obj.Amount), createdCell: (cell, _, row) => {
+                    data: obj => RenderParlayAmount(obj), createdCell: (cell, _, row) => {
                         if (row.Stake >= 1000) {
                             $(cell).addClass('col-red')
                         }
@@ -296,8 +296,108 @@ function MatchMonitorDetail() {
                 if (data.SubscriberType === "L") {
                     $(row.cells[1]).addClass('username-hightlight');
                 }
+                if (data.Expand > 0) {
+                    if (data.SubParlayCount > 0) {    
+                        let myArr = [0, 1, 2, 3, 4, 12, 13, 14, 15, 16, 17];
+                        myArr.forEach(function (value, _) {
+                            $(row.cells[value]).attr(`rowspan`, data.SubParlayCount);
+                        });
+                                              
+                    } else {    
+                        let myArr = [17, 16, 15, 14, 13, 12, 4, 3, 2, 1, 0];
+                        myArr.forEach(function (value, _) {
+                            $(row.cells[value]).remove();
+                        });
+                 
+                    }
+                    data.Expand = 2;
+                } else {
+                    data.Expand = 1;
+                }
+            }            
+        });
+
+        GenerateTest2(element);
+    }
+
+    function GenerateTest2(element) {
+        $('tbody', element).on('click', 'td.col-betid', function () {
+
+            //let rowIndex = domElements.tblMMHomeTeam.DataTable().row(this).index(); 
+
+            let row = domElements.tblMMHomeTeam.DataTable().row(this).data();
+            
+            if (row) {
+                if (row.Expand > 1) {
+                    CollapseParlayTicketByRefNo();
+                } else {
+                    ExpandParlayTicketByRefNo(1234); 
+                }
+                
+            }
+        })
+    }
+
+    function CollapseParlayTicketByRefNo() {
+        var table = domElements.tblMMHomeTeam.DataTable();
+       
+        var rowWithRowspan = $('tbody tr:first-child', domElements.tblMMHomeTeam);
+       
+        var rowspanCell = rowWithRowspan.find('td[rowspan]');
+        if (rowspanCell.length) {
+            var currentRowspan = parseInt(rowspanCell.attr('rowspan'), 10);
+           
+            if (currentRowspan > 1) {              
+                rowspanCell.attr('rowspan', currentRowspan - 1);
+
+                // Find and remove the next row (the one that the rowspan affects)
+                var nextRow = rowWithRowspan.next('tr');
+                table.row(nextRow).remove().draw(false);
+            }
+        }
+    }
+
+    function ExpandParlayTicketByRefNo(refNo) {
+        $.ajax(common.modifyRelativeUrl('MatchMonitor/GetParlayTicketByRefNo'), {
+            async: false,
+            type: 'POST',
+            tryCount: 0,
+            retryLimit: 3,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({ refNo: refNo }),
+            success: function (response) {
+                RenderParlayTicketByRefNo(response.data);
+            },
+            error: function (xhr, textStatus, error) {
+                if (textStatus == 'timeout') {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        //try again
+                        $.ajax(this);
+                        return;
+                    }
+                }
+
+                console.log(error);
             }
         });
+    }
+
+    function RenderParlayTicketByRefNo(parlayTickets) {
+        if (parlayTickets.length > 0) {
+            let table = domElements.tblMMHomeTeam.DataTable();
+            let data = table.rows().data().toArray();
+            parlayTickets.forEach(function (value, _) {
+                let newRowData = { SubParlayCount: 0, Expand: 1, ParlayTicket: value };
+
+                // Insert new row data at the clicked row's index + 1
+                data.splice(1, 0, newRowData);
+            })
+           
+            // Clear the table and re-add all rows with the new row included
+            table.clear().rows.add(data).draw();
+        }
     }
 
     //#endregion Initial Grid
@@ -1640,9 +1740,32 @@ function MatchMonitorDetail() {
                 return `<span class='span-betid' data-bet-id=${obj.TransIdToString}>${obj.TransIdToString}</span>`;
             }            
         } else {
-            return `<span class='span-betid' data-bet-id=${obj.TransIdToString}>Mix Parlay </span><span class="icon-chevron-right"></span>`;
+            return RenderParlayBetInfo(obj);
+        }        
+    }
+
+    function RenderParlayBetInfo(obj) {
+        if (obj.Expand > 0 && obj.ParlayTicket != undefined) {           
+            let ticket = obj.ParlayTicket;
+            let html = `<div>                    
+                    <ul><li>${ticket.BetTypeName} - ${ticket.BetTeam}</li></ul>
+                    <ul><li>${ticket.HomeName} vs ${ticket.AwayName}</li></ul>
+                    <ul><li>${ticket.SportName} ${ticket.LeagueName}</li></ul>
+                    <ul><li>${ticket.GlobalShowTime}</li></ul>                  
+                </div>`;
+
+            return `<span class='span-betid' data-bet-id=${obj.TransIdToString}>${html} </span><span class="icon-chevron-down"></span>`;
+        } else {
+            return `<span class='span-betid' data-bet-id=${obj.TransIdToString}>${obj.TransIdToString} </span><span class="icon-chevron-down"></span>`
         }
-        
+    }
+
+    function RenderParlayCurrency(obj) {
+        return obj.Expand > 0 ? `<span> </span>` : `<span>${obj.CurrencyName}</span>`         
+    }
+
+    function RenderParlayAmount(obj) {
+        return ConvertNumberToThousandsString(obj.Amount);
     }
 
     //#endregion Render Grid

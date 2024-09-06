@@ -9,7 +9,7 @@
         [SpParam(SqlParamName = "FraudTickets")]
         public string FraudTickets { get; set; }
 
-        public override string GetSettingKey() => "CTS_Rpt_MatchMonitorParlay_FraudTicketsSummary";
+        public override string GetSettingKey() => "CTS_MatchMonitorParlay_FraudTicketSummary";
 
         public override bool IsValid() => true;
     }

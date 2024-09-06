@@ -189,20 +189,20 @@
                 {
                     #region Comment for write test
 
-                    //var matchFromCTSInfos = Enumerable.Empty<GetMatchMonitorModel>();
+                    var matchFromCTSInfos = Enumerable.Empty<GetMatchMonitorModel>();
 
-                    //if (para.DateType == 1)
-                    //    matchFromCTSInfos = GetMMByScanDate(para);
-                    //else
-                    //    matchFromCTSInfos = GetMMByEventDate(para);
+                    if (para.DateType == 1)
+                        matchFromCTSInfos = GetMMByScanDate(para);
+                    else
+                        matchFromCTSInfos = GetMMByEventDate(para);
 
-                    //var dicSumTickets = GetMMFraudTicketsSummary(matchFromCTSInfos, TicketType.Single);
+                    var dicSumTickets = GetMMFraudTicketsSummary(matchFromCTSInfos, TicketType.Single);
 
-                    //var dicSumParlayTickets = GetMMFraudTicketsSummary(matchFromCTSInfos, TicketType.Parlay);
+                    var dicSumParlayTickets = GetMMFraudTicketsSummary(matchFromCTSInfos, TicketType.Parlay);
 
-                    //matchMonitors = MergeMatchMonitorWithMMStaticAndTicketsSummary(matchFromCTSInfos, dicSumTickets, dicSumParlayTickets);
+                    matchMonitors = MergeMatchMonitorWithMMStaticAndTicketsSummary(matchFromCTSInfos, dicSumTickets, dicSumParlayTickets);
 
-                    matchMonitors = GenerateMMParlay_Test();
+                   // matchMonitors = GenerateMMParlay_Test();
 
                     #endregion Comment for write test
                 }
@@ -366,6 +366,9 @@
                 {
                     x.IsSupportShowAllTickets = y.IsGetDataFromOrigin == 1;
                     x.DataSource = y.DataSource;
+                    x.HomeName = y.HomeName;
+                    x.AwayName = y.AwayName;
+                    x.LeagueName = y.LeagueName;
                     return x;
                 });
             }
@@ -484,23 +487,23 @@
             try
             {
                 #region Comment for Test
-                //if (para.IsImportNewTicket)
-                //{
-                //    result = GetMatchMonitorFilterImportNew(para);
-                //}
-                //else
-                //{
-                //    if (para.TypeOfTickets == MMViewModeFromUI.TicketFraud)
-                //    {
-                //        result = GetFraudMMFilter(para);
-                //    }
-                //    else if (para.IsSupportShowAllTickets)
-                //    {
-                //        result = GetAllMMFilter(para);
-                //    }
-                //}
+                if (para.IsImportNewTicket)
+                {
+                    result = GetMatchMonitorFilterImportNew(para);
+                }
+                else
+                {
+                    if (para.TypeOfTickets == MMViewModeFromUI.TicketFraud)
+                    {
+                        result = GetFraudMMFilter(para);
+                    }
+                    else if (para.IsSupportShowAllTickets)
+                    {
+                        result = GetAllMMFilter(para);
+                    }
+                }
 
-                result = GetMatchMonitorFilter_Test();
+                //result = GetMatchMonitorFilter_Test();
 
                 #endregion Comment for Test
             }
@@ -763,15 +766,51 @@
                     BetID = "0",
                     BetTypeID = 1,
                     BetTeam = "h",
+                    CustomerClass = 301,
+                    CurrencyId = 1,
+                    CurrencyName = "HK",
+                    Amount = 1000,
                     TransId = 45678912223456789,
                     TransTime = DateTime.Now,
                     TransTimeToString = DateTime.Now.ToString(Consts.FormatDateTimeToString_ddMMyyhhmmss),
                     Username = "User Test 1",
-                    ParlayTickets = parlayTickets
+                    SubParlayCount = 2
+                    //ParlayTicket = parlayTickets
+                },
+                new MatchMonitorDetailItemViewModel
+                {
+                    BetID = "0",
+                    BetTypeID = 3,
+                    BetTeam = "h",
+                    CustomerClass = 301,
+                    CurrencyId = 1,
+                    CurrencyName = "HK",
+                    Amount = 1500,
+                    TransId = 45678912223456777,
+                    TransTime = DateTime.Now,
+                    TransTimeToString = DateTime.Now.ToString(Consts.FormatDateTimeToString_ddMMyyhhmmss),
+                    Username = "User Test 2",
+                    SubParlayCount = 2
+                    //ParlayTicket = parlayTickets
                 }
             };
 
             return mdResult;
+        }
+
+        private IEnumerable<ParlayTicketInfoViewModel> GetParlayTicketByRefNo()
+        {
+            return new List<ParlayTicketInfoViewModel>() {
+                new ParlayTicketInfoViewModel{
+                    HomeName = "VN",
+                    AwayName = "TL",
+                    BetTeam = "Home",
+                    BetTypeName = "Handicap",
+                    SportName = "Giao Huu",
+                    LeagueName = "GH",
+                    GlobalShowTime = "8/16/2024 01:00 AM"
+                }
+            };             
         }
 
         #endregion Generate Data Test
@@ -1093,7 +1132,7 @@
 
         #endregion Detail Tickets
 
-        #region Parlay Detail Filter
+        #region Parlay Detail
         [HttpPost]
         public ActionResult GetMatchMonitorParlayFilter(MMDetailInfoViewModel para)
         {
@@ -1104,6 +1143,15 @@
             return Json(new
             {
                 data = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetParlayTicketByRefNo(long refNo)
+        {
+            return Json(new
+            {
+                data = GetParlayTicketByRefNo()
             }, JsonRequestBehavior.AllowGet);
         }
 

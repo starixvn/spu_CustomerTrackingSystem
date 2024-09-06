@@ -31,7 +31,7 @@
         public DateTime? MaxTransDate { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_MatchTicketDetailsParlayInfo_Get";
+            => "CTS_MatchMonitorParlay_Details_GetFilter";
 
         public override bool IsValid()
             => true;
