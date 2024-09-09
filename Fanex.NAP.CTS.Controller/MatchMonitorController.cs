@@ -251,7 +251,7 @@
             {
                 ReasonGroupName = ReasonDetectBySystemParlay_Display,
                 ReasonItems = reasonGroupItems.Where(x => x.ListNameDisplay == ReasonDetectBySystemParlay)
-                    .Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
+                    .Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = true })
                     .OrderBy(x => x.ReasonName)
             });
 
@@ -774,7 +774,7 @@
                     TransTime = DateTime.Now,
                     TransTimeToString = DateTime.Now.ToString(Consts.FormatDateTimeToString_ddMMyyhhmmss),
                     Username = "User Test 1",
-                    SubParlayCount = 2
+                    SubParlayCount = 3
                     //ParlayTicket = parlayTickets
                 },
                 new MatchMonitorDetailItemViewModel
@@ -790,7 +790,7 @@
                     TransTime = DateTime.Now,
                     TransTimeToString = DateTime.Now.ToString(Consts.FormatDateTimeToString_ddMMyyhhmmss),
                     Username = "User Test 2",
-                    SubParlayCount = 2
+                    SubParlayCount = 3 
                     //ParlayTicket = parlayTickets
                 }
             };
@@ -801,16 +801,27 @@
         private IEnumerable<ParlayTicketInfoViewModel> GetParlayTicketByRefNo()
         {
             return new List<ParlayTicketInfoViewModel>() {
-                new ParlayTicketInfoViewModel{
+                 new ParlayTicketInfoViewModel {
                     HomeName = "VN",
                     AwayName = "TL",
                     BetTeam = "Home",
                     BetTypeName = "Handicap",
                     SportName = "Giao Huu",
                     LeagueName = "GH",
-                    GlobalShowTime = "8/16/2024 01:00 AM"
+                    GlobalShowTime = "8/16/2024 01:00 AM",
+                    IsMainTicket = false
+                },
+                new ParlayTicketInfoViewModel {
+                    HomeName = "VN",
+                    AwayName = "TL",
+                    BetTeam = "Home",
+                    BetTypeName = "Handicap",
+                    SportName = "Giao Huu",
+                    LeagueName = "GH",
+                    GlobalShowTime = "8/16/2024 01:00 AM",
+                    IsMainTicket = true
                 }
-            };             
+            };
         }
 
         #endregion Generate Data Test
@@ -868,46 +879,46 @@
             {
                 #region Comment for test
 
-                //switch (para.TypeOfTickets)
-                //{
-                //    case MMViewModeFromUI.TicketFraud:
-                //        {
-                //            var fraudTicket = GetFraudMMDetailForCache(para);
+                switch (para.TypeOfTickets)
+                {
+                    case MMViewModeFromUI.TicketFraud:
+                        {
+                            var fraudTicket = GetFraudMMDetailForCache(para);
 
-                //            if (fraudTicket != null)
-                //            {
-                //                mdResult = GetFraudMMDetail(para, filter, fraudTicket);
-                //            }
+                            if (fraudTicket != null)
+                            {
+                                mdResult = GetFraudMMDetail(para, filter, fraudTicket);
+                            }
 
-                //            break;
-                //        }
-                //    case MMViewModeFromUI.TicketAll when para.IsSupportShowAllTickets:
-                //        {
-                //            var internalCurrencyIDs = new List<int> { 20, 27, 28 };
+                            break;
+                        }
+                    case MMViewModeFromUI.TicketAll when para.IsSupportShowAllTickets:
+                        {
+                            var internalCurrencyIDs = new List<int> { 20, 27, 28 };
 
-                //            mdResult = GetAllMMDetail(para, filter);
+                            mdResult = GetAllMMDetail(para, filter);
 
-                //            if (mdResult != null)
-                //            {
-                //                var ctsCustIDHomeIsZero = mdResult.HomeMatchItemList.Where(x => x.CTSCustID == 0 && !internalCurrencyIDs.Any(c => c == x.CurrencyId)).Select(x => x);
-                //                var ctsCustIDAwayIsZero = mdResult.AwayMatchItemList.Where(x => x.CTSCustID == 0 && !internalCurrencyIDs.Any(c => c == x.CurrencyId)).Select(x => x);
+                            if (mdResult != null)
+                            {
+                                var ctsCustIDHomeIsZero = mdResult.HomeMatchItemList.Where(x => x.CTSCustID == 0 && !internalCurrencyIDs.Any(c => c == x.CurrencyId)).Select(x => x);
+                                var ctsCustIDAwayIsZero = mdResult.AwayMatchItemList.Where(x => x.CTSCustID == 0 && !internalCurrencyIDs.Any(c => c == x.CurrencyId)).Select(x => x);
 
-                //                if (ctsCustIDHomeIsZero != null && ctsCustIDHomeIsZero.Any())
-                //                {
-                //                    LogService.Error($"{Region} Get Match Monitor Detail with CTSCustIDHome=0: {JsonConvert.SerializeObject(ctsCustIDHomeIsZero)}");
-                //                }
+                                if (ctsCustIDHomeIsZero != null && ctsCustIDHomeIsZero.Any())
+                                {
+                                    LogService.Error($"{Region} Get Match Monitor Detail with CTSCustIDHome=0: {JsonConvert.SerializeObject(ctsCustIDHomeIsZero)}");
+                                }
 
-                //                if (ctsCustIDAwayIsZero != null && ctsCustIDAwayIsZero.Any())
-                //                {
-                //                    LogService.Error($"{Region} Get Match Monitor Detail with CTSCustIDAway=0: {JsonConvert.SerializeObject(ctsCustIDAwayIsZero)}");
-                //                }
-                //            }
+                                if (ctsCustIDAwayIsZero != null && ctsCustIDAwayIsZero.Any())
+                                {
+                                    LogService.Error($"{Region} Get Match Monitor Detail with CTSCustIDAway=0: {JsonConvert.SerializeObject(ctsCustIDAwayIsZero)}");
+                                }
+                            }
 
-                //            break;
-                //        }
-                //}
+                            break;
+                        }
+                }
 
-                mdResult = GetMatchMonitorDetail_Test();
+                //mdResult = GetMatchMonitorDetail_Test();
 
                 #endregion Comment for test
             }

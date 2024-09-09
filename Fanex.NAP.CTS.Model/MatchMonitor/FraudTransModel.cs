@@ -4,6 +4,8 @@
     {
         public long TransID { get; set; }
 
+        public long Refno { get; set; }
+
         public string Reason { get; set; }
 
         public int AGroup { get; set; }

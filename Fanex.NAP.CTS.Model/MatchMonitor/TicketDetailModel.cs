@@ -75,5 +75,11 @@
         public int IsLicensee { get; set; }
 
         public int ChoiceOrder { get; set; }
+
+        public int OrderTicket { get; set; }
+
+        public long Refno { get; set; }
+
+        public int Combinition { get; set; }
     }
 }

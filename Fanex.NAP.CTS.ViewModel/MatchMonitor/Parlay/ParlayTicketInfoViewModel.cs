@@ -15,5 +15,8 @@
         public string LeagueName { get; set; }
 
         public string GlobalShowTime { get; set; }
+
+        public bool IsMainTicket { get; set; }
+
     }
 }

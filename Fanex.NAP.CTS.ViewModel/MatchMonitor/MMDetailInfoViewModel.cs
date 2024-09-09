@@ -28,6 +28,7 @@
             this.TranstimeFrom = para.TranstimeFrom;
             this.TranstimeTo = para.TranstimeTo;
             this.IsCashout = para.IsCashout;
+            this.TicketType = para.TicketType;
         }
 
         public bool IsSupportShowAllTickets { get; set; }

@@ -732,6 +732,20 @@
                                             color: #209005;
                                         }
                                     }
+
+                                    .parlay-li {
+                                        white-space: nowrap;
+                                        text-align: left;
+                                        padding-bottom: 4px;
+                                    }
+
+                                    .bold {
+                                        font-weight: bold;
+                                    }
+
+                                    .hidden {
+                                        display: none;
+                                    }
                                 }
 
                                 tr td:last-child {
@@ -813,6 +827,14 @@
 
                                 &:hover {
                                     background-color: #A3C4F5 !important;
+                                }
+                            }
+
+                            .bg-parlay-main {
+                                background-color: #c5d9f1;
+
+                                &:hover {
+                                    background-color: #c5d9f1 !important;
                                 }
                             }
 

@@ -6,14 +6,14 @@
     {
         public MMDetailBetTeamModel() { }
 
-        public MMDetailBetTeamModel(MatchMonitorDetailModel m, TicketDetailModel t)
+        public MMDetailBetTeamModel(MatchMonitorDetailModel m, TicketDetailModel t, bool isParlay)
         {
-            this.TransID = m.TransID;
+            this.TransID = isParlay ? m.Refno : m.TransID;
             this.Reason = m.Reason;
             this.GroupID = m.GroupID;
             this.Betteam = t.BetTeam;
             this.CustID = t.CustId;
-        }
+        }       
 
         public long TransID { get; set; }
 

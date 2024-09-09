@@ -3,6 +3,8 @@
     public class MMDetailMergeGroupModel
     {
         public long TransID { get; set; }
+     
+        public long Refno { get { return this.TransID; } }
 
         public int ScoreDiff { get; set; }
 

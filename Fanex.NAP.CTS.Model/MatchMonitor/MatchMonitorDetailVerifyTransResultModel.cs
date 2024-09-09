@@ -6,8 +6,8 @@ namespace Fanex.NAP.CTS.Model.MatchMonitor
     {
         public long VerifiedTransID { get; set; }
 
-        public DateTime VerifiedDate { get; set; }
+        //public DateTime VerifiedDate { get; set; }
 
-        public string VerifiedBy { get; set; }              
+        //public string VerifiedBy { get; set; }              
     }
 }

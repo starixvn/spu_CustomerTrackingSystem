@@ -236,7 +236,7 @@
 
         public int SubParlayCount { get; set; }
 
-        public int Expand { get; set; }
+        public bool ViewMoreInfo { get; set; }
 
         public ParlayTicketInfoViewModel ParlayTicket { get; set; }
 

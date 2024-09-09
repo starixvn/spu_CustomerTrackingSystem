@@ -981,6 +981,29 @@
             .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .icon-Check::before,
             .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .icon-Check::before {
               color: #209005; }
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .parlay-li,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .parlay-li,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .parlay-li,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .parlay-li,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .parlay-li,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .parlay-li {
+              white-space: nowrap;
+              text-align: left;
+              padding-bottom: 4px; }
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .bold,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .bold,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .bold,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .bold,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .bold,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .bold {
+              font-weight: bold; }
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr .hidden,
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr .hidden,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr .hidden,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr .hidden,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor tbody tr .hidden,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr .hidden {
+              display: none; }
             .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor tbody tr td:last-child,
             .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail tbody tr td:last-child,
             .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor tbody tr td:last-child,
@@ -1081,6 +1104,14 @@
             .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .void-ticket:hover,
             .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .void-ticket:hover {
               background-color: #A3C4F5 !important; }
+          .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .bg-parlay-main,
+          .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .bg-parlay-main,
+          .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .bg-parlay-main {
+            background-color: #c5d9f1; }
+            .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .bg-parlay-main:hover,
+            .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .bg-parlay-main:hover,
+            .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .bg-parlay-main:hover {
+              background-color: #c5d9f1 !important; }
           .detailpage .monitor-container .monitor-table .group-table #monitor-datatable .table-report .table-monitor-detail .username-hightlight,
           .detailpage .monitor-container .monitor-table .group-table #first-monitor-datatable .table-report .table-monitor-detail .username-hightlight,
           .detailpage .monitor-container .monitor-table .group-table #second-monitor-datatable .table-report .table-monitor-detail .username-hightlight {
