@@ -285,7 +285,7 @@
                        return nTicket;
                    });
 
-                return ticketResult.Distinct(x => x.TransId);
+                return ticketResult.Distinct(x => x.Refno);
             }
 
         }
@@ -1028,8 +1028,7 @@
                 ViewMode = para.TypeOfTickets == MMViewModeFromUI.TicketAll ? 0 : 1,
                 BatchSize = batchSize,
                 IsLicensee = (para.Sites == MMSites.All || para.Sites == null) ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
-                ListRefno = listRefno,
-                IsCashout = para.IsCashout,
+                ListRefno = listRefno,               
                 FromTransDate = para.TranstimeFrom != null ? para.TranstimeFrom.Value.ToUniversalTime() : (DateTime?)null,
                 ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null,
                 IsExclTestCurr = _mmQueryType == MMQueryType.DangerMMReport
@@ -1054,7 +1053,7 @@
                 criteria.ListScore = (filter.ScoreList == null || !para.LiveIndicator || filter.SportType == 2) ? null : string.Join(",", filter.ScoreList);
                 criteria.ListCurrency = filter.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList);
                 criteria.ListDanger = GenerateDangerJson(filter);
-                criteria.ListStatus = filter.TicketStatusList == null ? null : string.Join(",", filter.TicketStatusList);
+                //criteria.ListStatus = filter.TicketStatusList == null ? null : string.Join(",", filter.TicketStatusList);
                 criteria.ListCustomerClass = filter.CustomerClassList == null ? null : string.Join(",", filter.CustomerClassList);
                 criteria.ListReason = filter.ReasonList == null ? null : string.Join(",", filter.ReasonList).Replace('-', '0');
                 criteria.ListAGroup = filter.AGroupList == null ? null : string.Join(",", filter.AGroupList).Replace('-', '0');

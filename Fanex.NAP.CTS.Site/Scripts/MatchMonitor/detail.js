@@ -335,7 +335,7 @@ function MatchMonitorDetail() {
             
             if (data.ViewMoreInfo) {
                 data.ViewMoreInfo = false;
-                CollapseParlayTicketByRefNo(rowIndex);               
+                CollapseParlayTicketByRefNo(rowIndex);
             } else {
                 data.ViewMoreInfo = true;
                 ExpandParlayTicketByRefNo(1234, rowIndex); 
@@ -1499,7 +1499,8 @@ function MatchMonitorDetail() {
                     MGrTranIDListFiltered: GetTranIDsByFilterMGr(),
                     Sport: domElements.sportType,
                     TranstimeFrom: transtime.fromDate,
-                    TranstimeTo: transtime.toDate
+                    TranstimeTo: transtime.toDate,
+                    TicketType: domElements.ticketType
                 };
 
                 params.IsFilterSuspicious = IsFilterSuspicious(params);
@@ -1646,7 +1647,7 @@ function MatchMonitorDetail() {
             Sport: domElements.sportType,
             TranstimeFrom: transtime.fromDate,
             TranstimeTo: transtime.toDate,
-            TicketType: 2
+            TicketType: domElements.ticketType
         };
 
         $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorFilter'), {

@@ -73,11 +73,7 @@
         public int? BatchSize { get; set; }
 
         [SpParam(SqlParamName = "IsExclTestCurr")]
-        public bool IsExclTestCurr { get; set; }
-
-        [SpParam(SqlParamName = "IsCashout")]
-        public int? IsCashout { get; set; }
-
+        public bool IsExclTestCurr { get; set; }    
 
         [SpParam(SqlParamName = "MinSequenceId")]
         public long? MinSequenceId { get; set; }

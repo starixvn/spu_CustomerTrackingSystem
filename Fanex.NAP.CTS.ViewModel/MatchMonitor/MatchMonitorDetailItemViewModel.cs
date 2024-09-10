@@ -201,6 +201,8 @@
             }          
         }
 
+        public long Refno { get; set; }
+
         public int? RobotType { get; set; }
 
         public bool IsRobot { get; set; }
@@ -383,6 +385,7 @@
             this.MDetectGroupID = -2;
             //this.ReasonList = "",         
             this.TransId = ticket.TransId;
+            this.Refno = ticket.Refno;
             this.RobotType = null;
             this.IsRobot = false;
             this.ChoiceOrder = ticket.ChoiceOrder;

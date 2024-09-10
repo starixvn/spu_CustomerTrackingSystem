@@ -457,7 +457,8 @@
                 ViewBag.MatchSection = para?.MatchSection ?? 0;
                 ViewBag.IsVisibleHoldKey = para?.MatchSection != (int)MATCHMONITOR_SECTION.Closed;
                 ViewBag.HoldKeyStatus = GetHoldKeyStatus(para?.MatchID ?? 0, para?.MatchSection ?? 0);
-                ViewBag.TicketType = (int)para.TicketType;
+                //ViewBag.TicketType = (int)para.TicketType;
+                ViewBag.TicketType = 2;
                 ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                                                                             NapSettings.Settings.SiteId,
                                                                             FSFunctionKeys.MatchMonitor,
@@ -1054,7 +1055,7 @@
         private TicketDetailViewModel GetFraudMMDetailForCache(MMDetailInfoViewModel filter)
         {
             var para = filter.Clone();
-            var fraudMMDetailResult = new TicketDetailViewModel();
+            var fraudMMDetailResult = new TicketDetailViewModel() { TicketType = filter.TicketType };
             var viewModeName = Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketFraud);
             var key = filter.TicketType == TicketType.Single
                 ? para.BuildCacheKey("TicketFraud", Region, UserID, viewModeName)
