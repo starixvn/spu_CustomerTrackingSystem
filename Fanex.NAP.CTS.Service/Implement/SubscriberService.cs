@@ -1,7 +1,6 @@
 ﻿using Fanex.NAP.CTS.Core.BaseClasses;
 using Fanex.NAP.CTS.Criteria.Api;
 using Fanex.NAP.CTS.Criteria.Api.FPS.Subscriber;
-using Fanex.NAP.CTS.Model;
 using Fanex.NAP.CTS.Model.API.FPS.Subscriber;
 using Fanex.NAP.CTS.Model.Subscriber;
 using Fanex.NAP.CTS.Service.Interface;

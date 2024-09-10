@@ -57,9 +57,7 @@
 
             RobotBettingBundles(bundles);
 
-            RegisterCustomerCategoryBundles(bundles);
-
-            RegisterProblemAccountMonitorBundles(bundles);
+            RegisterCustomerCategoryBundles(bundles);        
 
             RegisterProblemAccountMonitorDetailBundles(bundles);
 
@@ -67,9 +65,7 @@
 
             RegisterAssociatedAccountMonitorBundles(bundles);
 
-            RegisterSpecialCustomerClassBundles(bundles);
-
-            RegisterProbationManagementBundles(bundles);
+            RegisterSpecialCustomerClassBundles(bundles);          
 
             RegisterManagerSubscriberBundles(bundles);
 
@@ -77,9 +73,7 @@
 
             RegisterAssociationDetailReport(bundles);
 
-            RegisterLatestTransaction(bundles);
-
-            RegisterProblemCaseMonitor(bundles);
+            RegisterLatestTransaction(bundles);           
 
             RegisterAssociationDetectionBundles(bundles);
 
@@ -213,21 +207,7 @@
         private static void RegisterCustomerCategoryBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/account/customer-category-scripts").Include("~/Scripts/Account/CustomerCategory/*.js"));
-        }
-
-        private static void RegisterProblemAccountMonitorBundles(BundleCollection bundles)
-        {
-            bundles.Add(new ScriptBundle("~/problem-account-monitor-scripts").Include(
-                "~/Scripts/select2.min.js",
-                "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
-                "~/Scripts/ProblemAccountMonitor/index.js"));
-
-            bundles.Add(new StyleBundle("~/problem-account-monitor-styles").Include(
-                "~/Content/scss/vendors/select2.min.css",
-                 "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
-                 "~/Content/scss/MultipleSelect/jquery.multiselect.css",
-                "~/Content/scss/pages/problem-account-monitor/problem-account-monitor.css"));
-        }
+        }      
 
         private static void RegisterProblemAccountMonitorDetailBundles(BundleCollection bundles)
         {
@@ -301,21 +281,7 @@
                 "~/Content/scss/MultipleSelect/jquery.multiselect.css",
                 "~/Content/scss/vendors/jquery-ui/base/tagify.css",
                 "~/Content/scss/pages/special-customer-class/special-customer-class.css"));
-        }
-
-        private static void RegisterProbationManagementBundles(BundleCollection bundles)
-        {
-            bundles.Add(new StyleBundle("~/probation-management-styles").Include(
-                "~/Content/scss/vendors/select2.min.css",
-                "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
-                "~/Content/scss/MultipleSelect/jquery.multiselect.css",
-                "~/Content/scss/pages/probation-management/probation-management.css"));
-
-            bundles.Add(new ScriptBundle("~/probation-management-scripts").Include(
-                "~/Scripts/select2.min.js",
-                "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
-                "~/Scripts/ProbationManagement/index.js"));
-        }
+        }      
 
         private static void RegisterManagerSubscriberBundles(BundleCollection bundles)
         {
@@ -390,23 +356,7 @@
                 "~/Content/scss/pages/match-monitor/match-monitor-detail.css",
                 "~/Content/scss/vendors/jquery-ui/base/tagify.css"));
         }
-
-        private static void RegisterProblemCaseMonitor(BundleCollection bundles)
-        {
-            bundles.Add(new ScriptBundle("~/problem-case-monitor-scripts").Include(
-                  "~/Scripts/select2.min.js",
-                  "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
-                  "~/Scripts/tagify/jquery.tagify.min.js",
-                  "~/Scripts/tagify/tagify.min.js",
-                  "~/Scripts/ProblemCaseMonitor/index.js"));
-
-            bundles.Add(new StyleBundle("~/problem-case-monitor-styles").Include(
-                "~/Content/scss/vendors/select2.min.css",
-                 "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
-                "~/Content/scss/MultipleSelect/jquery.multiselect.css",
-                "~/Content/scss/pages/problem-case-monitor/problem-case-monitor.css"));
-        }
-
+       
         private static void RegisterTransactionReport(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/transaction-report-scripts").Include(

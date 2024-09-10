@@ -36,9 +36,9 @@
 
         public int? SportType { get; set; }
 
-        public int IssueTypeID { get; set; }
+        public int? IssueTypeID { get; set; }
 
-        public bool IsDirect { get; set; }
+        public bool IsMarkedDirectly { get; set; }
 
         public string Remark { get; set; }
 
@@ -52,6 +52,8 @@
 
         public Int64? BetCount { get; set; }
 
-        public int? ActiveDays { get; set; }        
+        public int? ActiveDays { get; set; }
+
+        public DateTime? PerformanceTime { get; set; }
     }
 }

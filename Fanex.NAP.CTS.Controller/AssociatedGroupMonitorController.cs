@@ -8,6 +8,7 @@
     using Fanex.NAP.CTS.Model.AssociatedGroupMonitor;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.AssociatedGroupMonitor;
@@ -23,29 +24,35 @@
     public class AssociatedGroupMonitorController : BaseController
     {
         private const string AssociatedAccountMonitorTemplate = "~/App_Data/Excel Template/AssociatedGroupMonitor/Template.xlsx";
-        private readonly IAssociatedGroupMonitorService _associatedGroupService;
-        private readonly IProblemAccountClassificationService _paClassificationService;
+        private readonly IAssociatedGroupMonitorService _associatedGroupService;       
+        private readonly IProblemAccountManagementService _pamService;
         private readonly ICommonService _commonService;
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
         public AssociatedGroupMonitorController()
         {
-            _associatedGroupService = new AssociatedGroupMonitorService();
-            _paClassificationService = new ProblemAccountClassificationService();
+            _associatedGroupService = new AssociatedGroupMonitorService();            
+            _pamService = new ProblemAccountManagementService();
             _commonService = new CommonService();
         }
 
         public ActionResult Index()
         {
-            IUserService userService = new UserService();
+            IUserService userService = new UserService();            
 
             var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                             NapSettings.Settings.SiteId,
                             FSFunctionKeys.AssociatedGroupMonitor,
                             NAP.Core.Business.Constant.Policy.Host);
-                      
-            return View(isHostPermission);
+
+            var categoryList = _pamService.GetProblemAccountCategories(ViewCategoryPageSource.AssociatedGroupMonitor).OrderBy(x => x.Priorty);
+
+            return View(new AssGroupMonitorViewModel
+            {
+                IsHostPermission = isHostPermission,
+                CategoryList = categoryList
+            });
         }
 
         [HttpPost]

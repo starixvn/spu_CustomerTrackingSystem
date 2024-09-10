@@ -7,39 +7,18 @@
 		<Setting Key="FS_DelayGoalAccount_ImportFromFPS" SpName="FS_DelayGoalAccount_ImportFromFPS" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
 	</Function>
 
-	<Function Name="Notification">
-		<Setting Key="FS_Tbl_UserMessage_Get" SpName="FS_Tbl_UserMessage_Get" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-		<Setting Key="FS_Tbl_UserMessage_GetUnreadCount" SpName="FS_Tbl_UserMessage_GetUnreadCount" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-		<Setting Key="FS_Recipients_Add" SpName="FS_Recipients_Add" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-		<Setting Key="FS_Recipients_Get" SpName="FS_Recipients_Get" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-		<Setting Key="FS_Recipients_Delete" SpName="FS_Recipients_Delete" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-	</Function>
-
 	<Function name="Common">		
-		<Setting Key="CTS_CustomerClass_GetByCustId" SpName="CTS_CustomerClass_GetByCustId_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_CustomerLastTicketDate_Get" SpName="CTS_CustomerLastTicketDate_Get" DbName="DBCTS.bodb02.bodbSPUNet" />		
+		<Setting Key="CTS_CustomerClass_GetByCustId" SpName="CTS_CustomerClass_GetByCustId_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />	
 		<Setting Key="CTS_CustomerStatistics_GetPerformance_ByBettype" SpName="CTS_CustomerStatistics_GetPerformance_ByBettype_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
 		<Setting Key="CTS_CustomerStatistics_GetPerformanceDaily" SpName="CTS_CustomerStatistics_GetPerformanceDaily_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
-		<Setting Key="CTS_CustomerStatistics_GetPerformance_BySport" SpName="CTS_CustomerStatistics_GetPerformance_BySport_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
-		<Setting Key="FS_MoveBetBalanceUpDate_Get" SpName="FS_MoveBetBalanceUpDate_Get_xtest" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-		<Setting Key="FS_CTSSportList_Get" SpName="FS_CTSSportList_Get_xtest" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-		<Setting Key="FS_CTSLeagueList_GetBySports" SpName="FS_CTSLeagueList_GetBySports_xtest" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-		<Setting Key="FS_Rpt_CTSMatchMonitor_Get" SpName="FS_Rpt_CTSMatchMonitor_Get_xtest" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-		<Setting Key="FS_Rpt_CTSMatchMonitor_Details_GetMatchInfo" SpName="FS_Rpt_CTSMatchMonitor_Details_GetMatchInfo_xtest" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-		<Setting Key="FS_Rpt_CTSMatchMonitor_Details_GetTickets" SpName="FS_Rpt_CTSMatchMonitor_Details_GetTickets_xtest" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged_UAT1" DbName="DBCust.CustDB.bodbAdminNet" />
-		<Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged_UAT1" DbName="DBCust.CustDB.bodbAdminNet" />
-		<Setting Key="TicketVoiding_TicketsInRequest_Select" SpName="TicketVoiding_TicketsInRequest_Select_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get_xtest" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />		
-		<Setting Key="CTS_Customer_RobotCheckExist" SpName="CTS_Customer_RobotCheckExist_xtest" DbName="DBONUSER.ON_USER.bodbSPUNet" />
+		<Setting Key="CTS_CustomerStatistics_GetPerformance_BySport" SpName="CTS_CustomerStatistics_GetPerformance_BySport_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />					
+		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged" DbName="DBCust.CustDB.bodbAdminNet" />
+		<Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged" DbName="DBCust.CustDB.bodbAdminNet" />	
+		<Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get_xtest" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />				
 		<Setting Key="CTS_MatchInfo_Get" SpName="CTS_MatchInfo_Get_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_SportBettype_Get" SpName="CTS_SportBettype_Get_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_LeagueGroup_Get" SpName="CTS_LeagueGroup_Get_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_ValidateUsername" SpName="CTS_ValidateUsername_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
-	</Function>
-
-	<Function name="ProbationManagement">
-		<Setting Key="CTS_NormalAccountsClassification_GetAccummulatedInfo" SpName="CTS_NormalAccountsClassification_GetAccummulatedInfo_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
 	</Function>
 
 	<Function name="CustomerClassification">
@@ -89,7 +68,4 @@
 		<Setting Key="CTS_BySportNormalClassification_RescanNormal_Preprocess" SpName="CTS_BySportNormalClassification_RescanNormal_Preprocess_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
 	</Function>
 
-	<Function name="RescanClassification">
-		<Setting Key="CTS_CustomerClassification_CheckNewGroupBetting" SpName="CTS_CustomerClassification_CheckNewGroupBetting_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />		
-	</Function>
 </Functions>

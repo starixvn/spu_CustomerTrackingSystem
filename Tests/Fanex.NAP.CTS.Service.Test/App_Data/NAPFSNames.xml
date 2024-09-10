@@ -215,28 +215,6 @@
 			    DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
   </Function>
 
-  <Function Name="Notification">
-    <Setting Key="FS_Tbl_UserMessage_Get"
-             SpName="FS_Tbl_UserMessage_Get"
-             DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-
-    <Setting Key="FS_Tbl_UserMessage_GetUnreadCount"
-             SpName="FS_Tbl_UserMessage_GetUnreadCount"
-             DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-
-    <Setting Key="FS_Recipients_Add"
-         SpName="FS_Recipients_Add"
-         DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-
-    <Setting Key="FS_Recipients_Get"
-     SpName="FS_Recipients_Get"
-     DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-
-    <Setting Key="FS_Recipients_Delete"
-     SpName="FS_Recipients_Delete"
-     DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-  </Function>
-
   <Function Name="OfficeIPReport">
     <Setting Key="FS_Rpt_OfficeIP_Get"
              SpName="FS_Rpt_OfficeIP_Get"

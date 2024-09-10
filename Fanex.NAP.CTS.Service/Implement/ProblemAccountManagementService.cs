@@ -4,10 +4,9 @@
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.ProblemAccountManagement;
-    using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
-    using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement;
     using Fanex.NAP.TGRS.Core.ExcelUtility;
@@ -18,17 +17,7 @@
     using System.Linq;    
 
     public class ProblemAccountManagementService : IProblemAccountManagementService
-    {
-        public IEnumerable<SubscriberGroupModel> GetAllSites()
-        {
-            var criteria = new GetAllSubscriberGroupsCriteria();
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<SubscriberGroupModel>(criteria);
-            }
-        }
-
+    {     
         public IEnumerable<CategoryInfoModel> GetAllCategory()
         {
             var criteria = new GetCategoryInfoCriteria();
@@ -57,9 +46,9 @@
             }
         }
 
-        public IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories()
+        public IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories(ViewCategoryPageSource categoryPageSource)
         {
-            var criteria = new GetProblemAccountCategoryCriteria();
+            var criteria = new GetProblemAccountCategoryCriteria() {  PageSource = (int)categoryPageSource};
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
@@ -94,25 +83,8 @@
                     });
                 }
             }
-
-            var objectDb = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
-            var connection = objectDb.CreateDbConnection();
-            connection.Open();
-
-            objectDb.Dispose();
-            connection.Dispose();           
-
+          
             return result;
-        }
-
-        public IEnumerable<GetCustEvidenceByReasonIdModel> GetCustEvidenceByReasonIds()
-        {
-            var criteria = new GetCustEvidenceByReasonIdCriteria();
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<GetCustEvidenceByReasonIdModel>(criteria).ToList();
-            }
         }
      
         public byte[] ExportProblemAccount(IEnumerable<GetProblemAccountViewModel> data, string fileName, string templatePath, ProblemAccountFilterViewModel filter)
@@ -213,18 +185,6 @@
             }
 
             lineCount += 1;
-        }
-       
-        public IEnumerable<long> RemoveProblemAccountEvidence(string custIds)
-        {
-            var repository = new DynamicRepository();
-            var criteria = new RemoveProblemAccountEvidenceCriteria
-            {
-                CustIDs = custIds,
-                SourceType = 1
-            };
-
-            return repository.Fetch<long>(criteria);
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.AssociationDetection
 {
+    using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using System;
     using System.Linq;
@@ -31,15 +33,8 @@
             this.AssociatedTypes = GetAssociationType(data.AssociationType);
             this.CustomerCategory = data.CustomerCategory;
             this.CustomerClassToString = data.CustomerClass > 0 ? data.CustomerClass.ToString() : null;
-            this.CustomerClass = data.CustomerClass;
-            this.IsPAProbation = data.IsPAProbation;
-            this.CategoryType = data.CategoryType;
-
-            if (this.CategoryType != 2)
-            {
-                this.IsProblemAccount = data.ParentIDs != null && data.ParentIDs.Split(',').Any(y => y == "50");
-            }
-
+            this.CustomerClass = data.CustomerClass;          
+    
             this.AgentCTSCustID = data.AgentCTSCustID;
             if (!data.IsLicensee && data.AgentUsername != null)
                 this.AgentUsername = data.AgentUsername;
@@ -50,6 +45,19 @@
                 this.AgentEvidence = data.AgentEvidence;
             else
                 this.AgentEvidence = "-";
+
+            if (!string.IsNullOrEmpty(data.ColorTypeIDs))
+            {
+                var arrColorTypeIDs = data.ColorTypeIDs.Split(',');
+
+                int.TryParse(arrColorTypeIDs[0], out int colorTypeID);
+
+                this.CategoryColorType = (CategoryColorType)colorTypeID;
+            }
+            else
+            {
+                this.CategoryColorType = CategoryColorType.Default;
+            }          
         }
 
         public int RowNumber { get; set; }
@@ -86,10 +94,6 @@
 
         public int CustomerClass { get; set; }
 
-        public bool IsProblemAccount { get; set; }
-
-        public bool IsPAProbation { get; set; }
-
         public long AgentCTSCustID { get; set; }
 
         public string AgentUsername { get; set; }
@@ -108,7 +112,20 @@
 
         public int Danger5 { get; set; }
 
-        public int CategoryType { get; set; } // 1: PA, 2: PA Dangerous
+        public CategoryColorType CategoryColorType { get; set; }
+
+        public string CategoryColorDesc
+        {
+            get
+            {
+                if (this.CategoryColorType == CategoryColorType.Default)
+                {
+                    return string.Empty;
+                }
+
+                return EnumExtensions.GetStringSlow(CategoryColorType);
+            }
+        }
 
         private string GetAssociationType(string assType)
         {

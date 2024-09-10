@@ -26,5 +26,9 @@
 
         public int TaggingType { get; set; }
 
+        public bool IsPA { get; set; }
+
+        public bool IsNormalLinkedPA { get; set; }
+
     }
 }

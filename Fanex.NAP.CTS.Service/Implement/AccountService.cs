@@ -7,7 +7,6 @@
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers;
-    using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.Account.Associated;
     using Fanex.NAP.CTS.Criteria.Account.BettingStatistic;
@@ -20,7 +19,6 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Account.AssociatedAccount;
-    using Fanex.NAP.CTS.Model.Account.CustomerCategory;
     using Fanex.NAP.CTS.Model.Account.CustomerCategoryBySport;
     using Fanex.NAP.CTS.Model.Account.CustomerInfo;
     using Fanex.NAP.CTS.Model.Association;
@@ -30,12 +28,10 @@
     using Fanex.NAP.CTS.Model.Transaction;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
-    using Newtonsoft.Json;
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading.Tasks;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class AccountService : IAccountService
@@ -232,37 +228,7 @@
 
                 return result.ToList();
             }
-        }
-
-        public CustomerLastTicketDateModel GetCustomerLastTicketDate(long custId)
-        {
-            var criteria = new CustomerLastTicketDateCriteria
-            {
-                CustId = custId
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.QueryEntity<CustomerLastTicketDateModel>(criteria);
-
-                return result;
-            }
-        }
-
-        public CustomerRobotUserStatusModel GetCustomerRobotUserStatus(long custId)
-        {
-            var criteria = new CustomerRobotUserStatusCriteria
-            {
-                CustId = custId
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.QueryEntity<CustomerRobotUserStatusModel>(criteria);
-
-                return result;
-            }
-        }
+        }   
 
         public CustomerFlagInfoModel GetCustomerFlagInfo(Int64 ctsCustId)
         {
@@ -331,41 +297,7 @@
             }
 
             return groupStatuses;
-        }
-
-        public string MappingAssociationType(AssociatedAccountModel data)
-        {
-            if (data.AssociationType != null)
-            {
-                return GetAssociationTypeName(data.AssociationType).Select(x => x).Join(", ");
-            }
-
-            return string.Empty;
-        }
-
-        public List<string> GetAssociationTypeName(List<int> associationType)
-        {
-            var assTypeName = new List<string>();
-
-            foreach (var i in associationType)
-            {
-                assTypeName.Add(GetAssociationTypeName(i));
-            }
-
-            return assTypeName;
-        }
-
-        public string GetAssociationTypeName(int associationType)
-        {
-            string x = Enum.GetName(typeof(AssociationType), associationType);
-
-            if (!string.IsNullOrEmpty(x) && x.Equals("BettingPattern"))
-            {
-                return Consts.AssociationTypeName_BettingPattern;
-            }
-
-            return x;
-        }
+        }       
 
         public IEnumerable<ValidateManualAssociationMultipleModel> ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList, out bool isException)
         {
@@ -466,18 +398,7 @@
                 };
             }
         }
-
-        public IEnumerable<long> GetAssociationException(string apiURL, long ctsCustId)
-        {
-            var urlString = string.Format(apiURL + "?ctsCustId={0}", ctsCustId);
-
-            var data = ApiHelper.Get<IEnumerable<long>>(urlString);
-
-            Task.WhenAll(data);
-
-            return data.Result ?? new List<long>();
-        }
-
+      
         public MatchesAssociationByAIModel GetGBAssociationFromAI(long custID1, long custID2, string groupList)
         {
             var result = new MatchesAssociationByAIModel();
@@ -971,33 +892,10 @@
 
         #endregion
 
-        #region Customer Category
-        public IEnumerable<SportGroup> GetAllSportGroup()
-        {
-            var criteria = new GetAllSportGroupCriteria();
+        #region Customer Category           
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<SportGroup>(criteria);
-            }
-        }
-
-        public IEnumerable<CustomerCategory> GetCustomerCategoryByCTSCustId(long ctsCustId)
-        {
-            var criteria = new GetCustomerCategoryByCTSCustIdCriteria
-            {
-                CTSCustId = ctsCustId
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<CustomerCategory>(criteria);
-            }
-        }
-
-        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId, out bool isPinCategory, out bool isExcludedTagAssPA)
-        {
-            isPinCategory = false;
+        public IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId, out bool isExcludedTagAssPA)
+        {         
             isExcludedTagAssPA = false;
 
             var criteria = new GetCTSCustomerClassificationCriteria
@@ -1008,16 +906,10 @@
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 using (var result = db.QueryMultiple(criteria))
-                {
-                    var pinCategories = result.Read<bool>();
+                {                   
                     var excludedTagAssPA = result.Read<bool>();
-                    var categories = result.Read<CustomerClassificationModel>();
-
-                    if (pinCategories != null && pinCategories.Any())
-                    {
-                        isPinCategory = pinCategories.ToList()[0];
-                    }
-
+                    var categories = result.Read<GetCustomerClassificationModel>();
+                   
                     if (excludedTagAssPA != null && excludedTagAssPA.Any())
                     {
                         isExcludedTagAssPA = excludedTagAssPA.ToList()[0];
@@ -1028,7 +920,7 @@
             }
         }
 
-        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId)
+        public IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId)
         {
             var criteria = new GetCTSCustomerClassificationCriteria
             {
@@ -1038,11 +930,10 @@
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 using (var result = db.QueryMultiple(criteria))
-                {
-                    result.Read<bool>(); // Pin Categories
+                {                   
                     result.Read<bool>(); // Excluded Tag Ass PA
 
-                    return result.Read<CustomerClassificationModel>();
+                    return result.Read<GetCustomerClassificationModel>();
                 }
             }
         }
@@ -1069,7 +960,7 @@
             return new List<CustomerClassificationHistoryModel>();
         }
 
-        public IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, string parentCateIdList)
+        public IEnumerable<GetCustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, string parentCateIdList)
         {
             var criteria = new GetCTSCustomerClassificationForAPICriteria
             {
@@ -1079,49 +970,9 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<CustomerClassificationModel>(criteria);
+                return db.Query<GetCustomerClassificationModel>(criteria);
             }
-        }
-
-        public IEnumerable<Model.API.CustomerClassModel> GetCustomerClassByCustId(string custIdList)
-        {
-            var criteria = new GetCustomerClassByCustIdCriteria
-            {
-                CustIds = custIdList
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<Model.API.CustomerClassModel>(criteria);
-            }
-        }
-
-        public IEnumerable<LatestClassificationModel> MarkVVIPCategory(CustomerCategoryModel categoryModel)
-        {
-            var custList = new List<AddCustomerCategoryInfoModel>()
-            {
-                new AddCustomerCategoryInfoModel
-                {
-                    CustID = categoryModel.CustId,
-                    CTSCustID = categoryModel.CTSCustId,
-                    RoleID = categoryModel.RoleId,
-                    SubscriberID = categoryModel.SubscriberId,
-                    CreatedBy = categoryModel.CreatedBy,
-                    Remark = categoryModel.Remark
-                }
-            };
-
-            var criteria = new MarkVVIPCategoryCriteria
-            {
-                FromAction = (int)FromAction.WebSite,
-                AffectDownline = categoryModel.IsAffectToAllDownlines,
-                CustJson = JsonConvert.SerializeObject(custList)
-            };
-
-            var repository = new DynamicRepository();
-
-            return repository.Fetch<LatestClassificationModel>(criteria) ?? Enumerable.Empty<LatestClassificationModel>();
-        }
+        }     
 
         public DBResult AddQueueAffectDownlinesCustomerCategory(CustomerCategoryModel categoryModel)
         {
@@ -1152,75 +1003,7 @@
 
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
-
-        public IEnumerable<long> RemoveVVIPCategory(CustomerCategoryModel categoryModel)
-        {
-            var custList = new List<RemoveCustomerCategoryInfoModel>()
-            {
-                new RemoveCustomerCategoryInfoModel
-                {
-                    CustID = categoryModel.CustId,
-                    CTSCustID = categoryModel.CTSCustId,
-                    RoleID = categoryModel.RoleId,
-                    CreatedBy = categoryModel.CreatedBy
-                }
-            };
-
-            var criteria = new RemoveCustomerCategoryCriteria
-            {
-                FromAction = (int)FromAction.WebSite,
-                AffectDownline = categoryModel.IsAffectToAllDownlines,
-                CustJson = JsonConvert.SerializeObject(custList)
-            };
-
-            var repository = new DynamicRepository();
-            return repository.Fetch<long>(criteria) ?? Enumerable.Empty<long>();
-        }
-
-        public DBResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory, int createdBy)
-        {
-            var criteria = new PinCTSCategoryCustomerClassificationCriteria
-            {
-                CTSCustId = ctsCustId,
-                SubscriberId = subscriberId,
-                IsPinCategory = isPinCategory,
-                CreatedBy = createdBy
-            };
-
-            try
-            {
-                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-                {
-                    db.ExecuteNonQuery(criteria);
-
-                    if (string.IsNullOrWhiteSpace(criteria.ErrorMessage))
-                    {
-                        return new DBResult
-                        {
-                            ErrorCode = 0,
-                            ErrorMsg = criteria.ErrorMessage
-                        };
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("CTS - Pin Category - PinCategoryCustomerClassification exception: " + ex.Message, ex);
-
-                return new DBResult
-                {
-                    ErrorCode = -1,
-                    ErrorMsg = ex.Message
-                };
-            }
-
-            return new DBResult
-            {
-                ErrorCode = -1,
-                ErrorMsg = criteria.ErrorMessage
-            };
-        }
-
+      
         public DBResult ChangeExcludedTagAssPA(long ctsCustId, int subscriberId, bool isExcludedTagAssPA, int createdBy)
         {
             var criteria = new ChangeUpdateTaggingAssWithPACriteria

@@ -12,12 +12,10 @@
     let isHostPermission;
     let cacheData = {
         isVVip: false,
-        isPinCategory: false,
         isExcludedTagAssPA: false,
-        isProblemAccount: false,
-        isPAProbation: false
+        isProblemAccount: false      
     };
-    let CONST_ROBOT_USER_GROUP = 163;
+
     let dataTable;
     let dataTableCustomerCategoryBySport;
 
@@ -126,7 +124,7 @@
             type: 'POST',
             data: params,
             success: function (response) {
-                if (response.errorCode === 0) {
+                if (response.errorCode == 0) {
                     common.showSuccess('Unmark Category successful!', 2000);
                     divUnmarkCustomerCategory.dialog('close');
                 }
@@ -134,7 +132,7 @@
                     common.showError(response.errorMessage);
                 }
 
-                LoadGrid(params.CTSCustID, true);
+                LoadGrid(params.CTSCustID);
                 GetCustomerCategory(params.CustID);
                 LoadStatusRobotUser(params.CustID);
             },
@@ -156,8 +154,7 @@
         let params = {};
         params.CustId = $('#hdCustId').val();
         params.CTSCustId = $('#hdCTSCustId').val();
-        params.SubscriberId = $('#hdSubscriberId').val();
-        params.CategoryId = 210; // VVIP
+        params.SubscriberId = $('#hdSubscriberId').val();      
         params.RoleId = $('#hdRoleID').val();
         params.IsAffectToAllDownlines = $('#inputVVIPUnmarkAffectToAllDownlines').is(":checked");
 
@@ -165,7 +162,7 @@
             type: 'POST',
             data: params,
             success: function (response) {
-                if (response.errorCode === 0) {
+                if (response.errorCode == 0) {
                     common.showSuccess('Unmark VVIP successful!', 2000);
                     divUnmarkCustomerCategory.dialog('close');                    
                 }
@@ -173,7 +170,7 @@
                     common.showError(response.errorMessage);
                 }
 
-                LoadGrid(params.CTSCustId, true);
+                LoadGrid(params.CTSCustId);
                 GetCustomerCategory(params.CustId);
             },
             beforeSend: function () {
@@ -249,18 +246,12 @@
                     let json = jQuery.parseJSON(response);
 
                     cacheData.isProblemAccount = json.isProblemAccount;
-                    cacheData.isPinCategory = json.isPinCategory;
                     cacheData.isExcludedTagAssPA = json.isExcludedTagAssPA;
-                    cacheData.isVVip = json.isVVip;
-                    cacheData.isPAProbation = json.isPAProbation;
+                    cacheData.isVVip = json.isVVip;                   
 
                     ResetCategorySetting();
 
-                    let isProblemAccount = RenderProblemCategoryProfilePage(json.categoryList, json.isPAProbation);
-
-                    if (!isProblemAccount) {
-                        RenderNormalCategoryProfilePage(json.categoryList, json.isPAProbation);
-                    } 
+                    RenderCategoryColorSummary(json.categoryList, json.isProblemAccount);                  
                 }
                 return response;
             },
@@ -272,14 +263,13 @@
             },
             complete: function () {
                 tblcustomercategory.find('tbody').removeClass('loading');
-                
-                let disabledUnmarkCategory = (!cacheData.isVVip && !cacheData.isProblemAccount)// && !cacheData.isPAProbation)
-                    || (!cacheData.isVVip && cacheData.isPinCategory);                
+
+                let disabledUnmarkCategory = !cacheData.isProblemAccount && !cacheData.isVVip;
 
                 let disabledMarkCategory = cacheData.isVVip
                     || ($("#hdIsLicensee").val() == 'TRUE' && $("#hdRoleID").val() > 1)
                     || $("#hdIsInternal").val() == 'TRUE';
-                
+                  
                 btnUnmarkCategory.prop('disabled', disabledUnmarkCategory);
                 btnMarkCategory.prop('disabled', disabledMarkCategory);                
 
@@ -293,133 +283,36 @@
         });
     }
 
-    function RenderProblemCategoryProfilePage(data, isPAProbation) {
-        var isExistProblemAccount = false;
-        let html = "";
-        
-        html = BuildButtonProfileInsertPA(html, data);
+    function RenderCategoryColorSummary(data, isProblemAccount) {        
+        let html = BuildButtonProfileInsertPA("", data);
+        let bgHeaderUsername = '';
+        let bgHeaderInfo = '';
+        if (data.length > 0) {
+            data.map(function (x) {
+                if ((isProblemAccount && x.IsProblemAccount) || (!isProblemAccount)) {
+                    html = BuildCategoryToHtmlDiv(html, "circle bg-" + x.CategoryColorDesc, x.CategoryName);
+                } 
 
-        data.map(function (x) {
-            if (x.IsProblemAccount && x.CategoryType != 2) {
-                let classIconColor = isPAProbation ? "circle bg-lightred" : "circle bg-red";
-
-                html = BuildCategoryToHtmlDiv(html, classIconColor, x.CategoryName);
-
-                isExistProblemAccount = true;
-            }
-        });
-
-        if (isExistProblemAccount) {
-            if (isPAProbation) {
-                $('#divHeaderUsername')
-                    .removeClass('bg-yellow').removeClass('bg-green')
-                    .removeClass('green-line').removeClass('yellow-line')
-                    .addClass('bg-lightred');
-                $('#divHeaderInfo')
-                    .removeClass('border-yellow').removeClass('border-green')
-                    .addClass('border-lightred');
-            } else {
-                $('#divHeaderUsername')
-                    .removeClass('bg-yellow').removeClass('bg-green')
-                    .removeClass('green-line').removeClass('yellow-line')
-                    .addClass('bg-red');
-                $('#divHeaderInfo')
-                    .removeClass('border-yellow').removeClass('border-green')
-                    .addClass('border-red');
-            }
-
-            $('#divCustomerCategorySummary').html(html);
-            $('#spanContentInfoLoading').css('visibility', 'hidden');
-            $('#divHeaderInfo').css('visibility', 'visible');
+                bgHeaderUsername = 'bg-' + x.CategoryColorDesc;
+                bgHeaderInfo = 'border-' + x.CategoryColorDesc;
+            });
+        } else {            
+            bgHeaderUsername = 'bg-green';
+            bgHeaderInfo = 'border-green';
         }        
 
-        return isExistProblemAccount;
-    }
+        $('#divHeaderUsername').removeClass('bg-yellow').removeClass('bg-green')
+            .removeClass('bg-green-line').removeClass('bg-yellow-line').removeClass('bg-lightred').removeClass('bg-red')
+            .addClass(bgHeaderUsername);
 
-    function RenderNormalCategoryProfilePage(data, isPAProbation) {
-        let indexColorProfile = 1;
-        let html = "";
-
-        html = BuildButtonProfileInsertPA(html);
-
-        let cacheCategoryColors = common.categoryColor();
-
-        for (let i = 0; i < cacheCategoryColors.length; i++) {
-            data.map(function (x) {
-                let isEquals = x.CategoryId.toString() === cacheCategoryColors[i].id;
-                if (isEquals) {
-                    let classIconColor = cacheCategoryColors[i].cssClass;
-
-                    html = BuildCategoryToHtmlDiv(html, classIconColor, x.CategoryName);
-
-                    indexColorProfile = indexColorProfile < cacheCategoryColors[i].indexColor
-                        ? cacheCategoryColors[i].indexColor
-                        : indexColorProfile;
-                }
-            });
-        }
-
-        switch (indexColorProfile) {
-            case 1:
-                $('#divHeaderUsername')
-                    .removeClass('bg-red').removeClass('bg-lightred').removeClass('bg-yellow')
-                    .removeClass('green-line').removeClass('yellow-line')
-                    .addClass('bg-green');
-                $('#divHeaderInfo')
-                    .removeClass('border-red').removeClass('border-lightred').removeClass('border-yellow')
-                    .addClass('border-green');
-                break;
-            case 2:
-                $('#divHeaderUsername')
-                    .removeClass('bg-red').removeClass('bg-lightred').removeClass('bg-green')
-                    .removeClass('green-line').removeClass('yellow-line')
-                    .addClass('bg-yellow');
-                $('#divHeaderInfo')
-                    .removeClass('border-red').removeClass('border-lightred').removeClass('border-green')
-                    .addClass('border-yellow');
-                break;
-            case 3:
-                $('#divHeaderUsername')
-                    .removeClass('bg-red').removeClass('bg-lightred').removeClass('bg-yellow')
-                    .removeClass('bg-green').removeClass('yellow-line')
-                    .addClass('green-line')
-                $('#divHeaderInfo')
-                    .removeClass('border-red').removeClass('border-lightred').removeClass('border-yellow')
-                    .addClass('border-green');
-                break;
-            case 4:
-                $('#divHeaderUsername')
-                    .removeClass('bg-red').removeClass('bg-lightred').removeClass('bg-yellow')
-                    .removeClass('bg-green').removeClass('green-line')
-                    .addClass('yellow-line')
-                $('#divHeaderInfo')
-                    .removeClass('border-red').removeClass('border-lightred').removeClass('border-yellow')
-                    .addClass('border-yellow');
-                break;
-            case 5:
-                $('#divHeaderUsername')
-                    .removeClass('bg-red').removeClass('bg-lightred').removeClass('bg-green')
-                    .removeClass('green-line').removeClass('yellow-line');
-                $('#divHeaderInfo')
-                    .removeClass('border-red').removeClass('border-lightred').removeClass('border-green');
-
-                if (isPAProbation) {
-                    $('#divHeaderUsername').addClass('bg-yellow-light');
-                    $('#divHeaderInfo').addClass('border-yellow-light');
-                } else {
-                    $('#divHeaderUsername').addClass('bg-yellow');
-                    $('#divHeaderInfo').addClass('border-yellow');
-                }
-                break;
-            default:
-                break;
-        }
+        $('#divHeaderInfo').removeClass('border-yellow').removeClass('border-green').removeClass('border-red')
+            .addClass(bgHeaderInfo);
 
         $('#divCustomerCategorySummary').html(html);
         $('#spanContentInfoLoading').css('visibility', 'hidden');
         $('#divHeaderInfo').css('visibility', 'visible');
     }
-
+ 
     function BuildButtonProfileInsertPA(html) {
         if (isHostPermission) {
             html += "<div class='btn-add-pa' id='btnProfileInsertPA' title='Mark Category'></div>";
@@ -435,8 +328,7 @@
                 ctsCustID: $("#hdCTSCustId").val(),
                 roleID: $("#hdRoleID").val(),
                 userName: $("#hdUsername").val(),
-                isRobotUser: $("#hdIsRobotUser").val(),
-                isPinCategory: cacheData.isPinCategory
+                isRobotUser: $("#hdIsRobotUser").val()               
             },
             beforeSend: function () {
                 common.showLoading();
@@ -502,7 +394,7 @@
                     common.showError(response.errorMessage);
                 }
 
-                LoadGrid(params.CTSCustID, true);
+                LoadGrid(params.CTSCustID);
                 GetCustomerCategory(params.CustID);
             },
             beforeSend: function () {
@@ -533,11 +425,12 @@
             if (!$(this).attr('disabled')) {
                 params.CategoryID = $(this).val();
                 params.CategoryGroup = $(this).attr('data-categorygroup');
+                params.IsRobot = $(this).attr('data-isrobot');
             }
         });
 
         if (params.CategoryID != 0) {
-            let url = (params.CategoryGroup == CONST_ROBOT_USER_GROUP)
+            let url = params.IsRobot?.toLowerCase() == 'true'
                 ? common.modifyRelativeUrl('Account/SaveMarkRobotAccount')
                 : common.modifyRelativeUrl('Account/SaveMarkCustomerCategory');
 
@@ -553,7 +446,7 @@
                         common.showError(response.errorMessage);
                     }
 
-                    LoadGrid(params.CTSCustID, true);
+                    LoadGrid(params.CTSCustID);
                     GetCustomerCategory(params.CustID);
                     LoadStatusRobotUser(params.CustID);
                 },
@@ -614,15 +507,7 @@
 
     function ExcludedTagAssPA(isChecked, custId, ctsCustId, subscriberId, custSubId) {
         let html = "";      
-        if (isChecked && cacheData.isPinCategory) {
-            html = "<div style='text-align:center'>You are not allow to turn on this setting because of Pin Category.</div>";
-            html += "<div style='text-align:center'>Please contact your system administrator for further assistance.</div>";
-
-            common.showError(html, 2000);
-            ResetCategorySetting();
-
-            return;
-        } else if (isChecked) {
+        if (isChecked) {
             html = "<div style='text-align:center'>Are you sure about this action? </div>";
             html += "<div>By selecting this option, this account will not be classified with PA</div>";
             html += "<div>Associated Category by our service in future</div>";
@@ -647,14 +532,14 @@
                     type: 'POST',
                     data: params,
                     success: function (response) {
-                        if (response.errorCode === 0) {
+                        if (response.errorCode == 0) {
                             let message = isChecked
                                 ? "Mark category successfully!"
                                 : "Unmark category successfully!";
 
                             common.showSuccess(message);
 
-                            LoadGrid(ctsCustId, true);
+                            LoadGrid(ctsCustId);
                         }
                         else {
                             common.showError('Failed! ' + response.errorMessage);
@@ -682,9 +567,7 @@
 
     function ResetCategorySetting() {
         let cbbCategorySettingSelector = cbbCategorySetting.empty();
-
-        //cbbCategorySettingSelector.append("<option " + (cacheData.isPinCategory ? "selected" : "") + (cacheData.isVVip ? " disabled" : "") + " value='PinCategory'>Pin Category</option>");
-
+       
         cbbCategorySettingSelector.append("<option " + (cacheData.isExcludedTagAssPA ? "selected" : "") + " value='ExcludedTagAssPA'>Normal Category</option>");
 
         cbbCategorySetting.multiselect("refresh");
@@ -799,8 +682,7 @@
             menuHeight: 60,
             header: false,
             click: function (_, ui) {
-                if (ui.value == "ExcludedTagAssPA")
-                    //PinCategory(ui.checked, ctsCustId, subscriberId);
+                if (ui.value == "ExcludedTagAssPA")                    
                     ExcludedTagAssPA(ui.checked, custId, ctsCustId, subscriberId, custSubId);                 
             },
             selectedText: "Category Setting",

@@ -47,8 +47,12 @@
 
         public string GroupIDs { get; set; }
 
-        public string OriginGroupIDs { get; set; }
+        public string OriginGroupIDs { get; set; }      
 
-        public int CategoryType { get; set; }
+        public bool IsPA { get; set; }
+
+        public bool IsPotentialPA { get; set; }
+
+        public string ColorTypeIDs { get; set; }
     }
 }

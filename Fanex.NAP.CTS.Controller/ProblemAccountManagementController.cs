@@ -128,12 +128,7 @@
         [HttpGet]
         public ActionResult GetProblemAccountAllCategories()
         {
-            var data = _pamService.GetProblemAccountCategories()
-                .Where(x => x.CategoryID != (int)CustomerCategoryID.SystemDetectGroupBetting
-                        && x.CategoryID != (int)CustomerCategoryID.RobotOCRD
-                        && x.CategoryID != (int)CustomerCategoryID.SysDetectUnauthorizedLogin
-                        && x.CategoryID != (int)CustomerCategoryID.SysDetectUnauthorizedLoginLosing)
-                .OrderBy(x => x.Priorty);
+            var data = _pamService.GetProblemAccountCategories(ViewCategoryPageSource.PAM).OrderBy(x => x.Priorty);              
 
             return Json(data, JsonRequestBehavior.AllowGet);
         }
@@ -168,7 +163,7 @@
 
                 if (!resultValidate.ProblemAccountInvalidList.Any())
                 {
-                    if (model.CategoryGroup == 163)
+                    if (model.IsRobot)
                     {
                         dbResult = SaveMarkRobotAccount(model, validatedModels);
                     }
@@ -196,46 +191,28 @@
                 SubscriberID = x.SubscriberID,
                 IsLicensee = x.IsLicensee,
                 CategoryID = model.CategoryID,
-                CategoryGroup = model.CategoryGroup,
                 Remark = model.Comment,
-                IsDirectPA = true,
+                IsMarkedDirectly = true,
                 IsFromCTS = true,
                 CreatedBy = CurrentSession.UserId
             });
 
-            return _paClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Category, "ProblemAccountManagement", FromFlow.CTSWEB, true);            
+            return _paClassificationService.InsertProblemAccountPackage(pas, CCInputFlow.InsertPACategory, "Problem Account Management", FromFlow.CTSWEB, true);
         }
 
         private DBResult SaveMarkRobotAccount(ValidateProblemAccountInputViewModel model, IEnumerable<ProblemAccountValidatedModel> validatedModels)
         {
-            var robotAccounts = validatedModels.Select(x => new InsertRobotModel {
-                CustID = x.CustID,               
+            var robotAccounts = validatedModels.Select(x => new InsertProblemAccountModel
+            {
+                CustID = x.CustID,
+                CategoryID = model.CategoryID,
                 Remark = model.Comment,
-                IsDirect = true,
+                IsMarkedDirectly = true,
                 IsFromCTS = true,
                 CreatedBy = CurrentSession.UserId                
             });
-
-            var custInfos = _paClassificationService.InsertRobotAccountPackge(robotAccounts, false);
-
-            if (custInfos.Any())
-            {
-                var custIds = custInfos.Select(x=>x.CustID).Distinct();
-
-                _customerClassificationService.PushDataToExternalPackge(custIds, new PushDataToExternalModel
-                {
-                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,                 
-                    IsPushCCToSoon88 = true,
-                    IsUpdateDangerToMainDB = true,
-                    IsSyncAFC = false
-                }, FromFlow.CTSWEB);
-
-                return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
-            }
-            else
-            {
-                return new DBResult { ErrorCode = -1, ErrorMsg = "Mark PA Robot failed" };
-            }                           
+                        
+            return _paClassificationService.InsertProblemAccountPackage(robotAccounts, CCInputFlow.InsertPACategory, "Mark Robot Management", FromFlow.CTSWEB, false);                          
         }
 
         [HttpPost]
@@ -252,7 +229,7 @@
 
                 if (!resultValidate.ProblemAccountInvalidList.Any())
                 {
-                    var paUnmark = validatedModels.Select(x => new UnmarkProblemAccountModel
+                    var resultUnmark = _paClassificationService.UnmarkProblemAccount(validatedModels.Select(x => new UnmarkProblemAccountModel
                     {
                         CustID = x.CustID,
                         CTSCustID = x.CTSCustID,
@@ -261,32 +238,17 @@
                         CreatedBy = CurrentSession.UserId,
                         Remark = model.Comment,
                         IsExceptDirectDownline = model.IsUnmarkDownlines,
-                        IsDirectPA = true
-                    });
+                        IsMarkedDirectly = true
+                    }), false);
 
-                    var unmarkPAResult = _paClassificationService.UnmarkProblemAccount(paUnmark, false);
-
-                    if (unmarkPAResult.ErrorCode == 0 && unmarkPAResult.CustomerInfo.Any())
+                    if (resultUnmark.CustInfos != null && resultUnmark.CustInfos.Any())
                     {
-                        var custIdList = unmarkPAResult.CustomerInfo.Select(c => c.CustID)?.Distinct();
-                        var custIds = string.Join(",", custIdList);
-                        
-                        _paClassificationService.UpdateBetLimitOfUnflaggedCustomer(custIdList);
-
-                        var paramRescan = new RescanCustClassificationModel
-                        {                           
-                            CustIds = custIdList,
-                            IsPushCCToSoon88 = true,
-                            IsRescanPotentialPA = true,
+                        _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
+                        {
+                            CustIds = resultUnmark.CustInfos.Select(x => x.CustID),
                             FunctionId = FunctionId.UnmarkCustomerCategory,
                             IsUpdateDangerToMainDB = true
-                        };
-
-                        var custRescanPADangous = _rescanClassificationService.RescanPotentialProblemAccount(custIdList.ToList(), new List<long>(), paramRescan);
-
-                        var smCustIds = _rescanClassificationService.GetAgentCusts(custIdList);
-
-                        _rescanClassificationService.RescanNormalAccount(paramRescan, custRescanPADangous.CustIds.Distinct(), smCustIds);
+                        });
                     }
                 }
             }

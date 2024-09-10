@@ -32,7 +32,7 @@
     {
         private readonly IAccountService _accountService;      
         private readonly IAssociatedAccountService _associationService;      
-        private readonly ICategoryService _categoryService;     
+        private readonly ICustomerCategoryService _categoryService;     
         private readonly ISubscriberService _subscriberService;
         private readonly IProblemCaseMonitorService _problemCaseMonitorService;       
         private readonly ICtsAssociationApiService _ctsAssociationApiService;
@@ -45,7 +45,7 @@
         {
             _accountService = new AccountService();
             _associationService = new AssociatedAccountService();                  
-            _categoryService = new CategoryService();          
+            _categoryService = new CustomerCategoryService();          
             _subscriberService = new SubscriberService();
             _problemCaseMonitorService = new Service.Implement.Api.ProblemCaseMonitorService();          
             _ctsAssociationApiService = new CtsAssociationApiService();
@@ -117,7 +117,7 @@
             var result = string.Empty;
             try
             {
-                var custClassifications = _accountService.GetCustomerClassificationForAPI(custIdList, "50,200");
+                var custClassifications = _accountService.GetCustomerClassificationForAPI(custIdList, "1000,20000,30000,40000");
                 result = custClassifications.Select(c => new CustomerClassification()
                 {
                     CustID = c.CustID,
@@ -173,7 +173,7 @@
         {
             try
             {
-                var custClassifications = _accountService.GetCustomerClassificationByCategory("210");
+                var custClassifications = _accountService.GetCustomerClassificationByCategory("1010");
                 return custClassifications.Any()
                     ? custClassifications.Select(c => new CustomerClassification()
                     {

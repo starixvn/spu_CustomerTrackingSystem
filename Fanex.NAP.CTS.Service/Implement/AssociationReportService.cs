@@ -2,19 +2,15 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using Fanex.Logging;
     using Fanex.NAP.CTS.Core;
-    using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.Account.Associated;
     using Fanex.NAP.CTS.Criteria.AssociationReport;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.AssociationReport;
     using Fanex.NAP.CTS.ViewModel.AssociationReport;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading.Tasks;
 
     public class AssociationReportService : IAssociationReportService
     {
@@ -63,27 +59,6 @@
             {
                 return db.Query<EvidenceModel>(criteria);
             }
-        }
-
-        public IEnumerable<CategoriesModel> GetCategories(string ctsCustIdList)
-        {
-            var criteria = new AssociationReportGetCategoriesCriteria
-            {
-                CTSCustIdList = ctsCustIdList
-            };
-            try
-            {
-                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-                {
-                    return db.Query<CategoriesModel>(criteria);
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("CTS - AssociationReportService GetCategories - Exception: " + ex.Message, ex);
-            }
-
-            return new List<CategoriesModel>();
         }
 
         public DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, int createdBy, bool isRemoveAction)

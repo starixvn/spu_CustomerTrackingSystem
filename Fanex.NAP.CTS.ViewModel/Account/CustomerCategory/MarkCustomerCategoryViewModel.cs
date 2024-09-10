@@ -9,7 +9,7 @@
         public MarkCustomerCategoryViewModel()
         {
             this.ProblemAccountList = new List<ProblemAccountCategoryModel>();
-            this.CategoryList = new List<CustomerCategoryViewModel>();
+            this.CategoryList = new List<GetCustomerCategoryViewModel>();
         }
 
         public bool IsVVip { get; set; }
@@ -17,12 +17,11 @@
         public string UserName { get; set; }
 
         public bool IsRobotUser { get; set; }
-
-        public bool IsPinCategory { get; set; }
+       
 
         public IEnumerable<ProblemAccountCategoryModel> ProblemAccountList { get; set; }
 
-        public IEnumerable<CustomerCategoryViewModel> CategoryList { get; set; }
+        public IEnumerable<GetCustomerCategoryViewModel> CategoryList { get; set; }
 
         public int RoleID { get; set; }               
 

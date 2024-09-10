@@ -18,18 +18,14 @@
     /// </summary>
     public class GraphController : ApiController
     {
-        private readonly IAssociatedAccountService associationService;
-        private readonly IAssociationDetectionService associationDetectionService;
-        private readonly IAssociationReportService associationReportService;
+        private readonly IAssociatedAccountService associationService;      
 
         /// <summary>
         /// Constructor
         /// </summary>
         public GraphController()
         {
-            associationService = new AssociatedAccountService();
-            associationDetectionService = new AssociationDetectionService();
-            associationReportService = new AssociationReportService();
+            associationService = new AssociatedAccountService();         
         }
 
         #region API - Flagged Evidence Level

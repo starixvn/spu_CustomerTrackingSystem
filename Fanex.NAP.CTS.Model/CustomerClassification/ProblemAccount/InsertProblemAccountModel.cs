@@ -1,18 +1,16 @@
 ﻿namespace Fanex.NAP.CTS.Model.CustomerClassification
 {
     using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
-    using Fanex.NAP.CTS.Resource.Consts;
     using System;
     using System.Configuration;
 
-    public class InsertProblemAccountModel
+    public class InsertProblemAccountModel : CustomerClassificationModel
     {
         public InsertProblemAccountModel()
         {
             IsFromTVS = false;
             IsFromCTS = false;
-            IsFromTW = false;
-            IsDataChanged = false;
+            IsFromTW = false;           
         }
 
         public InsertProblemAccountModel(RescanPADangerousModel rescanPADangerous)
@@ -21,16 +19,14 @@
             this.CTSCustID = rescanPADangerous.CTSCustID;
             this.RoleID = rescanPADangerous.RoleID;
             this.SubscriberID = rescanPADangerous.SubscriberID;
-            this.CategoryID = rescanPADangerous.CategoryID;
-            this.CategoryGroup = rescanPADangerous.CategoryID;
+            this.CategoryID = rescanPADangerous.CategoryID;            
             this.IsLicensee = rescanPADangerous.IsLicensee;
             this.IsFromAI = true;
-            this.IsDirectPA = null;
+            this.IsMarkedDirectly = null;
             this.IsFromCTS = false;
             this.IsFromTVS = false;
             this.IsFromTW = false;
-            this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
-            this.Remark = string.Format(Consts.DangerousScoreRemark, rescanPADangerous.ClassifiedDate.ToString(Consts.FormatDateToString_MMMddyyyy), (rescanPADangerous.ClassifiedScore * 100).ToString(Consts.FormatDecimalToString_2Places));           
+            this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);            
         }
 
         public InsertProblemAccountModel(GetInitialTWGroupBettingModel twGBCust, PotentialPACustInfoModel ctsCust)
@@ -39,16 +35,14 @@
             this.CTSCustID = ctsCust.CTSCustID;
             this.RoleID = ctsCust.RoleID;
             this.SubscriberID = ctsCust.SubscriberID;
-            this.CategoryID = ctsCust.CategoryID;
-            this.CategoryGroup = ctsCust.CategoryGroup;
+            this.CategoryID = ctsCust.CategoryID;            
             this.IsLicensee = ctsCust.IsLicensee;
             this.IsFromAI = false;
-            this.IsDirectPA = null;
+            this.IsMarkedDirectly = null;
             this.IsFromCTS = false;
             this.IsFromTVS = false;
             this.IsFromTW = true;
-            this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
-            this.Remark = string.Format(Consts.TWTWInitialGBRemark, twGBCust.DetectedDate.ToString(Consts.FormatDateToString_MMMddyyyy), twGBCust.GBTicketCount, twGBCust.SportName);            
+            this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);         
         }
 
         public InsertProblemAccountModel(TWInitialSmartPAModel tWInitialSmartCust)
@@ -58,19 +52,40 @@
             this.RoleID = tWInitialSmartCust.RoleID;
             this.SubscriberID = tWInitialSmartCust.SubscriberID;
             this.CategoryID = tWInitialSmartCust.CategoryID;
-            this.CategoryGroup = tWInitialSmartCust.CategoryGroup;
             this.IsLicensee = tWInitialSmartCust.IsLicensee;
             this.IsFromAI = false;
-            this.IsDirectPA = null;
+            this.IsMarkedDirectly = null;
             this.IsFromCTS = false;
             this.IsFromTVS = false;
             this.IsFromTW = true;
-            this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
-            this.Remark = string.Format(Consts.TWInitialSmartRemark, tWInitialSmartCust.DetectedDate.ToString(Consts.FormatDateToString_MMMddyyyy), tWInitialSmartCust.Probability);           
+            this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);            
         }
 
-        /* Cust info */
-        public long CustID { get; set; }
+        public InsertProblemAccountModel(RescanCustomerClassificationModel data)
+        {
+            CTSCustID = data.CTSCustID;
+            CustID = data.CustID;
+            CategoryID = data.CategoryID;
+            TVSReasonID = data.TVSReasonID;
+            RobotCounter = data.RobotCounter;
+            TVSRequestID = data.TVSRequestID;
+            IsParlay = data.IsParlay;
+            IssueTypeID = data.IssueTypeID;
+            SportType = data.SportType;
+            RoleID = data.RoleID;
+            SubscriberID = data.SubscriberID;
+            IsLicensee = data.IsLicensee;
+            Remark = data.Remark;
+            CreatedBy = data.CreatedBy;
+            IsMarkedDirectly = data.IsMarkedDirectly;
+            IsFromTVS = data.IsFromTVS;
+            IsFromTW = data.IsFromTW;
+            IsFromCTS = data.IsFromCTS;
+            IsFromAI = data.IsFromAI;
+            IsFromImperva = data.IsFromImperva;
+            LastModifiedDate = data.LastModifiedDate;
+            CreatedDate = data.CreatedDate;
+        }     
 
         public long CTSCustID { get; set; }
 
@@ -88,25 +103,11 @@
 
         /* Data warehouse, mainDB  info */
 
-        public int? WinlossStatus { get; set; } // LOSING  = 0, KEEPSTATE = 1, WINNING = 2
+        public int? WinlossStatus { get; set; } // LOSING  = 0, KEEPSTATE = 1, WINNING = 2      
 
-        public decimal? TurnoverRM { get; set; }
+        public int? TVSReasonID { get; set; }
 
-        public decimal? WinlossRM { get; set; }
-
-        public Int64? BetCount { get; set; }
-
-        public int? ActiveDays { get; set; }
-
-        /* Get Mapping Value */
-
-        public int? CategoryID { get; set; }
-
-        public int CategoryGroup { get; set; }
-
-        public int? ReasonID { get; set; }
-
-        public bool? IsDirectPA { get; set; }
+        public bool? IsMarkedDirectly { get; set; }
 
         public bool IsFromAI { get; set; }
 
@@ -118,13 +119,17 @@
 
         public int? SportType { get; set; }
 
-        public int IssueTypeID { get; set; }
+        public int? IssueTypeID { get; set; }
+
+        public int? RobotCounter { get; set; }
 
         public bool IsFromTW { get; set; }
 
         public bool IsFromCTS { get; set; }
 
-        //True if only removing SpecialCC
-        public bool IsDataChanged { get; set; }
+        public bool IsFromImperva { get; set; }
+
+        public DateTime? CreatedDate { get; set; }
+
     }
 }

@@ -493,7 +493,6 @@
     <Content Include="Content\scss\components\_charts.scss" />
     <Content Include="Content\images\logo.webp" />
     <Content Include="Content\images\maintenance.webp" />
-    <Content Include="App_Data\Excel Template\ProbationManagement\ExportTemplate.xlsx" />
     <Content Include="App_Data\Excel Template\ProblemAccountManagement\ExportTemplate.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -618,13 +617,6 @@
     <Content Include="Content\scss\pages\notification-setting\notification-setting.min.css">
       <DependentUpon>notification-setting.css</DependentUpon>
     </Content>
-    <Content Include="Content\scss\pages\probation-management\probation-management.css">
-      <DependentUpon>probation-management.scss</DependentUpon>
-    </Content>
-    <Content Include="Content\scss\pages\probation-management\probation-management.min.css">
-      <DependentUpon>probation-management.css</DependentUpon>
-    </Content>
-    <Content Include="Content\scss\pages\probation-management\probation-management.scss" />
     <Content Include="Content\scss\pages\manage-subscriber\manage-subscriber.css">
       <DependentUpon>manage-subscriber.scss</DependentUpon>
     </Content>
@@ -643,26 +635,12 @@
       <DependentUpon>problem-account-management.css</DependentUpon>
     </Content>
     <Content Include="Content\scss\pages\problem-account-management\problem-account-management.scss" />
-    <None Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.scss" />
     <None Include="Content\scss\pages\import-evidences\import-evidences.scss" />
     <Content Include="Content\scss\pages\import-evidences\import-evidences.css">
       <DependentUpon>import-evidences.scss</DependentUpon>
     </Content>
     <Content Include="Content\scss\pages\import-evidences\import-evidences.min.css">
       <DependentUpon>import-evidences.css</DependentUpon>
-    </Content>
-    <Content Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.css">
-      <DependentUpon>problem-account-monitor.scss</DependentUpon>
-    </Content>
-    <Content Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.min.css">
-      <DependentUpon>problem-account-monitor.css</DependentUpon>
-    </Content>
-    <None Include="Content\scss\pages\problem-case-monitor\problem-case-monitor.scss" />
-    <Content Include="Content\scss\pages\problem-case-monitor\problem-case-monitor.css">
-      <DependentUpon>problem-case-monitor.scss</DependentUpon>
-    </Content>
-    <Content Include="Content\scss\pages\problem-case-monitor\problem-case-monitor.min.css">
-      <DependentUpon>problem-case-monitor.css</DependentUpon>
     </Content>
     <Content Include="Content\scss\pages\robot-report\robot-report.css">
       <DependentUpon>robot-report.scss</DependentUpon>
@@ -734,7 +712,6 @@
     <Content Include="Scripts\AssociatedAccountMonitor\index.js" />
     <Content Include="Scripts\AssociatedGroupMonitor\index.js" />
     <Content Include="Scripts\AssociatedGroupMonitor\transfer-account.js" />
-    <Content Include="Scripts\AssociationDetection\index_old.js" />
     <Content Include="Scripts\AssociationDetection\index.js" />
     <Content Include="Scripts\AssociationReport\detail.js" />
     <Content Include="Scripts\AssociationReport\index.js" />
@@ -1111,11 +1088,7 @@
     <Content Include="Scripts\popoto\d3.v3.min.js" />
     <Content Include="Scripts\popoto\popoto.min.js" />
     <Content Include="Scripts\popoto\vis\vis-network.min.js" />
-    <Content Include="Scripts\ProbationManagement\index.js" />
     <Content Include="Scripts\ProblemAccountManagement\index.js" />
-    <Content Include="Scripts\ProblemAccountMonitor\detail.js" />
-    <Content Include="Scripts\ProblemAccountMonitor\index.js" />
-    <Content Include="Scripts\ProblemCaseMonitor\index.js" />
     <Content Include="Scripts\RobotReport\ai-robot-report-table.js" />
     <Content Include="Scripts\RobotReport\index.js" />
     <Content Include="Scripts\RobotReport\robot-report-table.js" />
@@ -1130,7 +1103,6 @@
     <Content Include="Scripts\tagify\jquery.tagify.min.js" />
     <Content Include="Scripts\tagify\tagify.min.js" />
     <Content Include="Scripts\TransactionReport\index.js" />
-    <Content Include="Views\ProblemAccountMonitor\Detail.cshtml" />
     <Content Include="Views\EvidenceManagement\Index.cshtml" />
     <Content Include="Views\AssociatedAccountMonitor\Index.cshtml" />
     <Content Include="Views\Account\BettingStatistic\TurnoverByBetType.cshtml" />
@@ -1138,7 +1110,6 @@
     <Content Include="Views\Account\BettingStatistic\TurnoverWinLost.cshtml" />
     <Content Include="Views\Account\BettingStatistic\Summary.cshtml" />
     <Content Include="Views\SpecialCustomerClass\Index.cshtml" />
-    <Content Include="Views\ProbationManagement\Index.cshtml" />
     <Content Include="Views\ManageSubscriber\Index.cshtml" />
     <Content Include="Views\NotificationSetting\Index.cshtml" />
     <Content Include="Views\AssociationReport\Index.cshtml" />
@@ -1148,7 +1119,6 @@
     <Content Include="Views\LatestTransaction\Index.cshtml" />
     <Content Include="Views\AssociationDetection\Index.cshtml" />
     <Content Include="Views\MatchMonitor\Index.cshtml" />
-    <Content Include="Views\ProblemCaseMonitor\Index.cshtml" />
     <Content Include="Template\ProblemCaseTemplate.xls">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1170,7 +1140,6 @@
     <Content Include="Views\Account\CustomerCategory\MarkCustomerCategory.cshtml" />
     <Content Include="Views\Account\CustomerCategory\UnmarkCustomerCategory.cshtml" />
     <Content Include="Views\AssociatedGroupMonitor\Index.cshtml" />
-    <Content Include="Views\AssociationDetection\Index_old.cshtml" />
     <Content Include="WebConfigs\Web.AppSettings.SIT.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1915,7 +1884,6 @@
     <Content Include="Views\Account\Associated\AddAssociation.cshtml" />
     <Content Include="Views\Account\CustomerCategory\CustomerCategory.cshtml" />
     <Content Include="Views\Account\CustomerCategory\EditMarkCatergory.cshtml" />
-    <Content Include="Views\ProblemAccountMonitor\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

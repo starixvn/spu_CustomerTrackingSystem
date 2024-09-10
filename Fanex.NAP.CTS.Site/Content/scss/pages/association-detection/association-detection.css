@@ -752,6 +752,19 @@ body {
       .association-detection-report .association-detection-content .table-report .table-association-detection tr .td-bg-yellow {
         background-color: #FDB703;
         font-weight: bold; }
+      .association-detection-report .association-detection-content .table-report .table-association-detection tr .td-bg-yellow-line {
+        background-color: #FDB703;
+        background-size: 5px 5px;
+        font-weight: bold;
+        background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent); }
+        .association-detection-report .association-detection-content .table-report .table-association-detection tr .td-bg-yellow-line:after {
+          background-color: #FDB703;
+          background-size: 5px 5px;
+          background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent); }
+      .association-detection-report .association-detection-content .table-report .table-association-detection tr .td-bg-yellow-light {
+        background-color: #FEDB81; }
+        .association-detection-report .association-detection-content .table-report .table-association-detection tr .td-bg-yellow-light:after {
+          background-color: #FEDB81; }
       .association-detection-report .association-detection-content .table-report .table-association-detection tr .td-bg-green {
         background-color: #2BC769;
         font-weight: bold; }
@@ -860,6 +873,16 @@ body {
 .td-bg-green {
   background-color: #2BC769;
   font-weight: bold; }
+
+.td-bg-green-line {
+  background-color: #2BC769;
+  font-weight: bold;
+  background-size: 5px 5px;
+  background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent); }
+  .td-bg-green-line:after {
+    background-color: #2BC769;
+    background-size: 5px 5px;
+    background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent); }
 
 .td-bg-red {
   background-color: #FF7676;

@@ -40,30 +40,25 @@
        
         public string SportName { get; set; }
 
-        public int IssueTypeID { get; set; }
+        public int? IssueTypeID { get; set; }
 
         private string BuildComment(GetProblemAccountModel data)
         {
             var comment = string.Empty;
 
-            if (data.CategoryID == (int)CustomerCategoryID.SysDetectUnauthorizedLogin
-                || data.CategoryID == (int)CustomerCategoryID.SysDetectUnauthorizedLoginLosing)
-            {
-                comment = "-";
-            }
-            else if (string.IsNullOrEmpty(data.Remark) && data.IsFromTVS)
+            if (string.IsNullOrEmpty(data.Remark) && data.IsFromTVS)
             {
                 if (data.TVSRequestID > 0)
                     comment += $"Void by RequestID: { data.TVSRequestID } ";
                 else
-                    comment += $"Void by BetID ";              
+                    comment += $"Void by BetID ";
 
                 if (data.SportType != null && data.SportType > 0)
                     comment += $"| Sport: {this.SportName} ";
 
                 if (data.IsParlay != null && data.IsParlay.Value)
                     comment += $"| Parlay";
-            }           
+            }
             else
             {
                 comment = string.IsNullOrEmpty(data.Remark) ? "-" : data.Remark;

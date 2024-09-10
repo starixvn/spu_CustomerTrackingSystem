@@ -147,19 +147,7 @@ namespace Fanex.NAP.CTS.Model
     {
         Insert = 1,
         Remove = 2
-    }
-
-    public enum FromAction
-    {
-        WebSite = 1,
-        Service = 2
-    }
-
-    public enum InsertPA_ByType
-    {
-        Category,
-        Reason
-    }
+    }   
 
     public enum DetectAssociation_QueryType
     {
@@ -167,11 +155,6 @@ namespace Fanex.NAP.CTS.Model
         GetTicketDetail = 2,
         GetAssByGroup = 3,
         GetTicketDetailByListCust = 4
-    }
-
-    public enum CustomerCategoryGroup
-    {
-        RobotUser = 163
     }
 
     public enum CustomerCategoryID
@@ -251,5 +234,77 @@ namespace Fanex.NAP.CTS.Model
     {
         Add = 0,
         Remove = 2
+    }
+
+    public enum ViewCategoryPageSource
+    {
+        [Description("Problem Account Management")]
+        PAM = 1,
+        [Description("Associated Group Monitor")]
+        AssociatedGroupMonitor = 2,
+        [Description("Other: Profile page")]
+        Other = 3
+    }
+
+    public enum CategoryColorType
+    {
+        [Description("green")]
+        Default = 0,
+        [Description("green")]
+        Green = 1,
+        [Description("green-line")]
+        GreenLine = 3,
+        [Description("yellow")]
+        Yellow = 2,
+        [Description("yellow-line")]
+        YellowLine = 4,
+        [Description("yellow-light")]
+        YellowLight = 5,
+        [Description("red")]
+        Red = 6,
+        [Description("lightred")]
+        RedLight = 7
+    }
+
+    public enum CCInputFlow
+    {
+        [Description("VVIP")]
+        VVIP = 1,
+        [Description("SpecialCC")]
+        SpecialCC = 2,
+        [Description("LicVIP")]
+        LicVIP = 3,
+        [Description("LicBA")]
+        LicBA = 4,
+        [Description("InsertPACategory")]
+        InsertPACategory = 5,
+        [Description("InsertPAReason")]
+        InsertPAReason = 6,      
+        [Description("Potential")]
+        Potential = 8,
+        [Description("Normal")]
+        Normal = 9,
+        [Description("RescanPACategory")]
+        RescanPACategory = 115,       
+        [Description("RescanPotential")]
+        RescanPotential = 118,
+        [Description("RescanNormal")]
+        RescanNormal = 9,
+        [Description("RemoveVVIP")]
+        RemoveVVIP = 221,
+        [Description("RemoveSpecialCC")]
+        RemoveSpecialCC = 222,
+        [Description("RemoveLicVIP")]
+        RemoveLicVIP = 223,
+        [Description("RemoveLicBA")]
+        RemoveLicBA = 224,
+        [Description("RemovePACategory")]
+        RemovePACategory = 225,
+        [Description("BySportInsertSpecialCC")]
+        BySportInsertSpecialCC = 332,
+        [Description("BySportInsertNormal")]
+        BySportInsertNormal = 339,
+        [Description("BySportRemoveSpecialCC")]
+        BySportRemoveSpecialCC = 442
     }
 }

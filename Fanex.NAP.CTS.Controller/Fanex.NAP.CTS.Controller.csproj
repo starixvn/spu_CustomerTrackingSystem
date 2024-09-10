@@ -176,7 +176,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountController.cs" />
-    <Compile Include="AssociatedAccountMonitorController.cs" />
     <Compile Include="AssociatedGroupMonitorController.cs" />
     <Compile Include="AssociationDetectionController.cs" />
     <Compile Include="AssociationReportController.cs" />
@@ -194,13 +193,10 @@
     <Compile Include="ActionFilter\TrackingFunctionUsageFilterAttribute.cs" />
     <Compile Include="MatchMonitorController.cs" />
     <Compile Include="ProblemAccountManagementController.cs" />
-    <Compile Include="ProblemCaseMonitorController.cs" />
     <Compile Include="ManageSubscriberController.cs" />
     <Compile Include="NotificationSettingController.cs" />
-    <Compile Include="ProbationManagementController.cs" />
     <Compile Include="RobotReportController.cs" />
     <Compile Include="SpecialCustomerClassController.cs" />
-    <Compile Include="ProblemAccountMonitorController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportsController.cs" />
     <Compile Include="LatestTransactionController.cs" />

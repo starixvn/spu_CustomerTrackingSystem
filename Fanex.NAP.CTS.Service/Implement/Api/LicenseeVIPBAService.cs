@@ -1,10 +1,10 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement.Api
 {
-    using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
-    using Fanex.NAP.CTS.Criteria.Api;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.API;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Service.Interface.Api;
@@ -15,15 +15,13 @@
     using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
-    public class LicenseeVIPBAService : ILicenseeVIPBAService
-    {
-        private readonly IDynamicRepository repository;
+    public class LicenseeVIPBAService : BaseCustomerClassificationService, ILicenseeVIPBAService
+    {        
         private readonly ICustomerClassificationService custClassificationService;
         private readonly IRescanCustomerClassificationService rescanCustomerClassificationService;
 
         public LicenseeVIPBAService()
-        {
-            repository = new DynamicRepository();
+        {            
             custClassificationService = new CustomerClassificationService();
             rescanCustomerClassificationService = new RescanCustomerClassificationService();
         }
@@ -36,7 +34,7 @@
             }
 
             return true;
-        }       
+        }
 
         public void InsertLicVIP(LicenseeVIPBAInputModel parameter)
         {
@@ -49,15 +47,14 @@
 
             foreach (var batchCustIds in custInfo)
             {
-                var custIDs = InsertLicVIP(batchCustIds);
+                var custList = InsertLicVIP(batchCustIds);
 
-                if (custIDs != null && custIDs.Any())
+                if (custList != null && custList.CustInfos.IsNotNullOrEmpty())
                 {
-                    custClassificationService.PushDataToExternal(custIDs, new PushDataToExternalModel
+                    custClassificationService.PushDataToExternal(custList.CustInfos.Select(x => x.CustID), new PushDataToExternalModel
                     {
                         IsUpdateDangerToMainDB = false,
-                        IsSyncAFC = false,
-                        IsPushCCToSoon88 = false,
+                        IsSyncAFC = false,                    
                         ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize
                     });
                 }
@@ -75,16 +72,13 @@
 
             foreach (var batchCustIds in custInfo)
             {
-                var custIDs = RemoveLicVIP(batchCustIds);
+                var resultRemove = RemoveLicVIP(batchCustIds);
 
-                if (custIDs != null && custIDs.Any())
+                if (resultRemove != null && resultRemove.CustInfos.IsNotNullOrEmpty())
                 {
                     rescanCustomerClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
-                        CustIds = custIDs,
-                        IsRescanPA = true,
-                        IsRescanPotentialPA = true,
-                        IsPushCCToSoon88 = true,
+                        CustIds = resultRemove.CustInfos.Select(x => x.CustID),
                         IsUpdateDangerToMainDB = true,
                         FunctionId = FunctionId.RemoveLicVIP_API,
                         ServiceName = "RemoveLicVIP"
@@ -104,15 +98,14 @@
 
             foreach (var batchCustIds in custInfo)
             {
-                var custIDs = InsertLicBA(batchCustIds);
+                var custList = InsertLicBA(batchCustIds);
 
-                if (custIDs != null && custIDs.Any())
+                if (custList != null && custList.CustInfos.IsNotNullOrEmpty())
                 {
-                    custClassificationService.PushDataToExternal(custIDs, new PushDataToExternalModel
+                    custClassificationService.PushDataToExternal(custList.CustInfos.Select(x => x.CustID), new PushDataToExternalModel
                     {
                         IsUpdateDangerToMainDB = false,
-                        IsSyncAFC = false,
-                        IsPushCCToSoon88 = false,
+                        IsSyncAFC = false,                        
                         ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize
                     });
                 }
@@ -130,22 +123,20 @@
 
             foreach (var batchCustIds in custInfo)
             {
-                var custIDs = RemoveLicBA(batchCustIds);
-               
-                if (custIDs != null && custIDs.Any())
-                {                    
+                var resultRemove = RemoveLicBA(batchCustIds);
+
+                if (resultRemove.CustInfos != null && resultRemove.CustInfos.Any())
+                {
                     rescanCustomerClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
-                        CustIds = custIDs,
-                        IsRescanPA = false,
-                        IsPushCCToSoon88 = false,
+                        CustIds = resultRemove.CustInfos.Select(x=>x.CustID),
                         IsUpdateDangerToMainDB = false,
                         FunctionId = FunctionId.RemoveLicBA_API,
                         ServiceName = "RemoveLicBA"
                     });
                 }
             }
-        }       
+        }
 
         #region Private Methods
 
@@ -170,46 +161,50 @@
             return Enumerable.Empty<List<LicenseeVIPBAModel>>();
         }
 
-        private IEnumerable<long> InsertLicVIP(IEnumerable<LicenseeVIPBAModel> parameter)
+        private ResultInsertCustomerClassificationModel InsertLicVIP(IEnumerable<LicenseeVIPBAModel> parameter)
         {
-            var criteria = new LicenseeVIPInsertCriteria
+            var model = new InsertCustomerClassificationModel
             {
-                CustJson = JsonConvert.SerializeObject(parameter)
+                FromAction = (int)FromFlow.CTSAPI,
+                CustClassificationJson = JsonConvert.SerializeObject(parameter)
             };
 
-            return repository.Fetch<long>(criteria);
+            return InsertCustomerClassification(CCInputFlow.LicVIP, model);
         }
 
-        private IEnumerable<long> RemoveLicVIP(IEnumerable<LicenseeVIPBAModel> parameter)
-        {
-            var criteria = new LicenseeVIPRemoveCriteria
+        private ResultRemoveCustomerClassificationModel RemoveLicVIP(IEnumerable<LicenseeVIPBAModel> model)
+        {           
+            var modelRemove = new RemoveCustomerClassificationModel
             {
-                CustJson = JsonConvert.SerializeObject(parameter)
+                FromAction = (int)FromFlow.CTSAPI,
+                CustClassificationJson = JsonConvert.SerializeObject(model)
             };
 
-            return repository.Fetch<long>(criteria);
+            return RemoveCustomerClassification(CCInputFlow.RemoveLicVIP, modelRemove);
         }
 
-        private IEnumerable<long> InsertLicBA(IEnumerable<LicenseeVIPBAModel> parameter)
+        private ResultInsertCustomerClassificationModel InsertLicBA(IEnumerable<LicenseeVIPBAModel> model)
         {
-            var criteria = new LicenseeBAInsertCriteria
+            var modelInsert = new InsertCustomerClassificationModel
             {
-                CustJson = JsonConvert.SerializeObject(parameter)
+                FromAction = (int)FromFlow.CTSAPI,
+                CustClassificationJson = JsonConvert.SerializeObject(model)
             };
 
-            return repository.Fetch<long>(criteria);
+            return InsertCustomerClassification(CCInputFlow.LicBA, modelInsert);
         }
 
-        private IEnumerable<long> RemoveLicBA(IEnumerable<LicenseeVIPBAModel> parameter)
+        private ResultRemoveCustomerClassificationModel RemoveLicBA(IEnumerable<LicenseeVIPBAModel> model)
         {
-            var criteria = new LicenseeBARemoveCriteria
+            var modelRemove = new RemoveCustomerClassificationModel 
             {
-                CustJson = JsonConvert.SerializeObject(parameter)
+                FromAction = (int)FromFlow.CTSAPI,
+                CustClassificationJson = JsonConvert.SerializeObject(model)
             };
 
-            return repository.Fetch<long>(criteria);
+            return RemoveCustomerClassification(CCInputFlow.RemoveLicBA, modelRemove);
         }
-        
+
         #endregion Private Methods
     }
 }

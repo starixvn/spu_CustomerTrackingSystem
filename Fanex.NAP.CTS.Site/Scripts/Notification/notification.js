@@ -216,57 +216,57 @@ function notification() {
     });
 
     function GetNewNotification(maxAssociationID, maxProbationID, isSkip) {
-        var url = common.modifyRelativeUrl("/NotificationSetting/GetAllMessages");
+        //var url = common.modifyRelativeUrl("/NotificationSetting/GetAllMessages");
 
-        $.ajax(url, {
-            type: 'POST',
-            data: {
-                maxAssociationID: maxAssociationID,
-                maxProbationID: maxProbationID,
-                isSkipTracking : isSkip
-            },
-            success: function (json) {
-                if (!CheckValid(json)) {
-                    ReCheckin();
-                } else {
-                    HasNewMessages(json);
-                    SetUnReadCounterToCookie(json.unReadMessageCounter);
+        //$.ajax(url, {
+        //    type: 'POST',
+        //    data: {
+        //        maxAssociationID: maxAssociationID,
+        //        maxProbationID: maxProbationID,
+        //        isSkipTracking : isSkip
+        //    },
+        //    success: function (json) {
+        //        if (!CheckValid(json)) {
+        //            ReCheckin();
+        //        } else {
+        //            HasNewMessages(json);
+        //            SetUnReadCounterToCookie(json.unReadMessageCounter);
 
-                    associatedMessages.messages = json.messages.AssociatedMessages;
-                    associatedMessages.msgCounter = json.associatedMessagesCounter;
-                    associatedMessages.msgUnreadCounter = json.associatedUnreadCounter;
-                    associatedMessages.maxAssociationId = json.associatedMaxAssociationID;
+        //            associatedMessages.messages = json.messages.AssociatedMessages;
+        //            associatedMessages.msgCounter = json.associatedMessagesCounter;
+        //            associatedMessages.msgUnreadCounter = json.associatedUnreadCounter;
+        //            associatedMessages.maxAssociationId = json.associatedMaxAssociationID;
 
-                    probationMessages.messages = json.messages.ProbationMessages;
-                    probationMessages.msgCounter = json.probationMessagesCounter;
-                    probationMessages.msgUnreadCounter = json.probationUnreadCounter;
-                    probationMessages.maxProbationID = json.probationMaxProbationID;
+        //            probationMessages.messages = json.messages.ProbationMessages;
+        //            probationMessages.msgCounter = json.probationMessagesCounter;
+        //            probationMessages.msgUnreadCounter = json.probationUnreadCounter;
+        //            probationMessages.maxProbationID = json.probationMaxProbationID;
 
-                    GetMessages();
-                    SetupBellNotification();
-                    isFirstNotification = json.isFirstNotification;
-                }
-            },
-            complete: function () {
-                if (isFirstNotification == false && IsNewMessageFromCookie() == "true") {
-                    NotifyToDesktop();
-                    document.cookie = "hasNewUnreadMessages=false; path=/";
-                }
+        //            GetMessages();
+        //            SetupBellNotification();
+        //            isFirstNotification = json.isFirstNotification;
+        //        }
+        //    },
+        //    complete: function () {
+        //        if (isFirstNotification == false && IsNewMessageFromCookie() == "true") {
+        //            NotifyToDesktop();
+        //            document.cookie = "hasNewUnreadMessages=false; path=/";
+        //        }
 
-                if (unreadMsgCounter == 0) {
-                    GetMessages();
-                }
+        //        if (unreadMsgCounter == 0) {
+        //            GetMessages();
+        //        }
                 
-            },
-            error: function (errMsg) {
-                console.log('Get notification Error, ' + errMsg);
-                SetUnReadCounterToCookie(0);
-                msgCounter = 0;
-                messages = null;
-                GetMessages();
-                console.log(errMsg);
-            }
-        });
+        //    },
+        //    error: function (errMsg) {
+        //        console.log('Get notification Error, ' + errMsg);
+        //        SetUnReadCounterToCookie(0);
+        //        msgCounter = 0;
+        //        messages = null;
+        //        GetMessages();
+        //        console.log(errMsg);
+        //    }
+        //});
     }
 
     function SetupBellNotification()
@@ -441,22 +441,22 @@ function notification() {
     }
 
     $(document).ready(function () {
-        getUnreadMessageCount();
-        domElements.allSelection.on('click', function() 
-        {
-            GetAllMessage();
-            selectionCheckbox = 1;
-        });
+        //getUnreadMessageCount();
+        //domElements.allSelection.on('click', function() 
+        //{
+        //    GetAllMessage();
+        //    selectionCheckbox = 1;
+        //});
 
-        domElements.associationSelection.on('click', function () {
-            GetAssociationMessages();
-            selectionCheckbox = 2;
-        });   
+        //domElements.associationSelection.on('click', function () {
+        //    GetAssociationMessages();
+        //    selectionCheckbox = 2;
+        //});   
 
-        domElements.probationSelection.on('click', function () {
-            GetProbationMessages();
-            selectionCheckbox = 3;
-        });   
+        //domElements.probationSelection.on('click', function () {
+        //    GetProbationMessages();
+        //    selectionCheckbox = 3;
+        //});   
     });
 
     $(document).click(function (e) {

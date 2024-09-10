@@ -1,4 +1,5 @@
 ﻿@using Fanex.NAP.CTS.Model
+@using Fanex.NAP.CTS.ViewModel
 @{
     ViewBag.Title = "ASSOCIATED ACCOUNT GROUP";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -28,7 +29,7 @@
                 <thead>
                     <tr>
                         <th>Group ID</th>
-                        <th>Group Name</th>                     
+                        <th>Group Name</th>
                         <th>Associated Type</th>
                         <th>ABI</th>
                         <th>Ori</th>
@@ -56,7 +57,7 @@
         <div class="form-control margin-right-20">
             <div class="label">Site<label style="color:red">*</label></div>
             <div style="width:240px">
-                <select class="control width-select" id="cbbSites" multiple="multiple">                  
+                <select class="control width-select" id="cbbSites" multiple="multiple">
                 </select>
             </div>
         </div>
@@ -150,7 +151,7 @@
     </div>
 </div>
 
-<div id="divSetPC" class="popup-add" style="display: none">      
+<div id="divSetPC" class="popup-add" style="display: none">
     <div style="display: flex">
         <div class="form-control margin-right-20">
             <div class="label">Site<label style="color:red">*</label></div>
@@ -165,16 +166,21 @@
             <div style="width:200px">
                 <select class="control" id="cbbProblemCategorySetPC" style="width:200px">
                     <option value="-1">None</option>
-                    <option value="52" selected>Group Betting</option>
-                    <option value="53">Hedging</option>
-                    <option value="54">Arbitrage</option>
-                    <option value="55">Fixed Game</option>
-                    <option value="59">Formula Bet</option>
-                    <option value="62">Info Bet</option>
+                    @foreach (var cate in Model.CategoryList)
+                    {
+                        <option value="@cate.CategoryID">@cate.CategoryName</option>
+                    }
+                    @*<option value="-1">None</option>
+        <option value="52" selected>Group Betting</option>
+        <option value="53">Hedging</option>
+        <option value="54">Arbitrage</option>
+        <option value="55">Fixed Game</option>
+        <option value="59">Formula Bet</option>
+        <option value="62">Info Bet</option>*@
                 </select>
             </div>
         </div>
-    </div>    
+    </div>
 
     <div class="modal-footer margin-top-20">
         <button id="btnCancelSetPC" class="button btn-cancel-outline" title="Cancel">Cancel</button>
@@ -186,7 +192,7 @@
 
 <div id="divSitesByGroup" class="popup-add" style="display: none">
     <div class="form-control" style="max-height: 400px;text-align: justify;">
-        <div class="label" id="lblSiteList"></div>        
+        <div class="label" id="lblSiteList"></div>
     </div>
 </div>
 
@@ -200,7 +206,7 @@
             <div class="wrapper-rule wrapper-rule-left">
                 <span class="text bg-red">Red</span>
                 <span class="text">Invalid username</span>
-            </div>           
+            </div>
         </div>
     </div>
 
@@ -217,7 +223,7 @@
     <div class="form-control margin-right-20">
         <div class="label">New Group<label style="color:red">*</label></div>
         <div style="width:200px">
-            <select class="control" id="cbbTransferAccountNewGroup" style="width:200px">                       
+            <select class="control" id="cbbTransferAccountNewGroup" style="width:200px">
             </select>
         </div>
     </div>
@@ -229,7 +235,7 @@
 </div>
 
 <div class="hide">
-    <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.ToString()" />  
+    <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.IsHostPermission.ToString()" />
     <span id="spanAddAssociatedAccountOpen" hidden></span>
 </div>
 

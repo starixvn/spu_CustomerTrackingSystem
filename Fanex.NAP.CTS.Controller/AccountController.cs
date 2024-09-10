@@ -11,7 +11,6 @@
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers;
-    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Account.RobotBetting;
@@ -20,7 +19,6 @@
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassification.ProblemAccount;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
-    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Model.Transaction;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
@@ -50,6 +48,7 @@
     {
         private readonly IAccountService _accountService;
         private readonly ITransactionService _transService;
+        private readonly ICustomerCategoryService _customerCategoryService;
         private readonly ICustomerEvidenceService _customerEvidenceService;
         private readonly IRescanCustomerClassificationService _rescanClassificationService;
         private readonly ICustomerClassificationService _customerClassificationService;
@@ -67,8 +66,9 @@
         {
             _accountService = new AccountService();
             _transService = new TransactionService();
+            _customerCategoryService = new CustomerCategoryService();
             _customerEvidenceService = new CustomerEvidenceService();
-            _rescanClassificationService = new RescanCustomerClassificationService();
+            _rescanClassificationService = new RescanCustomerClassificationService();          
             _customerClassificationService = new CustomerClassificationService();
             _commonService = new CommonService();
             _robotClassificationService = new RobotClassificationService();
@@ -426,7 +426,7 @@
             {
                 totalItem = graphAssociationPage.TotalItems;
 
-                var customerAssociation = graphAssociationPage.AssociationList;
+                var customerAssociation = graphAssociationPage.AssociationList;                
 
                 var ctsCustIdList = customerAssociation.Select(x => new { CTSCustId = x.CTSCustID, SubscriberId = x.SubscriberID });
 
@@ -436,31 +436,10 @@
 
                 result = customerAssociation.Select(x =>
                 {
-                    var newX = new CustomerAssociationByAccountDetailViewModel
-                    {
-                        CustId = x.CustId.HasValue ? x.CustId.Value : 0,
-                        Username = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2,
-                        LoginId = !string.IsNullOrWhiteSpace(x.Username2) ? x.Username2 : x.Username,
-                        AssociationDate = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                        AssociationType = x.AssociationType,
-                        AssociationTypeName = StandardizeAssociationTypeName(x.AssociationTypeName),
-                        Status = x.StatusName == "NA" ? "N/A" : x.StatusName,
-                        StatusId = x.StatusId.HasValue ? x.StatusId.Value : 0,
-                        SubscriberId = x.SubscriberID,
-                        SubscriberName = !string.IsNullOrEmpty(x.SubscriberName) ? x.SubscriberName : "-",
-                        CTSCustId = x.CTSCustID,
-                        IsLinked = x.AssociationStatus == 1,
-                        IsProblemAccount = x.ParentIDs != null ? x.ParentIDs.Split(',').Any(y => y == "50") : false,
-                        CategoryType = x.CategoryType,
-                        IsPAProbation = x.IsProbation,
-                        CategoryIds = x.CategoryIDs,
-                        CategoryNames = !string.IsNullOrEmpty(x.CategoryNames) ? x.CategoryNames : "-",
-                        CustomerClasses = x.CustomerClasses != "-1" ? x.CustomerClasses : "-",
-                        GroupIDs = x.GroupIDs,
-                        OriginGroupIDs = x.OriginGroupIDs
-                    };
-
+                    var newX = new CustomerAssociationByAccountDetailViewModel(x);
+                   
                     var flaggedAffected = flaggedAffectedTagList.FirstOrDefault(y => y.SubscriberID.Equals(newX.SubscriberId) && y.CTSCustID.Equals(newX.CTSCustId));
+
                     if (flaggedAffected != null)
                     {
                         newX.IsFlaggedTag = flaggedAffected.IsFlagged;
@@ -478,7 +457,7 @@
                 recordsFiltered = totalItem,
                 data = result
             }, JsonRequestBehavior.AllowGet);
-        }
+        }       
 
         private IEnumerable<CategoryGroupViewModel> GetAllCategories()
         {
@@ -504,21 +483,7 @@
 
             return categoryList;
         }
-
-        private string StandardizeAssociationTypeName(string name)
-        {
-            if (!string.IsNullOrEmpty(name))
-            {
-                var spanBettingPattern = $"<span class='association-type-name betting-pattern'>{Consts.AssociationTypeName_BettingPattern}</span>";
-                var spanIPAssociation = $"<span class='association-type-name ip-association'>{Consts.AssociationTypeName_IP}</span>";
-
-                name = name.Replace(Consts.AssociationTypeName_BettingPattern, spanBettingPattern);
-                name = name.Replace(Consts.AssociationTypeName_IP, spanIPAssociation);
-            }
-
-            return name;
-        }
-
+      
         private List<AssociatedAccountModel> GetCustClassification(string custIds, List<AssociatedAccountModel> assModel)
         {
             var custClassification = new List<LatestCCDangerLevelModel>();
@@ -552,13 +517,13 @@
                                           StatusId = group.a.StatusId,
                                           AssociationStatus = group.a.AssociationStatus,
                                           ParentIDs = group.a.ParentIDs,
-                                          IsProbation = group.a.IsProbation,
-                                          CategoryType = group.a.CategoryType,
+                                          IsProbation = group.a.IsProbation,                                         
                                           CategoryIDs = group.a.CategoryIDs,
                                           CategoryNames = group.a.CategoryNames,
                                           CustomerClasses = (temp != null && group.a.CustSubId == 0) ? temp.CustomerClass.ToString() : "-",
                                           GroupIDs = group.a.GroupIDs,
-                                          OriginGroupIDs = group.a.OriginGroupIDs
+                                          OriginGroupIDs = group.a.OriginGroupIDs,
+                                          ColorTypeIDs = group.a.ColorTypeIDs
                                       }).ToList();
 
             return result;
@@ -1626,333 +1591,38 @@
 
         [HttpPost]
         public ActionResult GetCustomerClassification(long ctsCustID, int roleID)
-        {
-            var isPinCategory = false;
-            var isExcludedTagAssPA = false;
+        {           
             var isVVip = false;
-            var isProblemAccount = false;
-            var isPAProbation = false;
-            var isPADangerous = false;
-            var categoryList = new List<CustomerCategoryViewModel>();
+            var isProblemAccount = false;          
+            var categoryList = new List<GetCustomerCategoryViewModel>();
             var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
 
-            var classification = _accountService.GetCustomerClassification(ctsCustID, out isPinCategory, out isExcludedTagAssPA);
+            var classification = _accountService.GetCustomerClassification(ctsCustID, out bool isExcludedTagAssPA);
 
             if (classification != null && classification.Any())
             {
-                categoryList = classification.Select(x => new CustomerCategoryViewModel
-                {
-                    CategoryId = x.CategoryID,
-                    CategoryType = x.CategoryType,
-                    CategoryName = x.CategoryName ?? string.Empty,
-                    IsProblemAccount = x.ParentID == 50
-                }).ToList();
+                categoryList = classification.Select(x => new GetCustomerCategoryViewModel(x)).ToList();
 
-                isVVip = categoryList.Any(x => x.CategoryId == (int)CustomerCategoryID.VVIP);                
-                isProblemAccount = categoryList.Any(x => x.IsProblemAccount && x.CategoryType != 2);
-                isPADangerous = categoryList.Any(x => x.CategoryType == 2);
-                isPAProbation = classification.Any(x => x.IsProbation);
+                isVVip = categoryList.Any(x => x.IsVVIP);
+                isProblemAccount = categoryList.Any(x => x.IsProblemAccount);                          
             }
 
             var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustID);
 
             if (classificationHistory != null && classificationHistory.Any())
             {
-                classificationHistoryList = classificationHistory.Select(x => new CustomerClassificationHistoryViewModel
-                {
-                    CreatedTimeString = x.CreatedTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    SourceTypeName = x.SourceTypeName,
-                    CategoryName = (x.SourceTypeID == (int)SourceTypeID.NoShow_Detail) ? "-" : (x.CategoryName != null ? x.CategoryName : string.Empty),
-                    CustomerClass = x.CustomerClass,
-                    Reason = GetReason(x, roleID),
-                    TurnOver = x.TurnOver,
-                    Winloss = x.Winloss,
-                    Margin = x.Margin,
-                    BetCount = x.BetCount,
-                    ActiveDays = x.ActiveDays,
-                    LastXDaysMargin = x.LastXDaysMargin,
-                    ProbationPeriodWinloss = x.ProbationPeriodWinloss,
-                    CreatedBy = x.CreatedBy
-                }).ToList();
+                classificationHistoryList = classificationHistory.Select(x => new CustomerClassificationHistoryViewModel(x)).ToList();                
             }
 
             return Json(new
-            {
-                isPinCategory,
+            {             
                 isExcludedTagAssPA,
                 isVVip,
-                isProblemAccount,
-                isPADangerous,
-                isPAProbation,
+                isProblemAccount,          
                 categoryList,
                 data = classificationHistoryList,
             }, JsonRequestBehavior.AllowGet);
-        }
-
-        private string GetReason(CustomerClassificationHistoryModel cc, int roleID)
-        {
-            var divReason = $"<div>";
-            var spanReason = string.Empty;
-            var winloss = cc.Winloss.ToString(Consts.FormatDecimalToString_Thousands3Places);
-
-            if (cc.SourceTypeID == (int)SourceTypeID.Classification_Rescan)
-            {
-                spanReason += $"Win loss: {winloss}";
-            }
-            else if (cc.IsFromTVS)
-            {
-                if (cc.TVSRequestID > 0)
-                    spanReason += $"Void by RequestID: {cc.TVSRequestID} ";
-                else
-                    spanReason += $"Void by BetID ";
-
-                if (roleID == 1)
-                    spanReason += $"| Win loss: {winloss} ";
-
-                if (cc.SportType != null && cc.SportType > 0)
-                    spanReason += $"| Sport: {cc.SportName} ";
-
-                if (cc.IsParlay != null && cc.IsParlay.Value)
-                    spanReason += $"| Parlay";
-            }
-
-            if (spanReason == string.Empty)
-                spanReason = MappingReasonByCategoryID(spanReason, cc);
-
-            if (spanReason == string.Empty)
-                spanReason = MappingReasonBySourceTypeID(spanReason, cc, roleID);
-
-            if (spanReason == string.Empty)
-                divReason += $"<div>{MappingAdditionalReason(cc)}</div>" + $"<div>{cc.SourceTypeName}</div>";
-            else
-                divReason += $"<div>{MappingAdditionalReason(cc) + spanReason}</div>";
-
-            return divReason;
-        }
-
-        private string MappingReasonByCategoryID(string spanReason, CustomerClassificationHistoryModel cc)
-        {
-            var margin = Math.Round(cc.Margin, 3);
-            var winloss = cc.Winloss.ToString(Consts.FormatDecimalToString_Thousands3Places);
-            var turnOver = cc.TurnOver.ToString(Consts.FormatDecimalToString_Thousands3Places);
-            var betCount = cc.BetCount.ToString("N0");
-            var activeDays = cc.ActiveDays;
-            var twGroupBettingRate = cc.TWGroupBettingRate;
-            var twTicketRejectRate = cc.TWTicketRejectRate;
-            var twDesktopTicket = cc.TWDesktopUsageRate;
-            var first5TWGBTicketCount = cc.First5TWGBTicketCount?.ToString() ?? string.Empty;
-
-            switch (cc.CategoryID)
-            {
-                case (int)ClassificationSourceType.NewMember:
-                case (int)ClassificationSourceType.NewMember31:
-                case (int)ClassificationSourceType.NewMember32:
-                case (int)ClassificationSourceType.NewMember33:
-                case (int)ClassificationSourceType.NormalAccount:
-                case (int)ClassificationSourceType.NormalAccount121:
-                case (int)ClassificationSourceType.NormalAccount122:
-                case (int)ClassificationSourceType.NormalAccount123:
-                case (int)ClassificationSourceType.Probation:
-                case (int)ClassificationSourceType.Probation51:
-                case (int)ClassificationSourceType.Probation52:
-                case (int)ClassificationSourceType.Probation53:
-                case (int)ClassificationSourceType.SmartPunter:
-                case (int)ClassificationSourceType.SmartPunter61:
-                case (int)ClassificationSourceType.SmartPunter62:
-                case (int)ClassificationSourceType.SmartPunter63:
-                case (int)ClassificationSourceType.HighRiskPunter:
-                case (int)ClassificationSourceType.HighRiskPunter71:
-                case (int)ClassificationSourceType.HighRiskPunter72:
-                case (int)ClassificationSourceType.HighRiskPunter73:
-                    spanReason += $"Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount}";
-                    break;
-
-                case (int)ClassificationSourceType.GoodMember:
-                case (int)ClassificationSourceType.GoodMember111:
-                case (int)ClassificationSourceType.GoodMember112:
-                case (int)ClassificationSourceType.GoodMember113:
-                    spanReason += $"Turnover: {turnOver} | Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
-                    break;
-
-                case (int)ClassificationSourceType.NewMember39:
-                    spanReason += $"Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Group Betting Bet Count: {first5TWGBTicketCount} | Sport: {GetSportNameNewGroupBettingFromSportType(cc)}";
-                    break;
-
-                case (int)ClassificationSourceType.Probation57:
-                case (int)ClassificationSourceType.SmartPunter67:
-                case (int)ClassificationSourceType.HighRiskPunter77:
-                    spanReason += $"Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Group Betting Percent: {twGroupBettingRate}";
-                    break;
-
-                case (int)ClassificationSourceType.Probation58:
-                case (int)ClassificationSourceType.SmartPunter68:
-                case (int)ClassificationSourceType.HighRiskPunter78:
-                    spanReason += $"Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount} | Desktop Percent: {twDesktopTicket} | Reject Percent: {twTicketRejectRate}";
-                    break;
-                case (int)ClassificationSourceType.EarlyWarningMembers:
-                case (int)ClassificationSourceType.EarlyWarningMembersLosing:
-                case (int)ClassificationSourceType.TWInitialGroupBetting:
-                case (int)ClassificationSourceType.TWInitialGroupBettingLosing:
-                case (int)ClassificationSourceType.TWInitialSmart:
-                case (int)ClassificationSourceType.TWInitialSmartLosing:
-                    spanReason += $"{cc.Remark} | Turnover: {turnOver} | Win loss: {winloss} | Margin: {margin} | Bet Count: {betCount}";
-                    break;
-
-                case (int)ClassificationSourceType.NormalAccountInactive:
-                case (int)ClassificationSourceType.ProPunterInactive:
-                    spanReason += $"<span> {cc.SourceTypeName} </span>";
-                    break;
-
-                case (int)ClassificationSourceType.RobotUser61:
-                case (int)ClassificationSourceType.RobotUser163:
-                case (int)ClassificationSourceType.RobotUser164:
-                case (int)ClassificationSourceType.RobotOCRD165:
-                case (int)ClassificationSourceType.RobotOCRD166:
-                    if (cc.IsFromTVS)
-                    {
-                        if (cc.TVSRequestID > 0)
-                            spanReason += $"Void by RequestID: {cc.TVSRequestID} | Win loss: {winloss}";
-                        else
-                            spanReason += $"Void by BetID |  Win loss: {winloss}";
-                    }
-                    else if (cc.IsFromTW)
-                    {
-                        spanReason += $"Counter: {cc.RobotCounter} | Win loss: {winloss}";
-                    }
-                    else if (cc.IsFromImperva)
-                    {
-                        spanReason += $"{cc.Remark} Win loss: {winloss}";
-                    }
-                    else if (cc.IsFromAI)
-                    {
-                        spanReason += $"Win loss: {winloss}";
-                    }
-                    else if (cc.IsFromCTS)
-                    {
-                        spanReason += $"Robot is marked directly ";
-
-                        spanReason += $" | Win loss: {winloss}";
-                        if (!string.IsNullOrEmpty(cc.Remark))
-                            spanReason += $" | {cc.Remark}";
-                    }
-                    break;
-            
-                default:
-                    break;
-            }
-
-            return spanReason;
-        }
-
-        private string GetSportNameNewGroupBettingFromSportType(CustomerClassificationHistoryModel cc)
-        {
-            switch (cc.SportType)
-            {
-                case (int)CustomerCategorySportType.Soccer:
-                case (int)CustomerCategorySportType.Basketball:
-                    return cc.SportName;
-                default:
-                    return "Soccer/Basketball";
-            }
-        }
-
-        private string MappingReasonBySourceTypeID(string spanReason, CustomerClassificationHistoryModel cc, int roleID)
-        {
-            var winloss = cc.Winloss.ToString(Consts.FormatDecimalToString_Thousands3Places);
-
-            switch (cc.SourceTypeID)
-            {
-                case (int)SourceTypeID.SpecialCustomerClass_Add:
-                case (int)SourceTypeID.SpecialCustomerClass_Remove:
-                    {
-                        spanReason += $"<span> {cc.SourceTypeName} </span>";
-
-                        if (!string.IsNullOrEmpty(cc.Remark))
-                            spanReason += $"| {cc.Remark} ";
-                        break;
-                    }
-                case (int)SourceTypeID.Classification_PAMarkDirectly:
-                case (int)SourceTypeID.Classification_PAAffectedByUplines:
-                    if (!string.IsNullOrEmpty(cc.Remark) && cc.Remark.Contains(Consts.MarkPA_AssociatedGroup))
-                    {
-                        spanReason += $"<span> {cc.Remark} </span>";
-
-                        if (roleID == 1)
-                            spanReason += $"| Win loss: {winloss} ";
-                    }
-                    else
-                    {
-                        spanReason += $"<span> {cc.SourceTypeName} </span>";
-                        if (roleID == 1)
-                            spanReason += $"| Win loss: {winloss} ";
-
-                        if (!string.IsNullOrEmpty(cc.Remark))
-                            spanReason += $"| {cc.Remark}";
-                    }
-
-                    break;
-
-                case (int)SourceTypeID.Classification_PAUnmarkDirectly:
-                case (int)SourceTypeID.Classification_UnmarkingPAAffectedDirectly:
-                    spanReason += $"<span> {cc.SourceTypeName} </span>";
-                    if (!string.IsNullOrEmpty(cc.Remark))
-                    {
-                        spanReason += $"| {cc.Remark}";
-                    }
-                    break;
-
-                case (int)SourceTypeID.Classification_ClassifyGBMatchMonitor:
-                    if (!string.IsNullOrEmpty(cc.Remark))
-                    {
-                        spanReason += $"Match ID {cc.Remark} | Win loss: {winloss}";
-                    }
-                    else
-                    {
-                        spanReason += $"Win loss: {winloss}";
-                    }
-
-                    break;
-
-                case (int)SourceTypeID.NoShow_Detail:
-                    spanReason += $"{cc.CategoryName}";
-                    break;
-                case (int)SourceTypeID.UnauthorizedLogin_Customer:
-                    if (!string.IsNullOrEmpty(cc.Remark))
-                    {
-                        var unauthLoginCust = JsonConvert.DeserializeObject<RemarkDetectUnauthorizedModel>(cc.Remark);
-                        spanReason += $"First Bet Date: {unauthLoginCust.FirstBetDate.ToString(Consts.FormatDateToString_MMMddyyyy)} " +
-                            $"| Detection Date: {unauthLoginCust.DetectionDate.ToString(Consts.FormatDateToString_MMMddyyyy)} " +
-                            $"- Bot Trans: { unauthLoginCust.Bot.ToString("N0") } ({unauthLoginCust.BotPCT}%) " +
-                            $"- Invalid Browser Info Trans: {unauthLoginCust.InvalidBrowser.ToString("N0")} ({unauthLoginCust.InvalidBrowserPCT}%) " +
-                            $" | Win loss: {winloss}";
-                    }
-                    else
-                    {
-                        spanReason += $"Win loss: {winloss}";
-                    }
-
-                    break;
-                default:
-                    break;
-            }
-
-            return spanReason;
-        }
-
-        private string MappingAdditionalReason(CustomerClassificationHistoryModel cc)
-        {
-            if (cc.SourceTypeID != (int)SourceTypeID.NoShow_Detail && !string.IsNullOrEmpty(cc.LicVIP))
-            {
-                return $"<div>{cc.LicVIP}</div>";
-            }
-
-            if (cc.SourceTypeID != (int)SourceTypeID.NoShow_Detail && !string.IsNullOrEmpty(cc.LicBA))
-            {
-                return $"<div>{cc.LicBA}</div>";
-            }
-
-            return string.Empty;
-        }
+        }     
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationNormalCategory)]
@@ -1969,8 +1639,7 @@
                 {
                     _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
-                        CustIds = new List<long> { custId },
-                        IsRescanPA = false,
+                        CustIds = new List<long> { custId },                     
                         FunctionId = FunctionId.ExcludeTaggingAssPAWeb,
                         ServiceName = "ExcludeTaggingAssociationWithPA"
                     });
@@ -1991,27 +1660,21 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult MarkCustomerCategory(long ctsCustID, int roleID, string userName, bool isRobotUser, bool isPinCategory)
+        public ActionResult MarkCustomerCategory(long ctsCustID, int roleID, string userName, bool isRobotUser)
         {
             var result = new MarkCustomerCategoryViewModel
             {
                 RoleID = roleID,
                 UserName = userName,
-                IsRobotUser = isRobotUser,
-                IsPinCategory = isPinCategory,
-                ProblemAccountList = _pamService.GetProblemAccountCategories().OrderBy(x => x.Priorty)
+                IsRobotUser = isRobotUser,             
+                ProblemAccountList = _pamService.GetProblemAccountCategories(ViewCategoryPageSource.Other).OrderBy(x => x.Priorty)
             };
 
             var classifications = _accountService.GetCustomerClassification(ctsCustID);
 
             if (classifications != null && classifications.Any())
             {
-                result.CategoryList = classifications.Select(x => new CustomerCategoryViewModel
-                {
-                    CategoryId = x.CategoryID,
-                    CategoryName = x.CategoryName ?? string.Empty,
-                    CategoryGroup = x.CategoryGroup
-                });
+                result.CategoryList = classifications.Select(x => new GetCustomerCategoryViewModel(x));
 
                 result.IsVVip = classifications.Any(x => x.CategoryID == (int)CustomerCategoryID.VVIP);
             }
@@ -2029,8 +1692,7 @@
             {
                 CustId = model.CustID,
                 CTSCustId = model.CTSCustID,
-                SubscriberId = model.SubscriberID,
-                CategoryId = model.CategoryID,
+                SubscriberId = model.SubscriberID,              
                 RoleId = model.RoleID,
                 IsAffectToAllDownlines = model.IsAffectAllDownlines,
                 Remark = model.Remark,
@@ -2039,11 +1701,18 @@
                 ActionType = ActionTypeQueueCustCategory.Insert
             };
 
-            var isMarkDirect = MarkDirectVVIP(categoryModel);
+            var isSuccess = MarkDirectVVIP(categoryModel);
 
-            if (isMarkDirect && categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
+            if (isSuccess)
             {
-                result = _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
+                if (categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
+                {
+                    result = _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
+                }               
+            }
+            else 
+            {
+                result = new DBResult { ErrorCode = -1, ErrorMsg = "Mark VVIP failed" };
             }
 
             return Json(new
@@ -2057,22 +1726,24 @@
         {
             try
             {
-                var latestClassifications = _accountService.MarkVVIPCategory(categoryModel);
+                var classificationCusts = _customerCategoryService.MarkVVIPCustomerCategory(categoryModel);
 
-                if (categoryModel.IsVVip)
-                {
-                    latestClassifications = latestClassifications?.Where(c => c.CustId != 0);
-
-                    if (latestClassifications != null && latestClassifications.Any())
+                if (categoryModel.IsVVip && classificationCusts.CustInfos != null && classificationCusts.CustInfos.Any())
+                {                    
+                    var latestClassificationModel = classificationCusts.CustInfos.Select(x => new LatestClassificationModel
                     {
-                        // Update CC in table custinfo to MainDB
-                        _customerClassificationService.RetryPushCCToMainDB(latestClassifications, 2);
+                        CustId = x.CustID,
+                        CustomerClass = x.CustomerClass,
+                        Category =  x.CategoryID
+                    });
 
-                        Task.Run(() =>
-                        {
-                            _antiFraudCenterService.DeleteAFCAccounts(latestClassifications.Select(c => c.CustId), FromFlow.CTSWEB);
-                        });
-                    }
+                    // Update CC in table custinfo to MainDB
+                    _customerClassificationService.RetryPushCCToMainDB(latestClassificationModel, 2);
+
+                    Task.Run(() =>
+                    {
+                        _antiFraudCenterService.DeleteAFCAccounts(classificationCusts.CustInfos.Select(x => x.CustID), FromFlow.CTSWEB);
+                    });                    
                 }
             }
             catch (Exception ex)
@@ -2102,18 +1773,17 @@
                     RoleID = model.RoleID,
                     SubscriberID = model.SubscriberID,
                     IsLicensee = model.IsLicensee,
-                    CategoryID = model.CategoryID,
-                    CategoryGroup = model.CategoryGroup,
+                    CategoryID = model.CategoryID,                   
                     Remark = model.Remark,
                     IsFromAI = false,
-                    IsDirectPA = true,
+                    IsMarkedDirectly = true,
                     IsFromCTS = true,
                     CreatedBy = CurrentSession.UserId
                 }
             };
 
-            var result = _problemAccountClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Category, "ProfileAddProblemAccount", FromFlow.CTSWEB, true);
-
+            var result = _problemAccountClassificationService.InsertProblemAccountPackage(pas, CCInputFlow.InsertPACategory, "ProfileAddProblemAccount", FromFlow.CTSWEB, true);
+            
             return Json(new
             {
                 errorCode = result.ErrorCode,
@@ -2124,41 +1794,22 @@
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]
         public ActionResult SaveMarkRobotAccount(SaveMarkCustomerCategoryViewModel model)
-        {
-            var dbResult = new DBResult();
-
-            var robotAccounts = new List<InsertRobotModel>()
+        {            
+            var robotAccounts = new List<InsertProblemAccountModel>()
                 {
-                    new InsertRobotModel
+                    new InsertProblemAccountModel
                     {
                         CustID = model.CustID,
+                        CategoryID = model.CategoryID,
                         Remark = model.Remark,
-                        IsDirect = true,
+                        RoleID = model.RoleID,
+                        IsMarkedDirectly = true,
                         IsFromCTS = true,
                         CreatedBy = CurrentSession.UserId
                     }
                 };
 
-            var custInfos = _problemAccountClassificationService.InsertRobotAccountPackge(robotAccounts, false);
-
-            if (custInfos.Any())
-            {
-                var custIds = custInfos.Select(x => x.CustID).Distinct();
-
-                _customerClassificationService.PushDataToExternalPackge(custIds, new PushDataToExternalModel
-                {
-                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
-                    IsPushCCToSoon88 = true,
-                    IsUpdateDangerToMainDB = true,
-                    IsSyncAFC = false
-                }, FromFlow.CTSWEB);
-
-                dbResult = new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
-            }
-            else
-            {
-                dbResult = new DBResult { ErrorCode = -1, ErrorMsg = "Mark PA Robot failed" };
-            }
+            var dbResult = _problemAccountClassificationService.InsertProblemAccountPackage(robotAccounts, CCInputFlow.InsertPACategory, "Mark Robot Profile Page", FromFlow.CTSWEB, false);          
 
             return Json(new
             {
@@ -2192,9 +1843,9 @@
                 model.CreatedBy = CurrentSession.UserId;
                 model.ActionType = ActionTypeQueueCustCategory.Remove;
 
-                var custIds = _accountService.RemoveVVIPCategory(model);
+                var resultUmmark = _customerCategoryService.UnmarkVVIPCustomerCategory(model);
 
-                if (custIds != null && custIds.Any())
+                if (resultUmmark.CustInfos != null && resultUmmark.CustInfos.Any())
                 {
                     if (model.RoleId != 1 && model.IsAffectToAllDownlines)
                     {
@@ -2205,11 +1856,8 @@
                     {
                         _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                         {
-                            CustIds = new List<long> { model.CustId },
-                            IsRescanPA = true,
-                            IsRescanPotentialPA = true,
-                            IsToQueue = (model.RoleId != 1 && !model.IsAffectToAllDownlines), // add to queue for case SMA and not checking affect to downline to affect PA for downline
-                            IsPushCCToSoon88 = true,
+                            CustIds = new List<long> { model.CustId },                        
+                            IsToQueue = (model.RoleId != 1 && !model.IsAffectToAllDownlines), // add to queue for case SMA and not checking affect to downline to affect PA for downline                          
                             IsUpdateDangerToMainDB = true,
                             FunctionId = FunctionId.UnmarkCustomerCategory,
                             ServiceName = "RemoveCustomerCategory"
@@ -2236,8 +1884,8 @@
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
         public ActionResult SaveUnmarkCustomerCategory(SaveUnmarkCustomerCategoryViewModel model)
-        {
-            var paUnmark = new List<UnmarkProblemAccountModel>()
+        {                                
+            var resultUnmark = _problemAccountClassificationService.UnmarkProblemAccount(new List<UnmarkProblemAccountModel>()
                 {
                     new UnmarkProblemAccountModel()
                     {
@@ -2248,38 +1896,24 @@
                         CreatedBy = CurrentSession.UserId,
                         Remark = model.Remark,
                         IsExceptDirectDownline = model.IsExceptDirectDownline,
-                        IsDirectPA = true
+                        IsMarkedDirectly = true
                     }
-                };
+                }, false);
 
-            var unmarkPAResult = _problemAccountClassificationService.UnmarkProblemAccount(paUnmark, false);
-
-            if (unmarkPAResult.ErrorCode == 0 && unmarkPAResult.CustomerInfo.Any())
+            if (resultUnmark.CustInfos != null && resultUnmark.CustInfos.Any())
             {
-                var custIds = unmarkPAResult.CustomerInfo.Select(x => x.CustID);
-
-                _problemAccountClassificationService.UpdateBetLimitOfUnflaggedCustomer(custIds.Distinct());
-
-                var paramRescan = new RescanCustClassificationModel
+                _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                 {
-                    CustIds = custIds,
-                    IsPushCCToSoon88 = true,
-                    IsRescanPotentialPA = true,
+                    CustIds = resultUnmark.CustInfos.Select(x=>x.CustID),                   
                     FunctionId = FunctionId.UnmarkCustomerCategory,
                     IsUpdateDangerToMainDB = true
-                };
-
-                var custIdsToRescanPotentialPA = _rescanClassificationService.RescanPotentialProblemAccount(custIds.ToList(), new List<long>(), paramRescan);
-
-                var smCustIds = _rescanClassificationService.GetAgentCusts(custIds);
-
-                _rescanClassificationService.RescanNormalAccount(paramRescan, custIdsToRescanPotentialPA.CustIds, smCustIds);
+                });
             }
 
             return Json(new
             {
-                errorCode = unmarkPAResult.ErrorCode,
-                errorMessage = unmarkPAResult.ErrorMessage
+                errorCode = string.IsNullOrEmpty(resultUnmark.ErrorMessage) ? 0 : -1,
+                errorMessage = resultUnmark.ErrorMessage
             }, JsonRequestBehavior.AllowGet);
         }
 

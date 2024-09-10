@@ -36,8 +36,6 @@
 
         public string ParentIDs { get; set; }
 
-        public bool IsPAProbation { get; set; }
-
         public bool IsLicensee { get; set; }
 
         public long AgentCTSCustID { get; set; }
@@ -58,8 +56,8 @@
 
         public int Danger5 { get; set; }
 
-        public string DangerDisplay { get; set; }
+        public string DangerDisplay { get; set; }       
 
-        public int CategoryType { get; set; } // 1: PA, 2: PA Dangerous
+        public string ColorTypeIDs { get; set; }
     }
 }

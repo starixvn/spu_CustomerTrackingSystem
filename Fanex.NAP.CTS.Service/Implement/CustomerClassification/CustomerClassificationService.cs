@@ -2,18 +2,14 @@
 {
     using Fanex.Data.Repository;
     using Fanex.Logging;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
-    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
     using Fanex.NAP.CTS.Criteria.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;
-    using Fanex.NAP.CTS.Service.Implement;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
@@ -65,12 +61,7 @@
                 if (latestcustClassification != null && latestcustClassification.Any())
                 {
                     isSuccess = PushCCToMainDB(latestcustClassification, Consts.Retry);
-
-                    if (paras.IsPushCCToSoon88)
-                    {
-                        PushCustomerClassificationToSoon88(latestcustClassification);
-                    }
-
+                    
                     if (paras.IsUpdateDangerToMainDB && isSuccess)
                     {
                         isSuccess = UpdateDangerLevelToMainDB(latestcustClassification);
@@ -81,7 +72,7 @@
             return isSuccess;
         }
 
-        public bool UpdateDangerLevelToMainDB(IEnumerable<LatestCCDangerLevelModel> lastestClassifications)
+        private bool UpdateDangerLevelToMainDB(IEnumerable<LatestCCDangerLevelModel> lastestClassifications)
         {
             if (lastestClassifications != null && lastestClassifications.Any())
             {
@@ -110,7 +101,7 @@
             return true;
         }
 
-        public bool PushCCToMainDB(IEnumerable<LatestCCDangerLevelModel> lastestClassifications, int retryTime)
+        private bool PushCCToMainDB(IEnumerable<LatestCCDangerLevelModel> lastestClassifications, int retryTime)
         {
             bool isSuccess = true;
 
@@ -173,38 +164,7 @@
             }
 
             return true;
-        }
-
-        public void PushCustomerClassificationToSoon88(IEnumerable<LatestCCDangerLevelModel> customerClassifications)
-        {
-            var feedDataToSoon88Service = new FeedDataToSoon88Service();
-
-            if (customerClassifications == null || !customerClassifications.Any())
-            {
-                return;
-            }
-
-            try
-            {
-                var custClassList = customerClassifications.Select(c => new CustomerClassForMainDb()
-                {
-                    CustID = c.CustID,
-                    CustomerClass = c.CustomerClass
-                });
-                
-                feedDataToSoon88Service.FeedDataToSoon88(custClassList);
-            }
-            catch (Exception ex)
-            {
-                var jsonDataForLog = JsonConvert.SerializeObject(customerClassifications);
-
-                var logMessage = new LogMessage(ex.Message)
-                .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error($"Feed Data to Soon88 - Start Exception {logMessage} with listCust: {jsonDataForLog}", ex);
-            }
-        }
+        }       
 
         public bool RetryUpdateDangerLevelToMainDB(IEnumerable<DangerLevelModel> dangerLevels, int dangerType, int retryTime)
         {
@@ -252,7 +212,7 @@
 
         #region DataAccess Layer
 
-        public DBResult UpdateCCToMainDB(IEnumerable<LatestClassificationModel> customerClassList)
+        private DBResult UpdateCCToMainDB(IEnumerable<LatestClassificationModel> customerClassList)
         {
             var criteria = new SyncCustomerClassToMainDbCriteria
             {
@@ -278,7 +238,6 @@
 
             return new List<LatestCCDangerLevelModel>();
         }
-
 
         public IEnumerable<LatestCCDangerLevelModel> GetLatestCCAndDangerLevel(string custIds)
         {

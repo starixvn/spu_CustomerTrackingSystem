@@ -282,7 +282,10 @@
             RemoveLicVIP_API = 47,
             AddLicBA_API = 48,
             RemoveLicBA_API = 49,
-            RemoveLicBABySite_API = 50,
+            RemoveLicBABySite_API = 50,            
+            DangerousScoreClassification = 102,
+            TWInitialGBClassification = 103,
+            TWInitialSmartClassification = 104
         };
 
         public enum BySport_FunctionId
@@ -321,9 +324,8 @@
         {
             CTSWEB = 1,
             CTSAPI = 2,
-            CTSServices = 3,
-            AFCSerivce = 4,
-            ManualTrigger = 5
+            CTSServices = 3,          
+            ManualTrigger = 4
         };
 
         public enum TrackingCtsFunctionId

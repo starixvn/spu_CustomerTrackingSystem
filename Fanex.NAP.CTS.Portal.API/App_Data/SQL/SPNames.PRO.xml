@@ -18,15 +18,14 @@
 		<Setting Key="CTS_DC_CustClassification_Get4API" SpName="CTS_DC_CustClassification_Get4API" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassification_GetAllByCategory" SpName="CTS_DC_CustClassification_GetAllByCategory" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="Acc_CustomerUpdateCustomerClass" SpName="Acc_CustomerUpdateCustomerClass" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
-		<Setting Key="CTS_DC_CustClassification_UpdateProblemAccount" SpName="CTS_DC_CustClassification_UpdateProblemAccount" DbName="MySQL.CTS_DataCenter.Admin"/>
-		<Setting Key="CTS_DC_CustClassification_PA_Insert" SpName="CTS_DC_CustClassification_PA_Insert" DbName="MySQL.CTS_DataCenter.Admin"/>
 		<Setting Key="CTS_DC_CustClassification_Get" SpName="CTS_DC_CustClassification_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
+    <Setting Key="CTS_DC_CustClassification_Insert" SpName="CTS_DC_CustClassification_Insert" DbName="MySQL.CTS_DataCenter.Admin" TimeOut="600"/>
+    <Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove" DbName="MySQL.CTS_DataCenter.Admin" TimeOut="600"/>
+    <Setting Key="CTS_DC_CustClassification_Rescan_Get" SpName="CTS_DC_CustClassification_Rescan_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function Name="CustomerClass">
-		<Setting Key="CTS_CustomerClass_GetByCustId" SpName="CTS_CustomerClass_GetByCustId" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_DC_CustClassification_GetForSoon88" SpName="CTS_DC_CustClassification_GetForSoon88" DbName="MySQL.CTS_DataCenter.Reporter"/>
-		<Setting Key="CTS_DC_CustClassification_GetLatestClassification" SpName="CTS_DC_CustClassification_GetLatestClassification" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_CustomerClass_GetByCustId" SpName="CTS_CustomerClass_GetByCustId" DbName="DBCTS.bodb02.bodbSPUNet" />	
 		
 		<Setting Key="CTS_DC_CustClassification_LogInputData" SpName="CTS_DC_CustClassification_LogInputData" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_CustomerUpdDanger" SpName="CTS_CustomerUpdDanger" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
@@ -56,8 +55,7 @@
 		<Setting Key="CTS_DC_CustInfo_GetCustIDsRole" SpName="CTS_DC_CustInfo_GetCustIDsRole" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
-	<Function name ="RobotUser">
-		<Setting Key="CTS_Customer_RobotCheckExist" SpName="CTS_Customer_RobotCheckExist" DbName="DBONUSER.ON_USER.bodbSPUNet"/>
+	<Function name ="RobotUser">		
 		<Setting Key="CTS_Customer_RobotListSelByDate" SpName="CTS_Customer_RobotListSelByDate" DbName="DBONUSER.ON_USER.bodbSPUNet"/>
 	</Function>
 
@@ -66,48 +64,23 @@
 	</Function>
 	
   <Function name="TWProblemAccountDetection">
-    <Setting Key="CTS_DC_TWProblemDetectionMonitor_Remove" SpName="CTS_DC_TWProblemDetectionMonitor_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
-    <Setting Key="CTS_DC_TWProblemDetectionMonitor_Insert" SpName="CTS_DC_TWProblemDetectionMonitor_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
-    <Setting Key="CTS_DC_TWProblemDetectionMonitor_Get" SpName="CTS_DC_TWProblemDetectionMonitor_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
     <Setting Key="CTS_CustomerClassification_GetPerformance" SpName="CTS_CustomerClassification_GetPerformance" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
     <Setting Key="Nap_ProblemAccount_AutoInsertCustomer" SpName="Nap_ProblemAccount_AutoInsertCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
-  </Function>
-
-  <Function name="SpecialCustomerClass">
-    <Setting Key="CTS_DC_SpecialCustClass_Insert" SpName="CTS_DC_SpecialCustClass_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
   </Function>
 
 	<Function name="MonitorCTSFunction">
 		<Setting Key="SPU_Stats_Accessment_Insert" SpName="SPU_Stats_Accessment_Insert" DbName="MySQL.SPU_Stats.Admin" />
 	</Function>
-		<Function name="ProblemAccountManagement">
-		<Setting Key="CTS_DC_ProblemAccountManagement_Evidence_Update" SpName="CTS_DC_ProblemAccountManagement_Evidence_Update" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_ProblemAccountManagement_Evidence_Remove" SpName="CTS_DC_ProblemAccountManagement_Evidence_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
-	</Function>
 	<Function name="RescanCustomerClassification">
 		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" TimeOut="300" />
-		<Setting Key="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" SpName="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" DbName="MySQL.CTS_Archive.Admin" />
-		<Setting Key="CTS_DC_CustClassification_PA_ReScan" SpName="CTS_DC_CustClassification_PA_ReScan" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_PA_InsertRobot" SpName="CTS_DC_CustClassification_PA_InsertRobot" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_PA_ClearOld" SpName="CTS_DC_CustClassification_PA_ClearOld" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" SpName="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" DbName="MySQL.CTS_Archive.Admin" />					
 		
 		<Setting Key="CTS_DC_CustClassification_GetCCAndDangerLevel" SpName="CTS_DC_CustClassification_GetCCAndDangerLevel" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_GeneralNormalClassification_RescanNormal_Preprocess" SpName="CTS_GeneralNormalClassification_RescanNormal_Preprocess" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
-		<Setting Key="CTS_DC_CustClassification_PA_Dangerous_ReScan" SpName="CTS_DC_CustClassification_PA_Dangerous_ReScan" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_CustomerClassification_CheckNewGroupBetting" SpName="CTS_CustomerClassification_CheckNewGroupBetting" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
-		<Setting Key="CTS_DC_CustClassification_InitialGB_GetCustInfo" SpName="CTS_DC_CustClassification_InitialGB_GetCustInfo" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_InitialSmart_CheckExist" SpName="CTS_DC_CustClassification_InitialSmart_CheckExist" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_GeneralNormalClassification_RescanNormal_Preprocess" SpName="CTS_GeneralNormalClassification_RescanNormal_Preprocess" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />				
 	</Function>
 	<Function name="LogData">
 		<Setting Key="CTS_Archive_Log_Insert" SpName="CTS_Archive_Log_Insert" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />
 	</Function>
-	<Function name="Licensee VIP/BA">	
-		<Setting Key="CTS_DC_CustClassification_LicVIP_Insert" SpName="CTS_DC_CustClassification_LicVIP_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_LicVIP_Remove" SpName="CTS_DC_CustClassification_LicVIP_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_LicBA_Insert" SpName="CTS_DC_CustClassification_LicBA_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_LicBA_Remove" SpName="CTS_DC_CustClassification_LicBA_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
-	</Function>
-
 	<Function name="FPS">
 		<Setting Key="CTS_DC_CustInfo_GetByNameSubscriber" SpName="CTS_DC_CustInfo_GetByNameSubscriber" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_GetPartialByUserNameSubscriber" SpName="CTS_DC_CustInfo_GetPartialByUserNameSubscriber" DbName="MySQL.CTS_DataCenter.Reporter" />

@@ -22,7 +22,7 @@
 
         public string CategoryName { get; set; }
 
-        public int CategoryID { get; set; }
+        public string CategoryID { get; set; }
 
         public DateTime CreatedDate { get; set; }
 
@@ -38,7 +38,7 @@
 
         public int? SportType { get; set; }
 
-        public int IssueTypeID { get; set; }
+        public int? IssueTypeID { get; set; }
 
     }
 }
