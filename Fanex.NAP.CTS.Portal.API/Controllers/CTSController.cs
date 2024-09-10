@@ -117,7 +117,7 @@
             var result = string.Empty;
             try
             {
-                var custClassifications = _accountService.GetCustomerClassificationForAPI(custIdList, "50,200");
+                var custClassifications = _accountService.GetCustomerClassificationForAPI(custIdList, "1000,20000,30000,40000");
                 result = custClassifications.Select(c => new CustomerClassification()
                 {
                     CustID = c.CustID,
@@ -173,7 +173,7 @@
         {
             try
             {
-                var custClassifications = _accountService.GetCustomerClassificationByCategory("210");
+                var custClassifications = _accountService.GetCustomerClassificationByCategory("1010");
                 return custClassifications.Any()
                     ? custClassifications.Select(c => new CustomerClassification()
                     {
