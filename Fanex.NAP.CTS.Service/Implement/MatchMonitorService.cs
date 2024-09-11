@@ -20,6 +20,7 @@
     using System.Threading.Tasks;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.MatchMonitor.Parlay;
+    using Fanex.NAP.CTS.Model.MatchMonitor.Parlay;
 
     public class MatchMonitorService : IMatchMonitorService
     {
@@ -266,7 +267,7 @@
             }
             else
             {
-                ticketResult = mergeGroup.TicketMergeGroups.Join(ticket.Where(x => x.OrderTicket == 1), tg => tg.Refno, t => t.Refno,
+                ticketResult = mergeGroup.TicketMergeGroups.Join(ticket.Where(x => x.TicketOrder == 0), tg => tg.Refno, t => t.Refno,
                    (tg, t) => new { tg = tg, t = t })
                    .Join(custInfo, ttg => ttg.t.CustId, c => c.CustID,
                    (ttg, c) => new { ttg = ttg, c = c }).Select(x =>
@@ -380,7 +381,7 @@
             }
             else
             {
-                var mMDetailBetTeams = matchDetailInfo.MatchDetails.Join(result.TicketDetails.Where(x => x.OrderTicket == 1).Distinct(x => x.Refno),
+                var mMDetailBetTeams = matchDetailInfo.MatchDetails.Join(result.TicketDetails.Where(x => x.TicketOrder == 0).Distinct(x => x.Refno),
                 m => m.Refno,
                 t => t.Refno, (m, t) => new MMDetailBetTeamModel(m, t, true));
 
@@ -525,7 +526,7 @@
             };
         }
 
-        public MMTicketDetailInfoModel GetMMParlayTicketInfo(MMDetailInfoViewModel para, IEnumerable<SuspiciousTransInfoModel> suspiciousTranInfos)
+        public MMTicketDetailInfoModel GetMMParlayTicketInfo(MMDetailInfoViewModel para, IEnumerable<SuspiciousTransInfoModel> suspiciousRefnos)
         {
             var betTypeInfos = JsonConvert.SerializeObject(new List<MatchBetTypeSettingModel>() { new MatchBetTypeSettingModel {
                 SportTypeID = para.Sport,
@@ -541,7 +542,8 @@
                 MatchID = para.MatchID,
                 EventDate = para.EventDate,
                 IsLive = para.LiveIndicator ? 1 : 0,
-                ListSuspiciousTransIdm = suspiciousTranInfos != null ? JsonConvert.SerializeObject(suspiciousTranInfos) : null,
+                ListSuspiciousRefno = suspiciousRefnos != null ? JsonConvert.SerializeObject(suspiciousRefnos) : null,
+                //ListSuspiciousTransIdm=  null,
                 ViewMode = (int)GetViewModeFromDB(_mmQueryType, para.TypeOfTickets),
                 ListSportBettype = betTypeInfos,
                 IsExclTestCurr = _mmQueryType == MMQueryType.DangerMMReport,
@@ -1053,7 +1055,7 @@
                 criteria.ListScore = (filter.ScoreList == null || !para.LiveIndicator || filter.SportType == 2) ? null : string.Join(",", filter.ScoreList);
                 criteria.ListCurrency = filter.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList);
                 criteria.ListDanger = GenerateDangerJson(filter);
-                //criteria.ListStatus = filter.TicketStatusList == null ? null : string.Join(",", filter.TicketStatusList);
+                criteria.ListStatus = filter.TicketStatusList == null ? null : string.Join(",", filter.TicketStatusList);
                 criteria.ListCustomerClass = filter.CustomerClassList == null ? null : string.Join(",", filter.CustomerClassList);
                 criteria.ListReason = filter.ReasonList == null ? null : string.Join(",", filter.ReasonList).Replace('-', '0');
                 criteria.ListAGroup = filter.AGroupList == null ? null : string.Join(",", filter.AGroupList).Replace('-', '0');
@@ -1064,11 +1066,29 @@
 
             return new TicketDetailViewModel
             {
-                TicketDetails = data,
+                TicketDetails = GroupParlayTickets(data),
                 MinSequenceId = criteria.MinSequenceId,
                 MinTransDate = criteria.MinTransDate,
                 TotalTicket = criteria.TotalTicket
             };
+        }
+
+        private IEnumerable<TicketDetailModel> GroupParlayTickets(IEnumerable<TicketDetailModel> tickets)
+        {
+            var parlaySubDictionary = tickets.Where(x => x.TicketOrder != 0)
+                .GroupBy(x => x.Refno, (key, g) => new { Refno = key, ParlayTickets = g.Select(y => new ParlayTicketInfoModel(y)) })
+                .ToDictionary(x => x.Refno, x => x.ParlayTickets);
+
+            var groupTickets = tickets.Where(x => x.TicketOrder == 0).Select(x => 
+                {
+                    parlaySubDictionary.TryGetValue(x.Refno, out var parlayTickets);
+
+                    x.ParlayTickets = parlayTickets.OrderBy(y=>y.IsMainTicket);
+
+                    return x;
+                });
+
+            return groupTickets;
         }
 
         #endregion

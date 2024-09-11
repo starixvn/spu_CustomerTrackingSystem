@@ -1,6 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Model.MatchMonitor
 {
+    using Fanex.NAP.CTS.Model.MatchMonitor.Parlay;
     using System;
+    using System.Collections.Generic;
 
     public class TicketDetailModel
     {
@@ -14,7 +16,11 @@
 
         public Int64 HomeId { get; set; }
 
+        public string HomeName { get; set; }
+
         public Int64 AwayId { get; set; }
+
+        public string AwayName { get; set; }
 
         public Int64 LeagueId { get; set; }
 
@@ -29,6 +35,10 @@
         public int BetType { get; set; }
 
         public Int64 CustId { get; set; }
+
+        public string BettypeName { get; set; }
+
+        public string SportType { get; set; } // SportName
 
         public string BetTeam { get; set; }
 
@@ -76,10 +86,12 @@
 
         public int ChoiceOrder { get; set; }
 
-        public int OrderTicket { get; set; }
+        public int TicketOrder { get; set; }
 
         public long Refno { get; set; }
 
         public int Combinition { get; set; }
+
+        public IEnumerable<ParlayTicketInfoModel> ParlayTickets { get; set; }
     }
 }

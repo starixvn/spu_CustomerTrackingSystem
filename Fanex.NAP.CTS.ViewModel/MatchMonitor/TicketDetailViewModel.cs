@@ -86,7 +86,7 @@
                 return JsonConvert.SerializeObject(transList);
             }
 
-            return string.Empty;
+            return "[]";
         }
 
         public string GetTransByFilterExcludeSuspicous(MMDetailFilterViewModel filter, IEnumerable<MatchMonitorDetailItemViewModel> ticketMergeGroups)
@@ -235,6 +235,7 @@
                     suspiciousTransInfos.Add(new SuspiciousTransInfoModel
                     {
                         TransId = ticket.TransId,
+                        Refno = ticket.Refno,
                         Reason = reason,
                         GroupId = ticket.ADetectGroupID
                     });

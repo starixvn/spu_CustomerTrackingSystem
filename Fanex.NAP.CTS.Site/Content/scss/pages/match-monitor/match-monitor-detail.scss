@@ -736,7 +736,8 @@
                                     .parlay-li {
                                         white-space: nowrap;
                                         text-align: left;
-                                        padding-bottom: 4px;
+                                        padding-top: 3px;
+                                        padding-bottom: 3px;
                                     }
 
                                     .bold {
@@ -745,6 +746,10 @@
 
                                     .hidden {
                                         display: none;
+                                    }
+
+                                    .more-info {
+                                        margin-top: 6px;
                                     }
                                 }
 

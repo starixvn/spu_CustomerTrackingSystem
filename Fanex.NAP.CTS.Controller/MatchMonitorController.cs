@@ -775,7 +775,7 @@
                     TransTime = DateTime.Now,
                     TransTimeToString = DateTime.Now.ToString(Consts.FormatDateTimeToString_ddMMyyhhmmss),
                     Username = "User Test 1",
-                    SubParlayCount = 3
+                    Combinition = 3
                     //ParlayTicket = parlayTickets
                 },
                 new MatchMonitorDetailItemViewModel
@@ -791,7 +791,7 @@
                     TransTime = DateTime.Now,
                     TransTimeToString = DateTime.Now.ToString(Consts.FormatDateTimeToString_ddMMyyhhmmss),
                     Username = "User Test 2",
-                    SubParlayCount = 3 
+                    Combinition = 3 
                     //ParlayTicket = parlayTickets
                 }
             };
@@ -953,7 +953,9 @@
             {
                 if (info.BetChoiceType != 1)
                 {
-                    var matchDetailInfo = _matchMonitorService.GetMatchMonitorDetail(para);
+                    var matchDetailInfo = para.TicketType == TicketType.Single
+                       ? _matchMonitorService.GetMatchMonitorDetail(para)
+                       : _matchMonitorService.GetMatchMonitorParlayDetail(para);
 
                     if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
                     {
@@ -1013,7 +1015,6 @@
 
             if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
             {
-                var mmStatic = new MatchMonitorStaticListModel();
                 var ticketDetail = fraudTicket.TicketDetails;
                 var mergeGroup = fraudTicket.MMDetailMergeGroup;
 
@@ -1034,7 +1035,7 @@
 
                 var mergeInfo = _matchMonitorService.DrawColorFraudMMDetailWithMergeReasonAGroup(matchDetailInfo.VerifiedTrans, custInfo, ticketDetailGroup.TicketDetails, mergeGroup, reasons);
 
-                var mdItemList = MappingRobotStatus(mergeInfo, para.BetTypeID);
+                var mdItemList = MappingRobotStatus(mergeInfo, para.BetTypeID, para.TicketType);
 
                 if (para.BetChoiceType == 1)
                 {
@@ -1608,20 +1609,22 @@
             });
 
             return ticketResult;
-        }
+        }       
 
-        private IEnumerable<MatchMonitorDetailItemViewModel> MappingRobotStatus(IEnumerable<MatchMonitorDetailItemViewModel> ticket, int betTypeID)
+        private IEnumerable<MatchMonitorDetailItemViewModel> MappingRobotStatus(IEnumerable<MatchMonitorDetailItemViewModel> ticket, int betTypeID, TicketType ticketType)
         {
             if (ticket.Any())
             {
-                var para = ticket.Select(c => new { TransID = c.TransId, TransDate = c.TransTime, CustID = c.CustID });
+                var para = ticket.Select(c => new { TransID = ticketType == TicketType.Single ? c.TransId : c.Refno, 
+                    TransDate = c.TransTime, 
+                    CustID = c.CustID });
 
                 var robotStatus = _matchMonitorService.GetRobotStatus(JsonConvert.SerializeObject(para));
 
                 if (robotStatus.Any())
                 {
                     return ticket.GroupJoin(robotStatus,
-                               t => t.TransId,
+                               t => ticketType == TicketType.Single ? t.TransId : t.Refno,
                                r => r.TransID,
                                (t, r) => new { t, r })
                                .SelectMany(

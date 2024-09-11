@@ -21,8 +21,8 @@
         [SpParam(SqlParamName = "ListSportBettype")]
         public string ListSportBettype { get; set; }
 
-        [SpParam(SqlParamName = "ListSuspiciousTransIdm")]
-        public string ListSuspiciousTransIdm { get; set; }
+        [SpParam(SqlParamName = "ListSuspiciousRefno")]
+        public string ListSuspiciousRefno { get; set; }
 
         [SpParam(SqlParamName = "IsExclTestCurr")]
         public bool IsExclTestCurr { get; set; }
