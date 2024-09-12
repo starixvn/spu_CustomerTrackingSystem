@@ -56,6 +56,8 @@
 
         public Decimal Hdp2 { get; set; }
 
+        public string Choice { get; set; }
+
         public int LiveHomeScore { get; set; }
 
         public int LiveAwayScore { get; set; }

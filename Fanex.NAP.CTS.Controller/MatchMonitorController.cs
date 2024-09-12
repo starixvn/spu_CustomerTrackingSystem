@@ -35,6 +35,7 @@
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.MarkPA;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.Parlay;
+    using Fanex.NAP.CTS.Model.MatchMonitor.Parlay;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -42,6 +43,8 @@
     {
         private const string MMDetailDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/DoubleGridTemplate.xlsx";
         private const string MMDetailSingleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/SingleGridTemplate.xlsx";
+        private const string MMParlayDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/ParlayDoubleGridTemplate.xlsx";
+        private const string MMParlaySingleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/ParlaySingleGridTemplate.xlsx";
 
         private readonly IMatchMonitorService _matchMonitorService;
         private readonly IAssociationDetectionService _associationDetectionService;
@@ -344,7 +347,7 @@
                        Market = x.Key.Market,
                        MatchID = x.Key.MatchID,
                        DataSource = x.Key.DataSource,
-                       FraudTrans = String.Join(",", x.Select(y => y.FraudTrans)),
+                       FraudRefno = String.Join(",", x.Select(y => y.FraudRefno)),
                    });
 
                 return _matchMonitorService.GetMMParlayFraudTicketsSummary(mmFraudTicketsSummaryModel)?.ToDictionary(x => x.BuildDictionaryKey());
@@ -457,8 +460,7 @@
                 ViewBag.MatchSection = para?.MatchSection ?? 0;
                 ViewBag.IsVisibleHoldKey = para?.MatchSection != (int)MATCHMONITOR_SECTION.Closed;
                 ViewBag.HoldKeyStatus = GetHoldKeyStatus(para?.MatchID ?? 0, para?.MatchSection ?? 0);
-                //ViewBag.TicketType = (int)para.TicketType;
-                ViewBag.TicketType = 2;
+                ViewBag.TicketType = (int)para.TicketType;
                 ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                                                                             NapSettings.Settings.SiteId,
                                                                             FSFunctionKeys.MatchMonitor,
@@ -1090,14 +1092,14 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                  .AddMessage($"{Region} Get Fraud MM Detail For Cache Error: " + ex.Message + ex.StackTrace + "\n"
-                   + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                   + ex.InnerException.StackTrace)
-                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+                //var logMessage = new LogMessage(ex.Message)
+                //  .AddMessage($"{Region} Get Fraud MM Detail For Cache Error: " + ex.Message + ex.StackTrace + "\n"
+                //   + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                //   + ex.InnerException.StackTrace)
+                //  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                //  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
-                LogService.Error(logMessage);
+                //LogService.Error(logMessage);
             }
 
             return fraudMMDetailResult;
@@ -1159,15 +1161,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        public ActionResult GetParlayTicketByRefNo(long refNo)
-        {
-            return Json(new
-            {
-                data = GetParlayTicketByRefNo()
-            }, JsonRequestBehavior.AllowGet);
-        }
-
+       
         #endregion
 
         #region Association Detect
@@ -1552,6 +1546,7 @@
 
             var matchInfo = serializer.Deserialize<ExExlMatchInfoViewModel>(from["match"]);
             var isDisplaySingleGrid = from["isDisplaySingleGrid"];
+            var isViewParlay = !string.IsNullOrEmpty(from["isViewParlay"]) && from["isViewParlay"].ToLower() == "true";
 
             if (!string.IsNullOrEmpty(isDisplaySingleGrid) && isDisplaySingleGrid.ToLower() == "true")
             {
@@ -1568,12 +1563,14 @@
             else
             {
                 var homeMItems = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["homes"]);
+               
                 var awayMItems = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["aways"]);
-                var templatePath = Server.MapPath(MMDetailDoubleGridTemplate);
+
+                var templatePath = isViewParlay ? Server.MapPath(MMParlayDoubleGridTemplate) : Server.MapPath(MMDetailDoubleGridTemplate);
 
                 var fileName = string.Format("MM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr);
 
-                var excelFile = _matchMonitorService.ExportExcelMMDetailDG(homeMItems, awayMItems, fileName, templatePath);
+                var excelFile = _matchMonitorService.ExportExcelMMDetailDG(homeMItems, awayMItems, fileName, templatePath, isViewParlay);
 
                 return File(excelFile, "application/vnd.ms-excel", fileName);
             }

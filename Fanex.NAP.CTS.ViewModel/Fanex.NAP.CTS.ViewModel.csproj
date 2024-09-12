@@ -216,6 +216,7 @@
     <Compile Include="MatchMonitor\MatchMonitorViewModel.cs" />
     <Compile Include="MatchMonitor\MMDetailMergeGroupViewModel.cs" />
     <Compile Include="MatchMonitor\MMFraudTicketsSummaryViewModel.cs" />
+    <Compile Include="MatchMonitor\Parlay\ExExcelParlayTicketInfoViewModel.cs" />
     <Compile Include="MatchMonitor\Parlay\ParlayTicketInfoViewModel.cs" />
     <Compile Include="MatchMonitor\TicketDetailViewModel.cs" />
     <Compile Include="MatchMonitor\TicketVoiding\TicketVoidingViewModel.cs" />

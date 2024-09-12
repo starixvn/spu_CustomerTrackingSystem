@@ -6,6 +6,10 @@
 
     public class ParlayTicketInfoModel
     {
+        public ParlayTicketInfoModel()
+        {
+        }
+
         public ParlayTicketInfoModel(TicketDetailModel data)
         {
             if (data != null)
@@ -23,9 +27,8 @@
                 this.MalayOdds = data.MalayOdds;
                 this.CurrencyName = data.CurrencyName;
                 this.CurrencyId = data.CurrencyId;
-                this.Amount = data.OrgStake;
-                this.HDP1 = data.Hdp1;
-                this.HDP2 = data.Hdp2;
+                this.Amount = data.OrgStake;               
+                this.Choice = data.Choice;
                 this.Score = data.LiveIndicator ? (data.LiveHomeScore + " - " + data.LiveAwayScore) : "-";
                 this.IsParlay = true;
                 this.Combinition = data.Combinition;
@@ -54,38 +57,9 @@
 
         public string CurrencyName { get; set; }
 
-        public Int16 CurrencyId { get; set; }
+        public Int16 CurrencyId { get; set; }       
 
-        public decimal HDP1 { get; set; }
-
-        public decimal HDP2 { get; set; }
-
-        public decimal HDP
-        {
-            get
-            {
-                if (BetTypeID == (int)MatchMonitorBetType.OU
-                    || BetTypeID == (int)MatchMonitorBetType.FirstOU
-                    || BetTypeID == (int)MatchMonitorBetType.QuarterXOU)
-                {
-                    return HDP1;
-                }
-
-                if (!string.IsNullOrEmpty(BetTeam))
-                {
-                    if (string.Equals(BetTeam, "h", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return (HDP2 - HDP1);
-                    }
-                    else if (string.Equals(BetTeam, "a", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return (HDP1 - HDP2);
-                    }
-                }
-
-                return 0;
-            }
-        }
+        public string Choice { get; set; }
 
         public Decimal Amount { get; set; }
 
@@ -95,6 +69,6 @@
 
         public int Combinition { get; set; }
 
-        public bool IsMainTicket { get; set; }
+        public bool IsMainTicket { get; set; }       
     }
 }

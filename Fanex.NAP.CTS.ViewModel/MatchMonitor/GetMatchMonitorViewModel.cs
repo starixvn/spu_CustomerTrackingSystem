@@ -36,6 +36,7 @@
             this.BettypeName = data.BettypeNameDisplay;
             this.MapX = data.DetailsX;
             this.MapYY = data.DetailsY;
+            this.TicketType = data.TicketType;
         }
 
         public Int64 ID { get; set; }
@@ -91,6 +92,8 @@
         public int MapX { get; set; }
 
         public int MapYY { get; set; }
+
+        public int TicketType { get; set; } // 1: Single, 2: Parlay
 
         public string MarketName
         {

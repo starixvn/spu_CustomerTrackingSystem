@@ -3,7 +3,6 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-
     public class MMParlayFraudTicketsSummaryCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "FraudTickets")]

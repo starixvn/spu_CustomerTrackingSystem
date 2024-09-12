@@ -363,32 +363,7 @@ function MatchMonitorDetail() {
         }
     }
 
-    function ExpandParlayTicket(parlayTickets, rowIndex) {
-        //$.ajax(common.modifyRelativeUrl('MatchMonitor/GetParlayTicketByRefNo'), {
-        //    async: false,
-        //    type: 'POST',
-        //    tryCount: 0,
-        //    retryLimit: 3,
-        //    dataType: 'json',
-        //    contentType: 'application/json; charset=utf-8',
-        //    data: JSON.stringify({ refNo: refNo }),
-        //    success: function (response) {
-        //        RenderParlayTicketByRefNo(response.data, rowIndex);
-        //    },
-        //    error: function (xhr, textStatus, error) {
-        //        if (textStatus == 'timeout') {
-        //            this.tryCount++;
-        //            if (this.tryCount <= this.retryLimit) {
-        //                //try again
-        //                $.ajax(this);
-        //                return;
-        //            }
-        //        }
-
-        //        console.log(error);
-        //    }
-        //});
-
+    function ExpandParlayTicket(parlayTickets, rowIndex) {       
         if (parlayTickets.length > 0) {
             let table = domElements.tblMMHomeTeam.DataTable();
             let data = table.rows().data().toArray();            
@@ -404,23 +379,6 @@ function MatchMonitorDetail() {
             table.clear().rows.add(data).draw();
         }
     }
-
-    //function RenderParlayTicketByRefNo(parlayTickets, rowIndex) {
-    //    if (parlayTickets.length > 0) {
-    //        let table = domElements.tblMMHomeTeam.DataTable();
-    //        let data = table.rows().data().toArray();
-
-    //        parlayTickets.forEach(function (value, _) {
-    //            let newRowData = { SubParlayCount: 0, ParlayTicket: value, ViewMoreInfo: true };
-
-    //            // Insert new row data at the clicked row's index + 1
-    //            data.splice(rowIndex + 1, 0, newRowData);
-    //        })
-           
-    //        // Clear the table and re-add all rows with the new row included
-    //        table.clear().rows.add(data).draw();
-    //    }
-    //}
 
     //#endregion Initial Grid
 
@@ -1840,7 +1798,7 @@ function MatchMonitorDetail() {
 
     function RenderHDPChoice(obj) {
         if (obj.IsParlay && obj.ParlayTicket != undefined) {
-            return obj.ParlayTicket.HDP;           
+            return obj.ParlayTicket.Choice;
         }
         return isDisplaySingleGrid ? obj.BetTeam : obj.HDP;        
     }
@@ -2117,6 +2075,7 @@ function MatchMonitorDetail() {
     function ExportToExcel() {
         if (IsValidExportExcel()) {
             let mmDetails = {
+                isViewParlay: domElements.ticketType == 2,
                 isDisplaySingleGrid: isDisplaySingleGrid,
                 matchInfo: GetDataMatchInfo(),
                 homeMItems: isDisplaySingleGrid ? null : GetDataSelectedInGrid(domElements.tblMMHomeTeam.DataTable()),
@@ -2127,6 +2086,7 @@ function MatchMonitorDetail() {
 
             $('body').append('<form action="' + url + '" method="post" target="output_frame" id="postToIframe"></form>');
             $('#postToIframe').append('<input type="hidden" asp-for="isDisplaySingleGridf" name=isDisplaySingleGrid value="' + mmDetails.isDisplaySingleGrid + '" />');
+            $('#postToIframe').append('<input type="hidden" asp-for="isViewParlay" name=isViewParlay value="' + mmDetails.isViewParlay + '" />');
             $('#postToIframe').append('<input type="hidden" asp-for="matchf" name=match value="' + mmDetails.matchInfo + '" />');
             $('#postToIframe').append('<input type="hidden" asp-for="homef" name=homes value="[' + mmDetails.homeMItems + ']" />');
             $('#postToIframe').append('<input type="hidden" asp-for="awayf" name=aways value="[' + mmDetails.awayMItems + ']" />');
@@ -2159,7 +2119,6 @@ function MatchMonitorDetail() {
             })
         }
 
-
         if (homeCheckedL + awayCheckedL + itemCheckL < 1) {
             common.showError("Please select at least 1 record to proceed!")
             return false;
@@ -2185,6 +2144,7 @@ function MatchMonitorDetail() {
     function GetDataSelectedInGrid(table) {
         let datas = '';
         table.rows(function (idx, data, node) {
+            
             if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
                 if (!$(node).is(':hidden')) {
                     datas += `{&quot;SubscriberType&quot;:&quot;${data.SubscriberType}&quot;`;
@@ -2201,17 +2161,46 @@ function MatchMonitorDetail() {
                     datas += `,&quot;Currency&quot;:&quot;${data.CurrencyName}&quot;`;
                     datas += `,&quot;Amount&quot;:&quot;${data.Amount}&quot;`;
                     datas += `,&quot;HDP&quot;:&quot;${data.HDP}&quot;`;
+                    datas += `,&quot;Choice&quot;:&quot;${data.Choice}&quot;`;
                     datas += `,&quot;Score&quot;:&quot;${data.Score}&quot;`;
                     datas += `,&quot;TransTimeToString&quot;:&quot;${data.TransTimeToString}&quot;`;
                     datas += `,&quot;BetFrom&quot;:&quot;${data.BetFrom}&quot;`;
                     datas += `,&quot;ADetectGroup&quot;:&quot;${data.ADetectGroup}&quot;`;
                     datas += `,&quot;MDetectGroup&quot;:&quot;${data.MDetectGroup}&quot;`;
                     datas += `,&quot;ReasonList&quot;:&quot;${data.ReasonList}&quot;`;
-                    datas += `,&quot;PICVerified&quot;:&quot;${data.PICVerified}&quot;},`;
+                    datas += `,&quot;PICVerified&quot;:&quot;${data.PICVerified}&quot;`;
+
+                    datas += `,&quot;ParlayTickets&quot;:[${GetExportParlayTicket(data.ParlayTickets)}]`;
+
+                    datas += `},`;
                 }
             }
         });
 
+        return datas != '' ? datas.slice(0, -1) : datas;
+    }
+
+    function GetExportParlayTicket(parlayTickets) {
+        let datas = '';
+        $.each(parlayTickets, function (index, value) {
+            datas += `{&quot;HomeName&quot;:&quot;${value.HomeName}&quot;`;
+            datas += `,&quot;AwayName&quot;:&quot;${value.AwayName}&quot;`;
+            datas += `,&quot;BetTypeName&quot;:&quot;${value.BetTypeName}&quot;`;
+            datas += `,&quot;BetTeam&quot;:&quot;${value.BetTeam}&quot;`;
+            datas += `,&quot;LeagueName&quot;:&quot;${value.LeagueName}&quot;`;
+            datas += `,&quot;SportName&quot;:&quot;${value.SportName}&quot;`;
+            datas += `,&quot;GlobalShowTime&quot;:&quot;${value.GlobalShowTime}&quot;`;
+            datas += `,&quot;IsMainTicket&quot;:&quot;${value.IsMainTicket}&quot;`;
+            datas += `,&quot;Odds&quot;:&quot;${value.Odds}&quot;`;
+            datas += `,&quot;MalayOdds&quot;:&quot;${value.MalayOdds}&quot;`;
+            datas += `,&quot;CurrencyName&quot;:&quot;${value.CurrencyName}&quot;`;
+            datas += `,&quot;Amount&quot;:&quot;${value.Amount}&quot;`;
+            datas += `,&quot;Choice&quot;:&quot;${value.Choice}&quot;`;
+            datas += `,&quot;Score&quot;:&quot;${value.Score}&quot;`;
+            datas += `},`;
+        })
+            
+                
         return datas != '' ? datas.slice(0, -1) : datas;
     }
 

@@ -176,6 +176,8 @@
             }
         }
 
+        public string Choice { get; set; }
+
         public string Score { get; set; }
 
         public int TicketStatus { get; set; }
@@ -278,6 +280,7 @@
             this.Amount = ticket.OrgStake;
             this.HDP1 = ticket.Hdp1;
             this.HDP2 = ticket.Hdp2;
+            this.Choice = ticket.Choice;
             this.Score = ticket.LiveIndicator ? (ticket.LiveHomeScore + " - " + ticket.LiveAwayScore) : "-";
             this.TicketStatus = ticket.TicketStatus;
             this.TransTime = ticket.TransDate;

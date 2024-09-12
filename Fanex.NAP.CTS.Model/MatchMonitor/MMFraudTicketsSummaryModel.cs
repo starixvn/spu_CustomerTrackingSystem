@@ -20,5 +20,7 @@ namespace Fanex.NAP.CTS.Model.MatchMonitor
         public int? BetID { get; set; }
 
         public string FraudTrans { get; set; }
+
+        public string FraudRefno { get; set; }
     }
 }

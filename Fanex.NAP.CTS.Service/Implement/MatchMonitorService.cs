@@ -21,6 +21,8 @@
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.MatchMonitor.Parlay;
     using Fanex.NAP.CTS.Model.MatchMonitor.Parlay;
+    using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.ViewModel.MatchMonitor.Parlay;
 
     public class MatchMonitorService : IMatchMonitorService
     {
@@ -242,53 +244,35 @@
             if (custInfo == null || ticket == null || mergeGroup.TicketMergeGroups == null)
                 return ticketResult;
 
-            if (mergeGroup.TicketType == Model.TicketType.Single)
-            {
-                ticketResult = mergeGroup.TicketMergeGroups.Join(ticket, tg => tg.TransID, t => t.TransId,
-                (tg, t) => new { tg = tg, t = t })
-                .Join(custInfo, ttg => ttg.t.CustId, c => c.CustID,
-                (ttg, c) => new { ttg = ttg, c = c }).Select(x =>
+            var isViewParlay = mergeGroup.TicketType == Model.TicketType.Parlay;
+
+            if (isViewParlay)
+                ticket = ticket.Where(x => x.TicketOrder == 0);
+
+            var dicCustInfo = custInfo.ToDictionary(x => x.CustID, x => x);
+            var dicVerifiedTrans = verifiedTrans.ToDictionary(x => x.VerifiedTransID, x => x);
+            var dicGroup = mergeGroup.Groups.ToDictionary(x => x.GroupID, x => x);
+
+            ticketResult = mergeGroup.TicketMergeGroups.Join(ticket,
+                    tg => isViewParlay ? tg.Refno : tg.TransID,
+                    t => isViewParlay ? t.Refno : t.TransId,
+                (tg, t) => new { tg = tg, t = t }).Select(x =>
                 {
-                    var nTicket = new MatchMonitorDetailItemViewModel(x.ttg.tg.MergeGroupID, x.ttg.t, x.c);
-                    var verifiedTransID = verifiedTrans.FirstOrDefault(y => y.VerifiedTransID == x.ttg.t.TransId)?.VerifiedTransID.ToString() ?? string.Empty;
-                    var group = mergeGroup.Groups.FirstOrDefault(y => y.GroupID == x.ttg.tg.MergeGroupID);
+                    dicCustInfo.TryGetValue(x.t.CustId, out CustInfoModel xCustInfo);
+                    dicVerifiedTrans.TryGetValue(x.tg.TransID, out MatchMonitorDetailVerifyTransResultModel xVerifiedTran);
+                    dicGroup.TryGetValue(x.tg.MergeGroupID, out GroupInfoViewModel group);
 
-                    nTicket.PICVerified = verifiedTransID;
-
-                    nTicket.ReasonList = GetReasonName(reasons, x.ttg.tg.ReasonList);
-                    nTicket.ReasonIDList = x.ttg.tg.ReasonList;
-                    nTicket.ADetectGroupID = group?.GroupID ?? 0;
-                    nTicket.ADetectGroup = group?.GroupName ?? "-";
-
-                    return nTicket;
+                    return new MatchMonitorDetailItemViewModel(x.tg.MergeGroupID, x.t, xCustInfo ?? new CustInfoModel())
+                    {
+                        PICVerified = xVerifiedTran?.VerifiedTransID.ToString() ?? string.Empty,
+                        ReasonList = GetReasonName(reasons, x.tg.ReasonList),
+                        ReasonIDList = x.tg.ReasonList,
+                        ADetectGroupID = group?.GroupID ?? 0,
+                        ADetectGroup = group?.GroupName ?? "-"
+                    };
                 });
 
-                return ticketResult.Distinct(x => x.TransId);
-            }
-            else
-            {
-                ticketResult = mergeGroup.TicketMergeGroups.Join(ticket.Where(x => x.TicketOrder == 0), tg => tg.Refno, t => t.Refno,
-                   (tg, t) => new { tg = tg, t = t })
-                   .Join(custInfo, ttg => ttg.t.CustId, c => c.CustID,
-                   (ttg, c) => new { ttg = ttg, c = c }).Select(x =>
-                   {
-                       var nTicket = new MatchMonitorDetailItemViewModel(x.ttg.tg.MergeGroupID, x.ttg.t, x.c);
-                       var verifiedTransID = verifiedTrans.FirstOrDefault(y => y.VerifiedTransID == x.ttg.t.TransId)?.VerifiedTransID.ToString() ?? string.Empty;
-                       var group = mergeGroup.Groups.FirstOrDefault(y => y.GroupID == x.ttg.tg.MergeGroupID);
-
-                       nTicket.PICVerified = verifiedTransID;
-
-                       nTicket.ReasonList = GetReasonName(reasons, x.ttg.tg.ReasonList);
-                       nTicket.ReasonIDList = x.ttg.tg.ReasonList;
-                       nTicket.ADetectGroupID = group?.GroupID ?? 0;
-                       nTicket.ADetectGroup = group?.GroupName ?? "-";
-
-                       return nTicket;
-                   });
-
-                return ticketResult.Distinct(x => x.Refno);
-            }
-
+            return ticketResult.Distinct(x => isViewParlay ? x.Refno : x.TransId);
         }
 
         public string GetReasonName(IEnumerable<StaticListModel> reasonList, string reasonIDList)
@@ -368,29 +352,26 @@
                 TicketType = para.TicketType
             };
 
-            if (para.TicketType == Model.TicketType.Single)
-            {
-                var mMDetailBetTeams = matchDetailInfo.MatchDetails.Join(result.TicketDetails.Distinct(x => x.TransId),
-                m => m.TransID,
-                t => t.TransId, (m, t) => new MMDetailBetTeamModel(m, t, false));
+            var ticketDetails = Enumerable.Empty<TicketDetailModel>();
 
-                if (mMDetailBetTeams.Any())
-                {
-                    mergeGroup.TicketMergeGroups = this.GetMMDetailMergeGroup(mMDetailBetTeams);
-                }
+            if (para.TicketType == TicketType.Parlay)
+            {
+                ticketDetails = result.TicketDetails.Where(x => x.TicketOrder == 0).Distinct(x => x.Refno);
             }
             else
             {
-                var mMDetailBetTeams = matchDetailInfo.MatchDetails.Join(result.TicketDetails.Where(x => x.TicketOrder == 0).Distinct(x => x.Refno),
-                m => m.Refno,
-                t => t.Refno, (m, t) => new MMDetailBetTeamModel(m, t, true));
-
-                if (mMDetailBetTeams.Any())
-                {
-                    mergeGroup.TicketMergeGroups = this.GetMMDetailMergeGroup(mMDetailBetTeams);
-                }
+                ticketDetails = result.TicketDetails.Distinct(x => x.TransId);
             }
 
+            var mMDetailBetTeams = matchDetailInfo.MatchDetails.Join(ticketDetails,
+               m => m.Refno,
+               t => t.Refno, (m, t) => new MMDetailBetTeamModel(m, t, true));
+
+            if (mMDetailBetTeams.Any())
+            {
+                mergeGroup.TicketMergeGroups = this.GetMMDetailMergeGroup(mMDetailBetTeams);
+            }
+          
             mergeGroup.Groups = mergeGroup.GroupByGroupID();
 
             result.MMDetailMergeGroup = mergeGroup;
@@ -648,19 +629,28 @@
         }
 
         public byte[] ExportExcelMMDetailDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems
-            , string fileName, string templatePath)
+            , string fileName, string templatePath, bool isViewParlay)
         {
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Sheet1");
             writer.CopyRows(0, 1);
 
-            FillRowDataDG(homeMItems, awayMItems, ref writer);
-
-            writer.SyncColumnsWidth(35);
+            if (isViewParlay)
+            {
+                FillRowDataParlayDG(homeMItems, awayMItems, ref writer);
+            }
+            else
+            {
+                FillRowDataDG(homeMItems, awayMItems, ref writer);
+            }
+            
+            writer.SyncColumnsWidth(37);
 
             return writer.ToBytes();
         }
 
-        private void FillRowDataDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems, ref ExcelTemplateWriter writer)
+        private void FillRowDataDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, 
+            IEnumerable<ExExcelTicketInfoViewModel> awayMItems, 
+            ref ExcelTemplateWriter writer)
         {
             var tblHome = homeMItems != null ? homeMItems.ToArray() : new ExExcelTicketInfoViewModel[0];
             var tblAway = awayMItems != null ? awayMItems.ToArray() : new ExExcelTicketInfoViewModel[0];
@@ -685,6 +675,37 @@
                         writer.WriteRow(1, NewRecordTblHomeAwayDG(tblHome[i], tblAway[i]));
                     else
                         writer.WriteRow(1, NewRecordTblAwayDG(tblAway[i]));
+                }
+            }
+        }
+
+        private void FillRowDataParlayDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems,
+            IEnumerable<ExExcelTicketInfoViewModel> awayMItems,
+            ref ExcelTemplateWriter writer)
+        {
+            var tblHome = homeMItems != null ? TransformParlayToDetailItems(homeMItems).ToArray() : new ExExcelParlayTicketInfoViewModel[0];
+            var tblAway = awayMItems != null ? TransformParlayToDetailItems(awayMItems).ToArray() : new ExExcelParlayTicketInfoViewModel[0];
+            var lengthH = tblHome.Length;
+            var lengthA = tblAway.Length;
+
+            if (lengthH > lengthA)
+            {
+                for (int i = 0; i < lengthH; i++)
+                {
+                    if (i < lengthA)
+                        writer.WriteRow(1, NewRecordTblParlayHomeAwayDG(tblHome[i], tblAway[i]));
+                    else
+                        writer.WriteRow(1, NewRecordTblParlayHomeDG(tblHome[i]));
+                }
+            }
+            else
+            {
+                for (int i = 0; i < lengthA; i++)
+                {
+                    if (i < lengthH)
+                        writer.WriteRow(1, NewRecordTblParlayHomeAwayDG(tblHome[i], tblAway[i]));
+                    else
+                        writer.WriteRow(1, NewRecordTblParlayAwayDG(tblAway[i]));
                 }
             }
         }
@@ -747,7 +768,7 @@
                     itemA.ReasonList,
                     (!string.IsNullOrEmpty(itemA.PICVerified) ? "x" : "-")
                 };
-        }
+        }        
 
         private object[] NewRecordTblHomeAwayDG(ExExcelTicketInfoViewModel itemH, ExExcelTicketInfoViewModel itemA)
         {
@@ -778,7 +799,7 @@
                     (itemA.IsRobot ? "x" : "-"),
                     itemA.DangerToString,
                     itemA.Odds,
-                    itemH.MalayOdds,
+                    itemA.MalayOdds,
                     itemA.BetID.ToString(),
                     itemA.Currency,
                     (itemA.Amount % 1 == 0 ? itemA.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemA.Amount.ToString()),
@@ -791,6 +812,131 @@
                     itemA.ReasonList,
                     (!string.IsNullOrEmpty(itemA.PICVerified) ? "x" : "-")
                 };
+        }
+
+        private object[] NewRecordTblParlayHomeDG(ExExcelParlayTicketInfoViewModel itemH)
+        {
+            return new object[]
+               {
+                    itemH.SubscriberType,
+                    itemH.Username,
+                    itemH.CustomerClass == -1 ? "-" : itemH.CustomerClass.ToString(),
+                    (itemH.IsRobot ? "x" : "-"),
+                    itemH.DangerToString,
+                    itemH.Odds,
+                    itemH.MalayOdds,
+                    itemH.BetID??null,
+                    itemH.MatchName,
+                    itemH.Currency,
+                    (itemH.Amount % 1 == 0 ? itemH.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemH.Amount.ToString()),
+                    itemH.Choice,
+                    itemH.Score,
+                    itemH.TransTimeToString,
+                    itemH.BetFrom,
+                    itemH.ADetectGroup,
+                    itemH.MDetectGroup,
+                    itemH.ReasonList,
+                    (!string.IsNullOrEmpty(itemH.PICVerified) ? "x" : "-"),
+                    null, null, null, null,
+                    null, null, null, null,
+                    null, null, null, null,
+                    null, null, null, null,
+                    null, null, null, null
+               };
+        }
+    
+        private object[] NewRecordTblParlayAwayDG(ExExcelParlayTicketInfoViewModel itemA)
+        {
+            return new object[]
+                {
+                    null, null, null, null,
+                    null, null, null, null,
+                    null, null, null, null,
+                    null, null, null, null,
+                    null, null, null, null,
+                    itemA.SubscriberType,
+                    itemA.Username,
+                    itemA.CustomerClass == -1 ? "-" : itemA.CustomerClass.ToString(),
+                    (itemA.IsRobot ? "x" : "-"),
+                    itemA.DangerToString,
+                    itemA.Odds,
+                    itemA.MalayOdds,
+                    itemA.BetID??null,
+                    itemA.MatchName,
+                    itemA.Currency,
+                    (itemA.Amount % 1 == 0 ? itemA.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemA.Amount.ToString()),
+                    itemA.Choice,
+                    itemA.Score,
+                    itemA.TransTimeToString,
+                    itemA.BetFrom,
+                    itemA.ADetectGroup,
+                    itemA.MDetectGroup,
+                    itemA.ReasonList,
+                    (!string.IsNullOrEmpty(itemA.PICVerified) ? "x" : "-")
+                };
+        }
+
+        private object[] NewRecordTblParlayHomeAwayDG(ExExcelParlayTicketInfoViewModel itemH, ExExcelParlayTicketInfoViewModel itemA)
+        {
+            return new object[]
+                {
+                    itemH.SubscriberType,
+                    itemH.Username,
+                    itemH.CustomerClass == -1 ? "-" : itemH.CustomerClass.ToString(),
+                    (itemH.IsRobot ? "x" : "-"),
+                    itemH.DangerToString,
+                    itemH.Odds,
+                    itemH.MalayOdds,
+                    itemH.BetID??null,
+                    itemH.MatchName,
+                    itemH.Currency,
+                    (itemH.Amount % 1 == 0 ? itemH.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemH.Amount.ToString()),
+                    itemH.Choice,
+                    itemH.Score,
+                    itemH.TransTimeToString,
+                    itemH.BetFrom,
+                    itemH.ADetectGroup,
+                    itemH.MDetectGroup,
+                    itemH.ReasonList,
+                    (!string.IsNullOrEmpty(itemH.PICVerified) ? "x" : "-"),
+                    "",
+                    itemA.SubscriberType,
+                    itemA.Username,
+                    itemA.CustomerClass == -1 ? "-" : itemA.CustomerClass.ToString(),
+                    (itemA.IsRobot ? "x" : "-"),
+                    itemA.DangerToString,
+                    itemA.Odds,
+                    itemA.MalayOdds,
+                    itemA.BetID??null,
+                    itemA.MatchName,
+                    itemA.Currency,
+                    (itemA.Amount % 1 == 0 ? itemA.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemA.Amount.ToString()),
+                    itemA.Choice,
+                    itemA.Score,
+                    itemA.TransTimeToString,
+                    itemA.BetFrom,
+                    itemA.ADetectGroup,
+                    itemA.MDetectGroup,
+                    itemA.ReasonList,
+                    (!string.IsNullOrEmpty(itemA.PICVerified) ? "x" : "-")
+                };
+        }
+
+        private IEnumerable<ExExcelParlayTicketInfoViewModel> TransformParlayToDetailItems(IEnumerable<ExExcelTicketInfoViewModel> items)
+        {
+            var list = new List<ExExcelParlayTicketInfoViewModel>();
+
+            foreach (var single in items)
+            {
+                list.Add(new ExExcelParlayTicketInfoViewModel(single));
+
+                foreach (var parlay in single.ParlayTickets)
+                {
+                    list.Add(new ExExcelParlayTicketInfoViewModel(single, parlay));
+                }
+            }
+
+            return list;
         }
 
         #endregion

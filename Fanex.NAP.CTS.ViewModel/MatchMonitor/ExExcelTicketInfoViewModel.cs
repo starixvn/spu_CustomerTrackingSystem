@@ -1,7 +1,9 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
+    using Fanex.NAP.CTS.Model.MatchMonitor.Parlay;
     using System;
-   
+    using System.Collections.Generic;
+
     [Serializable]
     public class ExExcelTicketInfoViewModel
     {
@@ -29,9 +31,11 @@
 
         public string Currency { get; set; }
 
-        public decimal Amount { get; set; }    
+        public decimal Amount { get; set; }
 
         public decimal HDP { get; set; }
+
+        public string Choice { get; set; }
 
         public string Score { get; set; }
    
@@ -46,5 +50,7 @@
         public string ReasonList { get; set; }
 
         public string PICVerified { get; set; }
+
+        public List<ParlayTicketInfoModel> ParlayTickets { get; set; }
     }
 }
