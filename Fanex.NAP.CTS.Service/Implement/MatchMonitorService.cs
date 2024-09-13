@@ -1176,7 +1176,7 @@
                 ViewMode = para.TypeOfTickets == MMViewModeFromUI.TicketAll ? 0 : 1,
                 BatchSize = batchSize,
                 IsLicensee = (para.Sites == MMSites.All || para.Sites == null) ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
-                ListRefno = listRefno,               
+                ListRefno = listRefno?? "[]",
                 FromTransDate = para.TranstimeFrom != null ? para.TranstimeFrom.Value.ToUniversalTime() : (DateTime?)null,
                 ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null,
                 IsExclTestCurr = _mmQueryType == MMQueryType.DangerMMReport

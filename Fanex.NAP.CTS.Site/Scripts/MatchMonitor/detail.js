@@ -3,6 +3,11 @@
     TicketFraud: 2
 }
 
+const TicketType = {
+    Single: 1,
+    Parlay: 2
+}
+
 const SiteViewType = {
     SiteAll: "A",
     SiteCredit: "C",
@@ -322,29 +327,32 @@ function MatchMonitorDetail() {
     }
 
     function OnclickBetInfo(element) {
-        $('tbody', element).on('click', 'td.col-betid', function () {
-          
-            let rowIndex = element.DataTable().row(this).index(); 
+        $('tbody', element).on('click', 'td span.icon-toggle', function () {
+            let $td = $(this).parent().parent();
+            let rowIndex = element.DataTable().row($td).index(); 
 
-            let row = element.DataTable().row(this);
+            let row = element.DataTable().row($td);
 
             let data = row.data();  
             
             if (data.ViewMoreInfo) {
                 data.ViewMoreInfo = false;
-                CollapseParlayTicket(rowIndex);
+                CollapseParlayTicket(element, rowIndex);
             } else {
                 data.ViewMoreInfo = true;
-                ExpandParlayTicket(data.ParlayTickets, rowIndex); 
+                ExpandParlayTicket(element, data.ParlayTickets, rowIndex); 
             }
         })
     }
 
-    function CollapseParlayTicket(rowIndex) {
-        let table = domElements.tblMMHomeTeam.DataTable();
+    function CollapseParlayTicket(element, rowIndex) {
+        let table = element.DataTable();
              
         let rowWithRowspan = $(table.row(rowIndex).node());
-       
+
+        $(rowWithRowspan).find('td div.more-info').empty();
+        $(rowWithRowspan).find('td span.icon-toggle').removeClass('icon-chevron-down').addClass('icon-chevron-right');
+
         let rowspanCell = rowWithRowspan.find('td[rowspan]');        
 
         if (rowspanCell.length) {
@@ -363,9 +371,9 @@ function MatchMonitorDetail() {
         }
     }
 
-    function ExpandParlayTicket(parlayTickets, rowIndex) {       
+    function ExpandParlayTicket(element, parlayTickets, rowIndex) {       
         if (parlayTickets.length > 0) {
-            let table = domElements.tblMMHomeTeam.DataTable();
+            let table = element.DataTable();
             let data = table.rows().data().toArray();            
 
             parlayTickets.forEach(function (value, _) {
@@ -1729,7 +1737,7 @@ function MatchMonitorDetail() {
     }
 
     function RenderBetInfo(obj) {
-        if (domElements.ticketType == 1) {
+        if (domElements.ticketType == TicketType.Single) {
             if (!isDisplaySingleGrid && obj.TransIdToString.length > 6) {
                 let halfBetID = '...' + obj.TransIdToString.substring(obj.TransIdToString.length - 6);
 
@@ -1739,7 +1747,7 @@ function MatchMonitorDetail() {
             }
         } else {
             return RenderParlayBetInfo(obj);
-        }        
+        }
     }
 
     function RenderParlayBetInfo(obj) {
@@ -1765,18 +1773,18 @@ function MatchMonitorDetail() {
         } else if (obj.ViewMoreInfo) {
             let description = obj.Combinition == 2 ? "Double (1 Bet)" : "Treble(1 Bet)";
             
-            return `<div style='white-space: nowrap'>
+            return `<div class='div-col-betinfo'>
                         <span class='span-betid' data-bet-id=${obj.TransIdToString}>${obj.TransIdToString} </span>
-                        <span class="icon-chevron-down"></span>
-                        <div class='more-info'>       
+                        <span class="icon-toggle icon-chevron-down"></span>                        
+                    </div>
+                        <div class='more-info'>
                             <ul><li class='parlay-li'>Mix Parlay</li></ul>
                             <ul><li class='parlay-li'>${description}</li></ul>
-                        </div>
-                    </div>`;
+                        </div>`;
         } else {
-            return `<div style='white-space: nowrap'>
+            return `<div class='div-col-betinfo'>
                         <span class='span-betid' data-bet-id=${obj.TransIdToString}>${obj.TransIdToString} </span>
-                        <span class="icon-chevron-right"></span>
+                        <span class="icon-toggle icon-chevron-right"></span>
                     </div>`;
         }
     }
@@ -2075,7 +2083,7 @@ function MatchMonitorDetail() {
     function ExportToExcel() {
         if (IsValidExportExcel()) {
             let mmDetails = {
-                isViewParlay: domElements.ticketType == 2,
+                isViewParlay: domElements.ticketType == TicketType.Parlay,
                 isDisplaySingleGrid: isDisplaySingleGrid,
                 matchInfo: GetDataMatchInfo(),
                 homeMItems: isDisplaySingleGrid ? null : GetDataSelectedInGrid(domElements.tblMMHomeTeam.DataTable()),
@@ -2810,16 +2818,15 @@ function MatchMonitorDetail() {
 
                     nextRowIdx = nextRowIdx + (data.IsParlay ? 0 : data.Combinition);
                 } else {
-                    CollapseParlayTicket(rowIdx);
+                    CollapseParlayTicket(tblElement, rowIdx);
                 }
             }
         });
         if (arrDataExpand.length > 0) {
             $.each(arrDataExpand, function (index, value) {
-                ExpandParlayTicket(value.ParlayTickets, value.rowIdx);
+                ExpandParlayTicket(tblElement, value.ParlayTickets, value.rowIdx);
             });
-        }
-       
+        }       
     }
 
     function ToggleMapXYY(isBetTypeChange) {

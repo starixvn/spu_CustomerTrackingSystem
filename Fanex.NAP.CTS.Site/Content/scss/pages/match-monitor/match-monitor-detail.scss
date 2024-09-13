@@ -733,6 +733,32 @@
                                         }
                                     }
 
+                                    .div-col-betinfo {
+                                        display: flex;
+                                        display: -ms-flexbox;
+                                        position: relative;
+                                        text-align: center;                                      
+                                    }
+
+                                    .more-info {
+                                        float: left;
+                                        margin-top: 2px;
+                                    }
+
+                                    .icon-toggle {
+                                        cursor: pointer;
+                                        -webkit-box-flex: 1;
+                                        width: 26px;
+                                        height: 10px;
+                                        border-radius: 3px;
+                                        right: 0;
+                                        cursor: pointer;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        flex-direction: column;
+                                    }
+
                                     .parlay-li {
                                         white-space: nowrap;
                                         text-align: left;
@@ -746,10 +772,6 @@
 
                                     .hidden {
                                         display: none;
-                                    }
-
-                                    .more-info {
-                                        margin-top: 6px;
                                     }
                                 }
 
