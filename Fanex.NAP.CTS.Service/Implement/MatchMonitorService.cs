@@ -446,7 +446,7 @@
         {
             var ticketResult = this.GetMainTicketDetail(para, filter, batchSize, transIDsJson);
 
-            return (int)ticketResult.TotalTicket;
+            return ticketResult.TotalTicket ?? 0;
         }
 
         private string GenerateDangerJson(MMDetailFilterViewModel filter)

@@ -347,7 +347,7 @@ function MatchMonitorDetail() {
 
     function CollapseParlayTicket(element, rowIndex) {
         let table = element.DataTable();
-             
+      
         let rowWithRowspan = $(table.row(rowIndex).node());
 
         $(rowWithRowspan).find('td div.more-info').empty();
@@ -356,6 +356,7 @@ function MatchMonitorDetail() {
         let rowspanCell = rowWithRowspan.find('td[rowspan]');        
 
         if (rowspanCell.length) {
+       
             let currentRowspan = parseInt(rowspanCell.attr('rowspan'), 10);
                       
             while (currentRowspan > 1) {
@@ -374,9 +375,9 @@ function MatchMonitorDetail() {
     function ExpandParlayTicket(element, parlayTickets, rowIndex) {       
         if (parlayTickets.length > 0) {
             let table = element.DataTable();
-            let data = table.rows().data().toArray();            
+            let data = table.rows().data().toArray();
 
-            parlayTickets.forEach(function (value, _) {
+            parlayTickets.forEach(function (value, _) {              
                 let newRowData = { Combinition: value.Combinition, ParlayTicket: value, ViewMoreInfo: true, IsParlay: value.IsParlay };
 
                 // Insert new row data at the clicked row's index + 1
@@ -1485,14 +1486,14 @@ function MatchMonitorDetail() {
 
                 GetMatchMonitorTotalTicket(params, lastScannedSequenceID);
 
-                if (recordsTotalGlobal > 0) {
-                    GetMatchMonitorDetail(params, lastScannedSequenceID, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
-                }
-                else {
+                GetMatchMonitorDetail(params, lastScannedSequenceID, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
+       
+                if (recordsTotalGlobal == 0) {
+                    
                     domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
                     domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
                     domElements.tblMMSG.find('tbody').removeClass('loading');
-                }
+                }                
             }, 10)
         }
     }
@@ -2806,18 +2807,20 @@ function MatchMonitorDetail() {
         let arrDataExpand = [];
        
         tblElement.DataTable().rows().every(function (rowIdx, tableLoop, row) {
-            let data = this.data(); 
+            let data = this.data();
 
-            if (data.IsParlay == undefined) {                
-                data.ViewMoreInfo = isExpand;
-               
+            if (data != undefined && data.IsParlay == false) {                                               
                 if (isExpand) {
-                    let index = rowIdx == 0 ? rowIdx : (nextRowIdx + rowIdx);
+                    if (!data.ViewMoreInfo) {
+                        data.ViewMoreInfo = true;
+                        let index = rowIdx == 0 ? rowIdx : (nextRowIdx + rowIdx);
 
-                    arrDataExpand.push({ ParlayTickets: data.ParlayTickets, rowIdx: index });
+                        arrDataExpand.push({ ParlayTickets: data.ParlayTickets, rowIdx: index, IsParlay: data.IsParlay });
 
-                    nextRowIdx = nextRowIdx + (data.IsParlay ? 0 : data.Combinition);
+                        nextRowIdx = nextRowIdx + (data.IsParlay ? 0 : data.Combinition);
+                    }                    
                 } else {
+                    data.ViewMoreInfo = false;
                     CollapseParlayTicket(tblElement, rowIdx);
                 }
             }

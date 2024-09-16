@@ -190,8 +190,6 @@
             {
                 if (para != null && para.IsValid())
                 {
-                    #region Comment for write test
-
                     var matchFromCTSInfos = Enumerable.Empty<GetMatchMonitorModel>();
 
                     if (para.DateType == 1)
@@ -205,7 +203,9 @@
 
                     matchMonitors = MergeMatchMonitorWithMMStaticAndTicketsSummary(matchFromCTSInfos, dicSumTickets, dicSumParlayTickets);
 
-                   // matchMonitors = GenerateMMParlay_Test();
+                    #region Comment for write test
+
+                    // matchMonitors = GenerateMMParlay_Test();
 
                     #endregion Comment for write test
                 }
@@ -489,7 +489,6 @@
 
             try
             {
-                #region Comment for Test
                 if (para.IsImportNewTicket)
                 {
                     result = GetMatchMonitorFilterImportNew(para);
@@ -505,6 +504,8 @@
                         result = GetAllMMFilter(para);
                     }
                 }
+
+                #region Comment for Test
 
                 //result = GetMatchMonitorFilter_Test();
 
@@ -839,15 +840,14 @@
 
             try
             {
+                var fraudTicket = GetFraudMMDetailForCache(info);
+
+                var transJson = _matchMonitorService.GetTransFilterSuspicousMGr(filter, fraudTicket);
+
+                recordsTotal = _matchMonitorService.GetTotalTicketDetail(info, filter, 0, transJson);
+
                 #region Comment for test
-
-                //var fraudTicket = GetFraudMMDetailForCache(info);
-
-                //var transJson = _matchMonitorService.GetTransFilterSuspicousMGr(filter, fraudTicket);
-
-                //recordsTotal = _matchMonitorService.GetTotalTicketDetail(info, filter, 0, transJson);
-
-                recordsTotal = GetMatchMonitorTotalTicket_Test();
+                //recordsTotal = GetMatchMonitorTotalTicket_Test();
 
                 #endregion Comment for test
             }
