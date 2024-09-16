@@ -125,10 +125,6 @@
     <Compile Include="AssociationDetection\DetectAssociationBySharedMatchesCriteria.cs" />
     <Compile Include="AssociationDetection\DetectAssociationMergeGroupCriteria.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectionDetailCriteria.cs" />
-    <Compile Include="Api\LicenseeVIPBA\LicenseeBAInsertCriteria.cs" />
-    <Compile Include="Api\LicenseeVIPBA\LicenseeBARemoveCriteria.cs" />
-    <Compile Include="Api\LicenseeVIPBA\LicenseeVIPRemoveCriteria.cs" />
-    <Compile Include="Api\LicenseeVIPBA\LicenseeVIPInsertCriteria.cs" />
     <Compile Include="AssociationDetection\GetMainCustStatisticsInfoCriteria.cs" />
     <Compile Include="Category\GetCategoryCustomerClassByCustIDCriteria.cs" />
     <Compile Include="Common\GetCommonBetTypeSettingCriteria.cs" />
