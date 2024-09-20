@@ -305,7 +305,7 @@ function MatchMonitorDetail() {
                             $(row.cells[value]).remove();
                         });
 
-                        if (data.ParlayTicket != undefined && data.ParlayTicket.IsMainTicket) {
+                        if (data.ParlayTicket != undefined && data.ParlayTicket.IsMainTicket && data.TicketStatus != 101 && data.TicketStatus != 102) {
                             let myArr = [0, 1, 2, 3, 4, 5, 6];
                             myArr.forEach(function (value, _) {
                                 $(row.cells[value]).addClass('bg-parlay-main');
@@ -340,7 +340,7 @@ function MatchMonitorDetail() {
                 CollapseParlayTicket(element, rowIndex);
             } else {
                 data.ViewMoreInfo = true;
-                ExpandParlayTicket(element, data.ParlayTickets, rowIndex); 
+                ExpandParlayTicket(element, data.ParlayTickets, rowIndex, data.TicketStatus); 
             }
         })
     }
@@ -372,13 +372,13 @@ function MatchMonitorDetail() {
         }
     }
 
-    function ExpandParlayTicket(element, parlayTickets, rowIndex) {       
+    function ExpandParlayTicket(element, parlayTickets, rowIndex, ticketStatus) {       
         if (parlayTickets.length > 0) {
             let table = element.DataTable();
             let data = table.rows().data().toArray();
 
             parlayTickets.forEach(function (value, _) {              
-                let newRowData = { Combinition: value.Combinition, ParlayTicket: value, ViewMoreInfo: true, IsParlay: value.IsParlay };
+                let newRowData = { Combinition: value.Combinition, ParlayTicket: value, ViewMoreInfo: true, IsParlay: value.IsParlay, TicketStatus: ticketStatus };
 
                 // Insert new row data at the clicked row's index + 1
                 data.splice(rowIndex + 1, 0, newRowData);
@@ -1449,7 +1449,11 @@ function MatchMonitorDetail() {
                     BetID: GetBetIDSelected(),
                     BetChoiceType: GetAttributeBetTypeSelected('data-betchoicetype'),
                     BetChoiceHome: GetAttributeBetTypeSelected('data-betchoicehome'),
+                    BetChoiceHomeDisplay: GetAttributeBetTypeSelected('data-betchoicehomedisplay'),
+                    BetChoiceHomeFullName: GetAttributeBetTypeSelected('data-betchoicehomefullname'),
                     BetChoiceAway: GetAttributeBetTypeSelected('data-betchoiceaway'),
+                    BetChoiceAwayDisplay: GetAttributeBetTypeSelected('data-betchoiceawaydisplay'),
+                    BetChoiceAwayFullName: GetAttributeBetTypeSelected('data-betchoiceawayfullname'),
                     LiveIndicator: domElements.cbbMarket.val(),
                     LastScannedSequenceID: lastScannedSequenceID,
                     IsSupportShowAllTickets: isSupportShowAllTickets,
@@ -1616,7 +1620,9 @@ function MatchMonitorDetail() {
             BetID: GetBetIDSelected(),
             BetChoiceType: GetAttributeBetTypeSelected('data-betchoicetype'),
             BetChoiceHome: GetAttributeBetTypeSelected('data-betchoicehome'),
+            BetChoiceHomeFullName: GetAttributeBetTypeSelected('data-betchoicehomefullname'),
             BetChoiceAway: GetAttributeBetTypeSelected('data-betchoiceaway'),
+            BetChoiceAwayFullName: GetAttributeBetTypeSelected('data-betchoiceawayfullname'),
             Sites: domElements.cbbSites.val(),
             Reason: domElements.reason,
             LiveIndicator: domElements.cbbMarket.val(),
@@ -1763,7 +1769,7 @@ function MatchMonitorDetail() {
                         </div>`;
             } else {
                 html = `<div>                    
-                            <ul><li class='parlay-li bold'>${ticket.BetTypeName} - ${ticket.BetTeam}</li></ul>
+                            <ul><li class='parlay-li bold'>${ticket.BetTypeName} - ${ticket.BetTeamFullName}</li></ul>
                             <ul><li class='parlay-li bold'>${ticket.HomeName} vs ${ticket.AwayName}</li></ul>
                             <ul><li class='parlay-li'>${ticket.SportName} ${ticket.LeagueName}</li></ul>
                             <ul><li class='parlay-li'>${ticket.GlobalShowTime}</li></ul>                  
@@ -2815,7 +2821,7 @@ function MatchMonitorDetail() {
                         data.ViewMoreInfo = true;
                         let index = rowIdx == 0 ? rowIdx : (nextRowIdx + rowIdx);
 
-                        arrDataExpand.push({ ParlayTickets: data.ParlayTickets, rowIdx: index, IsParlay: data.IsParlay });
+                        arrDataExpand.push({ ParlayTickets: data.ParlayTickets, rowIdx: index, IsParlay: data.IsParlay, Combinition: data.Combinition, TicketStatus: data.TicketStatus });
 
                         nextRowIdx = nextRowIdx + (data.IsParlay ? 0 : data.Combinition);
                     }                    
@@ -2827,7 +2833,7 @@ function MatchMonitorDetail() {
         });
         if (arrDataExpand.length > 0) {
             $.each(arrDataExpand, function (index, value) {
-                ExpandParlayTicket(tblElement, value.ParlayTickets, value.rowIdx);
+                ExpandParlayTicket(tblElement, value.ParlayTickets, value.rowIdx, value.TicketStatus);
             });
         }       
     }
@@ -3320,9 +3326,9 @@ function MatchMonitorDetail() {
             if (!ValidateTicketStatus()) {
                 return;
             }
-            //if (ValidationFilter()) { // comment code for test
+            if (ValidationFilter()) {
                 FetchMatchMonitorDetail(currentType);
-            //}
+            }
         })
 
         domElements.tickCheckAll.on('click', function () { ToggleTickCheckAll(true); });

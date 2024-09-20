@@ -111,7 +111,11 @@
                     BetID = _commonService.GetBetID(x.BetIDPattern, x.NameDetailsX),
                     BetChoiceType = x.BetChoiceType,
                     BetChoiceHome = x.BetChoiceHome,
+                    BetChoiceHomeDisplay = x.BetChoiceHomeDisplay,
+                    BetChoiceHomeFullName = x.BetChoiceHomeFullName,
                     BetChoiceAway = x.BetChoiceAway,
+                    BetChoiceAwayDisplay = x.BetChoiceAwayDisplay,
+                    BetChoiceAwayFullName = x.BetChoiceAwayFullName,
                     PriorityOrder = x.PriorityOrder,
                     BetIDPattern = x.BetIDPattern,
                     NameDetailsX = x.NameDetailsX
@@ -132,7 +136,11 @@
                 BetIDPattern = x.BetIDPattern,
                 BetChoiceType = x.BetChoiceType,
                 BetChoiceHome = x.BetChoiceHome,
+                BetChoiceHomeDisplay = x.BetChoiceHomeDisplay,
+                BetChoiceHomeFullName = x.BetChoiceHomeFullName,
                 BetChoiceAway = x.BetChoiceAway,
+                BetChoiceAwayDisplay = x.BetChoiceAwayDisplay,
+                BetChoiceAwayFullName = x.BetChoiceAwayFullName,
                 IsSupportSuspicious = x.IsMMDetection,
                 IsSelected = true,
                 NameDetailsX = x.NameDetailsX
@@ -202,12 +210,7 @@
                     var dicSumParlayTickets = GetMMFraudTicketsSummary(matchFromCTSInfos, TicketType.Parlay);
 
                     matchMonitors = MergeMatchMonitorWithMMStaticAndTicketsSummary(matchFromCTSInfos, dicSumTickets, dicSumParlayTickets);
-
-                    #region Comment for write test
-
-                    // matchMonitors = GenerateMMParlay_Test();
-
-                    #endregion Comment for write test
+                   
                 }
             }
             catch (Exception ex)
@@ -503,13 +506,7 @@
                     {
                         result = GetAllMMFilter(para);
                     }
-                }
-
-                #region Comment for Test
-
-                //result = GetMatchMonitorFilter_Test();
-
-                #endregion Comment for Test
+                }               
             }
             catch (Exception ex)
             {
@@ -683,152 +680,7 @@
             allFilterResult.IsDisplaySingleGrid = para.BetChoiceType == 1;
 
             return allFilterResult;
-        }
-
-        #region Generate Data Test
-        private IEnumerable<GetMatchMonitorViewModel> GenerateMMParlay_Test()
-        {
-            var matchMonitors = new List<GetMatchMonitorViewModel>();
-
-            var mmModel = new GetMatchMonitorModel()
-            {
-                BetID = 0,
-                BettypeID = 1,
-                AwayID = 11,
-                AwayName = "Anh",
-                HomeID = 22,
-                HomeName = "TBN",
-                ID = 1,
-                BettypeNameDisplay = "U/O",
-                IsVerified = false,
-                LeagueID = 1,
-                LeagueName = "EURO 2024",
-                MatchID = 100,
-                MatchSection = 1,
-                SportTypeId = 1,
-                TicketType = (int)TicketType.Parlay,
-                EventDate = DateTime.Now,
-                Reason = "5"
-            };
-
-            var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
-
-            var mmViewModel = new GetMatchMonitorViewModel(mmModel, reasons)
-            {
-                HomeTotalAmount = 1000,
-                HomeBetCount = 10,
-                AwayTotalAmount = 2000,
-                AwayBetCount = 20
-            };
-
-            matchMonitors.Add(mmViewModel);
-
-            return matchMonitors;
-        }
-
-        private MMDetailFilterViewModel GetMatchMonitorFilter_Test()
-        {
-            var result = new MMDetailFilterViewModel()
-            {
-                TicketStatusList = new List<int>() { 1, 2 },
-                HDPList = new List<decimal>() { 1, 2 },
-                DropdownListFilter = new MMDetailFilterDropdownListViewModel()
-                {
-                    TicketStatusList = new List<TicketStatusViewModel>() { new TicketStatusViewModel { TicketStatus = 112, TicketStatusName = "Won" } }
-                }
-            };
-
-            return result;
-        }
-
-        private int GetMatchMonitorTotalTicket_Test()
-        {
-            return 1;
-        }
-
-        private MMDetailTicketListViewModel GetMatchMonitorDetail_Test()
-        {
-            var mdResult = new MMDetailTicketListViewModel();
-
-            var parlayTickets = new List<ParlayTicketInfoViewModel>()
-            {
-                new ParlayTicketInfoViewModel
-                {
-                    HomeName = "VN", AwayName = "TL",
-                    BetTeam = "Home",
-                    BetTypeName = "Handicap",
-                    SportName = "Giao Huu",
-                    LeagueName = "GH",
-                    GlobalShowTime = "8/16/2024 01:00 AM"
-                }
-            };
-
-            mdResult.HomeMatchItemList = new List<MatchMonitorDetailItemViewModel>()
-            {
-                new MatchMonitorDetailItemViewModel
-                {
-                    BetID = "0",
-                    BetTypeID = 1,
-                    BetTeam = "h",
-                    CustomerClass = 301,
-                    CurrencyId = 1,
-                    CurrencyName = "HK",
-                    Amount = 1000,
-                    TransId = 45678912223456789,
-                    TransTime = DateTime.Now,
-                    TransTimeToString = DateTime.Now.ToString(Consts.FormatDateTimeToString_ddMMyyhhmmss),
-                    Username = "User Test 1",
-                    Combinition = 3
-                    //ParlayTicket = parlayTickets
-                },
-                new MatchMonitorDetailItemViewModel
-                {
-                    BetID = "0",
-                    BetTypeID = 3,
-                    BetTeam = "h",
-                    CustomerClass = 301,
-                    CurrencyId = 1,
-                    CurrencyName = "HK",
-                    Amount = 1500,
-                    TransId = 45678912223456777,
-                    TransTime = DateTime.Now,
-                    TransTimeToString = DateTime.Now.ToString(Consts.FormatDateTimeToString_ddMMyyhhmmss),
-                    Username = "User Test 2",
-                    Combinition = 3 
-                    //ParlayTicket = parlayTickets
-                }
-            };
-
-            return mdResult;
-        }
-
-        private IEnumerable<ParlayTicketInfoViewModel> GetParlayTicketByRefNo()
-        {
-            return new List<ParlayTicketInfoViewModel>() {
-                 new ParlayTicketInfoViewModel {
-                    HomeName = "VN",
-                    AwayName = "TL",
-                    BetTeam = "Home",
-                    BetTypeName = "Handicap",
-                    SportName = "Giao Huu",
-                    LeagueName = "GH",
-                    GlobalShowTime = "8/16/2024 01:00 AM",
-                    IsMainTicket = false
-                },
-                new ParlayTicketInfoViewModel {
-                    HomeName = "VN",
-                    AwayName = "TL",
-                    BetTeam = "Home",
-                    BetTypeName = "Handicap",
-                    SportName = "Giao Huu",
-                    LeagueName = "GH",
-                    GlobalShowTime = "8/16/2024 01:00 AM",
-                    IsMainTicket = true
-                }
-            };
-        }
-
-        #endregion Generate Data Test
+        }      
 
         #endregion Detail Filter
 
@@ -844,12 +696,7 @@
 
                 var transJson = _matchMonitorService.GetTransFilterSuspicousMGr(filter, fraudTicket);
 
-                recordsTotal = _matchMonitorService.GetTotalTicketDetail(info, filter, 0, transJson);
-
-                #region Comment for test
-                //recordsTotal = GetMatchMonitorTotalTicket_Test();
-
-                #endregion Comment for test
+                recordsTotal = _matchMonitorService.GetTotalTicketDetail(info, filter, 0, transJson);               
             }
             catch (Exception ex)
             {
@@ -880,8 +727,6 @@
 
             try
             {
-                #region Comment for test
-
                 switch (para.TypeOfTickets)
                 {
                     case MMViewModeFromUI.TicketFraud:
@@ -919,11 +764,7 @@
 
                             break;
                         }
-                }
-
-                //mdResult = GetMatchMonitorDetail_Test();
-
-                #endregion Comment for test
+                }             
             }
             catch (Exception ex)
             {
@@ -1092,14 +933,14 @@
             }
             catch (Exception ex)
             {
-                //var logMessage = new LogMessage(ex.Message)
-                //  .AddMessage($"{Region} Get Fraud MM Detail For Cache Error: " + ex.Message + ex.StackTrace + "\n"
-                //   + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                //   + ex.InnerException.StackTrace)
-                //  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                //  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+                var logMessage = new LogMessage(ex.Message)
+                  .AddMessage($"{Region} Get Fraud MM Detail For Cache Error: " + ex.Message + ex.StackTrace + "\n"
+                   + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                   + ex.InnerException.StackTrace)
+                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
-                //LogService.Error(logMessage);
+                LogService.Error(logMessage);
             }
 
             return fraudMMDetailResult;

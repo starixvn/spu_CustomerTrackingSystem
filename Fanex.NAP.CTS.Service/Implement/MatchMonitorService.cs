@@ -433,8 +433,8 @@
                 BetChoiceHome = para.BetChoiceHome,
                 BetChoiceAway = para.BetChoiceAway,
                 BetID = para.BetID,
-                BetChoiceHomeFullName = para.BetChoiceHome, // Home
-                BetChoiceAwayFullName = para.BetChoiceAway // Away
+                BetChoiceHomeFullName = para.BetChoiceHomeFullName,
+                BetChoiceAwayFullName = para.BetChoiceAwayFullName
             } });
 
             return para.TicketType == Model.TicketType.Single

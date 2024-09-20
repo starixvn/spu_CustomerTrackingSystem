@@ -135,6 +135,8 @@
 
         public string BetTeam { get; set; }
 
+        public string BetTeamFullName { get; set; }
+
         public string BetFrom { get; set; }
 
         public string CurrencyName { get; set; }
@@ -275,6 +277,7 @@
             this.BetTypeID = ticket.BetType;
             this.BetID = ticket.TransId.ToString();
             this.BetTeam = ticket.BetTeam;
+            this.BetTeamFullName = ticket.BetTeamFullName;
             this.BetFrom = ticket.BetFrom;
             this.CurrencyName = ticket.CurrencyName;
             this.CurrencyId = ticket.CurrencyId;

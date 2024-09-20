@@ -19,6 +19,7 @@
                 this.BetTypeID = data.BetType;
                 this.BetTypeName = data.BettypeName;
                 this.BetTeam = data.BetTeam;
+                this.BetTeamFullName = data.BetTeamFullName ?? data.BetTeam;
                 this.LeagueName = data.LeagueName;
                 this.SportName = data.SportType;
                 this.GlobalShowTime = data.KickOffTime.ToString(Consts.FormatDateTimeToString_ddMMyyhhmmss);
@@ -29,9 +30,8 @@
                 this.CurrencyId = data.CurrencyId;
                 this.Amount = data.OrgStake;               
                 this.Choice = data.Choice;
-                this.Score = data.LiveIndicator ? (data.LiveHomeScore + " - " + data.LiveAwayScore) : "-";
+                this.Score = data.LiveIndicator ? (data.LiveHomeScore + " - " + data.LiveAwayScore) : "-";  
                 this.IsParlay = true;
-                this.Combinition = data.Combinition;
             }
         }
 
@@ -44,6 +44,8 @@
         public string BetTypeName { get; set; }
 
         public string BetTeam { get; set; }
+
+        public string BetTeamFullName { get; set; }
 
         public string SportName { get; set; }
 
@@ -66,9 +68,7 @@
         public string Score { get; set; }
 
         public bool IsParlay { get; set; }
-
-        public int Combinition { get; set; }
-
-        public bool IsMainTicket { get; set; }       
+     
+        public bool IsMainTicket { get; set; }
     }
 }
