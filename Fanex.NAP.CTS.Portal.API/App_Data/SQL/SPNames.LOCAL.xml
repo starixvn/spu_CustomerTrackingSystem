@@ -15,13 +15,13 @@
 	</Function>
 
 	<Function Name="CustomerClassification">
-		<Setting Key="CTS_DC_CustClassification_Get4API" SpName="CTS_DC_CustClassification_Get4API" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_Get4API" SpName="CTS_DC_CustClassification_Get4API_UAT1" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassification_GetAllByCategory" SpName="CTS_DC_CustClassification_GetAllByCategory" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="Acc_CustomerUpdateCustomerClass" SpName="Acc_CustomerUpdateCustomerClass" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
 		<Setting Key="CTS_DC_CustClassification_Get" SpName="CTS_DC_CustClassification_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassification_BySport_GetCC" SpName="CTS_DC_CustClassification_BySport_GetCC" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="Acc_CustomerUpdateCustomerClassBySport" SpName="Acc_CustomerUpdateCustomerClassBySport" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="600" />
-    <Setting Key="CTS_DC_CustClassification_Insert" SpName="CTS_DC_CustClassification_Insert" DbName="MySQL.CTS_DataCenter.Admin" TimeOut="600"/>
+    <Setting Key="CTS_DC_CustClassification_Insert" SpName="CTS_DC_CustClassification_Insert_UAT1" DbName="MySQL.CTS_DataCenter.Admin" TimeOut="600"/>
     <Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove" DbName="MySQL.CTS_DataCenter.Admin" TimeOut="600"/>
     <Setting Key="CTS_DC_CustClassification_Rescan_Get" SpName="CTS_DC_CustClassification_Rescan_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
@@ -34,7 +34,7 @@
 
 	<Function Name="Customer">
 		<Setting Key="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" SpName="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustInfo_GetByCustID" SpName="CTS_DC_CustInfo_GetByCustID" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustInfo_GetByCustID" SpName="CTS_DC_CustInfo_GetByCustID_UAT1" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_Profile_GetAssociationAccount" SpName="CTS_DC_CustInfo_Profile_GetAssociationAccount" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
