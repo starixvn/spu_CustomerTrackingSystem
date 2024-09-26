@@ -128,6 +128,7 @@
                         }
                         return selectedSubscribers.join(',');
                     },
+                    RoleID: function () { return $("#hdRoleID").val(); },
                     IsSkipTracking: function () { return isSkipTracking; }
                 },
                 type: "POST",

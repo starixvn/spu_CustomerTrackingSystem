@@ -15,6 +15,7 @@
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using System;
     using System.Collections.Generic;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public interface IAccountService
     {        
@@ -34,7 +35,7 @@
 
         CustomerInfoLoginStatsModel GetCustomerInfoLoginStats(long ctsCustId, DateTime fromDate, DateTime toDate);
 
-        CustomerInfoDateModel GetCustProfileDates(long ctsCustId);
+        CustomerInfoDateModel GetCustProfileDates(long ctsCustId, ROLE_CUSTOMER roleID);
 
         #endregion
 
@@ -78,11 +79,11 @@
 
         DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, int createdBy, bool isRemoveAction);       
 
-        IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId, out bool isExcludedTagAssPA);
+        IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId, ROLE_CUSTOMER Role, out bool isExcludedTagAssPA);
 
         IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId);
 
-        IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long ctsCustId);
+        IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long ctsCustId, ROLE_CUSTOMER RoleID);
       
         DBResult AddQueueAffectDownlinesCustomerCategory(CustomerCategoryModel categoryModel);       
 

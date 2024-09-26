@@ -126,11 +126,12 @@
             }
         }
 
-        public CustomerInfoDateModel GetCustProfileDates(long ctsCustId)
+        public CustomerInfoDateModel GetCustProfileDates(long ctsCustId, ROLE_CUSTOMER roleID)
         {
             var criteria = new GetCustomerInfoDateCriteria
             {
-                CTSCustID = ctsCustId
+                CTSCustID = ctsCustId,
+                RoleID = roleID
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -257,7 +258,8 @@
                 SubscriberIDs = filterModel.SubscriberIds,
                 Skip = filterModel.start,
                 Take = filterModel.length,
-                TotalItems = 0
+                TotalItems = 0,
+                Role = filterModel.Role
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -894,13 +896,14 @@
 
         #region Customer Category           
 
-        public IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId, out bool isExcludedTagAssPA)
+        public IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId, ROLE_CUSTOMER roleID, out bool isExcludedTagAssPA)
         {         
             isExcludedTagAssPA = false;
 
             var criteria = new GetCTSCustomerClassificationCriteria
             {
-                CTSCustID = ctsCustId
+                CTSCustID = ctsCustId,
+                RoleID = roleID
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -938,11 +941,12 @@
             }
         }
 
-        public IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long ctsCustId)
+        public IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long ctsCustId, ROLE_CUSTOMER roleID)
         {
             var criteria = new GetCTSCustomerClassificationHistoryCriteria
             {
-                CTSCustID = ctsCustId
+                CTSCustID = ctsCustId,
+                RoleID = roleID
             };
 
             try

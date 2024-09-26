@@ -155,7 +155,7 @@
         params.CustId = $('#hdCustId').val();
         params.CTSCustId = $('#hdCTSCustId').val();
         params.SubscriberId = $('#hdSubscriberId').val();      
-        params.RoleId = $('#hdRoleID').val();
+        params.RoleID = $('#hdRoleID').val();
         params.IsAffectToAllDownlines = $('#inputVVIPUnmarkAffectToAllDownlines').is(":checked");
 
         $.ajax(common.modifyRelativeUrl('Account/SaveUnmarkVVIP'), {

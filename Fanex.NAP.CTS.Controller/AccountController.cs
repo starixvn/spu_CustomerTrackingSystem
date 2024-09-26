@@ -354,9 +354,9 @@
         }
 
         [HttpPost]
-        public ActionResult GetCustProfileDates(long ctsCustId)
+        public ActionResult GetCustProfileDates(long ctsCustId, ROLE_CUSTOMER roleID)
         {
-            var data = _accountService.GetCustProfileDates(ctsCustId);
+            var data = _accountService.GetCustProfileDates(ctsCustId, roleID);
 
             if (data != null)
             {
@@ -1590,7 +1590,7 @@
         }
 
         [HttpPost]
-        public ActionResult GetCustomerClassification(long ctsCustID, int roleID)
+        public ActionResult GetCustomerClassification(long ctsCustID, ROLE_CUSTOMER roleID)
         {           
             var isVVip = false;
             var isProblemAccount = false;          
@@ -1599,7 +1599,7 @@
             var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
             var usnBackGroundColor = EnumExtensions.GetStringSlow(CategoryColorType.Default);
 
-            var classification = _accountService.GetCustomerClassification(ctsCustID, out bool isExcludedTagAssPA);
+            var classification = _accountService.GetCustomerClassification(ctsCustID, roleID, out bool isExcludedTagAssPA);
 
             if (classification != null && classification.Any())
             {
@@ -1612,7 +1612,7 @@
                 usnBackGroundColor = EnumExtensions.GetStringSlow((CategoryColorType)classification.FirstOrDefault(x => x.CategoryPriority == minPriority).ColorTypeID);
             }
 
-            var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustID);
+            var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustID, roleID);
 
             if (classificationHistory != null && classificationHistory.Any())
             {

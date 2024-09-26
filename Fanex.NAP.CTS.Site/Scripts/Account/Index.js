@@ -2,6 +2,7 @@
     var username = $("#hdUsername").val();
     var custId = $("#hdCustId").val();
     var ctsCustId = $("#hdCTSCustId").val();
+    let roleID = $("#hdRoleID").val();
     var subscriberId = $("#hdSubscriberId").val();
     var subscriber = $("#hdSubscriber").val();
     var subscriberSourceID = $("#hdSubscriberSourceID").val();
@@ -272,7 +273,8 @@
             traditional: true,
             async: true,            
             data: {
-                ctsCustId: ctsCustId
+                ctsCustId: ctsCustId,
+                roleID: roleID
             },
             success: function (response) {
                 if (response !== null) {

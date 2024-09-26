@@ -135,7 +135,7 @@
         }
 
         public enum ROLE_CUSTOMER
-        {
+        {           
             MEMBER = 1,
             AGENT = 2,
             MASTER = 3,
