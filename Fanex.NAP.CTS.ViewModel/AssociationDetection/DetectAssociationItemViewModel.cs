@@ -46,13 +46,9 @@
             else
                 this.AgentEvidence = "-";
 
-            if (!string.IsNullOrEmpty(data.ColorTypeIDs))
+            if (data.ColorTypeID != null)
             {
-                var arrColorTypeIDs = data.ColorTypeIDs.Split(',');
-
-                int.TryParse(arrColorTypeIDs[0], out int colorTypeID);
-
-                this.CategoryColorType = (CategoryColorType)colorTypeID;
+                this.CategoryColorType = (CategoryColorType)data.ColorTypeID;
             }
             else
             {
