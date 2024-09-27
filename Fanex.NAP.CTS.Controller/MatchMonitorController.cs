@@ -400,9 +400,11 @@
                         MatchID = m1.MatchID,
                         Market = m1.Market,
                         HomeID = m1.HomeID,
+                        HomeName = m2.HomeName,
                         AwayID = m1.AwayID,
+                        AwayName = m2.AwayName,
                         LeagueID = m1.LeagueID,
-                        LeagueName = m1.LeagueName,
+                        LeagueName = m2.LeagueName,
                         SportTypeId = m1.SportTypeId,
                         BettypeID = m1.BettypeID,
                         BetID = m1.BetID,
@@ -417,7 +419,8 @@
                         FraudTrans = m1.FraudTrans,
                         BettypeNameDisplay = m1.BettypeNameDisplay,
                         DetailsX = m1.DetailsX,
-                        DetailsY = m1.DetailsY
+                        DetailsY = m1.DetailsY,
+                        TicketType = m1.TicketType
                     });
 
                 return newMatches;
