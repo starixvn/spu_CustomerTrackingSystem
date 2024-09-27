@@ -30,9 +30,14 @@
             this.CategoryNames = !string.IsNullOrEmpty(data.CategoryNames) ? data.CategoryNames : "-";
             this.CustomerClasses = data.CustomerClasses != "-1" ? data.CustomerClasses : "-";
             this.GroupIDs = data.GroupIDs;
-            this.OriginGroupIDs = data.OriginGroupIDs;            
-            int.TryParse(data.ColorTypeIDs, out int colorTypeID);
-            this.CategoryColorType = (CategoryColorType)colorTypeID;
+            this.OriginGroupIDs = data.OriginGroupIDs;
+
+            if (data.ColorTypeIDs != null)
+            {
+                var arrColorTypeIDs = data.ColorTypeIDs.Split(',');
+                int.TryParse(arrColorTypeIDs[0], out int colorTypeID);
+                this.CategoryColorType = (CategoryColorType)colorTypeID;
+            };
         }
 
         public long CTSCustId { get; set; }
