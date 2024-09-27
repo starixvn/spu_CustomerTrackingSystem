@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Portal.API
 {
+    using Fanex.Caching;
     using Fanex.Data;
     using Fanex.Data.MySql;
     using Fanex.Data.SqlServer;
@@ -7,6 +8,11 @@
     using Fanex.Logging.Sentry.RavenClient;
     using Fanex.RemotingRef;
     using Newtonsoft.Json.Serialization;
+    using ONEbook.UM;
+    using ONEbook.UM.Configurations;
+    using ONEbook.UM.Helpers;
+    using ONEbook.UM.NETFramework;
+    using ONEbook.UM.Transport;
     using SharpRaven;
     using System;
     using System.Collections.Generic;
@@ -47,6 +53,14 @@
             RefDataTypeContainer
                 .ConnectTo(new Uri(ConfigurationManager.AppSettings["Fanex.RemotingRef.Service.Url"]))
                 .FromApplication("CTS Portal API");
+
+            var umConfig = new UMClientConfiguration().Initialize();
+
+            UMClientManager
+               .UseConfig(umConfig)
+               .UseCacheService(new UMCacheService(new CacheService()))
+               .UseRestClient(new UMRestClient(umConfig))
+               .UseHttpContext(new HttpContextHelper());
 
             var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
             json.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();

@@ -15,8 +15,11 @@
     using Fanex.NAP.CTS.Service.Implement.Api;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Interface.Api;
+    using Fanex.NAP.CTS.User.Helper;
     using Fanex.NAP.CTS.ViewModel.API.CustomerClassCategory;
     using Fanex.NAP.CTS.ViewModel.API.Http;
+    using ONEbook.UM;
+    using ONEbook.UM.Services;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -37,6 +40,7 @@
         private readonly IProblemCaseMonitorService _problemCaseMonitorService;       
         private readonly ICtsAssociationApiService _ctsAssociationApiService;
         private readonly ICommonService _commonService;
+        private readonly IMaintenanceService _maintenanceService;
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -50,6 +54,7 @@
             _problemCaseMonitorService = new Service.Implement.Api.ProblemCaseMonitorService();          
             _ctsAssociationApiService = new CtsAssociationApiService();
             _commonService = new CommonService();
+            _maintenanceService = new MaintenanceService(UMClientManager.RestClient, UMClientManager.CacheService, UMClientManager.UMClientConfigs, UMClientManager.HttpContext);
         }
 
         [HttpGet]
@@ -57,6 +62,11 @@
         {
             try
             {
+                if (UMHelper.IsUnderMaintainaceHappen(_maintenanceService))
+                {
+                    return InternalServerError();
+                }
+
                 _commonService.CheckConnection();
 
                 return Ok("ok");
