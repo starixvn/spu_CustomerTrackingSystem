@@ -24,5 +24,6 @@
 
         public bool IsPotentialPA { get; set; }
 
+        public int CategoryPriority { get; set; }
     }
 }

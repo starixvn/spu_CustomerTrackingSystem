@@ -1596,6 +1596,7 @@
             var isProblemAccount = false;          
             var categoryList = new List<GetCustomerCategoryViewModel>();
             var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
+            var usnBackGroundColor = EnumExtensions.GetStringSlow(CategoryColorType.Default);
 
             var classification = _accountService.GetCustomerClassification(ctsCustID, out bool isExcludedTagAssPA);
 
@@ -1604,7 +1605,9 @@
                 categoryList = classification.Select(x => new GetCustomerCategoryViewModel(x)).ToList();
 
                 isVVip = categoryList.Any(x => x.IsVVIP);
-                isProblemAccount = categoryList.Any(x => x.IsProblemAccount);                          
+                isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
+                int minPriority = classification.Min(c => c.CategoryPriority);
+                usnBackGroundColor = EnumExtensions.GetStringSlow((CategoryColorType)classification.FirstOrDefault(x => x.CategoryPriority == minPriority).ColorTypeID);
             }
 
             var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustID);
@@ -1620,6 +1623,7 @@
                 isVVip,
                 isProblemAccount,          
                 categoryList,
+                usnBackGroundColor,
                 data = classificationHistoryList,
             }, JsonRequestBehavior.AllowGet);
         }     
