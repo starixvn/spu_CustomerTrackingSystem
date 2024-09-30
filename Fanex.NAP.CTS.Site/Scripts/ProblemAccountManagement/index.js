@@ -7,6 +7,7 @@
         dpkToDate: $('#dpkToDate'),
         cbbSite: $('#cbbSite'),
         cbbCategory: $('#cbbCategory'),
+        cbbRole: $('#cbbRole'),
         cbbProblemAccountCategories: $('#cbbProblemAccountCategories'),
         inputUserName: $('#inputUserName'),
         inputSearchDownlines: $('#inputSearchDownlines'),
@@ -422,6 +423,8 @@
         params.IsUnmarkDownlines = domElements.ckbUnmarkDownlines.is(":checked");
         params.CategoryGroup = $('option:selected', domElements.cbbProblemAccountCategories).attr('data-categorygroup');
         params.IsRobot = $('option:selected', domElements.cbbProblemAccountCategories).attr('data-isrobot');
+        params.CategoryIDAgency = $('option:selected', domElements.cbbProblemAccountCategories).attr('data-categoryidagency');
+        params.CategoryGroupAgency = $('option:selected', domElements.cbbProblemAccountCategories).attr('data-categorygroupidagency');
 
         if (params.PAAction == 1) {
             SaveMarkProblemAccount(params);
@@ -504,8 +507,30 @@
         $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/GetProblemAccountAllCategories'), {
             type: 'GET',
             success: function (response) {
-                response.map(function (x) {
-                    domElements.cbbProblemAccountCategories.append("<option value='" + x.CategoryID + "' data-categorygroup='" + x.CategoryGroupID + "' data-isrobot='" + x.IsRobot + "'>" + x.CategoryName + "</option>");
+
+                const mergedCategories = [];
+
+                response.forEach(category => {
+                if (category.RoleGroup === 1) {
+                    const agencyCategory = response.find(c => c.CategoryName === category.CategoryName && c.RoleGroup === 2);
+
+                    if (agencyCategory) {
+                    mergedCategories.push({
+                        CategoryID: category.CategoryID,
+                        CategoryName: category.CategoryName,
+                        CategoryGroupID: category.CategoryGroupID,
+                        IsRobot: category.IsRobot,
+                        RelevantCategoryGroup: category.RelevantCategoryGroup,
+                        CategoryIDAgency: agencyCategory.CategoryID,
+                        CategoryGroupIDAgency: agencyCategory.CategoryGroupID,
+                        RelevantCategoryGroupAgency: agencyCategory.RelevantCategoryGroup
+                    });
+                    }
+                }
+                });
+
+                mergedCategories.map(function (x) {
+                    domElements.cbbProblemAccountCategories.append("<option value='" + x.CategoryID + "' data-categorygroup='" + x.CategoryGroupID + "' data-isrobot='" + x.IsRobot + "' data-categoryidagency='" + x.CategoryIDAgency + "' data-categorygroupidagency='" + x.CategoryGroupIDAgency + "'>" + x.CategoryName + "</option>");
                 });
 
                 domElements.cbbProblemAccountCategories.prop('selectedIndex', 0);
@@ -651,8 +676,19 @@
             label: ''
         });
 
+        domElements.cbbRole.multiselect({
+            menuWidth: 280,
+            menuHeight: 280,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Role"
+        }).multiselectfilter({
+            width: 240,
+            placeholder: '',
+            label: ''
+        });
+
         domElements.cbbCategory.multiselect({
-            menuWidth: 300,
+            menuWidth: 320,
             menuHeight: 280,
             selectedText: "# of # selected",
             noneSelectedText: "Select Category"

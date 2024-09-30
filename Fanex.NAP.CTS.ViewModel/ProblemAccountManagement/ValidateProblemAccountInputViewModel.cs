@@ -10,6 +10,10 @@
 
         public int CategoryGroup { get; set; }
 
+        public int CategoryIDAgency { get; set; }
+
+        public int CategoryGroupAgency { get; set; }
+
         public string Comment { get; set; }
 
         public ProblemAccountAction PAAction { get; set; }

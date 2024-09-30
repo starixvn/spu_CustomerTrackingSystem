@@ -84,6 +84,8 @@
                        }).ToList();
             }
 
+            result.RoleList = _commonService.GetRoles().ToList();
+
             return View(result);
         }
 

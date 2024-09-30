@@ -27,7 +27,7 @@
                         <span class="icon-calendar-text"></span>
                     </div>
 
-                    <div class="group" style="width:290px">
+                    <div class="group" style="width:220px">
                         <label class="text">Site</label>
                         <select class="control" id="cbbSite" multiple="multiple">
                             @if (Model.SiteGroupList != null)
@@ -42,6 +42,16 @@
                                         }
                                     </optgroup>
                                 }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="group" style="width:220px">
+                        <label class="text">Role</label>
+                        <select class="control" id="cbbRole" multiple="multiple">
+                            @foreach (var item in Model.RoleList)
+                            {
+                                <option selected value=@item.RoleID>@item.RoleName</option>
                             }
                         </select>
                     </div>

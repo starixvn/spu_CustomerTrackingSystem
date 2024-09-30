@@ -394,6 +394,8 @@
 
             var categories = GetAllCategories();
 
+            var roles = _commonService.GetRoles();
+
             var associatedByAccountViewModel = new AssociatedByAccountViewModel
             {
                 AssociationStatus = getAssociationStatus,
@@ -401,6 +403,7 @@
                 AccountStatusList = accountStatus,
                 SubscribersList = subscribers.ToList(),
                 CategoryList = categories.ToList(),
+                RoleList = roles.ToList(),
                 Username = username
             };
 

@@ -39,6 +39,7 @@
     let titleMatchBettingPatternName = $('#titleStakeIPPatternName');
     let titleStakeIPPattern = $('#titleStakeIPPattern');
     let assDetailsPopup = $("#assicationDetails");
+    let cbbRole = $("#cbbRole");
 
     let isLoadingMatchBettingPattern;
     let isLoadingStakeIPPattern;
@@ -1637,6 +1638,17 @@
             optGroupChecked: true
         }).multiselectfilter({
             width: 217,
+            placeholder: '',
+            label: ''
+        });
+
+        cbbRole.multiselect({
+            menuWidth: 280,
+            menuHeight: 280,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Role"
+        }).multiselectfilter({
+            width: 240,
             placeholder: '',
             label: ''
         });
