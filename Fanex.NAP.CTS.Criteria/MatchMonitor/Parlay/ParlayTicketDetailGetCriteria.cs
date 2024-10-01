@@ -21,8 +21,8 @@
         [SpParam(SqlParamName = "IsLive")]
         public int IsLive { get; set; }
 
-        [SpParam(SqlParamName = "ListSportBettype")]
-        public string ListSportBettype { get; set; }
+        [SpParam(SqlParamName = "ListBetType")]
+        public string ListBetType { get; set; }
 
         [SpParam(SqlParamName = "FromTransDate")]
         public DateTime? FromTransDate { get; set; }

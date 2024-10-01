@@ -28,6 +28,8 @@
 
         public string BetIDPattern { get; set; }
 
+        public long BetID { get; set; }
+
         public bool IsMMDetection { get; set; }
 
         public bool IsDefaultSelected { get; set; }

@@ -6,7 +6,7 @@
     public class GetCommonBetTypeSettingCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_FunctionID")]
-        public int FunctionID { get; set; }
+        public int? FunctionID { get; set; }
 
         [SpParam(SqlParamName = "ip_SportTypeIDList")]
         public string SportTypeIDList { get; set; }
@@ -15,13 +15,13 @@
         public string BettypeIDList { get; set; }
 
         [SpParam(SqlParamName = "ip_IsFilterMMDetection")]
-        public bool IsFilterMMDetection { get; set; }
+        public bool? IsFilterMMDetection { get; set; }
 
         [SpParam(SqlParamName = "ip_IsFilterMMParlayDetection")]
-        public bool IsFilterMMParlayDetection { get; set; }
+        public bool? IsFilterMMParlayDetection { get; set; }
 
         [SpParam(SqlParamName = "ip_IsShowDetailsX")]
-        public bool IsShowDetailsX { get; set; }
+        public bool? IsShowDetailsX { get; set; }
 
         [SpParam(SqlParamName = "ip_Status")]
         public int Status { get; set; }

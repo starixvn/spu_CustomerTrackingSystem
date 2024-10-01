@@ -426,20 +426,28 @@
 
         public TicketDetailViewModel GetMainTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int? batchSize, string transJson = null)
         {
-            var betTypeInfos = JsonConvert.SerializeObject(new List<MatchBetTypeSettingModel>() { new MatchBetTypeSettingModel {
-                SportTypeID = para.Sport,
-                BetTypeID = para.BetTypeID,
-                BetChoiceType = para.BetChoiceType,
-                BetChoiceHome = para.BetChoiceHome,
-                BetChoiceAway = para.BetChoiceAway,
-                BetID = para.BetID,
-                BetChoiceHomeFullName = para.BetChoiceHomeFullName,
-                BetChoiceAwayFullName = para.BetChoiceAwayFullName
-            } });
+            if (para.TicketType == Model.TicketType.Single)
+            {
+                var betTypeInfos = JsonConvert.SerializeObject(new List<MatchBetTypeSettingModel>() { new MatchBetTypeSettingModel {
+                    SportTypeID = para.Sport,
+                    BetTypeID = para.BetTypeID,
+                    BetChoiceType = para.BetChoiceType,
+                    BetChoiceHome = para.BetChoiceHome,
+                    BetChoiceAway = para.BetChoiceAway,
+                    BetID = para.BetID,
+                    BetChoiceHomeFullName = para.BetChoiceHomeFullName,
+                    BetChoiceAwayFullName = para.BetChoiceAwayFullName
+                } });
 
-            return para.TicketType == Model.TicketType.Single
-                ? GetSingleTicketDetail(para, filter, betTypeInfos, batchSize, transJson)
-                : GetParlayTicketDetail(para, filter, betTypeInfos, batchSize, transJson);
+                return GetSingleTicketDetail(para, filter, betTypeInfos, batchSize, transJson);
+            }
+            else
+            {                
+                var betTypeInfos = JsonConvert.SerializeObject(commonService.GetBetTypeSettings(new BetTypeSettingParaModel() { Status = 1 })
+                    .Select(x => new MatchBetTypeSettingModel(x)));
+
+                return GetParlayTicketDetail(para, filter, betTypeInfos, batchSize, transJson);
+            }
         }
 
         public int GetTotalTicketDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, int? batchSize, string transIDsJson)
@@ -1172,7 +1180,7 @@
                 LastTransDate = para.LastTransDate,
                 IsLive = para.LiveIndicator ? 1 : 0,
                 MatchID = para.MatchID,
-                ListSportBettype = betTypeInfos,
+                ListBetType = betTypeInfos,
                 ViewMode = para.TypeOfTickets == MMViewModeFromUI.TicketAll ? 0 : 1,
                 BatchSize = batchSize,
                 IsLicensee = (para.Sites == MMSites.All || para.Sites == null) ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
