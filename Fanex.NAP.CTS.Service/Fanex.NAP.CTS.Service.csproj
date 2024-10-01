@@ -57,6 +57,10 @@
     <Compile Include="Implement\AssociationDetectionService.cs" />
     <Compile Include="Implement\AssociationReportService.cs" />
     <Compile Include="Implement\CustomerCategoryService.cs" />
+    <Compile Include="Implement\CustomerClassificationAgency\BaseCustomerClassificationAgencyService.cs" />
+    <Compile Include="Implement\CustomerClassificationAgency\CustomerCategoryAgencyService.cs" />
+    <Compile Include="Implement\CustomerClassificationAgency\ProblemAccountClassificationAgencyService.cs" />
+    <Compile Include="Implement\CustomerClassificationAgency\RescanCustomerClassificationAgencyService.cs" />
     <Compile Include="Implement\CustomerClassification\BaseCustomerClassificationService.cs" />
     <Compile Include="Implement\CustomerClassification\CustomerClassificationBySportService.cs" />
     <Compile Include="Implement\CustomerClassification\ProblemAccountClassificationService.cs" />
@@ -91,6 +95,9 @@
     <Compile Include="Interface\Api\IProblemCaseMonitorService.cs" />
     <Compile Include="Interface\Api\IFpsService.cs" />
     <Compile Include="Interface\Api\ITWInitialSmartService.cs" />
+    <Compile Include="Interface\CustomerClassificationAgency\ICustomerCategoryAgencyService.cs" />
+    <Compile Include="Interface\CustomerClassificationAgency\IProblemAccountClassificationAgencyService.cs" />
+    <Compile Include="Interface\CustomerClassificationAgency\IRescanCustomerClassificationAgencyService.cs" />
     <Compile Include="Interface\CustomerClassification\IBaseCustomerClassificationService.cs" />
     <Compile Include="Interface\CustomerClassification\ICustomerClassificationBySportService.cs" />
     <Compile Include="Interface\CustomerClassification\IDataLogTrackingServices.cs" />

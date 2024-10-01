@@ -320,6 +320,17 @@
     <Compile Include="Account\BettingStatistic\PerformanceDailyModel.cs" />
     <Compile Include="Account\UpdateAccountExceptionModel.cs" />
     <Compile Include="Account\ValidateManualAssociationMultipleModel.cs" />
+    <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\CustInfoClassificationAgencyModel.cs" />
+    <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\GetRescanCustomerClassificationAgencyModel.cs" />
+    <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\RemoveCustomerClassificationAgencyModel.cs" />
+    <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\RescanCustomerClassificationAgencyModel.cs" />
+    <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\ResultInsertCustomerClassificationAgencyModel.cs" />
+    <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\ResultRemoveCCInfoAgencyModel.cs" />
+    <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\ResultRemoveCustomerClassificationAgencyModel.cs" />
+    <Compile Include="CustomerClassificationAgency\ProblemAccountAgency\InsertProblemAccountAgencyModel.cs" />
+    <Compile Include="CustomerClassificationAgency\ProblemAccountAgency\UnmarkProblemAccountAgencyModel.cs" />
+    <Compile Include="CustomerClassificationAgency\RescanCustomerClassificationAgency\RescanResultAgencyModel.cs" />
+    <Compile Include="CustomerClassificationAgency\RescanCustomerClassificationAgency\RescanCustClassificationAgencyModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\BySport\CustInfoClassificationBySportModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\BySport\RemoveCustomerClassificationBySportModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\BySport\ResultRemoveCCInfoBySportModel.cs" />

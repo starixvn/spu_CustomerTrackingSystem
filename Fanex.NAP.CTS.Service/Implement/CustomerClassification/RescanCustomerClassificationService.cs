@@ -3,7 +3,6 @@
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
-    using Fanex.NAP.CTS.Criteria;
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
@@ -23,13 +22,16 @@
         {
             custClassificationService = new CustomerClassificationService();         
             repository = new DynamicRepository();
-        }        
+        }
 
+        /// <summary>
+        /// RescanCustomerClassification for Member
+        /// </summary>
         public bool RescanCustomerClassification(RescanCustClassificationModel paras)
         {
             var result = new RescanResultModel();
-            var custIdsToRescanPA = new List<long>();
-            var smaCustIds = GetAgentCusts(paras.CustIds);
+            //var custIdsToRescanPA = new List<long>();
+            //var smaCustIds = GetAgentCusts(paras.CustIds);
             var custRescans = GetRescanCustomerClassification(string.Join(",", paras.CustIds));
 
             if (custRescans.CustInfos != null && custRescans.CustInfos.Any())
@@ -46,15 +48,15 @@
                     {
                         result = RescanProblemAccount(group.CustRescans, paras, (CCInputFlow)group.InputFlowID);
 
-                        custIdsToRescanPA.AddRange(result.CustIds);
+                        //custIdsToRescanPA.AddRange(result.CustIds);
                     }
                 }                
             }
 
-            if (smaCustIds.Any())
-            {
-                result.IsSuccess = PushDataToExternal(paras, custIdsToRescanPA, smaCustIds);
-            }
+            //if (smaCustIds.Any())
+            //{
+            //    result.IsSuccess = PushDataToExternal(paras, custIdsToRescanPA, smaCustIds);
+            //}
 
             return result.IsSuccess;
         }
@@ -88,40 +90,6 @@
             repository.Execute(criteria);           
         }
 
-        private IEnumerable<long> GetAgentCusts(IEnumerable<long> custIds)
-        {
-            if (custIds != null && custIds.Any())
-            {
-                var criteria = new GetRoleCustomerCriteria
-                {
-                    CustIds = string.Join(",", custIds.Distinct())
-                };
-
-                var data = repository.Fetch<RoleCustomerModel>(criteria);
-
-                if (data != null && data.Any())
-                {
-                    return data.Where(c => c.RoleID == (int)ROLE_CUSTOMER.AGENT
-                                        || c.RoleID == (int)ROLE_CUSTOMER.MASTER
-                                        || c.RoleID == (int)ROLE_CUSTOMER.SUPER).Select(c => c.CustID);
-                }
-            }
-
-            return Enumerable.Empty<long>();
-        }
-
-        private bool PushDataToExternal(RescanCustClassificationModel parameters, IEnumerable<long> custIdsToRescanPA, IEnumerable<long> smaCustIds)
-        {            
-            if (smaCustIds.Any())
-            {
-                var custToRemovePA = smaCustIds.Except(custIdsToRescanPA);
-
-                PushDataToExternalPackge(custToRemovePA?.Distinct(), parameters);
-            }
-
-            return true;
-        }                 
-
         private bool PushDataToExternalPackge(IEnumerable<long> custIdsToSyncCC, RescanCustClassificationModel parameters)
         {
             bool isSuccess = true;
@@ -130,15 +98,14 @@
             {
                 isSuccess = custClassificationService.PushDataToExternalPackge(custIdsToSyncCC.Distinct(), new PushDataToExternalModel
                 {
-                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,                   
+                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                     IsUpdateDangerToMainDB = parameters.IsUpdateDangerToMainDB,
                     IsSyncAFC = ConfigSettings.IsSyncAFCData
                 }, FromFlow.CTSWEB);
             }
 
             return isSuccess;
-        }     
-     
+        }
         #endregion Private Methods
     }
 }

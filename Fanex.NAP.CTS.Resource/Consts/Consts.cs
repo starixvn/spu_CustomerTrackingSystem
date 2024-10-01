@@ -296,11 +296,22 @@
             Manual = 5,
         };
 
+        public enum FunctionIdAgency
+        {
+            InsertPAM = 43,
+            UnmarkCustomerCategory = 45,
+        }
+
         public enum RescanNormalType
         {
             Manual = 4,
             Auto_Customer = 5,
             Auto_AfftectedDownline = 6
+        }
+
+        public enum RescanNormalTypeAgency
+        {
+            Manual = 4,
         }
 
         public enum BySport_RescanNormalType

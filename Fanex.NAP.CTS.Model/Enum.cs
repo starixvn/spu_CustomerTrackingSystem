@@ -313,4 +313,18 @@ namespace Fanex.NAP.CTS.Model
         Single = 1,
         Parlay = 2
     }
+
+    public enum CCInputFlowAgency
+    {
+        [Description("VVIP")]
+        VVIP = 1,
+        [Description("InsertPACategory")]
+        InsertPACategory = 5,
+        [Description("RescanNormal")]
+        RescanNormal = 9,
+        [Description("RemoveVVIP")]
+        RemoveVVIP = 221,
+        [Description("RemovePACategory")]
+        RemovePACategory = 225,
+    }
 }
