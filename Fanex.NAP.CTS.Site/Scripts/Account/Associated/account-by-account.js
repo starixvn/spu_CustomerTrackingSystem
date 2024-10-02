@@ -1784,9 +1784,8 @@
             .forEach(group =>
             {
                 // hard code
-                if (!categoryGroup.isIncludeMember && categoryGroup.isIncludeAgency &&
-                    (group.CategoryGroupName == 'Normal Account Category' ||
-                    group.CategoryGroupName == 'PA Associated Category'))
+                if (!cbbRole.val().some(x => x <= 2) &&
+                    group.CategoryGroupName == 'Normal Account Category')
                     {
                         return;
                     }
