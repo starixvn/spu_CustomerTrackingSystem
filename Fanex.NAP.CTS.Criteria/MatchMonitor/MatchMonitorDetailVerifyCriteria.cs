@@ -22,7 +22,10 @@
         public string TranIds { get; set; }
 
         [SpParam(SqlParamName = "ip_VerifiedBy")]
-        public int VerifiedBy { get; set; }      
+        public int VerifiedBy { get; set; }
+
+        [SpParam(SqlParamName = "ip_TicketType")]
+        public int TicketType { get; set; } // 1: Single, 2: Parlay
 
         public override string GetSettingKey()
             => "CTS_DC_MatchMonitor_Details_Verify";

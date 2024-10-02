@@ -1884,7 +1884,8 @@ function MatchMonitorDetail() {
                 LiveIndicator: domElements.cbbMarket.val(),
                 BettypeID: GetBetTypeSelected(),
                 BetID: GetBetIDSelected(),
-                TranIds: GetTranIds().join()
+                TranIds: GetTranIds().join(),
+                TicketType:  domElements.ticketType
             },
             beforeSend: function () {
                 domElements.tblMMHomeTeam.addClass('loading-value');

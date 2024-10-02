@@ -87,7 +87,8 @@
                 BettypeID = para.BettypeID,
                 BetID = para.BetID,
                 TranIds = para.TranIds,
-                VerifiedBy = para.VerifiedBy
+                VerifiedBy = para.VerifiedBy,
+                TicketType = (int)para.TicketType
             };
 
             repository.Fetch<DBResult>(criteria);
