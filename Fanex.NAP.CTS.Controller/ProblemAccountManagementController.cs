@@ -4,6 +4,7 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassification.ProblemAccount;
     using Fanex.NAP.CTS.Model.CustomerClassificationAgency.BaseCustomerClassificationAgency;
@@ -70,25 +71,6 @@
                              }).ToList();
             }
 
-            var categories = _pamService.GetAllCategory();
-
-            if (categories != null && categories.Any())
-            {
-                result.CategoryList = categories
-                       .Where(x => x.CategoryGroup == Consts.ProblemAccountManagement_CategoryPA)
-                       .GroupBy(g => new { g.CategoryGroup })
-                       .Select(x => new { Group = x.Key, CategoryList = x.ToList() })
-                       .Select(x => new CategoryGroupViewModel
-                       {
-                           CategoryGroupName = x.Group.CategoryGroup,
-                           CategoryList = x.CategoryList.Select(y => new CategoryViewModel
-                           {
-                               CategoryIDs = y.CategoryIDs,
-                               CategoryName = y.CategoryName
-                           }).OrderBy(y => y.CategoryName)
-                       }).ToList();
-            }
-
             result.RoleList = _commonService.GetRoles().ToList();
 
             return View(result);
@@ -132,6 +114,35 @@
             return problemAccounts;
         }
 
+        [HttpGet]
+        public ActionResult GetProblemCategories()
+        {
+            List<CategoryViewModel> result = null;
+
+            var categories = _pamService.GetAllCategory();
+
+            if (categories != null && categories.Any())
+            {
+                result = categories
+                       .Where(x => x.CategoryGroup == Consts.ProblemAccountManagement_CategoryPA)
+                       .GroupBy(g => new { g.CategoryGroup })
+                       .Select(x => new { Group = x.Key, CategoryList = x.ToList() })
+                       .SelectMany(x => x.CategoryList.Select(y => new CategoryViewModel
+                           {
+                               CategoryIDs = y.CategoryIDs,
+                               CategoryName = y.CategoryName,
+                               RoleGroup = y.RoleGroup
+                           })
+                       ).OrderBy(y => y.CategoryName).ToList();
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Popup mark new
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult GetProblemAccountAllCategories()
         {

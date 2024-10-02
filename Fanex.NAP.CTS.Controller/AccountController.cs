@@ -402,8 +402,6 @@
 
             var subscribers = _commonService.GetSubscriberGroups();
 
-            var categories = GetAllCategories();
-
             var roles = _commonService.GetRoles();
 
             var associatedByAccountViewModel = new AssociatedByAccountViewModel
@@ -412,12 +410,38 @@
                 AssociationTypeList = getCustomerStaticAssType,
                 AccountStatusList = accountStatus,
                 SubscribersList = subscribers.ToList(),
-                CategoryList = categories.ToList(),
                 RoleList = roles.ToList(),
                 Username = username
             };
 
             return PartialView("Associated/AccountByAccount", associatedByAccountViewModel);
+        }
+
+        [HttpGet]
+        public ActionResult GetAllCategories()
+        {
+            var categoryList = new List<CategoryGroupViewModel>();
+
+            var data = _accountService.GetAllCategory();
+
+            if (data != null && data.Any())
+            {
+                categoryList = data
+                       .GroupBy(g => new { g.CategoryGroup })
+                       .Select(x => new { Group = x.Key, CategoryList = x.ToList() })
+                       .Select(x => new CategoryGroupViewModel
+                       {
+                           CategoryGroupName = x.Group.CategoryGroup,
+                           CategoryList = x.CategoryList.Select(y => new CategoryViewModel
+                           {
+                               CategoryIDs = y.CategoryIDs,
+                               CategoryName = y.CategoryName,
+                               RoleGroup = y.RoleGroup
+                           }).OrderBy(y => y.CategoryName)
+                       }).ToList();
+            }
+
+            return Json(categoryList, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -470,31 +494,6 @@
                 recordsFiltered = totalItem,
                 data = result
             }, JsonRequestBehavior.AllowGet);
-        }
-
-        private IEnumerable<CategoryGroupViewModel> GetAllCategories()
-        {
-            var categoryList = new List<CategoryGroupViewModel>();
-
-            var data = _accountService.GetAllCategory();
-
-            if (data != null && data.Any())
-            {
-                categoryList = data
-                       .GroupBy(g => new { g.CategoryGroup })
-                       .Select(x => new { Group = x.Key, CategoryList = x.ToList() })
-                       .Select(x => new CategoryGroupViewModel
-                       {
-                           CategoryGroupName = x.Group.CategoryGroup,
-                           CategoryList = x.CategoryList.Select(y => new CategoryViewModel
-                           {
-                               CategoryIDs = y.CategoryIDs,
-                               CategoryName = y.CategoryName
-                           }).OrderBy(y => y.CategoryName)
-                       }).ToList();
-            }
-
-            return categoryList;
         }
 
         private List<AssociatedAccountModel> GetCustClassification(string custIds, List<AssociatedAccountModel> assModel)

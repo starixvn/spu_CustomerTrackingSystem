@@ -5,5 +5,7 @@
         public string CategoryIDs { get; set; }
 
         public string CategoryName { get; set; }
+
+        public int RoleGroup { get; set; }
     }
 }

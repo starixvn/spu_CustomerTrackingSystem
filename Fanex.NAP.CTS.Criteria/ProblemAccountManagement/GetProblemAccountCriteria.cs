@@ -21,6 +21,9 @@
         [SpParam(SqlParamName = "ip_UserName")]
         public string UserName { get; set; }
 
+        [SpParam(SqlParamName = "ip_RoleIDs")]
+        public string RoleIDs { get; set; }
+
         [SpParam(SqlParamName = "ip_HasDownline")]
         public bool HasDownline { get; set; }
 

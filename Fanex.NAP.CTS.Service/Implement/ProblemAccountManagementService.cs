@@ -37,6 +37,7 @@
                 Sites = filter.Sites,
                 CategoryIDs = filter.CategoryIDs,
                 UserName = filter.UserName,
+                RoleIDs = filter.RoleIDs,
                 HasDownline = filter.HasDownline
             };
 

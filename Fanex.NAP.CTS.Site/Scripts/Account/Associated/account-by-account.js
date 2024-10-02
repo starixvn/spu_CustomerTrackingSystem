@@ -52,6 +52,12 @@
     let tblOTGBRound2 = $("#tblOTGBRound2");
     let tblOTGBRound3 = $("#tblOTGBRound3");
     let configTableOTGB = false;
+
+    let categoryGroup = {
+        list: [],
+        isIncludeMember: false,
+        isIncludeAgency: false
+    }
     
     function RenderTag(obj) {
         let html = "";
@@ -1668,6 +1674,12 @@
             label: ''
         });
 
+        GetAllCategories();
+
+        cbbRole.on('change', function() {
+            RefreshCategories();
+        })
+
         dataTable = RenderGrid();
 
         btnSearch.on('click', () => LoadGrid(false));
@@ -1742,4 +1754,76 @@
         });
 
     };
+
+    function GetAllCategories() {
+        $.ajax(common.modifyRelativeUrl('Account/GetAllCategories'), {
+            type: 'GET',
+            success: function (response) {
+                if (response) {
+                    categoryGroup.list = response;
+
+                    RefreshCategories();
+                }
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function RefreshCategories()
+    {
+        cbbAssociationCategory.empty();
+
+        categoryGroup.isIncludeMember = cbbRole.val().some(x => x == 1);
+        categoryGroup.isIncludeAgency = cbbRole.val().some(x => x != 1);
+
+        var categoriesGroup = {};
+
+        categoryGroup.list
+            .forEach(group =>
+            {
+                // hard code
+                if (!categoryGroup.isIncludeMember && categoryGroup.isIncludeAgency &&
+                    (group.CategoryGroupName == 'Normal Account Category' ||
+                    group.CategoryGroupName == 'PA Associated Category'))
+                    {
+                        return;
+                    }
+
+                group.CategoryList.filter(x =>
+                    (categoryGroup.isIncludeMember && x.RoleGroup == 1) ||
+                    (categoryGroup.isIncludeAgency && x.RoleGroup == 2))
+                .forEach(x => {
+                    if (!categoriesGroup[group.CategoryGroupName])
+                    {
+                        categoriesGroup[group.CategoryGroupName] = {};
+                    }
+
+                    if (categoriesGroup[group.CategoryGroupName][x.CategoryName]) {
+                        categoriesGroup[group.CategoryGroupName][x.CategoryName].CategoryIDs += `,${x.CategoryIDs}`;
+                    }
+                    else {
+                        categoriesGroup[group.CategoryGroupName][x.CategoryName] = {
+                            CategoryName: x.CategoryName,
+                            CategoryIDs: x.CategoryIDs
+                        };
+                    }
+                });
+            });
+
+        var option = '';
+
+        Object.keys(categoriesGroup).forEach(groupName => {
+            option += (`<optgroup label='${groupName}'>`);
+            Object.values(categoriesGroup[groupName]).forEach(item => {
+                option += (`<option selected value=${item.CategoryIDs}>${item.CategoryName}</option>`);
+            })
+            option += (`</optgroup>`);
+        });
+
+        cbbAssociationCategory.append(option);
+
+        cbbAssociationCategory.multiselect("refresh");
+    }
 }

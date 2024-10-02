@@ -1,5 +1,10 @@
 ﻿function ProblemAccountManagement() {
     let dataTable;
+    let categoryGroup = {
+        list: [],
+        isIncludeMember: false,
+        isIncludeAgency: false
+    }
 
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),
@@ -103,6 +108,7 @@
         params.IsAllSites = domElements.cbbSite.find('option').not(':selected').length == 0;
         params.CategoryIDs = domElements.cbbCategory.val().join();
         params.UserName = domElements.inputUserName.val().trim();
+        params.RoleIDs = domElements.cbbRole.val().join();
         params.HasDownline = domElements.inputSearchDownlines.is(":checked");
 
         if (isExportExcel) {
@@ -501,6 +507,53 @@
             () => { });
     }
 
+    function RefreshProblemCategories() {
+        domElements.cbbCategory.empty();
+
+        categoryGroup.isIncludeMember = domElements.cbbRole.val().some(x => x == 1);
+        categoryGroup.isIncludeAgency = domElements.cbbRole.val().some(x => x != 1);
+
+        var categories = {};
+
+        categoryGroup.list
+            .filter(x =>
+                (categoryGroup.isIncludeMember && x.RoleGroup == 1) ||
+                (categoryGroup.isIncludeAgency && x.RoleGroup == 2))
+            .forEach(x => {
+                if (categories[x.CategoryName]) {
+                    categories[x.CategoryName].CategoryIDs += `,${x.CategoryIDs}`;
+                }
+                else {
+                    categories[x.CategoryName] = {
+                        CategoryName: x.CategoryName,
+                        CategoryIDs: x.CategoryIDs
+                    };
+                }
+            });
+
+        Object.values(categories).forEach(x => {
+            domElements.cbbCategory.append("<option selected value='" + x.CategoryIDs + "'>" + x.CategoryName + "</option>");
+        });
+
+        domElements.cbbCategory.multiselect("refresh");
+    }
+
+    function GetProblemCategories() {
+        $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/GetProblemCategories'), {
+            type: 'GET',
+            success: function (response) {
+                if (response) {
+                    categoryGroup.list = response;
+
+                    RefreshProblemCategories();
+                }
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
     function GetProblemAccountCategories(setVal) {
         domElements.cbbProblemAccountCategories.empty();
 
@@ -511,22 +564,22 @@
                 const mergedCategories = [];
 
                 response.forEach(category => {
-                if (category.RoleGroup === 1) {
-                    const agencyCategory = response.find(c => c.CategoryName === category.CategoryName && c.RoleGroup === 2);
+                    if (category.RoleGroup === 1) {
+                        const agencyCategory = response.find(c => c.CategoryName === category.CategoryName && c.RoleGroup === 2);
 
-                    if (agencyCategory) {
-                    mergedCategories.push({
-                        CategoryID: category.CategoryID,
-                        CategoryName: category.CategoryName,
-                        CategoryGroupID: category.CategoryGroupID,
-                        IsRobot: category.IsRobot,
-                        RelevantCategoryGroup: category.RelevantCategoryGroup,
-                        CategoryIDAgency: agencyCategory.CategoryID,
-                        CategoryGroupIDAgency: agencyCategory.CategoryGroupID,
-                        RelevantCategoryGroupAgency: agencyCategory.RelevantCategoryGroup
-                    });
+                        if (agencyCategory) {
+                            mergedCategories.push({
+                                CategoryID: category.CategoryID,
+                                CategoryName: category.CategoryName,
+                                CategoryGroupID: category.CategoryGroupID,
+                                IsRobot: category.IsRobot,
+                                RelevantCategoryGroup: category.RelevantCategoryGroup,
+                                CategoryIDAgency: agencyCategory.CategoryID,
+                                CategoryGroupIDAgency: agencyCategory.CategoryGroupID,
+                                RelevantCategoryGroupAgency: agencyCategory.RelevantCategoryGroup
+                            });
+                        }
                     }
-                }
                 });
 
                 mergedCategories.map(function (x) {
@@ -698,6 +751,10 @@
             label: ''
         });
 
+        GetProblemCategories();
+
+        domElements.cbbRole.on('change', function () { RefreshProblemCategories() });
+
         domElements.btnGenerate.on('click', function () { GetProblemAccountReport(); });
 
         domElements.btnExportToExcel.on('click', function () { ExportToExcel(); });
@@ -709,7 +766,7 @@
         domElements.btnUnmarkProblemAccount.on('click', function () {
             domElements.grpCategories.addClass('hide');
             domElements.grpCkboxAffectedDownline.addClass('hide');
-            domElements.ckbUnmarkDownlines.prop("checked", false);          
+            domElements.ckbUnmarkDownlines.prop("checked", false);
             domElements.txtComment.val('');
             domElements.spanProblemAccountActionHidden.val('2'); // Unmark
 
