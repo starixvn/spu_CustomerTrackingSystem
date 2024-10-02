@@ -112,8 +112,16 @@
 
             foreach (var ticket in ticketMergeGroups)
             {
-               
-                mGrTranIDListFilteredDic.TryGetValue(ticket.TransId, out var objMGr);
+                var objMGr = new MGrTranIDListFilteredModel();
+
+                if (this.TicketType == TicketType.Single)
+                {
+                    mGrTranIDListFilteredDic.TryGetValue(ticket.TransId, out objMGr);
+                }
+                else
+                {
+                    mGrTranIDListFilteredDic.TryGetValue(ticket.Refno, out objMGr);
+                }                
 
                 var equals = !filter.ReasonList.Any(y => (ticket.ReasonList ?? "-").Contains(y))
                             || !filter.AGroupList.Contains(ticket.ADetectGroup)
@@ -130,6 +138,7 @@
                             transList.Add(new FraudTransModel
                             {
                                 TransID = ticket.TransId,
+                                Refno = ticket.Refno,
                                 Reason = item,
                                 AGroup = ticket.ADetectGroupID,
                                 MGroup = objMGr != null ? objMGr.MGr : 0

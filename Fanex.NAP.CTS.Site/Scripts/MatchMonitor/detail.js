@@ -1806,7 +1806,7 @@ function MatchMonitorDetail() {
 
     function RenderAmount(obj) {
         if (obj.IsParlay && obj.ParlayTicket != undefined) {
-            return ConvertNumberToThousandsString(obj.ParlayTicket.Amount);
+            return '-';
         }
         return ConvertNumberToThousandsString(obj.Amount);
     }

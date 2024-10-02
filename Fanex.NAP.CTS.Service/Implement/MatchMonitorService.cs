@@ -354,7 +354,7 @@
             };
 
             var ticketDetails = Enumerable.Empty<TicketDetailModel>();
-
+            var isViewParlay = para.TicketType == TicketType.Parlay;
             if (para.TicketType == TicketType.Parlay)
             {
                 ticketDetails = result.TicketDetails.Where(x => x.TicketOrder == 0).Distinct(x => x.Refno);
@@ -365,8 +365,8 @@
             }
 
             var mMDetailBetTeams = matchDetailInfo.MatchDetails.Join(ticketDetails,
-               m => m.Refno,
-               t => t.Refno, (m, t) => new MMDetailBetTeamModel(m, t, true));
+               m => isViewParlay ? m.Refno : m.TransID,
+               t => isViewParlay ? t.Refno : t.TransId, (m, t) => new MMDetailBetTeamModel(m, t, isViewParlay));
 
             if (mMDetailBetTeams.Any())
             {
