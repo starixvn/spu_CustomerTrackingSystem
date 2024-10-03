@@ -258,8 +258,7 @@
                 SubscriberIDs = filterModel.SubscriberIds,
                 Skip = filterModel.start,
                 Take = filterModel.length,
-                TotalItems = 0,
-                Role = filterModel.Role
+                TotalItems = 0     
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

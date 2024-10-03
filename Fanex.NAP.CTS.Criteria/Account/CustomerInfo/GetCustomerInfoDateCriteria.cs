@@ -16,7 +16,7 @@
         {
             return this.RoleID == ROLE_CUSTOMER.MEMBER 
                 ? "CTS_DC_CustInfo_Profile_GetDate"
-                : "CTS_DC_SMACustInfo_Profile_GetDate";
+                : "CTS_DC_CustInfoAgency_Profile_GetDate";
         }
 
         public override bool IsValid()

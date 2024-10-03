@@ -134,8 +134,7 @@
                             cbbAssociationSubscriber.find('option').not(':selected').each(function () { selectedSubscribers.push($(this).val()); });
                         }
                         return selectedSubscribers.join(',');
-                    },
-                    RoleID: function () { return $("#hdRoleID").val(); },
+                    },                
                     IsSkipTracking: function () { return isSkipTracking; }
                 },
                 type: "POST",

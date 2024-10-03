@@ -74,8 +74,7 @@
 		<Setting Key="SPU_AIML_GB_3S_GetCouple_FraudDetails" SpName="SPU_AIML_GB_3S_GetCouple_FraudDetails" DbName="MySQL.SPU_AIML.Reporter" />
 		<Setting Key="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" SpName="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" DbName="MySQL.SPU_AIML.Reporter" />
 		<Setting Key="CTS_DC_AssociationByAI_GetFirstAssociationDate" SpName="CTS_DC_AssociationByAI_GetFirstAssociationDate_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="SPU_AIML_OTGB_GetCouple_FraudDetails" SpName="SPU_AIML_OTGB_GetCouple_FraudDetails_xtest" DbName="MySQL.SPU_AIML.Reporter" />
-    <Setting Key="CTS_DC_SMAAssociation_Profile_Get" SpName="CTS_DC_SMAAssociation_Profile_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="SPU_AIML_OTGB_GetCouple_FraudDetails" SpName="SPU_AIML_OTGB_GetCouple_FraudDetails_xtest" DbName="MySQL.SPU_AIML.Reporter" />  
 	</Function>
 
 	<Function Name="AssociationDetection">
@@ -103,8 +102,8 @@
     <Setting Key="CTS_DC_CustClassification_Insert" SpName="CTS_DC_CustClassification_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" Timeout="600" />
     <Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove_xtest" DbName="MySQL.CTS_DataCenter.Admin" Timeout="600" />
     <Setting Key="CTS_DC_CustClassification_Rescan_Get" SpName="CTS_DC_CustClassification_Rescan_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-    <Setting Key="CTS_DC_SMACustClassification_ViewHistory" SpName="CTS_DC_SMACustClassification_ViewHistory_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="600" />
-    <Setting Key="CTS_DC_SMACustClassification_Get" SpName="CTS_DC_SMACustClassification_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+    <Setting Key="CTS_DC_CustClassificationAgency_ViewHistory" SpName="CTS_DC_CustClassificationAgency_ViewHistory_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="600" />
+    <Setting Key="CTS_DC_CustClassificationAgency_Get" SpName="CTS_DC_CustClassificationAgency_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
   </Function>
 
 	<Function name="SpecialCustomerClass">
@@ -170,7 +169,7 @@
 		<Setting Key="CTS_DC_CustInfo_Profile_GetEvidence" SpName="CTS_DC_CustInfo_Profile_GetEvidence_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_Profile_GetLoginStats" SpName="CTS_DC_CustInfo_Profile_GetLoginStats_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_Profile_GetDate" SpName="CTS_DC_CustInfo_Profile_GetDate_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
-    <Setting Key="CTS_DC_SMACustInfo_Profile_GetDate" SpName="CTS_DC_SMACustInfo_Profile_GetDate_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
+    <Setting Key="CTS_DC_CustInfoAgency_Profile_GetDate" SpName="CTS_DC_CustInfoAgency_Profile_GetDate_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function name="MonitorCTSFunction">

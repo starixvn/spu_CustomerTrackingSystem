@@ -1,6 +1,4 @@
-﻿using static Fanex.NAP.CTS.Resource.Consts.Consts;
-
-namespace Fanex.NAP.CTS.Model.Association
+﻿namespace Fanex.NAP.CTS.Model.Association
 {
     public class AssociatedFilterModel
     {
@@ -23,7 +21,6 @@ namespace Fanex.NAP.CTS.Model.Association
         public string CategoryIds { get; set; }
 
         public string SubscriberIds { get; set; }
-
-        public ROLE_CUSTOMER Role { get; set; }
+       
     }
 }

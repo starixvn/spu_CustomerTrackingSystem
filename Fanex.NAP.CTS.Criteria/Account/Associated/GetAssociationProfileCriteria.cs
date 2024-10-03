@@ -32,17 +32,9 @@
 
         [SpParam(SqlParamName = "op_TotalItems")]        
         public int TotalItems { get; set; }
-
-        [SpParam(Ignored = true)]
-        public ROLE_CUSTOMER Role { get; set; }
-
+       
         public override string GetSettingKey() => "CTS_DC_Association_Profile_Get";
-        //{
-        //    return this.Role == ROLE_CUSTOMER.MEMBER 
-        //        ? "CTS_DC_Association_Profile_Get" 
-        //        : "CTS_DC_SMAAssociation_Profile_Get";
-        //}
-
+        
         public override bool IsValid()
         {
             return true;

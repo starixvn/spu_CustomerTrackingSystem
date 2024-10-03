@@ -16,7 +16,7 @@
         {
             return this.RoleID == ROLE_CUSTOMER.MEMBER
                 ? "CTS_DC_CustClassification_ViewHistory"
-                : "CTS_DC_SMACustClassification_ViewHistory";
+                : "CTS_DC_CustClassificationAgency_ViewHistory";
         }
 
         public override bool IsValid()
