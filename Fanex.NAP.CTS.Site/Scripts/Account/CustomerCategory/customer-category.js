@@ -246,12 +246,13 @@
                     let json = jQuery.parseJSON(response);
 
                     cacheData.isProblemAccount = json.isProblemAccount;
+                    cacheData.isMultiplePA = json.isMultiplePA;
                     cacheData.isExcludedTagAssPA = json.isExcludedTagAssPA;
-                    cacheData.isVVip = json.isVVip;                   
+                    cacheData.isVVip = json.isVVip;
 
                     ResetCategorySetting();
 
-                    RenderCategoryColorSummary(json.categoryList, json.isProblemAccount, json.usnBackGroundColor);                  
+                    RenderCategoryColorSummary(json.categoryList, json.isMultiplePA, json.usnBackGroundColor);                  
                 }
                 return response;
             },
@@ -283,14 +284,14 @@
         });
     }
 
-    function RenderCategoryColorSummary(data, isProblemAccount, usnBackGroundColor) {        
+    function RenderCategoryColorSummary(data, isMultiplePA, usnBackGroundColor) {        
         let html = BuildButtonProfileInsertPA("", data);
         let bgHeaderUsername = '';
         let bgHeaderInfo = '';
 
         if (data.length > 0) {
             data.map(function (x) {
-                if ((isProblemAccount && x.IsProblemAccount) || (!isProblemAccount)) {
+                if ((isMultiplePA && x.IsMultiplePA) || (!isMultiplePA)) {
                     html = BuildCategoryToHtmlDiv(html, "circle bg-" + x.CategoryColorDesc, x.CategoryName);
                 } 
             });

@@ -1594,6 +1594,7 @@
         {           
             var isVVip = false;
             var isProblemAccount = false;          
+            var isMultiplePA = false;          
             var categoryList = new List<GetCustomerCategoryViewModel>();
             var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
             var usnBackGroundColor = EnumExtensions.GetStringSlow(CategoryColorType.Default);
@@ -1606,6 +1607,7 @@
 
                 isVVip = categoryList.Any(x => x.IsVVIP);
                 isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
+                isMultiplePA = categoryList.Any(x => x.IsMultiplePA);
                 int minPriority = classification.Min(c => c.CategoryPriority);
                 usnBackGroundColor = EnumExtensions.GetStringSlow((CategoryColorType)classification.FirstOrDefault(x => x.CategoryPriority == minPriority).ColorTypeID);
             }
@@ -1621,7 +1623,8 @@
             {             
                 isExcludedTagAssPA,
                 isVVip,
-                isProblemAccount,          
+                isProblemAccount,
+                isMultiplePA,
                 categoryList,
                 usnBackGroundColor,
                 data = classificationHistoryList,
