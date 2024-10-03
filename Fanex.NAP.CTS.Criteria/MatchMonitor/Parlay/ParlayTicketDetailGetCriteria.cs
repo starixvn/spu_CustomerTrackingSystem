@@ -21,6 +21,12 @@
         [SpParam(SqlParamName = "IsLive")]
         public int IsLive { get; set; }
 
+        [SpParam(SqlParamName = "Bettype")]
+        public int BetType { get; set; }
+
+        [SpParam(SqlParamName = "BetID")]
+        public long BetID { get; set; }
+
         [SpParam(SqlParamName = "ListBetType")]
         public string ListBetType { get; set; }
 

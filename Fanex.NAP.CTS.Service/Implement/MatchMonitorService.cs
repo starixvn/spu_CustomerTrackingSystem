@@ -833,7 +833,7 @@
                     (itemH.IsRobot ? "x" : "-"),
                     itemH.DangerToString,
                     itemH.Odds,
-                    itemH.MalayOdds,
+                    (itemH.MalayOdds == "-" ? null : itemH.MalayOdds),
                     itemH.BetID??null,
                     itemH.MatchName,
                     itemH.Currency,
@@ -869,7 +869,7 @@
                     (itemA.IsRobot ? "x" : "-"),
                     itemA.DangerToString,
                     itemA.Odds,
-                    itemA.MalayOdds,
+                    (itemA.MalayOdds == "-" ? null : itemA.MalayOdds),
                     itemA.BetID??null,
                     itemA.MatchName,
                     itemA.Currency,
@@ -895,7 +895,7 @@
                     (itemH.IsRobot ? "x" : "-"),
                     itemH.DangerToString,
                     itemH.Odds,
-                    itemH.MalayOdds,
+                    (itemH.MalayOdds == "-" ? null : itemH.MalayOdds),
                     itemH.BetID??null,
                     itemH.MatchName,
                     itemH.Currency,
@@ -915,7 +915,7 @@
                     (itemA.IsRobot ? "x" : "-"),
                     itemA.DangerToString,
                     itemA.Odds,
-                    itemA.MalayOdds,
+                   (itemA.MalayOdds == "-" ? null : itemA.MalayOdds),
                     itemA.BetID??null,
                     itemA.MatchName,
                     itemA.Currency,
@@ -939,10 +939,10 @@
             {
                 list.Add(new ExExcelParlayTicketInfoViewModel(single));
 
-                foreach (var parlay in single.ParlayTickets)
+                for (int i = single.ParlayTickets.Count - 1; i >= 0; i--)
                 {
-                    list.Add(new ExExcelParlayTicketInfoViewModel(single, parlay));
-                }
+                    list.Add(new ExExcelParlayTicketInfoViewModel(single, single.ParlayTickets[i]));
+                }              
             }
 
             return list;
@@ -1181,6 +1181,8 @@
                 LastTransDate = para.LastTransDate,
                 IsLive = para.LiveIndicator ? 1 : 0,
                 MatchID = para.MatchID,
+                BetType = para.BetTypeID,
+                BetID = para.BetID,
                 ListBetType = betTypeInfos,
                 ViewMode = para.TypeOfTickets == MMViewModeFromUI.TicketAll ? 0 : 1,
                 BatchSize = batchSize,

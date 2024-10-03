@@ -1798,7 +1798,7 @@ function MatchMonitorDetail() {
 
     function RenderCurrency(obj) {
         if (obj.IsParlay && obj.ParlayTicket != undefined) {               
-            return obj.ParlayTicket.CurrencyName;
+            return '-';
         }
 
         return obj.CurrencyName;
@@ -2175,9 +2175,8 @@ function MatchMonitorDetail() {
                     datas += `,&quot;BetID&quot;:&quot;${data.BetID}&quot;`;
                     datas += `,&quot;BetTeam&quot;:&quot;${data.BetTeam}&quot;`;
                     datas += `,&quot;Currency&quot;:&quot;${data.CurrencyName}&quot;`;
-                    datas += `,&quot;Amount&quot;:&quot;${data.Amount}&quot;`;
-                    datas += `,&quot;HDP&quot;:&quot;${data.HDP}&quot;`;
-                    datas += `,&quot;Choice&quot;:&quot;${data.Choice}&quot;`;
+                    datas += `,&quot;Amount&quot;:&quot;${data.Amount}&quot;`;                 
+                    datas += `,&quot;Choice&quot;:&quot;${data.HDP}&quot;`;
                     datas += `,&quot;Score&quot;:&quot;${data.Score}&quot;`;
                     datas += `,&quot;TransTimeToString&quot;:&quot;${data.TransTimeToString}&quot;`;
                     datas += `,&quot;BetFrom&quot;:&quot;${data.BetFrom}&quot;`;
