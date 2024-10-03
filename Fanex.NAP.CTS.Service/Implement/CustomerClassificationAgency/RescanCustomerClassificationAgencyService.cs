@@ -24,8 +24,7 @@
         public bool RescanCustomerClassificationAgency(RescanCustClassificationAgencyModel paras)
         {
             var result = new RescanResultAgencyModel();
-            var custIdsToRescanPA = new List<long>();
-            var smaCustIds = GetAgentCusts(paras.CustIds);
+            var custIdsToRescan = new List<long>();
             var custRescans = GetRescanCustomerClassificationAgency(string.Join(",", paras.CustIds));
 
             if (custRescans.CustInfos != null && custRescans.CustInfos.Any())
@@ -36,20 +35,25 @@
                 {
                     if ((CCInputFlowAgency)group.InputFlowID == CCInputFlowAgency.RescanNormal)
                     {
-                        PreNormalClassificationAgency(group.CustRescans.Select(x => x.CustID), paras);
+                        var custIds = group.CustRescans.Select(x => x.CustID);
+                        PreNormalClassificationAgency(custIds, paras);
+
+                        custIdsToRescan.AddRange(custIds);
                     }
                     else
                     {
                         result = RescanProblemAccountAgency(group.CustRescans, paras, (CCInputFlowAgency)group.InputFlowID);
 
-                        custIdsToRescanPA.AddRange(result.CustIds);
+                        custIdsToRescan.AddRange(result.CustIds);
                     }
                 }
             }
 
+            var smaCustIds = GetAgentCusts(paras.CustIds);
+
             if (smaCustIds.Any())
             {
-                result.IsSuccess = PushDataToExternalAgency(paras, custIdsToRescanPA, smaCustIds);
+                result.IsSuccess = PushDataToExternalAgency(paras, custIdsToRescan, smaCustIds);
             }
 
             return true;
