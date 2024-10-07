@@ -315,16 +315,23 @@ namespace Fanex.NAP.CTS.Model
     }
 
     public enum CCInputFlowAgency
+    public enum AgencyCCInputFlow
     {
         [Description("VVIP")]
-        VVIP = 1,
+        VVIP = 1001,
         [Description("InsertPACategory")]
-        InsertPACategory = 5,
-        [Description("RescanNormal")]
-        RescanNormal = 9,
-        [Description("RemoveVVIP")]
-        RemoveVVIP = 221,
+        InsertPACategory = 1005,
+        [Description("InsertPAReason")]
+        InsertPAReason = 6,
+        [Description("Normal")]
+        Normal = 1009,
+        //[Description("RescanPACategory")]
+        //RescanPACategory = 1115,
         [Description("RemovePACategory")]
-        RemovePACategory = 225,
+        RemovePACategory = 1225,
+        [Description("RescanNormal")]
+        RescanNormal = 1009,
+        [Description("RemoveVVIP")]
+        RemoveVVIP = 1221,
     }
 }

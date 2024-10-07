@@ -33,7 +33,7 @@
                 IsAffectDownline = custCategoryModel.IsAffectToAllDownlines
             };
 
-            return base.RemoveCustomerClassificationAgency(CCInputFlowAgency.RemoveVVIP, modelRemove);
+            return base.RemoveCustomerClassificationAgency(AgencyCCInputFlow.RemoveVVIP, modelRemove);
         }
     }
 }

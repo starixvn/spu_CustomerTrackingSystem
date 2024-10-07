@@ -26,7 +26,7 @@
             return new GetRescanCustomerClassificationAgencyModel { CustInfos = custInfos };
         }
 
-        public ResultRemoveCustomerClassificationAgencyModel RemoveCustomerClassificationAgency(CCInputFlowAgency inputFlow, RemoveCustomerClassificationAgencyModel model)
+        public ResultRemoveCustomerClassificationAgencyModel RemoveCustomerClassificationAgency(AgencyCCInputFlow inputFlow, RemoveCustomerClassificationAgencyModel model)
         {
             var criteria = new RemoveCustomerClassificationAgencyCriteria
             {

@@ -16,7 +16,7 @@
         {
         }
 
-        public IEnumerable<long> RescanCustomerClassificationAgency(IEnumerable<RescanCustomerClassificationAgencyModel> custRescans, CCInputFlowAgency ccInputFlow, bool isToQueue)
+        public IEnumerable<long> RescanCustomerClassificationAgency(IEnumerable<RescanCustomerClassificationAgencyModel> custRescans, AgencyCCInputFlow ccInputFlow, bool isToQueue)
         {
             var pas = custRescans.Select(x => new InsertProblemAccountAgencyModel(x));
 
@@ -62,7 +62,7 @@
                 FromAction = (int)FromFlow.CTSWEB
             };
 
-            var removePaResult = base.RemoveCustomerClassificationAgency(CCInputFlowAgency.RemovePACategory, modelRemove);
+            var removePaResult = base.RemoveCustomerClassificationAgency(AgencyCCInputFlow.RemovePACategory, modelRemove);
 
             RemovePALogics(removePaResult.CustInfos);
 
@@ -93,7 +93,7 @@
             }
         }
 
-        private ResultInsertCustomerClassificationAgencyModel InsertProblemAccountsAgency(IEnumerable<InsertProblemAccountAgencyModel> problemAccounts, CCInputFlowAgency ccInputFlow, FunctionIdAgency funcId, bool isToQueue)
+        private ResultInsertCustomerClassificationAgencyModel InsertProblemAccountsAgency(IEnumerable<InsertProblemAccountAgencyModel> problemAccounts, AgencyCCInputFlow ccInputFlow, FunctionIdAgency funcId, bool isToQueue)
         {
             throw new System.NotImplementedException();
         }

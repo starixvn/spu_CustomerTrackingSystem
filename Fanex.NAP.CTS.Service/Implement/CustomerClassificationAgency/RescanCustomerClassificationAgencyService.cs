@@ -33,7 +33,7 @@
 
                 foreach (var group in groupingCustRescans)
                 {
-                    if ((CCInputFlowAgency)group.InputFlowID == CCInputFlowAgency.RescanNormal)
+                    if ((AgencyCCInputFlow)group.InputFlowID == AgencyCCInputFlow.RescanNormal)
                     {
                         var custIds = group.CustRescans.Select(x => x.CustID);
                         PreNormalClassificationAgency(custIds, paras);
@@ -42,7 +42,7 @@
                     }
                     else
                     {
-                        result = RescanProblemAccountAgency(group.CustRescans, paras, (CCInputFlowAgency)group.InputFlowID);
+                        result = RescanProblemAccountAgency(group.CustRescans, paras, (AgencyCCInputFlow)group.InputFlowID);
 
                         custIdsToRescan.AddRange(result.CustIds);
                     }
@@ -108,7 +108,7 @@
             _repository.Execute(criteria);
         }
 
-        private RescanResultAgencyModel RescanProblemAccountAgency(IEnumerable<RescanCustomerClassificationAgencyModel> custNormals, RescanCustClassificationAgencyModel paras, CCInputFlowAgency ccInputFlow)
+        private RescanResultAgencyModel RescanProblemAccountAgency(IEnumerable<RescanCustomerClassificationAgencyModel> custNormals, RescanCustClassificationAgencyModel paras, AgencyCCInputFlow ccInputFlow)
         {
             var resultCustRescans = base.RescanCustomerClassificationAgency(custNormals, ccInputFlow, paras.IsToQueue);
 
