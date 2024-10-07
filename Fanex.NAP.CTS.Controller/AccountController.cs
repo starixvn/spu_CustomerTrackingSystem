@@ -1897,7 +1897,7 @@
                     {
                         CustIds = new List<long> { model.CustId },
                         IsToQueue = (model.RoleId != 1 && !model.IsAffectToAllDownlines), // add to queue for case SMA and not checking affect to downline to affect PA for downline                          
-                        IsUpdateDangerToMainDB = true,
+                        IsUpdateDangerToMainDB = false, // sma not update danger
                         FunctionId = FunctionIdAgency.UnmarkCustomerCategory,
                         ServiceName = "RemoveCustomerCategory"
                     });
@@ -1970,7 +1970,7 @@
                 {
                     CustIds = resultUnmark.CustInfos.Select(x => x.CustID),
                     FunctionId = FunctionIdAgency.UnmarkCustomerCategory,
-                    IsUpdateDangerToMainDB = true
+                    IsUpdateDangerToMainDB = false // sma not update danger
                 });
             }
 

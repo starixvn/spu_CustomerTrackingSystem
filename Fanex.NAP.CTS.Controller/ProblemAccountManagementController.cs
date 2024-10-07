@@ -286,7 +286,7 @@
                 {
                     CustIds = resultUnmark.CustInfos.Select(x => x.CustID),
                     FunctionId = FunctionIdAgency.UnmarkCustomerCategory,
-                    IsUpdateDangerToMainDB = true
+                    IsUpdateDangerToMainDB = false // sma not update danger
                 });
             }
 
