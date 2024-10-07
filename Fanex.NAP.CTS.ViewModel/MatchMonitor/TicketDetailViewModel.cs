@@ -35,22 +35,15 @@
             if (!string.IsNullOrEmpty(filter.MGrTranIDListFiltered))
             {
                 mGrTranIDListFilteredDic = JsonConvert.DeserializeObject<IEnumerable<MGrTranIDListFilteredModel>>(filter.MGrTranIDListFiltered)
-                    .ToDictionary(x => x.TransRefnoID, x => x);
+                    .ToDictionary(x => x.TransID, x => x);
             }
 
             foreach (var ticket in ticketMergeGroups)
             {
                 var objMGr = new MGrTranIDListFilteredModel();
 
-                if (this.TicketType == TicketType.Single)
-                {
-                    mGrTranIDListFilteredDic.TryGetValue(ticket.TransId, out objMGr);
-                }
-                else
-                {
-                    mGrTranIDListFilteredDic.TryGetValue(ticket.Refno, out objMGr);
-                }
-
+                mGrTranIDListFilteredDic.TryGetValue(ticket.TransId, out objMGr);
+              
                 var equals = filter.ReasonList.Any(y => (ticket.ReasonList ?? "-").Contains(y))
                             && filter.AGroupList.Contains(ticket.ADetectGroup);
 
@@ -101,12 +94,12 @@
                 if (filter.MGroupList.Contains("-") || filter.MGroupList.Contains("0"))
                 {
                     mGrTranIDListFilteredDic = JsonConvert.DeserializeObject<IEnumerable<MGrTranIDListFilteredModel>>(filter.MGrTranIDListFiltered)
-                        .Where(x => !filter.MGroupList.Contains(x.MGrName)).ToDictionary(x => x.TransRefnoID, x => x);
+                        .Where(x => !filter.MGroupList.Contains(x.MGrName)).ToDictionary(x => x.TransID, x => x);
                 }
                 else
                 {
                     mGrTranIDListFilteredDic = JsonConvert.DeserializeObject<IEnumerable<MGrTranIDListFilteredModel>>(filter.MGrTranIDListFiltered)
-                        .Where(x => filter.MGroupList.Contains(x.MGrName)).ToDictionary(x => x.TransRefnoID, x => x);
+                        .Where(x => filter.MGroupList.Contains(x.MGrName)).ToDictionary(x => x.TransID, x => x);
                 }
             }
 
@@ -114,14 +107,7 @@
             {
                 var objMGr = new MGrTranIDListFilteredModel();
 
-                if (this.TicketType == TicketType.Single)
-                {
-                    mGrTranIDListFilteredDic.TryGetValue(ticket.TransId, out objMGr);
-                }
-                else
-                {
-                    mGrTranIDListFilteredDic.TryGetValue(ticket.Refno, out objMGr);
-                }                
+                mGrTranIDListFilteredDic.TryGetValue(ticket.TransId, out objMGr);                          
 
                 var equals = !filter.ReasonList.Any(y => (ticket.ReasonList ?? "-").Contains(y))
                             || !filter.AGroupList.Contains(ticket.ADetectGroup)
@@ -169,7 +155,7 @@
                 var mGrTranIDListFiltered = JsonConvert.DeserializeObject<IEnumerable<MGrTranIDListFilteredModel>>(filter.MGrTranIDListFiltered)
                     .Where(x => filter.MGroupList.Contains(x.MGrName));
 
-                mGrTranIDListFilteredDic = mGrTranIDListFiltered.ToDictionary(x => x.TransRefnoID, x => x);
+                mGrTranIDListFilteredDic = mGrTranIDListFiltered.ToDictionary(x => x.TransID, x => x);
             }
 
             transList = GetTranByFilterMGr(transList, mGrTranIDListFilteredDic);
@@ -195,13 +181,13 @@
                 {
                     mGrTranIDListFiltered = JsonConvert.DeserializeObject<IEnumerable<MGrTranIDListFilteredModel>>(filter.MGrTranIDListFiltered)
                   .Where(x => !filter.MGroupList.Contains(x.MGrName));
-                    mGrTranIDListFilteredDic = mGrTranIDListFiltered.ToDictionary(x => x.TransRefnoID, x => x);
+                    mGrTranIDListFilteredDic = mGrTranIDListFiltered.ToDictionary(x => x.TransID, x => x);
                 }
                 else
                 {
                     mGrTranIDListFiltered = JsonConvert.DeserializeObject<IEnumerable<MGrTranIDListFilteredModel>>(filter.MGrTranIDListFiltered)
                   .Where(x => filter.MGroupList.Contains(x.MGrName));
-                    mGrTranIDListFilteredDic = mGrTranIDListFiltered.ToDictionary(x => x.TransRefnoID, x => x);
+                    mGrTranIDListFilteredDic = mGrTranIDListFiltered.ToDictionary(x => x.TransID, x => x);
                 }
             }
 
@@ -220,8 +206,8 @@
             var trandsIDs = transList.Select(x => x.TransID);
             var trandsExcept = mGrTranIDListFilteredDic.Where(d => !trandsIDs.Contains(d.Key)).Select(x => new FraudTransModel
             {
-                TransID = x.Value.TransRefnoID,
-                Refno = x.Value.TransRefnoID,
+                TransID = x.Value.TransID,
+                Refno = x.Value.TransID,
                 Reason = "0",
                 MGroup = x.Value.MGr
             });

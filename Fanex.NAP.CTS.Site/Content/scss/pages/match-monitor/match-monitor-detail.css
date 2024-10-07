@@ -1371,6 +1371,8 @@
             left: 3px; }
         .float-container .column .body-column .items .flex-item .width-160 {
           width: 160px; }
+        .float-container .column .body-column .items .flex-item .width-180 {
+          width: 180px; }
     .float-container .column .body-column .correct-reason-item {
       padding-top: 0 !important; }
   .float-container .column textarea {

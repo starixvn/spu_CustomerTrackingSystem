@@ -260,7 +260,7 @@
                 (tg, t) => new { tg = tg, t = t }).Select(x =>
                 {
                     dicCustInfo.TryGetValue(x.t.CustId, out CustInfoModel xCustInfo);
-                    dicVerifiedTrans.TryGetValue(x.tg.TransID, out MatchMonitorDetailVerifyTransResultModel xVerifiedTran);
+                    dicVerifiedTrans.TryGetValue(x.t.TransId, out MatchMonitorDetailVerifyTransResultModel xVerifiedTran);
                     dicGroup.TryGetValue(x.tg.MergeGroupID, out GroupInfoViewModel group);
 
                     return new MatchMonitorDetailItemViewModel(x.tg.MergeGroupID, x.t, xCustInfo ?? new CustInfoModel())

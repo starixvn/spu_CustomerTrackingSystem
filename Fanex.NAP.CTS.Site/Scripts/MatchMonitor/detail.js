@@ -199,8 +199,12 @@ function MatchMonitorDetail() {
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 5, 6, 8, 10, 13, 14, 15, 16, 17], className: "text-center" },
                 {
-                    targets: [0], width: "3%", render: function (data, type, full, meta) {
-                        return '<label><input type="checkbox" class="col-checkbox" name="chkbx" /></label>';
+                    targets: [0], width: "3%", render: function (data, type, obj, meta) {                                             
+                        if (obj.IsSelected == true) {
+                            return '<label><input type="checkbox" class="col-checkbox" name="chkbx" checked /></label>';
+                        } else {                            
+                            return '<label><input type="checkbox" class="col-checkbox" name="chkbx" /></label>';
+                        }
                     } // Checkbox
                 },
                 { targets: [1], width: "17%", className: "col-username" }, // UserName
@@ -331,10 +335,10 @@ function MatchMonitorDetail() {
             let $td = $(this).parent().parent();
             let rowIndex = element.DataTable().row($td).index(); 
 
-            let row = element.DataTable().row($td);
+            let row = element.DataTable().row($td);          
+            let data = row.data();
+            data.IsSelected = $(row.node()).find('.col-checkbox').prop('checked');
 
-            let data = row.data();  
-            
             if (data.ViewMoreInfo) {
                 data.ViewMoreInfo = false;
                 CollapseParlayTicket(element, rowIndex);
@@ -377,7 +381,7 @@ function MatchMonitorDetail() {
             let table = element.DataTable();
             let data = table.rows().data().toArray();
 
-            parlayTickets.forEach(function (value, _) {              
+            parlayTickets.forEach(function (value, _) {               
                 let newRowData = { Combinition: value.Combinition, ParlayTicket: value, ViewMoreInfo: true, IsParlay: value.IsParlay, TicketStatus: ticketStatus };
 
                 // Insert new row data at the clicked row's index + 1
@@ -2808,34 +2812,57 @@ function MatchMonitorDetail() {
         $('input[type="checkbox"][name="chkbx"]:not(:hidden)', nodes).prop('checked', input.is(":checked"));
     }
 
-    function ToggleBetID(tblElement, isExpand) {
-        let nextRowIdx = 0;
-        let arrDataExpand = [];
-       
-        tblElement.DataTable().rows().every(function (rowIdx, tableLoop, row) {
-            let data = this.data();
+    function ToggleBetID(tblElement, isExpand) {        
+        if (domElements.ticketType == TicketType.Single) {
+            $('tr', tblElement).each(function (idx, tr) {
+                let spanBetID = $(tr).find('span.span-betid').first();
 
-            if (data != undefined && data.IsParlay == false) {                                               
-                if (isExpand) {
-                    if (!data.ViewMoreInfo) {
-                        data.ViewMoreInfo = true;
-                        let index = rowIdx == 0 ? rowIdx : (nextRowIdx + rowIdx);
+                if (spanBetID != undefined) {
+                    let halfBetID = '...';
+                    let fullBetID = $(spanBetID[0]).attr('data-bet-id');
 
-                        arrDataExpand.push({ ParlayTickets: data.ParlayTickets, rowIdx: index, IsParlay: data.IsParlay, Combinition: data.Combinition, TicketStatus: data.TicketStatus });
+                    if (fullBetID != undefined && fullBetID.length > 5) {
+                        if (isExpand) {
+                            spanBetID.text(fullBetID);
+                        } else {
+                            halfBetID = halfBetID + fullBetID.substring(fullBetID.length - 6);
 
-                        nextRowIdx = nextRowIdx + (data.IsParlay ? 0 : data.Combinition);
-                    }                    
-                } else {
-                    data.ViewMoreInfo = false;
-                    CollapseParlayTicket(tblElement, rowIdx);
+                            spanBetID.text(halfBetID);
+                        }
+                    }
                 }
-            }
-        });
-        if (arrDataExpand.length > 0) {
-            $.each(arrDataExpand, function (index, value) {
-                ExpandParlayTicket(tblElement, value.ParlayTickets, value.rowIdx, value.TicketStatus);
             });
-        }       
+        } else {
+            let nextRowIdx = 0;
+            let arrDataExpand = [];
+
+            tblElement.DataTable().rows().every(function (rowIdx, tableLoop, row) {
+                let data = this.data();    
+                
+                data.IsSelected = $(this.node()).find('.col-checkbox').prop('checked');
+
+                if (data != undefined && data.IsParlay == false) {
+                    if (isExpand) {
+                        if (!data.ViewMoreInfo) {
+                            data.ViewMoreInfo = true;
+                            let index = rowIdx == 0 ? rowIdx : (nextRowIdx + rowIdx);
+
+                            arrDataExpand.push({ ParlayTickets: data.ParlayTickets, rowIdx: index, IsParlay: data.IsParlay, Combinition: data.Combinition, TicketStatus: data.TicketStatus });
+
+                            nextRowIdx = nextRowIdx + (data.IsParlay ? 0 : data.Combinition);
+                        }
+                    } else {
+                        data.ViewMoreInfo = false;
+                        CollapseParlayTicket(tblElement, rowIdx);
+                    }
+                }
+            });
+            if (arrDataExpand.length > 0) {
+                $.each(arrDataExpand, function (index, value) {
+                    ExpandParlayTicket(tblElement, value.ParlayTickets, value.rowIdx, value.TicketStatus);
+                });
+            }      
+        }
     }
 
     function ToggleMapXYY(isBetTypeChange) {

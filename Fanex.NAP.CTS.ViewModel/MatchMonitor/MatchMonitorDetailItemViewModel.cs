@@ -241,6 +241,8 @@
 
         public MMViewModeFromUI TypeOfTicket { get; set; } = MMViewModeFromUI.TicketFraud;
 
+        public bool IsSelected { get; set; } = false;
+
         public bool IsParlay { get; set; }
 
         public int Combinition { get; set; }

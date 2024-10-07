@@ -10,28 +10,20 @@
 
         public string MGrName { get; set; }
 
-        public long TransRefnoID
+        public long TransID
         {
             get
-            {
-                if (this.TicketType == TicketType.Single)
+            {               
+                if (string.IsNullOrEmpty(this.BetID))
                 {
-                    if (string.IsNullOrEmpty(this.BetID))
-                    {
-                        return 0;
-                    }
-                    else
-                    {
-                        long.TryParse(this.BetID, out long transID);
-
-                        return transID;
-                    }
+                    return 0;
                 }
                 else
                 {
-                    return this.Refno;
+                    long.TryParse(this.BetID, out long transID);
+
+                    return transID;
                 }
-                
             }
         }
 
