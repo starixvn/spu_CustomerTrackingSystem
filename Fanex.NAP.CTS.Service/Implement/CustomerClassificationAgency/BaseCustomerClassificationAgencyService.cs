@@ -26,6 +26,24 @@
             return new GetRescanCustomerClassificationAgencyModel { CustInfos = custInfos };
         }
 
+        public ResultInsertCustomerClassificationAgencyModel InsertCustomerClassificationAgency(AgencyCCInputFlow inputFlow, InsertCustomerClassificationAgencyModel model)
+        {
+            var criteria = new InsertCustomerClassificationAgencyCriteria
+            {
+                InputFlowID = (int)inputFlow,
+                CustClassificationJson = model.CustClassificationJson,
+                IsToQueue = model.IsToQueue,
+                QueueID = model.QueueID,
+                UplineRoleID = model.UplineRoleID,
+                IsAffectDownline = model.IsAffectDownline,
+                FromAction = model.FromAction
+            };
+
+            var custInfos = _repository.Fetch<CustInfoClassificationAgencyModel>(criteria);
+
+            return new ResultInsertCustomerClassificationAgencyModel { CustInfos = custInfos, ErrorMessage = criteria.ErrorMessage };
+        }
+
         public ResultRemoveCustomerClassificationAgencyModel RemoveCustomerClassificationAgency(AgencyCCInputFlow inputFlow, RemoveCustomerClassificationAgencyModel model)
         {
             var criteria = new RemoveCustomerClassificationAgencyCriteria

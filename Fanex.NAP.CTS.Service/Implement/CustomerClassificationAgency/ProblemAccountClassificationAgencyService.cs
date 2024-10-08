@@ -153,8 +153,28 @@
             FunctionId funcId, 
             bool isToQueue)
         {
-            return new ResultInsertCustomerClassificationAgencyModel();
+            var paClassification = CombinePAWithLosingPerformace(problemAccounts, funcId);
+
+            var modelInsert = new InsertCustomerClassificationAgencyModel()
+            {
+                CustClassificationJson = JsonConvert.SerializeObject(paClassification),
+                IsToQueue = isToQueue,
+                FromAction = (int)FromFlow.CTSWEB
+            };
+
+            return base.InsertCustomerClassificationAgency(ccInputFlow, modelInsert);
         }
+
+        private IEnumerable<InsertProblemAccountModel> CombinePAWithLosingPerformace(IEnumerable<InsertProblemAccountModel> problemAccounts, FunctionId funcId)
+        {
+            return problemAccounts.Select(x => { var y = x;
+                    y.WinlossRM = 0;
+                    y.TurnoverRM = 0;
+                    y.BetCount = 0;                    
+                return y;
+            });
+        }
+
         #endregion
     }
 }

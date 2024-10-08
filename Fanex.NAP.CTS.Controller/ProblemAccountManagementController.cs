@@ -15,6 +15,7 @@
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Implement.CustomerClassificationAgency;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Interface.CustomerClassificationAgency;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
@@ -44,6 +45,7 @@
         {
             _pamService = new ProblemAccountManagementService();
             _paClassificationService = new ProblemAccountClassificationService();
+            _paClassificationAgencyService = new ProblemAccountClassificationAgencyService();
             _rescanClassificationService = new RescanCustomerClassificationService();
             _customerClassificationService = new CustomerClassificationService();
             _commonService = new CommonService();
@@ -215,7 +217,18 @@
                 CreatedBy = CurrentSession.UserId
             });
 
-            return _paClassificationService.InsertProblemAccountPackage(pas, CCInputFlow.InsertPACategory, "Problem Account Management", FromFlow.CTSWEB, true);
+            var memberPas = pas.Where(x => x.RoleID == (int)ROLE_CUSTOMER.MEMBER);
+
+            var result = _paClassificationService.InsertProblemAccountPackage(memberPas, CCInputFlow.InsertPACategory, "Problem Account Management", FromFlow.CTSWEB, true);
+            
+            if (result.ErrorCode == 0)
+            {
+                var agencyPas = pas.Where(x => x.RoleID != (int)ROLE_CUSTOMER.MEMBER);
+
+                return _paClassificationAgencyService.InsertProblemAccountAgencyPackage(agencyPas, AgencyCCInputFlow.InsertPACategory, "Problem Account Management", FromFlow.CTSWEB, true);
+            }
+
+            return result;
         }
 
         private DBResult SaveMarkRobotAccount(ValidateProblemAccountInputViewModel model, IEnumerable<ProblemAccountValidatedModel> validatedModels)

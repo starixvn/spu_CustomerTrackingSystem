@@ -1,13 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.CTS.Criteria.CustomerClassificationAgency.BaseCustomerClassificationAgency
+﻿namespace Fanex.NAP.CTS.Criteria.CustomerClassificationAgency.BaseCustomerClassificationAgency
 {
-    public class InsertCustomerClassificationAgencyCriteria
-    {
+    using Fanex.Data;
+    using Fanex.Data.Repository;
 
+    public class InsertCustomerClassificationAgencyCriteria : NonQueryCommand
+    {
+        [SpParam(SqlParamName = "ip_InputFlowID")]
+        public int InputFlowID { get; set; }
+
+        [SpParam(SqlParamName = "ip_FromAction")]
+        public int FromAction { get; set; }
+
+        [SpParam(SqlParamName = "ip_UplineRoleID")]
+        public int UplineRoleID { get; set; }
+
+        [SpParam(SqlParamName = "ip_QueueID")]
+        public long QueueID { get; set; }
+
+        [SpParam(SqlParamName = "ip_IsAffectDownline")]
+        public bool IsAffectDownline { get; set; }
+
+        [SpParam(SqlParamName = "ip_IsToQueue")]
+        public bool IsToQueue { get; set; }
+
+        [SpParam(SqlParamName = "ip_CustInfo")]
+        public string CustClassificationJson { get; set; }
+
+        [SpParam(SqlParamName = "op_ErrorMessage")]
+        public string ErrorMessage { get; set; }
+
+        public override string GetSettingKey()
+        {
+            return "CTS_DC_CustClassificationAgency_Insert";
+        }
+
+        public override bool IsValid()
+        {
+            return true;
+        }
     }
 }

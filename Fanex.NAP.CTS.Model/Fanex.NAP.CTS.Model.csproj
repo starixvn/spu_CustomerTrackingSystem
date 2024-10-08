@@ -322,6 +322,7 @@
     <Compile Include="Account\ValidateManualAssociationMultipleModel.cs" />
     <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\CustInfoClassificationAgencyModel.cs" />
     <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\GetRescanCustomerClassificationAgencyModel.cs" />
+    <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\InsertCustomerClassificationAgencyModel.cs" />
     <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\RemoveCustomerClassificationAgencyModel.cs" />
     <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\RescanCustomerClassificationAgencyModel.cs" />
     <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\ResultInsertCustomerClassificationAgencyModel.cs" />
