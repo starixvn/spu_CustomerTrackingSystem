@@ -1679,23 +1679,25 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult MarkCustomerCategory(long ctsCustID, int roleID, string userName, bool isRobotUser)
+        public ActionResult MarkCustomerCategory(long ctsCustID, ROLE_CUSTOMER roleID, string userName, bool isRobotUser)
         {
+            var problemAccounts = _pamService.GetProblemAccountCategories(ViewCategoryPageSource.Other);
+
+            problemAccounts = problemAccounts.Where(x => x.MapRole(roleID)).OrderBy(x => x.Priorty);
+
             var result = new MarkCustomerCategoryViewModel
             {
-                RoleID = roleID,
+                RoleID = (int)roleID,
                 UserName = userName,
                 IsRobotUser = isRobotUser,
-                ProblemAccountList = _pamService.GetProblemAccountCategories(ViewCategoryPageSource.Other).OrderBy(x => x.Priorty)
+                ProblemAccountList = problemAccounts
             };
 
             var classifications = _accountService.GetCustomerClassification(ctsCustID);
 
             if (classifications != null && classifications.Any())
             {
-                result.CategoryList = classifications.Select(x => new GetCustomerCategoryViewModel(x));
-
-                result.IsVVip = classifications.Any(x => x.CategoryID == (int)CustomerCategoryID.VVIP);
+                result.CategoryList = classifications.Select(x => new GetCustomerCategoryViewModel(x));                
             }
 
             return PartialView("CustomerCategory/MarkCustomerCategory", result);
@@ -1712,7 +1714,7 @@
                 CustId = model.CustID,
                 CTSCustId = model.CTSCustID,
                 SubscriberId = model.SubscriberID,
-                RoleId = model.RoleID,
+                RoleId = (int)model.RoleID,
                 IsAffectToAllDownlines = model.IsAffectAllDownlines,
                 Remark = model.Remark,
                 IsVVip = model.IsVVip,
@@ -1789,7 +1791,7 @@
                 {
                     CustID = model.CustID,
                     CTSCustID = model.CTSCustID,
-                    RoleID = model.RoleID,
+                    RoleID = (int)model.RoleID,
                     SubscriberID = model.SubscriberID,
                     IsLicensee = model.IsLicensee,
                     CategoryID = model.CategoryID,
@@ -1801,7 +1803,9 @@
                 }
             };
 
-            var result = _problemAccountClassificationService.InsertProblemAccountPackage(pas, CCInputFlow.InsertPACategory, "ProfileAddProblemAccount", FromFlow.CTSWEB, true);
+            var result = model.RoleID == ROLE_CUSTOMER.MEMBER 
+                ? _problemAccountClassificationService.InsertProblemAccountPackage(pas, CCInputFlow.InsertPACategory, "ProfileAddProblemAccount", FromFlow.CTSWEB, true)
+                : _problemAccountClassificationAgencyService.InsertProblemAccountAgencyPackage(pas, AgencyCCInputFlow.InsertPACategory, "ProfileAddProblemAccount", FromFlow.CTSWEB, true);
 
             return Json(new
             {
@@ -1821,7 +1825,7 @@
                         CustID = model.CustID,
                         CategoryID = model.CategoryID,
                         Remark = model.Remark,
-                        RoleID = model.RoleID,
+                        RoleID = (int)model.RoleID,
                         IsMarkedDirectly = true,
                         IsFromCTS = true,
                         CreatedBy = CurrentSession.UserId
@@ -1898,7 +1902,7 @@
                         CustIds = new List<long> { model.CustId },
                         IsToQueue = (model.RoleId != 1 && !model.IsAffectToAllDownlines), // add to queue for case SMA and not checking affect to downline to affect PA for downline                          
                         IsUpdateDangerToMainDB = false, // sma not update danger
-                        FunctionId = FunctionIdAgency.UnmarkCustomerCategory,
+                        FunctionId = FunctionId.UnmarkCustomerCategory,
                         ServiceName = "RemoveCustomerCategory"
                     });
                 }
@@ -1969,7 +1973,7 @@
                 _rescanClassificationAgencyService.RescanCustomerClassificationAgency(new RescanCustClassificationAgencyModel
                 {
                     CustIds = resultUnmark.CustInfos.Select(x => x.CustID),
-                    FunctionId = FunctionIdAgency.UnmarkCustomerCategory,
+                    FunctionId = FunctionId.UnmarkCustomerCategory,
                     IsUpdateDangerToMainDB = false // sma not update danger
                 });
             }

@@ -285,7 +285,7 @@
                 _rescanClassificationAgencyService.RescanCustomerClassificationAgency(new RescanCustClassificationAgencyModel
                 {
                     CustIds = resultUnmark.CustInfos.Select(x => x.CustID),
-                    FunctionId = FunctionIdAgency.UnmarkCustomerCategory,
+                    FunctionId = FunctionId.UnmarkCustomerCategory,
                     IsUpdateDangerToMainDB = false // sma not update danger
                 });
             }

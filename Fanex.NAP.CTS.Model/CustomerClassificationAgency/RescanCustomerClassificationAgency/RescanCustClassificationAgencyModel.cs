@@ -18,7 +18,7 @@
 
         public bool IsToQueue { get; set; }
 
-        public FunctionIdAgency FunctionId { get; set; }
+        public FunctionId FunctionId { get; set; }
 
         public string ServiceName { get; set; }
     }

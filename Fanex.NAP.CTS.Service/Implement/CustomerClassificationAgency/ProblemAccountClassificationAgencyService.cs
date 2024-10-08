@@ -1,30 +1,85 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement.CustomerClassificationAgency
 {
+    using Fanex.Logging;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.Database;
+    using Fanex.NAP.CTS.Core;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
     using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassificationAgency.BaseCustomerClassificationAgency;
     using Fanex.NAP.CTS.Model.CustomerClassificationAgency.ProblemAccountAgency;
+    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Service.Interface.CustomerClassificationAgency;
     using Newtonsoft.Json;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class ProblemAccountClassificationAgencyService : BaseCustomerClassificationAgencyService, IProblemAccountClassificationAgencyService
     {
+        private readonly ICustomerClassificationService _ccService;
+        private readonly IDataLogTrackingServices _dataLogTrackingServices;
         public ProblemAccountClassificationAgencyService() : base()
         {
+            _ccService = new CustomerClassificationService();
+            _dataLogTrackingServices = new DataLogTrackingServices();
         }
 
         public IEnumerable<long> RescanCustomerClassificationAgency(IEnumerable<RescanCustomerClassificationAgencyModel> custRescans, AgencyCCInputFlow ccInputFlow, bool isToQueue)
         {
             var pas = custRescans.Select(x => new InsertProblemAccountAgencyModel(x));
 
-            var insertPaResult = InsertProblemAccountsAgency(pas, ccInputFlow, FunctionIdAgency.InsertPAM, isToQueue);
+            var insertPaResult = InsertProblemAccountsAgency(pas, ccInputFlow, FunctionId.InsertPAM, isToQueue);
 
             InsertPALogicsAgency(insertPaResult.CustInfos);
 
             return insertPaResult.CustInfos.Select(x => x.CustID).Distinct();
+        }
+
+        public DBResult InsertProblemAccountAgencyPackage(IEnumerable<InsertProblemAccountModel> problemAccounts,
+            AgencyCCInputFlow ccInputFlow, 
+            string serviceName, 
+            FromFlow fromFlow, 
+            bool isToQueue)
+        {
+            try
+            {
+                if (problemAccounts.Any())
+                {
+                    var custIds = problemAccounts.Select(x => x.CustID);
+
+                    var insertPaResult = InsertProblemAccountsAgency(problemAccounts, ccInputFlow, FunctionId.InsertPAM, isToQueue);
+
+                    if (insertPaResult.CustInfos != null && insertPaResult.CustInfos.Any())
+                    {
+                        InsertPALogicsAgency(insertPaResult.CustInfos);
+
+                        _ccService.PushDataToExternalPackge(insertPaResult.CustInfos.Select(x => x.CustID), new PushDataToExternalModel
+                        {
+                            ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
+                            IsUpdateDangerToMainDB = true,
+                            IsSyncAFC = ConfigSettings.IsSyncAFCData
+                        }, fromFlow);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                                                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                                                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+
+                _dataLogTrackingServices.LogErrorData(ex, serviceName);
+
+                return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
+            }
+
+            return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
         public void UpdateBetLimitOfFlaggedCustomer(IEnumerable<long> custId)
@@ -93,9 +148,12 @@
             }
         }
 
-        private ResultInsertCustomerClassificationAgencyModel InsertProblemAccountsAgency(IEnumerable<InsertProblemAccountAgencyModel> problemAccounts, AgencyCCInputFlow ccInputFlow, FunctionIdAgency funcId, bool isToQueue)
+        private ResultInsertCustomerClassificationAgencyModel InsertProblemAccountsAgency(IEnumerable<InsertProblemAccountModel> problemAccounts, 
+            AgencyCCInputFlow ccInputFlow, 
+            FunctionId funcId, 
+            bool isToQueue)
         {
-            throw new System.NotImplementedException();
+            return new ResultInsertCustomerClassificationAgencyModel();
         }
         #endregion
     }

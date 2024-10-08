@@ -294,13 +294,7 @@
         {
             InsertNewCustJob = 4,
             Manual = 5,
-        };
-
-        public enum FunctionIdAgency
-        {
-            InsertPAM = 43,
-            UnmarkCustomerCategory = 45,
-        }
+        };       
 
         public enum RescanNormalType
         {
