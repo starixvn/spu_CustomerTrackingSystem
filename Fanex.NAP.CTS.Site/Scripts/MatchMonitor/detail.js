@@ -266,7 +266,10 @@ function MatchMonitorDetail() {
                 { data: obj => obj.ADetectGroup },
                 {
                     data: obj => () => {
-                        const assDetectionItem = cacheMGroup.allMGroup[obj.BetID];
+                        const assDetectionItem = domElements.ticketType == TicketType.Single
+                            ? cacheMGroup.allMGroup[obj.BetID]
+                            : cacheMGroup.allMGroup[obj.Refno];
+
                         if (assDetectionItem) {
                             obj.MDetectGroupID = assDetectionItem.GroupID;
                             obj.MDetectGroup = assDetectionItem.GroupName;
@@ -1955,13 +1958,13 @@ function MatchMonitorDetail() {
                     SetupMGroupFilter(response.mGrList.MGrItems);
 
                     if (isDisplaySingleGrid) {
-                        BindChangeGroupAssWithOptions(domElements.tblMMSG.DataTable(), itemList);
+                        BindChangeGroupAssWithOptions(domElements.tblMMSG, itemList);
                         let itemSG = domElements.tblMMSG.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
 
                         totalItem = itemSG.length;
                     } else {
-                        BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam.DataTable(), itemList);
-                        BindChangeGroupAssWithOptions(domElements.tblMMAwayTeam.DataTable(), itemList);
+                        BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam, itemList);
+                        BindChangeGroupAssWithOptions(domElements.tblMMAwayTeam, itemList);
 
                         let itemMMHomeTeam = domElements.tblMMHomeTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
                         let itemMMAwayTeam = domElements.tblMMAwayTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
@@ -2059,32 +2062,59 @@ function MatchMonitorDetail() {
         return self.indexOf(value) == index;
     }
 
-    function BindChangeGroupAssWithOptions(table, itemList) {
-        table.rows().every(function () {
+    function BindChangeGroupAssWithOptions(tblElement, itemList) {
+        
+        tblElement.DataTable().rows().every(function (rowIdx) {
             let rowData = this.data();
-            if ($(this.node()).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
-                let newGroupData = itemList.find(function (x) { return x.CustID == rowData.CustID; });
-                if (newGroupData != undefined && newGroupData.GroupID > 0) {
-                    rowData.MDetectGroupID = newGroupData.GroupID;
-                    rowData.MDetectGroup = newGroupData.GroupName;
+            if (rowData != undefined) {
+                rowData.ViewMoreInfo = false;
+                rowData.IsSelected = false;
 
-                    cacheMGroup.allMGroup[rowData.BetID] = newGroupData;
-                    cacheMGroup.selectMgroup[rowData.BetID] = true;
-                } else $(this.node()).css('display', 'none');
-            } else $(this.node()).css('display', 'none');
+                CollapseParlayTicket(tblElement, rowIdx);
 
-            this.invalidate();
+                let rowNode = this.node();
+
+                if ($(rowNode).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                    let newGroupData = itemList.find(function (x) { return x.CustID == rowData.CustID; });
+                    if (newGroupData != undefined && newGroupData.GroupID > 0) {
+                        rowData.MDetectGroupID = newGroupData.GroupID;
+                        rowData.MDetectGroup = newGroupData.GroupName;
+                        if (domElements.ticketType == TicketType.Single) {
+                            cacheMGroup.allMGroup[rowData.BetID] = newGroupData;
+                            cacheMGroup.selectMgroup[rowData.BetID] = true;
+                        } else {
+                            cacheMGroup.allMGroup[rowData.Refno] = newGroupData;
+                            cacheMGroup.selectMgroup[rowData.Refno] = true;
+                        }
+                    } else {
+                        $(this.node()).css('display', 'none');
+                    }
+                } else {
+                    $(this.node()).css('display', 'none');
+                }
+
+                this.invalidate();
+            }            
         })
     }
 
     function GetTranIDsByFilterMGr() {
         let arrMGrTranIDs = [];
-        Object.keys(cacheMGroup.allMGroup).forEach((betID) => {
-            arrMGrTranIDs.push({
-                BetID: betID,
-                MGrName: cacheMGroup.allMGroup[betID].GroupName
-            });
-        })
+        if (domElements.ticketType == TicketType.Single) {
+            Object.keys(cacheMGroup.allMGroup).forEach((betID) => {
+                arrMGrTranIDs.push({
+                    BetID: betID,
+                    MGrName: cacheMGroup.allMGroup[betID].GroupName
+                });
+            })
+        } else {
+            Object.keys(cacheMGroup.allMGroup).forEach((refno) => {
+                arrMGrTranIDs.push({
+                    Refno: refno,
+                    MGrName: cacheMGroup.allMGroup[refno].GroupName
+                });
+            })
+        }        
 
         return JSON.stringify(arrMGrTranIDs);
     }

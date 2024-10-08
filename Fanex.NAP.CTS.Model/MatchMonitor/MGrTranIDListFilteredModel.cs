@@ -27,6 +27,31 @@
             }
         }
 
+        public long TransRefnoID
+        {
+            get
+            {
+                if (this.TicketType == TicketType.Single)
+                {
+                    if (string.IsNullOrEmpty(this.BetID))
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        long.TryParse(this.BetID, out long transID);
+
+                        return transID;
+                    }
+                }
+                else
+                {
+                    return this.Refno;
+                }
+
+            }
+        }
+
         public int MGr 
         { 
             get 
