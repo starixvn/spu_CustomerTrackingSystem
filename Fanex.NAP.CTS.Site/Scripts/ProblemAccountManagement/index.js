@@ -1,10 +1,6 @@
 ﻿function ProblemAccountManagement() {
     let dataTable;
-    let categoryGroup = {
-        list: [],
-        isIncludeMember: false,
-        isIncludeAgency: false
-    }
+    let categoryGroup = [];
 
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),
@@ -510,15 +506,14 @@
     function RefreshProblemCategories() {
         domElements.cbbCategory.empty();
 
-        categoryGroup.isIncludeMember = domElements.cbbRole.val().some(x => x == 1);
-        categoryGroup.isIncludeAgency = domElements.cbbRole.val().some(x => x != 1);
-
+        var roleIds = domElements.cbbRole.val();
         var categories = {};
 
-        categoryGroup.list
+        categoryGroup
             .filter(x =>
-                (categoryGroup.isIncludeMember && x.RoleGroup == 1) ||
-                (categoryGroup.isIncludeAgency && x.RoleGroup == 2))
+                roleIds.includes(`${x.RoleGroup}`) ||
+                    (roleIds.some(item => item > 1) && x.RoleGroup == 0)
+            )
             .forEach(x => {
                 if (categories[x.CategoryName]) {
                     categories[x.CategoryName].CategoryIDs += `,${x.CategoryIDs}`;
@@ -543,7 +538,7 @@
             type: 'GET',
             success: function (response) {
                 if (response) {
-                    categoryGroup.list = response;
+                    categoryGroup = response;
 
                     RefreshProblemCategories();
                 }

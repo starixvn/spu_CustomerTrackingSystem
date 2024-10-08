@@ -53,11 +53,7 @@
     let tblOTGBRound3 = $("#tblOTGBRound3");
     let configTableOTGB = false;
 
-    let categoryGroup = {
-        list: [],
-        isIncludeMember: false,
-        isIncludeAgency: false
-    }
+    let categoryGroup = [];
     
     function RenderTag(obj) {
         let html = "";
@@ -1759,7 +1755,7 @@
             type: 'GET',
             success: function (response) {
                 if (response) {
-                    categoryGroup.list = response;
+                    categoryGroup = response;
 
                     RefreshCategories();
                 }
@@ -1774,24 +1770,16 @@
     {
         cbbAssociationCategory.empty();
 
-        categoryGroup.isIncludeMember = cbbRole.val().some(x => x == 1);
-        categoryGroup.isIncludeAgency = cbbRole.val().some(x => x != 1);
-
+        var roleIds = cbbRole.val();
         var categoriesGroup = {};
 
-        categoryGroup.list
+        categoryGroup
             .forEach(group =>
             {
-                // hard code
-                if (!cbbRole.val().some(x => x <= 2) &&
-                    group.CategoryGroupName == 'Normal Account Category')
-                    {
-                        return;
-                    }
-
-                group.CategoryList.filter(x =>
-                    (categoryGroup.isIncludeMember && x.RoleGroup == 1) ||
-                    (categoryGroup.isIncludeAgency && x.RoleGroup == 2))
+                group.CategoryList.filter(x => 
+                    roleIds.includes(`${x.RoleGroup}`) ||
+                    (roleIds.some(item => item > 1) && x.RoleGroup == 0)
+                )
                 .forEach(x => {
                     if (!categoriesGroup[group.CategoryGroupName])
                     {
