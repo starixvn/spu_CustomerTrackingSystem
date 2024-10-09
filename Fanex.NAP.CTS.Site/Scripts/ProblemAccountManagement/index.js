@@ -559,8 +559,8 @@
                 const mergedCategories = [];
 
                 response.forEach(category => {
-                    if (category.RoleGroup === 1) {
-                        const agencyCategory = response.find(c => c.CategoryName === category.CategoryName && c.RoleGroup === 2);
+                    if (category.RoleGroup == 1) {
+                        const agencyCategory = response.find(c => c.CategoryName == category.CategoryName && c.RoleGroup == 2);
 
                         if (agencyCategory) {
                             mergedCategories.push({

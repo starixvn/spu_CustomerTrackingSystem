@@ -223,7 +223,14 @@
             
             if (result.ErrorCode == 0)
             {
-                var agencyPas = pas.Where(x => x.RoleID != (int)ROLE_CUSTOMER.MEMBER);
+                var agencyPas = pas.Where(x => x.RoleID != (int)ROLE_CUSTOMER.MEMBER)
+                    .Select(x =>
+                    {
+                        var y = x;
+                        y.CategoryID = model.CategoryIDAgency;
+                        y.CategoryGroupID = model.CategoryGroupAgency;
+                        return y;
+                    });
 
                 return _paClassificationAgencyService.InsertProblemAccountAgencyPackage(agencyPas, AgencyCCInputFlow.InsertPACategory, "Problem Account Management", FromFlow.CTSWEB, true);
             }

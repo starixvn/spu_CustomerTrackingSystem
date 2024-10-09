@@ -263,7 +263,9 @@ namespace Fanex.NAP.CTS.Model
         [Description("red")]
         Red = 6,
         [Description("lightred")]
-        RedLight = 7
+        RedLight = 7,
+        [Description("gray")]
+        Gray = 8
     }
 
     public enum CCInputFlow

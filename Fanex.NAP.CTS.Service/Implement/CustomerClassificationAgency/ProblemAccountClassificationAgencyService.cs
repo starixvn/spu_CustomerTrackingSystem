@@ -48,9 +48,7 @@
             try
             {
                 if (problemAccounts.Any())
-                {
-                    var custIds = problemAccounts.Select(x => x.CustID);
-
+                {                 
                     var insertPaResult = InsertProblemAccountsAgency(problemAccounts, ccInputFlow, FunctionId.InsertPAM, isToQueue);
 
                     if (insertPaResult.CustInfos != null && insertPaResult.CustInfos.Any())
