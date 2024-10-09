@@ -251,6 +251,7 @@
             var criteria = new GetAssociationProfileCriteria
             {
                 CTSCustId = filterModel.CTSCustId,
+                RoleIDs = filterModel.RoleIDs,
                 AssociationStatus = filterModel.AssociationStatus,
                 AccountStatusIds = filterModel.AccountStatusIds,
                 AssociationType = filterModel.AssociationType,

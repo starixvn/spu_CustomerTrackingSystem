@@ -10,6 +10,8 @@
 
         public long CTSCustId { get; set; }
 
+        public string RoleIDs { get; set; }
+
         public int AssociationType { get; set; }
 
         public bool IsDirect { get; set; }

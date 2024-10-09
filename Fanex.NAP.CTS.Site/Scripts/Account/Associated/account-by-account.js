@@ -108,6 +108,9 @@
                     CTSCustId: function () {
                         return $("#hdCTSCustId").val();
                     },
+                    RoleIDs: function () {
+                        return cbbRole.val();
+                    },
                     AssociationStatus: function () {
                         return $('#association-cbb-status').val();
                     },
@@ -1753,6 +1756,7 @@
     function GetAllCategories() {
         $.ajax(common.modifyRelativeUrl('Account/GetAllCategories'), {
             type: 'GET',
+            async: false,
             success: function (response) {
                 if (response) {
                     categoryGroup = response;

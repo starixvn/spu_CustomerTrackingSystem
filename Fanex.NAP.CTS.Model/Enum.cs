@@ -320,9 +320,7 @@ namespace Fanex.NAP.CTS.Model
         [Description("VVIP")]
         VVIP = 1001,
         [Description("InsertPACategory")]
-        InsertPACategory = 1005,
-        [Description("InsertPAReason")]
-        InsertPAReason = 6,
+        InsertPACategory = 1005,      
         [Description("Normal")]
         Normal = 1009,
         //[Description("RescanPACategory")]

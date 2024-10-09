@@ -57,12 +57,12 @@
                     {
                         InsertPALogicsAgency(insertPaResult.CustInfos);
 
-                        _ccService.PushDataToExternalPackge(insertPaResult.CustInfos.Select(x => x.CustID), new PushDataToExternalModel
-                        {
-                            ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
-                            IsUpdateDangerToMainDB = true,
-                            IsSyncAFC = ConfigSettings.IsSyncAFCData
-                        }, fromFlow);
+                        //_ccService.PushDataToExternalPackge(insertPaResult.CustInfos.Select(x => x.CustID), new PushDataToExternalModel
+                        //{
+                        //    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
+                        //    IsUpdateDangerToMainDB = true,
+                        //    IsSyncAFC = ConfigSettings.IsSyncAFCData
+                        //}, fromFlow);
                     }
                 }
             }
@@ -168,9 +168,11 @@
         private IEnumerable<InsertProblemAccountModel> CombinePAWithLosingPerformace(IEnumerable<InsertProblemAccountModel> problemAccounts, FunctionId funcId)
         {
             return problemAccounts.Select(x => { var y = x;
-                    y.WinlossRM = 0;
-                    y.TurnoverRM = 0;
-                    y.BetCount = 0;                    
+                y.WinlossStatus = 2;
+                y.TurnoverRM = 0;
+                y.WinlossRM = 0;
+                y.BetCount = 0;
+                y.PerformanceTime = null;
                 return y;
             });
         }

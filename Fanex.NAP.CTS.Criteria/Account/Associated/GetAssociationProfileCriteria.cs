@@ -9,6 +9,9 @@
         [SpParam(SqlParamName = "ip_CTSCustID")]
         public long CTSCustId { get; set; }
 
+        [SpParam(SqlParamName = "ip_RoleIDList")]
+        public string RoleIDs { get; set; }
+
         [SpParam(SqlParamName = "ip_AssociationType")]
         public int AssociationType { get; set; }
 
