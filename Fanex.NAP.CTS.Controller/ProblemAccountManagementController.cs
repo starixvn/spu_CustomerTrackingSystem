@@ -282,7 +282,7 @@
         {
             var resultUnmark = new ResultRemoveCustomerClassificationAgencyModel();
 
-            if (agencyList.IsNotNullOrEmpty())
+            if (agencyList.IsNullOrEmpty())
             {
                 return resultUnmark;
             }
@@ -316,7 +316,7 @@
         {
             var resultUnmark = new ResultRemoveCustomerClassificationModel();
 
-            if (memberList.IsNotNullOrEmpty())
+            if (memberList.IsNullOrEmpty())
             {
                 return resultUnmark;
             }
