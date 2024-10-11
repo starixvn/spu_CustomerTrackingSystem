@@ -72,7 +72,7 @@
                 {
                     CustID = custCategoryModel.CustId,
                     CTSCustID = custCategoryModel.CTSCustId,
-                    RoleID = custCategoryModel.RoleId,
+                    //RoleID = custCategoryModel.RoleId,
                     CreatedBy = custCategoryModel.CreatedBy
                 }
             };

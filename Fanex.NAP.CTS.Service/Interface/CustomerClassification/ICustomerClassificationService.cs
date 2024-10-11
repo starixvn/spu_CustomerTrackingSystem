@@ -8,8 +8,8 @@
 
     public interface ICustomerClassificationService
     {
-        bool RetryPushCCToMainDB(IEnumerable<LatestClassificationModel> customerClassifications, int retryTime);
- 
+        bool RetryPushCCToMainDB(IEnumerable<LatestClassificationModel> customerClassifications, RoleGroupType roleGroupType, int retryTime);
+
         bool PushDataToExternalPackge(IEnumerable<long> custIds, PushDataToExternalModel paras, FromFlow fromFlow);
 
         bool PushDataToExternal(IEnumerable<long> custIdsToSyncCC, PushDataToExternalModel paras);

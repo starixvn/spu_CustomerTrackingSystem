@@ -1650,6 +1650,7 @@
         {
             try
             {
+                // need modify
                 var result = _accountService.ChangeExcludedTagAssPA(ctsCustId, subscriberId, isExcludedTagAssPA, CurrentSession.UserId);
 
                 if (result.ErrorCode == 0
@@ -1697,7 +1698,7 @@
 
             if (classifications != null && classifications.Any())
             {
-                result.CategoryList = classifications.Select(x => new GetCustomerCategoryViewModel(x));                
+                result.CategoryList = classifications.Select(x => new GetCustomerCategoryViewModel(x));
             }
 
             return PartialView("CustomerCategory/MarkCustomerCategory", result);
@@ -1759,7 +1760,8 @@
                     });
 
                     // Update CC in table custinfo to MainDB
-                    _customerClassificationService.RetryPushCCToMainDB(latestClassificationModel, 2);
+                    var roleGroupType = categoryModel.RoleId == 1 ? RoleGroupType.Member : RoleGroupType.Agency;
+                    _customerClassificationService.RetryPushCCToMainDB(latestClassificationModel, roleGroupType, 2);
 
                     Task.Run(() =>
                     {
@@ -1803,7 +1805,7 @@
                 }
             };
 
-            var result = model.RoleID == ROLE_CUSTOMER.MEMBER 
+            var result = model.RoleID == ROLE_CUSTOMER.MEMBER
                 ? _problemAccountClassificationService.InsertProblemAccountPackage(pas, CCInputFlow.InsertPACategory, "ProfileAddProblemAccount", FromFlow.CTSWEB, true)
                 : _problemAccountClassificationAgencyService.InsertProblemAccountAgencyPackage(pas, AgencyCCInputFlow.InsertPACategory, "ProfileAddProblemAccount", FromFlow.CTSWEB, true);
 
@@ -1884,13 +1886,13 @@
             }
         }
 
-        public string UnmarkAndRescanVVIPAgency(CustomerCategoryModel model)
+        private string UnmarkAndRescanVVIPAgency(CustomerCategoryModel model)
         {
             var resultUmmark = _customerCategoryAgencyService.UnmarkVVIPCustomerCategory(model);
 
             if (resultUmmark.CustInfos.IsNotNullOrEmpty())
             {
-                if (model.RoleId != 1 && model.IsAffectToAllDownlines)
+                if (model.IsAffectToAllDownlines)
                 {
                     _accountService.AddQueueAffectDownlinesCustomerCategory(model);
                 }
@@ -1900,10 +1902,10 @@
                     _rescanClassificationAgencyService.RescanCustomerClassificationAgency(new RescanCustClassificationAgencyModel
                     {
                         CustIds = new List<long> { model.CustId },
-                        IsToQueue = (model.RoleId != 1 && !model.IsAffectToAllDownlines), // add to queue for case SMA and not checking affect to downline to affect PA for downline                          
+                        IsToQueue = !model.IsAffectToAllDownlines, // add to queue for case SMA and not checking affect to downline to affect PA for downline                          
                         IsUpdateDangerToMainDB = false, // sma not update danger
                         FunctionId = FunctionId.UnmarkCustomerCategory,
-                        ServiceName = "RemoveCustomerCategory"
+                        ServiceName = "RemoveCustomerCategoryAgency"
                     });
                 }
             }
@@ -1911,23 +1913,18 @@
             return resultUmmark.ErrorMessage;
         }
 
-        public string UnmarkAndRescanVVIP(CustomerCategoryModel model)
+        private string UnmarkAndRescanVVIP(CustomerCategoryModel model)
         {
             var resultUmmark = _customerCategoryService.UnmarkVVIPCustomerCategory(model);
 
             if (resultUmmark.CustInfos.IsNotNullOrEmpty())
             {
-                //if (model.RoleId != 1 && model.IsAffectToAllDownlines)
-                //{
-                //    _accountService.AddQueueAffectDownlinesCustomerCategory(model);
-                //}
-
                 if (model.CustId != 0)
                 {
                     _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
                         CustIds = new List<long> { model.CustId },
-                        IsToQueue = (model.RoleId != 1 && !model.IsAffectToAllDownlines), // add to queue for case SMA and not checking affect to downline to affect PA for downline                          
+                        IsToQueue = false,
                         IsUpdateDangerToMainDB = true,
                         FunctionId = FunctionId.UnmarkCustomerCategory,
                         ServiceName = "RemoveCustomerCategory"
@@ -1968,7 +1965,7 @@
                     }
                 }, false);
 
-            if (resultUnmark.CustInfos != null && resultUnmark.CustInfos.Any())
+            if (resultUnmark.CustInfos.IsNotNullOrEmpty())
             {
                 _rescanClassificationAgencyService.RescanCustomerClassificationAgency(new RescanCustClassificationAgencyModel
                 {
@@ -1998,7 +1995,7 @@
                     }
                 }, false);
 
-            if (resultUnmark.CustInfos != null && resultUnmark.CustInfos.Any())
+            if (resultUnmark.CustInfos.IsNotNullOrEmpty())
             {
                 _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                 {

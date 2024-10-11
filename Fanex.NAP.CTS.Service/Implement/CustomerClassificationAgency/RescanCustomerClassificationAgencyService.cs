@@ -131,7 +131,8 @@
                 {
                     ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                     //IsUpdateDangerToMainDB = parameters.IsUpdateDangerToMainDB, -- Agency not handle
-                    IsSyncAFC = ConfigSettings.IsSyncAFCData
+                    IsSyncAFC = ConfigSettings.IsSyncAFCData,
+                    RoleGroup = RoleGroupType.Agency
                 }, FromFlow.CTSWEB);
             }
 

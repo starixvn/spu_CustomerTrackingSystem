@@ -30,8 +30,6 @@
         public bool RescanCustomerClassification(RescanCustClassificationModel paras)
         {
             var result = new RescanResultModel();
-            //var custIdsToRescanPA = new List<long>();
-            //var smaCustIds = GetAgentCusts(paras.CustIds);
             var custRescans = GetRescanCustomerClassification(string.Join(",", paras.CustIds));
 
             if (custRescans.CustInfos != null && custRescans.CustInfos.Any())
@@ -47,17 +45,9 @@
                     else
                     {
                         result = RescanProblemAccount(group.CustRescans, paras, (CCInputFlow)group.InputFlowID);
-
-                        //custIdsToRescanPA.AddRange(result.CustIds);
                     }
                 }                
             }
-
-            //if (smaCustIds.Any())
-            //{
-            //    result.IsSuccess = PushDataToExternal(paras, custIdsToRescanPA, smaCustIds);
-            //}
-
             return result.IsSuccess;
         }
 
@@ -100,7 +90,8 @@
                 {
                     ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                     IsUpdateDangerToMainDB = parameters.IsUpdateDangerToMainDB,
-                    IsSyncAFC = ConfigSettings.IsSyncAFCData
+                    IsSyncAFC = ConfigSettings.IsSyncAFCData,
+                    RoleGroup = RoleGroupType.Member
                 }, FromFlow.CTSWEB);
             }
 

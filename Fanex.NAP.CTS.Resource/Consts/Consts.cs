@@ -580,5 +580,11 @@
             { CustomerCategorySportType.SabaSoccer      ,     6 },
             { CustomerCategorySportType.SabaBasketball  ,     7 },
         };
+
+        public enum RoleGroupType
+        {
+            Member = 1,
+            Agency = 2
+        }
     }
 }

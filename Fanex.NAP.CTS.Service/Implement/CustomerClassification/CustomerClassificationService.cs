@@ -35,7 +35,7 @@
             {
                 custIds = custIds.Distinct();
 
-                isSuccess= PushDataToExternal(custIds, paras);
+                isSuccess = PushDataToExternal(custIds, paras);
 
                 _antiFraudCenterService.InsertAFCAccounts(custIds, fromFlow, paras.IsSyncAFC);
             }
@@ -60,8 +60,8 @@
 
                 if (latestcustClassification != null && latestcustClassification.Any())
                 {
-                    isSuccess = PushCCToMainDB(latestcustClassification, Consts.Retry);
-                    
+                    isSuccess = PushCCToMainDB(latestcustClassification, paras.RoleGroup, Consts.Retry);
+
                     if (paras.IsUpdateDangerToMainDB && isSuccess)
                     {
                         isSuccess = UpdateDangerLevelToMainDB(latestcustClassification);
@@ -76,7 +76,7 @@
         {
             if (lastestClassifications != null && lastestClassifications.Any())
             {
-                var groupDangerType = lastestClassifications.Where(c=>c.DangerLevel != null).GroupBy(c => c.DangerLevelType);
+                var groupDangerType = lastestClassifications.Where(c => c.DangerLevel != null).GroupBy(c => c.DangerLevelType);
 
                 if (groupDangerType != null && groupDangerType.Any())
                 {
@@ -101,7 +101,7 @@
             return true;
         }
 
-        private bool PushCCToMainDB(IEnumerable<LatestCCDangerLevelModel> lastestClassifications, int retryTime)
+        private bool PushCCToMainDB(IEnumerable<LatestCCDangerLevelModel> lastestClassifications, RoleGroupType roleGroupType, int retryTime)
         {
             bool isSuccess = true;
 
@@ -114,13 +114,13 @@
                     CustomerClass = c.CustomerClass
                 });
 
-                isSuccess = RetryPushCCToMainDB(custClassification, retryTime);
+                isSuccess = RetryPushCCToMainDB(custClassification, roleGroupType, retryTime);
             }
 
             return isSuccess;
         }
 
-        public bool RetryPushCCToMainDB(IEnumerable<LatestClassificationModel> customerClassifications, int retryTime)
+        public bool RetryPushCCToMainDB(IEnumerable<LatestClassificationModel> customerClassifications, RoleGroupType roleGroupType, int retryTime)
         {
             if (customerClassifications == null || !customerClassifications.Any())
             {
@@ -131,7 +131,7 @@
             {
                 try
                 {
-                    var result = UpdateCCToMainDB(customerClassifications);
+                    var result = UpdateCCToMainDB(customerClassifications, roleGroupType);
 
                     if (result.ErrorCode != 0 && retryTime == 0)
                     {
@@ -164,7 +164,7 @@
             }
 
             return true;
-        }       
+        }
 
         public bool RetryUpdateDangerLevelToMainDB(IEnumerable<DangerLevelModel> dangerLevels, int dangerType, int retryTime)
         {
@@ -212,11 +212,12 @@
 
         #region DataAccess Layer
 
-        private DBResult UpdateCCToMainDB(IEnumerable<LatestClassificationModel> customerClassList)
+        private DBResult UpdateCCToMainDB(IEnumerable<LatestClassificationModel> customerClassList, RoleGroupType roleGroupType)
         {
             var criteria = new SyncCustomerClassToMainDbCriteria
             {
-                custList = customerClassList.ToXmlString()
+                Mode = (int)roleGroupType,
+                CustList = customerClassList.ToXmlString()
             };
 
             repository.Execute(criteria);
