@@ -10,8 +10,9 @@
         {
             this.CategoryId = data.CategoryID;          
             this.CategoryGroup = data.CategoryGroupID;
-            this.CategoryName = data.CategoryName ?? string.Empty;         
+            this.CategoryName = data.CategoryName ?? string.Empty;
             this.IsProblemAccount = data.IsPA;
+            this.IsMultiplePA = data.IsMultiplePA;
             this.IsVVIP = data.IsVVIP;            
             this.CategoryColorType = (CategoryColorType)data.ColorTypeID;
         }
@@ -23,6 +24,8 @@
         public int CategoryGroup { get; set; }
 
         public bool IsProblemAccount { get; set; }     
+
+        public bool IsMultiplePA { get; set; }     
 
         public bool IsVVIP { get; set; }      
 

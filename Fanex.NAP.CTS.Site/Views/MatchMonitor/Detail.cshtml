@@ -19,7 +19,7 @@
 
             </div>
             <div class="title-box-right">
-                <div class="hold-key" @(ViewBag.IsVisibleHoldKey ? "" : "style=display:none")>
+                <div class="hold-key" @(ViewBag.IsVisibleHoldKey != null && ViewBag.IsVisibleHoldKey ? "" : "style=display:none")>
                     <div class="toggle tooltip @(ViewBag.HoldKeyStatus.IsHold ? "toggle-on": "") " id="tggHoldKey" type="checkbox">
                         <div class="toggle-text-off">Hold Key - OFF</div>
                         <div class="glow-comp"></div>

@@ -58,6 +58,6 @@
 
         public string DangerDisplay { get; set; }       
 
-        public string ColorTypeIDs { get; set; }
+        public int? ColorTypeID { get; set; }
     }
 }

@@ -22,7 +22,8 @@
 
         public bool IsPA { get; set; }
 
-        public bool IsPotentialPA { get; set; }
+        public bool IsMultiplePA { get; set; }
 
+        public int CategoryPriority { get; set; }
     }
 }

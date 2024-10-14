@@ -246,12 +246,13 @@
                     let json = jQuery.parseJSON(response);
 
                     cacheData.isProblemAccount = json.isProblemAccount;
+                    cacheData.isMultiplePA = json.isMultiplePA;
                     cacheData.isExcludedTagAssPA = json.isExcludedTagAssPA;
-                    cacheData.isVVip = json.isVVip;                   
+                    cacheData.isVVip = json.isVVip;
 
                     ResetCategorySetting();
 
-                    RenderCategoryColorSummary(json.categoryList, json.isProblemAccount);                  
+                    RenderCategoryColorSummary(json.categoryList, json.isMultiplePA, json.usnBackGroundColor);                  
                 }
                 return response;
             },
@@ -283,19 +284,20 @@
         });
     }
 
-    function RenderCategoryColorSummary(data, isProblemAccount) {        
+    function RenderCategoryColorSummary(data, isMultiplePA, usnBackGroundColor) {        
         let html = BuildButtonProfileInsertPA("", data);
         let bgHeaderUsername = '';
         let bgHeaderInfo = '';
+
         if (data.length > 0) {
             data.map(function (x) {
-                if ((isProblemAccount && x.IsProblemAccount) || (!isProblemAccount)) {
+                if ((isMultiplePA && x.IsMultiplePA) || (!isMultiplePA)) {
                     html = BuildCategoryToHtmlDiv(html, "circle bg-" + x.CategoryColorDesc, x.CategoryName);
                 } 
-
-                bgHeaderUsername = 'bg-' + x.CategoryColorDesc;
-                bgHeaderInfo = 'border-' + x.CategoryColorDesc;
             });
+
+            bgHeaderUsername = 'bg-' + usnBackGroundColor;
+            bgHeaderInfo = 'border-' + usnBackGroundColor;
         } else {            
             bgHeaderUsername = 'bg-green';
             bgHeaderInfo = 'border-green';
