@@ -52,22 +52,22 @@
 
             bool isSuccess = true;
 
-            var custIdsChunk = custIdsToSyncCC.Distinct().Chunk(paras.ExternalBatchSize);
+            //var custIdsChunk = custIdsToSyncCC.Distinct().Chunk(paras.ExternalBatchSize);
 
-            foreach (var batchCustIds in custIdsChunk)
-            {
-                var latestcustClassification = GetLatestCCAndDangerLevel(batchCustIds);
+            //foreach (var batchCustIds in custIdsChunk)
+            //{
+            //    var latestcustClassification = GetLatestCCAndDangerLevel(batchCustIds);
 
-                if (latestcustClassification != null && latestcustClassification.Any())
-                {
-                    isSuccess = PushCCToMainDB(latestcustClassification, paras.RoleGroup, Consts.Retry);
+            //    if (latestcustClassification != null && latestcustClassification.Any())
+            //    {
+            //        isSuccess = PushCCToMainDB(latestcustClassification, paras.RoleGroup, Consts.Retry);
 
-                    if (paras.IsUpdateDangerToMainDB && isSuccess)
-                    {
-                        isSuccess = UpdateDangerLevelToMainDB(latestcustClassification);
-                    }
-                }
-            }
+            //        if (paras.IsUpdateDangerToMainDB && isSuccess)
+            //        {
+            //            isSuccess = UpdateDangerLevelToMainDB(latestcustClassification);
+            //        }
+            //    }
+            //}
 
             return isSuccess;
         }
