@@ -29,13 +29,13 @@
 	</Function>
 	
 	<Function name="MatchMonitor">
-		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_Rpt_MatchMonitor_MatchInfo" SpName="CTS_Rpt_MatchMonitor_MatchInfo" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_TicketDetails_Info" SpName="CTS_TicketDetails_Info" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails" DbName="SQL.WASAVerse.bodbSPUNet" />
+		<Setting Key="CTS_Rpt_MatchMonitor_MatchInfo" SpName="CTS_Rpt_MatchMonitor_MatchInfo" DbName="SQL.WASAVerse.bodbSPUNet" />
+		<Setting Key="CTS_TicketDetails_Info" SpName="CTS_TicketDetails_Info" DbName="SQL.WASAVerse.bodbSPUNet" />
 		<Setting Key="CTS_Rpt_MatchMonitor_FraudTicketsSummary" SpName="CTS_Rpt_MatchMonitor_FraudTicketsSummary" DbName="DBCTS.bodb02.bodbSPUNet" />
-    <Setting Key="CTS_MatchMonitorParlay_FraudTicketSummary" SpName="CTS_MatchMonitorParlay_FraudTicketSummary" DbName="DBCTS.bodb02.bodbSPUNet" />      
-    <Setting Key="CTS_MatchMonitorParlay_Details_GetTicket" SpName="CTS_MatchMonitorParlay_Details_GetTicket" DbName="DBCTS.bodb02.bodbSPUNet" />
-    <Setting Key="CTS_MatchMonitorParlay_Details_GetFilter" SpName="CTS_MatchMonitorParlay_Details_GetFilter" DbName="DBCTS.bodb02.bodbSPUNet" />
+    <Setting Key="CTS_MatchMonitorParlay_FraudTicketSummary" SpName="CTS_MatchMonitorParlay_FraudTicketSummary" DbName="SQL.WASAVerse.bodbSPUNet" />      
+    <Setting Key="CTS_MatchMonitorParlay_Details_GetTicket" SpName="CTS_MatchMonitorParlay_Details_GetTicket" DbName="SQL.WASAVerse.bodbSPUNet" />
+    <Setting Key="CTS_MatchMonitorParlay_Details_GetFilter" SpName="CTS_MatchMonitorParlay_Details_GetFilter" DbName="SQL.WASAVerse.bodbSPUNet" />
 	</Function>
 
 	<Function name="RobotBetting">
