@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement.CustomerClassificationAgency
 {
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria;
     using Fanex.NAP.CTS.Criteria.CustomerClassificationAgency;
@@ -50,28 +51,17 @@
             }
 
             var smaCustIds = GetAgentCusts(paras.CustIds);
+            var custToRemovePA = smaCustIds.Except(custIdsToRescan);
 
-            if (smaCustIds.Any())
+            if (custToRemovePA.IsNotNullOrEmpty())
             {
-                result.IsSuccess = PushDataToExternalAgency(paras, custIdsToRescan, smaCustIds);
+                result.IsSuccess = PushDataToExternalPackge(custToRemovePA?.Distinct(), paras);
             }
 
             return true;
         }
 
         #region private method
-        private bool PushDataToExternalAgency(RescanCustClassificationAgencyModel parameters, IEnumerable<long> custIdsToRescanPA, IEnumerable<long> smaCustIds)
-        {
-            if (smaCustIds.Any())
-            {
-                var custToRemovePA = smaCustIds.Except(custIdsToRescanPA);
-
-                PushDataToExternalPackge(custToRemovePA?.Distinct(), parameters);
-            }
-
-            return true;
-        }
-
         private IEnumerable<long> GetAgentCusts(IEnumerable<long> custIds)
         {
             if (custIds != null && custIds.Any())
