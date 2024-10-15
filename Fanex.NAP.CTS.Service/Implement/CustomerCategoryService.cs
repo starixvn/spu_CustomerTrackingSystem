@@ -47,7 +47,7 @@
                 {
                     CustID = custCategoryModel.CustId,
                     CTSCustID = custCategoryModel.CTSCustId,
-                    RoleID = custCategoryModel.RoleId,
+                    RoleID = (int)custCategoryModel.RoleId,
                     SubscriberID = custCategoryModel.SubscriberId,
                     CreatedBy = custCategoryModel.CreatedBy,
                     Remark = custCategoryModel.Remark

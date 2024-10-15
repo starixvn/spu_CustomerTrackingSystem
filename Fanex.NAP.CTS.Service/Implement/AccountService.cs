@@ -986,7 +986,7 @@
                 CTSCustId = categoryModel.CTSCustId,
                 SubscriberId = categoryModel.SubscriberId,
                 CategoryId = categoryModel.CategoryId,
-                RoleId = categoryModel.RoleId,
+                RoleId = (int)categoryModel.RoleId,
                 CreatedBy = categoryModel.CreatedBy,
                 Remark = categoryModel.Remark,
                 ActionType = (int)categoryModel.ActionType

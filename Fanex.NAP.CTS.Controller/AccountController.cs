@@ -1715,7 +1715,7 @@
                 CustId = model.CustID,
                 CTSCustId = model.CTSCustID,
                 SubscriberId = model.SubscriberID,
-                RoleId = (int)model.RoleID,
+                RoleId = model.RoleID,
                 IsAffectToAllDownlines = model.IsAffectAllDownlines,
                 Remark = model.Remark,
                 IsVVip = model.IsVVip,
@@ -1727,7 +1727,7 @@
 
             if (isSuccess)
             {
-                if (categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
+                if (categoryModel.RoleId != ROLE_CUSTOMER.MEMBER && categoryModel.IsAffectToAllDownlines)
                 {
                     result = _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
                 }
@@ -1747,27 +1747,21 @@
         private bool MarkDirectVVIP(CustomerCategoryModel categoryModel)
         {
             try
-            {
-                var classificationCusts = _customerCategoryService.MarkVVIPCustomerCategory(categoryModel);
+            {                
+                var latestClassifications = MarkVVIP(categoryModel);
 
-                if (categoryModel.IsVVip && classificationCusts.CustInfos != null && classificationCusts.CustInfos.Any())
+                if (latestClassifications.Any())
                 {
-                    var latestClassificationModel = classificationCusts.CustInfos.Select(x => new LatestClassificationModel
-                    {
-                        CustId = x.CustID,
-                        CustomerClass = x.CustomerClass,
-                        Category = x.CategoryID
-                    });
-
                     // Update CC in table custinfo to MainDB
-                    var roleGroupType = categoryModel.RoleId == 1 ? RoleGroupType.Member : RoleGroupType.Agency;
-                    _customerClassificationService.RetryPushCCToMainDB(latestClassificationModel, roleGroupType, 2);
+                    var roleGroupType = categoryModel.RoleId == ROLE_CUSTOMER.MEMBER ? RoleGroupType.Member : RoleGroupType.Agency;
+
+                    _customerClassificationService.RetryPushCCToMainDB(latestClassifications, roleGroupType, 2);
 
                     Task.Run(() =>
                     {
-                        _antiFraudCenterService.DeleteAFCAccounts(classificationCusts.CustInfos.Select(x => x.CustID), FromFlow.CTSWEB);
+                        _antiFraudCenterService.DeleteAFCAccounts(latestClassifications.Select(x => x.CustId), FromFlow.CTSWEB);
                     });
-                }
+                }   
             }
             catch (Exception ex)
             {
@@ -1781,6 +1775,32 @@
             }
 
             return true;
+        }
+
+        private IEnumerable<LatestClassificationModel> MarkVVIP(CustomerCategoryModel categoryModel)
+        {
+            if (categoryModel.RoleId == ROLE_CUSTOMER.MEMBER)
+            {
+                var memberMarkResult = _customerCategoryService.MarkVVIPCustomerCategory(categoryModel);
+
+                return memberMarkResult.CustInfos.Select(x => new LatestClassificationModel
+                {
+                    CustId = x.CustID,
+                    CustomerClass = x.CustomerClass,
+                    Category = x.CategoryID
+                });
+            }
+            else
+            {
+                var agencyMarkResult = _customerCategoryAgencyService.MarkVVIPCustomerCategory(categoryModel);
+
+                return agencyMarkResult.CustInfos.Select(x => new LatestClassificationModel
+                {
+                    CustId = x.CustID,
+                    CustomerClass = x.CustomerClass,
+                    Category = x.CategoryID
+                });
+            }
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
@@ -1868,7 +1888,7 @@
                 model.CreatedBy = CurrentSession.UserId;
                 model.ActionType = ActionTypeQueueCustCategory.Remove;
 
-                var messageResult = model.RoleId == (int)ROLE_CUSTOMER.MEMBER ? UnmarkAndRescanVVIP(model) : UnmarkAndRescanVVIPAgency(model);
+                var messageResult = model.RoleId == ROLE_CUSTOMER.MEMBER ? UnmarkAndRescanVVIP(model) : UnmarkAndRescanVVIPAgency(model);
 
                 return Json(new
                 {

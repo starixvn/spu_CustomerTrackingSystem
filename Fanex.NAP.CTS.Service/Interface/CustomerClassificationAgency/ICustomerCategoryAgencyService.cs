@@ -5,6 +5,8 @@
 
     public interface ICustomerCategoryAgencyService
     {
+        ResultInsertCustomerClassificationAgencyModel MarkVVIPCustomerCategory(CustomerCategoryModel custCategoryModel);
+
         ResultRemoveCustomerClassificationAgencyModel UnmarkVVIPCustomerCategory(CustomerCategoryModel custCategoryModel);
     }
 }

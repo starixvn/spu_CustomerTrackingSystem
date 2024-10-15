@@ -1,4 +1,6 @@
-﻿namespace Fanex.NAP.CTS.Model.Account
+﻿using static Fanex.NAP.CTS.Resource.Consts.Consts;
+
+namespace Fanex.NAP.CTS.Model.Account
 {
     public class CustomerCategoryModel
     {
@@ -10,7 +12,7 @@
 
         public int CategoryId { get; set; }
 
-        public int RoleId { get; set; }
+        public ROLE_CUSTOMER RoleId { get; set; }
 
         public bool IsAffectToAllDownlines { get; set; }
 

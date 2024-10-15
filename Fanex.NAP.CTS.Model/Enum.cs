@@ -319,8 +319,8 @@ namespace Fanex.NAP.CTS.Model
     public enum CCInputFlowAgency
     public enum AgencyCCInputFlow
     {
-        [Description("VVIP")]
-        VVIP = 1001,
+        [Description("InsertVVIP")]
+        InsertVVIP = 1001,
         [Description("InsertPACategory")]
         InsertPACategory = 1005,      
         [Description("Normal")]

@@ -13,6 +13,31 @@
     {
         public CustomerCategoryAgencyService() : base() { }
 
+        public ResultInsertCustomerClassificationAgencyModel MarkVVIPCustomerCategory(CustomerCategoryModel custCategoryModel)
+        {
+            var custList = new List<AddCustomerCategoryInfoModel>()
+            {
+                new AddCustomerCategoryInfoModel
+                {
+                    CustID = custCategoryModel.CustId,
+                    CTSCustID = custCategoryModel.CTSCustId,
+                    RoleID = (int)custCategoryModel.RoleId,
+                    SubscriberID = custCategoryModel.SubscriberId,
+                    CreatedBy = custCategoryModel.CreatedBy,
+                    Remark = custCategoryModel.Remark
+                }
+            };
+
+            var modelInsert = new InsertCustomerClassificationAgencyModel()
+            {
+                CustClassificationJson = JsonConvert.SerializeObject(custList),
+                FromAction = (int)FromFlow.CTSWEB,
+                IsAffectDownline = custCategoryModel.IsAffectToAllDownlines
+            };
+
+            return base.InsertCustomerClassificationAgency(AgencyCCInputFlow.InsertVVIP, modelInsert);
+        }
+
         public ResultRemoveCustomerClassificationAgencyModel UnmarkVVIPCustomerCategory(CustomerCategoryModel custCategoryModel)
         {
             var custList = new List<RemoveCustomerCategoryInfoModel>()
