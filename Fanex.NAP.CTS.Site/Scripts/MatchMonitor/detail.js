@@ -1744,7 +1744,8 @@ function MatchMonitorDetail() {
 
     function RenderMalayOdds(obj) {
         if (obj.IsParlay && obj.ParlayTicket != undefined) {
-            return obj.ParlayTicket.MalayOdds;
+            return "-";
+            //return obj.ParlayTicket.MalayOdds;
         }
 
         return obj.MalayOdds;
