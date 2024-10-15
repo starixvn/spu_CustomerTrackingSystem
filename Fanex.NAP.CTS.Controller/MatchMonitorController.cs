@@ -697,6 +697,7 @@
             try
             {
                 var fraudTicket = GetFraudMMDetailForCache(info);
+                fraudTicket.TicketType = info.TicketType;
 
                 var transJson = _matchMonitorService.GetTransFilterSuspicousMGr(filter, fraudTicket);
 
@@ -705,9 +706,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                   .AddMessage($"{Region} Get Match Monitor Total Ticket Error: " + ex.Message + ex.StackTrace + "\n"
-                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                    + ex.InnerException.StackTrace)
+                   .AddMessage($"{Region} Get Match Monitor Total Ticket Error: " + ex.Message + ex.StackTrace + "\n")
                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
@@ -739,6 +738,8 @@
 
                             if (fraudTicket != null)
                             {
+                                fraudTicket.TicketType = para.TicketType;
+
                                 mdResult = GetFraudMMDetail(para, filter, fraudTicket);
                             }
 
@@ -773,9 +774,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                   .AddMessage($"{Region} Get Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
-                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                    + ex.InnerException.StackTrace)
+                   .AddMessage($"{Region} Get Match Monitor Detail Error: " + ex.Message + ex.StackTrace)
                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
@@ -807,6 +806,8 @@
                     if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
                     {
                         var fraudTicket = GetFraudMMDetailForCache(para);
+
+                        fraudTicket.TicketType = info.TicketType;
 
                         var transJson = _matchMonitorService.GetTransFilterSuspicousMGr(filter, fraudTicket);
 
@@ -843,9 +844,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                 .AddMessage($"{Region} Get All Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
-                  + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                  + ex.InnerException.StackTrace)
+                 .AddMessage($"{Region} Get All Match Monitor Detail Error: " + ex.Message + ex.StackTrace)
                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
@@ -938,9 +937,7 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                  .AddMessage($"{Region} Get Fraud MM Detail For Cache Error: " + ex.Message + ex.StackTrace + "\n"
-                   + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                   + ex.InnerException.StackTrace)
+                  .AddMessage($"{Region} Get Fraud MM Detail For Cache Error: " + ex.Message + ex.StackTrace)
                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
