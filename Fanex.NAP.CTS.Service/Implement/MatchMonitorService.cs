@@ -292,7 +292,7 @@
             return string.Empty;
         }
 
-        public string GetTransFilterSuspicousMGr(MMDetailFilterViewModel filter, TicketDetailViewModel fraudTicket)
+        public string GetTransFilterSuspicousMGr(MMDetailFilterViewModel filter, TicketDetailViewModel fraudTicket, TicketType ticketType = TicketType.Single)
         {
             var transJson = string.Empty;
 
@@ -319,6 +319,8 @@
                 else
                 {
                     fraudTicket = new TicketDetailViewModel();
+                    fraudTicket.TicketType = ticketType;
+
                     if (isExclude)
                     {
                         transJson = fraudTicket.GetTransByFilterExcludeMGr(filter);

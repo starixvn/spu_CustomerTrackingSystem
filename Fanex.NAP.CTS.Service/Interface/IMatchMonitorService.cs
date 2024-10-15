@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Core;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
@@ -25,7 +26,7 @@
 
         IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);      
 
-        string GetTransFilterSuspicousMGr(MMDetailFilterViewModel filter, TicketDetailViewModel fraudTicket);
+        string GetTransFilterSuspicousMGr(MMDetailFilterViewModel filter, TicketDetailViewModel fraudTicket, TicketType ticketType = TicketType.Single);
 
         TicketDetailViewModel GetTicketDetailFraud(MMDetailResultModel matchDetailInfo, MMDetailInfoViewModel para);
 

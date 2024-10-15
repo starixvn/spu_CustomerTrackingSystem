@@ -697,9 +697,11 @@
             try
             {
                 var fraudTicket = GetFraudMMDetailForCache(info);
-                fraudTicket.TicketType = info.TicketType;
 
-                var transJson = _matchMonitorService.GetTransFilterSuspicousMGr(filter, fraudTicket);
+                if (fraudTicket != null)
+                    fraudTicket.TicketType = info.TicketType;
+
+                var transJson = _matchMonitorService.GetTransFilterSuspicousMGr(filter, fraudTicket, info.TicketType);
 
                 recordsTotal = _matchMonitorService.GetTotalTicketDetail(info, filter, 0, transJson);               
             }
@@ -963,7 +965,7 @@
             var verifiedTrans = new List<MatchMonitorDetailVerifyTransResultModel>();
             var ticketFromMainDb = new MMDetailTicketListViewModel();
 
-            var transJson = _matchMonitorService.GetTransFilterSuspicousMGr(filter, null);
+            var transJson = _matchMonitorService.GetTransFilterSuspicousMGr(filter, null, para.TicketType);
 
             var ticketDetailGroup = _matchMonitorService.GetTicketDetailAll(para, filter, transJson);
 
