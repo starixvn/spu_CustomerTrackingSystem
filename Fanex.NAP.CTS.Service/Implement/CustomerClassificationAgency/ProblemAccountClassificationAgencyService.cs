@@ -163,16 +163,21 @@
             return base.InsertCustomerClassificationAgency(ccInputFlow, modelInsert);
         }
 
-        private IEnumerable<InsertProblemAccountModel> CombinePAWithLosingPerformace(IEnumerable<InsertProblemAccountModel> problemAccounts, FunctionId funcId)
+        private IEnumerable<InsertProblemAccountAgencyModel> CombinePAWithLosingPerformace(IEnumerable<InsertProblemAccountModel> problemAccounts, FunctionId funcId)
         {
-            return problemAccounts.Select(x => { var y = x;
-                y.WinlossStatus = 2;
-                y.TurnoverRM = 0;
-                y.WinlossRM = 0;
-                y.BetCount = 0;
-                y.PerformanceTime = null;
-                return y;
+            return problemAccounts.Select(x => new InsertProblemAccountAgencyModel
+            {
+
             });
+
+            //return problemAccounts.Select(x => { var y = x;
+            //    y.WinlossStatus = 2;
+            //    y.TurnoverRM = 0;
+            //    y.WinlossRM = 0;
+            //    y.BetCount = 0;
+            //    y.PerformanceTime = null;
+            //    return y;
+            //});
         }
 
         #endregion
