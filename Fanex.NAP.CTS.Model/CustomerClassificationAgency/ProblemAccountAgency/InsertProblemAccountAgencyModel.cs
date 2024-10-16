@@ -31,17 +31,17 @@
 
         public InsertProblemAccountAgencyModel(RescanCustomerClassificationAgencyModel data) 
         {
-            CustID = data.CustID;
             CTSCustID = data.CTSCustID;
+            CustID = data.CustID;
+            CategoryID = data.CategoryID;
             RoleID = data.RoleID;
             SubscriberID = data.SubscriberID;
-            CategoryID = data.CategoryID;          
             IsLicensee = data.IsLicensee;
-            CreatedBy = data.CreatedBy;
             Remark = data.Remark;
-            IsMarkedDirectly = data.IsMarkedDirectly;          
+            CreatedBy = data.CreatedBy;
+            IsMarkedDirectly = data.IsMarkedDirectly;
             IsFromCTS = data.IsFromCTS;
-            CreatedDate = data.CreatedDate;           
+            CreatedDate = data.CreatedDate;
         }      
 
         public long CustID { get; set; }

@@ -432,10 +432,8 @@
         });
 
         if (params.CategoryID != 0) {
-            let url = params.IsRobot?.toLowerCase() == 'true'
-                ? common.modifyRelativeUrl('Account/SaveMarkRobotAccount')
-                : common.modifyRelativeUrl('Account/SaveMarkCustomerCategory');
-
+            let url = common.modifyRelativeUrl('Account/SaveMarkCustomerCategory');
+            
             $.ajax(url, {
                 type: 'POST',
                 data: params,

@@ -127,41 +127,41 @@
                 return true;
             }
 
-            while (retryTime >= 0)
-            {
-                try
-                {
-                    var result = UpdateCCToMainDB(customerClassifications, roleGroupType);
+            //while (retryTime >= 0)
+            //{
+            //    try
+            //    {
+            //        var result = UpdateCCToMainDB(customerClassifications, roleGroupType);
 
-                    if (result.ErrorCode != 0 && retryTime == 0)
-                    {
-                        LogService.Error($"CTS - PushDataToExternalService - exception from MainDB {result.ErrorMsg} with listCust: {JsonConvert.SerializeObject(customerClassifications)}");
+            //        if (result.ErrorCode != 0 && retryTime == 0)
+            //        {
+            //            LogService.Error($"CTS - PushDataToExternalService - exception from MainDB {result.ErrorMsg} with listCust: {JsonConvert.SerializeObject(customerClassifications)}");
 
-                        return false;
-                    }
-                    else if (result.ErrorCode != 0)
-                    {
-                        retryTime--;
-                    }
-                    else
-                    {
-                        retryTime = -1;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (retryTime == 0)
-                    {
-                        var jsonDataForLog = JsonConvert.SerializeObject(customerClassifications);
+            //            return false;
+            //        }
+            //        else if (result.ErrorCode != 0)
+            //        {
+            //            retryTime--;
+            //        }
+            //        else
+            //        {
+            //            retryTime = -1;
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        if (retryTime == 0)
+            //        {
+            //            var jsonDataForLog = JsonConvert.SerializeObject(customerClassifications);
 
-                        LogService.Error($"PushDataToExternalService - PushCustomerClassificationToMain exception {ex.Message} with listCust: {jsonDataForLog}", ex);
+            //            LogService.Error($"PushDataToExternalService - PushCustomerClassificationToMain exception {ex.Message} with listCust: {jsonDataForLog}", ex);
 
-                        return false;
-                    }
+            //            return false;
+            //        }
 
-                    retryTime--;
-                }
-            }
+            //        retryTime--;
+            //    }
+            //}
 
             return true;
         }

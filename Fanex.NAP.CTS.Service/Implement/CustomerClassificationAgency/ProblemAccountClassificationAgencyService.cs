@@ -48,8 +48,10 @@
             try
             {
                 if (problemAccounts.Any())
-                {                 
-                    var insertPaResult = InsertProblemAccountsAgency(problemAccounts, ccInputFlow, FunctionId.InsertPAM, isToQueue);
+                {
+                    var agencyPAs = problemAccounts.Select(x => new InsertProblemAccountAgencyModel(x));
+
+                    var insertPaResult = InsertProblemAccountsAgency(agencyPAs, ccInputFlow, FunctionId.InsertPAM, isToQueue);
 
                     if (insertPaResult.CustInfos != null && insertPaResult.CustInfos.Any())
                     {
@@ -146,12 +148,12 @@
             }
         }
 
-        private ResultInsertCustomerClassificationAgencyModel InsertProblemAccountsAgency(IEnumerable<InsertProblemAccountModel> problemAccounts, 
+        private ResultInsertCustomerClassificationAgencyModel InsertProblemAccountsAgency(IEnumerable<InsertProblemAccountAgencyModel> problemAccounts, 
             AgencyCCInputFlow ccInputFlow, 
             FunctionId funcId, 
             bool isToQueue)
         {
-            var paClassification = CombinePAWithLosingPerformace(problemAccounts, funcId);
+            var paClassification = CombinePAWithLosingPerformace(problemAccounts);
 
             var modelInsert = new InsertCustomerClassificationAgencyModel()
             {
@@ -163,21 +165,17 @@
             return base.InsertCustomerClassificationAgency(ccInputFlow, modelInsert);
         }
 
-        private IEnumerable<InsertProblemAccountAgencyModel> CombinePAWithLosingPerformace(IEnumerable<InsertProblemAccountModel> problemAccounts, FunctionId funcId)
+        private IEnumerable<InsertProblemAccountAgencyModel> CombinePAWithLosingPerformace(IEnumerable<InsertProblemAccountAgencyModel> problemAccounts)
         {
-            return problemAccounts.Select(x => new InsertProblemAccountAgencyModel
-            {
-
+            return problemAccounts.Select(x => {
+                var y = x;
+                y.WinlossStatus = 2;
+                y.TurnoverRM = 0;
+                y.WinlossRM = 0;
+                y.BetCount = 0;
+                y.PerformanceTime = null;
+                return y;
             });
-
-            //return problemAccounts.Select(x => { var y = x;
-            //    y.WinlossStatus = 2;
-            //    y.TurnoverRM = 0;
-            //    y.WinlossRM = 0;
-            //    y.BetCount = 0;
-            //    y.PerformanceTime = null;
-            //    return y;
-            //});
         }
 
         #endregion
