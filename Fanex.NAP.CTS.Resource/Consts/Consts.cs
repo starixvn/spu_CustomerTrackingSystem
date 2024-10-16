@@ -112,8 +112,10 @@
         public const string ProblemAccountManagement_CategoryPA = "Problem Account Category";
         public const string MarkPA_AssociatedGroup = "Associated Group";
         public const string ReasonDetectNone = "None";
-        public const string ReasonDetectBySystem = "Detect by System";
-        public const string ReasonDetectByAI = "Detect by AI";
+        public const string ReasonDetectBySystem = "Detect By System";
+        public const string ReasonDetectBySystemParlay_Display = "Detect By System(Parlay)";
+        public const string ReasonDetectBySystemParlay = "Detect By System Parlay";
+        public const string ReasonDetectByAI = "Detect By AI";
         public const string DangerousScoreRemark = "Detection Date: {0} - Dangerous Score: {1}%";
         public const string TWInitialGBMissSport = "Soccer/Basketball";
         public const string TWInitialSmartRemark = "Detection Date: {0} - Probability Threshold: {1}";
@@ -494,13 +496,13 @@
             TD = 300
         };
 
-        public enum MMTicketTypeFromUI
+        public enum MMViewModeFromUI
         {
             TicketFraud = 2,
             TicketAll = 3
         }
 
-        public enum MMTicketTypeFromDB
+        public enum MMViewModeFromDB
         {
             TicketAll = 0,
             TicketFraud = 1,
@@ -513,19 +515,19 @@
             DangerMMReport = 3
         }
 
-        public static MMTicketTypeFromDB GetTicketTypeFromDB(MMQueryType queryType, MMTicketTypeFromUI? ticketTypeFromUI)
+        public static MMViewModeFromDB GetViewModeFromDB(MMQueryType queryType, MMViewModeFromUI? viewModeFromUI)
         {
-            if (ticketTypeFromUI == MMTicketTypeFromUI.TicketAll && queryType == MMQueryType.MMReport)
+            if (viewModeFromUI == MMViewModeFromUI.TicketAll && queryType == MMQueryType.MMReport)
             {
-                return MMTicketTypeFromDB.TicketAll;
+                return MMViewModeFromDB.TicketAll;
             }
 
-            if (ticketTypeFromUI == MMTicketTypeFromUI.TicketAll && queryType == MMQueryType.DangerMMReport)
+            if (viewModeFromUI == MMViewModeFromUI.TicketAll && queryType == MMQueryType.DangerMMReport)
             {
-                return MMTicketTypeFromDB.TicketDanger;
+                return MMViewModeFromDB.TicketDanger;
             }
 
-            return MMTicketTypeFromDB.TicketFraud;
+            return MMViewModeFromDB.TicketFraud;
         }
 
         public enum RobotType

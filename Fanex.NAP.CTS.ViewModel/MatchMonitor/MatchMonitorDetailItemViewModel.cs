@@ -1,7 +1,9 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
     using Fanex.NAP.CTS.Model.MatchMonitor;
+    using Fanex.NAP.CTS.Model.MatchMonitor.Parlay;
     using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.ViewModel.MatchMonitor.Parlay;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -133,6 +135,8 @@
 
         public string BetTeam { get; set; }
 
+        public string BetTeamFullName { get; set; }
+
         public string BetFrom { get; set; }
 
         public string CurrencyName { get; set; }
@@ -174,6 +178,8 @@
             }
         }
 
+        public string Choice { get; set; }
+
         public string Score { get; set; }
 
         public int TicketStatus { get; set; }
@@ -197,8 +203,10 @@
             get
             {
                 return TransId.ToString();
-            }
+            }          
         }
+
+        public long Refno { get; set; }
 
         public int? RobotType { get; set; }
 
@@ -231,51 +239,22 @@
 
         public int ChoiceOrder { get; set; }
 
-        public MMTicketTypeFromUI TypeOfTicket { get; set; } = MMTicketTypeFromUI.TicketFraud;
+        public MMViewModeFromUI TypeOfTicket { get; set; } = MMViewModeFromUI.TicketFraud;
+
+        public bool IsSelected { get; set; } = false;
+
+        public bool IsParlay { get; set; }
+
+        public int Combinition { get; set; }
+
+        public bool ViewMoreInfo { get; set; }
+
+        public IEnumerable<ParlayTicketInfoModel> ParlayTickets { get; set; }
 
         #endregion
 
         #region function
-        public bool FilterByHomeAway(string[] matchMonitorBetChoiceIds)
-        {
-            return matchMonitorBetChoiceIds.Any(x => string.Equals(BetTeam, x, StringComparison.OrdinalIgnoreCase));
-        }
-
-        public bool FilterBySite(string site)
-        {            
-            return !string.IsNullOrWhiteSpace(site) ? site.Contains("A") || site.Contains(SubscriberType) : false;
-        }        
-
-        public bool FilterByReasonAGroup(List<string> reasonList, IEnumerable<string> reasonGroupIDDic)
-        {
-            return
-                (reasonList?.Any(y => (ReasonList ?? "-").Contains(y)) ?? true) &&
-                (reasonGroupIDDic?.Contains(ADetectGroupID.ToString()) ?? true);
-        }        
-        
-        public bool FilterByDanger(MMDetailFilterViewModel filter)
-        {
-            var isPass = filter.Danger1List == null &&
-                filter.Danger2List == null &&
-                filter.Danger3List == null &&
-                filter.Danger4List == null &&
-                filter.Danger5List == null;
-
-            if (isPass)
-            {
-                return filter.IsDangerNone ? DangerToString == "-" : false;
-            }
-            else
-            {
-                return (filter.Danger1List?.Any(x => x == Danger1) ?? false) ||
-                (filter.Danger2List?.Any(x => x == Danger2) ?? false) ||
-                (filter.Danger3List?.Any(x => x == Danger3) ?? false) ||
-                (filter.Danger4List?.Any(x => x == Danger4) ?? false) ||
-                (filter.Danger5List?.Any(x => x == Danger5) ?? false) ||
-                (filter.IsDangerNone ? DangerToString == "-" : false);
-            }
-        }
-              
+   
         public MatchMonitorDetailItemViewModel MappingFraudTicketToAllTicket(Dictionary<long, MatchMonitorDetailItemViewModel> fraudMMTicketsDictionary)
         {
             if (fraudMMTicketsDictionary != null && fraudMMTicketsDictionary.TryGetValue(TransId, out var value))
@@ -284,49 +263,7 @@
             }
 
             return this;
-        }
-
-        public decimal BallHeadHDP()
-        {          
-            if (BetTypeID == (int)MatchMonitorBetType.OU
-                    || BetTypeID == (int)MatchMonitorBetType.FirstOU
-                    || BetTypeID == (int)MatchMonitorBetType.QuarterXOU)
-            {
-                return HDP;
-            }
-
-            if (this.HDP < 0)
-            {               
-                return Math.Abs(this.HDP);
-            }
-
-            return this.HDP;
-        }
-
-        public string BallHeadBetTeam()
-        {
-            if (BetTypeID == (int)MatchMonitorBetType.TotalGoal
-                || BetTypeID == (int)MatchMonitorBetType.FirstTotalGoal
-                || BetTypeID == (int)MatchMonitorBetType.CorrectScore
-                || BetTypeID == (int)MatchMonitorBetType.FirstCorrectScore)
-            {
-                return this.BetTeam;
-            }
-
-            if (BetTypeID == (int)MatchMonitorBetType.OU
-                    || BetTypeID == (int)MatchMonitorBetType.FirstOU
-                    || BetTypeID == (int)MatchMonitorBetType.QuarterXOU)
-            {
-                return HDP.ToString();
-            }
-         
-            if (this.HDP < 0)
-            {
-                return Math.Abs(this.HDP).ToString();
-            }
-
-            return this.HDP.ToString();
-        }
+        } 
 
         private void MappingTicketDetail(TicketDetailModel ticket)
         {
@@ -342,6 +279,7 @@
             this.BetTypeID = ticket.BetType;
             this.BetID = ticket.TransId.ToString();
             this.BetTeam = ticket.BetTeam;
+            this.BetTeamFullName = ticket.BetTeamFullName;
             this.BetFrom = ticket.BetFrom;
             this.CurrencyName = ticket.CurrencyName;
             this.CurrencyId = ticket.CurrencyId;
@@ -349,6 +287,7 @@
             this.Amount = ticket.OrgStake;
             this.HDP1 = ticket.Hdp1;
             this.HDP2 = ticket.Hdp2;
+            this.Choice = ticket.Choice;
             this.Score = ticket.LiveIndicator ? (ticket.LiveHomeScore + " - " + ticket.LiveAwayScore) : "-";
             this.TicketStatus = ticket.TicketStatus;
             this.TransTime = ticket.TransDate;
@@ -357,9 +296,12 @@
             this.MDetectGroupID = -2;
             //this.ReasonList = "",         
             this.TransId = ticket.TransId;
+            this.Refno = ticket.Refno;
             this.RobotType = null;
             this.IsRobot = false;
             this.ChoiceOrder = ticket.ChoiceOrder;
+            this.Combinition = ticket.Combinition;
+            this.ParlayTickets = ticket.ParlayTickets;
         }
 
         private void MappingCustInfo(CustInfoModel cust)

@@ -1440,6 +1440,7 @@ function DangerousSettingDetail() {
         if (GetDataCondition(lastScannedSequenceID, lastTransDate, data.TypeOfTickets)) {
             data.LastScannedSequenceID = lastScannedSequenceID;
             data.LastTransDate = lastTransDate == new Date() ? null : lastTransDate;
+            data.TicketType = 1;
             currentType = data.TypeOfTickets;
 
             xhr = $.ajax(common.modifyRelativeUrl('DangerMonitor/GetMatchMonitorDetail'), {

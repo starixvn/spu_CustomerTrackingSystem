@@ -510,6 +510,12 @@
     </Content>
     <Content Include="App_Data\Excel Template\DangerMonitor\DoubleGridTemplate.xlsx" />
     <Content Include="App_Data\Excel Template\DangerMonitor\SingleGridTemplate.xlsx" />
+    <Content Include="App_Data\Excel Template\MatchMonitor\ParlayDoubleGridTemplate.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Excel Template\MatchMonitor\ParlaySingleGridTemplate.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Content\scss\components\_notification.scss" />
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.svg" />
     <Content Include="Content\scss\images\chevron-down.png" />

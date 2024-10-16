@@ -397,6 +397,7 @@
     <Compile Include="MatchMonitor\MMDetailMergeGroupModel.cs" />
     <Compile Include="MatchMonitor\MMFraudTicketsSummaryModel.cs" />
     <Compile Include="MatchMonitor\MMTicketDetailInfoModel.cs" />
+    <Compile Include="MatchMonitor\Parlay\ParlayTicketInfoModel.cs" />
     <Compile Include="MatchMonitor\RobotStatusModel.cs" />
     <Compile Include="MatchMonitor\SuspiciousTransInfoModel.cs" />
     <Compile Include="MatchMonitor\TransGroupModel.cs" />

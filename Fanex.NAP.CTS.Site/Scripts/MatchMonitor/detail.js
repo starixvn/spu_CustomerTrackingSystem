@@ -3,6 +3,11 @@
     TicketFraud: 2
 }
 
+const TicketType = {
+    Single: 1,
+    Parlay: 2
+}
+
 const SiteViewType = {
     SiteAll: "A",
     SiteCredit: "C",
@@ -53,6 +58,7 @@ function MatchMonitorDetail() {
         defaultReasonNames: $('#hdReasonNames').val(),
         mapX: $('#hdMapX').val(),
         mapYY: $('#hdMapYY').val(),
+        ticketType: $("#hdTicketType").val(),
         cbbMarket: $('#cbbMarket'),
         cbbBetType: $('#cbbBetType'),
         cbbMapX: $('#cbbMapX'),
@@ -193,27 +199,31 @@ function MatchMonitorDetail() {
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 5, 6, 8, 10, 13, 14, 15, 16, 17], className: "text-center" },
                 {
-                    targets: [0], width: "3%", render: function (data, type, full, meta) {
-                        return '<label><input type="checkbox" class="col-checkbox" name="chkbx" /></label>';
-                    }
+                    targets: [0], width: "3%", render: function (data, type, obj, meta) {                                             
+                        if (obj.IsSelected == true) {
+                            return '<label><input type="checkbox" class="col-checkbox" name="chkbx" checked /></label>';
+                        } else {                            
+                            return '<label><input type="checkbox" class="col-checkbox" name="chkbx" /></label>';
+                        }
+                    } // Checkbox
                 },
-                { targets: [1], width: "17%" },
-                { targets: [2], width: "4%" },
-                { targets: [3], width: "4%" },
-                { targets: [4], width: "10%", className: "text-center col-dgr" },
-                { targets: [5], width: "5%" },
-                { targets: [6], width: "5%" },
-                { targets: [7], width: "5%", className: "text-center col-betid" },
-                { targets: [8], width: "5%" },
-                { targets: [9], width: "5%", className: "text-right col-amt" },
-                { targets: [10], width: "4%" },
-                { targets: [11], width: "5%", className: "text-center col-score" },
-                { targets: [12], width: "13%", className: "text-center col-transtime" },
-                { targets: [13], width: "3%" },
-                { targets: [14], width: "5%" },
-                { targets: [15], width: "5%", className: "text-center" },
-                { targets: [16], width: "7%", className: "text-center col-reason" },
-                { targets: [17], width: "3%" },
+                { targets: [1], width: "17%", className: "col-username" }, // UserName
+                { targets: [2], width: "4%", className: "col-customerclass" }, // CC
+                { targets: [3], width: "4%", className: "col-bot" }, // Bot
+                { targets: [4], width: "10%", className: "text-center col-dgr" }, // Dgr
+                { targets: [5], width: "5%", className: "col-odds" }, // Odds
+                { targets: [6], width: "5%", className: "col-myodds" }, // MY.Odds
+                { targets: [7], width: "5%", className: "text-left col-betid" }, // BetID
+                { targets: [8], width: "5%", className: "col-currency"}, // Cur
+                { targets: [9], width: "5%", className: "text-right col-amt" }, // Amt
+                { targets: [10], width: "4%", className: "col-hdp" }, // HDP
+                { targets: [11], width: "5%", className: "text-center col-score" }, // Score
+                { targets: [12], width: "13%", className: "text-center col-transtime" }, // Transtime
+                { targets: [13], width: "3%" }, // B.f.
+                { targets: [14], width: "5%" }, // A.Gr.
+                { targets: [15], width: "5%", className: "text-center" }, // M.Gr.
+                { targets: [16], width: "7%", className: "text-center col-reason" }, // Reason
+                { targets: [17], width: "3%" }, // Icon Verify
                 { targets: [18], visible: false },
                 { targets: [19], visible: false }
             ],
@@ -236,39 +246,30 @@ function MatchMonitorDetail() {
                 { data: obj => obj.CustomerClassToString },
                 { data: obj => RenderBotIcon(obj.RobotType, obj.IsRobot) },
                 { data: obj => obj.DangerToString },
-                { data: obj => obj.Odds },
-                { data: obj => obj.MalayOdds },
+                { data: obj => RenderOdds(obj) },
+                { data: obj => RenderMalayOdds(obj) },
                 {
-                    data: obj => {
-                        if (!isDisplaySingleGrid && obj.TransIdToString.length > 6) {
-                            let halfBetID = '...' + obj.TransIdToString.substring(obj.TransIdToString.length - 6);
-
-                            return `<span class='span-betid' data-bet-id=${obj.TransIdToString}>${halfBetID}</span>`;
-                        } else {
-                            return `<span class='span-betid' data-bet-id=${obj.TransIdToString}>${obj.TransIdToString}</span>`;
-                        }
-                    }
+                    data: obj => RenderBetInfo(obj),
                 },
-                { data: obj => obj.CurrencyName },
+                { data: obj => RenderCurrency(obj) },
                 {
-                    data: obj => ConvertNumberToThousandsString(obj.Amount), createdCell: (cell, _, row) => {
+                    data: obj => RenderAmount(obj), createdCell: (cell, _, row) => {
                         if (row.Stake >= 1000) {
                             $(cell).addClass('col-red')
                         }
                     }
                 },
-                {
-                    data: obj => {
-                        return isDisplaySingleGrid ? obj.BetTeam : obj.HDP;
-                    }
-                },
-                { data: obj => obj.Score },
+                { data: obj => RenderHDPChoice(obj) },
+                { data: obj => RenderScore(obj) },
                 { data: obj => obj.TransTimeToString },
                 { data: obj => obj.BetFrom },
                 { data: obj => obj.ADetectGroup },
                 {
                     data: obj => () => {
-                        const assDetectionItem = cacheMGroup.allMGroup[obj.BetID];
+                        const assDetectionItem = domElements.ticketType == TicketType.Single
+                            ? cacheMGroup.allMGroup[obj.BetID]
+                            : cacheMGroup.allMGroup[obj.Refno];
+
                         if (assDetectionItem) {
                             obj.MDetectGroupID = assDetectionItem.GroupID;
                             obj.MDetectGroup = assDetectionItem.GroupName;
@@ -303,13 +304,101 @@ function MatchMonitorDetail() {
                 if (data.SubscriberType === "L") {
                     $(row.cells[1]).addClass('username-hightlight');
                 }
-            }
+               
+                if (data.ViewMoreInfo) {
+                    if (data.IsParlay) {                           
+                        let myArr = [17, 16, 15, 14, 13, 12, 4, 3, 2, 1, 0];
+                        myArr.forEach(function (value, _) {
+                            $(row.cells[value]).remove();
+                        });
+
+                        if (data.ParlayTicket != undefined && data.ParlayTicket.IsMainTicket && data.TicketStatus != 101 && data.TicketStatus != 102) {
+                            let myArr = [0, 1, 2, 3, 4, 5, 6];
+                            myArr.forEach(function (value, _) {
+                                $(row.cells[value]).addClass('bg-parlay-main');
+                            })
+                        }
+                                              
+                    } else {    
+                        let myArr = [0, 1, 2, 3, 4, 12, 13, 14, 15, 16, 17];
+                        myArr.forEach(function (value, _) {
+                            $(row.cells[value]).attr('rowspan', data.Combinition + 1);
+                        });
+
+                    }                  
+                } 
+            }            
         });
+
+        OnclickBetInfo(element);
+    }
+
+    function OnclickBetInfo(element) {
+        $('tbody', element).on('click', 'td span.icon-toggle', function () {
+            let $td = $(this).parent().parent();
+            let rowIndex = element.DataTable().row($td).index(); 
+
+            let row = element.DataTable().row($td);          
+            let data = row.data();
+            data.IsSelected = $(row.node()).find('.col-checkbox').prop('checked');
+
+            if (data.ViewMoreInfo) {
+                data.ViewMoreInfo = false;
+                CollapseParlayTicket(element, rowIndex);
+            } else {
+                data.ViewMoreInfo = true;
+                ExpandParlayTicket(element, data.ParlayTickets, rowIndex, data.TicketStatus); 
+            }
+        })
+    }
+
+    function CollapseParlayTicket(element, rowIndex) {
+        let table = element.DataTable();
+      
+        let rowWithRowspan = $(table.row(rowIndex).node());
+
+        $(rowWithRowspan).find('td div.more-info').empty();
+        $(rowWithRowspan).find('td span.icon-toggle').removeClass('icon-chevron-down').addClass('icon-chevron-right');
+
+        let rowspanCell = rowWithRowspan.find('td[rowspan]');        
+
+        if (rowspanCell.length) {
+       
+            let currentRowspan = parseInt(rowspanCell.attr('rowspan'), 10);
+                      
+            while (currentRowspan > 1) {
+                rowspanCell.attr('rowspan', currentRowspan - 1);
+
+                // Find and remove the next row (the one that the rowspan affects)
+                let nextRow = rowWithRowspan.next('tr');
+
+                table.row(nextRow).remove().draw(false);
+
+                currentRowspan = currentRowspan - 1;
+            }
+        }
+    }
+
+    function ExpandParlayTicket(element, parlayTickets, rowIndex, ticketStatus) {       
+        if (parlayTickets.length > 0) {
+            let table = element.DataTable();
+            let data = table.rows().data().toArray();
+
+            parlayTickets.forEach(function (value, _) {               
+                let newRowData = { Combinition: value.Combinition, ParlayTicket: value, ViewMoreInfo: true, IsParlay: value.IsParlay, TicketStatus: ticketStatus };
+
+                // Insert new row data at the clicked row's index + 1
+                data.splice(rowIndex + 1, 0, newRowData);
+            })
+
+            // Clear the table and re-add all rows with the new row included
+            table.clear().rows.add(data).draw();
+        }
     }
 
     //#endregion Initial Grid
 
-    //#region Setup Filter & Grid    
+    //#region Setup Filter & Grid
     function SetupMultiselect(ccb, selectName, menuWidth = 260, menuHeight = 280) {
         ccb.multiselect({
             menuWidth: menuWidth,
@@ -738,7 +827,7 @@ function MatchMonitorDetail() {
 
         domElements.cbbCashoutType.empty();
 
-        if (data) {
+        if (data && data.length > 0) {
             data.forEach(item => {
                 domElements.cbbCashoutType.append(`<option value='${item.CashoutStatus}'>${item.CashoutName}</option>`);
             });
@@ -1367,7 +1456,11 @@ function MatchMonitorDetail() {
                     BetID: GetBetIDSelected(),
                     BetChoiceType: GetAttributeBetTypeSelected('data-betchoicetype'),
                     BetChoiceHome: GetAttributeBetTypeSelected('data-betchoicehome'),
+                    BetChoiceHomeDisplay: GetAttributeBetTypeSelected('data-betchoicehomedisplay'),
+                    BetChoiceHomeFullName: GetAttributeBetTypeSelected('data-betchoicehomefullname'),
                     BetChoiceAway: GetAttributeBetTypeSelected('data-betchoiceaway'),
+                    BetChoiceAwayDisplay: GetAttributeBetTypeSelected('data-betchoiceawaydisplay'),
+                    BetChoiceAwayFullName: GetAttributeBetTypeSelected('data-betchoiceawayfullname'),
                     LiveIndicator: domElements.cbbMarket.val(),
                     LastScannedSequenceID: lastScannedSequenceID,
                     IsSupportShowAllTickets: isSupportShowAllTickets,
@@ -1396,21 +1489,22 @@ function MatchMonitorDetail() {
                     MGrTranIDListFiltered: GetTranIDsByFilterMGr(),
                     Sport: domElements.sportType,
                     TranstimeFrom: transtime.fromDate,
-                    TranstimeTo: transtime.toDate
+                    TranstimeTo: transtime.toDate,
+                    TicketType: domElements.ticketType
                 };
 
                 params.IsFilterSuspicious = IsFilterSuspicious(params);
 
                 GetMatchMonitorTotalTicket(params, lastScannedSequenceID);
 
-                if (recordsTotalGlobal > 0) {
-                    GetMatchMonitorDetail(params, lastScannedSequenceID, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
-                }
-                else {
+                GetMatchMonitorDetail(params, lastScannedSequenceID, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
+       
+                if (recordsTotalGlobal == 0) {
+                    
                     domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
                     domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
                     domElements.tblMMSG.find('tbody').removeClass('loading');
-                }
+                }                
             }, 10)
         }
     }
@@ -1533,7 +1627,9 @@ function MatchMonitorDetail() {
             BetID: GetBetIDSelected(),
             BetChoiceType: GetAttributeBetTypeSelected('data-betchoicetype'),
             BetChoiceHome: GetAttributeBetTypeSelected('data-betchoicehome'),
+            BetChoiceHomeFullName: GetAttributeBetTypeSelected('data-betchoicehomefullname'),
             BetChoiceAway: GetAttributeBetTypeSelected('data-betchoiceaway'),
+            BetChoiceAwayFullName: GetAttributeBetTypeSelected('data-betchoiceawayfullname'),
             Sites: domElements.cbbSites.val(),
             Reason: domElements.reason,
             LiveIndicator: domElements.cbbMarket.val(),
@@ -1542,7 +1638,8 @@ function MatchMonitorDetail() {
             IsSupportShowAllTickets: isSupportShowAllTickets,
             Sport: domElements.sportType,
             TranstimeFrom: transtime.fromDate,
-            TranstimeTo: transtime.toDate
+            TranstimeTo: transtime.toDate,
+            TicketType: domElements.ticketType
         };
 
         $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorFilter'), {
@@ -1637,6 +1734,106 @@ function MatchMonitorDetail() {
         return html;
     }
 
+    function RenderOdds(obj) {  
+        if (obj.IsParlay && obj.ParlayTicket != undefined) {
+            return obj.ParlayTicket.Odds;
+        }
+
+        return obj.Odds;
+    }
+
+    function RenderMalayOdds(obj) {
+        if (obj.IsParlay && obj.ParlayTicket != undefined) {
+            return "-";
+            //return obj.ParlayTicket.MalayOdds;
+        }
+
+        return obj.MalayOdds;
+    }
+
+    function RenderBetInfo(obj) {
+        if (domElements.ticketType == TicketType.Single) {
+            if (!isDisplaySingleGrid && obj.TransIdToString.length > 6) {
+                let halfBetID = '...' + obj.TransIdToString.substring(obj.TransIdToString.length - 6);
+
+                return `<span class='span-betid' data-bet-id=${obj.TransIdToString}>${halfBetID}</span>`;
+            } else {
+                return `<span class='span-betid' data-bet-id=${obj.TransIdToString}>${obj.TransIdToString}</span>`;
+            }
+        } else {
+            return RenderParlayBetInfo(obj);
+        }
+    }
+
+    function RenderParlayBetInfo(obj) {
+        let html = '';
+
+        if (obj.ViewMoreInfo && obj.ParlayTicket != undefined) {           
+            let ticket = obj.ParlayTicket;           
+            
+            if (ticket.IsMainTicket) {
+                html = `<div>
+                            <ul><li class='parlay-li'>${ticket.HomeName} vs ${ticket.AwayName}</li></ul>
+                        </div>`;
+            } else {
+                html = `<div>                    
+                            <ul><li class='parlay-li bold'>${ticket.BetTypeName} - ${ticket.BetTeamFullName}</li></ul>
+                            <ul><li class='parlay-li bold'>${ticket.HomeName} vs ${ticket.AwayName}</li></ul>
+                            <ul><li class='parlay-li'>${ticket.SportName} ${ticket.LeagueName}</li></ul>
+                            <ul><li class='parlay-li'>${ticket.GlobalShowTime}</li></ul>                  
+                        </div>`;
+            }
+
+            return `<span class='span-betid' data-bet-id=${obj.TransIdToString}>${html} </span>`;
+        } else if (obj.ViewMoreInfo) {
+            let description = obj.Combinition == 2 ? "Double (1 Bet)" : "Treble(1 Bet)";
+            
+            return `<div class='div-col-betinfo'>
+                        <span class='span-betid' data-bet-id=${obj.TransIdToString}>${obj.TransIdToString} </span>
+                        <span class="icon-toggle icon-chevron-down"></span>                        
+                    </div>
+                        <div class='more-info'>
+                            <ul><li class='parlay-li'>Mix Parlay</li></ul>
+                            <ul><li class='parlay-li'>${description}</li></ul>
+                        </div>`;
+        } else {
+            return `<div class='div-col-betinfo'>
+                        <span class='span-betid' data-bet-id=${obj.TransIdToString}>${obj.TransIdToString} </span>
+                        <span class="icon-toggle icon-chevron-right"></span>
+                    </div>`;
+        }
+    }
+
+    function RenderCurrency(obj) {
+        if (obj.IsParlay && obj.ParlayTicket != undefined) {               
+            return '-';
+        }
+
+        return obj.CurrencyName;
+    }
+
+    function RenderAmount(obj) {
+        if (obj.IsParlay && obj.ParlayTicket != undefined) {
+            return '-';
+        }
+        return ConvertNumberToThousandsString(obj.Amount);
+    }
+
+    function RenderHDPChoice(obj) {
+        if (obj.IsParlay && obj.ParlayTicket != undefined) {
+            return obj.ParlayTicket.Choice;
+        }
+        return isDisplaySingleGrid ? obj.BetTeam : obj.HDP;        
+    }
+
+    function RenderScore(obj) {
+        if (obj.IsParlay && obj.ParlayTicket != undefined) {
+            return obj.ParlayTicket.Score;
+        }
+
+        return obj.Score;
+    }
+
     //#endregion Render Grid
 
     //#region Refresh
@@ -1695,7 +1892,8 @@ function MatchMonitorDetail() {
                 LiveIndicator: domElements.cbbMarket.val(),
                 BettypeID: GetBetTypeSelected(),
                 BetID: GetBetIDSelected(),
-                TranIds: GetTranIds().join()
+                TranIds: GetTranIds().join(),
+                TicketType:  domElements.ticketType
             },
             beforeSend: function () {
                 domElements.tblMMHomeTeam.addClass('loading-value');
@@ -1761,13 +1959,13 @@ function MatchMonitorDetail() {
                     SetupMGroupFilter(response.mGrList.MGrItems);
 
                     if (isDisplaySingleGrid) {
-                        BindChangeGroupAssWithOptions(domElements.tblMMSG.DataTable(), itemList);
+                        BindChangeGroupAssWithOptions(domElements.tblMMSG, itemList);
                         let itemSG = domElements.tblMMSG.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
 
                         totalItem = itemSG.length;
                     } else {
-                        BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam.DataTable(), itemList);
-                        BindChangeGroupAssWithOptions(domElements.tblMMAwayTeam.DataTable(), itemList);
+                        BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam, itemList);
+                        BindChangeGroupAssWithOptions(domElements.tblMMAwayTeam, itemList);
 
                         let itemMMHomeTeam = domElements.tblMMHomeTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
                         let itemMMAwayTeam = domElements.tblMMAwayTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
@@ -1865,32 +2063,59 @@ function MatchMonitorDetail() {
         return self.indexOf(value) == index;
     }
 
-    function BindChangeGroupAssWithOptions(table, itemList) {
-        table.rows().every(function () {
+    function BindChangeGroupAssWithOptions(tblElement, itemList) {
+        
+        tblElement.DataTable().rows().every(function (rowIdx) {
             let rowData = this.data();
-            if ($(this.node()).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
-                let newGroupData = itemList.find(function (x) { return x.CustID == rowData.CustID; });
-                if (newGroupData != undefined && newGroupData.GroupID > 0) {
-                    rowData.MDetectGroupID = newGroupData.GroupID;
-                    rowData.MDetectGroup = newGroupData.GroupName;
+            if (rowData != undefined) {
+                rowData.ViewMoreInfo = false;
+                rowData.IsSelected = false;
 
-                    cacheMGroup.allMGroup[rowData.BetID] = newGroupData;
-                    cacheMGroup.selectMgroup[rowData.BetID] = true;
-                } else $(this.node()).css('display', 'none');
-            } else $(this.node()).css('display', 'none');
+                CollapseParlayTicket(tblElement, rowIdx);
 
-            this.invalidate();
+                let rowNode = this.node();
+
+                if ($(rowNode).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
+                    let newGroupData = itemList.find(function (x) { return x.CustID == rowData.CustID; });
+                    if (newGroupData != undefined && newGroupData.GroupID > 0) {
+                        rowData.MDetectGroupID = newGroupData.GroupID;
+                        rowData.MDetectGroup = newGroupData.GroupName;
+                        if (domElements.ticketType == TicketType.Single) {
+                            cacheMGroup.allMGroup[rowData.BetID] = newGroupData;
+                            cacheMGroup.selectMgroup[rowData.BetID] = true;
+                        } else {
+                            cacheMGroup.allMGroup[rowData.Refno] = newGroupData;
+                            cacheMGroup.selectMgroup[rowData.Refno] = true;
+                        }
+                    } else {
+                        $(this.node()).css('display', 'none');
+                    }
+                } else {
+                    $(this.node()).css('display', 'none');
+                }
+
+                this.invalidate();
+            }            
         })
     }
 
     function GetTranIDsByFilterMGr() {
         let arrMGrTranIDs = [];
-        Object.keys(cacheMGroup.allMGroup).forEach((betID) => {
-            arrMGrTranIDs.push({
-                BetID: betID,
-                MGrName: cacheMGroup.allMGroup[betID].GroupName
-            });
-        })
+        if (domElements.ticketType == TicketType.Single) {
+            Object.keys(cacheMGroup.allMGroup).forEach((betID) => {
+                arrMGrTranIDs.push({
+                    BetID: betID,
+                    MGrName: cacheMGroup.allMGroup[betID].GroupName
+                });
+            })
+        } else {
+            Object.keys(cacheMGroup.allMGroup).forEach((refno) => {
+                arrMGrTranIDs.push({
+                    Refno: refno,
+                    MGrName: cacheMGroup.allMGroup[refno].GroupName
+                });
+            })
+        }        
 
         return JSON.stringify(arrMGrTranIDs);
     }
@@ -1901,6 +2126,7 @@ function MatchMonitorDetail() {
     function ExportToExcel() {
         if (IsValidExportExcel()) {
             let mmDetails = {
+                isViewParlay: domElements.ticketType == TicketType.Parlay,
                 isDisplaySingleGrid: isDisplaySingleGrid,
                 matchInfo: GetDataMatchInfo(),
                 homeMItems: isDisplaySingleGrid ? null : GetDataSelectedInGrid(domElements.tblMMHomeTeam.DataTable()),
@@ -1911,6 +2137,7 @@ function MatchMonitorDetail() {
 
             $('body').append('<form action="' + url + '" method="post" target="output_frame" id="postToIframe"></form>');
             $('#postToIframe').append('<input type="hidden" asp-for="isDisplaySingleGridf" name=isDisplaySingleGrid value="' + mmDetails.isDisplaySingleGrid + '" />');
+            $('#postToIframe').append('<input type="hidden" asp-for="isViewParlay" name=isViewParlay value="' + mmDetails.isViewParlay + '" />');
             $('#postToIframe').append('<input type="hidden" asp-for="matchf" name=match value="' + mmDetails.matchInfo + '" />');
             $('#postToIframe').append('<input type="hidden" asp-for="homef" name=homes value="[' + mmDetails.homeMItems + ']" />');
             $('#postToIframe').append('<input type="hidden" asp-for="awayf" name=aways value="[' + mmDetails.awayMItems + ']" />');
@@ -1943,7 +2170,6 @@ function MatchMonitorDetail() {
             })
         }
 
-
         if (homeCheckedL + awayCheckedL + itemCheckL < 1) {
             common.showError("Please select at least 1 record to proceed!")
             return false;
@@ -1969,6 +2195,7 @@ function MatchMonitorDetail() {
     function GetDataSelectedInGrid(table) {
         let datas = '';
         table.rows(function (idx, data, node) {
+            
             if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
                 if (!$(node).is(':hidden')) {
                     datas += `{&quot;SubscriberType&quot;:&quot;${data.SubscriberType}&quot;`;
@@ -1983,19 +2210,47 @@ function MatchMonitorDetail() {
                     datas += `,&quot;BetID&quot;:&quot;${data.BetID}&quot;`;
                     datas += `,&quot;BetTeam&quot;:&quot;${data.BetTeam}&quot;`;
                     datas += `,&quot;Currency&quot;:&quot;${data.CurrencyName}&quot;`;
-                    datas += `,&quot;Amount&quot;:&quot;${data.Amount}&quot;`;
-                    datas += `,&quot;HDP&quot;:&quot;${data.HDP}&quot;`;
+                    datas += `,&quot;Amount&quot;:&quot;${data.Amount}&quot;`;                 
+                    datas += `,&quot;Choice&quot;:&quot;${data.HDP}&quot;`;
                     datas += `,&quot;Score&quot;:&quot;${data.Score}&quot;`;
                     datas += `,&quot;TransTimeToString&quot;:&quot;${data.TransTimeToString}&quot;`;
                     datas += `,&quot;BetFrom&quot;:&quot;${data.BetFrom}&quot;`;
                     datas += `,&quot;ADetectGroup&quot;:&quot;${data.ADetectGroup}&quot;`;
                     datas += `,&quot;MDetectGroup&quot;:&quot;${data.MDetectGroup}&quot;`;
                     datas += `,&quot;ReasonList&quot;:&quot;${data.ReasonList}&quot;`;
-                    datas += `,&quot;PICVerified&quot;:&quot;${data.PICVerified}&quot;},`;
+                    datas += `,&quot;PICVerified&quot;:&quot;${data.PICVerified}&quot;`;
+
+                    datas += `,&quot;ParlayTickets&quot;:[${GetExportParlayTicket(data.ParlayTickets)}]`;
+
+                    datas += `},`;
                 }
             }
         });
 
+        return datas != '' ? datas.slice(0, -1) : datas;
+    }
+
+    function GetExportParlayTicket(parlayTickets) {
+        let datas = '';
+        $.each(parlayTickets, function (index, value) {
+            datas += `{&quot;HomeName&quot;:&quot;${value.HomeName}&quot;`;
+            datas += `,&quot;AwayName&quot;:&quot;${value.AwayName}&quot;`;
+            datas += `,&quot;BetTypeName&quot;:&quot;${value.BetTypeName}&quot;`;
+            datas += `,&quot;BetTeam&quot;:&quot;${value.BetTeam}&quot;`;
+            datas += `,&quot;LeagueName&quot;:&quot;${value.LeagueName}&quot;`;
+            datas += `,&quot;SportName&quot;:&quot;${value.SportName}&quot;`;
+            datas += `,&quot;GlobalShowTime&quot;:&quot;${value.GlobalShowTime}&quot;`;
+            datas += `,&quot;IsMainTicket&quot;:&quot;${value.IsMainTicket}&quot;`;
+            datas += `,&quot;Odds&quot;:&quot;${value.Odds}&quot;`;
+            datas += `,&quot;MalayOdds&quot;:&quot;${value.MalayOdds}&quot;`;
+            datas += `,&quot;CurrencyName&quot;:&quot;${value.CurrencyName}&quot;`;
+            datas += `,&quot;Amount&quot;:&quot;${value.Amount}&quot;`;
+            datas += `,&quot;Choice&quot;:&quot;${value.Choice}&quot;`;
+            datas += `,&quot;Score&quot;:&quot;${value.Score}&quot;`;
+            datas += `},`;
+        })
+            
+                
         return datas != '' ? datas.slice(0, -1) : datas;
     }
 
@@ -2588,25 +2843,57 @@ function MatchMonitorDetail() {
         $('input[type="checkbox"][name="chkbx"]:not(:hidden)', nodes).prop('checked', input.is(":checked"));
     }
 
-    function ToggleBetID(tblElement, isExpand) {
-        $('tr', tblElement).each(function (idx, tr) {
-            let spanBetID = $(tr).find('span.span-betid').first();
+    function ToggleBetID(tblElement, isExpand) {        
+        if (domElements.ticketType == TicketType.Single) {
+            $('tr', tblElement).each(function (idx, tr) {
+                let spanBetID = $(tr).find('span.span-betid').first();
 
-            if (spanBetID != undefined) {
-                let halfBetID = '...';
-                let fullBetID = $(spanBetID[0]).attr('data-bet-id');
+                if (spanBetID != undefined) {
+                    let halfBetID = '...';
+                    let fullBetID = $(spanBetID[0]).attr('data-bet-id');
 
-                if (fullBetID != undefined && fullBetID.length > 5) {
-                    if (isExpand) {
-                        spanBetID.text(fullBetID);
-                    } else {
-                        halfBetID = halfBetID + fullBetID.substring(fullBetID.length - 6);
+                    if (fullBetID != undefined && fullBetID.length > 5) {
+                        if (isExpand) {
+                            spanBetID.text(fullBetID);
+                        } else {
+                            halfBetID = halfBetID + fullBetID.substring(fullBetID.length - 6);
 
-                        spanBetID.text(halfBetID);
+                            spanBetID.text(halfBetID);
+                        }
                     }
                 }
-            }
-        });
+            });
+        } else {
+            let nextRowIdx = 0;
+            let arrDataExpand = [];
+
+            tblElement.DataTable().rows().every(function (rowIdx, tableLoop, row) {
+                let data = this.data();    
+                
+                data.IsSelected = $(this.node()).find('.col-checkbox').prop('checked');
+
+                if (data != undefined && data.IsParlay == false) {
+                    if (isExpand) {
+                        if (!data.ViewMoreInfo) {
+                            data.ViewMoreInfo = true;
+                            let index = rowIdx == 0 ? rowIdx : (nextRowIdx + rowIdx);
+
+                            arrDataExpand.push({ ParlayTickets: data.ParlayTickets, rowIdx: index, IsParlay: data.IsParlay, Combinition: data.Combinition, TicketStatus: data.TicketStatus });
+
+                            nextRowIdx = nextRowIdx + (data.IsParlay ? 0 : data.Combinition);
+                        }
+                    } else {
+                        data.ViewMoreInfo = false;
+                        CollapseParlayTicket(tblElement, rowIdx);
+                    }
+                }
+            });
+            if (arrDataExpand.length > 0) {
+                $.each(arrDataExpand, function (index, value) {
+                    ExpandParlayTicket(tblElement, value.ParlayTickets, value.rowIdx, value.TicketStatus);
+                });
+            }      
+        }
     }
 
     function ToggleMapXYY(isBetTypeChange) {

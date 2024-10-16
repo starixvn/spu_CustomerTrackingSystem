@@ -61,11 +61,17 @@
 
                                     if (!item.IsSupportSuspicious)
                                     {
-                                        <option value="@itemValue" data-bettypeid="@item.BetTypeID" data-betidpattern="@item.BetIDPattern" data-betchoicetype="@item.BetChoiceType" data-betchoicehome="@item.BetChoiceHome" data-betchoiceaway="@item.BetChoiceAway" data-betid="@item.BetID" data-is-support-suspicious="false" class="readOnly">@item.BetTypeName</option>
+                                        <option value="@itemValue" data-bettypeid="@item.BetTypeID" data-betidpattern="@item.BetIDPattern" data-betchoicetype="@item.BetChoiceType" 
+                                                data-betchoicehome="@item.BetChoiceHome" data-betchoicehomedisplay="@item.BetChoiceHomeDisplay" data-betchoicehomefullname="@item.BetChoiceHomeFullName"  
+                                                data-betchoiceaway="@item.BetChoiceAway" data-betchoiceawaydisplay="@item.BetChoiceAwayDisplay" data-betchoiceawayfullname="@item.BetChoiceAwayFullName"                                                 
+                                                data-betid="@item.BetID" data-is-support-suspicious="false" class="readOnly">@item.BetTypeName</option>
                                     }
                                     else
                                     {
-                                        <option value="@itemValue" data-bettypeid="@item.BetTypeID" data-betidpattern="@item.BetIDPattern" data-betchoicetype="@item.BetChoiceType" data-betchoicehome="@item.BetChoiceHome" data-betchoiceaway="@item.BetChoiceAway" data-betid="@item.BetID">@item.BetTypeName</option>
+                                        <option value="@itemValue" data-bettypeid="@item.BetTypeID" data-betidpattern="@item.BetIDPattern" data-betchoicetype="@item.BetChoiceType" 
+                                               data-betchoicehome="@item.BetChoiceHome" data-betchoicehomedisplay="@item.BetChoiceHomeDisplay" data-betchoicehomefullname="@item.BetChoiceHomeFullName"  
+                                               data-betchoiceaway="@item.BetChoiceAway" data-betchoiceawaydisplay="@item.BetChoiceAwayDisplay" data-betchoiceawayfullname="@item.BetChoiceAwayFullName"    
+                                               data-betid="@item.BetID">@item.BetTypeName</option>
                                     }
                                 }
 
@@ -406,7 +412,7 @@
                             @foreach (var reason in group.ReasonItems)
                             {
                                 <option value=@reason.ReasonName selected>@reason.ReasonName</option>
-                            }                           
+                            }
                         </optgroup>
                     }
                 </select>
@@ -427,6 +433,7 @@
             <input id="hdReasonNames" type="hidden" value="@ViewBag.ReasonName" />
             <input id="hdMapX" type="hidden" value="@ViewBag.MapX" />
             <input id="hdMapYY" type="hidden" value="@ViewBag.MapYY" />
+            <input id="hdTicketType" type="hidden" value="@ViewBag.TicketType" />
         </div>
     </div>
 </section>

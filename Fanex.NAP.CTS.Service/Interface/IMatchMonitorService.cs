@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Core;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
@@ -25,7 +26,7 @@
 
         IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);      
 
-        string GetTransFilterSuspicousMGr(MMDetailFilterViewModel filter, TicketDetailViewModel fraudTicket);
+        string GetTransFilterSuspicousMGr(MMDetailFilterViewModel filter, TicketDetailViewModel fraudTicket, TicketType ticketType = TicketType.Single);
 
         TicketDetailViewModel GetTicketDetailFraud(MMDetailResultModel matchDetailInfo, MMDetailInfoViewModel para);
 
@@ -59,12 +60,16 @@
 
         IEnumerable<RobotStatusModel> GetRobotStatus(string transJson);
 
-        MatchMonitorStaticListModel GetMMStaticList();    
+        MatchMonitorStaticListModel GetMMStaticList();
+
+        #region Export Excel
 
         byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath);
 
         byte[] ExportExcelMMDetailDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems
-            , string fileName, string templatePath);
+            , string fileName, string templatePath, bool isViewParlay);
+
+        #endregion
 
         #region User Feedback
         IEnumerable<GetMMUserFeedbackModel> GetUserFeedback(UserFeedbackViewModel para);
@@ -85,6 +90,14 @@
 
         void LogHoldKeyAction(int userId, bool status, int matchId);
 
+        #endregion
+
+        #region Parlay
+        IEnumerable<MMFraudTicketsSummaryViewModel> GetMMParlayFraudTicketsSummary(IEnumerable<MMFraudTicketsSummaryModel> mmModels);
+
+        MMDetailResultModel GetMatchMonitorParlayDetail(MMDetailInfoViewModel filter);
+
+        
         #endregion
 
     }

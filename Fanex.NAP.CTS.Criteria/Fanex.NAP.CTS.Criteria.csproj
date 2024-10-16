@@ -193,7 +193,11 @@
     <Compile Include="MatchMonitor\HoldKey\HoldKeyLogInsertCriteria.cs" />
     <Compile Include="MatchMonitor\MMDetailMergeGroupCriteria.cs" />
     <Compile Include="MatchMonitor\MMFraudTicketsSummaryCriteria.cs" />
+    <Compile Include="MatchMonitor\MMParlayFraudTicketsSummaryCriteria.cs" />
     <Compile Include="MatchMonitor\MMTicketDetailInfoCriteria.cs" />
+    <Compile Include="MatchMonitor\Parlay\MMParlaySuspiciousTicketGetCriteria.cs" />
+    <Compile Include="MatchMonitor\Parlay\ParlayTicketDetailGetCriteria.cs" />
+    <Compile Include="MatchMonitor\Parlay\ParlayTicketInfoGetCriteria.cs" />
     <Compile Include="MatchMonitor\RobotStatusByTransGetCriteria.cs" />
     <Compile Include="MatchMonitor\CustInfoByCustIdGetCriteria.cs" />
     <Compile Include="MatchMonitor\MatchDetailMonitorGetCriteria.cs" />

@@ -24,7 +24,15 @@
 
         public string BetChoiceHome { get; set; }
 
+        public string BetChoiceHomeDisplay { get; set; }
+
+        public string BetChoiceHomeFullName { get; set; }
+
         public string BetChoiceAway { get; set; }
+
+        public string BetChoiceAwayDisplay { get; set; }
+
+        public string BetChoiceAwayFullName { get; set; }
 
         public string BetIDPattern { get; set; }
 

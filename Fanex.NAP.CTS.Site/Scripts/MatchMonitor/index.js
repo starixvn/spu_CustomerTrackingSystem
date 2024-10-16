@@ -269,8 +269,8 @@
                 { data: obj => obj.LeagueName },
                 {
                     data: obj => () => {
-                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&BettypeName={5}&MatchSection={6}&Market={7}&Reason={8}&ReasonName={9}&LeagueID={10}&BetID={11}&SportType={12}&KOTime={13}&IsSupportShowAllTickets={14}&MX={15}&MY={16}";
-                        let para = paramTemplate.format(obj.EventDateToString, obj.MatchID, obj.HomeID, obj.AwayID, obj.BettypeID, obj.BettypeName, obj.MatchSection, obj.Market, obj.Reason, obj.ReasonName, obj.LeagueID, obj.BetID, obj.SportType, obj.KOTime, obj.IsSupportShowAllTickets, obj.MapX, obj.MapYY);
+                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&BettypeName={5}&MatchSection={6}&Market={7}&Reason={8}&ReasonName={9}&LeagueID={10}&BetID={11}&SportType={12}&KOTime={13}&IsSupportShowAllTickets={14}&MX={15}&MY={16}&TicketType={17}";
+                        let para = paramTemplate.format(obj.EventDateToString, obj.MatchID, obj.HomeID, obj.AwayID, obj.BettypeID, obj.BettypeName, obj.MatchSection, obj.Market, obj.Reason, obj.ReasonName, obj.LeagueID, obj.BetID, obj.SportType, obj.KOTime, obj.IsSupportShowAllTickets, obj.MapX, obj.MapYY, obj.TicketType);
 
                         return '<a class="click-view-details" href="MatchMonitor/Detail?' + para + '" target="_blank">' + obj.MatchName + '</a>';
                     }

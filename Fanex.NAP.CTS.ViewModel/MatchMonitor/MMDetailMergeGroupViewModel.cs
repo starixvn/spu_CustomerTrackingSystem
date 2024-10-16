@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using System.Collections.Generic;
     using System.Linq;
@@ -10,7 +11,10 @@
         {
             this.TicketMergeGroups = Enumerable.Empty<MMDetailMergeGroupModel>();
             this.Groups = Enumerable.Empty<GroupInfoViewModel>();
+            this.TicketType = TicketType.Single;
         }
+
+        public TicketType TicketType { get; set; }
 
         public IEnumerable<MMDetailMergeGroupModel> TicketMergeGroups { get; set; }
 

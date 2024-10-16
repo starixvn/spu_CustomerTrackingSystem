@@ -32,6 +32,8 @@
 
         public string BetTeam { get; set; }
 
+        public string BetTeamFullName { get; set; }
+
         public int TicketStatus { get; set; }
 
         public int IsCashout { get; set; }

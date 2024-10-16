@@ -21,8 +21,8 @@
         [SpParam(SqlParamName = "ListSuspiciousTransId")]
         public string ListSuspiciousTransId { get; set; }
 
-        [SpParam(SqlParamName = "TicketType")]
-        public int TicketType { get; set; }
+        [SpParam(SqlParamName = "ViewMode")]
+        public int ViewMode { get; set; }
 
         //[SpParam(SqlParamName = "BetID")]
         //public long BetID { get; set; }

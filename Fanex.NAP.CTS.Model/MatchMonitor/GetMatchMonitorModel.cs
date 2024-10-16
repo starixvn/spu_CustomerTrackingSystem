@@ -15,7 +15,11 @@
 
         public int HomeID { get; set; }
 
+        public string HomeName { get; set; }
+
         public int AwayID { get; set; }
+
+        public string AwayName { get; set; }
 
         public int LeagueID { get; set; }
 
@@ -42,6 +46,8 @@
 
         public string FraudTrans { get; set; }
 
+        public string FraudRefno { get; set; }
+
         public short DataSource { get; set; }
 
         public string BettypeNameDisplay { get; set; }
@@ -49,5 +55,7 @@
         public int DetailsX { get; set; }
 
         public int DetailsY { get; set; }
+
+        public int TicketType { get; set; } // 1: Single, 2: Parlay
     }
 }

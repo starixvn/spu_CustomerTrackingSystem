@@ -2,14 +2,18 @@
 {
     public class MGrTranIDListFilteredModel
     {
+        public TicketType TicketType { get; set; }
+
         public string BetID { get; set; }
-       
+
+        public long Refno { get; set; }
+
         public string MGrName { get; set; }
 
         public long TransID
         {
             get
-            {
+            {               
                 if (string.IsNullOrEmpty(this.BetID))
                 {
                     return 0;
@@ -20,6 +24,31 @@
 
                     return transID;
                 }
+            }
+        }
+
+        public long TransRefnoID
+        {
+            get
+            {
+                if (this.TicketType == TicketType.Single)
+                {
+                    if (string.IsNullOrEmpty(this.BetID))
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        long.TryParse(this.BetID, out long transID);
+
+                        return transID;
+                    }
+                }
+                else
+                {
+                    return this.Refno;
+                }
+
             }
         }
 
