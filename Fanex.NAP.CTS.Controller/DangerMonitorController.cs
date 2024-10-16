@@ -178,6 +178,8 @@
 
             try
             {
+                para.TicketType = TicketType.Single;
+
                 result = _dangerMonitorService.GetMatchMonitorFilter(para);
             }
             catch (Exception ex)
@@ -204,10 +206,12 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.DangerMonitorDetailRpt)]
         public ActionResult GetMatchMonitorDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter)
         {
-            var mdResult = default(MMDetailTicketListViewModel);
+            var mdResult = default(MMDetailTicketListViewModel);            
 
             try
             {
+                para.TicketType = TicketType.Single;
+
                 mdResult = _dangerMonitorService.GetMatchMonitorDetail(para, filter);
             }
             catch (Exception ex)
