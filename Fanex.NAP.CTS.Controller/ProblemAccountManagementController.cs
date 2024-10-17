@@ -129,11 +129,11 @@
                        .GroupBy(g => new { g.CategoryGroup })
                        .Select(x => new { Group = x.Key, CategoryList = x.ToList() })
                        .SelectMany(x => x.CategoryList.Select(y => new CategoryViewModel
-                           {
-                               CategoryIDs = y.CategoryIDs,
-                               CategoryName = y.CategoryName,
-                               RoleGroup = y.RoleGroup
-                           })
+                       {
+                           CategoryIDs = y.CategoryIDs,
+                           CategoryName = y.CategoryName,
+                           RoleGroup = y.RoleGroup
+                       })
                        ).OrderBy(y => y.CategoryName).ToList();
             }
 
@@ -172,7 +172,6 @@
         public ActionResult SaveMarkProblemAccount(ValidateProblemAccountInputViewModel model)
         {
             var result = new ResultSaveProblemAccountViewModel();
-            var dbResult = new DBResult();
 
             var validatedModels = _pamService.ValidateProblemAccounts(model);
 
@@ -182,14 +181,7 @@
 
                 if (!resultValidate.ProblemAccountInvalidList.Any())
                 {
-                    if (model.IsRobot)
-                    {
-                        dbResult = SaveMarkRobotAccount(model, validatedModels);
-                    }
-                    else
-                    {
-                        dbResult = SaveMarkPA(model, validatedModels);
-                    }
+                    var dbResult = SaveMarkPA(model, validatedModels);
 
                     result.ErrorCode = dbResult.ErrorCode;
                     result.ErrorMessage = dbResult.ErrorMsg;
@@ -219,7 +211,7 @@
             var memberPas = pas.Where(x => x.RoleID == (int)ROLE_CUSTOMER.MEMBER);
 
             var result = _paClassificationService.InsertProblemAccountPackage(memberPas, CCInputFlow.InsertPACategory, "Problem Account Management", FromFlow.CTSWEB, true);
-            
+
             if (result.ErrorCode == 0)
             {
                 var agencyPas = pas.Where(x => x.RoleID != (int)ROLE_CUSTOMER.MEMBER)
