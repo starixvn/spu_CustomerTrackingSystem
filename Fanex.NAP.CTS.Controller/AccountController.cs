@@ -179,9 +179,9 @@
         }
 
         [HttpPost]
-        public ActionResult GetStatusRobotClassification(int custID)
+        public ActionResult GetStatusRobotClassification(int custID, ROLE_CUSTOMER roleID)
         {
-            var result = _robotClassificationService.GetStatusRobotClassification(custID);
+            var result = _robotClassificationService.GetStatusRobotClassification(custID, roleID);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }

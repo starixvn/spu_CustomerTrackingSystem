@@ -110,7 +110,7 @@
                 var customerCategory = new customer_category();
                 customerCategory.Initial(custId, ctsCustId, subscriberId, username, isHostPermission, custSubId);
 
-                customerCategory.ReloadStatusRobotUser(custId);
+                customerCategory.ReloadStatusRobotUser(custId, roleID);
 
                 GetCustProfileDates();
 

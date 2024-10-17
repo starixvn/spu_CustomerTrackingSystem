@@ -134,7 +134,7 @@
 
                 LoadGrid(params.CTSCustID);
                 GetCustomerCategory(params.CustID);
-                LoadStatusRobotUser(params.CustID);
+                LoadStatusRobotUser(params.CustID, params.RoleID);
             },
             beforeSend: function () {
                 common.showLoading();
@@ -448,7 +448,7 @@
 
                     LoadGrid(params.CTSCustID);
                     GetCustomerCategory(params.CustID);
-                    LoadStatusRobotUser(params.CustID);
+                    LoadStatusRobotUser(params.CustID, params.RoleID);
                 },
                 beforeSend: function () {
                     common.showLoading();
@@ -464,12 +464,13 @@
         }
     }
 
-    function LoadStatusRobotUser(custID)
+    function LoadStatusRobotUser(custID, roleID)
     {
         $.ajax(common.modifyRelativeUrl('Account/GetStatusRobotClassification'), {
             type: 'POST',
             data: {
-                CustID: custID
+                CustID: custID,
+                RoleID: roleID
             },
             success: function (response) {
                 switch (response.RobotType) {
@@ -704,8 +705,8 @@
         btnDisplayCustomerCategoryBySport.click(function () { DisplayCustomerCategoryBySport(ctsCustId); });
     };
 
-    this.ReloadStatusRobotUser = function (custId) {
-        LoadStatusRobotUser(custId);
+    this.ReloadStatusRobotUser = function (custId, roleID) {
+        LoadStatusRobotUser(custId, roleID);
     }
 
     this.ReloadTab = function (ctsCustId) {

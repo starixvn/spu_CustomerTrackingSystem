@@ -2,7 +2,7 @@
 {
     public class CustomerRobotUserStatusModel
     {
-        public long? CustId { get; set; }
+        public long? CustID { get; set; }
 
         public int? RobotType { get; set; }       
     }
