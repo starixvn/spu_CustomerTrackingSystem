@@ -251,7 +251,7 @@
                 ticket = ticket.Where(x => x.TicketOrder == 0);
 
             var dicCustInfo = custInfo.ToDictionary(x => x.CustID, x => x);
-            var dicVerifiedTrans = verifiedTrans.ToDictionary(x => x.VerifiedTransID, x => x);
+            var dicVerifiedTrans = verifiedTrans.Distinct(x => x.VerifiedTransID).ToDictionary(x => x.VerifiedTransID, x => x);
             var dicGroup = mergeGroup.Groups.ToDictionary(x => x.GroupID, x => x);
 
             ticketResult = mergeGroup.TicketMergeGroups.Join(ticket,

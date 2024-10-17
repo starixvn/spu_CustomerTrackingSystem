@@ -1956,6 +1956,9 @@ function MatchMonitorDetail() {
             success: function (response) {
                 let totalItem = 0;
                 let itemList = response?.data?.ItemList;
+                let itemMMHomeTeam = 0;
+                let itemMMAwayTeam = 0;
+
                 if (response?.data?.ItemList) {
                     cacheMGroup.isActive = true;
 
@@ -1971,12 +1974,10 @@ function MatchMonitorDetail() {
                     } else {
                         BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam, itemList);
                         BindChangeGroupAssWithOptions(domElements.tblMMAwayTeam, itemList);
-
-                        console.log(cacheMGroup.selectMgroup);
+                        
                         if (domElements.ticketType == TicketType.Single) {
-                            let itemMMHomeTeam = domElements.tblMMHomeTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
-                            let itemMMAwayTeam = domElements.tblMMAwayTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
-
+                            itemMMHomeTeam = domElements.tblMMHomeTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
+                            itemMMAwayTeam = domElements.tblMMAwayTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
                         } else {
                             itemMMHomeTeam = domElements.tblMMHomeTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.RefnoToString]; });
                             itemMMAwayTeam = domElements.tblMMAwayTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.RefnoToString]; });
