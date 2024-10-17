@@ -8,6 +8,14 @@
 
         public long Refno { get; set; }
 
+        public string RefnoToString 
+        { 
+            get 
+            {
+                return this.Refno.ToString();
+            } 
+        }
+
         public string MGrName { get; set; }
 
         public long TransID
