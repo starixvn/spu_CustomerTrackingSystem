@@ -527,6 +527,7 @@
                 params.isExcludedTagAssPA = isChecked;
                 params.isProblemAccount = cacheData.isProblemAccount;
                 params.custSubId = custSubId;
+                params.roleID = $("#hdRoleID").val();
 
                 $.ajax(url, {
                     type: 'POST',
@@ -666,7 +667,7 @@
     function DisableButton(hostPermission) {
         isHostPermission = hostPermission === "True";
 
-        if (!isHostPermission) {
+        if (!isHostPermission || $("#hdRoleID").val() > 1) {
             cbbCategorySetting.prop('disabled', true);                 
         }
         btnMarkCategory.prop('disabled', true);
