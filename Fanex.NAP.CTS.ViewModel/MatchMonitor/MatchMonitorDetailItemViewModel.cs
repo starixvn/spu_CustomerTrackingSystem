@@ -208,6 +208,8 @@
 
         public long Refno { get; set; }
 
+        public string RefnoToString { get { return this.Refno.ToString(); } }
+
         public int? RobotType { get; set; }
 
         public bool IsRobot { get; set; }

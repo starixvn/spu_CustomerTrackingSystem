@@ -268,7 +268,7 @@ function MatchMonitorDetail() {
                     data: obj => () => {
                         const assDetectionItem = domElements.ticketType == TicketType.Single
                             ? cacheMGroup.allMGroup[obj.BetID]
-                            : cacheMGroup.allMGroup[obj.Refno];
+                            : cacheMGroup.allMGroup[obj.RefnoToString];
 
                         if (assDetectionItem) {
                             obj.MDetectGroupID = assDetectionItem.GroupID;
@@ -382,7 +382,12 @@ function MatchMonitorDetail() {
     function ExpandParlayTicket(element, parlayTickets, rowIndex, ticketStatus) {       
         if (parlayTickets.length > 0) {
             let table = element.DataTable();
-            let data = table.rows().data().toArray();
+          
+            let visibleRows = table.rows().nodes().to$().filter(function () {               
+                return $(this).css('display') != 'none';              
+            });            
+
+            let data = table.rows(visibleRows).data().toArray();       
 
             parlayTickets.forEach(function (value, _) {               
                 let newRowData = { Combinition: value.Combinition, ParlayTicket: value, ViewMoreInfo: true, IsParlay: value.IsParlay, TicketStatus: ticketStatus };
@@ -1951,6 +1956,9 @@ function MatchMonitorDetail() {
             success: function (response) {
                 let totalItem = 0;
                 let itemList = response?.data?.ItemList;
+                let itemMMHomeTeam = 0;
+                let itemMMAwayTeam = 0;
+
                 if (response?.data?.ItemList) {
                     cacheMGroup.isActive = true;
 
@@ -1966,10 +1974,15 @@ function MatchMonitorDetail() {
                     } else {
                         BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam, itemList);
                         BindChangeGroupAssWithOptions(domElements.tblMMAwayTeam, itemList);
-
-                        let itemMMHomeTeam = domElements.tblMMHomeTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
-                        let itemMMAwayTeam = domElements.tblMMAwayTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
-
+                        
+                        if (domElements.ticketType == TicketType.Single) {
+                            itemMMHomeTeam = domElements.tblMMHomeTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
+                            itemMMAwayTeam = domElements.tblMMAwayTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
+                        } else {
+                            itemMMHomeTeam = domElements.tblMMHomeTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.RefnoToString]; });
+                            itemMMAwayTeam = domElements.tblMMAwayTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.RefnoToString]; });
+                        }
+                        
                         totalItem = itemMMHomeTeam.length + itemMMAwayTeam.length;
                     }
                 }
@@ -2084,8 +2097,8 @@ function MatchMonitorDetail() {
                             cacheMGroup.allMGroup[rowData.BetID] = newGroupData;
                             cacheMGroup.selectMgroup[rowData.BetID] = true;
                         } else {
-                            cacheMGroup.allMGroup[rowData.Refno] = newGroupData;
-                            cacheMGroup.selectMgroup[rowData.Refno] = true;
+                            cacheMGroup.allMGroup[rowData.RefnoToString] = newGroupData;
+                            cacheMGroup.selectMgroup[rowData.RefnoToString] = true;
                         }
                     } else {
                         $(this.node()).css('display', 'none');
@@ -2109,10 +2122,10 @@ function MatchMonitorDetail() {
                 });
             })
         } else {
-            Object.keys(cacheMGroup.allMGroup).forEach((refno) => {
+            Object.keys(cacheMGroup.allMGroup).forEach((refnoToString) => {
                 arrMGrTranIDs.push({
-                    Refno: refno,
-                    MGrName: cacheMGroup.allMGroup[refno].GroupName
+                    Refno: refnoToString,
+                    MGrName: cacheMGroup.allMGroup[refnoToString].GroupName
                 });
             })
         }        
@@ -2868,30 +2881,35 @@ function MatchMonitorDetail() {
             let arrDataExpand = [];
 
             tblElement.DataTable().rows().every(function (rowIdx, tableLoop, row) {
-                let data = this.data();    
-                
-                data.IsSelected = $(this.node()).find('.col-checkbox').prop('checked');
+                let data = this.data();
+                let isDisplayNone = $(this.node()).css('display') == 'none';
 
-                if (data != undefined && data.IsParlay == false) {
-                    if (isExpand) {
-                        if (!data.ViewMoreInfo) {
-                            data.ViewMoreInfo = true;
-                            let index = rowIdx == 0 ? rowIdx : (nextRowIdx + rowIdx);
+                if (!isDisplayNone) {
+                    data.IsSelected = $(this.node()).find('.col-checkbox').prop('checked');
 
-                            arrDataExpand.push({ ParlayTickets: data.ParlayTickets, rowIdx: index, IsParlay: data.IsParlay, Combinition: data.Combinition, TicketStatus: data.TicketStatus });
+                    if (data != undefined && data.IsParlay == false) {
+                        if (isExpand) {
+                            if (!data.ViewMoreInfo) {
+                                data.ViewMoreInfo = true;
+                                let index = rowIdx == 0 ? rowIdx : (nextRowIdx + rowIdx);
 
-                            nextRowIdx = nextRowIdx + (data.IsParlay ? 0 : data.Combinition);
+                                arrDataExpand.push({ ParlayTickets: data.ParlayTickets, rowIdx: index, IsParlay: data.IsParlay, Combinition: data.Combinition, TicketStatus: data.TicketStatus });
+
+                                nextRowIdx = nextRowIdx + (data.IsParlay ? 0 : data.Combinition);
+                            }
+                        } else {
+                            data.ViewMoreInfo = false;
+                            CollapseParlayTicket(tblElement, rowIdx);
                         }
-                    } else {
-                        data.ViewMoreInfo = false;
-                        CollapseParlayTicket(tblElement, rowIdx);
                     }
                 }
+               
+               
             });
             if (arrDataExpand.length > 0) {
                 $.each(arrDataExpand, function (index, value) {
                     ExpandParlayTicket(tblElement, value.ParlayTickets, value.rowIdx, value.TicketStatus);
-                });
+                });                
             }      
         }
     }
