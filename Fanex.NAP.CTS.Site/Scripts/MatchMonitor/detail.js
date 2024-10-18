@@ -336,11 +336,30 @@ function MatchMonitorDetail() {
     function OnclickBetInfo(element) {
         $('tbody', element).on('click', 'td span.icon-toggle', function () {
             let $td = $(this).parent().parent();
-            let rowIndex = element.DataTable().row($td).index(); 
+            let $tr = $td.parent();
+           
+            let rowIndex = -1; 
+
+            let visibleRows = element.DataTable().rows().nodes().to$().filter(function () {
+                return $(this).css('display') != 'none';
+            });
+
+            $(visibleRows).each(function (idx, trEle) {
+                let tr1 = $tr.eq(0); 
+                let tr2 = $(trEle).eq(0); 
+
+                if (tr1.is(tr2)) {
+                    rowIndex = idx;
+                }
+            });
+
+            if (rowIndex == -1) {
+                return;
+            }
 
             let row = element.DataTable().row($td);          
             let data = row.data();
-            data.IsSelected = $(row.node()).find('.col-checkbox').prop('checked');
+            data.IsSelected = $(row.node()).find('.col-checkbox').prop('checked');            
 
             if (data.ViewMoreInfo) {
                 data.ViewMoreInfo = false;
@@ -2879,10 +2898,14 @@ function MatchMonitorDetail() {
         } else {
             let nextRowIdx = 0;
             let arrDataExpand = [];
+            let reduceIndex = 0;
 
             tblElement.DataTable().rows().every(function (rowIdx, tableLoop, row) {
                 let data = this.data();
                 let isDisplayNone = $(this.node()).css('display') == 'none';
+
+                if (isDisplayNone)
+                    reduceIndex = reduceIndex + 1;
 
                 if (!isDisplayNone) {
                     data.IsSelected = $(this.node()).find('.col-checkbox').prop('checked');
@@ -2891,7 +2914,9 @@ function MatchMonitorDetail() {
                         if (isExpand) {
                             if (!data.ViewMoreInfo) {
                                 data.ViewMoreInfo = true;
+
                                 let index = rowIdx == 0 ? rowIdx : (nextRowIdx + rowIdx);
+                                index = index - reduceIndex;
 
                                 arrDataExpand.push({ ParlayTickets: data.ParlayTickets, rowIdx: index, IsParlay: data.IsParlay, Combinition: data.Combinition, TicketStatus: data.TicketStatus });
 
@@ -2902,10 +2927,9 @@ function MatchMonitorDetail() {
                             CollapseParlayTicket(tblElement, rowIdx);
                         }
                     }
-                }
-               
-               
+                }                              
             });
+
             if (arrDataExpand.length > 0) {
                 $.each(arrDataExpand, function (index, value) {
                     ExpandParlayTicket(tblElement, value.ParlayTickets, value.rowIdx, value.TicketStatus);
