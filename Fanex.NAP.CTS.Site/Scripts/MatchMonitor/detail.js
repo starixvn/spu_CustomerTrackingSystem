@@ -336,11 +336,30 @@ function MatchMonitorDetail() {
     function OnclickBetInfo(element) {
         $('tbody', element).on('click', 'td span.icon-toggle', function () {
             let $td = $(this).parent().parent();
-            let rowIndex = element.DataTable().row($td).index(); 
+            let $tr = $td.parent();
+           
+            let rowIndex = -1; 
+
+            let visibleRows = element.DataTable().rows().nodes().to$().filter(function () {
+                return $(this).css('display') != 'none';
+            });
+
+            $(visibleRows).each(function (idx, trEle) {
+                let tr1 = $tr.eq(0); 
+                let tr2 = $(trEle).eq(0); 
+
+                if (tr1.is(tr2)) {
+                    rowIndex = idx;
+                }
+            });
+
+            if (rowIndex == -1) {
+                return;
+            }
 
             let row = element.DataTable().row($td);          
             let data = row.data();
-            data.IsSelected = $(row.node()).find('.col-checkbox').prop('checked');
+            data.IsSelected = $(row.node()).find('.col-checkbox').prop('checked');            
 
             if (data.ViewMoreInfo) {
                 data.ViewMoreInfo = false;
