@@ -36,7 +36,6 @@
         private readonly IRescanCustomerClassificationService _rescanClassificationService;
         private readonly IProblemAccountClassificationAgencyService _paClassificationAgencyService;
         private readonly IRescanCustomerClassificationAgencyService _rescanClassificationAgencyService;
-        private readonly ICustomerClassificationService _customerClassificationService;
         private readonly ICommonService _commonService;
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
@@ -46,7 +45,7 @@
             _paClassificationService = new ProblemAccountClassificationService();
             _paClassificationAgencyService = new ProblemAccountClassificationAgencyService();
             _rescanClassificationService = new RescanCustomerClassificationService();
-            _customerClassificationService = new CustomerClassificationService();
+            _rescanClassificationAgencyService = new RescanCustomerClassificationAgencyService();
             _commonService = new CommonService();
         }
 
@@ -227,22 +226,7 @@
             }
 
             return result;
-        }
-
-        private DBResult SaveMarkRobotAccount(ValidateProblemAccountInputViewModel model, IEnumerable<ProblemAccountValidatedModel> validatedModels)
-        {
-            var robotAccounts = validatedModels.Select(x => new InsertProblemAccountModel
-            {
-                CustID = x.CustID,
-                CategoryID = model.CategoryID,
-                Remark = model.Comment,
-                IsMarkedDirectly = true,
-                IsFromCTS = true,
-                CreatedBy = CurrentSession.UserId
-            });
-
-            return _paClassificationService.InsertProblemAccountPackage(robotAccounts, CCInputFlow.InsertPACategory, "Mark Robot Management", FromFlow.CTSWEB, false);
-        }
+        }     
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementMarkNew)]
@@ -263,6 +247,7 @@
 
 
                     UnmarkAndRescanProblemAccountAgency(agencyList, model);
+
                     UnmarkAndRescanProblemAccount(memberList, model);
                 }
             }
