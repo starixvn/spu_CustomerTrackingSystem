@@ -2898,10 +2898,14 @@ function MatchMonitorDetail() {
         } else {
             let nextRowIdx = 0;
             let arrDataExpand = [];
+            let reduceIndex = 0;
 
             tblElement.DataTable().rows().every(function (rowIdx, tableLoop, row) {
                 let data = this.data();
                 let isDisplayNone = $(this.node()).css('display') == 'none';
+
+                if (isDisplayNone)
+                    reduceIndex = reduceIndex + 1;
 
                 if (!isDisplayNone) {
                     data.IsSelected = $(this.node()).find('.col-checkbox').prop('checked');
@@ -2910,7 +2914,9 @@ function MatchMonitorDetail() {
                         if (isExpand) {
                             if (!data.ViewMoreInfo) {
                                 data.ViewMoreInfo = true;
+
                                 let index = rowIdx == 0 ? rowIdx : (nextRowIdx + rowIdx);
+                                index = index - reduceIndex;
 
                                 arrDataExpand.push({ ParlayTickets: data.ParlayTickets, rowIdx: index, IsParlay: data.IsParlay, Combinition: data.Combinition, TicketStatus: data.TicketStatus });
 
@@ -2921,10 +2927,9 @@ function MatchMonitorDetail() {
                             CollapseParlayTicket(tblElement, rowIdx);
                         }
                     }
-                }
-               
-               
+                }                              
             });
+
             if (arrDataExpand.length > 0) {
                 $.each(arrDataExpand, function (index, value) {
                     ExpandParlayTicket(tblElement, value.ParlayTickets, value.rowIdx, value.TicketStatus);
