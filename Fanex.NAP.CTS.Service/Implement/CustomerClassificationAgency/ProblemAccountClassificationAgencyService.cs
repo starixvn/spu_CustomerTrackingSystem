@@ -57,12 +57,13 @@
                     {
                         InsertPALogicsAgency(insertPaResult.CustInfos);
 
-                        //_ccService.PushDataToExternalPackge(insertPaResult.CustInfos.Select(x => x.CustID), new PushDataToExternalModel
-                        //{
-                        //    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
-                        //    IsUpdateDangerToMainDB = true,
-                        //    IsSyncAFC = ConfigSettings.IsSyncAFCData
-                        //}, fromFlow);
+                        _ccService.PushDataToExternalPackge(insertPaResult.CustInfos.Select(x => x.CustID), new PushDataToExternalModel
+                        {
+                            RoleGroup = RoleGroupType.Agency,
+                            ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
+                            IsUpdateDangerToMainDB = false, // Agency not update danger
+                            IsSyncAFC = ConfigSettings.IsSyncAFCData
+                        }, fromFlow);
                     }
                 }
             }

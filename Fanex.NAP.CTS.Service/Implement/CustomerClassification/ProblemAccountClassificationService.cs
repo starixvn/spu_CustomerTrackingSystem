@@ -58,6 +58,7 @@
 
                         _ccService.PushDataToExternalPackge(insertPaResult.CustInfos.Select(x => x.CustID), new PushDataToExternalModel
                         {
+                            RoleGroup = RoleGroupType.Member,
                             ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,                          
                             IsUpdateDangerToMainDB = true,
                             IsSyncAFC = ConfigSettings.IsSyncAFCData
