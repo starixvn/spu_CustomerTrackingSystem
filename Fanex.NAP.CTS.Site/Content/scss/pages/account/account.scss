@@ -265,7 +265,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 }
 
 .td-bg-gray {
-    background-color: #808080;
+    background-color: #C0C0C0;
     font-weight: bold;
 }
 
@@ -327,10 +327,10 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         align-items: inherit;
 
         .bg-gray {
-            background-color: #808080;
+            background-color: #C0C0C0;
 
             &:after {
-                background-color: #808080;
+                background-color: #C0C0C0;
             }
         }
 
@@ -371,7 +371,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         }
 
         &.border-gray {
-            border-bottom: 2px solid #808080;
+            border-bottom: 2px solid #C0C0C0;
         }
 
         &.border-yellow {
