@@ -316,7 +316,6 @@ namespace Fanex.NAP.CTS.Model
         Parlay = 2
     }
 
-    public enum CCInputFlowAgency
     public enum AgencyCCInputFlow
     {
         [Description("InsertVVIP")]
