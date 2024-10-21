@@ -27,10 +27,10 @@
         /// <summary>
         /// RescanCustomerClassification for Member
         /// </summary>
-        public bool RescanCustomerClassification(RescanCustClassificationModel paras)
+        public bool RescanCustomerClassification(RescanCustClassificationModel parameters)
         {
             var result = new RescanResultModel();
-            var custRescans = GetRescanCustomerClassification(string.Join(",", paras.CustIds));
+            var custRescans = GetRescanCustomerClassification(string.Join(",", parameters.CustIds));
 
             if (custRescans.CustInfos != null && custRescans.CustInfos.Any())
             {
@@ -40,11 +40,11 @@
                 {
                     if ((CCInputFlow)group.InputFlowID == CCInputFlow.RescanNormal)
                     {
-                        PreNormalClassification(group.CustRescans.Select(x => x.CustID), paras);
+                        PreNormalClassification(group.CustRescans.Select(x => x.CustID), parameters);
                     }
                     else
                     {
-                        result = RescanProblemAccount(group.CustRescans, paras, (CCInputFlow)group.InputFlowID);
+                        result = RescanProblemAccount(group.CustRescans, parameters, (CCInputFlow)group.InputFlowID);
                     }
                 }                
             }
@@ -57,12 +57,12 @@
         {
             var resultCustRescans = base.RescanCustomerClassification(custNormals, ccInputFlow, paras.IsToQueue);
 
-            PushDataToExternalPackge(resultCustRescans, paras);
+            var isSuccess = PushDataToExternalPackge(resultCustRescans, paras);
 
             return new RescanResultModel()
             {
                 CustIds = resultCustRescans.ToList(),
-                IsSuccess = true
+                IsSuccess = isSuccess
             };
         }
 
@@ -81,12 +81,10 @@
         }
 
         private bool PushDataToExternalPackge(IEnumerable<long> custIdsToSyncCC, RescanCustClassificationModel parameters)
-        {
-            bool isSuccess = true;
-
+        {            
             if (custIdsToSyncCC.Any())
             {
-                isSuccess = custClassificationService.PushDataToExternalPackge(custIdsToSyncCC.Distinct(), new PushDataToExternalModel
+                return custClassificationService.PushDataToExternalPackge(custIdsToSyncCC.Distinct(), new PushDataToExternalModel
                 {
                     ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                     IsUpdateDangerToMainDB = parameters.IsUpdateDangerToMainDB,
@@ -95,7 +93,7 @@
                 }, FromFlow.CTSWEB);
             }
 
-            return isSuccess;
+            return true;
         }
         #endregion Private Methods
     }

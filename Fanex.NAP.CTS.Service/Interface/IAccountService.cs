@@ -6,10 +6,8 @@
     using Fanex.NAP.CTS.Model.Account.AssociatedAccount;
     using Fanex.NAP.CTS.Model.Account.CustomerCategoryBySport;
     using Fanex.NAP.CTS.Model.Account.CustomerInfo;
-    using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassification;
-    using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Model.Transaction;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
@@ -25,7 +23,7 @@
 
         IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);
 
-        CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(long ctsCustId);
+        CustomerInfoByCtsCustIdModel GetCustomerInfoByCTSCustId(long ctsCustId);
 
         CustomerInfoByCustIdsModel GetCustomerInfoDangerous(long custID);
 
@@ -117,9 +115,9 @@
 
         IEnumerable<MatchesDetailInfoModel> GetTicketDetails(MatchesAssociationDetailViewModel macthInfo, string custIds, string betTypes);
 
-        IEnumerable<MatchesDetailInfoViewModel> MergeCustGroupTicketInfo(IEnumerable<MatchCustomerGGBViewModel> custGroups, IEnumerable<MatchesDetailInfoModel> ticketDetails, bool isGGB);
+        IEnumerable<MatchesDetailInfoViewModel> MergeCustGroupTicketInfo(IEnumerable<MatchCustomerGgbViewModel> custGroups, IEnumerable<MatchesDetailInfoModel> ticketDetails, bool isGGB);
 
-        IEnumerable<MatchCustomerGGBViewModel> MergeCustMatchInfo(IEnumerable<GBAssociationAIModel> matchInfo, IEnumerable<CustomerGroupModel> groupInfo);
+        IEnumerable<MatchCustomerGgbViewModel> MergeCustMatchInfo(IEnumerable<GBAssociationAIModel> matchInfo, IEnumerable<CustomerGroupModel> groupInfo);
 
         IEnumerable<CategoryInfoModel> GetAllCategory();		
 

@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class MatchCustomerGGBViewModel
+    public class MatchCustomerGgbViewModel
     {
         public Int64 GroupID { get; set; }
 

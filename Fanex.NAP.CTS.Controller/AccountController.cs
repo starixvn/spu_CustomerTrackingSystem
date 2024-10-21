@@ -1893,11 +1893,11 @@
                 model.CreatedBy = CurrentSession.UserId;
                 model.ActionType = ActionTypeQueueCustCategory.Remove;
 
-                var messageResult = model.RoleId == ROLE_CUSTOMER.MEMBER ? UnmarkAndRescanVVIP(model) : UnmarkAndRescanVVIPAgency(model);
+                result.ErrorMsg = model.RoleId == ROLE_CUSTOMER.MEMBER ? UnmarkAndRescanVVIP(model) : UnmarkAndRescanVVIPAgency(model);
 
                 return Json(new
                 {
-                    errorCode = result.ErrorCode,
+                    errorCode = !string.IsNullOrEmpty(result.ErrorMsg) ? - 1: 0,
                     errorMessage = result.ErrorMsg
                 }, JsonRequestBehavior.AllowGet);
             }
@@ -1944,17 +1944,14 @@
 
             if (resultUmmark.CustInfos.IsNotNullOrEmpty())
             {
-                if (model.CustId != 0)
+                _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                 {
-                    _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
-                    {
-                        CustIds = new List<long> { model.CustId },
-                        IsToQueue = false,
-                        IsUpdateDangerToMainDB = true,
-                        FunctionId = FunctionId.UnmarkCustomerCategory,
-                        ServiceName = "RemoveCustomerCategory"
-                    });
-                }
+                    CustIds = new List<long> { model.CustId },
+                    IsToQueue = false,
+                    IsUpdateDangerToMainDB = true,
+                    FunctionId = FunctionId.UnmarkCustomerCategory,
+                    ServiceName = "RemoveCustomerCategory"
+                });
             }
 
             return resultUmmark.ErrorMessage;

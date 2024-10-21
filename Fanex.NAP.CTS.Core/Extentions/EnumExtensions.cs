@@ -55,7 +55,7 @@ namespace Fanex.NAP.CTS.Core.Extentions
             {
                 theEnum = (T)Enum.Parse(enumType, value);
             }
-            catch (System.ArgumentException e)
+            catch
             {
                 bool found = false;
                 foreach (T enumValue in Enum.GetValues(enumType))

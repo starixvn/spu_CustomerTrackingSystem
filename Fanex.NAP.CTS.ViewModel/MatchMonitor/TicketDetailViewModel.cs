@@ -368,12 +368,7 @@
                                                             }).OrderBy(x => x.StatusOrderIdx);
 
             #region Danger List
-            var dangerList = filter.DropdownListFilterDependOn.Where(x => !string.IsNullOrEmpty(x.DangerToString));
-            var currency1 = dangerList.Where(x => x.Danger1 > 0).Select(x => x.CurrencyName).Distinct();
-            var currency2 = dangerList.Where(x => x.Danger2 > 0).Select(x => x.CurrencyName).Distinct();
-            var currency3 = dangerList.Where(x => x.Danger3 > 0).Select(x => x.CurrencyName).Distinct();
-            var currency4 = dangerList.Where(x => x.Danger4 > 0).Select(x => x.CurrencyName).Distinct();
-            var currency5 = dangerList.Where(x => x.Danger5 > 0).Select(x => x.CurrencyName).Distinct();
+            var dangerList = filter.DropdownListFilterDependOn.Where(x => !string.IsNullOrEmpty(x.DangerToString));        
 
             filter.DropdownListFilter.DangerList.Danger1.DangerItems = dangerList.Where(x => x.Danger1 > 0).Select(x => x.Danger1).Distinct()
                .Select(x => new DangerItemViewModel { Danger = x, DangerName = "Original " + x })

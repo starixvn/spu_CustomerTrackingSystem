@@ -9,15 +9,7 @@
         public long CustID { get; set; }
 
         public int CategoryID { get; set; }
-
-        //public int TVSReasonID { get; set; }
-
-        //public int? RobotCounter { get; set; }
-
-        //public int? TVSRequestID { get; set; }
-
-        //public bool? IsParlay { get; set; }
-
+     
         public int? SportType { get; set; }
 
         public int? IssueTypeID { get; set; }

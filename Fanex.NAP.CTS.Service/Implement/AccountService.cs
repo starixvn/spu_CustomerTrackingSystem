@@ -55,7 +55,7 @@
             return repository.Fetch<CustInfoModel>(criteria);
         }
 
-        public CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(Int64 ctsCustId)
+        public CustomerInfoByCtsCustIdModel GetCustomerInfoByCTSCustId(Int64 ctsCustId)
         {
             var criteria = new CustomerInfoByCTSCustIdCriteria
             {
@@ -64,7 +64,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var result = db.QueryEntity<CustomerInfoByCTSCustIdModel>(criteria);
+                var result = db.QueryEntity<CustomerInfoByCtsCustIdModel>(criteria);
 
                 return result;
             }
@@ -323,11 +323,11 @@
                 isException = true;
                 LogService.Error("CTS - Validate manual association multiple - exception: " + ex.Message, ex);
 
-                return GenerateAssociationErrorList(fromCTSCustId, toUserNameList);
+                return GenerateAssociationErrorList(toUserNameList);
             }
         }
 
-        private IEnumerable<ValidateManualAssociationMultipleModel> GenerateAssociationErrorList(long fromCTSCustId, string toUserNameList)
+        private IEnumerable<ValidateManualAssociationMultipleModel> GenerateAssociationErrorList(string toUserNameList)
         {
             var errorList = new List<ValidateManualAssociationMultipleModel>();
             var userNameList = toUserNameList.Split(',').AsEnumerable();
@@ -478,7 +478,7 @@
             return Enumerable.Empty<MatchesDetailInfoModel>();
         }
 
-        public IEnumerable<MatchesDetailInfoViewModel> MergeCustGroupTicketInfo(IEnumerable<MatchCustomerGGBViewModel> custGroups, IEnumerable<MatchesDetailInfoModel> ticketDetails, bool isGGB)
+        public IEnumerable<MatchesDetailInfoViewModel> MergeCustGroupTicketInfo(IEnumerable<MatchCustomerGgbViewModel> custGroups, IEnumerable<MatchesDetailInfoModel> ticketDetails, bool isGGB)
         {
             var result = new List<MatchesDetailInfoViewModel>();
 
@@ -535,22 +535,22 @@
             return result ?? Enumerable.Empty<MatchesDetailInfoViewModel>();
         }
 
-        public IEnumerable<MatchCustomerGGBViewModel> MergeCustMatchInfo(IEnumerable<GBAssociationAIModel> matchInfo, IEnumerable<CustomerGroupModel> groupInfo)
+        public IEnumerable<MatchCustomerGgbViewModel> MergeCustMatchInfo(IEnumerable<GBAssociationAIModel> matchInfo, IEnumerable<CustomerGroupModel> groupInfo)
         {
             if (matchInfo != null && matchInfo.Any() && groupInfo != null && groupInfo.Any())
             {
                 return matchInfo.Join(groupInfo,
                                     m => m.GroupID,
                                     g => g.OriginGroupID,
-                                    (m, g) => new MatchCustomerGGBViewModel
+                                    (m, g) => new MatchCustomerGgbViewModel
                                     {
                                         CustID = g.CustID,
                                         GroupID = g.GroupID,
                                         AdditionalInfo = m.AdditionalInfo
-                                    }) ?? Enumerable.Empty<MatchCustomerGGBViewModel>();
+                                    }) ?? Enumerable.Empty<MatchCustomerGgbViewModel>();
             }
 
-            return Enumerable.Empty<MatchCustomerGGBViewModel>();
+            return Enumerable.Empty<MatchCustomerGgbViewModel>();
         }
 
         public IEnumerable<CategoryInfoModel> GetAllCategory()
