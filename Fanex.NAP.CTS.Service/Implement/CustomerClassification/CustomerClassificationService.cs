@@ -133,7 +133,12 @@
                 {
                     var result = UpdateCCToMainDB(customerClassifications, roleGroupType);
 
-                    if (result.ErrorCode == 200 || retryTime == 0)
+                    if (result.ErrorCode == 200)
+                    {
+                        LogService.Error($"CTS - PushDataToExternalService - exception not existing CustIDs in mainDB, error msg: {result.ErrorMsg}");
+                    }
+
+                    if (retryTime == 0)
                     {
                         LogService.Error($"CTS - PushDataToExternalService - exception from MainDB with error code: {result.ErrorCode}, error msg: {result.ErrorMsg} with listCust: {JsonConvert.SerializeObject(customerClassifications)}");
                     }
