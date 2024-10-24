@@ -209,7 +209,7 @@
 
             var memberPas = pas.Where(x => x.RoleID == (int)ROLE_CUSTOMER.MEMBER);
 
-            var result = _paClassificationService.InsertProblemAccountPackage(memberPas, CCInputFlow.InsertPACategory, "Problem Account Management", FromFlow.CTSWEB, true);
+            var result = _paClassificationService.InsertProblemAccountPackage(memberPas, CCInputFlow.InsertPACategory, "Problem Account Management", FromFlow.CTSWEB, !model.IsRobot);
 
             if (result.ErrorCode == 0)
             {
@@ -222,7 +222,7 @@
                         return y;
                     });
 
-                return _paClassificationAgencyService.InsertProblemAccountAgencyPackage(agencyPas, AgencyCCInputFlow.InsertPACategory, "Problem Account Management", FromFlow.CTSWEB, true);
+                return _paClassificationAgencyService.InsertProblemAccountAgencyPackage(agencyPas, AgencyCCInputFlow.InsertPACategory, "Problem Account Management", FromFlow.CTSWEB, !model.IsRobot);
             }
 
             return result;

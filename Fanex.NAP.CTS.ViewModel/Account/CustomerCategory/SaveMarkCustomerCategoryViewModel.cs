@@ -20,6 +20,8 @@ namespace Fanex.NAP.CTS.ViewModel.Account.CustomerCategory
 
         public bool IsAffectAllDownlines { get; set; }
 
+        public bool IsRobot { get; set; }
+
         public string Remark { get; set; }
 
     }

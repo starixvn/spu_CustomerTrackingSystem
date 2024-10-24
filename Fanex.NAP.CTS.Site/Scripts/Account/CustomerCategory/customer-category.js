@@ -172,6 +172,7 @@
 
                 LoadGrid(params.CTSCustId);
                 GetCustomerCategory(params.CustId);
+                LoadStatusRobotUser(params.CustId, params.RoleID);
             },
             beforeSend: function () {
                 common.showLoading();
@@ -252,9 +253,7 @@
 
                     ResetCategorySetting();
 
-                    RenderCategoryColorSummary(json.categoryList, json.isMultiplePA, json.usnBackGroundColor);
-
-                    LoadStatusRobotUser($("#hdCustID").val(), $("#hdRoleID").val());
+                    RenderCategoryColorSummary(json.categoryList, json.isMultiplePA, json.usnBackGroundColor);                   
                 }
                 return response;
             },
@@ -400,6 +399,7 @@
 
                 LoadGrid(params.CTSCustID);
                 GetCustomerCategory(params.CustID);
+                LoadStatusRobotUser(params.CustID, params.RoleID);
             },
             beforeSend: function () {
                 common.showLoading();

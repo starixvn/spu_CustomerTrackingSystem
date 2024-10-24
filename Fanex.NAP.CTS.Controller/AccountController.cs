@@ -1831,42 +1831,15 @@
             };
 
             var result = model.RoleID == ROLE_CUSTOMER.MEMBER
-                ? _problemAccountClassificationService.InsertProblemAccountPackage(pas, CCInputFlow.InsertPACategory, "ProfileAddProblemAccount", FromFlow.CTSWEB, true)
-                : _problemAccountClassificationAgencyService.InsertProblemAccountAgencyPackage(pas, AgencyCCInputFlow.InsertPACategory, "ProfileAddProblemAccount", FromFlow.CTSWEB, true);
+                ? _problemAccountClassificationService.InsertProblemAccountPackage(pas, CCInputFlow.InsertPACategory, "ProfileAddProblemAccount", FromFlow.CTSWEB, !model.IsRobot)
+                : _problemAccountClassificationAgencyService.InsertProblemAccountAgencyPackage(pas, AgencyCCInputFlow.InsertPACategory, "ProfileAddProblemAccount", FromFlow.CTSWEB, !model.IsRobot);
 
             return Json(new
             {
                 errorCode = result.ErrorCode,
                 errorMessage = result.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
-        }
-
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]
-        public ActionResult SaveMarkRobotAccount(SaveMarkCustomerCategoryViewModel model)
-        {
-            var robotAccounts = new List<InsertProblemAccountModel>()
-                {
-                    new InsertProblemAccountModel
-                    {
-                        CustID = model.CustID,
-                        CategoryID = model.CategoryID,
-                        Remark = model.Remark,
-                        RoleID = (int)model.RoleID,
-                        IsMarkedDirectly = true,
-                        IsFromCTS = true,
-                        CreatedBy = CurrentSession.UserId
-                    }
-                };
-
-            var dbResult = _problemAccountClassificationService.InsertProblemAccountPackage(robotAccounts, CCInputFlow.InsertPACategory, "Mark Robot Profile Page", FromFlow.CTSWEB, false);
-
-            return Json(new
-            {
-                errorCode = dbResult.ErrorCode,
-                errorMessage = dbResult.ErrorMsg
-            }, JsonRequestBehavior.AllowGet);
-        }
+        }       
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
