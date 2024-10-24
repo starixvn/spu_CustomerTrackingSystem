@@ -138,11 +138,6 @@
                         LogService.Error($"CTS - PushDataToExternalService - exception not existing CustIDs in mainDB, error msg: {result.ErrorMsg}");
                     }
 
-                    if (retryTime == 0)
-                    {
-                        LogService.Error($"CTS - PushDataToExternalService - exception from MainDB with error code: {result.ErrorCode}, error msg: {result.ErrorMsg} with listCust: {JsonConvert.SerializeObject(customerClassifications)}");
-                    }
-
                     if (result.ErrorCode == 200 || result.ErrorCode == 0)
                     {
                         return true;
@@ -150,6 +145,8 @@
 
                     if (retryTime == 0)
                     {
+                        LogService.Error($"CTS - PushDataToExternalService - exception from MainDB with error code: {result.ErrorCode}, error msg: {result.ErrorMsg} with listCust: {JsonConvert.SerializeObject(customerClassifications)}");
+
                         return false;
                     }
 
