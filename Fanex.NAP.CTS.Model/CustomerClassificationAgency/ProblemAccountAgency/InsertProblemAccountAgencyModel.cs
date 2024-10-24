@@ -27,6 +27,7 @@
             PerformanceTime = data.PerformanceTime;
             IsFromTW = data.IsFromTW;
             IsFromAI = data.IsFromAI;
+            RobotCounter = data.RobotCounter;
         }
 
         public InsertProblemAccountAgencyModel(RescanCustomerClassificationAgencyModel data) 
@@ -42,6 +43,8 @@
             IsMarkedDirectly = data.IsMarkedDirectly;
             IsFromCTS = data.IsFromCTS;
             CreatedDate = data.CreatedDate;
+            IsFromTW = data.IsFromTW;
+            RobotCounter = data.RobotCounter;
         }      
 
         public long CustID { get; set; }
@@ -81,6 +84,7 @@
         public bool IsFromTW { get; set; }
 
         public bool IsFromAI { get; set; }
-   
+
+        public int? RobotCounter { get; set; }
     }
 }

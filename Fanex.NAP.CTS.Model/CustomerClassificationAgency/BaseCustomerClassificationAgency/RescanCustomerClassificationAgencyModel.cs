@@ -26,15 +26,11 @@
 
         public bool IsMarkedDirectly { get; set; }
 
-        //public bool IsFromTVS { get; set; }
-
-        //public bool IsFromTW { get; set; }
-
         public bool IsFromCTS { get; set; }
 
-        //public bool IsFromAI { get; set; }
+        public bool IsFromTW { get; set; }
 
-        //public bool IsFromImperva { get; set; }
+        public int? RobotCounter { get; set; }
 
         public DateTime LastModifiedDate { get; set; }
 
