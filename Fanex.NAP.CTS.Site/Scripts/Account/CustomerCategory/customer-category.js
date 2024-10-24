@@ -252,7 +252,9 @@
 
                     ResetCategorySetting();
 
-                    RenderCategoryColorSummary(json.categoryList, json.isMultiplePA, json.usnBackGroundColor);                  
+                    RenderCategoryColorSummary(json.categoryList, json.isMultiplePA, json.usnBackGroundColor);
+
+                    LoadStatusRobotUser($("#hdCustID").val(), $("#hdRoleID").val());
                 }
                 return response;
             },
