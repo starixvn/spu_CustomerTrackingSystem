@@ -1698,12 +1698,12 @@
                 IsRobotUser = isRobotUser,
                 ProblemAccountList = problemAccounts
             };
-
-            var classifications = _accountService.GetCustomerClassification(ctsCustID);
+           
+            var classifications = _accountService.GetCustomerClassification(ctsCustID, roleID, out bool isExcludedTagAssPA);
 
             if (classifications != null && classifications.Any())
             {
-                result.CategoryList = classifications.Select(x => new GetCustomerCategoryViewModel(x));
+                result.CategoryList = classifications.Select(x => new GetCustomerCategoryViewModel(x));              
             }
 
             return PartialView("CustomerCategory/MarkCustomerCategory", result);

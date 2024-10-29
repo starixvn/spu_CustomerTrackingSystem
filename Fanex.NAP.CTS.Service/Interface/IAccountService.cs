@@ -79,8 +79,6 @@
 
         IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId, ROLE_CUSTOMER Role, out bool isExcludedTagAssPA);
 
-        IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId);
-
         IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long ctsCustId, ROLE_CUSTOMER RoleID);
       
         DBResult AddQueueAffectDownlinesCustomerCategory(CustomerCategoryModel categoryModel);       

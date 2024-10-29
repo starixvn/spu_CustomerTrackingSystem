@@ -921,25 +921,7 @@
                     return categories;
                 }
             }
-        }
-
-        public IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId)
-        {
-            var criteria = new GetCTSCustomerClassificationCriteria
-            {
-                CTSCustID = ctsCustId
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                using (var result = db.QueryMultiple(criteria))
-                {                   
-                    result.Read<bool>(); // Excluded Tag Ass PA
-
-                    return result.Read<GetCustomerClassificationModel>();
-                }
-            }
-        }
+        }       
 
         public IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long ctsCustId, ROLE_CUSTOMER roleID)
         {
