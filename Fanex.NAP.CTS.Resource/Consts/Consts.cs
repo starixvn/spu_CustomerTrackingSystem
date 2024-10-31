@@ -121,6 +121,16 @@
         public const string TWInitialSmartRemark = "Detection Date: {0} - Probability Threshold: {1}";
         public const string TWTWInitialGBRemark = "Detection Date: {0} - GB Bet Count: {1} - Sport: {2}";
 
+        public const int MEMBER_PARENTID_VVIP = 1000;
+        public const int MEMBER_PARENTID_PA = 20000;
+        public const int MEMBER_PARENTID_POTENTIALPA = 30000;
+        public const int MEMBER_PARENTID_NORMAL = 40000;
+        public const int AGENCY_PARENTID_VVIP = 101000; 
+        public const int AGENCY_PARENTID_PA = 120000;
+        public const int AGENCY_PARENTID_NORMAL = 140000;
+        public const int MEMBER_CATEID_VVIP = 1010;
+        public const int AGENCY_CATEID_VVIP = 101010;
+
         public struct Platform
         {
             public const string Desktop = "Desktop";
