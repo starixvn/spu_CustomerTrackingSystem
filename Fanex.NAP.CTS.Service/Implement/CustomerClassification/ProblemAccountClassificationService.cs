@@ -47,9 +47,7 @@
             try
             {
                 if (problemAccounts.Any())
-                {
-                    var custIds = problemAccounts.Select(c => c.CustID)?.Distinct();
-                  
+                {                  
                     var insertPaResult = InsertProblemAccounts(problemAccounts, ccInputFlow, FunctionId.InsertPAM, isToQueue);
 
                     if (insertPaResult.CustInfos != null && insertPaResult.CustInfos.Any())

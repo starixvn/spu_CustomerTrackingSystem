@@ -1687,7 +1687,7 @@
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult MarkCustomerCategory(long ctsCustID, ROLE_CUSTOMER roleID, string userName, bool isRobotUser)
         {
-            var problemAccounts = _pamService.GetProblemAccountCategories(ViewCategoryPageSource.Other);
+            var problemAccounts = _pamService.GetProblemAccountCategories(ViewCategoryQueryType.ProfilePage_PA);
 
             problemAccounts = problemAccounts.Where(x => x.MapRole(roleID)).OrderBy(x => x.Priorty);
 
@@ -1727,6 +1727,8 @@
                 CreatedBy = CurrentSession.UserId,
                 ActionType = ActionTypeQueueCustCategory.Insert
             };
+
+            categoryModel.CategoryId = _pamService.GetVvipCategoryID(model.RoleID);
 
             var isSuccess = MarkDirectVVIP(categoryModel);
 

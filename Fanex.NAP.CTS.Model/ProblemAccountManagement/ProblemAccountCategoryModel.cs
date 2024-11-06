@@ -18,8 +18,10 @@ namespace Fanex.NAP.CTS.Model.ProblemAccountManagement
 
         public bool IsRobot { get; set; }
 
-        public int RoleGroup { get; set; }     
-        
+        public int RoleGroup { get; set; }
+
+        public int RoleID { get; set; }
+
         public bool MapRole(ROLE_CUSTOMER role)
         {
             var roleGroup = (int)ROLE_CUSTOMER.MEMBER;

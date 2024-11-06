@@ -14,7 +14,8 @@
     using NPOI.SS.UserModel;
     using NPOI.XSSF.UserModel;    
     using System.Collections.Generic;
-    using System.Linq;    
+    using System.Linq;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class ProblemAccountManagementService : IProblemAccountManagementService
     {     
@@ -47,14 +48,21 @@
             }
         }
 
-        public IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories(ViewCategoryPageSource categoryPageSource)
+        public IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories(ViewCategoryQueryType queryType)
         {
-            var criteria = new GetProblemAccountCategoryCriteria() {  PageSource = (int)categoryPageSource};
+            var criteria = new GetProblemAccountCategoryCriteria() {  QueryType = (int)queryType };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<ProblemAccountCategoryModel>(criteria);
             }
+        }
+
+        public int GetVvipCategoryID(ROLE_CUSTOMER roleID)
+        {
+            var vvipCategories = this.GetProblemAccountCategories(ViewCategoryQueryType.ProfilePage_Vvip).FirstOrDefault(x => x.RoleID == (int)roleID);
+
+            return vvipCategories?.CategoryID ?? 0;
         }
 
         public IEnumerable<ProblemAccountValidatedModel> ValidateProblemAccounts(ValidateProblemAccountInputViewModel model)
@@ -88,15 +96,15 @@
             return result;
         }
      
-        public byte[] ExportProblemAccount(IEnumerable<GetProblemAccountViewModel> data, string fileName, string templatePath, ProblemAccountFilterViewModel filter)
+        public byte[] ExportProblemAccount(IEnumerable<GetProblemAccountViewModel> problemAccounts, string fileName, string templatePath, ProblemAccountFilterViewModel filter)
         {
             var writer = new ExcelTemplateWriter(templatePath, fileName, "PAM");
             writer.CopyRows(0, 1);
 
-            FilterBlock(filter, data.Count(), ref writer);
+            FilterBlock(filter, problemAccounts.Count(), ref writer);
             writer.CopyRows(2, 1); // Fill Header
 
-            FillRowData(data, ref writer);
+            FillRowData(problemAccounts, ref writer);
             writer.SyncColumnsWidth(7);
 
             return writer.ToBytes();

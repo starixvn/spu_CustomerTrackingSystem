@@ -5,14 +5,17 @@
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
     using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement;    
     using System.Collections.Generic;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public interface IProblemAccountManagementService
     {    
         IEnumerable<CategoryInfoModel> GetAllCategory();
 
         IEnumerable<GetProblemAccountModel> GetProblemAccounts(ProblemAccountFilterViewModel filter);
-        
-        IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories(ViewCategoryPageSource categoryPageSource);
+
+        int GetVvipCategoryID(ROLE_CUSTOMER roleID);
+
+        IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories(ViewCategoryQueryType queryType);
 
         IEnumerable<ProblemAccountValidatedModel> ValidateProblemAccounts(ValidateProblemAccountInputViewModel model);
 

@@ -973,9 +973,7 @@
                 Remark = categoryModel.Remark,
                 ActionType = (int)categoryModel.ActionType
             };
-
-            var repository = new DynamicRepository();
-
+            
             try
             {
                 repository.Execute(criteria);
