@@ -188,32 +188,32 @@
         /// Get VVIP Customers
         /// </summary>
         /// <returns>Customer classification in XML format</returns>
-        [HttpGet]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetVVIPCustomerAPI)]
-        public string GetVVIPCustomer()
-        {
-            try
-            {
-                var cateIDs = new List<int> { MEMBER_CATEID_VVIP, AGENCY_CATEID_VVIP };
+        //[HttpGet]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetVVIPCustomerAPI)]
+        //public string GetVVIPCustomer()
+        //{
+        //    try
+        //    {
+        //        var cateIDs = new List<int> { MEMBER_CATEID_VVIP, AGENCY_CATEID_VVIP };
 
-                var custClassifications = _accountService.GetCustomerClassificationByCategory(string.Join(",", cateIDs));
+        //        var custClassifications = _accountService.GetCustomerClassificationByCategory(string.Join(",", cateIDs));
 
-                return custClassifications.Any()
-                    ? custClassifications.Select(c => new CustomerClassification()
-                    {
-                        CustID = c.CustID,
-                        ParentCategoryName = "",
-                        CategoryName = c.CategoryName
-                    }).ToXmlString()
-                    : string.Empty;
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("GetCustomerClassificationByCategoryIDs failed: " + ex.Message + ex.StackTrace);
-            }
+        //        return custClassifications.Any()
+        //            ? custClassifications.Select(c => new CustomerClassification()
+        //            {
+        //                CustID = c.CustID,
+        //                ParentCategoryName = "",
+        //                CategoryName = c.CategoryName
+        //            }).ToXmlString()
+        //            : string.Empty;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogService.Error("GetCustomerClassificationByCategoryIDs failed: " + ex.Message + ex.StackTrace);
+        //    }
 
-            return string.Empty;
-        }
+        //    return string.Empty;
+        //}
 
         /// <summary>
         /// Get class of customer

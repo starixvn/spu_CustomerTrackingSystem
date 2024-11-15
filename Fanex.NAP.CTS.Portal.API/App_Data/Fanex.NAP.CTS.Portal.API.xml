@@ -537,12 +537,6 @@
             <param name="categoryIDList"></param>
             <returns>Customer classification in XML format</returns>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetVVIPCustomer">
-            <summary>
-            Get VVIP Customers
-            </summary>
-            <returns>Customer classification in XML format</returns>
-        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.CheckCustomerNotExisted(System.String,System.DateTime,System.DateTime)">
             <summary>
             Get class of customer
