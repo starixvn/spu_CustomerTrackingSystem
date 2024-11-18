@@ -521,7 +521,7 @@
             Get Association data from MySQL
             </summary>
             <param name="custId"></param>
-            <returns></returns>
+            <returns></returns>       
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetCustomerClassification(System.String)">
             <summary>
