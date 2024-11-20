@@ -206,7 +206,9 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(new HealthCheckCriteria().GetSettingKey()))
             {
-                db.CreateDbConnection().Open();
+                var connection = db.CreateDbConnection();
+                connection.Open();
+                connection.Close();
             }
         }
 
