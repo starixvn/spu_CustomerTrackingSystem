@@ -21,7 +21,7 @@
 		<Setting Key="CTS_CustomerStatistics_GetPerformance_BySport" SpName="CTS_CustomerStatistics_GetPerformance_BySport" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />			
 		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged" DbName="DBCust.CustDB.bodbAdminNet" />
 		<Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged" DbName="DBCust.CustDB.bodbAdminNet" />
-		<Setting Key="Acc_CustomerUpdateCustomerClass" SpName="Acc_CustomerUpdateCustomerClass_xpre" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />	
+		<Setting Key="Acc_CustomerUpdateCustomerClass" SpName="Acc_CustomerUpdateCustomerClass" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />	
 		<Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />		
 		<Setting Key="CTS_MatchInfo_Get" SpName="CTS_MatchInfo_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_SportBettype_Get" SpName="CTS_SportBettype_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
@@ -32,7 +32,7 @@
 	<Function name="CustomerClassification">
 		<Setting Key="CTS_CustomerUpdDanger" SpName="CTS_CustomerUpdDanger" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
 		<Setting Key="CTS_GeneralNormalClassification_RescanNormal_Preprocess" SpName="CTS_GeneralNormalClassification_RescanNormal_Preprocess" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
-		<Setting Key="CTS_GeneralNormalClassificationAgency_RescanNormal_Preprocess" SpName="CTS_GeneralNormalClassificationAgency_RescanNormal_Preprocess_xpre" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
+		<Setting Key="CTS_GeneralNormalClassificationAgency_RescanNormal_Preprocess" SpName="CTS_GeneralNormalClassificationAgency_RescanNormal_Preprocess" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
 		<Setting Key="Acc_CustomerUpdateCustomerClassBySport" SpName="Acc_CustomerUpdateCustomerClassBySport" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="600" />
 	</Function>
 
