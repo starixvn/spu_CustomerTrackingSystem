@@ -17,7 +17,6 @@
     using Fanex.NAP.CTS.Service.Interface.Api;
     using Fanex.NAP.CTS.User.Helper;
     using Fanex.NAP.CTS.ViewModel.API.CustomerClassCategory;
-    using Fanex.NAP.CTS.ViewModel.API.Http;
     using ONEbook.UM;
     using ONEbook.UM.Services;
     using System;
@@ -127,7 +126,19 @@
             var result = string.Empty;
             try
             {
-                var custClassifications = _accountService.GetCustomerClassificationForAPI(custIdList, "1000,20000,30000,40000");
+                var parentIDs = new List<int> 
+                {   
+                    MEMBER_PARENTID_VVIP,
+                    MEMBER_PARENTID_PA,
+                    MEMBER_PARENTID_POTENTIALPA,
+                    MEMBER_PARENTID_NORMAL,
+                    AGENCY_PARENTID_VVIP,
+                    AGENCY_PARENTID_PA,
+                    AGENCY_PARENTID_NORMAL
+                };
+
+                var custClassifications = _accountService.GetCustomerClassificationForAPI(custIdList, string.Join(",", parentIDs));
+
                 result = custClassifications.Select(c => new CustomerClassification()
                 {
                     CustID = c.CustID,
@@ -177,29 +188,32 @@
         /// Get VVIP Customers
         /// </summary>
         /// <returns>Customer classification in XML format</returns>
-        [HttpGet]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetVVIPCustomerAPI)]
-        public string GetVVIPCustomer()
-        {
-            try
-            {
-                var custClassifications = _accountService.GetCustomerClassificationByCategory("1010");
-                return custClassifications.Any()
-                    ? custClassifications.Select(c => new CustomerClassification()
-                    {
-                        CustID = c.CustID,
-                        ParentCategoryName = "",
-                        CategoryName = c.CategoryName
-                    }).ToXmlString()
-                    : string.Empty;
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("GetCustomerClassificationByCategoryIDs failed: " + ex.Message + ex.StackTrace);
-            }
+        //[HttpGet]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetVVIPCustomerAPI)]
+        //public string GetVVIPCustomer()
+        //{
+        //    try
+        //    {
+        //        var cateIDs = new List<int> { MEMBER_CATEID_VVIP, AGENCY_CATEID_VVIP };
 
-            return string.Empty;
-        }
+        //        var custClassifications = _accountService.GetCustomerClassificationByCategory(string.Join(",", cateIDs));
+
+        //        return custClassifications.Any()
+        //            ? custClassifications.Select(c => new CustomerClassification()
+        //            {
+        //                CustID = c.CustID,
+        //                ParentCategoryName = "",
+        //                CategoryName = c.CategoryName
+        //            }).ToXmlString()
+        //            : string.Empty;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogService.Error("GetCustomerClassificationByCategoryIDs failed: " + ex.Message + ex.StackTrace);
+        //    }
+
+        //    return string.Empty;
+        //}
 
         /// <summary>
         /// Get class of customer

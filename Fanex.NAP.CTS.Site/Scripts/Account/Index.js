@@ -2,6 +2,7 @@
     var username = $("#hdUsername").val();
     var custId = $("#hdCustId").val();
     var ctsCustId = $("#hdCTSCustId").val();
+    let roleID = $("#hdRoleID").val();
     var subscriberId = $("#hdSubscriberId").val();
     var subscriber = $("#hdSubscriber").val();
     var subscriberSourceID = $("#hdSubscriberSourceID").val();
@@ -109,7 +110,7 @@
                 var customerCategory = new customer_category();
                 customerCategory.Initial(custId, ctsCustId, subscriberId, username, isHostPermission, custSubId);
 
-                customerCategory.ReloadStatusRobotUser(custId);
+                customerCategory.ReloadStatusRobotUser(custId, roleID);
 
                 GetCustProfileDates();
 
@@ -272,7 +273,8 @@
             traditional: true,
             async: true,            
             data: {
-                ctsCustId: ctsCustId
+                ctsCustId: ctsCustId,
+                roleID: roleID
             },
             success: function (response) {
                 if (response !== null) {

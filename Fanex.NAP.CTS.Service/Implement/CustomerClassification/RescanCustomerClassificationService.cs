@@ -3,7 +3,6 @@
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
-    using Fanex.NAP.CTS.Criteria;
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
@@ -23,14 +22,15 @@
         {
             custClassificationService = new CustomerClassificationService();         
             repository = new DynamicRepository();
-        }        
+        }
 
-        public bool RescanCustomerClassification(RescanCustClassificationModel paras)
+        /// <summary>
+        /// RescanCustomerClassification for Member
+        /// </summary>
+        public bool RescanCustomerClassification(RescanCustClassificationModel parameters)
         {
             var result = new RescanResultModel();
-            var custIdsToRescanPA = new List<long>();
-            var smaCustIds = GetAgentCusts(paras.CustIds);
-            var custRescans = GetRescanCustomerClassification(string.Join(",", paras.CustIds));
+            var custRescans = GetRescanCustomerClassification(string.Join(",", parameters.CustIds));
 
             if (custRescans.CustInfos != null && custRescans.CustInfos.Any())
             {
@@ -40,22 +40,14 @@
                 {
                     if ((CCInputFlow)group.InputFlowID == CCInputFlow.RescanNormal)
                     {
-                        PreNormalClassification(group.CustRescans.Select(x => x.CustID), paras);
+                        PreNormalClassification(group.CustRescans.Select(x => x.CustID), parameters);
                     }
                     else
                     {
-                        result = RescanProblemAccount(group.CustRescans, paras, (CCInputFlow)group.InputFlowID);
-
-                        custIdsToRescanPA.AddRange(result.CustIds);
+                        result = RescanProblemAccount(group.CustRescans, parameters, (CCInputFlow)group.InputFlowID);
                     }
                 }                
             }
-
-            if (smaCustIds.Any())
-            {
-                result.IsSuccess = PushDataToExternal(paras, custIdsToRescanPA, smaCustIds);
-            }
-
             return result.IsSuccess;
         }
 
@@ -65,12 +57,12 @@
         {
             var resultCustRescans = base.RescanCustomerClassification(custNormals, ccInputFlow, paras.IsToQueue);
 
-            PushDataToExternalPackge(resultCustRescans, paras);
+            var isSuccess = PushDataToExternalPackge(resultCustRescans, paras);
 
             return new RescanResultModel()
             {
                 CustIds = resultCustRescans.ToList(),
-                IsSuccess = true
+                IsSuccess = isSuccess
             };
         }
 
@@ -88,57 +80,21 @@
             repository.Execute(criteria);           
         }
 
-        private IEnumerable<long> GetAgentCusts(IEnumerable<long> custIds)
-        {
-            if (custIds != null && custIds.Any())
-            {
-                var criteria = new GetRoleCustomerCriteria
-                {
-                    CustIds = string.Join(",", custIds.Distinct())
-                };
-
-                var data = repository.Fetch<RoleCustomerModel>(criteria);
-
-                if (data != null && data.Any())
-                {
-                    return data.Where(c => c.RoleID == (int)ROLE_CUSTOMER.AGENT
-                                        || c.RoleID == (int)ROLE_CUSTOMER.MASTER
-                                        || c.RoleID == (int)ROLE_CUSTOMER.SUPER).Select(c => c.CustID);
-                }
-            }
-
-            return Enumerable.Empty<long>();
-        }
-
-        private bool PushDataToExternal(RescanCustClassificationModel parameters, IEnumerable<long> custIdsToRescanPA, IEnumerable<long> smaCustIds)
-        {            
-            if (smaCustIds.Any())
-            {
-                var custToRemovePA = smaCustIds.Except(custIdsToRescanPA);
-
-                PushDataToExternalPackge(custToRemovePA?.Distinct(), parameters);
-            }
-
-            return true;
-        }                 
-
         private bool PushDataToExternalPackge(IEnumerable<long> custIdsToSyncCC, RescanCustClassificationModel parameters)
-        {
-            bool isSuccess = true;
-
+        {            
             if (custIdsToSyncCC.Any())
             {
-                isSuccess = custClassificationService.PushDataToExternalPackge(custIdsToSyncCC.Distinct(), new PushDataToExternalModel
+                return custClassificationService.PushDataToExternalPackge(custIdsToSyncCC.Distinct(), new PushDataToExternalModel
                 {
-                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,                   
+                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                     IsUpdateDangerToMainDB = parameters.IsUpdateDangerToMainDB,
-                    IsSyncAFC = ConfigSettings.IsSyncAFCData
+                    IsSyncAFC = ConfigSettings.IsSyncAFCData,
+                    RoleGroup = RoleGroupType.Member
                 }, FromFlow.CTSWEB);
             }
 
-            return isSuccess;
-        }     
-     
+            return true;
+        }
         #endregion Private Methods
     }
 }

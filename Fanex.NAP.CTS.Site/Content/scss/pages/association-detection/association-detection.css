@@ -749,6 +749,9 @@ body {
           background: #70809E !important; }
         .association-detection-report .association-detection-content .table-report .table-association-detection .group td {
           color: #fff !important; }
+      .association-detection-report .association-detection-content .table-report .table-association-detection tr .td-bg-gray {
+        background-color: #C0C0C0;
+        font-weight: bold; }
       .association-detection-report .association-detection-content .table-report .table-association-detection tr .td-bg-yellow {
         background-color: #FDB703;
         font-weight: bold; }
@@ -865,6 +868,10 @@ body {
     background-color: #2BC769;
     background-size: 5px 5px;
     background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent); }
+
+.td-bg-gray {
+  background-color: #C0C0C0;
+  font-weight: bold; }
 
 .td-bg-yellow {
   background-color: #FDB703;

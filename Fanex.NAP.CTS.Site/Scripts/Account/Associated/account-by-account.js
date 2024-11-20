@@ -39,6 +39,7 @@
     let titleMatchBettingPatternName = $('#titleStakeIPPatternName');
     let titleStakeIPPattern = $('#titleStakeIPPattern');
     let assDetailsPopup = $("#assicationDetails");
+    let cbbRole = $("#cbbRole");
 
     let isLoadingMatchBettingPattern;
     let isLoadingStakeIPPattern;
@@ -51,6 +52,8 @@
     let tblOTGBRound2 = $("#tblOTGBRound2");
     let tblOTGBRound3 = $("#tblOTGBRound3");
     let configTableOTGB = false;
+
+    let categoryGroup = [];
     
     function RenderTag(obj) {
         let html = "";
@@ -105,6 +108,9 @@
                     CTSCustId: function () {
                         return $("#hdCTSCustId").val();
                     },
+                    RoleIDs: function () {
+                        return cbbRole.val();
+                    },
                     AssociationStatus: function () {
                         return $('#association-cbb-status').val();
                     },
@@ -127,7 +133,7 @@
                             cbbAssociationSubscriber.find('option').not(':selected').each(function () { selectedSubscribers.push($(this).val()); });
                         }
                         return selectedSubscribers.join(',');
-                    },
+                    },                
                     IsSkipTracking: function () { return isSkipTracking; }
                 },
                 type: "POST",
@@ -1640,6 +1646,17 @@
             label: ''
         });
 
+        cbbRole.multiselect({
+            menuWidth: 280,
+            menuHeight: 280,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Role"
+        }).multiselectfilter({
+            width: 240,
+            placeholder: '',
+            label: ''
+        });
+
         cbbAssociationCategory.multiselect({
             menuWidth: 276,
             menuHeight: 330,
@@ -1654,6 +1671,12 @@
             placeholder: '',
             label: ''
         });
+
+        GetAllCategories();
+
+        cbbRole.on('change', function() {
+            RefreshCategories();
+        })
 
         dataTable = RenderGrid();
 
@@ -1729,4 +1752,68 @@
         });
 
     };
+
+    function GetAllCategories() {
+        $.ajax(common.modifyRelativeUrl('Account/GetAllCategories'), {
+            type: 'GET',
+            async: false,
+            success: function (response) {
+                if (response) {
+                    categoryGroup = response;
+
+                    RefreshCategories();
+                }
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function RefreshCategories()
+    {
+        cbbAssociationCategory.empty();
+
+        var roleIds = cbbRole.val();
+        var categoriesGroup = {};
+
+        categoryGroup
+            .forEach(group =>
+            {
+                group.CategoryList.filter(x => 
+                    roleIds.includes(`${x.RoleGroup}`) ||
+                    (roleIds.some(item => item > 1) && x.RoleGroup == 0)
+                )
+                .forEach(x => {
+                    if (!categoriesGroup[group.CategoryGroupName])
+                    {
+                        categoriesGroup[group.CategoryGroupName] = {};
+                    }
+
+                    if (categoriesGroup[group.CategoryGroupName][x.CategoryName]) {
+                        categoriesGroup[group.CategoryGroupName][x.CategoryName].CategoryIDs += `,${x.CategoryIDs}`;
+                    }
+                    else {
+                        categoriesGroup[group.CategoryGroupName][x.CategoryName] = {
+                            CategoryName: x.CategoryName,
+                            CategoryIDs: x.CategoryIDs
+                        };
+                    }
+                });
+            });
+
+        var option = '';
+
+        Object.keys(categoriesGroup).forEach(groupName => {
+            option += (`<optgroup label='${groupName}'>`);
+            Object.values(categoriesGroup[groupName]).forEach(item => {
+                option += (`<option selected value=${item.CategoryIDs}>${item.CategoryName}</option>`);
+            })
+            option += (`</optgroup>`);
+        });
+
+        cbbAssociationCategory.append(option);
+
+        cbbAssociationCategory.multiselect("refresh");
+    }
 }

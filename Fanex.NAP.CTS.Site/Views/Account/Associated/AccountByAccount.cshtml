@@ -48,18 +48,19 @@
                 </select>
             </div>
 
+            <div class="form-control dropdown">
+                <div class="control-label">Role</div>
+                <select class="control" id="cbbRole" multiple="multiple">
+                    @foreach (var item in Model.RoleList)
+                    {
+                        <option selected value=@item.RoleID>@item.RoleName</option>
+                    }
+                </select>
+            </div>
+
             <div class="form-control dropdown" style="width: 278px;">
                 <div class="control-label">Category</div>
                 <select class="control" id="cbbAssociationCategory" multiple="multiple">
-                    @foreach (var group in Model.CategoryList)
-                    {
-                        <optgroup label="@group.CategoryGroupName">
-                            @foreach (var item in group.CategoryList)
-                            {
-                                <option selected value=@item.CategoryIDs>@item.CategoryName</option>
-                            }
-                        </optgroup>
-                    }
                 </select>
             </div>
 

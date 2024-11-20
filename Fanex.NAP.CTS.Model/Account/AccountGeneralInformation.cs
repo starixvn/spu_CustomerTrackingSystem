@@ -108,33 +108,6 @@
 
                 return LastLogin.ToString("MMM dd, yyyy");
             }
-        }
-
-        public string AccountStatusToString
-        {
-            get
-            {
-                switch (this.AccountStatus)
-                {                  
-                    case AccountStatus.Open:
-                        return ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_OPEN);                        
-                    case AccountStatus.Suspended:
-                        return ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_SUSPENDED);
-                    case AccountStatus.Closed:
-                        return ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CLOSED);
-                    case AccountStatus.Active:
-                        return ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_ACTIVE);
-                    case AccountStatus.ViewOnly:
-                        return ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_VIEW_ONLY);
-                    //case AccountStatus.Suspended:
-                    //    return ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_SUSPENDED);
-                    case AccountStatus.Inactive:
-                        return ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_INACTIVE);                   
-                    default:
-                        return ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_NOTYETDEPOSIT);
-                }
-                
-            }
-        }
+        }       
     }
 }

@@ -47,7 +47,7 @@
                 {
                     CustID = custCategoryModel.CustId,
                     CTSCustID = custCategoryModel.CTSCustId,
-                    RoleID = custCategoryModel.RoleId,
+                    RoleID = (int)custCategoryModel.RoleId,
                     SubscriberID = custCategoryModel.SubscriberId,
                     CreatedBy = custCategoryModel.CreatedBy,
                     Remark = custCategoryModel.Remark
@@ -72,7 +72,7 @@
                 {
                     CustID = custCategoryModel.CustId,
                     CTSCustID = custCategoryModel.CTSCustId,
-                    RoleID = custCategoryModel.RoleId,
+                    //RoleID = custCategoryModel.RoleId,
                     CreatedBy = custCategoryModel.CreatedBy
                 }
             };

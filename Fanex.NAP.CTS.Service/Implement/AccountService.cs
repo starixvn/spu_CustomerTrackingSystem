@@ -55,7 +55,7 @@
             return repository.Fetch<CustInfoModel>(criteria);
         }
 
-        public CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(Int64 ctsCustId)
+        public CustomerInfoByCtsCustIdModel GetCustomerInfoByCTSCustId(Int64 ctsCustId)
         {
             var criteria = new CustomerInfoByCTSCustIdCriteria
             {
@@ -64,7 +64,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var result = db.QueryEntity<CustomerInfoByCTSCustIdModel>(criteria);
+                var result = db.QueryEntity<CustomerInfoByCtsCustIdModel>(criteria);
 
                 return result;
             }
@@ -126,11 +126,12 @@
             }
         }
 
-        public CustomerInfoDateModel GetCustProfileDates(long ctsCustId)
+        public CustomerInfoDateModel GetCustProfileDates(long ctsCustId, ROLE_CUSTOMER roleID)
         {
             var criteria = new GetCustomerInfoDateCriteria
             {
-                CTSCustID = ctsCustId
+                CTSCustID = ctsCustId,
+                RoleID = roleID
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -250,6 +251,7 @@
             var criteria = new GetAssociationProfileCriteria
             {
                 CTSCustId = filterModel.CTSCustId,
+                RoleIDs = filterModel.RoleIDs,
                 AssociationStatus = filterModel.AssociationStatus,
                 AccountStatusIds = filterModel.AccountStatusIds,
                 AssociationType = filterModel.AssociationType,
@@ -257,7 +259,7 @@
                 SubscriberIDs = filterModel.SubscriberIds,
                 Skip = filterModel.start,
                 Take = filterModel.length,
-                TotalItems = 0
+                TotalItems = 0     
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -321,11 +323,11 @@
                 isException = true;
                 LogService.Error("CTS - Validate manual association multiple - exception: " + ex.Message, ex);
 
-                return GenerateAssociationErrorList(fromCTSCustId, toUserNameList);
+                return GenerateAssociationErrorList(toUserNameList);
             }
         }
 
-        private IEnumerable<ValidateManualAssociationMultipleModel> GenerateAssociationErrorList(long fromCTSCustId, string toUserNameList)
+        private IEnumerable<ValidateManualAssociationMultipleModel> GenerateAssociationErrorList(string toUserNameList)
         {
             var errorList = new List<ValidateManualAssociationMultipleModel>();
             var userNameList = toUserNameList.Split(',').AsEnumerable();
@@ -476,7 +478,7 @@
             return Enumerable.Empty<MatchesDetailInfoModel>();
         }
 
-        public IEnumerable<MatchesDetailInfoViewModel> MergeCustGroupTicketInfo(IEnumerable<MatchCustomerGGBViewModel> custGroups, IEnumerable<MatchesDetailInfoModel> ticketDetails, bool isGGB)
+        public IEnumerable<MatchesDetailInfoViewModel> MergeCustGroupTicketInfo(IEnumerable<MatchCustomerGgbViewModel> custGroups, IEnumerable<MatchesDetailInfoModel> ticketDetails, bool isGGB)
         {
             var result = new List<MatchesDetailInfoViewModel>();
 
@@ -533,22 +535,22 @@
             return result ?? Enumerable.Empty<MatchesDetailInfoViewModel>();
         }
 
-        public IEnumerable<MatchCustomerGGBViewModel> MergeCustMatchInfo(IEnumerable<GBAssociationAIModel> matchInfo, IEnumerable<CustomerGroupModel> groupInfo)
+        public IEnumerable<MatchCustomerGgbViewModel> MergeCustMatchInfo(IEnumerable<GBAssociationAIModel> matchInfo, IEnumerable<CustomerGroupModel> groupInfo)
         {
             if (matchInfo != null && matchInfo.Any() && groupInfo != null && groupInfo.Any())
             {
                 return matchInfo.Join(groupInfo,
                                     m => m.GroupID,
                                     g => g.OriginGroupID,
-                                    (m, g) => new MatchCustomerGGBViewModel
+                                    (m, g) => new MatchCustomerGgbViewModel
                                     {
                                         CustID = g.CustID,
                                         GroupID = g.GroupID,
                                         AdditionalInfo = m.AdditionalInfo
-                                    }) ?? Enumerable.Empty<MatchCustomerGGBViewModel>();
+                                    }) ?? Enumerable.Empty<MatchCustomerGgbViewModel>();
             }
 
-            return Enumerable.Empty<MatchCustomerGGBViewModel>();
+            return Enumerable.Empty<MatchCustomerGgbViewModel>();
         }
 
         public IEnumerable<CategoryInfoModel> GetAllCategory()
@@ -894,13 +896,14 @@
 
         #region Customer Category           
 
-        public IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId, out bool isExcludedTagAssPA)
+        public IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId, ROLE_CUSTOMER roleID, out bool isExcludedTagAssPA)
         {         
             isExcludedTagAssPA = false;
 
             var criteria = new GetCTSCustomerClassificationCriteria
             {
-                CTSCustID = ctsCustId
+                CTSCustID = ctsCustId,
+                RoleID = roleID
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -918,31 +921,14 @@
                     return categories;
                 }
             }
-        }
+        }       
 
-        public IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId)
-        {
-            var criteria = new GetCTSCustomerClassificationCriteria
-            {
-                CTSCustID = ctsCustId
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                using (var result = db.QueryMultiple(criteria))
-                {                   
-                    result.Read<bool>(); // Excluded Tag Ass PA
-
-                    return result.Read<GetCustomerClassificationModel>();
-                }
-            }
-        }
-
-        public IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long ctsCustId)
+        public IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long ctsCustId, ROLE_CUSTOMER roleID)
         {
             var criteria = new GetCTSCustomerClassificationHistoryCriteria
             {
-                CTSCustID = ctsCustId
+                CTSCustID = ctsCustId,
+                RoleID = roleID
             };
 
             try
@@ -982,14 +968,12 @@
                 CTSCustId = categoryModel.CTSCustId,
                 SubscriberId = categoryModel.SubscriberId,
                 CategoryId = categoryModel.CategoryId,
-                RoleId = categoryModel.RoleId,
+                RoleId = (int)categoryModel.RoleId,
                 CreatedBy = categoryModel.CreatedBy,
                 Remark = categoryModel.Remark,
                 ActionType = (int)categoryModel.ActionType
             };
-
-            var repository = new DynamicRepository();
-
+            
             try
             {
                 repository.Execute(criteria);

@@ -146,6 +146,7 @@
     <Compile Include="AssociationReport\AssociationFilterViewModel.cs" />
     <Compile Include="AssociationReport\AssociationReportViewModel.cs" />
     <Compile Include="AssociationReport\AssociationViewModel.cs" />
+    <Compile Include="Common\CustomerRoleViewModel.cs" />
     <Compile Include="Common\LeagueGroupViewModel.cs" />
     <Compile Include="Common\ReasonGroupStaticListViewModel.cs" />
     <Compile Include="Common\ReasonStaticListViewModel.cs" />

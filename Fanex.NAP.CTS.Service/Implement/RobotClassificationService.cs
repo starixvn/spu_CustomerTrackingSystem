@@ -7,6 +7,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class RobotClassificationService : IRobotClassificationService
     {
@@ -17,16 +18,17 @@
             repository = new DynamicRepository();
         }      
         
-        public CustomerRobotUserStatusModel GetStatusRobotClassification(long custID)
+        public CustomerRobotUserStatusModel GetStatusRobotClassification(long custID, ROLE_CUSTOMER RoleID)
         {
             var criteria = new GetStatusRobotClassificationCriteria() 
             { 
-                CustId = custID 
+                CustID = custID,
+                RoleID = RoleID
             };
 
             var robotStatus = repository.Fetch<CustomerRobotUserStatusModel>(criteria);
                 
-            return robotStatus?.FirstOrDefault() ?? new CustomerRobotUserStatusModel { CustId= null, RobotType = null };
+            return robotStatus?.FirstOrDefault() ?? new CustomerRobotUserStatusModel { CustID = null, RobotType = null };
         }
 
         public IEnumerable<RobotClassification> GetHistoryRobotClassification(long custID)

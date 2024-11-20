@@ -1,5 +1,6 @@
 ﻿function ProblemAccountManagement() {
     let dataTable;
+    let categoryGroup = [];
 
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),
@@ -7,6 +8,7 @@
         dpkToDate: $('#dpkToDate'),
         cbbSite: $('#cbbSite'),
         cbbCategory: $('#cbbCategory'),
+        cbbRole: $('#cbbRole'),
         cbbProblemAccountCategories: $('#cbbProblemAccountCategories'),
         inputUserName: $('#inputUserName'),
         inputSearchDownlines: $('#inputSearchDownlines'),
@@ -102,6 +104,7 @@
         params.IsAllSites = domElements.cbbSite.find('option').not(':selected').length == 0;
         params.CategoryIDs = domElements.cbbCategory.val().join();
         params.UserName = domElements.inputUserName.val().trim();
+        params.RoleIDs = domElements.cbbRole.val().join();
         params.HasDownline = domElements.inputSearchDownlines.is(":checked");
 
         if (isExportExcel) {
@@ -422,6 +425,8 @@
         params.IsUnmarkDownlines = domElements.ckbUnmarkDownlines.is(":checked");
         params.CategoryGroup = $('option:selected', domElements.cbbProblemAccountCategories).attr('data-categorygroup');
         params.IsRobot = $('option:selected', domElements.cbbProblemAccountCategories).attr('data-isrobot');
+        params.CategoryIDAgency = $('option:selected', domElements.cbbProblemAccountCategories).attr('data-categoryidagency');
+        params.CategoryGroupAgency = $('option:selected', domElements.cbbProblemAccountCategories).attr('data-categorygroupidagency');
 
         if (params.PAAction == 1) {
             SaveMarkProblemAccount(params);
@@ -498,14 +503,82 @@
             () => { });
     }
 
+    function RefreshProblemCategories() {
+        domElements.cbbCategory.empty();
+
+        var roleIds = domElements.cbbRole.val();
+        var categories = {};
+
+        categoryGroup
+            .filter(x =>
+                roleIds.includes(`${x.RoleGroup}`) ||
+                    (roleIds.some(item => item > 1) && x.RoleGroup == 0)
+            )
+            .forEach(x => {
+                if (categories[x.CategoryName]) {
+                    categories[x.CategoryName].CategoryIDs += `,${x.CategoryIDs}`;
+                }
+                else {
+                    categories[x.CategoryName] = {
+                        CategoryName: x.CategoryName,
+                        CategoryIDs: x.CategoryIDs
+                    };
+                }
+            });
+
+        Object.values(categories).forEach(x => {
+            domElements.cbbCategory.append("<option selected value='" + x.CategoryIDs + "'>" + x.CategoryName + "</option>");
+        });
+
+        domElements.cbbCategory.multiselect("refresh");
+    }
+
+    function GetProblemCategories() {
+        $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/GetProblemCategories'), {
+            type: 'GET',
+            success: function (response) {
+                if (response) {
+                    categoryGroup = response;
+
+                    RefreshProblemCategories();
+                }
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
     function GetProblemAccountCategories(setVal) {
         domElements.cbbProblemAccountCategories.empty();
 
         $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/GetProblemAccountAllCategories'), {
             type: 'GET',
             success: function (response) {
-                response.map(function (x) {
-                    domElements.cbbProblemAccountCategories.append("<option value='" + x.CategoryID + "' data-categorygroup='" + x.CategoryGroupID + "' data-isrobot='" + x.IsRobot + "'>" + x.CategoryName + "</option>");
+
+                const mergedCategories = [];
+
+                response.forEach(category => {
+                    if (category.RoleGroup == 1) {
+                        const agencyCategory = response.find(c => c.CategoryName == category.CategoryName && c.RoleGroup == 2);
+
+                        if (agencyCategory) {
+                            mergedCategories.push({
+                                CategoryID: category.CategoryID,
+                                CategoryName: category.CategoryName,
+                                CategoryGroupID: category.CategoryGroupID,
+                                IsRobot: category.IsRobot,
+                                RelevantCategoryGroup: category.RelevantCategoryGroup,
+                                CategoryIDAgency: agencyCategory.CategoryID,
+                                CategoryGroupIDAgency: agencyCategory.CategoryGroupID,
+                                RelevantCategoryGroupAgency: agencyCategory.RelevantCategoryGroup
+                            });
+                        }
+                    }
+                });
+
+                mergedCategories.map(function (x) {
+                    domElements.cbbProblemAccountCategories.append("<option value='" + x.CategoryID + "' data-categorygroup='" + x.CategoryGroupID + "' data-isrobot='" + x.IsRobot + "' data-categoryidagency='" + x.CategoryIDAgency + "' data-categorygroupidagency='" + x.CategoryGroupIDAgency + "'>" + x.CategoryName + "</option>");
                 });
 
                 domElements.cbbProblemAccountCategories.prop('selectedIndex', 0);
@@ -651,8 +724,19 @@
             label: ''
         });
 
+        domElements.cbbRole.multiselect({
+            menuWidth: 280,
+            menuHeight: 280,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Role"
+        }).multiselectfilter({
+            width: 240,
+            placeholder: '',
+            label: ''
+        });
+
         domElements.cbbCategory.multiselect({
-            menuWidth: 300,
+            menuWidth: 320,
             menuHeight: 280,
             selectedText: "# of # selected",
             noneSelectedText: "Select Category"
@@ -661,6 +745,10 @@
             placeholder: '',
             label: ''
         });
+
+        GetProblemCategories();
+
+        domElements.cbbRole.on('change', function () { RefreshProblemCategories() });
 
         domElements.btnGenerate.on('click', function () { GetProblemAccountReport(); });
 
@@ -673,7 +761,7 @@
         domElements.btnUnmarkProblemAccount.on('click', function () {
             domElements.grpCategories.addClass('hide');
             domElements.grpCkboxAffectedDownline.addClass('hide');
-            domElements.ckbUnmarkDownlines.prop("checked", false);          
+            domElements.ckbUnmarkDownlines.prop("checked", false);
             domElements.txtComment.val('');
             domElements.spanProblemAccountActionHidden.val('2'); // Unmark
 

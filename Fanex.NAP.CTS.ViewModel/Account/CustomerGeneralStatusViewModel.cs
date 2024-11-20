@@ -93,7 +93,7 @@
             return this;
         }
 
-        public CustomerGeneralStatusViewModel BindingGeneralDataFromCTS(CustomerInfoByCTSCustIdModel customerInfoByCTSCustIdModel)
+        public CustomerGeneralStatusViewModel BindingGeneralDataFromCTS(CustomerInfoByCtsCustIdModel customerInfoByCTSCustIdModel)
         {
             if (customerInfoByCTSCustIdModel != null)
             {

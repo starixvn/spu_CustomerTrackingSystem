@@ -134,7 +134,7 @@
 
                 LoadGrid(params.CTSCustID);
                 GetCustomerCategory(params.CustID);
-                LoadStatusRobotUser(params.CustID);
+                LoadStatusRobotUser(params.CustID, params.RoleID);
             },
             beforeSend: function () {
                 common.showLoading();
@@ -155,7 +155,7 @@
         params.CustId = $('#hdCustId').val();
         params.CTSCustId = $('#hdCTSCustId').val();
         params.SubscriberId = $('#hdSubscriberId').val();      
-        params.RoleId = $('#hdRoleID').val();
+        params.RoleID = $('#hdRoleID').val();
         params.IsAffectToAllDownlines = $('#inputVVIPUnmarkAffectToAllDownlines').is(":checked");
 
         $.ajax(common.modifyRelativeUrl('Account/SaveUnmarkVVIP'), {
@@ -172,6 +172,7 @@
 
                 LoadGrid(params.CTSCustId);
                 GetCustomerCategory(params.CustId);
+                LoadStatusRobotUser(params.CustId, params.RoleID);
             },
             beforeSend: function () {
                 common.showLoading();
@@ -252,7 +253,7 @@
 
                     ResetCategorySetting();
 
-                    RenderCategoryColorSummary(json.categoryList, json.isMultiplePA, json.usnBackGroundColor);                  
+                    RenderCategoryColorSummary(json.categoryList, json.isMultiplePA, json.usnBackGroundColor);                   
                 }
                 return response;
             },
@@ -398,6 +399,7 @@
 
                 LoadGrid(params.CTSCustID);
                 GetCustomerCategory(params.CustID);
+                LoadStatusRobotUser(params.CustID, params.RoleID);
             },
             beforeSend: function () {
                 common.showLoading();
@@ -432,10 +434,8 @@
         });
 
         if (params.CategoryID != 0) {
-            let url = params.IsRobot?.toLowerCase() == 'true'
-                ? common.modifyRelativeUrl('Account/SaveMarkRobotAccount')
-                : common.modifyRelativeUrl('Account/SaveMarkCustomerCategory');
-
+            let url = common.modifyRelativeUrl('Account/SaveMarkCustomerCategory');
+            
             $.ajax(url, {
                 type: 'POST',
                 data: params,
@@ -450,7 +450,7 @@
 
                     LoadGrid(params.CTSCustID);
                     GetCustomerCategory(params.CustID);
-                    LoadStatusRobotUser(params.CustID);
+                    LoadStatusRobotUser(params.CustID, params.RoleID);
                 },
                 beforeSend: function () {
                     common.showLoading();
@@ -466,12 +466,13 @@
         }
     }
 
-    function LoadStatusRobotUser(custID)
+    function LoadStatusRobotUser(custID, roleID)
     {
         $.ajax(common.modifyRelativeUrl('Account/GetStatusRobotClassification'), {
             type: 'POST',
             data: {
-                CustID: custID
+                CustID: custID,
+                RoleID: roleID
             },
             success: function (response) {
                 switch (response.RobotType) {
@@ -529,6 +530,7 @@
                 params.isExcludedTagAssPA = isChecked;
                 params.isProblemAccount = cacheData.isProblemAccount;
                 params.custSubId = custSubId;
+                params.roleID = $("#hdRoleID").val();
 
                 $.ajax(url, {
                     type: 'POST',
@@ -668,7 +670,7 @@
     function DisableButton(hostPermission) {
         isHostPermission = hostPermission === "True";
 
-        if (!isHostPermission) {
+        if (!isHostPermission || $("#hdRoleID").val() > 1) {
             cbbCategorySetting.prop('disabled', true);                 
         }
         btnMarkCategory.prop('disabled', true);
@@ -705,8 +707,8 @@
         btnDisplayCustomerCategoryBySport.click(function () { DisplayCustomerCategoryBySport(ctsCustId); });
     };
 
-    this.ReloadStatusRobotUser = function (custId) {
-        LoadStatusRobotUser(custId);
+    this.ReloadStatusRobotUser = function (custId, roleID) {
+        LoadStatusRobotUser(custId, roleID);
     }
 
     this.ReloadTab = function (ctsCustId) {

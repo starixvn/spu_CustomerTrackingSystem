@@ -26,6 +26,8 @@
 
         public string UserName { get; set; }
 
+        public string RoleIDs { get; set; }
+
         public bool HasDownline { get; set; }
 
         public DateTime DateTime { get; set; }

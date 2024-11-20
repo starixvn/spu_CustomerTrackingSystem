@@ -14,7 +14,7 @@
 
         public List<SubscriberGroupViewModel> SubscribersList { get; set; }
 
-        public List<CategoryGroupViewModel> CategoryList { get; set; }
+        public List<CustomerRoleViewModel> RoleList { get; set; }
 
         public string Username { get; set; }
     }

@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class CustomerInfoByCTSCustIdModel
+    public class CustomerInfoByCtsCustIdModel
     {
         public int CustID { get; set; }
 

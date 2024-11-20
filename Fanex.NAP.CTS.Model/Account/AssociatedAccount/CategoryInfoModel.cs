@@ -7,5 +7,7 @@
         public string CategoryName { get; set; }
 
         public string CategoryIDs { get; set; }
+
+        public int RoleGroup { get; set; }
     }
 }

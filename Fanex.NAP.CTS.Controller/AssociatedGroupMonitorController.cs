@@ -46,7 +46,7 @@
                             FSFunctionKeys.AssociatedGroupMonitor,
                             NAP.Core.Business.Constant.Policy.Host);
 
-            var categoryList = _pamService.GetProblemAccountCategories(ViewCategoryPageSource.AssociatedGroupMonitor).OrderBy(x => x.Priorty);
+            var categoryList = _pamService.GetProblemAccountCategories(ViewCategoryQueryType.AssociatedGroupMonitor).OrderBy(x => x.Priorty);
 
             return View(new AssGroupMonitorViewModel
             {

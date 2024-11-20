@@ -5,13 +5,12 @@
     using Fanex.Logging;
     using Fanex.NAP.CTS.Criteria.Common;
     using Fanex.NAP.CTS.Model.Common;
-    using Fanex.NAP.CTS.Model.DangerMonitor;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.Common;
-    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class CommonService : ICommonService
     {
@@ -106,7 +105,7 @@
         }
 
         public IEnumerable<MainTicketDetailModel> GetMainTicketDetails(string transIds, int? transSize, int? matchSize)
-        {           
+        {
             var criteria = new GetTicketDetailsCriteria
             {
                 ListTransId = transIds,
@@ -123,7 +122,7 @@
         public IEnumerable<CCGroupModel> GetGroupCustomerClass()
         {
             var groupCCList = Enumerable.Empty<CCGroupModel>();
-            var criteria = new GetCommonCustomerClassCriteria();             
+            var criteria = new GetCommonCustomerClassCriteria();
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
@@ -207,7 +206,9 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(new HealthCheckCriteria().GetSettingKey()))
             {
-                db.CreateDbConnection().Open();
+                var connection = db.CreateDbConnection();
+                connection.Open();
+                connection.Close();
             }
         }
 
@@ -216,6 +217,13 @@
             var criteria = new ValidateUsernameForMainCriteria { UsernameList = userName };
 
             return repository.Fetch<ValidateUserNameModel>(criteria);
+        }
+
+        public IEnumerable<CustomerRoleViewModel> GetRoles()
+        {
+            return Enum.GetValues(typeof(ROLE_CUSTOMER))
+                        .Cast<int>()
+                        .Select(x => new CustomerRoleViewModel { RoleID = x });
         }
     }
 }

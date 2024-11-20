@@ -5,8 +5,8 @@
 
     public class GetProblemAccountCategoryCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_PageSource")]
-        public int PageSource { get; set; }
+        [SpParam(SqlParamName = "ip_QueryType")]
+        public int QueryType { get; set; }
 
         public override string GetSettingKey()
         {

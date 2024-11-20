@@ -236,14 +236,16 @@ namespace Fanex.NAP.CTS.Model
         Remove = 2
     }
 
-    public enum ViewCategoryPageSource
+    public enum ViewCategoryQueryType
     {
         [Description("Problem Account Management")]
         PAM = 1,
         [Description("Associated Group Monitor")]
         AssociatedGroupMonitor = 2,
-        [Description("Other: Profile page")]
-        Other = 3
+        [Description("Other: Profile page PA")]
+        ProfilePage_PA = 3,
+        [Description("Other: Profile page Vvip")]
+        ProfilePage_Vvip = 4
     }
 
     public enum CategoryColorType
@@ -263,7 +265,9 @@ namespace Fanex.NAP.CTS.Model
         [Description("red")]
         Red = 6,
         [Description("lightred")]
-        RedLight = 7
+        RedLight = 7,
+        [Description("gray")]
+        Gray = 8
     }
 
     public enum CCInputFlow
@@ -312,5 +316,23 @@ namespace Fanex.NAP.CTS.Model
     {
         Single = 1,
         Parlay = 2
+    }
+
+    public enum AgencyCCInputFlow
+    {
+        [Description("InsertVVIP")]
+        InsertVVIP = 1001,
+        [Description("InsertPACategory")]
+        InsertPACategory = 1005,      
+        [Description("Normal")]
+        Normal = 1009,
+        //[Description("RescanPACategory")]
+        //RescanPACategory = 1115,
+        [Description("RemovePACategory")]
+        RemovePACategory = 1225,
+        [Description("RescanNormal")]
+        RescanNormal = 1009,
+        [Description("RemoveVVIP")]
+        RemoveVVIP = 1221,
     }
 }

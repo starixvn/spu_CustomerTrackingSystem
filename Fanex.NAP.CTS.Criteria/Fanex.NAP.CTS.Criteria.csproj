@@ -137,6 +137,10 @@
     <Compile Include="Common\GetSitesCriteria.cs" />
     <Compile Include="Common\GetTicketDetailsCriteria.cs" />
     <Compile Include="Common\ValidateUsernameForMainCriteria.cs" />
+    <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\GetRescanCustomerClassificationAgencyCriteria.cs" />
+    <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\InsertCustomerClassificationAgencyCriteria.cs" />
+    <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\RemoveCustomerClassificationAgencyCriteria.cs" />
+    <Compile Include="CustomerClassificationAgency\NormalClassificationRescanAgencyCriteria.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\BySport\RemoveCustomerClassificationBySportCriteria.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\GetRescanCustomerClassificationCriteria.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\BySport\InsertCustomerClassificationBySportCriteria.cs" />
@@ -264,6 +268,10 @@
     <ProjectReference Include="..\Fanex.NAP.CTS.Core\Fanex.NAP.CTS.Core.csproj">
       <Project>{5f3abbf7-ea70-4c02-bd47-b427f1a9cc39}</Project>
       <Name>Fanex.NAP.CTS.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NAP.CTS.Resource\Fanex.NAP.CTS.Resource.csproj">
+      <Project>{ae6c4b2a-8cd3-433a-8f42-d8272390cf61}</Project>
+      <Name>Fanex.NAP.CTS.Resource</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
