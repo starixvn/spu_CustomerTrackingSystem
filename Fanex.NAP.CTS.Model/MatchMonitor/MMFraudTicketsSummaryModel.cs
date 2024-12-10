@@ -8,6 +8,8 @@ namespace Fanex.NAP.CTS.Model.MatchMonitor
         [JsonProperty("MatchId")]
         public Int64 MatchID { get; set; }
 
+        public DateTime EventDate { get; set; }
+
         public Int16 DataSource { get; set; }
 
         [JsonProperty("IsLive")]
