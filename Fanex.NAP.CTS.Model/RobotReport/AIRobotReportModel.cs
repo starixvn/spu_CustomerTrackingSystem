@@ -30,6 +30,8 @@
 
         public int OCRD { get; set; }
 
+        public int LP { get; set; }
+
         public int TotalAccount { get; set; }
     }
 }
