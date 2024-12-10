@@ -180,5 +180,16 @@
             return repository.Fetch<RobotRDTicketDetailModel>(criteria);
         }
 
+        public IEnumerable<RobotAiLpDetailModel> GetRobotAiLpDetail(long custID, int periodRangeType)
+        {
+            var criteria = new GetRobotAiLpDetailCriteria
+            {
+                CustID = custID,
+                PeriodRangeType = periodRangeType                         
+            };
+
+            return repository.Fetch<RobotAiLpDetailModel>(criteria);
+        }
+
     }
 }

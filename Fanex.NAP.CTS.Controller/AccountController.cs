@@ -2061,32 +2061,39 @@
         {
             var rbData = _robotBettingService.GetRobotBetting(custID);
 
-            var isRobotBettingAIValid = rbData?.RobotBettingAI?.Any() ?? false;
-            var isRobotImpervasValid = rbData?.RobotBettingImperva?.Any() ?? false;
-            var isFirstLastRobotDateValid = !rbData.FirstLastRobotDate.FirstRobotDate.Equals(DateTime.MinValue) &&
-                                            !rbData.FirstLastRobotDate.LastRobotDate.Equals(DateTime.MinValue);
-
-            var rbBetting = new RobotBettingViewModel()
-            {
-                RobotBettingAI = isRobotBettingAIValid ? rbData.RobotBettingAI.Select(x => new RobotBettingAIViewModel
-                {
-                    CustID = x.CustID,
-                    RangeType = x.PeriodRangeType,
-                    RangeName = x.PeriodRangeName
-                }) : Enumerable.Empty<RobotBettingAIViewModel>(),
-                RobotImpervas = isRobotImpervasValid ? rbData.RobotBettingImperva.OrderBy(x => x.CreateTime).Select(x => new RobotImpervaViewModel
-                {
-                    CustID = x.CustID,
-                    CreatedDate = x.CreateTime.ToString(Consts.FormatDateToString_ddMMMyyyy),
-                    PlatformName = x.Platform == 1 ? Platform.Desktop : Platform.Mobile
-                }) : Enumerable.Empty<RobotImpervaViewModel>(),
-                FirstRobotDate = isFirstLastRobotDateValid ? rbData.FirstLastRobotDate.FirstRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff) : string.Empty,
-                LastRobotDate = isFirstLastRobotDateValid ? rbData.FirstLastRobotDate.LastRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff) : string.Empty
-            };
-
+            var rbBetting = new RobotBettingViewModel(rbData);
+           
             return Json(new
             {
                 data = rbBetting,
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.GetRobotAILPDetail)]
+        public ActionResult GetRobotAILPDetail(long custID, int rangeType)
+        {
+            // var rbAILPData = _robotBettingService.GetRobotAiLpDetail(custID, rangeType);
+
+            var rbAiLpData = new List<RobotAiLpDetailModel>()
+            {
+                new RobotAiLpDetailModel
+                {
+                    TransDate = DateTime.Now,
+                    Device = "12cafda50fda",
+                    RobotTracking = "Bot",
+                    DeviceType = "DeviceType",
+                    Browser = "firefox",
+                    IP = "192.168.1.1",
+                    Domain = "abc.com.vn"
+                }
+            };
+
+            var rbAILPDetail = rbAiLpData.Select(x => new RobotAiLpDetailViewModel(x));
+
+            return Json(new
+            {
+                data = rbAILPDetail,
             }, JsonRequestBehavior.AllowGet);
         }
 

@@ -175,6 +175,7 @@
     <Compile Include="Account\CustomerInfo\CustomerInfoDateModel.cs" />
     <Compile Include="Account\CustomerInfo\CustomerInfoEvidenceModel.cs" />
     <Compile Include="Account\CustomerInfo\CustomerInfoLoginStatsModel.cs" />
+    <Compile Include="Account\RobotBetting\RobotAiLpDetailModel.cs" />
     <Compile Include="Account\RobotBetting\RobotBettingImpervaModel.cs" />
     <Compile Include="Account\RobotBetting\RobotBettingModel.cs" />
     <Compile Include="Account\RobotBetting\RobotBettingTicketDetailModel.cs" />

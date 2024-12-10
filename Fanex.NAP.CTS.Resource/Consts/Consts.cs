@@ -480,7 +480,8 @@
             //RemoveLicBABySite_API = 242
             CheckAssociationAPI = 243,
             AddCustomerInitialSmarts = 244,
-            GetCustomerClassCategoryByCustID = 245
+            GetCustomerClassCategoryByCustID = 245,
+            GetRobotAILPDetail = 246
         };
 
         public enum SystemId

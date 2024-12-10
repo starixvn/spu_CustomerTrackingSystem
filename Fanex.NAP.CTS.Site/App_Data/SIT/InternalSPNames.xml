@@ -168,6 +168,7 @@
 		<Setting Key="SPU_AIML_RD_SCE_GetRobotUsersDetails" SpName="SPU_AIML_RD_SCE_GetRobotUsersDetails" DbName="MySQL.SPU_AIML.Reporter" />
 		<Setting Key="SPU_AIML_RD_GetRobotUserMatch" SpName="SPU_AIML_RD_GetRobotUserMatch" DbName="MySQL.SPU_AIML.Reporter" />
 		<Setting Key="SPU_AIML_RD_GetRobotUserMatchTransList" SpName="SPU_AIML_RD_GetRobotUserMatchTransList" DbName="MySQL.SPU_AIML.Reporter" />
+    <Setting Key="SPU_AIML_RD_LP_GetRobotDetails" SpName="SPU_AIML_RD_LP_GetRobotDetails" DbName="MySQL.SPU_AIML.Reporter" />
 	</Function>
 
 	<Function name="CustomerProfile">
