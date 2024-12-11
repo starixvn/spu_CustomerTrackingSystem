@@ -5,7 +5,7 @@
     public class RobotBettingModel
     {
         public RobotDateAndTypeModel FirstLastRobotDate { get; set; }
-
+      
         public IEnumerable<RobotBettingAIModel> RobotBettingAI { get; set; }
 
         public IEnumerable<RobotBettingImpervaModel> RobotBettingImperva { get; set; }

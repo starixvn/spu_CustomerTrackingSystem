@@ -2073,22 +2073,8 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.GetRobotAILPDetail)]
         public ActionResult GetRobotAILPDetail(long custID, int rangeType)
         {
-            // var rbAILPData = _robotBettingService.GetRobotAiLpDetail(custID, rangeType);
-
-            var rbAiLpData = new List<RobotAiLpDetailModel>()
-            {
-                new RobotAiLpDetailModel
-                {
-                    TransDate = DateTime.Now,
-                    Device = "12cafda50fda",
-                    RobotTracking = "Bot",
-                    DeviceType = "DeviceType",
-                    Browser = "firefox",
-                    IP = "192.168.1.1",
-                    Domain = "abc.com.vn"
-                }
-            };
-
+            var rbAiLpData = _robotBettingService.GetRobotAiLpDetail(custID, rangeType);
+           
             var rbAILPDetail = rbAiLpData.Select(x => new RobotAiLpDetailViewModel(x));
 
             return Json(new

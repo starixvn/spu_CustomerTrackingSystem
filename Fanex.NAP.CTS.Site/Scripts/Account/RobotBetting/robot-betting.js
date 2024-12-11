@@ -62,11 +62,11 @@ function robot_betting() {
                 { targets: [0, 1, 2, 3, 4, 5, 6], className: "text-center" },
             ],
             columns: [
-                { data: obj => obj.TransDate },
-                { data: obj => obj.Device },
+                { data: obj => obj.TransTime },
+                { data: obj => obj.DeviceID },
                 { data: obj => obj.RobotTracking },
                 { data: obj => obj.DeviceType },
-                { data: obj => obj.Browser },
+                { data: obj => obj.BrowserName },
                 { data: obj => obj.IP },
                 { data: obj => obj.Domain }               
             ],
@@ -124,11 +124,11 @@ function robot_betting() {
 
                     for (const item of response.data) {                      
                         html += `<tr class='robot-ai-lp-childRow' data-rangetype=${rangeType}>`;
-                        html += `<td class="td1 text-center">${item.TransDate}</td>`;
-                        html += `<td class="td2 text-center">${item.Device}</td>`;
+                        html += `<td class="td1 text-center">${item.TransTime}</td>`;
+                        html += `<td class="td2 text-center">${item.DeviceID}</td>`;
                         html += `<td class="td3 text-center">${item.RobotTracking}</td>`;
                         html += `<td class="td4 text-center">${item.DeviceType}</td>`;
-                        html += `<td class="td5 text-center">${item.Browser}</td>`;
+                        html += `<td class="td5 text-center">${item.BrowserName}</td>`;
                         html += `<td class="td6 text-center">${item.IP}</td>`;
                         html += `<td class="td7 text-center">${item.Domain}</td>`;
                         html += `</tr>`;
@@ -708,6 +708,7 @@ function robot_betting() {
             },
             beforeSend: function () {
                 robotSCETable.find('tbody').addClass('loading');
+                robotLPTable.addClass('hide');
                 robotSCETable.addClass('hide');
                 robotRDTable.addClass('hide');
             },
@@ -717,7 +718,8 @@ function robot_betting() {
                     lastRobotDate.text("Last Robot Date: " + response.data.LastRobotDate);
                 }
 
-                if (response.data.RobotBettingAI.length == 0
+                if (response.data.RobotAILP.length == 0
+                    && response.data.RobotBettingAI.length == 0
                     && response.data.RobotImpervas.length == 0
                 ) {
                     robotSCETable.DataTable().clear().rows.add([]).draw();
@@ -729,6 +731,7 @@ function robot_betting() {
                     const robotImpervas = response.data.RobotImpervas;
 
                     if (response.data.RobotAILP.length > 0) {
+                        robotLPTable.removeClass('hide');
                         robotLPTable.DataTable().clear().rows.add(response.data.RobotAILP).draw();
                     }
 

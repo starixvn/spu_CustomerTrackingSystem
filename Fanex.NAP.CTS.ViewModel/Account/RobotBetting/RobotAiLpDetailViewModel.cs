@@ -1,29 +1,30 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.Account.RobotBetting
 {
     using Fanex.NAP.CTS.Model.Account.RobotBetting;
+    using Fanex.NAP.CTS.Resource.Consts;
 
     public class RobotAiLpDetailViewModel
     {
         public RobotAiLpDetailViewModel(RobotAiLpDetailModel data)
         {
-            TransDate = data.TransDate.ToString();
-            Device = data.Device;
+            TransTime = data.TransTime.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
+            DeviceID = data.DeviceID;
             RobotTracking = data.RobotTracking;
             DeviceType = data.DeviceType;
-            Browser = data.Browser;
+            BrowserName = data.BrowserName;
             IP = data.IP;
             Domain = data.Domain;
         }
 
-        public string TransDate { get; set; }
+        public string TransTime { get; set; }
 
-        public string Device { get; set; }
+        public string DeviceID { get; set; }
 
         public string RobotTracking { get; set; }
 
         public string DeviceType { get; set; }
 
-        public string Browser { get; set; }
+        public string BrowserName { get; set; }
 
         public string IP { get; set; }
 

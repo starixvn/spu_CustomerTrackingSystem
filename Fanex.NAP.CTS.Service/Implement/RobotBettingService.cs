@@ -30,7 +30,7 @@
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 using (var result = db.QueryMultiple(criteria))
-                {
+                {                 
                     var robotAIs = result.Read<RobotBettingAIModel>();
                     var robotImpervas = result.Read<RobotBettingImpervaModel>();
                     var firstLastRobotDate = new RobotDateAndTypeModel
@@ -41,7 +41,7 @@
 
                     return new RobotBettingModel
                     {
-                        FirstLastRobotDate = firstLastRobotDate,
+                        FirstLastRobotDate = firstLastRobotDate,                       
                         RobotBettingAI = robotAIs,
                         RobotBettingImperva = robotImpervas
                     };

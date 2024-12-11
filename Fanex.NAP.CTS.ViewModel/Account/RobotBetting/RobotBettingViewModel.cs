@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.Account.RobotBetting
 {
     using Fanex.NAP.CTS.Model.Account.RobotBetting;
-    using Fanex.NAP.CTS.Resource.Consts;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -16,26 +15,14 @@
             var isFirstLastRobotDateValid = !rbData.FirstLastRobotDate.FirstRobotDate.Equals(DateTime.MinValue) &&
                                             !rbData.FirstLastRobotDate.LastRobotDate.Equals(DateTime.MinValue);
 
-            RobotAILP = RobotBettingAI = isRobotBettingAIValid ? rbData.RobotBettingAI.Select(x => new RobotBettingAIViewModel
-            {
-                CustID = x.CustID,
-                RangeType = x.PeriodRangeType,
-                RangeName = x.PeriodRangeName
-            }) : Enumerable.Empty<RobotBettingAIViewModel>();
+            RobotAILP = isRobotBettingAIValid ? rbData.RobotBettingAI.Where(x=>x.AIGroup == 1)
+                .Select(x => new RobotBettingAIViewModel(x)) : Enumerable.Empty<RobotBettingAIViewModel>();
 
-            RobotBettingAI = isRobotBettingAIValid ? rbData.RobotBettingAI.Select(x => new RobotBettingAIViewModel
-            {
-                CustID = x.CustID,
-                RangeType = x.PeriodRangeType,
-                RangeName = x.PeriodRangeName
-            }) : Enumerable.Empty<RobotBettingAIViewModel>();
+            RobotBettingAI = isRobotBettingAIValid ? rbData.RobotBettingAI.Where(x => x.AIGroup == 2)
+                .Select(x => new RobotBettingAIViewModel(x)) : Enumerable.Empty<RobotBettingAIViewModel>();
 
-            RobotImpervas = isRobotImpervasValid ? rbData.RobotBettingImperva.OrderBy(x => x.CreateTime).Select(x => new RobotImpervaViewModel
-            {
-                CustID = x.CustID,
-                CreatedDate = x.CreateTime.ToString(Consts.FormatDateToString_ddMMMyyyy),
-                PlatformName = x.Platform == 1 ? Platform.Desktop : Platform.Mobile
-            }) : Enumerable.Empty<RobotImpervaViewModel>();
+            RobotImpervas = isRobotImpervasValid ? rbData.RobotBettingImperva.OrderBy(x => x.CreateTime)
+                .Select(x => new RobotImpervaViewModel(x)) : Enumerable.Empty<RobotImpervaViewModel>();
 
             FirstRobotDate = isFirstLastRobotDateValid ? rbData.FirstLastRobotDate.FirstRobotDate.ToString(FormatDatetimeToString_ddMMMyyyyHHmmssfff) : string.Empty;
             LastRobotDate = isFirstLastRobotDateValid ? rbData.FirstLastRobotDate.LastRobotDate.ToString(FormatDatetimeToString_ddMMMyyyyHHmmssfff) : string.Empty;

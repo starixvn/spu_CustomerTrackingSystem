@@ -9,5 +9,7 @@
         public int PeriodRangeType { get; set; }
 
         public string PeriodRangeName { get; set; }
+
+        public int AIGroup { get; set; }
     }
 }
