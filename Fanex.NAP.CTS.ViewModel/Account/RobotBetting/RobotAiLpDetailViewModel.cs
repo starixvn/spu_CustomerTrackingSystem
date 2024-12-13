@@ -7,13 +7,13 @@
     {
         public RobotAiLpDetailViewModel(RobotAiLpDetailModel data)
         {
-            TransTime = data.TransTime.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
-            DeviceID = data.DeviceID;
-            RobotTracking = data.RobotTracking;
-            DeviceType = data.DeviceType;
-            BrowserName = data.BrowserName;
-            IP = data.IP;
-            Domain = data.Domain;
+            TransTime = FormatGridColumnString(data.TransTime.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff));
+            DeviceID = FormatGridColumnString(data.DeviceID);
+            RobotTracking = FormatGridColumnString(data.RobotTracking);
+            DeviceType = FormatGridColumnString(data.DeviceType);
+            BrowserName = FormatGridColumnString(data.BrowserName);
+            IP = FormatGridColumnString(data.IP);
+            Domain = FormatGridColumnString(data.Domain);
         }
 
         public string TransTime { get; set; }
@@ -29,5 +29,15 @@
         public string IP { get; set; }
 
         public string Domain { get; set; }
+
+        private string FormatGridColumnString(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return "-";
+            }
+
+            return value;
+        }
     }
 }
