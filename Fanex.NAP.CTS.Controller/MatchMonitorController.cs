@@ -342,9 +342,10 @@
             else
             {
                 var mmFraudTicketsSummaryModel = matchFromCTSInfos.Where(x => x.TicketType == (int)TicketType.Parlay)
-                   .GroupBy(x => new { x.BetID, x.BettypeID, x.DataSource, x.Market, x.MatchID })
+                   .GroupBy(x => new { x.BetID, x.BettypeID, x.DataSource, x.Market, x.MatchID, x.EventDate })
                    .Select(x => new MMFraudTicketsSummaryModel
                    {
+                       EventDate = x.Key.EventDate,
                        BetID = x.Key.BetID,
                        BettypeID = x.Key.BettypeID,
                        Market = x.Key.Market,
