@@ -44,7 +44,7 @@
 	</Function>
 
 	<Function name="CustomerProfile">
-		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList_xtest" DbName="SQL.WASAVerse.bodbSPUNet" />
 		<Setting Key="CTS_Rpt_BettingPattern_MatchInfo" SpName="CTS_Rpt_BettingPattern_MatchInfo" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_Rpt_BettingPattern_TicketDetails" SpName="CTS_Rpt_BettingPattern_TicketDetails_xtest" DbName="DBCTS.bodb02.bodbSPUNet" TimeOut="300"/>
 		<Setting Key="CTS_TicketDetails_Get" SpName="CTS_TicketDetails_Get_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
