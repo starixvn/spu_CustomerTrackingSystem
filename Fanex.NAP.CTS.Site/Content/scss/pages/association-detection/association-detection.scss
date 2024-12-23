@@ -496,6 +496,7 @@ body {
 
                     .td-bg-yellow-light {
                         background-color: $account-highlight;
+                        font-weight: bold;
 
                         &:after {
                             background-color: $account-highlight;
