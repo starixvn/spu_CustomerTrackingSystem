@@ -2243,7 +2243,7 @@ function MatchMonitorDetail() {
                     datas += `,&quot;BetTeam&quot;:&quot;${data.BetTeam}&quot;`;
                     datas += `,&quot;Currency&quot;:&quot;${data.CurrencyName}&quot;`;
                     datas += `,&quot;Amount&quot;:&quot;${data.Amount}&quot;`;                 
-                    datas += `,&quot;Choice&quot;:&quot;${data.HDP}&quot;`;
+                    datas += `,&quot;HDP&quot;:&quot;${data.HDP}&quot;`;
                     datas += `,&quot;Score&quot;:&quot;${data.Score}&quot;`;
                     datas += `,&quot;TransTimeToString&quot;:&quot;${data.TransTimeToString}&quot;`;
                     datas += `,&quot;BetFrom&quot;:&quot;${data.BetFrom}&quot;`;
