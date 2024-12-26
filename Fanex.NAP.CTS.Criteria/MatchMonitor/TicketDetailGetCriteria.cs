@@ -96,6 +96,9 @@
         [SpParam(SqlParamName = "IsExclTestCurr")]
         public bool IsExclTestCurr { get; set; }
 
+        [SpParam(SqlParamName = "UserNameList")]
+        public string UserNameList { get; set; }
+
         public override string GetSettingKey()
                 => "CTS_Rpt_MatchMonitor_TicketDetails";
 

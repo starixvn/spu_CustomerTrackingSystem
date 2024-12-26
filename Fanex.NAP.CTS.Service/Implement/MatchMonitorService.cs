@@ -500,6 +500,7 @@
                 ViewMode = (int)GetViewModeFromDB(_mmQueryType, para.TypeOfTickets),
                 ListSportBettype = betTypeInfos,
                 IsExclTestCurr = _mmQueryType == MMQueryType.DangerMMReport,
+                UserNameList = para.UserNameList,
 
                 FromTransDate = para.TranstimeFrom != null ? para.TranstimeFrom.Value.ToUniversalTime() : (DateTime?)null,
                 ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null
@@ -1127,6 +1128,7 @@
                 BatchSize = batchSize,
                 IsLicensee = (para.Sites == MMSites.All || para.Sites == null) ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
                 ListTransId = transJson,
+                UserNameList = para.UserNameList,
                 IsCashout = para.IsCashout,
                 FromTransDate = para.TranstimeFrom != null ? para.TranstimeFrom.Value.ToUniversalTime() : (DateTime?)null,
                 ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null,

@@ -1364,7 +1364,8 @@ function DangerousSettingDetail() {
                     MGrTranIDListFiltered: GetTranIDsByFilterMGr(),
                     Sport: domElements.sportType,
                     TranstimeFrom: transtime.fromDate,
-                    TranstimeTo: transtime.toDate
+                    TranstimeTo: transtime.toDate,
+                    UserNameList: domElements.tggUsernameMode.hasClass('toggle-on') ? domElements.hdSelectedUsernameMode.val() : '',
                 };
 
                 params.IsFilterSuspicious = IsFilterSuspicious(params);
@@ -1538,7 +1539,8 @@ function DangerousSettingDetail() {
             IsSupportShowAllTickets: isSupportShowAllTickets,
             Sport: domElements.sportType,
             TranstimeFrom: transtime.fromDate,
-            TranstimeTo: transtime.toDate
+            TranstimeTo: transtime.toDate,
+            UserNameList: domElements.tggUsernameMode.hasClass('toggle-on') ? domElements.hdSelectedUsernameMode.val() : '',
         };
 
         $.ajax(common.modifyRelativeUrl('DangerMonitor/GetMatchMonitorFilter'), {
@@ -2826,6 +2828,8 @@ function DangerousSettingDetail() {
                 else {
                     domElements.tggUsernameMode.addClass('toggle-on');
                 }
+
+                FetchFilterMatchMonitorDetail();
             });
         }
     }

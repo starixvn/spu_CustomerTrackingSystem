@@ -54,6 +54,9 @@
         [SpParam(SqlParamName = "ToTransDate")]
         public DateTime? ToTransDate { get; set; }
 
+        [SpParam(SqlParamName = "UserNameList")]
+        public string UserNameList { get; set; }
+
         public override string GetSettingKey()
             => "CTS_TicketDetails_Info";
 
