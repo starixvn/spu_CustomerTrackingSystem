@@ -20,6 +20,14 @@
 
             </div>
             <div class="title-box-right">
+                <div class="username-mode">
+                    <div class="toggle tooltip @(string.IsNullOrEmpty(ViewBag.UserName) ? "": "toggle-on") " id="tggUsernameMode" type="checkbox">
+                        <div class="toggle-text-off">UserNameMode - OFF</div>
+                        <div class="glow-comp"></div>
+                        <div class="toggle-button "></div>
+                        <div class="toggle-text-on @(string.IsNullOrEmpty(ViewBag.UserName) ? "disabled": "")"> UserNameMode - ON</div>
+                    </div>
+                </div>
                 <span class="title-sport-name">
                     <span id="spanSportBetTypeInfo">@ViewBag.SportName - @ViewBag.BettypeName -</span>
                     <span class="title-market" id="spanMarketInfo">@ViewBag.MarketName</span>
@@ -490,6 +498,7 @@
             <input id="hdSelectedUsernames" type="hidden" />
             <input id="hdSelectedHomeDetectMGr" type="hidden" />
             <input id="hdSelectedAwayDetectMGr" type="hidden" />
+            <input id="hdSelectedUsernameMode" type="hidden" value="@ViewBag.UserName" />
         </div>
     </div>
 </div>

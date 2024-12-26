@@ -109,6 +109,8 @@ function DangerousSettingDetail() {
         iconATranstimeAutofill: $('#iconATranstimeAutofill'),
         iconSGTranstimeAutofill: $('#iconSGTranstimeAutofill'),
         hdUsernameAmt: $("#hdUsernameAmt").val(),
+        tggUsernameMode: $('#tggUsernameMode'),
+        hdSelectedUsernameMode: $('#hdSelectedUsernameMode'),
     };
 
     let transtime = {
@@ -2815,6 +2817,17 @@ function DangerousSettingDetail() {
 
         domElements.inputHomeSelectAll.prop('checked', false);
         domElements.inputAwaySelectAll.prop('checked', false);
+
+        if (domElements.hdSelectedUsernameMode.val()) {
+            domElements.tggUsernameMode.on('click', function () {
+                if (domElements.tggUsernameMode.hasClass('toggle-on')) {
+                    domElements.tggUsernameMode.removeClass('toggle-on');
+                }
+                else {
+                    domElements.tggUsernameMode.addClass('toggle-on');
+                }
+            });
+        }
     }
 
     $(window).resize(function () {
