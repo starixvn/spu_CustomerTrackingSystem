@@ -18,6 +18,7 @@
     using Fanex.NAP.TGRS.Core.ExcelUtility;
     using Newtonsoft.Json;
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -98,8 +99,11 @@
 
                 var arrUsername = usernames.Split(',');
 
-                result.ValidateUsernames = validateUsernames?.Select(x => x.UserName).ToList() ?? new List<string>();
-                result.InvalidateUsernames = arrUsername?.Except(result.ValidateUsernames).ToList() ?? new List<string>();
+
+                var set = new HashSet<string>(validateUsernames?.Select(x => x.UserName) ?? new List<string>(), StringComparer.OrdinalIgnoreCase);
+
+                result.ValidateUsernames = arrUsername?.Where(x => set.Contains(x)).ToList() ?? new List<string>();
+                result.InvalidateUsernames = arrUsername?.Where(x => !set.Contains(x)).ToList() ?? new List<string>();
             }
 
             return result;
