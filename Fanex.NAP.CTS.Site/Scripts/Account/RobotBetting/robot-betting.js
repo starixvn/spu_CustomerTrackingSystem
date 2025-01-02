@@ -63,7 +63,7 @@ function robot_betting() {
             ],
             columns: [
                 { data: obj => obj.TransTime },
-                { data: obj => obj.DeviceID },
+                { data: obj => obj.Device },
                 { data: obj => obj.RobotTracking },
                 { data: obj => obj.DeviceType },
                 { data: obj => obj.BrowserName },
@@ -125,7 +125,7 @@ function robot_betting() {
                     for (const item of response.data) {                      
                         html += `<tr class='robot-ai-lp-childRow' data-rangetype=${rangeType}>`;
                         html += `<td class="td1 text-center">${item.TransTime}</td>`;
-                        html += `<td class="td2 text-center">${item.DeviceID}</td>`;
+                        html += `<td class="td2 text-center">${item.Device}</td>`;
                         html += `<td class="td3 text-center">${item.RobotTracking}</td>`;
                         html += `<td class="td4 text-center">${item.DeviceType}</td>`;
                         html += `<td class="td5 text-center">${item.BrowserName}</td>`;

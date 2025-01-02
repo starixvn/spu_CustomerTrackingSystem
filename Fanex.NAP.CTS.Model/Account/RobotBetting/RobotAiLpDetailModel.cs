@@ -6,7 +6,7 @@
     {
         public DateTime TransTime { get; set; }
 
-        public string DeviceID { get; set; }
+        public string Device { get; set; }
 
         public string RobotTracking { get; set; }
 

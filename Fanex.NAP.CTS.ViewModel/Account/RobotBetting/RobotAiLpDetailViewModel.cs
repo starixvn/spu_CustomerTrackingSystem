@@ -8,7 +8,7 @@
         public RobotAiLpDetailViewModel(RobotAiLpDetailModel data)
         {
             TransTime = FormatGridColumnString(data.TransTime.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff));
-            DeviceID = FormatGridColumnString(data.DeviceID);
+            Device = FormatGridColumnString(data.Device);
             RobotTracking = FormatGridColumnString(data.RobotTracking);
             DeviceType = FormatGridColumnString(data.DeviceType);
             BrowserName = FormatGridColumnString(data.BrowserName);
@@ -18,7 +18,7 @@
 
         public string TransTime { get; set; }
 
-        public string DeviceID { get; set; }
+        public string Device { get; set; }
 
         public string RobotTracking { get; set; }
 
