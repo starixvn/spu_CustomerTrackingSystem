@@ -30,7 +30,7 @@
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 using (var result = db.QueryMultiple(criteria))
-                {
+                {                 
                     var robotAIs = result.Read<RobotBettingAIModel>();
                     var robotImpervas = result.Read<RobotBettingImpervaModel>();
                     var firstLastRobotDate = new RobotDateAndTypeModel
@@ -41,7 +41,7 @@
 
                     return new RobotBettingModel
                     {
-                        FirstLastRobotDate = firstLastRobotDate,
+                        FirstLastRobotDate = firstLastRobotDate,                       
                         RobotBettingAI = robotAIs,
                         RobotBettingImperva = robotImpervas
                     };
@@ -178,6 +178,17 @@
             };
 
             return repository.Fetch<RobotRDTicketDetailModel>(criteria);
+        }
+
+        public IEnumerable<RobotAiLpDetailModel> GetRobotAiLpDetail(long custID, int periodRangeType)
+        {
+            var criteria = new GetRobotAiLpDetailCriteria
+            {
+                CustID = custID,
+                PeriodRangeType = periodRangeType                         
+            };
+
+            return repository.Fetch<RobotAiLpDetailModel>(criteria);
         }
 
     }

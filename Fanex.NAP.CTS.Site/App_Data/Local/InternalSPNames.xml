@@ -136,8 +136,8 @@
 	</Function>
 
 	<Function name="MatchMonitor">
-		<Setting Key="CTS_DC_MatchMonitor_Get" SpName="CTS_DC_MatchMonitor_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_MatchMonitor_Details_Verify" SpName="CTS_DC_MatchMonitor_Details_Verify_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_MatchMonitor_Get" SpName="CTS_DC_MatchMonitor_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_MatchMonitor_Details_Verify" SpName="CTS_DC_MatchMonitor_Details_Verify" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_MatchMonitor_Details_GetReasonGroup" SpName="CTS_DC_MatchMonitor_Details_GetReasonGroup" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_MatchMonitor_Details_GetScore" SpName="CTS_DC_MatchMonitor_Details_GetScore" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_MatchMonitor_Details_Get" SpName="CTS_DC_MatchMonitor_Details_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
@@ -151,7 +151,7 @@
 		
 
 		<Setting Key="CTS_DC_MatchMonitor_HoldKey_InsertLog" SpName="CTS_DC_MatchMonitor_HoldKey_InsertLog" DbName="MySQL.CTS_DataCenter.Admin" />
-    <Setting Key="CTS_DC_MatchMonitorParlay_Details_Get" SpName="CTS_DC_MatchMonitorParlay_Details_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+    <Setting Key="CTS_DC_MatchMonitorParlay_Details_Get" SpName="CTS_DC_MatchMonitorParlay_Details_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function name="RobotClassification">
@@ -170,6 +170,7 @@
 		<Setting Key="SPU_AIML_RD_SCE_GetRobotUsersDetails" SpName="SPU_AIML_RD_SCE_GetRobotUsersDetails" DbName="MySQL.SPU_AIML.Reporter" />
 		<Setting Key="SPU_AIML_RD_GetRobotUserMatch" SpName="SPU_AIML_RD_GetRobotUserMatch" DbName="MySQL.SPU_AIML.Reporter" />
 		<Setting Key="SPU_AIML_RD_GetRobotUserMatchTransList" SpName="SPU_AIML_RD_GetRobotUserMatchTransList" DbName="MySQL.SPU_AIML.Reporter" />
+    <Setting Key="SPU_AIML_RD_LP_GetRobotDetails" SpName="SPU_AIML_RD_LP_GetRobotDetails" DbName="MySQL.SPU_AIML.Reporter" />
 	</Function>
 
 	<Function name="CustomerProfile">

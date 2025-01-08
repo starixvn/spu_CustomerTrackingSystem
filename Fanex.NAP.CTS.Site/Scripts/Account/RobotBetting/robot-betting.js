@@ -12,6 +12,7 @@ function robot_betting() {
     let robotSCETable = $('#tableRobotBetting');
     let robotRDTable = $('#tblRobotRD');
     let robotImpervaTable = $('#tblImperva');
+    let robotLPTable = $('#tblBotLoginPattern');
 
     function LoadRobotDetail(tr, row) {
         let span = $('span', tr);
@@ -39,6 +40,120 @@ function robot_betting() {
                 }
             }
         }
+    }
+
+    function GenerateGridRobotLP() {
+        let table = robotLPTable.DataTable({
+            language: {
+                lengthMenu: "",
+                info: "",
+                infoEmpty: "",
+                zeroRecords: "",
+                emptyTable: "There's no data"
+            },
+            info: false,
+            ordering: false,
+            searching: false,
+            scrollX: false,
+            scrollCollapse: true,
+            paging: false,         
+            columnDefs: [
+                { targets: "_all", defaultContent: "-" },
+                { targets: [0, 1, 2, 3, 4, 5, 6], className: "text-center" },
+            ],
+            columns: [
+                { data: obj => obj.TransTime },
+                { data: obj => obj.Device },
+                { data: obj => obj.RobotTracking },
+                { data: obj => obj.DeviceType },
+                { data: obj => obj.BrowserName },
+                { data: obj => obj.IP },
+                { data: obj => obj.Domain }               
+            ],
+            createdRow: function (row, obj) {
+                let td = `<td class="robot-rd robot-lp-td" colspan="7" data-custid=${obj.CustID} data-rangetype=${obj.RangeType}>
+                              <span class="icon-chevron-right"><i class="title-robot">${obj.RangeName}</i></span>
+                              </td>`;
+                $(row).empty().html(td);
+            },
+        });
+
+        $('tbody', robotLPTable).on('click', 'tr', function () {
+            let tr = $(this).closest('tr');
+            let td = $('.robot-lp-td', tr);
+           
+            if (td.length > 0) {               
+                GenerateRobotAILPDetail(tr, td);
+            }
+        });
+
+        return table;
+    }
+
+    function GenerateRobotAILPDetail(tr, td) {    
+        let span = $('span', tr);
+        let custID = td.attr('data-custid');
+        let rangeType = td.attr('data-rangetype');
+
+        if (tr.hasClass('detail-loaded')) {            
+            let isShow = true;
+
+            if (span.hasClass('icon-chevron-right')) {
+                span.removeClass('icon-chevron-right').addClass('icon-chevron-down');
+            } else {
+                span.removeClass('icon-chevron-down').addClass('icon-chevron-right'); isShow = false;                
+            }
+
+            $('tr[data-rangetype="' + rangeType + '"]', robotLPTable.find('tbody')).each(function (idx, ele) {
+                if (isShow) {
+                    $(ele).removeClass('hide');
+                } else {
+                    $(ele).addClass('hide');
+                }
+            })
+
+        } else {                      
+            $.ajax(common.modifyRelativeUrl('Account/GetRobotAILPDetail'), {
+                type: 'POST',
+                data: {
+                    custID: custID,
+                    rangeType: rangeType
+                },
+                success: function (response) {
+                    let html = '';
+
+                    for (const item of response.data) {                      
+                        html += `<tr class='robot-ai-lp-childRow' data-rangetype=${rangeType}>`;
+                        html += `<td class="td1 text-center">${item.TransTime}</td>`;
+                        html += `<td class="td2 text-center">${item.Device}</td>`;
+                        html += `<td class="td3 text-center">${item.RobotTracking}</td>`;
+                        html += `<td class="td4 text-center">${item.DeviceType}</td>`;
+                        html += `<td class="td5 text-center">${item.BrowserName}</td>`;
+                        html += `<td class="td6 text-center">${item.IP}</td>`;
+                        html += `<td class="td7 text-center">${item.Domain}</td>`;
+                        html += `</tr>`;
+                    }
+
+                    $(tr).after(html);
+
+                    tr.addClass('detail-loaded');
+                },
+                beforeSend: function () {
+                    td.prop('disabled', true);
+                    robotLPTable.find('tbody').addClass('loading');
+                },
+                complete: function () {
+                    td.prop('disabled', false);
+                    robotLPTable.find('tbody').removeClass('loading');
+                },
+                error: function (errMsg) {
+                    td.prop('disabled', false);
+                    robotLPTable.find('tbody').removeClass('loading');
+                }
+            });
+
+            span.removeClass('icon-chevron-right').addClass('icon-chevron-down');
+        }       
     }
 
     function GenerateTicketDetail(tr, row) {
@@ -593,6 +708,7 @@ function robot_betting() {
             },
             beforeSend: function () {
                 robotSCETable.find('tbody').addClass('loading');
+                robotLPTable.addClass('hide');
                 robotSCETable.addClass('hide');
                 robotRDTable.addClass('hide');
             },
@@ -602,7 +718,8 @@ function robot_betting() {
                     lastRobotDate.text("Last Robot Date: " + response.data.LastRobotDate);
                 }
 
-                if (response.data.RobotBettingAI.length == 0
+                if (response.data.RobotAILP.length == 0
+                    && response.data.RobotBettingAI.length == 0
                     && response.data.RobotImpervas.length == 0
                 ) {
                     robotSCETable.DataTable().clear().rows.add([]).draw();
@@ -612,6 +729,11 @@ function robot_betting() {
                     const robotOCRD = response.data.RobotBettingAI?.filter(item => item.RangeType == RobotPeriodRangeType.OCRD) ?? [];
                     const robotTD = response.data.RobotBettingAI?.filter(item => item.RangeType == RobotPeriodRangeType.TD) ?? [];
                     const robotImpervas = response.data.RobotImpervas;
+
+                    if (response.data.RobotAILP.length > 0) {
+                        robotLPTable.removeClass('hide');
+                        robotLPTable.DataTable().clear().rows.add(response.data.RobotAILP).draw();
+                    }
 
                     if (robotSCE.length > 0) {
                         robotSCETable.removeClass('hide');
@@ -644,6 +766,7 @@ function robot_betting() {
     }
 
     this.Initial = function (custID) {
+        GenerateGridRobotLP();
         GenerateGridRobotSCE();
         GenerateGridRobotRD();
 

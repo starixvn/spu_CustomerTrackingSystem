@@ -79,6 +79,7 @@
                 item.SCE,
                 item.TD,
                 item.OCRD,
+                item.LP,
                 item.TotalAccount,
             });
         }
@@ -103,6 +104,7 @@
                 data.TFoot.SCE,
                 data.TFoot.TD,
                 data.TFoot.OCRD,
+                data.TFoot.LP
             };
         }
 

@@ -76,6 +76,7 @@
     <Compile Include="Account\CustomerInfo\GetCustomerInfoDangerousCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRDMatchCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRDTransCriteria.cs" />
+    <Compile Include="Account\RobotSetting\GetRobotAiLpDetailCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRobotUsersSCEDetailsCriteria.cs" />
     <Compile Include="Api\CtsAssociationAPI\DetectAssociationByTypeCriteria.cs" />
     <Compile Include="Api\FPS\Account\GetAssAccByDevSubscriberDCSExtraCriteria.cs" />

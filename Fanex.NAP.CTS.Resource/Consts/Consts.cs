@@ -247,7 +247,7 @@
         public enum ROBOT_REPORT
         {
             ROBOT_EXPORT_NUMBER_COLUMN = 5,
-            AIROBOT_EXPORT_NUMBER_COLUMN = 6,
+            AIROBOT_EXPORT_NUMBER_COLUMN = 7,
             EXPORT_NUMBER_CHAR_PER_LINE = 180,
             EXPORT_POINT_PIXEL = 300
         }
@@ -480,7 +480,8 @@
             //RemoveLicBABySite_API = 242
             CheckAssociationAPI = 243,
             AddCustomerInitialSmarts = 244,
-            GetCustomerClassCategoryByCustID = 245
+            GetCustomerClassCategoryByCustID = 245,
+            GetRobotAILPDetail = 246
         };
 
         public enum SystemId

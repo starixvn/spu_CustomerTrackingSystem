@@ -37,13 +37,14 @@ class AIRobotReportTable {
             paging: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4, 5, 6], className: "text-center" },
                 { targets: [0], width: "10%" },
                 { targets: [1], width: "5%" },
                 { targets: [2], width: "5%" },
                 { targets: [3], width: "5%" },
                 { targets: [4], width: "5%" },
-                { targets: [5], width: "11%" }
+                { targets: [5], width: "5%" },
+                { targets: [6], width: "11%" }
             ],
             columns: [
                 {
@@ -63,6 +64,7 @@ class AIRobotReportTable {
                 { data: obj => obj.SCE },
                 { data: obj => obj.TD },
                 { data: obj => obj.OCRD },
+                { data: obj => obj.LP },
                 { data: obj => obj.TotalAccount }
             ]
         });
@@ -154,6 +156,7 @@ class AIRobotReportTable {
             nCells[2].innerHTML = data.SCE;
             nCells[3].innerHTML = data.TD;
             nCells[4].innerHTML = data.OCRD;
+            nCells[5].innerHTML = data.LP;
         }
         $(`#tblAIRobot${this.dateTimeType}Report_wrapper .dataTables_scrollFoot`).height(height);
     }
