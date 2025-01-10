@@ -109,9 +109,11 @@ function DangerousSettingDetail() {
         iconATranstimeAutofill: $('#iconATranstimeAutofill'),
         iconSGTranstimeAutofill: $('#iconSGTranstimeAutofill'),
         hdUsernameAmt: $("#hdUsernameAmt").val(),
-        tggUsernameMode: $('#tggUsernameMode'),
+        cbbUsernameMode: $('#cbbUsernameMode'),
         hdSelectedUsernameMode: $('#hdSelectedUsernameMode'),
     };
+
+    let isSelectedUsernameMode = false;
 
     let transtime = {
         fromDate: undefined,
@@ -1365,7 +1367,7 @@ function DangerousSettingDetail() {
                     Sport: domElements.sportType,
                     TranstimeFrom: transtime.fromDate,
                     TranstimeTo: transtime.toDate,
-                    UserNameList: domElements.tggUsernameMode.hasClass('toggle-on') ? domElements.hdSelectedUsernameMode.val() : '',
+                    UserNameList: isSelectedUsernameMode ? domElements.hdSelectedUsernameMode.val() : '',
                 };
 
                 params.IsFilterSuspicious = IsFilterSuspicious(params);
@@ -1540,7 +1542,7 @@ function DangerousSettingDetail() {
             Sport: domElements.sportType,
             TranstimeFrom: transtime.fromDate,
             TranstimeTo: transtime.toDate,
-            UserNameList: domElements.tggUsernameMode.hasClass('toggle-on') ? domElements.hdSelectedUsernameMode.val() : '',
+            UserNameList: isSelectedUsernameMode ? domElements.hdSelectedUsernameMode.val() : '',
         };
 
         $.ajax(common.modifyRelativeUrl('DangerMonitor/GetMatchMonitorFilter'), {
@@ -2820,17 +2822,24 @@ function DangerousSettingDetail() {
         domElements.inputHomeSelectAll.prop('checked', false);
         domElements.inputAwaySelectAll.prop('checked', false);
 
-        if (domElements.hdSelectedUsernameMode.val()) {
-            domElements.tggUsernameMode.on('click', function () {
-                if (domElements.tggUsernameMode.hasClass('toggle-on')) {
-                    domElements.tggUsernameMode.removeClass('toggle-on');
-                }
-                else {
-                    domElements.tggUsernameMode.addClass('toggle-on');
-                }
+        InitializeUsernameMode();
+    }
 
+    function InitializeUsernameMode() {
+        if (domElements.hdSelectedUsernameMode.val()) {
+            domElements.cbbUsernameMode.val('0');
+            isSelectedUsernameMode = domElements.cbbUsernameMode.val() == '0';
+
+            domElements.cbbUsernameMode.on('change', function () {
+                isSelectedUsernameMode = domElements.cbbUsernameMode.val() == '0';
                 FetchFilterMatchMonitorDetail();
             });
+        }
+        else
+        {
+            isSelectedUsernameMode = false;
+            domElements.cbbUsernameMode.val('1');
+            domElements.cbbUsernameMode.prop('disabled', true);
         }
     }
 
