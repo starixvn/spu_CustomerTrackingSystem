@@ -1,4 +1,10 @@
 ﻿function DangerousSetting() {
+    const DangerMode = {
+        DangerTypeMode: 0,
+        UsernameMode: 1 
+    }
+    let dangerMode = DangerMode.DangerTypeMode;
+
     let dateEmptyString = "------,----";
     let dataTable;
     let sportBetType = [];
@@ -292,6 +298,7 @@
     function GetDangerMonitor() {
         timeoutRenderTicketDetail = setTimeout(() => {
             $('#txtEventHeader').val('');
+            dangerMode = domElements.rbtnSelect.filter(":checked").val();
 
             let data = {
                 FromDate: domElements.dpkFromDate.val(),
@@ -312,7 +319,7 @@
                 TotalAmount: GetInputAmount(domElements.txtTotalAmt.val()),
             };
 
-            if (domElements.rbtnSelect.filter(":checked").val() == 0) {
+            if (dangerMode == DangerMode.DangerTypeMode) {
                 data.QueryDanger = domElements.cbbDgr.val();
             }
             else {
@@ -659,7 +666,7 @@
                 { data: obj => obj.LeagueName },
                 {
                     data: obj => {
-                        if (domElements.rbtnSelect.filter(":checked").val() != 0) {
+                        if (dangerMode == DangerMode.UsernameMode) {
                             obj.username = domElements.txtUsername.val();
                         }
 
@@ -744,7 +751,7 @@
                 para += `&UsernameAmt=${usernameAmt}`;
             }
 
-            if (domElements.rbtnSelect.filter(":checked").val() == 0) {
+            if (dangerMode == DangerMode.DangerTypeMode) {
                 Object.keys(dangerListSelected).forEach(item => {
                     if (dangerListSelected[item]) {
                         para += `&${item}=${dangerListSelected[item]}`;
