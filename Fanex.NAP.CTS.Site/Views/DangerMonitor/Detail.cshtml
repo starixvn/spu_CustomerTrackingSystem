@@ -88,6 +88,16 @@
                         <div class="first-row-line"></div>
 
                         <div class="first-row-info">
+                            <label class="text info-text">Username</label>
+                            <select class="control info-select" id="cbbUsernameMode">
+                                <option value="0">Selected Username</option>
+                                <option value="1">All</option>
+                            </select>
+                        </div>
+
+                        <div class="first-row-line"></div>
+
+                        <div class="first-row-info">
                             <label class="text info-text">Transtime</label>
                             <div class="control info-input">
                                 <input class="transtime-input" placeholder="dd/mm/yy hh:mm:ss" id="inputTranstimeFrom"/>
@@ -490,6 +500,7 @@
             <input id="hdSelectedUsernames" type="hidden" />
             <input id="hdSelectedHomeDetectMGr" type="hidden" />
             <input id="hdSelectedAwayDetectMGr" type="hidden" />
+            <input id="hdSelectedUsernameMode" type="hidden" value="@ViewBag.UserName" />
         </div>
     </div>
 </div>

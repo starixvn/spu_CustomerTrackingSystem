@@ -1,4 +1,10 @@
 ﻿function DangerousSetting() {
+    const DangerMode = {
+        DangerTypeMode: 0,
+        UsernameMode: 1 
+    }
+    let dangerMode = DangerMode.DangerTypeMode;
+
     let dateEmptyString = "------,----";
     let dataTable;
     let sportBetType = [];
@@ -292,6 +298,7 @@
     function GetDangerMonitor() {
         timeoutRenderTicketDetail = setTimeout(() => {
             $('#txtEventHeader').val('');
+            dangerMode = domElements.rbtnSelect.filter(":checked").val();
 
             let data = {
                 FromDate: domElements.dpkFromDate.val(),
@@ -312,7 +319,7 @@
                 TotalAmount: GetInputAmount(domElements.txtTotalAmt.val()),
             };
 
-            if (domElements.rbtnSelect.filter(":checked").val() == 0) {
+            if (dangerMode == DangerMode.DangerTypeMode) {
                 data.QueryDanger = domElements.cbbDgr.val();
             }
             else {
@@ -614,7 +621,7 @@
     }
 
     function GenerateGrid() {
-        return domElements.tblMonitor.DataTable({
+        var table = domElements.tblMonitor.DataTable({
             serverSide: false,
             dom: '<"wrapper-info-table"<"wrapper-info"lip<"filter"f>>>t',
             pagingType: "full_numbers",
@@ -658,38 +665,12 @@
                 { data: obj => obj.SportName },
                 { data: obj => obj.LeagueName },
                 {
-                    data: obj => () => {
-                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&BettypeName={5}&MatchSection={6}&Market={7}&LeagueID={8}&BetID={9}&SportType={10}&KOTime={11}";
-                        let para = paramTemplate.format(
-                            obj.EventDateToString,
-                            obj.MatchID,
-                            obj.HomeID,
-                            obj.AwayID,
-                            obj.BettypeID,
-                            obj.BettypeName,
-                            obj.MatchSection,
-                            obj.Market,
-                            obj.LeagueID,
-                            obj.BetID,
-                            obj.SportType,
-                            obj.KOTime
-                            );
-
-                        let usernameAmt = GetInputAmount(domElements.txtUsernameAmt.val());
-                        if (usernameAmt)
-                        {
-                            para += `&UsernameAmt=${usernameAmt}`;
+                    data: obj => {
+                        if (dangerMode == DangerMode.UsernameMode) {
+                            obj.username = domElements.txtUsername.val();
                         }
 
-                        if (domElements.rbtnSelect.filter(":checked").val() == 0) {
-                            Object.keys(dangerListSelected).forEach(item => {
-                                if (dangerListSelected[item]) {
-                                    para += `&${item}=${dangerListSelected[item]}`;
-                                }
-                            });
-                        }
-
-                        return '<a class="click-view-details" href="DangerMonitor/Detail?' + para + '" target="_blank">' + obj.MatchName + '</a>';
+                        return `<a class="click-view-details" target="_blank"> ${obj.MatchName} </a>`;
                     }
                 },
                 { data: obj => obj.MarketName },
@@ -745,6 +726,43 @@
                 }
             }
         });
+
+        table.on('click', 'a.click-view-details', function (e) {
+            let obj = table.row(e.target.closest('tr')).data();
+
+            let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&BettypeName={5}&MatchSection={6}&Market={7}&LeagueID={8}&BetID={9}&SportType={10}&KOTime={11}";
+            let para = paramTemplate.format(
+                obj.EventDateToString,
+                obj.MatchID,
+                obj.HomeID,
+                obj.AwayID,
+                obj.BettypeID,
+                obj.BettypeName,
+                obj.MatchSection,
+                obj.Market,
+                obj.LeagueID,
+                obj.BetID,
+                obj.SportType,
+                obj.KOTime
+            );
+
+            let usernameAmt = GetInputAmount(domElements.txtUsernameAmt.val());
+            if (usernameAmt) {
+                para += `&UsernameAmt=${usernameAmt}`;
+            }
+
+            if (dangerMode == DangerMode.DangerTypeMode) {
+                Object.keys(dangerListSelected).forEach(item => {
+                    if (dangerListSelected[item]) {
+                        para += `&${item}=${dangerListSelected[item]}`;
+                    }
+                });
+            }
+
+            RedirectToDangerMonitorDetail("DangerMonitor/Detail?" + para, obj.username);
+        });
+
+        return table;
     }
 
     function SearchEventHeader() {
@@ -1100,6 +1118,24 @@
         }
 
         return false;
+    }
+
+    function RedirectToDangerMonitorDetail(url, username) {
+        var form = document.createElement("form");
+        form.target = "_blank";
+        form.method = "POST";
+        form.action = url;
+        form.style.display = "none";
+
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "username";
+        input.value = username ?? "";
+        form.appendChild(input);
+
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
     }
 
     $(document).ready(function () {

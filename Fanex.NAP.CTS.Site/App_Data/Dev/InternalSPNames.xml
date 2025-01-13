@@ -95,16 +95,16 @@
 
 	<Function Name="CustomerClassification">
 		<Setting Key="CTS_DC_CustClassification_Get" SpName="CTS_DC_CustClassification_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_ViewHistory" SpName="CTS_DC_CustClassification_ViewHistory_xpre" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_ViewHistory" SpName="CTS_DC_CustClassification_ViewHistory" DbName="MySQL.CTS_DataCenter.Reporter" />
 
 		<Setting Key="CTS_DC_CustClassification_LogInputData" SpName="CTS_DC_CustClassification_LogInputData" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_Queue_Insert" SpName="CTS_DC_CustClassification_Queue_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_ProblemAccount_InsertByCategory" SpName="CTS_DC_CustClassification_ProblemAccount_InsertByCategory" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_BySport_GetCC" SpName="CTS_DC_CustClassification_BySport_GetCC" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassification_Insert" SpName="CTS_DC_CustClassification_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove_xpre" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassificationAgency_Remove" SpName="CTS_DC_CustClassificationAgency_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_Rescan_Get" SpName="CTS_DC_CustClassification_Rescan_Get_xpre" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_Rescan_Get" SpName="CTS_DC_CustClassification_Rescan_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassificationAgency_Rescan_Get" SpName="CTS_DC_CustClassificationAgency_Rescan_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassificationAgency_ViewHistory" SpName="CTS_DC_CustClassificationAgency_ViewHistory" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="600" />
 		<Setting Key="CTS_DC_CustClassificationAgency_Get" SpName="CTS_DC_CustClassificationAgency_Get" DbName="MySQL.CTS_DataCenter.Reporter" />

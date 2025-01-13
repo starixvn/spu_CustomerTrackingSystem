@@ -86,6 +86,8 @@
         .title-box-right {
             width: 25%;
             padding-right: 5px;
+            display: flex;
+            justify-content: flex-end;
 
             .title-sport-name {
                 float: right;

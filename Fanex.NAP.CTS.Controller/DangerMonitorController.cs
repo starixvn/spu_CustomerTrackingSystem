@@ -168,6 +168,14 @@
 
             return View();
         }
+
+        [HttpPost]
+        public ActionResult Detail(DangerMonitorDetailViewModel para, string username)
+        {
+            ViewBag.UserName = username;
+
+            return Detail(para);
+        }
         #endregion
 
         #region Detail Filter
