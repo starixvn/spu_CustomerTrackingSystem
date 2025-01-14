@@ -16,5 +16,7 @@
         void RemoveKeyContainsValue(string value);
 
         IEnumerable<string> GetKeyContainsValue(string value);
+
+        object GetValueByKey(string key);
     }
 }
