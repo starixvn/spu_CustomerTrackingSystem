@@ -36,6 +36,7 @@
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.Parlay;
     using Fanex.NAP.CTS.Model.MatchMonitor.Parlay;
+    using System.Web.Helpers;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -176,7 +177,7 @@
             var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true)
                 .Select(x => new ReasonStaticListViewModel { ReasonID = x.ItemValue, ReasonName = x.ItemNameDisplay, IsSelected = x.ItemDefaultValue == "1" })
                 .OrderBy(x => x.ReasonName);
-           
+
             var reasonGroups = GetReasonGroups(false);
 
             return View(new MatchMonitorViewModel
@@ -210,7 +211,7 @@
                     var dicSumParlayTickets = GetMMFraudTicketsSummary(matchFromCTSInfos, TicketType.Parlay);
 
                     matchMonitors = MergeMatchMonitorWithMMStaticAndTicketsSummary(matchFromCTSInfos, dicSumTickets, dicSumParlayTickets);
-                   
+
                 }
             }
             catch (Exception ex)
@@ -230,7 +231,7 @@
                 data = matchMonitors
             }, JsonRequestBehavior.AllowGet);
         }
-       
+
         private IEnumerable<ReasonGroupStaticListViewModel> GetReasonGroups(bool isInitGroupNone)
         {
             var reasonGroupItems = _commonService.GetStaticLists((int)StaticListID.Reason, true);
@@ -303,8 +304,8 @@
 
                                     SetValueMMTicketsSummaryFromDictionary(result, betChoiceAway, dicSumParlayTickets, PropertyNameOfSummaryAwayList);
                                 }
-                            }  
-                            
+                            }
+
                             return result;
                         })
                     .OrderBy(c => c.MatchSection);
@@ -322,7 +323,7 @@
         }
 
         private Dictionary<string, MMFraudTicketsSummaryViewModel> GetMMFraudTicketsSummary(IEnumerable<GetMatchMonitorModel> matchFromCTSInfos, TicketType ticketType)
-        {          
+        {
             if (ticketType == TicketType.Single)
             {
                 var mmFraudTicketsSummaryModel = matchFromCTSInfos.Where(x => x.TicketType == (int)TicketType.Single)
@@ -511,7 +512,7 @@
                     {
                         result = GetAllMMFilter(para);
                     }
-                }               
+                }
             }
             catch (Exception ex)
             {
@@ -540,10 +541,6 @@
 
             var removeKeyAll = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketAll));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyAll);
-
-            // log for check remove cache
-            LogMMClearCacheNotClean(para, removeKeyFraud);
-            LogMMClearCacheNotClean(para, removeKeyAll);
 
             switch (para.TypeOfTickets)
             {
@@ -583,26 +580,21 @@
             return result;
         }
 
-        private void LogMMClearCacheNotClean(MMDetailInfoViewModel para, string key)
-        {
-            var keyContainsValue = _memoryCacheService.GetKeyContainsValue(key);
-            if (keyContainsValue.Any())
-            {
-                var logMessage = new LogMessage($"{Region} Match Monitor Clear Cache Not Clean")
-                   .AddMessage("Params " + JsonConvert.SerializeObject(para) + "\n")
-                   .AddMessage("Keys " + JsonConvert.SerializeObject(keyContainsValue) + "\n")
-                   .ToString();
-
-                LogService.Error(logMessage);
-            }
-        }
-
         [HttpGet]
-        public ActionResult GetDataLogMM(string key)
+        public ActionResult GetValueOfMemoryCache(string key)
         {
             return Json(new
             {
-                data = _memoryCacheService.GetValue<object>(key)
+                data = _memoryCacheService.GetValueByKey(key)
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult GetKeyOfMemoryCache(string key)
+        {
+            return Json(new
+            {
+                data = _memoryCacheService.GetKeyContainsValue(key)
             }, JsonRequestBehavior.AllowGet);
         }
 
@@ -685,7 +677,7 @@
             allFilterResult.IsDisplaySingleGrid = para.BetChoiceType == 1;
 
             return allFilterResult;
-        }      
+        }
 
         #endregion Detail Filter
 
@@ -704,7 +696,7 @@
 
                 var transJson = _matchMonitorService.GetTransFilterSuspicousMGr(filter, fraudTicket, info.TicketType);
 
-                recordsTotal = _matchMonitorService.GetTotalTicketDetail(info, filter, 0, transJson);               
+                recordsTotal = _matchMonitorService.GetTotalTicketDetail(info, filter, 0, transJson);
             }
             catch (Exception ex)
             {
@@ -772,7 +764,7 @@
 
                             break;
                         }
-                }             
+                }
             }
             catch (Exception ex)
             {
@@ -1006,7 +998,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-       
+
         #endregion
 
         #region Association Detect
@@ -1408,7 +1400,7 @@
             else
             {
                 var homeMItems = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["homes"]);
-               
+
                 var awayMItems = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["aways"]);
 
                 var templatePath = isViewParlay ? Server.MapPath(MMParlayDoubleGridTemplate) : Server.MapPath(MMDetailDoubleGridTemplate);
@@ -1451,15 +1443,18 @@
             });
 
             return ticketResult;
-        }       
+        }
 
         private IEnumerable<MatchMonitorDetailItemViewModel> MappingRobotStatus(IEnumerable<MatchMonitorDetailItemViewModel> ticket, int betTypeID, TicketType ticketType)
         {
             if (ticket.Any())
             {
-                var para = ticket.Select(c => new { TransID = ticketType == TicketType.Single ? c.TransId : c.Refno, 
-                    TransDate = c.TransTime, 
-                    CustID = c.CustID });
+                var para = ticket.Select(c => new
+                {
+                    TransID = ticketType == TicketType.Single ? c.TransId : c.Refno,
+                    TransDate = c.TransTime,
+                    CustID = c.CustID
+                });
 
                 var robotStatus = _matchMonitorService.GetRobotStatus(JsonConvert.SerializeObject(para));
 

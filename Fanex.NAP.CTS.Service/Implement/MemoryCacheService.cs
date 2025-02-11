@@ -133,5 +133,10 @@
         {
             return _memoryCache.Where(x => x.Key.Contains(value)).Select(x => x.Key);
         }
+
+        public object GetValueByKey(string key)
+        {
+            return key.IsNotNullOrEmpty() ? _memoryCache.Get(key) : null;
+        }
     }
 }
