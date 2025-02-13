@@ -33,10 +33,6 @@
     using System.Web.Script.Serialization;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.MarkPA;
-    using Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn;
-    using Fanex.NAP.CTS.ViewModel.MatchMonitor.Parlay;
-    using Fanex.NAP.CTS.Model.MatchMonitor.Parlay;
-    using System.Web.Helpers;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]

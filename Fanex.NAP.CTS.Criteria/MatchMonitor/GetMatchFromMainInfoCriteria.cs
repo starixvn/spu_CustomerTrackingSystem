@@ -9,6 +9,9 @@
         [SpParam(SqlParamName = "MatchIds")]
         public string MatchIDs { get; set; }
 
+        [SpParam(SqlParamName = "SportList")]
+        public string SportList { get; set; }
+
         [SpParam(SqlParamName = "FromDateTime")]
         public DateTime FromDate { get; set; }
 
@@ -20,8 +23,6 @@
 
         [SpParam(SqlParamName = "Event")]
         public string Event { get; set; }
-
-        public string SportList { get; set; }
 
         public override string GetSettingKey()
            => "CTS_Rpt_MatchMonitor_MatchInfo";

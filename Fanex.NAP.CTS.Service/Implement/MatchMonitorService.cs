@@ -39,9 +39,12 @@
 
         public IEnumerable<MatchFromMainInfoModel> GetMatchFromMainInfos(MatchMonitorSearchViewModel filter, string matchIDs)
         {
+            var sportList = filter?.Sports != null ? string.Join(",", filter.Sports.Select(x => x.SportTypeID).Distinct()) : null;
+
             var criteria = new GetMatchFromMainInfoCriteria
             {
                 MatchIDs = matchIDs,
+                SportList = sportList,
                 FromDate = filter?.FromDate ?? DateTime.Now,
                 ToDate = filter?.ToDate ?? DateTime.Now,
                 MatchSection = filter.MatchSection,
@@ -374,7 +377,7 @@
             {
                 mergeGroup.TicketMergeGroups = this.GetMMDetailMergeGroup(mMDetailBetTeams);
             }
-          
+
             mergeGroup.Groups = mergeGroup.GroupByGroupID();
 
             result.MMDetailMergeGroup = mergeGroup;
@@ -445,7 +448,7 @@
                 return GetSingleTicketDetail(para, filter, betTypeInfos, batchSize, transJson);
             }
             else
-            {                
+            {
                 var betTypeInfos = JsonConvert.SerializeObject(commonService.GetBetTypeSettings(new BetTypeSettingParaModel() { Status = 1 })
                     .Select(x => new MatchBetTypeSettingModel(x)));
 
@@ -654,14 +657,14 @@
             {
                 FillRowDataDG(homeMItems, awayMItems, ref writer);
             }
-            
+
             writer.SyncColumnsWidth(37);
 
             return writer.ToBytes();
         }
 
-        private void FillRowDataDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, 
-            IEnumerable<ExExcelTicketInfoViewModel> awayMItems, 
+        private void FillRowDataDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems,
+            IEnumerable<ExExcelTicketInfoViewModel> awayMItems,
             ref ExcelTemplateWriter writer)
         {
             var tblHome = homeMItems != null ? homeMItems.ToArray() : new ExExcelTicketInfoViewModel[0];
@@ -780,7 +783,7 @@
                     itemA.ReasonList,
                     (!string.IsNullOrEmpty(itemA.PICVerified) ? "x" : "-")
                 };
-        }        
+        }
 
         private object[] NewRecordTblHomeAwayDG(ExExcelTicketInfoViewModel itemH, ExExcelTicketInfoViewModel itemA)
         {
@@ -856,7 +859,7 @@
                     null, null, null, null
                };
         }
-    
+
         private object[] NewRecordTblParlayAwayDG(ExExcelParlayTicketInfoViewModel itemA)
         {
             return new object[]
@@ -945,7 +948,7 @@
                 for (int i = single.ParlayTickets.Count - 1; i >= 0; i--)
                 {
                     list.Add(new ExExcelParlayTicketInfoViewModel(single, single.ParlayTickets[i]));
-                }              
+                }
             }
 
             return list;
@@ -1064,7 +1067,7 @@
 
         public void LogHoldKeyAction(int userId, bool status, int matchId)
         {
-            if (userId != 0) 
+            if (userId != 0)
             {
                 var criteria = new HoldKeyLogInsertCriteria
                 {
@@ -1172,10 +1175,10 @@
             };
         }
 
-        private TicketDetailViewModel GetParlayTicketDetail(MMDetailInfoViewModel para, 
-            MMDetailFilterViewModel filter, 
-            string betTypeInfos, 
-            int? batchSize, 
+        private TicketDetailViewModel GetParlayTicketDetail(MMDetailInfoViewModel para,
+            MMDetailFilterViewModel filter,
+            string betTypeInfos,
+            int? batchSize,
             string listRefno = null)
         {
             var criteria = new ParlayTicketDetailGetCriteria()
@@ -1191,7 +1194,7 @@
                 ViewMode = para.TypeOfTickets == MMViewModeFromUI.TicketAll ? 0 : 1,
                 BatchSize = batchSize,
                 IsLicensee = (para.Sites == MMSites.All || para.Sites == null) ? null : (int?)(para.Sites == MMSites.Licensee ? 1 : 0),
-                ListRefno = listRefno?? "[]",
+                ListRefno = listRefno ?? "[]",
                 FromTransDate = para.TranstimeFrom != null ? para.TranstimeFrom.Value.ToUniversalTime() : (DateTime?)null,
                 ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null,
                 IsExclTestCurr = _mmQueryType == MMQueryType.DangerMMReport
@@ -1240,11 +1243,11 @@
                 .GroupBy(x => x.Refno, (key, g) => new { Refno = key, ParlayTickets = g.Select(y => new ParlayTicketInfoModel(y)) })
                 .ToDictionary(x => x.Refno, x => x.ParlayTickets);
 
-            var groupTickets = tickets.Where(x => x.TicketOrder == 0).Select(x => 
+            var groupTickets = tickets.Where(x => x.TicketOrder == 0).Select(x =>
                 {
                     parlaySubDictionary.TryGetValue(x.Refno, out var parlayTickets);
 
-                    x.ParlayTickets = parlayTickets.OrderBy(y=>y.IsMainTicket);
+                    x.ParlayTickets = parlayTickets.OrderBy(y => y.IsMainTicket);
 
                     return x;
                 });
