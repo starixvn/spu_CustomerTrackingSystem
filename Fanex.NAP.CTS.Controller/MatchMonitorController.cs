@@ -196,7 +196,7 @@
             var matchMonitors = Enumerable.Empty<GetMatchMonitorViewModel>();
 
             try
-            {
+            {               
                 if (para != null && para.IsValid())
                 {
                     var matchFromCTSInfos = Enumerable.Empty<GetMatchMonitorModel>();
