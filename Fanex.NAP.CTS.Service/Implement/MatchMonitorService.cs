@@ -1154,7 +1154,7 @@
 
             if (filter != null)
             {
-                criteria.ListScore = (filter.ScoreList == null || !para.LiveIndicator || filter.SportType == (int)MatchMonitorSportType.Basketball || filter.SportType == (int)MatchMonitorSportType.Cricket) 
+                criteria.ListScore = (filter.ScoreList == null || !para.LiveIndicator || ConditionExcludeScoreForMM.Contains(filter.SportType)) 
                     ? null : string.Join(",", filter.ScoreList);
                 criteria.ListCurrency = filter.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList);
                 criteria.ListDanger = GenerateDangerJson(filter);
