@@ -222,6 +222,7 @@
             Soccer = 1,
             Basketball = 2,
             ESport = 43,
+            Cricket = 50
         }
 
         public enum MatchMonitorReason

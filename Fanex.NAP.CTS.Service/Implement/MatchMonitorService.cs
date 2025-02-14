@@ -1154,7 +1154,8 @@
 
             if (filter != null)
             {
-                criteria.ListScore = (filter.ScoreList == null || !para.LiveIndicator || filter.SportType == 2) ? null : string.Join(",", filter.ScoreList);
+                criteria.ListScore = (filter.ScoreList == null || !para.LiveIndicator || filter.SportType == (int)MatchMonitorSportType.Basketball || filter.SportType == (int)MatchMonitorSportType.Cricket) 
+                    ? null : string.Join(",", filter.ScoreList);
                 criteria.ListCurrency = filter.CurrencyIdList == null ? null : string.Join(",", filter.CurrencyIdList);
                 criteria.ListDanger = GenerateDangerJson(filter);
                 criteria.ListStatus = filter.TicketStatusList == null ? null : string.Join(",", filter.TicketStatusList);
