@@ -457,7 +457,8 @@
                 ViewBag.ReasonGroup = para?.ReasonGroup ?? string.Empty;
                 ViewBag.MarketName = para?.MarketName ?? string.Empty;
                 ViewBag.BetChoice = para?.BetChoice;
-                ViewBag.IsDisableScoreFilter = para?.SportType != null && para.SportType == (int)MatchMonitorSportType.Basketball;
+                ViewBag.IsDisableScoreFilter = para?.SportType != null 
+                    && (para.SportType == (int)MatchMonitorSportType.Basketball || para.SportType == (int)MatchMonitorSportType.Cricket);
                 ViewBag.SportType = para?.SportType ?? 0;
                 ViewBag.SportName = para?.SportName ?? string.Empty;
                 ViewBag.KOTime = para?.KOTime;
