@@ -434,16 +434,24 @@
         {
             if (para.TicketType == Model.TicketType.Single)
             {
-                var betTypeInfos = JsonConvert.SerializeObject(new List<MatchBetTypeSettingModel>() { new MatchBetTypeSettingModel {
+                var betTypeInfo = new MatchBetTypeSettingModel
+                {
                     SportTypeID = para.Sport,
                     BetTypeID = para.BetTypeID,
                     BetChoiceType = para.BetChoiceType,
                     BetChoiceHome = para.BetChoiceHome,
                     BetChoiceAway = para.BetChoiceAway,
-                    BetID = para.BetID,
+                    BetID = null,
                     BetChoiceHomeFullName = para.BetChoiceHomeFullName,
                     BetChoiceAwayFullName = para.BetChoiceAwayFullName
-                } });
+                };
+
+                if (para.Sport != (int)MatchMonitorSportType.Cricket)
+                {
+                    betTypeInfo.BetID = para.BetID;
+                }
+
+                var betTypeInfos = JsonConvert.SerializeObject(new List<MatchBetTypeSettingModel>() { betTypeInfo });
 
                 return GetSingleTicketDetail(para, filter, betTypeInfos, batchSize, transJson);
             }
@@ -484,15 +492,22 @@
             {
                 return GetMMParlayTicketInfo(para, suspiciousTranInfos);
             }
-
-            var betTypeInfos = JsonConvert.SerializeObject(new List<MatchBetTypeSettingModel>() { new MatchBetTypeSettingModel {
+            var betTypeInfo = new MatchBetTypeSettingModel
+            {
                 SportTypeID = para.Sport,
                 BetTypeID = para.BetTypeID,
                 BetChoiceType = para.BetChoiceType,
                 BetChoiceHome = para.BetChoiceHome,
                 BetChoiceAway = para.BetChoiceAway,
-                BetID = para.BetID
-            } });
+                BetID = null
+            };
+
+            if (para.Sport != (int)MatchMonitorSportType.Cricket)
+            {
+                betTypeInfo.BetID = para.BetID;
+            }
+
+            var betTypeInfos = JsonConvert.SerializeObject(new List<MatchBetTypeSettingModel>() { betTypeInfo });
 
             var criteria = new MMTicketDetailInfoCriteria()
             {
