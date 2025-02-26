@@ -24,6 +24,11 @@ const IndexFilterSelected = {
     AGr: 7
 }
 
+const SportTypeConst = {
+    Basketball: 2,
+    Cricket: 50
+}
+
 function ConvertNumberToThousandsString(x) {
     return x ? x.toLocaleString() : 0;
 }
@@ -1142,7 +1147,7 @@ function MatchMonitorDetail() {
     function GetBetIDSelected() {
         let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
 
-        if (domElements.sportType != 2 && betidpattern.includes('X')) {
+        if (domElements.sportType != SportTypeConst.Basketball && betidpattern.includes('X')) {
             let betIDString = "80" + domElements.cbbMapX.val();
 
             if (betidpattern.includes('YY')) {
@@ -1150,7 +1155,7 @@ function MatchMonitorDetail() {
             }
             return betIDString;
 
-        } else if (domElements.sportType == 2) {
+        } else if (domElements.sportType == SportTypeConst.Basketball) {
             return $("option:selected", domElements.cbbBetType).attr('data-betid');
         } else {
             return 0; //default
@@ -1491,7 +1496,8 @@ function MatchMonitorDetail() {
                     IsFilter: true,
                     TypeOfTickets: typeOfTickets,
                     SportType: domElements.sportType,
-                    ScoreList: domElements.sportType == 2 ? undefined : GetSelectDataFilter(domElements.cbbMatchScore, true),
+                    ScoreList: (domElements.sportType == SportTypeConst.Basketball || domElements.sportType == SportTypeConst.Cricket)
+                        ? undefined : GetSelectDataFilter(domElements.cbbMatchScore, true),
                     Sites: domElements.cbbSites.val(),
                     CustomerClassList: GetSelectDataFilter(domElements.cbbCC, true),
                     IsDangerNone: GetDangerSelectDataFilter(0).length > 0,
@@ -2941,7 +2947,7 @@ function MatchMonitorDetail() {
     function ToggleMapXYY(isBetTypeChange) {
         let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
 
-        if (domElements.sportType != 2 && betidpattern.includes('X')) {
+        if (domElements.sportType != SportTypeConst.Basketball && betidpattern.includes('X')) {
             $("option[value='0']", domElements.cbbMapX).remove();
             domElements.cbbMapX.prop('disabled', false);
             if (isBetTypeChange) {
@@ -2952,7 +2958,7 @@ function MatchMonitorDetail() {
             domElements.cbbMapX.prop('disabled', true);
         }
 
-        if (domElements.sportType != 2 && betidpattern != undefined && betidpattern.includes('YY')) {
+        if (domElements.sportType != SportTypeConst.Basketball && betidpattern != undefined && betidpattern.includes('YY')) {
             $("option[value='0']", domElements.cbbMapYY).remove();
             domElements.cbbMapYY.prop('disabled', false);
             if (isBetTypeChange) {
@@ -3328,7 +3334,7 @@ function MatchMonitorDetail() {
         domElements.inputTranstimeFrom.val('');
         domElements.inputTranstimeTo.val('');
 
-        if (domElements.mapX != "0" && domElements.sportType != 2) {
+        if (domElements.mapX != "0" && domElements.sportType != SportTypeConst.Basketball) {
             domElements.cbbMapX.val(domElements.mapX).trigger('change');
             domElements.cbbBetType.val(`${domElements.betTypeID}_0`).trigger('change');
         } else {

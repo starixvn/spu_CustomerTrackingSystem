@@ -29,7 +29,7 @@
 
         public string BetIDPattern { get; set; }
 
-        public long BetID { get; set; }
+        public long? BetID { get; set; }
 
         public string BetChoiceHomeFullName { get; set; }
 

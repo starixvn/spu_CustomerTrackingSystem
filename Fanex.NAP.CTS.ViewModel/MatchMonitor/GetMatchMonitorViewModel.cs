@@ -226,14 +226,9 @@
         {
             get
             {
-                switch (this.SportType)
+                if (SportNameDictonary.TryGetValue(SportType, out var sportName))
                 {
-                    case (int)MatchMonitorSportType.Soccer:
-                        return nameof(MatchMonitorSportType.Soccer);
-                    case (int)MatchMonitorSportType.Basketball:
-                        return nameof(MatchMonitorSportType.Basketball);
-                    case (int)MatchMonitorSportType.ESport:
-                        return "E-Sports";
+                    return sportName;
                 }
 
                 return string.Empty;

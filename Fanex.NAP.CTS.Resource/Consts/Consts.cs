@@ -222,6 +222,7 @@
             Soccer = 1,
             Basketball = 2,
             ESport = 43,
+            Cricket = 50,
         }
 
         public enum MatchMonitorReason
@@ -597,5 +598,19 @@
             Member = 1,
             Agency = 2
         }
+
+        public static readonly Dictionary<int, string> SportNameDictonary = new Dictionary<int, string>
+        {
+            { (int) MatchMonitorSportType.Soccer        , nameof(MatchMonitorSportType.Soccer)      },
+            { (int) MatchMonitorSportType.Basketball    , nameof(MatchMonitorSportType.Basketball)  },
+            { (int) MatchMonitorSportType.ESport        , "E-Sports"                                },
+            { (int) MatchMonitorSportType.Cricket       , nameof(MatchMonitorSportType.Cricket)     },
+        };
+
+        public static readonly List<int> ConditionExcludeScoreForMM = new List<int>
+        {
+            (int) MatchMonitorSportType.Basketball,
+            (int) MatchMonitorSportType.Cricket,
+        };
     }
 }

@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
     using Fanex.NAP.CTS.Core.BaseClasses;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Model;
     using System;
     using System.Collections.Generic;
@@ -234,16 +235,9 @@
         {
             get
             {
-                switch (SportType)
+                if (SportNameDictonary.TryGetValue(SportType, out var sportName))
                 {
-                    case (int)MatchMonitorSportType.Basketball:
-                        return nameof(MatchMonitorSportType.Basketball);
-
-                    case (int)MatchMonitorSportType.Soccer:
-                        return nameof(MatchMonitorSportType.Soccer);
-
-                    case (int)MatchMonitorSportType.ESport:
-                        return "E-Sports";
+                    return sportName;
                 }
 
                 return string.Empty;

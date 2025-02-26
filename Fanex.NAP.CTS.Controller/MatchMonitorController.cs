@@ -33,10 +33,6 @@
     using System.Web.Script.Serialization;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.MarkPA;
-    using Fanex.NAP.CTS.ViewModel.MatchMonitor.FilterDependOn;
-    using Fanex.NAP.CTS.ViewModel.MatchMonitor.Parlay;
-    using Fanex.NAP.CTS.Model.MatchMonitor.Parlay;
-    using System.Web.Helpers;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -196,7 +192,7 @@
             var matchMonitors = Enumerable.Empty<GetMatchMonitorViewModel>();
 
             try
-            {
+            {               
                 if (para != null && para.IsValid())
                 {
                     var matchFromCTSInfos = Enumerable.Empty<GetMatchMonitorModel>();
@@ -461,7 +457,8 @@
                 ViewBag.ReasonGroup = para?.ReasonGroup ?? string.Empty;
                 ViewBag.MarketName = para?.MarketName ?? string.Empty;
                 ViewBag.BetChoice = para?.BetChoice;
-                ViewBag.IsDisableScoreFilter = para?.SportType != null && para.SportType == (int)MatchMonitorSportType.Basketball;
+                ViewBag.IsDisableScoreFilter = para?.SportType != null 
+                    && (para.SportType == (int)MatchMonitorSportType.Basketball || para.SportType == (int)MatchMonitorSportType.Cricket);
                 ViewBag.SportType = para?.SportType ?? 0;
                 ViewBag.SportName = para?.SportName ?? string.Empty;
                 ViewBag.KOTime = para?.KOTime;
