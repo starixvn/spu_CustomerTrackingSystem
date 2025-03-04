@@ -142,6 +142,7 @@
     <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\InsertCustomerClassificationAgencyCriteria.cs" />
     <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\RemoveCustomerClassificationAgencyCriteria.cs" />
     <Compile Include="CustomerClassificationAgency\NormalClassificationRescanAgencyCriteria.cs" />
+    <Compile Include="CustomerClassificationAgency\ProblemAccount\ProblemAccountLosingAgencyGetCriteria.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\BySport\RemoveCustomerClassificationBySportCriteria.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\GetRescanCustomerClassificationCriteria.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\BySport\InsertCustomerClassificationBySportCriteria.cs" />

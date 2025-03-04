@@ -6,6 +6,7 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
+    using Fanex.NAP.CTS.Criteria.CustomerClassificationAgency.ProblemAccount;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassificationAgency.BaseCustomerClassificationAgency;
@@ -34,7 +35,7 @@
 
             var insertPaResult = InsertProblemAccountsAgency(pas, ccInputFlow, FunctionId.InsertPAM, isToQueue);
 
-            InsertPALogicsAgency(insertPaResult.CustInfos);
+            //InsertPALogicsAgency(insertPaResult.CustInfos);
 
             return insertPaResult.CustInfos.Select(x => x.CustID).Distinct();
         }
@@ -55,7 +56,7 @@
 
                     if (insertPaResult.CustInfos != null && insertPaResult.CustInfos.Any())
                     {
-                        InsertPALogicsAgency(insertPaResult.CustInfos);
+                        //InsertPALogicsAgency(insertPaResult.CustInfos);
 
                         _ccService.PushDataToExternalPackge(insertPaResult.CustInfos.Select(x => x.CustID), new PushDataToExternalModel
                         {
@@ -83,31 +84,31 @@
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
-        public void UpdateBetLimitOfFlaggedCustomer(IEnumerable<long> custId)
-        {
-            if (custId != null && custId.Any())
-            {
-                var criteria = new BetLimitByEvidenceUpdateCriteria
-                {
-                    CustIDList = string.Join(",", custId)
-                };
+        //public void UpdateBetLimitOfFlaggedCustomer(IEnumerable<long> custId)
+        //{
+        //    if (custId != null && custId.Any())
+        //    {
+        //        var criteria = new BetLimitByEvidenceUpdateCriteria
+        //        {
+        //            CustIDList = string.Join(",", custId)
+        //        };
 
-                _repository.Execute(criteria);
-            }
-        }
+        //        _repository.Execute(criteria);
+        //    }
+        //}
 
-        public void UpdateBetLimitOfUnflaggedCustomer(IEnumerable<long> custId)
-        {
-            if (custId != null && custId.Any())
-            {
-                var criteria = new BetLimitByEvidenceRemoveCriteria
-                {
-                    CustIDList = string.Join(",", custId)
-                };
+        //public void UpdateBetLimitOfUnflaggedCustomer(IEnumerable<long> custId)
+        //{
+        //    if (custId != null && custId.Any())
+        //    {
+        //        var criteria = new BetLimitByEvidenceRemoveCriteria
+        //        {
+        //            CustIDList = string.Join(",", custId)
+        //        };
 
-                _repository.Execute(criteria);
-            }
-        }
+        //        _repository.Execute(criteria);
+        //    }
+        //}
 
         public ResultRemoveCustomerClassificationAgencyModel UnmarkProblemAccountAgency(IEnumerable<UnmarkProblemAccountAgencyModel> paUnmark, bool isFromQueue)
         {
@@ -120,34 +121,34 @@
 
             var removePaResult = base.RemoveCustomerClassificationAgency(AgencyCCInputFlow.RemovePACategory, modelRemove);
 
-            RemovePALogics(removePaResult.CustInfos);
+            //RemovePALogics(removePaResult.CustInfos);
 
             return removePaResult;
         }
 
         #region private method
-        private void RemovePALogics(IEnumerable<ResultRemoveCCInfoAgencyModel> customerInfo)
-        {
-            if (customerInfo != null && customerInfo.Any())
-            {
-                var custIds = customerInfo.Where(c => c.IsCleanPA).Select(x => x.CustID).Distinct();
+        //private void RemovePALogics(IEnumerable<ResultRemoveCCInfoAgencyModel> customerInfo)
+        //{
+        //    if (customerInfo != null && customerInfo.Any())
+        //    {
+        //        var custIds = customerInfo.Where(c => c.IsCleanPA).Select(x => x.CustID).Distinct();
 
-                UpdateBetLimitOfUnflaggedCustomer(custIds);
-            }
-        }
+        //        UpdateBetLimitOfUnflaggedCustomer(custIds);
+        //    }
+        //}
 
-        private void InsertPALogicsAgency(IEnumerable<CustInfoClassificationAgencyModel> customerInfo)
-        {
-            if (customerInfo != null && customerInfo.Any())
-            {
-                var custPas = customerInfo.Where(x => x.IsPA).Distinct();
+        //private void InsertPALogicsAgency(IEnumerable<CustInfoClassificationAgencyModel> customerInfo)
+        //{
+        //    if (customerInfo != null && customerInfo.Any())
+        //    {
+        //        var custPas = customerInfo.Where(x => x.IsPA).Distinct();
 
-                // not handle for SMA
-                //CheckNewPAAssociationCustomerForRollback(JsonConvert.SerializeObject(custPas));
+        //        // not handle for SMA
+        //        //CheckNewPAAssociationCustomerForRollback(JsonConvert.SerializeObject(custPas));
 
-                UpdateBetLimitOfFlaggedCustomer(custPas.Select(x => x.CustID));
-            }
-        }
+        //        UpdateBetLimitOfFlaggedCustomer(custPas.Select(x => x.CustID));
+        //    }
+        //}
 
         private ResultInsertCustomerClassificationAgencyModel InsertProblemAccountsAgency(IEnumerable<InsertProblemAccountAgencyModel> problemAccounts, 
             AgencyCCInputFlow ccInputFlow, 
@@ -167,16 +168,74 @@
         }
 
         private IEnumerable<InsertProblemAccountAgencyModel> CombinePAWithLosingPerformace(IEnumerable<InsertProblemAccountAgencyModel> problemAccounts)
+        {          
+            var custIDs = problemAccounts.Select(x => x.CustID)?.Distinct();
+
+            var paLosing = GetProblemAccountLosingAgencies(custIDs);
+
+            return MergePALosingClassification(problemAccounts, paLosing);
+        }
+
+        public IEnumerable<ProblemAccountLosingAgencyModel> GetProblemAccountLosingAgencies(IEnumerable<long> custIDs)
         {
-            return problemAccounts.Select(x => {
-                var y = x;
-                y.WinlossStatus = 2;
-                y.TurnoverRM = 0;
-                y.WinlossRM = 0;
-                y.BetCount = 0;
-                y.PerformanceTime = null;
-                return y;
-            });
+            if (custIDs != null && custIDs.Any())
+            {
+                var criteria = new ProblemAccountLosingAgencyGetCriteria()
+                {
+                    CustIDList = string.Join(",", custIDs)
+                };
+
+                return _repository.Fetch<ProblemAccountLosingAgencyModel>(criteria);
+            }
+
+            return Enumerable.Empty<ProblemAccountLosingAgencyModel>();
+        }
+
+        private IEnumerable<InsertProblemAccountAgencyModel> MergePALosingClassification(IEnumerable<InsertProblemAccountAgencyModel> problemAccounts, IEnumerable<ProblemAccountLosingAgencyModel> paLosing)
+        {
+            if (problemAccounts != null && problemAccounts.Any())
+            {
+                return problemAccounts.GroupJoin(paLosing ?? Enumerable.Empty<ProblemAccountLosingAgencyModel>(),
+                                            pa => pa.CustID,
+                                            pl => pl.CustId,
+                                            (pa, pl) => new { pa, pl })
+                                            .SelectMany(
+                                                 group => group.pl.DefaultIfEmpty(),
+                                                 (group, temp) => new InsertProblemAccountAgencyModel
+                                                 {
+                                                     CustID = group.pa.CustID,
+                                                     CTSCustID = group.pa.CTSCustID,
+                                                     RoleID = group.pa.RoleID,
+                                                     SubscriberID = group.pa.SubscriberID,
+                                                     CategoryID = group.pa.CategoryID,
+                                                     IsLicensee = group.pa.IsLicensee,
+                                                     CreatedBy = group.pa.CreatedBy,
+                                                     //LastModifiedDate = group.pa.LastModifiedDate,
+                                                     CreatedDate = group.pa.CreatedDate,
+                                                     Remark = group.pa.Remark,
+
+                                                     IsMarkedDirectly = group.pa.IsMarkedDirectly,
+                                                     IsFromAI = group.pa.IsFromAI,
+                                                     IsFromCTS = group.pa.IsFromCTS,
+                                                     //IsFromTVS = group.pa.IsFromTVS,
+                                                     RobotCounter = group.pa.RobotCounter,
+                                                     //TVSRequestID = group.pa.TVSRequestID,
+                                                     IsFromTW = group.pa.IsFromTW,
+                                                     //TVSReasonID = group.pa.TVSReasonID,
+                                                     //IsParlay = group.pa.IsParlay,
+                                                     //SportType = group.pa.SportType,
+                                                     //IssueTypeID = group.pa.IssueTypeID,
+
+                                                     BetCount = temp?.BetCount,
+                                                     //ActiveDays = temp?.ActiveDays,
+                                                     TurnoverRM = temp?.TurnoverRM,
+                                                     WinlossRM = temp?.WinlossRM,
+                                                     WinlossStatus = temp?.WinlossStatus,
+                                                     PerformanceTime = temp?.PerformanceTime
+                                                 });
+            }
+
+            return Enumerable.Empty<InsertProblemAccountAgencyModel>();
         }
 
         #endregion
