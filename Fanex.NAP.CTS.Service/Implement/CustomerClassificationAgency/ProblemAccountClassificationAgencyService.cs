@@ -4,8 +4,7 @@
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.CTS.Core;
-    using Fanex.NAP.CTS.Core.Utilities;
-    using Fanex.NAP.CTS.Criteria.CustomerClassification;
+    using Fanex.NAP.CTS.Core.Utilities;   
     using Fanex.NAP.CTS.Criteria.CustomerClassificationAgency.ProblemAccount;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
@@ -29,13 +28,13 @@
             _dataLogTrackingServices = new DataLogTrackingServices();
         }
 
-        public IEnumerable<long> RescanCustomerClassificationAgency(IEnumerable<RescanCustomerClassificationAgencyModel> custRescans, AgencyCCInputFlow ccInputFlow, bool isToQueue)
+        public IEnumerable<long> RescanCustomerClassificationAgency(IEnumerable<RescanCustomerClassificationAgencyModel> custRescans, 
+            AgencyCCInputFlow ccInputFlow, 
+            bool isToQueue)
         {
             var pas = custRescans.Select(x => new InsertProblemAccountAgencyModel(x));
 
-            var insertPaResult = InsertProblemAccountsAgency(pas, ccInputFlow, FunctionId.InsertPAM, isToQueue);
-
-            //InsertPALogicsAgency(insertPaResult.CustInfos);
+            var insertPaResult = InsertProblemAccountsAgency(pas, ccInputFlow, FunctionId.InsertPAM, isToQueue);            
 
             return insertPaResult.CustInfos.Select(x => x.CustID).Distinct();
         }
@@ -56,8 +55,6 @@
 
                     if (insertPaResult.CustInfos != null && insertPaResult.CustInfos.Any())
                     {
-                        //InsertPALogicsAgency(insertPaResult.CustInfos);
-
                         _ccService.PushDataToExternalPackge(insertPaResult.CustInfos.Select(x => x.CustID), new PushDataToExternalModel
                         {
                             RoleGroup = RoleGroupType.Agency,
@@ -119,11 +116,7 @@
                 FromAction = (int)FromFlow.CTSWEB
             };
 
-            var removePaResult = base.RemoveCustomerClassificationAgency(AgencyCCInputFlow.RemovePACategory, modelRemove);
-
-            //RemovePALogics(removePaResult.CustInfos);
-
-            return removePaResult;
+            return base.RemoveCustomerClassificationAgency(AgencyCCInputFlow.RemovePACategory, modelRemove);   
         }
 
         #region private method
@@ -209,25 +202,17 @@
                                                      SubscriberID = group.pa.SubscriberID,
                                                      CategoryID = group.pa.CategoryID,
                                                      IsLicensee = group.pa.IsLicensee,
-                                                     CreatedBy = group.pa.CreatedBy,
-                                                     //LastModifiedDate = group.pa.LastModifiedDate,
+                                                     CreatedBy = group.pa.CreatedBy,                                                    
                                                      CreatedDate = group.pa.CreatedDate,
                                                      Remark = group.pa.Remark,
 
                                                      IsMarkedDirectly = group.pa.IsMarkedDirectly,
                                                      IsFromAI = group.pa.IsFromAI,
-                                                     IsFromCTS = group.pa.IsFromCTS,
-                                                     //IsFromTVS = group.pa.IsFromTVS,
-                                                     RobotCounter = group.pa.RobotCounter,
-                                                     //TVSRequestID = group.pa.TVSRequestID,
+                                                     IsFromCTS = group.pa.IsFromCTS,                                                   
+                                                     RobotCounter = group.pa.RobotCounter,                                                     
                                                      IsFromTW = group.pa.IsFromTW,
-                                                     //TVSReasonID = group.pa.TVSReasonID,
-                                                     //IsParlay = group.pa.IsParlay,
-                                                     //SportType = group.pa.SportType,
-                                                     //IssueTypeID = group.pa.IssueTypeID,
-
-                                                     BetCount = temp?.BetCount,
-                                                     //ActiveDays = temp?.ActiveDays,
+                                                     
+                                                     BetCount = temp?.BetCount,                                                   
                                                      TurnoverRM = temp?.TurnoverRM,
                                                      WinlossRM = temp?.WinlossRM,
                                                      WinlossStatus = temp?.WinlossStatus,
