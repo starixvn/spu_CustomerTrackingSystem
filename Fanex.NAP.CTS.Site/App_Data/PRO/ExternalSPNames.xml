@@ -52,7 +52,7 @@
 
 	<Function Name="DailyProblemClassification">
 		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" TimeOut="300" />
-    <Setting Key="CTS_ProblemAccountsClassificationAgency_Daily" SpName="CTS_ProblemAccountsClassificationAgency_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
+    <Setting Key="CTS_ProblemAccountsClassificationAgency_Daily" SpName="CTS_ProblemAccountsClassificationAgency_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" TimeOut="300" />
 	</Function>
 
 	<Function Name="AssociationDetection">
