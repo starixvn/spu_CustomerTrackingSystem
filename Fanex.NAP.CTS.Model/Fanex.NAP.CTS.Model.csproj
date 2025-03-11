@@ -330,6 +330,7 @@
     <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\ResultRemoveCCInfoAgencyModel.cs" />
     <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\ResultRemoveCustomerClassificationAgencyModel.cs" />
     <Compile Include="CustomerClassificationAgency\ProblemAccountAgency\InsertProblemAccountAgencyModel.cs" />
+    <Compile Include="CustomerClassificationAgency\ProblemAccountAgency\ProblemAccountLosingAgencyModel.cs" />
     <Compile Include="CustomerClassificationAgency\ProblemAccountAgency\UnmarkProblemAccountAgencyModel.cs" />
     <Compile Include="CustomerClassificationAgency\RescanCustomerClassificationAgency\RescanResultAgencyModel.cs" />
     <Compile Include="CustomerClassificationAgency\RescanCustomerClassificationAgency\RescanCustClassificationAgencyModel.cs" />

@@ -6,6 +6,8 @@
 
     public class InsertProblemAccountAgencyModel
     {
+        public InsertProblemAccountAgencyModel() { }
+
         public InsertProblemAccountAgencyModel(InsertProblemAccountModel data) 
         {
             CustID = data.CustID;
