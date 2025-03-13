@@ -26,7 +26,8 @@ const IndexFilterSelected = {
 
 const SportTypeConst = {
     Basketball: 2,
-    Cricket: 50
+    Cricket: 50,
+    Badminton: 9
 }
 
 function ConvertNumberToThousandsString(x) {
@@ -202,7 +203,7 @@ function MatchMonitorDetail() {
             autoWidth: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 5, 6, 8, 10, 13, 14, 15, 16, 17], className: "text-center" },
+                { targets: [0], className: "text-center" },
                 {
                     targets: [0], width: "3%", render: function (data, type, obj, meta) {                                             
                         if (obj.IsSelected == true) {
@@ -212,25 +213,26 @@ function MatchMonitorDetail() {
                         }
                     } // Checkbox
                 },
-                { targets: [1], width: "17%", className: "col-username" }, // UserName
-                { targets: [2], width: "4%", className: "col-customerclass" }, // CC
-                { targets: [3], width: "4%", className: "col-bot" }, // Bot
+                { targets: [1], width: "17%", className: "text-center col-username" }, // UserName
+                { targets: [2], width: "4%", className: "text-center col-customerclass" }, // CC
+                { targets: [3], width: "4%", className: "text-center col-bot" }, // Bot
                 { targets: [4], width: "10%", className: "text-center col-dgr" }, // Dgr
-                { targets: [5], width: "5%", className: "col-odds" }, // Odds
-                { targets: [6], width: "5%", className: "col-myodds" }, // MY.Odds
-                { targets: [7], width: "5%", className: "text-left col-betid" }, // BetID
-                { targets: [8], width: "5%", className: "col-currency"}, // Cur
-                { targets: [9], width: "5%", className: "text-right col-amt" }, // Amt
-                { targets: [10], width: "4%", className: "col-hdp" }, // HDP
-                { targets: [11], width: "5%", className: "text-center col-score" }, // Score
-                { targets: [12], width: "13%", className: "text-center col-transtime" }, // Transtime
-                { targets: [13], width: "3%" }, // B.f.
-                { targets: [14], width: "5%" }, // A.Gr.
-                { targets: [15], width: "5%", className: "text-center" }, // M.Gr.
-                { targets: [16], width: "7%", className: "text-center col-reason" }, // Reason
-                { targets: [17], width: "3%" }, // Icon Verify
-                { targets: [18], visible: false },
-                { targets: [19], visible: false }
+                { targets: [5], width: "5%", className: "text-center col-game", visible: domElements.sportType == SportTypeConst.Badminton },
+                { targets: [6], width: "5%", className: "text-center col-odds" }, // Odds
+                { targets: [7], width: "5%", className: "text-center col-myodds" }, // MY.Odds
+                { targets: [8], width: "5%", className: "text-left col-betid" }, // BetID
+                { targets: [9], width: "5%", className: "text-center col-currency"}, // Cur
+                { targets: [10], width: "5%", className: "text-right col-amt" }, // Amt
+                { targets: [11], width: "4%", className: "text-center col-hdp" }, // HDP
+                { targets: [12], width: "5%", className: "text-center col-score" }, // Score
+                { targets: [13], width: "13%", className: "text-center col-transtime" }, // Transtime
+                { targets: [14], width: "3%" }, // B.f.
+                { targets: [15], width: "5%" }, // A.Gr.
+                { targets: [16], width: "5%", className: "text-center" }, // M.Gr.
+                { targets: [17], width: "7%", className: "text-center col-reason" }, // Reason
+                { targets: [18], width: "3%" }, // Icon Verify
+                { targets: [19], visible: false },
+                { targets: [20], visible: false }
             ],
             columns: [
                 {
@@ -251,6 +253,7 @@ function MatchMonitorDetail() {
                 { data: obj => obj.CustomerClassToString },
                 { data: obj => RenderBotIcon(obj.RobotType, obj.IsRobot) },
                 { data: obj => obj.DangerToString },
+                { data: obj => obj.Game},
                 { data: obj => RenderOdds(obj) },
                 { data: obj => RenderMalayOdds(obj) },
                 {
@@ -875,6 +878,7 @@ function MatchMonitorDetail() {
                                         <th>CC</th>
                                         <th>Bot</th>
                                         <th>Dgr</th>
+                                        <th>Game</th>
                                         <th>Odds</th>
                                         <th>MY.Odds</th>
                                         <th>
@@ -919,6 +923,7 @@ function MatchMonitorDetail() {
                                         <th>CC</th>
                                         <th>Bot</th>
                                         <th>Dgr</th>
+                                        <th>Game</th>
                                         <th>Odds</th>
                                         <th>MY.Odds</th>
                                         <th>
@@ -1011,6 +1016,7 @@ function MatchMonitorDetail() {
                                         <th>CC</th>
                                         <th>Bot</th>
                                         <th>Dgr</th>
+                                        <th>Game</th>
                                         <th>Odds</th>
                                         <th>MY.Odds</th>
                                         <th>
