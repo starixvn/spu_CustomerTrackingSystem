@@ -67,6 +67,7 @@ function MatchMonitorDetail() {
         ticketType: $("#hdTicketType").val(),
         cbbMarket: $('#cbbMarket'),
         cbbBetType: $('#cbbBetType'),
+        cbbGame: $('#cbbGame'),
         cbbMapX: $('#cbbMapX'),
         cbbMapYY: $('#cbbMapYY'),
         divMapX: $('#divMapX'),
@@ -3323,6 +3324,7 @@ function MatchMonitorDetail() {
     //#endregion Ticket Voiding
 
     function Initial() {
+        SetupMultiselectFilter(domElements.cbbGame, "Game");
         SetupMultiselectFilter(domElements.cbbCC, "CC");
         SetupMultiselectFilter(domElements.cbbDanger, "Danger");
         SetupMultiselectFilter(domElements.cbbCurrency, "Currency");
