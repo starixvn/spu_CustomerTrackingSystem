@@ -2977,6 +2977,16 @@ function MatchMonitorDetail() {
         }
     }
 
+    function ToggleGameX(isBetTypeChange) {
+        //let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
+
+        if (domElements.sportType == SportTypeConst.Badminton) {
+            domElements.cbbGame.parent().show();           
+        } else {
+            domElements.cbbGame.parent().hide();
+        }            
+    }
+
     //#endregion Event Toggle
 
     //#region TranstimeFilter
@@ -3353,6 +3363,7 @@ function MatchMonitorDetail() {
         }
 
         ToggleMapXYY(false);
+        ToggleGameX(false);
 
         domElements.cbbMarket.val(domElements.liveIndicator);
 
@@ -3363,6 +3374,7 @@ function MatchMonitorDetail() {
         domElements.cbbBetType.change(function () {
             ResetTranstime();
             ToggleMapXYY(true);
+            ToggleGameX(true);
 
             OnchangeFilter();
         });

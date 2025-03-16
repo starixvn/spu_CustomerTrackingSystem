@@ -33,6 +33,7 @@
     using System.Web.Script.Serialization;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.MarkPA;
+    using System.Web.UI.WebControls.WebParts;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -457,8 +458,7 @@
                 ViewBag.ReasonGroup = para?.ReasonGroup ?? string.Empty;
                 ViewBag.MarketName = para?.MarketName ?? string.Empty;
                 ViewBag.BetChoice = para?.BetChoice;
-                ViewBag.IsDisableScoreFilter = para?.SportType != null 
-                    && (para.SportType == (int)MatchMonitorSportType.Basketball || para.SportType == (int)MatchMonitorSportType.Cricket);
+                ViewBag.IsDisableScoreFilter = IsDisableScoreFilter(para.SportType);
                 ViewBag.SportType = para?.SportType ?? 0;
                 ViewBag.SportName = para?.SportName ?? string.Empty;
                 ViewBag.KOTime = para?.KOTime;
@@ -485,6 +485,12 @@
             }
 
             return View();
+        }
+
+        private bool IsDisableScoreFilter(int sportType)
+        {
+            return sportType == (int)MatchMonitorSportType.Basketball 
+                || sportType == (int)MatchMonitorSportType.Cricket;
         }
 
         #region Detail Filter
