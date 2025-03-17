@@ -58,7 +58,7 @@
         public string UserNameList { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_TicketDetails_Info";
+            => "CTS_MatchMonitor_Details_GetFilter";
 
         public override bool IsValid()
             => true;
