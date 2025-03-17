@@ -49,7 +49,7 @@
 
         public int BetTypeID { get; set; }
 
-        public Int64 BetID { get; set; }
+        public string BetID { get; set; }
 
         public int BetChoiceType { get; set; }
 
@@ -92,7 +92,7 @@
 
         public TicketType TicketType { get; set; }
 
-        public string UserNameList {  get; set; }
+        public string UserNameList { get; set; }
 
         public MMDetailInfoViewModel Clone() => new MMDetailInfoViewModel(this);
 
