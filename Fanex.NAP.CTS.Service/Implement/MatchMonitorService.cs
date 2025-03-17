@@ -101,34 +101,6 @@
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
-        public IEnumerable<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, Int64 betId, int reason)
-        {
-            var criteria = new MatchGroupGetCriteria()
-            {
-                BettypeID = betTypeID,
-                BetID = betId,
-                MatchID = matchID,
-                LiveIndicator = liveIndicator,
-                Reason = reason
-            };
-
-            return _repository.Fetch<MatchGroupModel>(criteria);
-        }
-
-        public IEnumerable<MatchScoreModel> GetMatchScore(Int64 matchID, int betTypeID, bool liveIndicator, Int64 betId, int reason)
-        {
-            var criteria = new MatchScoreGetCriteria()
-            {
-                BettypeID = betTypeID,
-                BetID = betId,
-                MatchID = matchID,
-                LiveIndicator = liveIndicator,
-                Reason = reason
-            };
-
-            return _repository.Fetch<MatchScoreModel>(criteria);
-        }
-
         public MMDetailResultModel GetMatchMonitorDetail(MMDetailInfoViewModel filter)
         {
             var criteria = new MatchDetailMonitorGetCriteria
@@ -638,20 +610,6 @@
             };
 
             return _repository.Fetch<RobotStatusModel>(criteria);
-        }
-
-        public MatchMonitorStaticListModel GetMMStaticList()
-        {
-            var criteria = new GetMatchMonitorStaticListCriteria();
-
-            var result = _repository.FetchMultiple<MatchMonitorReasonModel, MatchMonitorSportModel, MatchMonitorBetTypeModel>(criteria);
-
-            return new MatchMonitorStaticListModel
-            {
-                Reasons = result.firstResultSet,
-                Sports = result.secondResultSet,
-                BetTypes = result.thirdResultSet
-            };
         }
 
         #region Export Excel

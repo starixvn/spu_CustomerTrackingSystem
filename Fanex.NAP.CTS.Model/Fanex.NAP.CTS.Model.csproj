@@ -419,8 +419,6 @@
     <Compile Include="MatchMonitor\MatchMonitorDetailModel.cs" />
     <Compile Include="MatchMonitor\CustReasonGroupModel.cs" />
     <Compile Include="MatchMonitor\TicketDetailModel.cs" />
-    <Compile Include="MatchMonitor\MatchScoreModel.cs" />
-    <Compile Include="MatchMonitor\MatchGroupModel.cs" />
     <Compile Include="MatchMonitor\GetMatchMonitorModel.cs" />
     <Compile Include="MatchMonitor\UserFeedback\GetMMUserFeedbackModel.cs" />
     <Compile Include="Notification\UpdateNotifiedSettingStatusModel.cs" />

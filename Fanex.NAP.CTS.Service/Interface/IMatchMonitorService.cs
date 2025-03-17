@@ -16,10 +16,6 @@
 
         IEnumerable<MMFraudTicketsSummaryViewModel> GetMMFraudTicketsSummary(IEnumerable<MMFraudTicketsSummaryModel> mmModels);
 
-        IEnumerable<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, Int64 betId, int reason);
-
-        IEnumerable<MatchScoreModel> GetMatchScore(Int64 matchID, int betTypeID, bool liveIndicator, Int64 betId, int reason);
-
         DBResult VerifyTransMatchMonitorDetail(MatchMonitorDetailVerifyTransParaModel para);
 
         MMDetailResultModel GetMatchMonitorDetail(MMDetailInfoViewModel filter);
@@ -65,8 +61,6 @@
         IEnumerable<MMDetailMergeGroupModel> GetMMDetailMergeGroup(IEnumerable<MMDetailBetTeamModel> mmDetailBetTeams);
 
         IEnumerable<RobotStatusModel> GetRobotStatus(string transJson);
-
-        MatchMonitorStaticListModel GetMMStaticList();
 
         #region Export Excel
 
