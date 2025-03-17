@@ -25,9 +25,9 @@ const IndexFilterSelected = {
 }
 
 const SportTypeConst = {
-    Basketball: 2,
-    Cricket: 50,
-    Badminton: 9
+    Basketball: "2",
+    Cricket: "50",
+    Badminton: "9"
 }
 
 function ConvertNumberToThousandsString(x) {
@@ -1154,7 +1154,7 @@ function MatchMonitorDetail() {
     function GetBetIDSelected() {
         let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
 
-        if (domElements.sportType != SportTypeConst.Basketball && betidpattern.includes('X')) {
+        if (![SportTypeConst.Basketball, SportTypeConst.Badminton].includes(domElements.sportType) && betidpattern.includes('X')) {
             let betIDString = "80" + domElements.cbbMapX.val();
 
             if (betidpattern.includes('YY')) {
@@ -1164,9 +1164,11 @@ function MatchMonitorDetail() {
 
         } else if (domElements.sportType == SportTypeConst.Basketball) {
             return $("option:selected", domElements.cbbBetType).attr('data-betid');
-        } else {
-            return 0; //default
+        } else if (domElements.sportType == SportTypeConst.Badminton && betidpattern.includes('X') && domElements.cbbGame.val()) {
+            return domElements.cbbGame.val().map(it => betidpattern.replace('X', it)).toString();
         }
+        
+        return 0; //default
     }
 
     function IsFilterSuspicious(params) {
