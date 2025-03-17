@@ -4,10 +4,17 @@
 
     public class MMDetailResultModel
     {
-        public IEnumerable<MMDetailCustModel> Custs { get; set; }
+        public List<MMDetailCustModel> Custs { get; set; }
 
-        public IEnumerable<MatchMonitorDetailModel> MatchDetails { get; set; }
+        public List<MatchMonitorDetailModel> MatchDetails { get; set; }
 
-        public IEnumerable<MatchMonitorDetailVerifyTransResultModel> VerifiedTrans { get; set; }      
+        public List<MatchMonitorDetailVerifyTransResultModel> VerifiedTrans { get; set; }
+
+        public MMDetailResultModel()
+        {
+            Custs = new List<MMDetailCustModel>();
+            MatchDetails = new List<MatchMonitorDetailModel>();
+            VerifiedTrans = new List<MatchMonitorDetailVerifyTransResultModel>();
+        }
     }
 }

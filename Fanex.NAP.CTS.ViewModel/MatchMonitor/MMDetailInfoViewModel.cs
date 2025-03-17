@@ -98,10 +98,15 @@
 
         public string BuildCacheKey(string nameOfFuntion, string mmDetailRegion, string userID, string viewMode)
         {
+            return BuildCacheKeyByBetID(nameOfFuntion, mmDetailRegion, userID, BetID, viewMode);
+        }
+
+        public string BuildCacheKeyByBetID(string nameOfFuntion, string mmDetailRegion, string userID, string betID, string viewMode)
+        {
             var transtimeFrom = TranstimeFrom?.Subtract(DateTime.MinValue).TotalSeconds.ToString() ?? string.Empty;
             var transtimeTo = TranstimeTo?.Subtract(DateTime.MinValue).TotalSeconds.ToString() ?? string.Empty;
             var usernameKey = string.IsNullOrEmpty(UserNameList) ? string.Empty : Extentions.CreateMD5Hash(UserNameList);
-            return $"{nameOfFuntion}_{mmDetailRegion}_{userID}_{MatchID}_{LiveIndicator}_{BetTypeID}_{BetID}_{usernameKey}_{viewMode}_{transtimeFrom}_{transtimeTo}";
+            return $"{nameOfFuntion}_{mmDetailRegion}_{userID}_{MatchID}_{LiveIndicator}_{BetTypeID}_{betID}_{usernameKey}_{viewMode}_{transtimeFrom}_{transtimeTo}";
         }
 
         public void SetLastMark(TicketDetailViewModel ticketDetail)

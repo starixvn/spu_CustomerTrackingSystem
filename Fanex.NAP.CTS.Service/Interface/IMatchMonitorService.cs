@@ -24,9 +24,15 @@
 
         MMDetailResultModel GetMatchMonitorDetail(MMDetailInfoViewModel filter);
 
-        IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);      
+        IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);
 
         string GetTransFilterSuspicousMGr(MMDetailFilterViewModel filter, TicketDetailViewModel fraudTicket, TicketType ticketType = TicketType.Single);
+
+        MMDetailResultModel GetMatchMonitorDetailForCache(MMDetailInfoViewModel para, string region, string userId, string viewModelName);
+
+        TicketDetailViewModel GetSingleTicketDetailForCache(MMDetailResultModel matchDetailInfo, MMDetailInfoViewModel para, string region, string userId, string viewModelName);
+
+        TicketDetailViewModel BuildSingleTicketDetailFraudMergeGroup(MMDetailResultModel matchDetailInfo, MMDetailInfoViewModel para, TicketDetailViewModel singleTicketDetails);
 
         TicketDetailViewModel GetTicketDetailFraud(MMDetailResultModel matchDetailInfo, MMDetailInfoViewModel para);
 
@@ -84,7 +90,7 @@
 
         #region Hold Key
 
-       HoldKeyUpdateResultModel UpdateHoldKeyStatus(HoldKeyUpdateViewModel parameters, string url);
+        HoldKeyUpdateResultModel UpdateHoldKeyStatus(HoldKeyUpdateViewModel parameters, string url);
 
         HoldKeyStatusGetResultModel GetHoldKeyStatus(Int64 matchID, string url);
 
@@ -97,7 +103,7 @@
 
         MMDetailResultModel GetMatchMonitorParlayDetail(MMDetailInfoViewModel filter);
 
-        
+
         #endregion
 
     }

@@ -33,7 +33,6 @@
     using System.Web.Script.Serialization;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.MarkPA;
-    using System.Web.UI.WebControls.WebParts;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -193,7 +192,7 @@
             var matchMonitors = Enumerable.Empty<GetMatchMonitorViewModel>();
 
             try
-            {               
+            {
                 if (para != null && para.IsValid())
                 {
                     var matchFromCTSInfos = Enumerable.Empty<GetMatchMonitorModel>();
@@ -489,7 +488,7 @@
 
         private bool IsDisableScoreFilter(int sportType)
         {
-            return sportType == (int)MatchMonitorSportType.Basketball 
+            return sportType == (int)MatchMonitorSportType.Basketball
                 || sportType == (int)MatchMonitorSportType.Cricket;
         }
 
@@ -541,6 +540,12 @@
 
             var removeKeyFraud = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketFraud));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyFraud);
+
+            para.BetID?.Split(',').ForEach(betId =>
+            {
+                var removeKey = para.BuildCacheKeyByBetID(string.Empty, Region, UserID, betId, Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketFraud));
+                _memoryCacheService.RemoveKeyContainsValue(removeKey);
+            });
 
             var removeKeyAll = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketAll));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyAll);
@@ -902,34 +907,43 @@
             var para = filter.Clone();
             var fraudMMDetailResult = new TicketDetailViewModel() { TicketType = filter.TicketType };
             var viewModeName = Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketFraud);
-            var key = filter.TicketType == TicketType.Single
-                ? para.BuildCacheKey("TicketFraud", Region, UserID, viewModeName)
-                : para.BuildCacheKey("TicketFraudParlay", Region, UserID, viewModeName);
 
             try
             {
-                fraudMMDetailResult = _memoryCacheService.GetValue<TicketDetailViewModel>(key);
-
-                if (fraudMMDetailResult == null)
+                switch (filter.TicketType)
                 {
-                    para.TypeOfTickets = MMViewModeFromUI.TicketFraud;
+                    case TicketType.Single:
+                        {
+                            fraudMMDetailResult = GetSingleFraudMMDetail(para, viewModeName);
+                            break;
+                        }
+                    case TicketType.Parlay:
+                        {
+                            var key = para.BuildCacheKey("TicketFraudParlay", Region, UserID, viewModeName);
 
-                    var matchDetailInfo = filter.TicketType == TicketType.Single
-                        ? _matchMonitorService.GetMatchMonitorDetail(para)
-                        : _matchMonitorService.GetMatchMonitorParlayDetail(para);
+                            fraudMMDetailResult = _memoryCacheService.GetValue<TicketDetailViewModel>(key);
 
-                    if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
-                    {
-                        var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
+                            if (fraudMMDetailResult == null)
+                            {
+                                para.TypeOfTickets = MMViewModeFromUI.TicketFraud;
 
-                        fraudMMDetailResult = _matchMonitorService.GetTicketDetailFraud(matchDetailInfo, para);
+                                var matchDetailInfo = _matchMonitorService.GetMatchMonitorParlayDetail(para);
 
-                        fraudMMDetailResult.MatchDetailInfo = matchDetailInfo;
+                                if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
+                                {
+                                    var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
 
-                        fraudMMDetailResult.AGroupReasonMerged = _matchMonitorService.MergeFraudReasonAGroup(fraudMMDetailResult, reasons);
+                                    fraudMMDetailResult = _matchMonitorService.GetTicketDetailFraud(matchDetailInfo, para);
 
-                        _memoryCacheService.PushValue(key, fraudMMDetailResult);
-                    }
+                                    fraudMMDetailResult.MatchDetailInfo = matchDetailInfo;
+
+                                    fraudMMDetailResult.AGroupReasonMerged = _matchMonitorService.MergeFraudReasonAGroup(fraudMMDetailResult, reasons);
+
+                                    _memoryCacheService.PushValue(key, fraudMMDetailResult);
+                                }
+                            }
+                            break;
+                        }
                 }
             }
             catch (Exception ex)
@@ -941,6 +955,34 @@
 
                 LogService.Error(logMessage);
             }
+
+            return fraudMMDetailResult;
+        }
+
+        private TicketDetailViewModel GetSingleFraudMMDetail(MMDetailInfoViewModel filter, string viewModeName)
+        {
+            var matchDetailInfo = new MMDetailResultModel();
+            var fraudTicketDetails = new List<TicketDetailModel>();
+
+            filter.TypeOfTickets = MMViewModeFromUI.TicketFraud;
+            filter.BetID?.Split(',').ForEach((betId) =>
+            {
+                var para = filter.Clone();
+                para.BetID = betId;
+
+                var matchDetailForCache = _matchMonitorService.GetMatchMonitorDetailForCache(para, Region, UserID, viewModeName);
+                var ticketDetails = _matchMonitorService.GetSingleTicketDetailForCache(matchDetailForCache, para, Region, UserID, viewModeName);
+
+                matchDetailInfo.Custs.AddRange(matchDetailForCache.Custs);
+                matchDetailInfo.MatchDetails.AddRange(matchDetailForCache.MatchDetails);
+                matchDetailInfo.VerifiedTrans.AddRange(matchDetailForCache.VerifiedTrans);
+                fraudTicketDetails.AddRange(ticketDetails.TicketDetails);
+            });
+
+            var fraudMMDetailResult = new TicketDetailViewModel() { TicketType = filter.TicketType };
+            var ticketDetailModel = new TicketDetailViewModel() { TicketDetails = fraudTicketDetails };
+
+            fraudMMDetailResult = _matchMonitorService.BuildSingleTicketDetailFraudMergeGroup(matchDetailInfo, filter, ticketDetailModel);
 
             return fraudMMDetailResult;
         }
