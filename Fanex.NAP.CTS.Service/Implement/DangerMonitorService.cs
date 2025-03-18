@@ -824,7 +824,7 @@
             var filter = new SportBettypeModel
             {
                 ProductId = (int)ProductType.SportBook,
-                BettypeList = string.Join(",", betTypes.Select(x => x.BetTypeID).Distinct())
+                SportBettypeList = JsonConvert.SerializeObject(betTypes.Select(x => x.BetTypeID).Distinct())
             };
 
             var mainBetTypes = _commonService.GetMainSportBettype(filter);
