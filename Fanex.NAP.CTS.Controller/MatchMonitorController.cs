@@ -13,7 +13,6 @@
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
@@ -40,6 +39,8 @@
     {
         private const string MMDetailDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/DoubleGridTemplate.xlsx";
         private const string MMDetailSingleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/SingleGridTemplate.xlsx";
+        private const string MMDetailBadmintonDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/BadmintonDoubleGridTemplate.xlsx";
+        private const string MMDetailBadmintonSingleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/BadmintonSingleGridTemplate.xlsx";
         private const string MMParlayDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/ParlayDoubleGridTemplate.xlsx";
         private const string MMParlaySingleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/ParlaySingleGridTemplate.xlsx";
 
@@ -1427,6 +1428,7 @@
             serializer.MaxJsonLength = Int32.MaxValue;
 
             var matchInfo = serializer.Deserialize<ExExlMatchInfoViewModel>(from["match"]);
+            var sportType = from["sportType"];
             var isDisplaySingleGrid = from["isDisplaySingleGrid"];
             var isViewParlay = !string.IsNullOrEmpty(from["isViewParlay"]) && from["isViewParlay"].ToLower() == "true";
 
@@ -1435,6 +1437,7 @@
                 var items = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["items"]);
 
                 var templatePath = Server.MapPath(MMDetailSingleGridTemplate);
+                //var templatePath = GetExcelTemplatePath(isViewParlay, true, sportType);
 
                 var fileName = string.Format("MM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr);
 
@@ -1448,7 +1451,8 @@
 
                 var awayMItems = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["aways"]);
 
-                var templatePath = isViewParlay ? Server.MapPath(MMParlayDoubleGridTemplate) : Server.MapPath(MMDetailDoubleGridTemplate);
+                //var templatePath = isViewParlay ? Server.MapPath(MMParlayDoubleGridTemplate) : Server.MapPath(MMDetailDoubleGridTemplate);
+                var templatePath = GetExcelTemplatePath(isViewParlay, false, sportType);
 
                 var fileName = string.Format("MM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr);
 
@@ -1523,45 +1527,7 @@
             }
 
             return ticket;
-        }
-
-        private string GetAssociationCustByIP(IEnumerable<DetectAssociationBySharedIPModel> detectAss, IEnumerable<CustInfoModel> custInfos)
-        {
-            var assCustBySharedIP = detectAss.Select(x =>
-            {
-                var fromCTSCust = custInfos.FirstOrDefault(y => y.CustID.Equals(x.CustID1)) ?? new CustInfoModel();
-                var toCTSCust = custInfos.FirstOrDefault(y => y.CustID.Equals(x.CustID2)) ?? new CustInfoModel();
-
-                return new AssociationCustModel
-                {
-                    FromCustID = x.CustID1,
-                    FromCTSCustID = fromCTSCust.CTSCustID,
-                    ToCustID = x.CustID2,
-                    ToCTSCustID = toCTSCust.CTSCustID
-                };
-            }).Where(x => x.FromCTSCustID != 0 && x.ToCTSCustID != 0);
-
-            return JsonConvert.SerializeObject(assCustBySharedIP);
-        }
-
-        private string GetAssociationCustByMatch(IEnumerable<DetectAssociationBySharedIPMatchesModel> detectAss, IEnumerable<CustInfoModel> custInfos)
-        {
-            var assCustBySharedIP = detectAss.Select(x =>
-            {
-                var fromCTSCust = custInfos.FirstOrDefault(y => y.CustID.Equals(x.CustID1)) ?? new CustInfoModel();
-                var toCTSCust = custInfos.FirstOrDefault(y => y.CustID.Equals(x.CustID2)) ?? new CustInfoModel();
-
-                return new AssociationCustModel
-                {
-                    FromCustID = x.CustID1,
-                    FromCTSCustID = fromCTSCust.CTSCustID,
-                    ToCustID = x.CustID2,
-                    ToCTSCustID = toCTSCust.CTSCustID
-                };
-            }).Where(x => x.FromCTSCustID != 0 && x.ToCTSCustID != 0);
-
-            return JsonConvert.SerializeObject(assCustBySharedIP);
-        }
+        }       
 
         private IEnumerable<DetectGroupAssociationItemViewModel> RearrangeAssGroup(IEnumerable<DetectGroupAssociationItemViewModel> assGroupList, bool isDisableNone)
         {
@@ -1609,6 +1575,16 @@
             }
 
             return result;
+        }
+
+        private string GetExcelTemplatePath(bool isViewParlay, bool isDisplaySingleGrid, string sportType)
+        {
+            if (sportType == "9") 
+            {
+                return Server.MapPath(MMDetailBadmintonDoubleGridTemplate);
+            }
+
+            return isViewParlay ? Server.MapPath(MMParlayDoubleGridTemplate) : Server.MapPath(MMDetailDoubleGridTemplate);
         }
 
         #endregion Private Methods

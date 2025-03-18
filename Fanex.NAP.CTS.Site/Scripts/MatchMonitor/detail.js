@@ -2228,6 +2228,7 @@ function MatchMonitorDetail() {
     function ExportToExcel() {
         if (IsValidExportExcel()) {
             let mmDetails = {
+                sportType: 9,
                 isViewParlay: domElements.ticketType == TicketType.Parlay,
                 isDisplaySingleGrid: isDisplaySingleGrid,
                 matchInfo: GetDataMatchInfo(),
@@ -2238,6 +2239,7 @@ function MatchMonitorDetail() {
             let url = common.modifyRelativeUrl('MatchMonitor/ExportToExcelMMDetail');
 
             $('body').append('<form action="' + url + '" method="post" target="output_frame" id="postToIframe"></form>');
+            $('#postToIframe').append('<input type="hidden" asp-for="sportType" name=sportType value="' + mmDetails.sportType + '">');
             $('#postToIframe').append('<input type="hidden" asp-for="isDisplaySingleGridf" name=isDisplaySingleGrid value="' + mmDetails.isDisplaySingleGrid + '" />');
             $('#postToIframe').append('<input type="hidden" asp-for="isViewParlay" name=isViewParlay value="' + mmDetails.isViewParlay + '" />');
             $('#postToIframe').append('<input type="hidden" asp-for="matchf" name=match value="' + mmDetails.matchInfo + '" />');
@@ -2307,6 +2309,7 @@ function MatchMonitorDetail() {
                     datas += `,&quot;CustomerClass&quot;:&quot;${data.CustomerClass}&quot;`;
                     datas += `,&quot;IsRobot&quot;:&quot;${data.IsRobot}&quot;`;
                     datas += `,&quot;DangerToString&quot;:&quot;${data.DangerToString}&quot;`;
+                    datas += `,&quot;BetIDFromDB&quot;:&quot;${data.BetIDFromDB}&quot;`;
                     datas += `,&quot;Odds&quot;:&quot;${data.Odds}&quot;`;
                     datas += `,&quot;MalayOdds&quot;:&quot;${data.MalayOdds ?? "-"}&quot;`;
                     datas += `,&quot;BetID&quot;:&quot;${data.BetID}&quot;`;

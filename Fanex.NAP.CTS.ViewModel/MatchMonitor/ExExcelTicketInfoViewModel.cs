@@ -21,6 +21,10 @@
 
         public string DangerToString { get; set; }
 
+        public int BetIDFromDB { get; set; }
+
+        public int Game { get { return this.BetIDFromDB % 10; } }        
+
         public decimal Odds { get; set; }
 
         public string MalayOdds { get; set; }
