@@ -980,7 +980,7 @@
                 MatchID = para.MatchID,
                 BetTypeID = para.BetTypeID,
                 LiveIndicator = para.IsLive,
-                BetID = para.BetID
+                BetIDs = para.BetID
             };
 
             return _repository.Fetch<GetMMUserFeedbackModel>(criteria);

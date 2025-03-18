@@ -15,8 +15,8 @@
         [SpParam(SqlParamName = "ip_BettypeID")]
         public int BetTypeID { get; set; }
 
-        [SpParam(SqlParamName = "ip_BetID")]
-        public long BetID { get; set; }
+        [SpParam(SqlParamName = "ip_BetIDList")]
+        public string BetIDs { get; set; }
 
         public override string GetSettingKey()
             => "CTS_DC_MatchMonitor_UserComment_Get";

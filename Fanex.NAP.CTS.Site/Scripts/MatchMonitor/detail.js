@@ -26,8 +26,9 @@ const IndexFilterSelected = {
 
 const SportTypeConst = {
     Basketball: "2",
-    Cricket: "50",
-    Badminton: "9"
+    Badminton: "9",
+    ESports: "43",
+    Cricket: "50"    
 }
 
 function ConvertNumberToThousandsString(x) {
@@ -254,7 +255,7 @@ function MatchMonitorDetail() {
                 { data: obj => obj.CustomerClassToString },
                 { data: obj => RenderBotIcon(obj.RobotType, obj.IsRobot) },
                 { data: obj => obj.DangerToString },
-                { data: obj => obj.Game},
+                { data: obj => obj.BetIDFromDB },
                 { data: obj => RenderOdds(obj) },
                 { data: obj => RenderMalayOdds(obj) },
                 {
@@ -3007,10 +3008,10 @@ function MatchMonitorDetail() {
         }
     }
 
-    function ToggleMapXYY(isBetTypeChange) {
+    function ToggleMapXYY(isBetTypeChange) {       
         let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
 
-        if (domElements.sportType != SportTypeConst.Basketball && betidpattern.includes('X')) {
+        if (domElements.sportType == SportTypeConst.ESports && betidpattern.includes('X')) {
             $("option[value='0']", domElements.cbbMapX).remove();
             domElements.cbbMapX.prop('disabled', false);
             if (isBetTypeChange) {
@@ -3021,7 +3022,7 @@ function MatchMonitorDetail() {
             domElements.cbbMapX.prop('disabled', true);
         }
 
-        if (domElements.sportType != SportTypeConst.Basketball && betidpattern != undefined && betidpattern.includes('YY')) {
+        if (domElements.sportType == SportTypeConst.ESports && betidpattern != undefined && betidpattern.includes('YY')) {
             $("option[value='0']", domElements.cbbMapYY).remove();
             domElements.cbbMapYY.prop('disabled', false);
             if (isBetTypeChange) {
@@ -3033,13 +3034,17 @@ function MatchMonitorDetail() {
         }
     }
 
-    function ToggleGameX(isBetTypeChange) {
-        //let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
+    function ToggleGameX(isBetTypeChange) {        
+        let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
 
-        if (domElements.sportType == SportTypeConst.Badminton) {
-            domElements.cbbGame.parent().show();           
+        if (domElements.sportType == SportTypeConst.Badminton && betidpattern.includes('X')) {            
+            domElements.cbbGame.parent().show();
+            domElements.cbbMapX.parent().hide();
+            domElements.cbbMapYY.parent().hide();
         } else {
             domElements.cbbGame.parent().hide();
+            domElements.cbbMapX.parent().show();
+            domElements.cbbMapYY.parent().show();
         }            
     }
 
@@ -3438,6 +3443,10 @@ function MatchMonitorDetail() {
             OnchangeFilter();
         });
         domElements.cbbMapYY.change(function () {
+            OnchangeFilter();
+        });
+
+        domElements.cbbGame.change(function () {
             OnchangeFilter();
         });
         domElements.cbbMatchScore.change(function () { ScoreOnChange(); });
