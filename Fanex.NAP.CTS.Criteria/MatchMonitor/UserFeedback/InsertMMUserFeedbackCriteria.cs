@@ -20,8 +20,8 @@
         [SpParam(SqlParamName = "ip_BettypeID")]
         public int BettypeID { get; set; }
 
-        [SpParam(SqlParamName = "ip_BetID")]
-        public int BetID { get; set; }
+        [SpParam(SqlParamName = "ip_BetIDList")]
+        public string BetIDs { get; set; }
 
         [SpParam(SqlParamName = "ip_UserComment")]
         public string UserComment { get; set; }

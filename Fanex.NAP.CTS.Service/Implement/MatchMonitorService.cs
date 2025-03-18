@@ -994,7 +994,7 @@
                 SportType = para.SportType,
                 LiveIndicator = para.IsLive,
                 BettypeID = para.BettypeID,
-                BetID = para.BetID,
+                BetIDs = para.BetID,
                 UserID = para.UserID,
                 UserComment = para.UserComment ?? string.Empty,
                 IncorrectReason = para.IncorrectReason,
