@@ -255,7 +255,7 @@ function MatchMonitorDetail() {
                 { data: obj => obj.CustomerClassToString },
                 { data: obj => RenderBotIcon(obj.RobotType, obj.IsRobot) },
                 { data: obj => obj.DangerToString },
-                { data: obj => obj.BetIDFromDB },
+                { data: obj => obj.BetIDFromDB % 10 },
                 { data: obj => RenderOdds(obj) },
                 { data: obj => RenderMalayOdds(obj) },
                 {
