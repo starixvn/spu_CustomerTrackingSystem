@@ -32,6 +32,8 @@
     using System.Web.Script.Serialization;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.MarkPA;
+    using static NPOI.HSSF.Util.HSSFColor;
+    using System.CodeDom;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -1427,17 +1429,18 @@
             var serializer = new JavaScriptSerializer();
             serializer.MaxJsonLength = Int32.MaxValue;
 
-            var matchInfo = serializer.Deserialize<ExExlMatchInfoViewModel>(from["match"]);
-            var sportType = from["sportType"];
+            var matchInfo = serializer.Deserialize<ExExlMatchInfoViewModel>(from["match"]);            
             var isDisplaySingleGrid = from["isDisplaySingleGrid"];
             var isViewParlay = !string.IsNullOrEmpty(from["isViewParlay"]) && from["isViewParlay"].ToLower() == "true";
+
+            int.TryParse(from["sportType"], out int sportType);           
 
             if (!string.IsNullOrEmpty(isDisplaySingleGrid) && isDisplaySingleGrid.ToLower() == "true")
             {
                 var items = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["items"]);
 
-                var templatePath = Server.MapPath(MMDetailSingleGridTemplate);
-                //var templatePath = GetExcelTemplatePath(isViewParlay, true, sportType);
+                //var templatePath = Server.MapPath(MMDetailSingleGridTemplate);
+                var templatePath = GetExcelTemplatePath(isViewParlay, true, sportType);
 
                 var fileName = string.Format("MM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr);
 
@@ -1456,7 +1459,7 @@
 
                 var fileName = string.Format("MM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr);
 
-                var excelFile = _matchMonitorService.ExportExcelMMDetailDG(homeMItems, awayMItems, fileName, templatePath, isViewParlay);
+                var excelFile = _matchMonitorService.ExportExcelMMDetailDG(homeMItems, awayMItems, fileName, templatePath, isViewParlay, sportType);
 
                 return File(excelFile, "application/vnd.ms-excel", fileName);
             }
@@ -1577,14 +1580,27 @@
             return result;
         }
 
-        private string GetExcelTemplatePath(bool isViewParlay, bool isDisplaySingleGrid, string sportType)
+        private string GetExcelTemplatePath(bool isViewParlay, bool isDisplaySingleGrid, int sportType)
         {
-            if (sportType == "9") 
+            switch (isDisplaySingleGrid)
             {
-                return Server.MapPath(MMDetailBadmintonDoubleGridTemplate);
+                case true:
+                    return Server.MapPath(MMDetailSingleGridTemplate);
+                case false when (isViewParlay):
+                    return Server.MapPath(MMParlayDoubleGridTemplate);
+                case false when (sportType == (int)MatchMonitorSportType.Badminton):
+                    return Server.MapPath(MMDetailBadmintonDoubleGridTemplate);
+                case false when (sportType != (int)MatchMonitorSportType.Badminton):
+                    return Server.MapPath(MMDetailDoubleGridTemplate);
+                default:
+                    return string.Empty;
             }
+            //if (sportType == (int)MatchMonitorSportType.Badminton) 
+            //{
+            //    return Server.MapPath(MMDetailBadmintonDoubleGridTemplate);
+            //}
 
-            return isViewParlay ? Server.MapPath(MMParlayDoubleGridTemplate) : Server.MapPath(MMDetailDoubleGridTemplate);
+            //return isViewParlay ? Server.MapPath(MMParlayDoubleGridTemplate) : Server.MapPath(MMDetailDoubleGridTemplate);
         }
 
         #endregion Private Methods

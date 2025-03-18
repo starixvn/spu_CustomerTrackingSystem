@@ -2228,7 +2228,7 @@ function MatchMonitorDetail() {
     function ExportToExcel() {
         if (IsValidExportExcel()) {
             let mmDetails = {
-                sportType: 9,
+                sportType: domElements.sportType,
                 isViewParlay: domElements.ticketType == TicketType.Parlay,
                 isDisplaySingleGrid: isDisplaySingleGrid,
                 matchInfo: GetDataMatchInfo(),

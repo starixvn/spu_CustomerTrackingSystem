@@ -660,21 +660,28 @@
         }
 
         public byte[] ExportExcelMMDetailDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems
-            , string fileName, string templatePath, bool isViewParlay)
+            , string fileName, string templatePath, bool isViewParlay, int sportType)
         {
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Sheet1");
             writer.CopyRows(0, 1);
 
-            if (isViewParlay)
+            switch (isViewParlay)
             {
-                FillRowDataParlayDG(homeMItems, awayMItems, ref writer);
+                case true:
+                    FillRowDataParlayDG(homeMItems, awayMItems, ref writer);
+                    writer.SyncColumnsWidth(37);
+                    break;
+                case false when(sportType == (int)MatchMonitorSportType.Badminton):
+                    FillRowDataBadmintonDG(homeMItems, awayMItems, ref writer);
+                    writer.SyncColumnsWidth(39);
+                    break;
+                case false when (sportType != (int)MatchMonitorSportType.Badminton):
+                    FillRowDataDG(homeMItems, awayMItems, ref writer);
+                    writer.SyncColumnsWidth(37);
+                    break;
+                default:
+                    break;
             }
-            else
-            {
-                FillRowDataDG(homeMItems, awayMItems, ref writer);
-            }
-
-            writer.SyncColumnsWidth(37);
 
             return writer.ToBytes();
         }
@@ -710,6 +717,37 @@
             }
         }
 
+        private void FillRowDataBadmintonDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems,
+            IEnumerable<ExExcelTicketInfoViewModel> awayMItems,   
+            ref ExcelTemplateWriter writer)
+        {
+            var tblHome = homeMItems != null ? homeMItems.ToArray() : new ExExcelTicketInfoViewModel[0];
+            var tblAway = awayMItems != null ? awayMItems.ToArray() : new ExExcelTicketInfoViewModel[0];
+            var lengthH = tblHome.Length;
+            var lengthA = tblAway.Length;
+
+            if (lengthH > lengthA)
+            {
+                for (int i = 0; i < lengthH; i++)
+                {
+                    if (i < lengthA)
+                        writer.WriteRow(1, NewRecordTblBadmintonHomeAwayDG(tblHome[i], tblAway[i]));
+                    else
+                        writer.WriteRow(1, NewRecordTblBadmintonHomeDG(tblHome[i]));
+                }
+            }
+            else
+            {
+                for (int i = 0; i < lengthA; i++)
+                {
+                    if (i < lengthH)
+                        writer.WriteRow(1, NewRecordTblBadmintonHomeAwayDG(tblHome[i], tblAway[i]));
+                    else
+                        writer.WriteRow(1, NewRecordTblBadmintonAwayDG(tblAway[i]));
+                }
+            }
+        }
+
         private void FillRowDataParlayDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems,
             IEnumerable<ExExcelTicketInfoViewModel> awayMItems,
             ref ExcelTemplateWriter writer)
@@ -739,6 +777,114 @@
                         writer.WriteRow(1, NewRecordTblParlayAwayDG(tblAway[i]));
                 }
             }
+        }
+
+        private object[] NewRecordTblBadmintonHomeDG(ExExcelTicketInfoViewModel itemH)
+        {
+            return new object[]
+               {
+                    itemH.SubscriberType,
+                    itemH.Username,
+                    itemH.CustomerClass == -1 ? "-" : itemH.CustomerClass.ToString(),
+                    (itemH.IsRobot ? "x" : "-"),
+                    itemH.DangerToString,
+                    itemH.Game,
+                    itemH.Odds,
+                    itemH.MalayOdds,
+                    itemH.BetID.ToString(),
+                    itemH.Currency,
+                    (itemH.Amount % 1 == 0 ? itemH.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemH.Amount.ToString()),
+                    itemH.HDP,
+                    itemH.Score,
+                    itemH.TransTimeToString,
+                    itemH.BetFrom,
+                    itemH.ADetectGroup,
+                    itemH.MDetectGroup,
+                    itemH.ReasonList,
+                    (!string.IsNullOrEmpty(itemH.PICVerified) ? "x" : "-"),
+                    null, null, null, null,
+                    null, null, null, null,
+                    null, null, null, null,
+                    null, null, null, null,
+                    null, null, null, null
+               };
+        }
+
+        private object[] NewRecordTblBadmintonAwayDG(ExExcelTicketInfoViewModel itemA)
+        {
+            return new object[]
+                {
+                    null, null, null, null,
+                    null, null, null, null,
+                    null, null, null, null,
+                    null, null, null, null,
+                    null, null, null, null,
+                    itemA.SubscriberType,
+                    itemA.Username,
+                    itemA.CustomerClass == -1 ? "-" : itemA.CustomerClass.ToString(),
+                    (itemA.IsRobot ? "x" : "-"),
+                    itemA.DangerToString,
+                    itemA.Game,
+                    itemA.Odds,
+                    itemA.MalayOdds,
+                    itemA.BetID.ToString(),
+                    itemA.Currency,
+                    (itemA.Amount % 1 == 0 ? itemA.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemA.Amount.ToString()),
+                    itemA.HDP,
+                    itemA.Score,
+                    itemA.TransTimeToString,
+                    itemA.BetFrom,
+                    itemA.ADetectGroup,
+                    itemA.MDetectGroup,
+                    itemA.ReasonList,
+                    (!string.IsNullOrEmpty(itemA.PICVerified) ? "x" : "-")
+                };
+        }
+
+        private object[] NewRecordTblBadmintonHomeAwayDG(ExExcelTicketInfoViewModel itemH, ExExcelTicketInfoViewModel itemA)
+        {
+            return new object[]
+                {
+                    itemH.SubscriberType,
+                    itemH.Username,
+                    itemH.CustomerClass == -1 ? "-" : itemH.CustomerClass.ToString(),
+                    (itemH.IsRobot ? "x" : "-"),
+                    itemH.DangerToString,
+                    itemH.Game,
+                    itemH.Odds,
+                    itemH.MalayOdds,
+                    itemH.BetID.ToString(),
+                    itemH.Currency,
+                    (itemH.Amount % 1 == 0 ? itemH.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemH.Amount.ToString()),
+                    itemH.HDP,
+                    itemH.Score,
+                    itemH.TransTimeToString,
+                    itemH.BetFrom,
+                    itemH.ADetectGroup,
+                    itemH.MDetectGroup,
+                    itemH.ReasonList,
+                    (!string.IsNullOrEmpty(itemH.PICVerified) ? "x" : "-"),
+                    "",
+                    itemA.SubscriberType,
+                    itemA.Username,
+                    itemA.CustomerClass == -1 ? "-" : itemA.CustomerClass.ToString(),
+                    (itemA.IsRobot ? "x" : "-"),
+                    itemA.DangerToString,
+                    itemA.Game,
+                    itemA.Odds,
+                    itemA.MalayOdds,
+                    itemA.BetID.ToString(),
+                    itemA.Currency,
+                    (itemA.Amount % 1 == 0 ? itemA.Amount.ToString(Consts.FormatDecimalToString_Thousands) : itemA.Amount.ToString()),
+                    itemA.HDP,
+                    itemA.Score,
+                    itemA.TransTimeToString,
+                    itemA.BetFrom,
+                    itemA.ADetectGroup,
+                    itemA.MDetectGroup,
+                    itemA.ReasonList,
+                    (!string.IsNullOrEmpty(itemA.PICVerified) ? "x" : "-")
+                };
         }
 
         private object[] NewRecordTblHomeDG(ExExcelTicketInfoViewModel itemH)
