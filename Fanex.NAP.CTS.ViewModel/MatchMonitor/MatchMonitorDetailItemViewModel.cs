@@ -3,10 +3,8 @@
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.Model.MatchMonitor.Parlay;
     using Fanex.NAP.CTS.Resource.Consts;
-    using Fanex.NAP.CTS.ViewModel.MatchMonitor.Parlay;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class MatchMonitorDetailItemViewModel
@@ -133,6 +131,8 @@
 
         public string BetID { get; set; }
 
+        public long BetIDFromDB { get; set; }
+
         public string BetTeam { get; set; }
 
         public string BetTeamFullName { get; set; }
@@ -256,7 +256,6 @@
         #endregion
 
         #region function
-   
         public MatchMonitorDetailItemViewModel MappingFraudTicketToAllTicket(Dictionary<long, MatchMonitorDetailItemViewModel> fraudMMTicketsDictionary)
         {
             if (fraudMMTicketsDictionary != null && fraudMMTicketsDictionary.TryGetValue(TransId, out var value))
@@ -280,6 +279,7 @@
             this.MalayOdds = ticket.MalayOdds;
             this.BetTypeID = ticket.BetType;
             this.BetID = ticket.TransId.ToString();
+            this.BetIDFromDB = ticket.BetID;
             this.BetTeam = ticket.BetTeam;
             this.BetTeamFullName = ticket.BetTeamFullName;
             this.BetFrom = ticket.BetFrom;
@@ -320,7 +320,6 @@
         {
             return commaCount % 2 == 0 ? " " : string.Empty;
         }
-
         #endregion
     }
 }

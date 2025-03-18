@@ -34,6 +34,8 @@
 
         public int BetType { get; set; }
 
+        public long BetID { get; set; }
+
         public Int64 CustId { get; set; }
 
         public string BettypeName { get; set; }

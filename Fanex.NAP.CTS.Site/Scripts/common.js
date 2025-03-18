@@ -332,6 +332,21 @@
         return host + config.contextPath + url;
     }
 
+    this.postMultipleAPI = function (requests) {
+        // Convert each request object into an AJAX Promise
+        var ajaxCalls = requests.map(req => 
+            $.ajax({
+                url: req.url,
+                type: "POST",
+                data: JSON.stringify(req.data),
+                contentType: "application/json"
+            })
+        );
+    
+        // Use $.when() to handle multiple requests
+        return $.when(...ajaxCalls);
+    }
+
     this.makeNonSearchSelect = select => $(select).select2({ minimumResultsForSearch: -1 })
 
     this.makeDatePicker = function (input, options) {

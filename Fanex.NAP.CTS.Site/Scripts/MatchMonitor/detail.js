@@ -1922,35 +1922,89 @@ function MatchMonitorDetail() {
         return tranIds;
     }
 
-    function VerifyTransMatchMonitorDetail() {
-        $.ajax(common.modifyRelativeUrl('MatchMonitor/VerifyTransMMDetail'), {
-            type: 'POST',
-            data:
-            {
-                MatchId: domElements.matchID,
-                LiveIndicator: domElements.cbbMarket.val(),
-                BettypeID: GetBetTypeSelected(),
-                BetID: GetBetIDSelected(),
-                TranIds: GetTranIds().join(),
-                TicketType:  domElements.ticketType
-            },
-            beforeSend: function () {
-                domElements.tblMMHomeTeam.addClass('loading-value');
-                domElements.tblMMAwayTeam.addClass('loading-value');
-            },
-            success: function () {
-                window.close();
-            },
-            complete: function () {
-                domElements.tblMMHomeTeam.removeClass("loading-value");
-                domElements.tblMMAwayTeam.removeClass("loading-value");
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-                domElements.tblMMHomeTeam.removeClass("loading-value");
-                domElements.tblMMAwayTeam.removeClass("loading-value");
+    function GetDataForMultiBetID()
+    {
+        const tickets = [];
+        domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
+            if (data.PICVerified == '-' || data.PICVerified == '' || data.PICVerified == null) {
+                tickets.push(data);
             }
         });
+        domElements.tblMMAwayTeam.DataTable().rows(function (idx, data, node) {
+            if (data.PICVerified == '' || data.PICVerified == '' || data.PICVerified == null) {
+                tickets.push(data);
+            }
+        });
+
+        const tranIdsByBetID = tickets.reduce((arr, ticket) => {
+            if (!arr[ticket.BetIDFromDB])
+            {
+                arr[ticket.BetIDFromDB] = [];
+            }
+
+            arr[ticket.BetIDFromDB].push(ticket.TransIdToString);
+
+            return arr;
+        }, {});
+
+        const transformedData = Object.entries(tranIdsByBetID).map(([betid, tickets]) => {
+            return {
+                url: common.modifyRelativeUrl('MatchMonitor/VerifyTransMMDetail'),
+                data: {
+                    MatchId: domElements.matchID,
+                    LiveIndicator: domElements.cbbMarket.val(),
+                    BettypeID: GetBetTypeSelected(),
+                    BetID: betid,
+                    TranIds: tickets.join(),
+                    TicketType:  domElements.ticketType
+            }};
+        });
+
+        return transformedData;
+    }
+
+    function VerifyTransMatchMonitorDetail() {
+        let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
+        if (domElements.sportType == SportTypeConst.Badminton && betidpattern.includes("X"))
+        {
+            common.postMultipleAPI(GetDataForMultiBetID())
+            .done(function(...responses) {
+                window.close();
+            }).fail(function() {
+                console.log("One or more requests failed");
+            });
+        }
+        else
+        {
+            $.ajax(common.modifyRelativeUrl('MatchMonitor/VerifyTransMMDetail'), {
+                type: 'POST',
+                data:
+                {
+                    MatchId: domElements.matchID,
+                    LiveIndicator: domElements.cbbMarket.val(),
+                    BettypeID: GetBetTypeSelected(),
+                    BetID: GetBetIDSelected(),
+                    TranIds: GetTranIds().join(),
+                    TicketType:  domElements.ticketType
+                },
+                beforeSend: function () {
+                    domElements.tblMMHomeTeam.addClass('loading-value');
+                    domElements.tblMMAwayTeam.addClass('loading-value');
+                },
+                success: function () {
+                    window.close();
+                },
+                complete: function () {
+                    domElements.tblMMHomeTeam.removeClass("loading-value");
+                    domElements.tblMMAwayTeam.removeClass("loading-value");
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                    domElements.tblMMHomeTeam.removeClass("loading-value");
+                    domElements.tblMMAwayTeam.removeClass("loading-value");
+                }
+            });
+        }
     }
 
     //#endregion Verify Trans
