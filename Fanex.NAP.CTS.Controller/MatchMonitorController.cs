@@ -1595,13 +1595,7 @@
                     return Server.MapPath(MMDetailDoubleGridTemplate);
                 default:
                     return string.Empty;
-            }
-            //if (sportType == (int)MatchMonitorSportType.Badminton) 
-            //{
-            //    return Server.MapPath(MMDetailBadmintonDoubleGridTemplate);
-            //}
-
-            //return isViewParlay ? Server.MapPath(MMParlayDoubleGridTemplate) : Server.MapPath(MMDetailDoubleGridTemplate);
+            }           
         }
 
         #endregion Private Methods
