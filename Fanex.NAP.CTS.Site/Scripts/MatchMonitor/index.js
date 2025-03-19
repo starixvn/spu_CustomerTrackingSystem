@@ -89,7 +89,7 @@
                         "BetTypeName": x.BetTypeName,
                         "BettypeID": x.BetTypeID,
                         "BetID": x.BetID,
-                        "BetIDPattern": x.BetIDPattern,
+                        "BetIDPattern": x.SportType == 9 ? null : x.BetIDPattern, // Hard code for Badminton then BetID = 0
                         "NameDetailsX": x.NameDetailsX
                     }));
 
@@ -188,13 +188,18 @@
     function MapperBettypes(item) {
         var result = {};
 
+        // For Bettype HDP, O/U, 1H HDP, 1H O/U, ... then BetID = 0
+        //// Current hardcode for Badminton MapX then BetID = 0
         if (item.BetIDPattern == null && item.NameDetailsX == '') {
             result.BetID = 0;
         }
 
+        // For SportType BasketBall then BetID = 801, 802, 803, 804
         if (item.BetIDPattern != '' && item.NameDetailsX != '') {
             result.BetID = item.BetID;
         }
+
+        // Exception case for Bettype MapX, MapXY then BetID = null
 
         result.BettypeID = item.BettypeID;
 
