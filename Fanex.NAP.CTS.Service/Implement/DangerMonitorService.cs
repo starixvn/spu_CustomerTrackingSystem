@@ -845,7 +845,7 @@
                         BetChoiceType = group.BetChoiceType,
                         BetChoiceHome = group.BetChoiceHome,
                         BetChoiceAway = group.BetChoiceAway,
-                        PriorityOrder = group.PriorityOrder,
+                        SportOrder = group.SportOrder,
                         BetIDPattern = group.BetIDPattern
                     }));
         }

@@ -82,8 +82,9 @@
             let sportSelectedList = domElements.cbbSport.val();
             bettypeList = {};
 
-            sportBetType.filter(x => sportSelectedList.includes(`${x.SportType}_${x.LeagueGroupID}`))
-                .map(x =>
+            sportBetType.filter(x => sportSelectedList.includes(`${x.SportType}_${x.LeagueGroupID}`)).sort(function (a, b) {
+                return a.BettypeOrder - b.BettypeOrder;
+            }).map(x =>
                     bettypeList[`${x.BetTypeID}_${x.BetID}`] =
                     ({
                         "BetTypeName": x.BetTypeName,
@@ -114,7 +115,7 @@
                     sportBetType = [...response.data];
 
                     sportBetType.sort(function (a, b) {
-                        return a.PriorityOrder - b.PriorityOrder;
+                        return a.SportOrder - b.SportOrder;
                     })
                 }
             },

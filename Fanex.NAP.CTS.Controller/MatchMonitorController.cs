@@ -116,7 +116,8 @@
                     BetChoiceAway = x.BetChoiceAway,
                     BetChoiceAwayDisplay = x.BetChoiceAwayDisplay,
                     BetChoiceAwayFullName = x.BetChoiceAwayFullName,
-                    PriorityOrder = x.PriorityOrder,
+                    SportOrder = x.SportOrder,
+                    BettypeOrder = x.BettypeOrder,
                     BetIDPattern = x.BetIDPattern,
                     NameDetailsX = x.NameDetailsX
                 };

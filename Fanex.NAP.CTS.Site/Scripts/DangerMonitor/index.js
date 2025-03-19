@@ -191,7 +191,7 @@
                     sportBetType = [...response.data];
 
                     sportBetType.sort(function (a, b) {
-                        return a.PriorityOrder - b.PriorityOrder;
+                        return a.SportOrder - b.SportOrder;
                     })
                 }
             },
