@@ -70,7 +70,7 @@
 	</Function>
 
 	<Function name="DangerMonitor">
-		<Setting Key="CTS_MatchTicketInfo_Get" SpName="CTS_MatchTicketInfo_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_MatchTicketInfo_Get" SpName="CTS_MatchTicketInfo_Get" DbName="SQL.WASAVerse.bodbSPUNet" />
 	</Function>
 
 	<Function name="RescanNormalClassificationBySport">
