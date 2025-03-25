@@ -10,7 +10,7 @@
 
         public int BettypeID { get; set; }
 
-        public int BetID { get; set; }
+        public string BetID { get; set; }
 
         public string UserComment { get; set; }
 

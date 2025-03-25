@@ -4,6 +4,6 @@
     {
         public int ProductId { get; set; }
 
-        public string BettypeList { get; set; }
+        public string SportBettypeList { get; set; }
     }
 }

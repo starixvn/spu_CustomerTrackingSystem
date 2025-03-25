@@ -195,7 +195,6 @@
     <Compile Include="ManageSubscriber\ReUpdateSubriberIdBySiteIdCriteira.cs" />
     <Compile Include="Api\GetFlaggedEvidenceByDirectAssociationCriteria.cs" />
     <Compile Include="MatchMonitor\GetMatchFromMainInfoCriteria.cs" />
-    <Compile Include="MatchMonitor\GetMatchMonitorStaticListCriteria.cs" />
     <Compile Include="MatchMonitor\HoldKey\HoldKeyLogInsertCriteria.cs" />
     <Compile Include="MatchMonitor\MMDetailMergeGroupCriteria.cs" />
     <Compile Include="MatchMonitor\MMFraudTicketsSummaryCriteria.cs" />
@@ -208,8 +207,6 @@
     <Compile Include="MatchMonitor\CustInfoByCustIdGetCriteria.cs" />
     <Compile Include="MatchMonitor\MatchDetailMonitorGetCriteria.cs" />
     <Compile Include="MatchMonitor\TicketDetailGetCriteria.cs" />
-    <Compile Include="MatchMonitor\MatchScoreGetCriteria.cs" />
-    <Compile Include="MatchMonitor\MatchGroupGetCriteria.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailVerifyCriteria.cs" />
     <Compile Include="MatchMonitor\MatchMonitorGetCriteria.cs" />
     <Compile Include="MatchMonitor\UserFeedback\DeleteMMUserFeedbackCriteria.cs" />

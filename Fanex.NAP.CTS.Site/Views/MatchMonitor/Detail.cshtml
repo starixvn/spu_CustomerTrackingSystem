@@ -78,6 +78,16 @@
                             </select>
                         </div>
 
+                        <div class="first-row-info">
+                            @*<label class="text">Game</label>*@
+                            <select class="control width-select" id="cbbGame" multiple="multiple">
+                                @for (int i = 1; i < 4; i++)
+                                {
+                                    <option value="@i" selected>@i</option>
+                                }                                
+                            </select>
+                        </div>
+
                         <div class="first-row-info" style="width:80px" id="divMapX">
                             <select class="control info-select" id="cbbMapX" name="state">
                                 @for (int i = 1; i < 10; i++)
@@ -252,6 +262,7 @@
                                         <th>CC</th>
                                         <th>Bot</th>
                                         <th>Dgr</th>
+                                        <th>Game</th>
                                         <th>Odds</th>
                                         <th>MY.Odds</th>
                                         <th>
@@ -301,6 +312,7 @@
                                         <th>Bot</th>
                                         <th>Dgr</th>
                                         <th>Odds</th>
+                                        <th>Game</th>
                                         <th>MY.Odds</th>
                                         <th>
                                             <div class="type-outer">
@@ -348,6 +360,7 @@
                                         <th>CC</th>
                                         <th>Bot</th>
                                         <th>Dgr</th>
+                                        <th>Game</th>
                                         <th>Odds</th>
                                         <th>MY.Odds</th>
                                         <th>

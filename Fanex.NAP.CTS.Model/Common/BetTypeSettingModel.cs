@@ -34,7 +34,9 @@
 
         public bool IsDefaultSelected { get; set; }
 
-        public int PriorityOrder { get; set; }
+        public int SportOrder { get; set; }
+
+        public int BettypeOrder { get; set; }
 
         public string NameDetailsX { get; set; }
 

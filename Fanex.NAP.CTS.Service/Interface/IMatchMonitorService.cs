@@ -16,17 +16,19 @@
 
         IEnumerable<MMFraudTicketsSummaryViewModel> GetMMFraudTicketsSummary(IEnumerable<MMFraudTicketsSummaryModel> mmModels);
 
-        IEnumerable<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, Int64 betId, int reason);
-
-        IEnumerable<MatchScoreModel> GetMatchScore(Int64 matchID, int betTypeID, bool liveIndicator, Int64 betId, int reason);
-
         DBResult VerifyTransMatchMonitorDetail(MatchMonitorDetailVerifyTransParaModel para);
 
         MMDetailResultModel GetMatchMonitorDetail(MMDetailInfoViewModel filter);
 
-        IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);      
+        IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);
 
         string GetTransFilterSuspicousMGr(MMDetailFilterViewModel filter, TicketDetailViewModel fraudTicket, TicketType ticketType = TicketType.Single);
+
+        MMDetailResultModel GetMatchMonitorDetailForCache(MMDetailInfoViewModel para, string region, string userId, string viewModelName);
+
+        TicketDetailViewModel GetSingleTicketDetailForCache(MMDetailResultModel matchDetailInfo, MMDetailInfoViewModel para, string region, string userId, string viewModelName);
+
+        TicketDetailViewModel BuildSingleTicketDetailFraudMergeGroup(MMDetailResultModel matchDetailInfo, MMDetailInfoViewModel para, TicketDetailViewModel singleTicketDetails);
 
         TicketDetailViewModel GetTicketDetailFraud(MMDetailResultModel matchDetailInfo, MMDetailInfoViewModel para);
 
@@ -60,14 +62,12 @@
 
         IEnumerable<RobotStatusModel> GetRobotStatus(string transJson);
 
-        MatchMonitorStaticListModel GetMMStaticList();
-
         #region Export Excel
 
         byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath);
 
         byte[] ExportExcelMMDetailDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems
-            , string fileName, string templatePath, bool isViewParlay);
+            , string fileName, string templatePath, bool isViewParlay, int sportType);
 
         #endregion
 
@@ -84,7 +84,7 @@
 
         #region Hold Key
 
-       HoldKeyUpdateResultModel UpdateHoldKeyStatus(HoldKeyUpdateViewModel parameters, string url);
+        HoldKeyUpdateResultModel UpdateHoldKeyStatus(HoldKeyUpdateViewModel parameters, string url);
 
         HoldKeyStatusGetResultModel GetHoldKeyStatus(Int64 matchID, string url);
 
@@ -97,7 +97,7 @@
 
         MMDetailResultModel GetMatchMonitorParlayDetail(MMDetailInfoViewModel filter);
 
-        
+
         #endregion
 
     }

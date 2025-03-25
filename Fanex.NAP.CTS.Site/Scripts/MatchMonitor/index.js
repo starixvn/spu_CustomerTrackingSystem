@@ -82,14 +82,15 @@
             let sportSelectedList = domElements.cbbSport.val();
             bettypeList = {};
 
-            sportBetType.filter(x => sportSelectedList.includes(`${x.SportType}_${x.LeagueGroupID}`))
-                .map(x =>
+            sportBetType.filter(x => sportSelectedList.includes(`${x.SportType}_${x.LeagueGroupID}`)).sort(function (a, b) {
+                return a.BettypeOrder - b.BettypeOrder;
+            }).map(x =>
                     bettypeList[`${x.BetTypeID}_${x.BetID}`] =
                     ({
                         "BetTypeName": x.BetTypeName,
                         "BettypeID": x.BetTypeID,
                         "BetID": x.BetID,
-                        "BetIDPattern": x.BetIDPattern,
+                        "BetIDPattern": x.SportType == 9 ? null : x.BetIDPattern, // Hard code for Badminton then BetID = 0
                         "NameDetailsX": x.NameDetailsX
                     }));
 
@@ -114,7 +115,7 @@
                     sportBetType = [...response.data];
 
                     sportBetType.sort(function (a, b) {
-                        return a.PriorityOrder - b.PriorityOrder;
+                        return a.SportOrder - b.SportOrder;
                     })
                 }
             },
@@ -188,13 +189,18 @@
     function MapperBettypes(item) {
         var result = {};
 
+        // For Bettype HDP, O/U, 1H HDP, 1H O/U, ... then BetID = 0
+        //// Current hardcode for Badminton MapX then BetID = 0
         if (item.BetIDPattern == null && item.NameDetailsX == '') {
             result.BetID = 0;
         }
 
+        // For SportType BasketBall then BetID = 801, 802, 803, 804
         if (item.BetIDPattern != '' && item.NameDetailsX != '') {
             result.BetID = item.BetID;
         }
+
+        // Exception case for Bettype MapX, MapXY then BetID = null
 
         result.BettypeID = item.BettypeID;
 

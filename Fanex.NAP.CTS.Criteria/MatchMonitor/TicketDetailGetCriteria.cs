@@ -100,7 +100,7 @@
         public string UserNameList { get; set; }
 
         public override string GetSettingKey()
-                => "CTS_Rpt_MatchMonitor_TicketDetails";
+                => "CTS_MatchMonitor_Details_GetTicket";
 
         public override bool IsValid()
             => true;

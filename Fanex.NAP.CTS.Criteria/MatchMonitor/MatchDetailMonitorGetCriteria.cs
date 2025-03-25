@@ -15,8 +15,8 @@
         [SpParam(SqlParamName = "ip_BettypeID")]
         public int BettypeID { get; set; }
 
-        [SpParam(SqlParamName = "ip_BetID")]
-        public Int64 BetID { get; set; }
+        [SpParam(SqlParamName = "ip_BetIDList")]
+        public string BetID { get; set; }
 
         public override string GetSettingKey()
             => "CTS_DC_MatchMonitor_Details_Get";

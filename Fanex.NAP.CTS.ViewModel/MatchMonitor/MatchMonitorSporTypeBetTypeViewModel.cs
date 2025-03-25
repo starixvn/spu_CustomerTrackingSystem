@@ -17,8 +17,10 @@
         public string BetTypeName { get; set; }
 
         public int BetID { get; set; }
+       
+        public int SportOrder { get; set; }
 
-        public int PriorityOrder { get; set; }
+        public int BettypeOrder { get; set; }
 
         public int BetChoiceType { get; set; }
 

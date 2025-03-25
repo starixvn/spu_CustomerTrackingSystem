@@ -13,7 +13,6 @@
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
@@ -33,6 +32,8 @@
     using System.Web.Script.Serialization;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.MarkPA;
+    using static NPOI.HSSF.Util.HSSFColor;
+    using System.CodeDom;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -40,6 +41,8 @@
     {
         private const string MMDetailDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/DoubleGridTemplate.xlsx";
         private const string MMDetailSingleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/SingleGridTemplate.xlsx";
+        private const string MMDetailBadmintonDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/BadmintonDoubleGridTemplate.xlsx";
+        private const string MMDetailBadmintonSingleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/BadmintonSingleGridTemplate.xlsx";
         private const string MMParlayDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/ParlayDoubleGridTemplate.xlsx";
         private const string MMParlaySingleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/ParlaySingleGridTemplate.xlsx";
 
@@ -85,7 +88,7 @@
             var filter = new SportBettypeModel
             {
                 ProductId = (int)ProductType.SportBook,
-                BettypeList = string.Join(",", betTypes.Select(x => x.BetTypeID).Distinct())
+                SportBettypeList = JsonConvert.SerializeObject(betTypes.Select(x => x.BetTypeID).Distinct())
             };
 
             var mainBetTypes = _commonService.GetMainSportBettype(filter);
@@ -113,7 +116,8 @@
                     BetChoiceAway = x.BetChoiceAway,
                     BetChoiceAwayDisplay = x.BetChoiceAwayDisplay,
                     BetChoiceAwayFullName = x.BetChoiceAwayFullName,
-                    PriorityOrder = x.PriorityOrder,
+                    SportOrder = x.SportOrder,
+                    BettypeOrder = x.BettypeOrder,
                     BetIDPattern = x.BetIDPattern,
                     NameDetailsX = x.NameDetailsX
                 };
@@ -192,7 +196,7 @@
             var matchMonitors = Enumerable.Empty<GetMatchMonitorViewModel>();
 
             try
-            {               
+            {
                 if (para != null && para.IsValid())
                 {
                     var matchFromCTSInfos = Enumerable.Empty<GetMatchMonitorModel>();
@@ -457,8 +461,7 @@
                 ViewBag.ReasonGroup = para?.ReasonGroup ?? string.Empty;
                 ViewBag.MarketName = para?.MarketName ?? string.Empty;
                 ViewBag.BetChoice = para?.BetChoice;
-                ViewBag.IsDisableScoreFilter = para?.SportType != null 
-                    && (para.SportType == (int)MatchMonitorSportType.Basketball || para.SportType == (int)MatchMonitorSportType.Cricket);
+                ViewBag.IsDisableScoreFilter = IsDisableScoreFilter(para.SportType);
                 ViewBag.SportType = para?.SportType ?? 0;
                 ViewBag.SportName = para?.SportName ?? string.Empty;
                 ViewBag.KOTime = para?.KOTime;
@@ -485,6 +488,12 @@
             }
 
             return View();
+        }
+
+        private bool IsDisableScoreFilter(int sportType)
+        {
+            return sportType == (int)MatchMonitorSportType.Basketball
+                || sportType == (int)MatchMonitorSportType.Cricket;
         }
 
         #region Detail Filter
@@ -535,6 +544,12 @@
 
             var removeKeyFraud = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketFraud));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyFraud);
+
+            para.BetID?.Split(',').ForEach(betId =>
+            {
+                var removeKey = para.BuildCacheKeyByBetID(string.Empty, Region, UserID, betId, Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketFraud));
+                _memoryCacheService.RemoveKeyContainsValue(removeKey);
+            });
 
             var removeKeyAll = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketAll));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyAll);
@@ -896,34 +911,43 @@
             var para = filter.Clone();
             var fraudMMDetailResult = new TicketDetailViewModel() { TicketType = filter.TicketType };
             var viewModeName = Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketFraud);
-            var key = filter.TicketType == TicketType.Single
-                ? para.BuildCacheKey("TicketFraud", Region, UserID, viewModeName)
-                : para.BuildCacheKey("TicketFraudParlay", Region, UserID, viewModeName);
 
             try
             {
-                fraudMMDetailResult = _memoryCacheService.GetValue<TicketDetailViewModel>(key);
-
-                if (fraudMMDetailResult == null)
+                switch (filter.TicketType)
                 {
-                    para.TypeOfTickets = MMViewModeFromUI.TicketFraud;
+                    case TicketType.Single:
+                        {
+                            fraudMMDetailResult = GetSingleFraudMMDetail(para, viewModeName);
+                            break;
+                        }
+                    case TicketType.Parlay:
+                        {
+                            var key = para.BuildCacheKey("TicketFraudParlay", Region, UserID, viewModeName);
 
-                    var matchDetailInfo = filter.TicketType == TicketType.Single
-                        ? _matchMonitorService.GetMatchMonitorDetail(para)
-                        : _matchMonitorService.GetMatchMonitorParlayDetail(para);
+                            fraudMMDetailResult = _memoryCacheService.GetValue<TicketDetailViewModel>(key);
 
-                    if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
-                    {
-                        var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
+                            if (fraudMMDetailResult == null)
+                            {
+                                para.TypeOfTickets = MMViewModeFromUI.TicketFraud;
 
-                        fraudMMDetailResult = _matchMonitorService.GetTicketDetailFraud(matchDetailInfo, para);
+                                var matchDetailInfo = _matchMonitorService.GetMatchMonitorParlayDetail(para);
 
-                        fraudMMDetailResult.MatchDetailInfo = matchDetailInfo;
+                                if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
+                                {
+                                    var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
 
-                        fraudMMDetailResult.AGroupReasonMerged = _matchMonitorService.MergeFraudReasonAGroup(fraudMMDetailResult, reasons);
+                                    fraudMMDetailResult = _matchMonitorService.GetTicketDetailFraud(matchDetailInfo, para);
 
-                        _memoryCacheService.PushValue(key, fraudMMDetailResult);
-                    }
+                                    fraudMMDetailResult.MatchDetailInfo = matchDetailInfo;
+
+                                    fraudMMDetailResult.AGroupReasonMerged = _matchMonitorService.MergeFraudReasonAGroup(fraudMMDetailResult, reasons);
+
+                                    _memoryCacheService.PushValue(key, fraudMMDetailResult);
+                                }
+                            }
+                            break;
+                        }
                 }
             }
             catch (Exception ex)
@@ -935,6 +959,34 @@
 
                 LogService.Error(logMessage);
             }
+
+            return fraudMMDetailResult;
+        }
+
+        private TicketDetailViewModel GetSingleFraudMMDetail(MMDetailInfoViewModel filter, string viewModeName)
+        {
+            var matchDetailInfo = new MMDetailResultModel();
+            var fraudTicketDetails = new List<TicketDetailModel>();
+
+            filter.TypeOfTickets = MMViewModeFromUI.TicketFraud;
+            filter.BetID?.Split(',').ForEach((betId) =>
+            {
+                var para = filter.Clone();
+                para.BetID = betId;
+
+                var matchDetailForCache = _matchMonitorService.GetMatchMonitorDetailForCache(para, Region, UserID, viewModeName);
+                var ticketDetails = _matchMonitorService.GetSingleTicketDetailForCache(matchDetailForCache, para, Region, UserID, viewModeName);
+
+                matchDetailInfo.Custs.AddRange(matchDetailForCache.Custs);
+                matchDetailInfo.MatchDetails.AddRange(matchDetailForCache.MatchDetails);
+                matchDetailInfo.VerifiedTrans.AddRange(matchDetailForCache.VerifiedTrans);
+                fraudTicketDetails.AddRange(ticketDetails.TicketDetails);
+            });
+
+            var fraudMMDetailResult = new TicketDetailViewModel() { TicketType = filter.TicketType };
+            var ticketDetailModel = new TicketDetailViewModel() { TicketDetails = fraudTicketDetails };
+
+            fraudMMDetailResult = _matchMonitorService.BuildSingleTicketDetailFraudMergeGroup(matchDetailInfo, filter, ticketDetailModel);
 
             return fraudMMDetailResult;
         }
@@ -1378,15 +1430,18 @@
             var serializer = new JavaScriptSerializer();
             serializer.MaxJsonLength = Int32.MaxValue;
 
-            var matchInfo = serializer.Deserialize<ExExlMatchInfoViewModel>(from["match"]);
+            var matchInfo = serializer.Deserialize<ExExlMatchInfoViewModel>(from["match"]);            
             var isDisplaySingleGrid = from["isDisplaySingleGrid"];
             var isViewParlay = !string.IsNullOrEmpty(from["isViewParlay"]) && from["isViewParlay"].ToLower() == "true";
+
+            int.TryParse(from["sportType"], out int sportType);           
 
             if (!string.IsNullOrEmpty(isDisplaySingleGrid) && isDisplaySingleGrid.ToLower() == "true")
             {
                 var items = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["items"]);
 
-                var templatePath = Server.MapPath(MMDetailSingleGridTemplate);
+                //var templatePath = Server.MapPath(MMDetailSingleGridTemplate);
+                var templatePath = GetExcelTemplatePath(isViewParlay, true, sportType);
 
                 var fileName = string.Format("MM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr);
 
@@ -1400,11 +1455,12 @@
 
                 var awayMItems = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["aways"]);
 
-                var templatePath = isViewParlay ? Server.MapPath(MMParlayDoubleGridTemplate) : Server.MapPath(MMDetailDoubleGridTemplate);
+                //var templatePath = isViewParlay ? Server.MapPath(MMParlayDoubleGridTemplate) : Server.MapPath(MMDetailDoubleGridTemplate);
+                var templatePath = GetExcelTemplatePath(isViewParlay, false, sportType);
 
                 var fileName = string.Format("MM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr);
 
-                var excelFile = _matchMonitorService.ExportExcelMMDetailDG(homeMItems, awayMItems, fileName, templatePath, isViewParlay);
+                var excelFile = _matchMonitorService.ExportExcelMMDetailDG(homeMItems, awayMItems, fileName, templatePath, isViewParlay, sportType);
 
                 return File(excelFile, "application/vnd.ms-excel", fileName);
             }
@@ -1475,45 +1531,7 @@
             }
 
             return ticket;
-        }
-
-        private string GetAssociationCustByIP(IEnumerable<DetectAssociationBySharedIPModel> detectAss, IEnumerable<CustInfoModel> custInfos)
-        {
-            var assCustBySharedIP = detectAss.Select(x =>
-            {
-                var fromCTSCust = custInfos.FirstOrDefault(y => y.CustID.Equals(x.CustID1)) ?? new CustInfoModel();
-                var toCTSCust = custInfos.FirstOrDefault(y => y.CustID.Equals(x.CustID2)) ?? new CustInfoModel();
-
-                return new AssociationCustModel
-                {
-                    FromCustID = x.CustID1,
-                    FromCTSCustID = fromCTSCust.CTSCustID,
-                    ToCustID = x.CustID2,
-                    ToCTSCustID = toCTSCust.CTSCustID
-                };
-            }).Where(x => x.FromCTSCustID != 0 && x.ToCTSCustID != 0);
-
-            return JsonConvert.SerializeObject(assCustBySharedIP);
-        }
-
-        private string GetAssociationCustByMatch(IEnumerable<DetectAssociationBySharedIPMatchesModel> detectAss, IEnumerable<CustInfoModel> custInfos)
-        {
-            var assCustBySharedIP = detectAss.Select(x =>
-            {
-                var fromCTSCust = custInfos.FirstOrDefault(y => y.CustID.Equals(x.CustID1)) ?? new CustInfoModel();
-                var toCTSCust = custInfos.FirstOrDefault(y => y.CustID.Equals(x.CustID2)) ?? new CustInfoModel();
-
-                return new AssociationCustModel
-                {
-                    FromCustID = x.CustID1,
-                    FromCTSCustID = fromCTSCust.CTSCustID,
-                    ToCustID = x.CustID2,
-                    ToCTSCustID = toCTSCust.CTSCustID
-                };
-            }).Where(x => x.FromCTSCustID != 0 && x.ToCTSCustID != 0);
-
-            return JsonConvert.SerializeObject(assCustBySharedIP);
-        }
+        }       
 
         private IEnumerable<DetectGroupAssociationItemViewModel> RearrangeAssGroup(IEnumerable<DetectGroupAssociationItemViewModel> assGroupList, bool isDisableNone)
         {
@@ -1561,6 +1579,23 @@
             }
 
             return result;
+        }
+
+        private string GetExcelTemplatePath(bool isViewParlay, bool isDisplaySingleGrid, int sportType)
+        {
+            switch (isDisplaySingleGrid)
+            {
+                case true:
+                    return Server.MapPath(MMDetailSingleGridTemplate);
+                case false when (isViewParlay):
+                    return Server.MapPath(MMParlayDoubleGridTemplate);
+                case false when (sportType == (int)MatchMonitorSportType.Badminton):
+                    return Server.MapPath(MMDetailBadmintonDoubleGridTemplate);
+                case false when (sportType != (int)MatchMonitorSportType.Badminton):
+                    return Server.MapPath(MMDetailDoubleGridTemplate);
+                default:
+                    return string.Empty;
+            }           
         }
 
         #endregion Private Methods

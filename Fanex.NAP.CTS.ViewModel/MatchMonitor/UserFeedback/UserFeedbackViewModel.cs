@@ -8,6 +8,6 @@
 
         public int BetTypeID { get; set; }
 
-        public int BetID { get; set; }
+        public string BetID { get; set; }
     }
 }
