@@ -138,7 +138,7 @@
                 ViewBag.ReasonGroup = para?.ReasonGroup ?? string.Empty;
                 ViewBag.MarketName = para?.MarketName ?? string.Empty;
                 ViewBag.BetChoice = para?.BetChoice;
-                ViewBag.IsDisableScoreFilter = para?.SportType != null && para.SportType == (int)MatchMonitorSportType.Basketball;
+                ViewBag.IsDisableScoreFilter = IsDisableScoreFilter(para.SportType);
                 ViewBag.SportType = para?.SportType ?? 0;
                 ViewBag.SportName = bettypes.FirstOrDefault(x => x.SportType == para?.SportType)?.SportName;
                 ViewBag.KOTime = para?.KOTime;
@@ -167,6 +167,12 @@
             }
 
             return View();
+        }
+
+        private bool IsDisableScoreFilter(int sportType)
+        {
+            return sportType == (int)MatchMonitorSportType.Basketball
+                || sportType == (int)MatchMonitorSportType.Cricket;
         }
 
         [HttpPost]
