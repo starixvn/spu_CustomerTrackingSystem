@@ -281,7 +281,7 @@
                 var isExclude = (filter.ReasonList != null && filter.ReasonList.Any(x => x.Equals("-"))) &&
                         (filter.AGroupList != null && filter.AGroupList.Any(x => x.Equals("-")));
 
-                if (fraudTicket != null)
+                if (fraudTicket != null && fraudTicket.AGroupReasonMerged != null)
                 {
                     if (isExclude)
                     {
