@@ -608,7 +608,7 @@
             { (int) MatchMonitorSportType.ESport        , "E-Sports"                                },
             { (int) MatchMonitorSportType.Cricket       , nameof(MatchMonitorSportType.Cricket)     },
             { (int) MatchMonitorSportType.Badminton       , nameof(MatchMonitorSportType.Badminton) },
-            { (int) MatchMonitorSportType.TableTennis       , nameof(MatchMonitorSportType.TableTennis) }
+            { (int) MatchMonitorSportType.TableTennis       , "Table Tennis" }
         };
 
         public static readonly List<int> ConditionExcludeScoreForMM = new List<int>

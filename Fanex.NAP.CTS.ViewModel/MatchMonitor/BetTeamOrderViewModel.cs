@@ -6,6 +6,6 @@
 
         public string ChoiceB { get; set; }
 
-        public string Other { get; set; }        
+        public string ChoiceDisplay { get; set; }        
     }
 }

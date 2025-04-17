@@ -122,6 +122,7 @@
         public List<string> OrderByFormatScoreBetTeam(IEnumerable<string> betTeamList, string separator)
         {
             var resultList = new List<string>();
+            var separatorDisplay = string.Empty;
             var betTeamOrderList = new List<BetTeamOrderViewModel>();
             var betTeamOrderOtherList = new List<BetTeamOrderViewModel>();           
 
@@ -132,7 +133,11 @@
                 if (arr.Length == 1)
                 {
                     arr = betTeam.Split(':');
-                    separator = ":";
+                    separatorDisplay = ":";
+                }
+                else 
+                {
+                    separatorDisplay = separator;
                 }
 
                 if (arr.Length > 1)
@@ -142,20 +147,21 @@
                     betTeamOrderList.Add(new BetTeamOrderViewModel
                     {
                         ChoiceA = choiceA,
-                        ChoiceB = arr[1].Trim()
+                        ChoiceB = arr[1].Trim(),
+                        ChoiceDisplay = choiceA + separatorDisplay + arr[1].Trim()
                     });
                 }
                 else
                 {
                     betTeamOrderOtherList.Add(new BetTeamOrderViewModel
                     {
-                        Other = betTeam
+                        ChoiceDisplay = betTeam
                     });
                 }
             }
 
-            resultList.AddRange(betTeamOrderList.OrderBy(x => x.ChoiceA).ThenBy(x => x.ChoiceB).Select(x => x.ChoiceA + separator + x.ChoiceB));
-            resultList.AddRange(betTeamOrderOtherList.OrderBy(x => x.Other).Select(x => x.Other));
+            resultList.AddRange(betTeamOrderList.OrderBy(x => x.ChoiceA).ThenBy(x => x.ChoiceB).Select(x => x.ChoiceDisplay));
+            resultList.AddRange(betTeamOrderOtherList.OrderBy(x => x.ChoiceDisplay).Select(x => x.ChoiceDisplay));
 
             return resultList;
         }
