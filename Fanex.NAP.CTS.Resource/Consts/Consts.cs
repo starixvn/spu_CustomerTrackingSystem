@@ -221,9 +221,10 @@
         {
             Soccer = 1,
             Basketball = 2,
+            Badminton = 9,
+            TableTennis = 18,
             ESport = 43,
-            Cricket = 50,
-            Badminton = 9
+            Cricket = 50           
         }
 
         public enum MatchMonitorReason
@@ -606,13 +607,14 @@
             { (int) MatchMonitorSportType.Basketball    , nameof(MatchMonitorSportType.Basketball)  },
             { (int) MatchMonitorSportType.ESport        , "E-Sports"                                },
             { (int) MatchMonitorSportType.Cricket       , nameof(MatchMonitorSportType.Cricket)     },
-            { (int) MatchMonitorSportType.Badminton       , nameof(MatchMonitorSportType.Badminton) }
+            { (int) MatchMonitorSportType.Badminton       , nameof(MatchMonitorSportType.Badminton) },
+            { (int) MatchMonitorSportType.TableTennis       , "Table Tennis" }
         };
 
         public static readonly List<int> ConditionExcludeScoreForMM = new List<int>
         {
             (int) MatchMonitorSportType.Basketball,
-            (int) MatchMonitorSportType.Cricket,
+            (int) MatchMonitorSportType.Cricket
         };
     }
 }
