@@ -244,6 +244,11 @@
     <Compile Include="API\LicenseeVIPBA\LicenseeVIPBAInputModel.cs" />
     <Compile Include="API\LicenseeVIPBA\LicenseeVIPBALogDataModel.cs" />
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorModel.cs" />
+    <Compile Include="API\TestRiskSetting\CCPeakHourRangeEntity.cs" />
+    <Compile Include="API\TestRiskSetting\CCSpreadPolicyDetailEntity.cs" />
+    <Compile Include="API\TestRiskSetting\CCSpreadPolicyEntity.cs" />
+    <Compile Include="API\TestRiskSetting\CCSpreadPolicyModel.cs" />
+    <Compile Include="API\TestRiskSetting\CCSpreadPolicyParamModel.cs" />
     <Compile Include="API\TWInitialSmart\InitialSmartCustInfoModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedAccountModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedGroupModel.cs" />

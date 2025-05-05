@@ -2,7 +2,9 @@
 {
     using Fanex.Logging;
     using Fanex.Logging.Extensions;
+    using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Model.API;
+    using Fanex.NAP.CTS.Model.API.TestRiskSetting;
     using Fanex.NAP.CTS.Model.API.TWInitialSmart;
     using Fanex.NAP.CTS.Model.LogInputData;
     using Fanex.NAP.CTS.Portal.API.ActionFilter;
@@ -13,6 +15,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Policy;
+    using System.Threading.Tasks;
     using System.Web.Http;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
@@ -56,6 +60,29 @@
             }
 
             return Ok("Success");
+        }
+
+        [HttpPost]
+        [Route("api/TW/GetCustomerClassPeakHourRange")]
+        public async Task<IEnumerable<CCPeakHourRangeEntity>> GetCustomerClassPeakHourRange([FromBody] bool isTest)
+        {
+            LogService.Info("GetCustomerClassPeakHourRange Test");
+
+            var baseUrl = "http://vn-spurisksetting.nebula.sit/";           
+            var url = $"{baseUrl}api/PeakHourSpread/GetCustomerClassPeakHourRange";
+            var para = true;
+
+            return await ApiHelper.Post<IEnumerable<CCPeakHourRangeEntity>>(url, para, 200);
+        }
+
+        [HttpPost]
+        [Route("api/TW/GetCustomerClassPeakHourDiff")]
+        public async Task<CCSpreadPolicyModel> GetCustomerClassPeakHourDiff([FromBody] CCSpreadPolicyParamModel paras)
+        {            
+            var baseUrl = "http://vn-spurisksetting.nebula.sit/";
+            var url = $"{baseUrl}api/PeakHourSpread/GetCustomerClassPeakHourDiff";
+           
+            return await ApiHelper.Post<CCSpreadPolicyModel>(url, paras, 200);
         }
     }
 }
