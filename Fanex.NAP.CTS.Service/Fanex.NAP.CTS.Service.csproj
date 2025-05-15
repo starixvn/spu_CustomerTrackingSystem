@@ -52,6 +52,7 @@
     <Compile Include="Implement\Api\ProblemCaseMonitorService.cs" />
     <Compile Include="Implement\Api\FpsService.cs" />
     <Compile Include="Implement\Api\TWInitialSmartService.cs" />
+    <Compile Include="Implement\Api\TWSpecialLicSubService.cs" />
     <Compile Include="Implement\AssociatedAccountService.cs" />
     <Compile Include="Implement\AssociatedGroupMonitorService.cs" />
     <Compile Include="Implement\AssociationDetectionService.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Interface\Api\IProblemCaseMonitorService.cs" />
     <Compile Include="Interface\Api\IFpsService.cs" />
     <Compile Include="Interface\Api\ITWInitialSmartService.cs" />
+    <Compile Include="Interface\Api\ITWSpecialLicSubService.cs" />
     <Compile Include="Interface\CustomerClassificationAgency\ICustomerCategoryAgencyService.cs" />
     <Compile Include="Interface\CustomerClassificationAgency\IProblemAccountClassificationAgencyService.cs" />
     <Compile Include="Interface\CustomerClassificationAgency\IRescanCustomerClassificationAgencyService.cs" />

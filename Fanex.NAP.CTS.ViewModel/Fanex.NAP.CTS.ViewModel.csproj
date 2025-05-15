@@ -116,6 +116,7 @@
     <Compile Include="API\CustomerClassCategory\CustomerClassCategoryViewModel.cs" />
     <Compile Include="API\Http\HttpResponseViewModel.cs" />
     <Compile Include="API\SearchAccount\SearchAccountResultViewModel.cs" />
+    <Compile Include="API\TWSpecialLicSub\ForceTWLicSubCCViewModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AssGroupMonitorViewModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AssociatedAccountMonitorViewModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AssociatedGroupMonitorViewModel.cs" />

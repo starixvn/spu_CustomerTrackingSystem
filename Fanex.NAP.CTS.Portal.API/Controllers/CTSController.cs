@@ -7,6 +7,7 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.API.ProblemCaseMonitor;
+    using Fanex.NAP.CTS.Model.API.TWSpecialLicSub;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.Portal.API.ActionFilter;
@@ -15,13 +16,12 @@
     using Fanex.NAP.CTS.Service.Implement.Api;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Interface.Api;
-    using Fanex.NAP.CTS.User.Helper;
     using Fanex.NAP.CTS.ViewModel.API.CustomerClassCategory;
-    using ONEbook.UM;
-    using ONEbook.UM.Services;
+    using Fanex.NAP.CTS.ViewModel.API.TWSpecialLicSub;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Web;
     using System.Web.Http;
     using System.Web.Http.Results;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -38,8 +38,8 @@
         private readonly ISubscriberService _subscriberService;
         private readonly IProblemCaseMonitorService _problemCaseMonitorService;       
         private readonly ICtsAssociationApiService _ctsAssociationApiService;
+        private readonly ITWSpecialLicSubService _twSpecialLicSubService;
         private readonly ICommonService _commonService;
-        private readonly IMaintenanceService _maintenanceService;
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -52,8 +52,8 @@
             _subscriberService = new SubscriberService();
             _problemCaseMonitorService = new Service.Implement.Api.ProblemCaseMonitorService();          
             _ctsAssociationApiService = new CtsAssociationApiService();
+            _twSpecialLicSubService = new TWSpecialLicSubService();
             _commonService = new CommonService();
-            _maintenanceService = new MaintenanceService(UMClientManager.RestClient, UMClientManager.CacheService, UMClientManager.UMClientConfigs, UMClientManager.HttpContext);
         }
 
         [HttpGet]
@@ -61,11 +61,6 @@
         {
             try
             {
-                if (UMHelper.IsUnderMaintainaceHappen(_maintenanceService))
-                {
-                    return InternalServerError();
-                }
-
                 _commonService.CheckConnection();
 
                 return Ok("ok");
@@ -399,6 +394,33 @@
                 LogService.Error(logMessage);
 
                 return Json(new List<ProblemCaseModel>());
+            }
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.ForceLicSubCC)]
+        public IHttpActionResult ForceLicSubCC(ForceTWLicSubCCModel model)
+        {
+            var result = new ForceTWLicSubCCViewModel();
+
+            try
+            {
+                var data = _twSpecialLicSubService.InsertTWSpecialLicSub(model);
+                result.responseDateTime = data.InsertedTime;
+
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+
+                result.httpStatusCode =  (int)System.Net.HttpStatusCode.InternalServerError;
+
+                return Content(System.Net.HttpStatusCode.InternalServerError, result);
             }
         }
     }
