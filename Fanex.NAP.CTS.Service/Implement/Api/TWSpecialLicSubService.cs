@@ -19,8 +19,8 @@
         {
             var criteria = new InsertTWSpecialLicSubCriteria
             {
-                Custid = model.Custid,
-                CustomerClass = model.CustomerClass
+                Custid = model.custid,
+                CustomerClass = model.customerClass
             };
 
             return _repository.Fetch<InsertTWSpecialLicSubEntity>(criteria)?.FirstOrDefault() ?? new InsertTWSpecialLicSubEntity();

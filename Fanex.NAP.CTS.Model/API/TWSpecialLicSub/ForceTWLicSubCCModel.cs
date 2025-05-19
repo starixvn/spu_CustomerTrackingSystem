@@ -2,8 +2,8 @@
 {
     public class ForceTWLicSubCCModel
     {
-        public int Custid { get; set; }
+        public int custid { get; set; }
 
-        public int CustomerClass { get; set; }
+        public int customerClass { get; set; }
     }
 }
