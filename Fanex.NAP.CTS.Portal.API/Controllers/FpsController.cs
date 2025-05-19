@@ -149,6 +149,83 @@
                 return Json(new LatestTransactionResultModel());
             }
         }
+
+        [HttpPost]
+        public JsonResult<GetDeviceByAccountResultModel> GetDeviceByAccountDCSCenter()
+        {
+            try
+            {
+                // var data = _fpsService.GetDeviceByAccount();
+                var data = new GetDeviceByAccountResultModel()
+                {
+                    Items = new List<GetDeviceByAccountItemModel>()
+                    {
+                        new GetDeviceByAccountItemModel()
+                        {
+                            AccountId = "test",
+                            UserName = "test",
+                            DeviceCount = 10
+                        },
+                        new GetDeviceByAccountItemModel()
+                        {
+                            AccountId = "test",
+                            UserName = "test",
+                            DeviceCount = 10
+                        },
+                        new GetDeviceByAccountItemModel()
+                        {
+                            AccountId = "test",
+                            UserName = "test",
+                            DeviceCount = 10
+                        }
+                    }
+                };
+
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Device By Account DCS Center exception: " + ex.Message);
+                return Json(new GetDeviceByAccountResultModel());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult<GetAccountByDeviceResultModel> GetAccountByDeviceDCSCenter()
+        {
+            try
+            {
+                return Json(new GetAccountByDeviceResultModel()
+                {
+                    Items = new List<GetAccountByDeviceItemModel>()
+                    {
+                        new GetAccountByDeviceItemModel()
+                        {
+                            DeviceId = "test",
+                            DeviceNo = "test",
+                            AccountCount = 10
+                        },
+                        new GetAccountByDeviceItemModel()
+                        {
+                            DeviceId = "test",
+                            DeviceNo = "test",
+                            AccountCount = 10
+                        },
+                        new GetAccountByDeviceItemModel()
+                        {
+                            DeviceId = "test",
+                            DeviceNo = "test",
+                            AccountCount = 10
+                        }
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Device By Account DCS Center exception: " + ex.Message);
+                return Json(new GetAccountByDeviceResultModel());
+            }
+        }
         #endregion dcs center
 
         #region dcs extra

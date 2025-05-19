@@ -207,6 +207,8 @@
     <Compile Include="API\FPS\Account\GetAssMatrixAccountByCustSubscriberItemModel.cs" />
     <Compile Include="API\FPS\Account\GetAssMatrixAccountByCustSubscriberParamModel.cs" />
     <Compile Include="API\FPS\Account\GetAssMatrixAccountByCustSubscriberResultModel.cs" />
+    <Compile Include="API\FPS\Account\GetAccountByDeviceResultModel.cs" />
+    <Compile Include="API\FPS\Account\GetAccountByDeviceItemModel.cs" />
     <Compile Include="API\FPS\Device\GetAssDevByDevSubscriberParamModel.cs" />
     <Compile Include="API\FPS\Device\GetAssDeviceInfoByIDSubscriberModel.cs" />
     <Compile Include="API\FPS\Device\GetAssDeviceInfoByIDSubscriberParamModel.cs" />
@@ -216,6 +218,8 @@
     <Compile Include="API\FPS\Device\GetAssDevByDevSubscriberItemModel.cs" />
     <Compile Include="API\FPS\Device\GetAssMatrixByDeviceSubscriberItemModel.cs" />
     <Compile Include="API\FPS\Device\GetAssMatrixByDeviceSubscriberParamModel.cs" />
+    <Compile Include="API\FPS\Device\GetDeviceByAccountItemModel.cs" />
+    <Compile Include="API\FPS\Device\GetDeviceByAccountResultModel.cs" />
     <Compile Include="API\FPS\Transaction\LatestTransactionDCSCenterItemModel.cs" />
     <Compile Include="API\FPS\Transaction\TransactionHistoryByAccountDCSExtraItemModel.cs" />
     <Compile Include="API\FPS\Transaction\TransactionHistoryByAccountDCSExtraResultModel.cs" />
