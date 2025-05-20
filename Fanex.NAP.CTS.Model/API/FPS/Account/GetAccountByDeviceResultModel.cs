@@ -1,5 +1,4 @@
-﻿using Fanex.NAP.CTS.Model.API.FPS.Device;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Fanex.NAP.CTS.Model.API.FPS.Account
 {

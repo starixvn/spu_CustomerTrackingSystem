@@ -151,7 +151,7 @@
         }
 
         [HttpPost]
-        public JsonResult<GetDeviceByAccountResultModel> GetDeviceByAccountDCSCenter()
+        public JsonResult<GetDeviceByAccountResultModel> GetDeviceByAccountDCSCenter(GetDeviceByAccountParamModel param)
         {
             try
             {
@@ -162,21 +162,21 @@
                     {
                         new GetDeviceByAccountItemModel()
                         {
-                            AccountId = "test",
-                            UserName = "test",
+                            AccountId = "test01",
+                            UserName = "test01",
                             DeviceCount = 10
                         },
                         new GetDeviceByAccountItemModel()
                         {
-                            AccountId = "test",
-                            UserName = "test",
-                            DeviceCount = 10
+                            AccountId = "test02",
+                            UserName = "test02",
+                            DeviceCount = 20
                         },
                         new GetDeviceByAccountItemModel()
                         {
-                            AccountId = "test",
-                            UserName = "test",
-                            DeviceCount = 10
+                            AccountId = "test03",
+                            UserName = "test03",
+                            DeviceCount = 30
                         }
                     }
                 };
@@ -191,7 +191,7 @@
         }
 
         [HttpPost]
-        public JsonResult<GetAccountByDeviceResultModel> GetAccountByDeviceDCSCenter()
+        public JsonResult<GetAccountByDeviceResultModel> GetAccountByDeviceDCSCenter(GetAccountByDeviceParamModel param)
         {
             try
             {
@@ -201,21 +201,21 @@
                     {
                         new GetAccountByDeviceItemModel()
                         {
-                            DeviceId = "test",
-                            DeviceNo = "test",
+                            DeviceId = "device01",
+                            DeviceNo = "device01",
                             AccountCount = 10
                         },
                         new GetAccountByDeviceItemModel()
                         {
-                            DeviceId = "test",
-                            DeviceNo = "test",
-                            AccountCount = 10
+                            DeviceId = "device02",
+                            DeviceNo = "device02",
+                            AccountCount = 20
                         },
                         new GetAccountByDeviceItemModel()
                         {
-                            DeviceId = "test",
-                            DeviceNo = "test",
-                            AccountCount = 10
+                            DeviceId = "device03",
+                            DeviceNo = "device03",
+                            AccountCount = 30
                         }
                     }
                 });

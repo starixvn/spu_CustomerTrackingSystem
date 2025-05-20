@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Model.API.FPS.Device
+﻿namespace Fanex.NAP.CTS.Model.API.FPS.Account
 {
     public class GetAccountByDeviceItemModel
     {
