@@ -3,6 +3,7 @@
     using Fanex.Logging;
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.API;
@@ -18,6 +19,7 @@
     using Fanex.NAP.CTS.Service.Interface.Api;
     using Fanex.NAP.CTS.ViewModel.API.CustomerClassCategory;
     using Fanex.NAP.CTS.ViewModel.API.TWSpecialLicSub;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -399,14 +401,17 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.ForceLicSubCC)]
+        [CheckValidInputParameterFilter]
         public IHttpActionResult ForceLicSubCC(ForceTWLicSubCCModel model)
         {
-            var result = new ForceTWLicSubCCViewModel();
-
             try
             {
                 var data = _twSpecialLicSubService.InsertTWSpecialLicSub(model);
-                result.responseDateTime = data.InsertedTime;
+
+                var result = new ForceTWLicSubCCViewModel
+                {
+                    responseDateTime = data.InsertedTime
+                };
 
                 return Json(result);
             }
@@ -414,13 +419,17 @@
             {
                 var logMessage = new LogMessage(ex.Message)
                     .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
+                    .ToString();
 
                 LogService.Error(logMessage);
 
-                result.httpStatusCode =  (int)System.Net.HttpStatusCode.InternalServerError;
+                var errorResult = new ForceTWLicSubCCViewModel
+                {
+                    httpStatusCode = (int)System.Net.HttpStatusCode.InternalServerError
+                };
 
-                return Content(System.Net.HttpStatusCode.InternalServerError, result);
+                return Content(System.Net.HttpStatusCode.InternalServerError, errorResult);
             }
         }
     }

@@ -6,6 +6,7 @@
     using System.Web.Http.Filters;
     using Fanex.NAP.CTS.User.Helper;
     using System.Net.Http;
+    using System.Text;
 
     public class UnderMaintainaceHappenFilterAttribute : ActionFilterAttribute
     {
@@ -21,7 +22,7 @@
             if (UMHelper.IsUnderMaintainaceHappen(_maintenanceService))
             {
                 filterContext.Response = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
-                filterContext.Response.Content = new StringContent("System is under maintenance, please try again later.");
+                filterContext.Response.Content = new StringContent("System is under maintenance, please try again later.", Encoding.Default, "application/json");
             }
             else
             {

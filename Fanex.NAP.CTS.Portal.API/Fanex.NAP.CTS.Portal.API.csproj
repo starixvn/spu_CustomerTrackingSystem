@@ -395,6 +395,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionFilter\CheckValidInputParameterFilterAttribute.cs" />
     <Compile Include="ActionFilter\TrackingFunctionUsageFilterAttribute.cs" />
     <Compile Include="ActionFilter\UnderMaintainaceHappenFilterAttribute.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
