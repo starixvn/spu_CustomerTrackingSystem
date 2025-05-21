@@ -2,9 +2,9 @@
 {
     public class GetAccountsPerDeviceItemModel
     {
-        public int DeviceId { get; set; }
+        public ulong DeviceId { get; set; }
 
-        public int DeviceNo { get; set; }
+        public string DeviceNo { get; set; }
 
         public int NoOfAccount { get; set; }
     }
