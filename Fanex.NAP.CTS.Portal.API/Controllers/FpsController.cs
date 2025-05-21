@@ -151,79 +151,33 @@
         }
 
         [HttpPost]
-        public JsonResult<GetDeviceByAccountResultModel> GetDeviceByAccountDCSCenter(GetDeviceByAccountParamModel param)
+        public JsonResult<GetDevicesPerAccountResultModel> GetDevicesPerAccountDCSCenter(GetDevicesPerAccountParamModel param)
         {
             try
             {
-                // var data = _fpsService.GetDeviceByAccount();
-                var data = new GetDeviceByAccountResultModel()
-                {
-                    Items = new List<GetDeviceByAccountItemModel>()
-                    {
-                        new GetDeviceByAccountItemModel()
-                        {
-                            AccountId = "test01",
-                            UserName = "test01",
-                            DeviceCount = 10
-                        },
-                        new GetDeviceByAccountItemModel()
-                        {
-                            AccountId = "test02",
-                            UserName = "test02",
-                            DeviceCount = 20
-                        },
-                        new GetDeviceByAccountItemModel()
-                        {
-                            AccountId = "test03",
-                            UserName = "test03",
-                            DeviceCount = 30
-                        }
-                    }
-                };
+                var data = _fpsService.GetDevicesPerAccount_DCSCenter(param);
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Device By Account DCS Center exception: " + ex.Message);
+                return Json(new GetDevicesPerAccountResultModel());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult<GetAccountsPerDeviceResultModel> GetAccountsPerDeviceDCSCenter(GetAccountPerDeviceParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetAccountsPerDevice_DCSCenter(param);
 
                 return Json(data);
             }
             catch (Exception ex)
             {
                 LogService.Error("FPS Get Device By Account DCS Center exception: " + ex.Message);
-                return Json(new GetDeviceByAccountResultModel());
-            }
-        }
-
-        [HttpPost]
-        public JsonResult<GetAccountByDeviceResultModel> GetAccountByDeviceDCSCenter(GetAccountByDeviceParamModel param)
-        {
-            try
-            {
-                return Json(new GetAccountByDeviceResultModel()
-                {
-                    Items = new List<GetAccountByDeviceItemModel>()
-                    {
-                        new GetAccountByDeviceItemModel()
-                        {
-                            DeviceId = "device01",
-                            DeviceNo = "device01",
-                            AccountCount = 10
-                        },
-                        new GetAccountByDeviceItemModel()
-                        {
-                            DeviceId = "device02",
-                            DeviceNo = "device02",
-                            AccountCount = 20
-                        },
-                        new GetAccountByDeviceItemModel()
-                        {
-                            DeviceId = "device03",
-                            DeviceNo = "device03",
-                            AccountCount = 30
-                        }
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("FPS Get Device By Account DCS Center exception: " + ex.Message);
-                return Json(new GetAccountByDeviceResultModel());
+                return Json(new GetAccountsPerDeviceResultModel());
             }
         }
         #endregion dcs center
