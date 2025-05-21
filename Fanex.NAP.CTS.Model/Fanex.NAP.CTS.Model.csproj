@@ -195,7 +195,7 @@
     <Compile Include="API\CustomerClassCategory\CustomerClassCategoryByCustIDModel.cs" />
     <Compile Include="API\CustomerClassCategory\CustomerClassModel.cs" />
     <Compile Include="API\CustomerClassCategory\CustomerClassification.cs" />
-    <Compile Include="API\FPS\Account\GetAccountByDeviceParamModel.cs" />
+    <Compile Include="API\FPS\Account\GetAccountPerDeviceParamModel.cs" />
     <Compile Include="API\FPS\Account\GetAssAccByDevSubscriberItemModel.cs" />
     <Compile Include="API\FPS\Account\GetAssAccByDevSubscriberParamModel.cs" />
     <Compile Include="API\FPS\Account\GetAssAccountInfoByCustSubscriberModel.cs" />
@@ -208,9 +208,9 @@
     <Compile Include="API\FPS\Account\GetAssMatrixAccountByCustSubscriberItemModel.cs" />
     <Compile Include="API\FPS\Account\GetAssMatrixAccountByCustSubscriberParamModel.cs" />
     <Compile Include="API\FPS\Account\GetAssMatrixAccountByCustSubscriberResultModel.cs" />
-    <Compile Include="API\FPS\Account\GetAccountsByDeviceResultModel.cs" />
-    <Compile Include="API\FPS\Account\GetAccountsByDeviceItemModel.cs" />
-    <Compile Include="API\FPS\Device\GetDevicesByAccountParamModel.cs" />
+    <Compile Include="API\FPS\Account\GetAccountsPerDeviceResultModel.cs" />
+    <Compile Include="API\FPS\Account\GetAccountsPerDeviceItemModel.cs" />
+    <Compile Include="API\FPS\Device\GetDevicesPerAccountParamModel.cs" />
     <Compile Include="API\FPS\Device\GetAssDevByDevSubscriberParamModel.cs" />
     <Compile Include="API\FPS\Device\GetAssDeviceInfoByIDSubscriberModel.cs" />
     <Compile Include="API\FPS\Device\GetAssDeviceInfoByIDSubscriberParamModel.cs" />
@@ -220,8 +220,8 @@
     <Compile Include="API\FPS\Device\GetAssDevByDevSubscriberItemModel.cs" />
     <Compile Include="API\FPS\Device\GetAssMatrixByDeviceSubscriberItemModel.cs" />
     <Compile Include="API\FPS\Device\GetAssMatrixByDeviceSubscriberParamModel.cs" />
-    <Compile Include="API\FPS\Device\GetDevicesByAccountItemModel.cs" />
-    <Compile Include="API\FPS\Device\GetDevicesByAccountResultModel.cs" />
+    <Compile Include="API\FPS\Device\GetDevicesPerAccountItemModel.cs" />
+    <Compile Include="API\FPS\Device\GetDevicesPerAccountResultModel.cs" />
     <Compile Include="API\FPS\Transaction\LatestTransactionDCSCenterItemModel.cs" />
     <Compile Include="API\FPS\Transaction\TransactionHistoryByAccountDCSExtraItemModel.cs" />
     <Compile Include="API\FPS\Transaction\TransactionHistoryByAccountDCSExtraResultModel.cs" />

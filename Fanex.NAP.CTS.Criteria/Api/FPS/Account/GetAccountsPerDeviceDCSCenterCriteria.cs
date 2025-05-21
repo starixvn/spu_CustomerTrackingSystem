@@ -3,7 +3,7 @@ using Fanex.Data.Repository;
 
 namespace Fanex.NAP.CTS.Criteria.Api.FPS.Account
 {
-    public class GetAccountsByDeviceDCSCenterCriteria : CriteriaBase
+    public class GetAccountsPerDeviceDCSCenterCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_SubscriberID")]
         public int SubscriberId { get; set; }

@@ -79,7 +79,7 @@
     <Compile Include="Account\RobotSetting\GetRobotAiLpDetailCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRobotUsersSCEDetailsCriteria.cs" />
     <Compile Include="Api\CtsAssociationAPI\DetectAssociationByTypeCriteria.cs" />
-    <Compile Include="Api\FPS\Account\GetAccountsByDeviceDCSCenterCriteria.cs" />
+    <Compile Include="Api\FPS\Account\GetAccountsPerDeviceDCSCenterCriteria.cs" />
     <Compile Include="Api\FPS\Account\GetAssAccByDevSubscriberDCSExtraCriteria.cs" />
     <Compile Include="Api\FPS\Account\GetAssAccountInfoByCustSubscriberDCSCenterCriteria.cs" />
     <Compile Include="Api\FPS\Account\GetAssAccountInfoByCustSubscriberDCSExtraCriteria.cs" />
@@ -87,7 +87,7 @@
     <Compile Include="Api\FPS\Account\GetAssAccountsByCustSubscriberDCSExtraCriteria.cs" />
     <Compile Include="Api\FPS\Account\GetAssMatrixAccountByCustSubscriberDCSCenterCriteria.cs" />
     <Compile Include="Api\FPS\Account\GetAssMatrixAccountByCustSubscriberDCSExtraCriteria.cs" />
-    <Compile Include="Api\FPS\Device\GetDevicesByAccountDCSCenterCriteria.cs" />
+    <Compile Include="Api\FPS\Device\GetDevicesPerAccountDCSCenterCriteria.cs" />
     <Compile Include="Api\FPS\Device\GetAssDevByDevSubscriberDCSExtraCriteria.cs" />
     <Compile Include="Api\FPS\Device\GetAssDeviceInfoByIDSubscriberDCSExtraCriteria.cs" />
     <Compile Include="Api\FPS\Device\GetAssDevicesByCustSubscriberDCSCenterCriteria.cs" />
