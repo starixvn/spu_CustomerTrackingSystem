@@ -2,7 +2,7 @@
 {
     public class GetDevicesPerAccountItemModel
     {
-        public string AccountID { get; set; }
+        public ulong AccountID { get; set; }
 
         public string LoginName { get; set; }
 

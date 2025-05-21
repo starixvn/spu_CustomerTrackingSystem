@@ -156,6 +156,7 @@
             try
             {
                 var data = _fpsService.GetDevicesPerAccount_DCSCenter(param);
+
                 return Json(data);
             }
             catch (Exception ex)

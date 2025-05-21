@@ -10,6 +10,6 @@
 
         public int TimeRange { get; set; }
 
-        public int NoOfDeivce { get; set; }
+        public int NoOfDevice { get; set; }
     }
 }

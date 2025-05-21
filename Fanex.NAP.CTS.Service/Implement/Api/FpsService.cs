@@ -228,7 +228,7 @@
             {
                 SubscriberId = param.SubscriberId,
                 TimeRange = param.TimeRange,
-                NoOfDevice = param.NoOfDeivce,
+                NoOfDevice = param.NoOfDevice,
                 PageSize = param.PageSize,
                 PageIndex = param.PageIndex
             };

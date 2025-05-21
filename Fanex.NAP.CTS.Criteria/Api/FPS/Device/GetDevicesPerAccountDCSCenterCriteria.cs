@@ -8,11 +8,11 @@ namespace Fanex.NAP.CTS.Criteria.Api.FPS.Account
         [SpParam(SqlParamName = "ip_SubscriberID")]
         public int SubscriberId { get; set; }
 
-        [SpParam(SqlParamName = "ip_LastDay")]
-        public long TimeRange { get; set; }
-
         [SpParam(SqlParamName = "ip_NoOfDevice")]
         public int NoOfDevice { get; set; }
+
+        [SpParam(SqlParamName = "ip_LastDay")]
+        public long TimeRange { get; set; }
 
         [SpParam(SqlParamName = "ip_PageSize")]
         public int PageSize { get; set; }
