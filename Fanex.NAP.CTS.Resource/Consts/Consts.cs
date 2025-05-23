@@ -484,7 +484,8 @@
             CheckAssociationAPI = 243,
             AddCustomerInitialSmarts = 244,
             GetCustomerClassCategoryByCustID = 245,
-            GetRobotAILPDetail = 246
+            GetRobotAILPDetail = 246,
+            ForceLicSubCC = 247,
         };
 
         public enum SystemId

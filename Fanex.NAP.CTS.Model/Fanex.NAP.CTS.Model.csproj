@@ -245,6 +245,8 @@
     <Compile Include="API\LicenseeVIPBA\LicenseeVIPBALogDataModel.cs" />
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorModel.cs" />
     <Compile Include="API\TWInitialSmart\InitialSmartCustInfoModel.cs" />
+    <Compile Include="API\TWSpecialLicSub\ForceTWLicSubCCModel.cs" />
+    <Compile Include="API\TWSpecialLicSub\InsertTWSpecialLicSubEntity.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedAccountModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedGroupModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AssociatedAccountMonitorModel.cs" />

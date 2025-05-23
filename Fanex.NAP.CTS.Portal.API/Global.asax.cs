@@ -26,6 +26,14 @@
     {
         protected void Application_Start()
         {
+            var umConfig = new UMClientConfiguration().Initialize();
+
+            UMClientManager
+               .UseConfig(umConfig)
+               .UseCacheService(new UMCacheService(new CacheService()))
+               .UseRestClient(new UMRestClient(umConfig))
+               .UseHttpContext(new HttpContextHelper());
+
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
            
@@ -53,14 +61,6 @@
             RefDataTypeContainer
                 .ConnectTo(new Uri(ConfigurationManager.AppSettings["Fanex.RemotingRef.Service.Url"]))
                 .FromApplication("CTS Portal API");
-
-            var umConfig = new UMClientConfiguration().Initialize();
-
-            UMClientManager
-               .UseConfig(umConfig)
-               .UseCacheService(new UMCacheService(new CacheService()))
-               .UseRestClient(new UMRestClient(umConfig))
-               .UseHttpContext(new HttpContextHelper());
 
             var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
             json.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
