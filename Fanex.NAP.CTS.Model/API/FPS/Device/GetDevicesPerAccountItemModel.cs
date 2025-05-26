@@ -2,9 +2,11 @@
 {
     public class GetDevicesPerAccountItemModel
     {
-        public ulong AccountID { get; set; }
+        public ulong CTSCustID { get; set; }
 
-        public string LoginName { get; set; }
+        public string UserName { get; set; }
+
+        public string RegisterName { get; set; } = string.Empty;
 
         public int NoOfDevice { get; set; }
     }
