@@ -23,6 +23,10 @@
         GetAssMatrixAccountByCustSubscriberResultModel GetAssMatrixAccountByCustSubscriber_DCSCenter(GetAssMatrixAccountByCustSubscriberParamModel param);
 
         LatestTransactionResultModel GetLastestTransactionBySubscriber_DCSCenter(LatestTransactionParamModel param);
+
+        GetAccountsPerDeviceResultModel GetAccountsPerDevice_DCSCenter(GetAccountPerDeviceParamModel param);
+
+        GetDevicesPerAccountResultModel GetDevicesPerAccount_DCSCenter(GetDevicesPerAccountParamModel param);
         #endregion cts
 
         #region dcs

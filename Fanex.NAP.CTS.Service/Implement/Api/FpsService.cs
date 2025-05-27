@@ -201,6 +201,43 @@
 
             return data;
         }
+
+        public GetAccountsPerDeviceResultModel GetAccountsPerDevice_DCSCenter(GetAccountPerDeviceParamModel param)
+        {
+            var data = new GetAccountsPerDeviceResultModel();
+
+            var criteria = new GetAccountsPerDeviceDCSCenterCriteria
+            {
+                SubscriberId = param.SubscriberId,
+                TimeRange = param.TimeRange,
+                NoOfAccount = param.NoOfAccount,
+                PageSize = param.PageSize,
+                PageIndex = param.PageIndex
+            };
+
+            data.Items = repository.Fetch<GetAccountsPerDeviceItemModel>(criteria);
+            data.TotalRows = criteria.TotalRows;
+            return data;
+        }
+
+        public GetDevicesPerAccountResultModel GetDevicesPerAccount_DCSCenter(GetDevicesPerAccountParamModel param)
+        {
+            var data = new GetDevicesPerAccountResultModel();
+
+            var criteria = new GetDevicesPerAccountDCSCenterCriteria
+            {
+                SubscriberId = param.SubscriberId,
+                TimeRange = param.TimeRange,
+                NoOfDevice = param.NoOfDevice,
+                PageSize = param.PageSize,
+                PageIndex = param.PageIndex
+            };
+
+            data.Items = repository.Fetch<GetDevicesPerAccountItemModel>(criteria);
+            data.TotalRows = criteria.TotalRows;
+            return data;
+        }
+
         #endregion cts
 
         #region dcs

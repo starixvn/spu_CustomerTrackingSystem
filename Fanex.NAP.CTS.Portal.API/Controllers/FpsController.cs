@@ -149,6 +149,38 @@
                 return Json(new LatestTransactionResultModel());
             }
         }
+
+        [HttpPost]
+        public JsonResult<GetDevicesPerAccountResultModel> GetDevicesPerAccountDCSCenter(GetDevicesPerAccountParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetDevicesPerAccount_DCSCenter(param);
+
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Device By Account DCS Center exception: " + ex.Message);
+                return Json(new GetDevicesPerAccountResultModel());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult<GetAccountsPerDeviceResultModel> GetAccountsPerDeviceDCSCenter(GetAccountPerDeviceParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetAccountsPerDevice_DCSCenter(param);
+
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Device By Account DCS Center exception: " + ex.Message);
+                return Json(new GetAccountsPerDeviceResultModel());
+            }
+        }
         #endregion dcs center
 
         #region dcs extra
