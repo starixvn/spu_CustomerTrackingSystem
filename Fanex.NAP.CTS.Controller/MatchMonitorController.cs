@@ -34,6 +34,7 @@
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.MarkPA;
     using static NPOI.HSSF.Util.HSSFColor;
     using System.CodeDom;
+    using System.Text.RegularExpressions;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -83,7 +84,7 @@
 
         private IEnumerable<MatchMonitorSporTypeBetTypeViewModel> GetSportBettypes()
         {
-            var betTypes = GetBetTypeSettings(null, true, false);
+            var betTypes = GetBetTypeSettings(null, true, false, true);
 
             var filter = new SportBettypeModel
             {
@@ -126,7 +127,7 @@
 
         private IEnumerable<MatchMonitorBetTypeViewModel> GetBetTypeSettingsWithSupportSuspicious(string sportIDs, bool isFilterMMDetection, bool isFilterMMParlayDetection)
         {
-            var bettypeSetting = GetBetTypeSettings(sportIDs, isFilterMMDetection, isFilterMMParlayDetection);
+            var bettypeSetting = GetBetTypeSettings(sportIDs, isFilterMMDetection, isFilterMMParlayDetection, false);
 
             return bettypeSetting.Select(x => new MatchMonitorBetTypeViewModel
             {
@@ -148,7 +149,7 @@
             }).GroupBy(g => new { g.BetTypeID, g.BetID }).Select(g => g.First());
         }
 
-        private IEnumerable<BetTypeSettingModel> GetBetTypeSettings(string sportIDs, bool isFilterMMDetection, bool isFilterMMParlayDetection)
+        private IEnumerable<BetTypeSettingModel> GetBetTypeSettings(string sportIDs, bool isFilterMMDetection, bool isFilterMMParlayDetection, bool isShowDetailsX)
         {
             var paras = new BetTypeSettingParaModel
             {
@@ -157,7 +158,7 @@
                 SportTypeIDList = sportIDs,
                 IsFilterMMDetection = isFilterMMDetection,
                 IsFilterMMParlayDetection = isFilterMMParlayDetection,
-                IsShowDetailsX = true,
+                IsShowDetailsX = isShowDetailsX,
                 Status = 1
             };
 
@@ -438,6 +439,7 @@
         public ActionResult Detail(MatchMonitorDetailViewModel para)
         {
             IUserService userService = new UserService();
+            var selectedSets = GetSelectedSetsFromBetTypeName(para?.BettypeName);
 
             try
             {
@@ -474,6 +476,7 @@
                                                                             NapSettings.Settings.SiteId,
                                                                             FSFunctionKeys.MatchMonitor,
                                                                             NAP.Core.Business.Constant.Policy.Host);
+                ViewBag.SelectedSet = selectedSets;
             }
             catch (Exception ex)
             {
@@ -488,7 +491,21 @@
             }
 
             return View();
-        }     
+        }
+
+        private List<int> GetSelectedSetsFromBetTypeName(string bettypeName)
+        {
+            var selectedSets = new List<int>();
+            if (!string.IsNullOrWhiteSpace(bettypeName))
+            {
+                var match = Regex.Match(bettypeName, @"Set (\d+)");
+                if (match.Success && int.TryParse(match.Groups[1].Value, out int setNo))
+                {
+                    selectedSets.Add(setNo);
+                }
+            }
+            return selectedSets;
+        }
 
         #region Detail Filter
         [HttpPost]
