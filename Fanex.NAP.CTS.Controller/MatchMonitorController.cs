@@ -33,8 +33,6 @@
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.MarkPA;
     using static NPOI.HSSF.Util.HSSFColor;
-    using System.CodeDom;
-    using System.Text.RegularExpressions;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -46,6 +44,7 @@
         private const string MMDetailBadmintonSingleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/BadmintonSingleGridTemplate.xlsx";
         private const string MMParlayDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/ParlayDoubleGridTemplate.xlsx";
         private const string MMParlaySingleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/ParlaySingleGridTemplate.xlsx";
+        private const string MMDetailVolleyballDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/VolleyballDoubleGridTemplate.xlsx";
 
         private readonly IMatchMonitorService _matchMonitorService;
         private readonly IAssociationDetectionService _associationDetectionService;
@@ -125,9 +124,9 @@
             });
         }
 
-        private IEnumerable<MatchMonitorBetTypeViewModel> GetBetTypeSettingsWithSupportSuspicious(string sportIDs, bool isFilterMMDetection, bool isFilterMMParlayDetection)
+        private IEnumerable<MatchMonitorBetTypeViewModel> GetBetTypeSettingsWithSupportSuspicious(string sportIDs, bool isFilterMMDetection, bool isFilterMMParlayDetection, bool isShowDetailsX)
         {
-            var bettypeSetting = GetBetTypeSettings(sportIDs, isFilterMMDetection, isFilterMMParlayDetection, false);
+            var bettypeSetting = GetBetTypeSettings(sportIDs, isFilterMMDetection, isFilterMMParlayDetection, isShowDetailsX);
 
             return bettypeSetting.Select(x => new MatchMonitorBetTypeViewModel
             {
@@ -212,7 +211,6 @@
                     var dicSumParlayTickets = GetMMFraudTicketsSummary(matchFromCTSInfos, TicketType.Parlay);
 
                     matchMonitors = MergeMatchMonitorWithMMStaticAndTicketsSummary(matchFromCTSInfos, dicSumTickets, dicSumParlayTickets);
-
                 }
             }
             catch (Exception ex)
@@ -279,7 +277,7 @@
             Dictionary<string, MMFraudTicketsSummaryViewModel> dicSumParlayTickets)
         {
             var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
-            var bettypeSettings = GetBetTypeSettingsWithSupportSuspicious(null, true, false);
+            var bettypeSettings = GetBetTypeSettingsWithSupportSuspicious(null, true, false, true);
 
             return
                 matchFromCTSInfos?
@@ -439,7 +437,6 @@
         public ActionResult Detail(MatchMonitorDetailViewModel para)
         {
             IUserService userService = new UserService();
-            var selectedSets = GetSelectedSetsFromBetTypeName(para?.BettypeName);
 
             try
             {
@@ -450,7 +447,7 @@
                 ViewBag.BetTypeID = para?.BetTypeID;
                 ViewBag.BettypeName = para?.BettypeName ?? string.Empty;
                 ViewBag.BetIDToString = para?.BetID.ToString();
-                ViewBag.BetTypeSettings = GetBetTypeSettingsWithSupportSuspicious(para.SportType.ToString(), false, false);
+                ViewBag.BetTypeSettings = GetBetTypeSettingsWithSupportSuspicious(para.SportType.ToString(), false, false, para.SportType != (int)MatchMonitorSportType.Volleyball);
                 ViewBag.MapX = para?.MX;
                 ViewBag.MapYY = para?.MY;
                 ViewBag.HomeName = para?.HomeName.ToUpper() ?? string.Empty;
@@ -476,7 +473,6 @@
                                                                             NapSettings.Settings.SiteId,
                                                                             FSFunctionKeys.MatchMonitor,
                                                                             NAP.Core.Business.Constant.Policy.Host);
-                ViewBag.SelectedSet = selectedSets;
             }
             catch (Exception ex)
             {
@@ -491,20 +487,6 @@
             }
 
             return View();
-        }
-
-        private List<int> GetSelectedSetsFromBetTypeName(string bettypeName)
-        {
-            var selectedSets = new List<int>();
-            if (!string.IsNullOrWhiteSpace(bettypeName))
-            {
-                var match = Regex.Match(bettypeName, @"Set (\d+)");
-                if (match.Success && int.TryParse(match.Groups[1].Value, out int setNo))
-                {
-                    selectedSets.Add(setNo);
-                }
-            }
-            return selectedSets;
         }
 
         #region Detail Filter
@@ -1602,14 +1584,14 @@
                     return Server.MapPath(MMParlayDoubleGridTemplate);
                 case false when (sportType == (int)MatchMonitorSportType.Badminton):
                     return Server.MapPath(MMDetailBadmintonDoubleGridTemplate);
+                case false when (sportType == (int)MatchMonitorSportType.Volleyball):
+                    return Server.MapPath(MMDetailVolleyballDoubleGridTemplate);
                 case false when (sportType != (int)MatchMonitorSportType.Badminton):
                     return Server.MapPath(MMDetailDoubleGridTemplate);
                 default:
                     return string.Empty;
             }           
         }
-
         #endregion Private Methods
-
     }
 }
