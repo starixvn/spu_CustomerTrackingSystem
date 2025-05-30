@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29411.108
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NAP.CTS.Model", "Fanex.NAP.CTS.Model\Fanex.NAP.CTS.Model.csproj", "{5CE0BA40-0A37-4C89-A33B-D61C7944BE08}"
 EndProject
@@ -20,16 +20,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NAP.CTS.Service", "Fanex.NAP.CTS.Service\Fanex.NAP.CTS.Service.csproj", "{3ED1D03F-97F1-4826-8CDD-258485A07546}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NAP.CTS.User", "Fanex.NAP.CTS.User\Fanex.NAP.CTS.User.csproj", "{072A03DC-0C4F-4BC9-A1C9-D4D62C7AFCCB}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4251AACF-6788-4B6E-880B-1C97AE75647D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NAP.CTS.Controller.Test", "Tests\Fanex.NAP.CTS.Controller.Test\Fanex.NAP.CTS.Controller.Test.csproj", "{F6FAA929-E8BE-4D27-B71A-DFD96BA864CB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NAP.CTS.Service.Test", "Tests\Fanex.NAP.CTS.Service.Test\Fanex.NAP.CTS.Service.Test.csproj", "{FBD40FE3-B8C9-4119-8C41-FD35CCF91939}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NAP.CTS.SampleData", "Tests\Fanex.NAP.CTS.SampleData\Fanex.NAP.CTS.SampleData.csproj", "{C4E2F55F-C718-4AAB-94F3-7C19219E7B0F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NAP.CTS.Portal.API", "Fanex.NAP.CTS.Portal.API\Fanex.NAP.CTS.Portal.API.csproj", "{4C19B587-7C93-4867-89BD-51616987F387}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,30 +63,9 @@ Global
 		{072A03DC-0C4F-4BC9-A1C9-D4D62C7AFCCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{072A03DC-0C4F-4BC9-A1C9-D4D62C7AFCCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{072A03DC-0C4F-4BC9-A1C9-D4D62C7AFCCB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F6FAA929-E8BE-4D27-B71A-DFD96BA864CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F6FAA929-E8BE-4D27-B71A-DFD96BA864CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F6FAA929-E8BE-4D27-B71A-DFD96BA864CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F6FAA929-E8BE-4D27-B71A-DFD96BA864CB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FBD40FE3-B8C9-4119-8C41-FD35CCF91939}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FBD40FE3-B8C9-4119-8C41-FD35CCF91939}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FBD40FE3-B8C9-4119-8C41-FD35CCF91939}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FBD40FE3-B8C9-4119-8C41-FD35CCF91939}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C4E2F55F-C718-4AAB-94F3-7C19219E7B0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C4E2F55F-C718-4AAB-94F3-7C19219E7B0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C4E2F55F-C718-4AAB-94F3-7C19219E7B0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C4E2F55F-C718-4AAB-94F3-7C19219E7B0F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4C19B587-7C93-4867-89BD-51616987F387}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4C19B587-7C93-4867-89BD-51616987F387}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4C19B587-7C93-4867-89BD-51616987F387}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4C19B587-7C93-4867-89BD-51616987F387}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{F6FAA929-E8BE-4D27-B71A-DFD96BA864CB} = {4251AACF-6788-4B6E-880B-1C97AE75647D}
-		{FBD40FE3-B8C9-4119-8C41-FD35CCF91939} = {4251AACF-6788-4B6E-880B-1C97AE75647D}
-		{C4E2F55F-C718-4AAB-94F3-7C19219E7B0F} = {4251AACF-6788-4B6E-880B-1C97AE75647D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {59C41D87-741A-4C93-8603-036EF4802379}

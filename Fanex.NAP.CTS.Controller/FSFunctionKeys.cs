@@ -8,7 +8,7 @@
 // </summary>
 //
 // <history>
-// Lasted generated date: 11/19/2018 11:27:57 AM
+// Lasted generated date: 5/30/2025 1:58:53 PM
 // </history>
 
 using System.Diagnostics.CodeAnalysis;
@@ -94,7 +94,7 @@ public static class FSFunctionKeys
     public const string ProbationManagement = "ProbationManagement";
 
     public const string ManageSubscriber = "ManageSubscriber";
-    
+
     public const string ViewIP = "ViewIP";
 
     public const string AssociationReport = "AssociationReport";

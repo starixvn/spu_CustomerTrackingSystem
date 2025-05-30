@@ -8,7 +8,7 @@
 // </summary>
 //
 // <history>
-// Lasted generated date: 2/11/2020 11:33:42 AM
+// Lasted generated date: 5/30/2025 1:57:50 PM
 // </history>
 
 using System.Diagnostics.CodeAnalysis;
@@ -21,21 +21,20 @@ public static class FSFunctionKeys
 {
     public const string Administration = "Administration";
 
-        public const string AssignFunctionToGroup = "AssignFunctionToGroup";
+    public const string AssignFunctionToGroup = "AssignFunctionToGroup";
 
-        public const string AssignFunctionToUser = "AssignFunctionToUser";
+    public const string AssignFunctionToUser = "AssignFunctionToUser";
 
-        public const string AssignSiteToUser = "AssignSiteToUser";
+    public const string AssignSiteToUser = "AssignSiteToUser";
 
-        public const string ManageFunction = "ManageFunction";
+    public const string ManageFunction = "ManageFunction";
 
-        public const string ManageGroup = "ManageGroup";
+    public const string ManageGroup = "ManageGroup";
 
-        public const string ManageMenu = "ManageMenu";
+    public const string ManageMenu = "ManageMenu";
 
-        public const string ManageUser = "ManageUser";
+    public const string ManageUser = "ManageUser";
 
-        public const string SystemConfiguration = "SystemConfiguration";
+    public const string SystemConfiguration = "SystemConfiguration";
 
-    }
- 
+}

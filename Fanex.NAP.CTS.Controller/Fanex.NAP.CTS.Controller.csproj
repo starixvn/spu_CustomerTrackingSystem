@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Fanex.NAP.CTS.Controller</RootNamespace>
     <AssemblyName>Fanex.NAP.CTS.Controller</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -183,11 +184,7 @@
     <Compile Include="ConfigurationsController.cs" />
     <Compile Include="DangerMonitorController.cs" />
     <Compile Include="ErrorsController.cs" />
-    <Compile Include="FSFunctionKeys.cs">
-      <DependentUpon>FSFunctionKeys.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
+    <Compile Include="FSFunctionKeys.cs" />
     <Compile Include="HomeController.cs" />
     <Compile Include="EvidenceManagementController.cs" />
     <Compile Include="ActionFilter\TrackingFunctionUsageFilterAttribute.cs" />
@@ -231,12 +228,6 @@
       <Project>{4940bbbb-2943-476d-a778-ffe0ed748f12}</Project>
       <Name>Fanex.NAP.CTS.ViewModel</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="FSFunctionKeys.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>FSFunctionKeys.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
