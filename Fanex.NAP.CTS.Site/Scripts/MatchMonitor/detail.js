@@ -474,7 +474,7 @@ function MatchMonitorDetail() {
             for (var i = 1; i <= 5; i++) {
                 var selected = domElements.betIDToString % 10;
                 domElements.cbbGame.append(
-                    `<option value='${i}' ${selected == i ? "selected" : ""}>Set ${i}</option>`
+                    `<option value='${i}' ${selected == i ? "selected" : ""}>${i}</option>`
                 );
             }
 
