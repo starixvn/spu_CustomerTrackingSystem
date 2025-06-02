@@ -1,9 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.Data.Repository;
-    using Fanex.Logging;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.SpecialCustomerClass;
@@ -152,11 +149,7 @@
                     }
                     catch (Exception ex)
                     {
-                        var logMessage = new LogMessage(ex.Message)
-                              .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                              .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                        LogService.Error(logMessage);
+                        ex.LogError();
 
                         throw;
                     }
@@ -173,11 +166,7 @@
                     }
                     catch (Exception ex)
                     {
-                        var logMessage = new LogMessage(ex.Message)
-                              .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                              .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                        LogService.Error(logMessage);
+                        ex.LogError();
 
                         throw;
                     }

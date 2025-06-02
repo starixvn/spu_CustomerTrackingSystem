@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.Data;
-    using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Criteria.CTSUser;
     using Fanex.NAP.CTS.Resource;
     using System;
@@ -26,7 +26,7 @@
             catch (Exception ex)
             {
                 var errorMessage = string.Format(ResourcesManager.GetValue(ConstsResources.INSERT_CTS_USER_ERROR), userId, userName);
-                LogService.Error(errorMessage, ex);
+                LogExtension.LogError(errorMessage, ex);
             }
         }
     }

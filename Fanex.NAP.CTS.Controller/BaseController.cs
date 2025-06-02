@@ -1,8 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
-    using Fanex.Logging;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Context;
     using Fanex.NAP.Core.Service.Impl;
@@ -10,13 +8,10 @@
     using Fanex.NAP.Core.Web.Context;
     using Fanex.NAP.Core.Web.Session;
     using Fanex.NAP.CTS.Core.ExportExcel;
-    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Resource.Consts;
     using NPOI.SS.UserModel;
-    using Sentry;
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.IO;
     using System.Web.Mvc;
 
@@ -101,11 +96,7 @@
 
         protected override void OnException(ExceptionContext filterContext)
         {
-            var logMessage = new LogMessage(filterContext.Exception.Message)
-                .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(filterContext.Exception))
-                .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(filterContext.Exception)).ToString();
-
-            LogService.Error(logMessage);
+            filterContext.Exception.LogError();
 
             base.OnException(filterContext);
         }

@@ -1,7 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.Data.Repository;
-    using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Utilities;
     using Newtonsoft.Json;
@@ -31,7 +32,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error($"{ConfigSettings.EnvironmentName} - AntiFraudCener - {fromFlow} - Insert Accounts - Exception: "
+                LogExtension.LogError($"{ConfigSettings.EnvironmentName} - AntiFraudCener - {fromFlow} - Insert Accounts - Exception: "
                     + ex.Message
                     + ex.StackTrace + "\n"
                     + ex?.InnerException?.Message + "\n"
@@ -52,7 +53,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error($"{ConfigSettings.EnvironmentName} - AntiFraudCener - {fromFlow} - Delete Accounts to AFC DB - Exception: "
+                LogExtension.LogError($"{ConfigSettings.EnvironmentName} - AntiFraudCener - {fromFlow} - Delete Accounts to AFC DB - Exception: "
                 + ex.Message
                 + ex.StackTrace + "\n"
                 + ex?.InnerException.Message + "\n"

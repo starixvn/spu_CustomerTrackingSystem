@@ -15,8 +15,9 @@
 
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
-    using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Newtonsoft.Json;
+    using Fanex.NAP.CTS.Core.Extentions;
 
     [NapSuperAuth]
     public class HomeController : BaseController
@@ -33,7 +34,7 @@
         [HttpGet]
         public void test()
         {
-            LogService.Info($"CTS test site");
+            LogExtension.LogInfo($"CTS test site");
         }
 
         public ActionResult Index()

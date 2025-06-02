@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.Data.Repository;
-    using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Criteria.LogInputData;
     using Fanex.NAP.CTS.Model.CustomerClassification;
@@ -32,14 +32,14 @@
 
                         if (!string.IsNullOrEmpty(result.ErrorMsg))
                         {
-                            LogService.Error($"LogInputData failed - FuncId: {(int)funcId}, inputData {JsonConvert.SerializeObject(content)} - Exception {result.ErrorMsg} - Datetime: {DateTime.Now}");
+                            LogExtension.LogError($"LogInputData failed - FuncId: {(int)funcId}, inputData {JsonConvert.SerializeObject(content)} - Exception {result.ErrorMsg} - Datetime: {DateTime.Now}");
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                LogService.Error($"LogInputData failed - FuncId: {(int)funcId}, inputData {JsonConvert.SerializeObject(content)} - Exception {ex}- Datetime: {DateTime.Now}");
+                LogExtension.LogError($"LogInputData failed - FuncId: {(int)funcId}, inputData {JsonConvert.SerializeObject(content)} - Exception {ex}- Datetime: {DateTime.Now}");
             }
         }
 
@@ -90,13 +90,13 @@
 
                     if (!string.IsNullOrEmpty(result.ErrorMsg))
                     {
-                        LogService.Error($"LogInputData failed - FuncId: {(int)funcId}, inputData {JsonConvert.SerializeObject(data)} - Exception {result.ErrorMsg} - Datetime: {DateTime.Now}");
+                        LogExtension.LogError($"LogInputData failed - FuncId: {(int)funcId}, inputData {JsonConvert.SerializeObject(data)} - Exception {result.ErrorMsg} - Datetime: {DateTime.Now}");
                     }
                 }
             }
             catch (Exception ex)
             {
-                LogService.Error($"LogInputData failed - FuncId: {(int)funcId}, inputData {JsonConvert.SerializeObject(data)} - Exception {ex}- Datetime: {DateTime.Now}");
+                LogExtension.LogError($"LogInputData failed - FuncId: {(int)funcId}, inputData {JsonConvert.SerializeObject(data)} - Exception {ex}- Datetime: {DateTime.Now}");
             }
         }
 

@@ -1,12 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
-    using Fanex.Common.Extensions;
-    using Fanex.Logging;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
-    using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.Extentions;
-    using Fanex.NAP.CTS.Core.Helpers;
+    using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.Common;
@@ -99,11 +94,7 @@
                 result.ErrorCode = 1;
                 result.ErrorMessage = ex.Message;
 
-                var logMessage = new LogMessage(ex.Message)
-                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                ex.LogError();
             }
 
             return Json(new
@@ -453,11 +444,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                ex.LogError();
             }
 
             return File(excelFile, "application/vnd.ms-excel", fileName);

@@ -1,10 +1,11 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
-    using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.ManageSubscriber;
     using Fanex.NAP.CTS.Service.Implement;
@@ -122,7 +123,7 @@
                 {
                     var flowName = isUpdateFlow ? "Update" : "Insert";
 
-                    LogService.Error($"{flowName} Subscriber - {flowName} SubId for Site exception {ex.Message} with Data: {JsonConvert.SerializeObject(result.Subscribers)}", ex);
+                    LogExtension.LogError($"{flowName} Subscriber - {flowName} SubId for Site exception {ex.Message} with Data: {JsonConvert.SerializeObject(result.Subscribers)}", ex);
                 }
 
             });

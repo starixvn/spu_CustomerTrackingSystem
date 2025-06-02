@@ -1,8 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model
 {
-    using Fanex.Logging;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.Core.Web.Session;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
@@ -82,12 +80,8 @@
                 base.OnActionExecuting(filterContext);
             }
             catch (Exception ex)
-            {               
-                var logMessage = new LogMessage($"Tracking function usage - Insert Stats Accessment fail - {ex.Message}")
-                                .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                                .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+            {
+                ex.LogError($"Tracking function usage - Insert Stats Accessment fail - {ex.Message}");
             }
         }
 

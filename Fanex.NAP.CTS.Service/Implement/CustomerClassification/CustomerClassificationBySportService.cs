@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement.CustomerClassification
 {
     using Fanex.Data.Repository;
-    using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
@@ -99,7 +99,7 @@
 
                         if (result.ErrorCode != 0 && retryTime == 0)
                         {
-                            LogService.Error($"CTS - UpdateCustomerClassificationBySportToMainDB failed {result.ErrorMsg} with listCust: {JsonConvert.SerializeObject(custClassification)}");
+                            LogExtension.LogError($"CTS - UpdateCustomerClassificationBySportToMainDB failed {result.ErrorMsg} with listCust: {JsonConvert.SerializeObject(custClassification)}");
                             return false;
                         }
                         else if (result.ErrorCode != 0)
@@ -117,7 +117,7 @@
                         {
                             var jsonDataForLog = JsonConvert.SerializeObject(custClassification);
 
-                            LogService.Error($"UpdateCustomerClassificationBySportToMainDB exception {ex.Message} with listCust: {jsonDataForLog}", ex);
+                            LogExtension.LogError($"UpdateCustomerClassificationBySportToMainDB exception {ex.Message} with listCust: {jsonDataForLog}", ex);
                             return false;
                         }
 

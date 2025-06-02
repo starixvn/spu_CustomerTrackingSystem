@@ -2,7 +2,7 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Criteria.Common;
     using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Service.Interface;
@@ -75,7 +75,7 @@
             catch (Exception ex)
             {
                 isException = true;
-                LogService.Error(ex.Message, ex);
+                LogExtension.LogError(ex.Message, ex);
 
                 return Enumerable.Empty<ValidateUserNameModel>();
             }

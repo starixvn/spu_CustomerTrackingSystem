@@ -2,15 +2,12 @@
 {
     using Fanex.Common.Extensions;
     using Fanex.Data;
-    using Fanex.Logging;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core;
-    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Common;
@@ -32,7 +29,6 @@
     using System.Web.Script.Serialization;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.MarkPA;
-    using static NPOI.HSSF.Util.HSSFColor;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -215,14 +211,9 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                    .AddMessage($"{Region} Get Match Monitor Error: " + ex.Message + ex.StackTrace + "\n"
+                ex.LogError($"{Region} Get Match Monitor Error: " + ex.Message + ex.StackTrace + "\n"
                      + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                     + ex.InnerException.StackTrace)
-                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                     + ex.InnerException.StackTrace);
             }
 
             return Json(new
@@ -476,14 +467,9 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                   .AddMessage($"{Region} Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
+                ex.LogError($"{Region} Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                    + ex.InnerException.StackTrace)
-                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                    + ex.InnerException.StackTrace);
             }
 
             return View();
@@ -515,14 +501,9 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                  .AddMessage($"{Region} Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
+                ex.LogError($"{Region} Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                   + ex.InnerException.StackTrace)
-                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                   + ex.InnerException.StackTrace);
             }
 
             return Json(new
@@ -666,14 +647,9 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                    .AddMessage($"{Region} Get All MM Filter Error: " + ex.Message + ex.StackTrace + "\n"
+                ex.LogError($"{Region} Get All MM Filter Error: " + ex.Message + ex.StackTrace + "\n"
                      + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                     + ex.InnerException.StackTrace)
-                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                     + ex.InnerException.StackTrace);
 
                 throw;
             }
@@ -705,12 +681,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                   .AddMessage($"{Region} Get Match Monitor Total Ticket Error: " + ex.Message + ex.StackTrace + "\n")
-                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                ex.LogError($"{Region} Get Match Monitor Total Ticket Error: " + ex.Message + ex.StackTrace + "\n");
             }
 
             return Json(new
@@ -758,12 +729,12 @@
 
                                 if (ctsCustIDHomeIsZero != null && ctsCustIDHomeIsZero.Any())
                                 {
-                                    LogService.Error($"{Region} Get Match Monitor Detail with CTSCustIDHome=0: {JsonConvert.SerializeObject(ctsCustIDHomeIsZero)}");
+                                    LogExtension.LogError($"{Region} Get Match Monitor Detail with CTSCustIDHome=0: {JsonConvert.SerializeObject(ctsCustIDHomeIsZero)}");
                                 }
 
                                 if (ctsCustIDAwayIsZero != null && ctsCustIDAwayIsZero.Any())
                                 {
-                                    LogService.Error($"{Region} Get Match Monitor Detail with CTSCustIDAway=0: {JsonConvert.SerializeObject(ctsCustIDAwayIsZero)}");
+                                    LogExtension.LogError($"{Region} Get Match Monitor Detail with CTSCustIDAway=0: {JsonConvert.SerializeObject(ctsCustIDAwayIsZero)}");
                                 }
                             }
 
@@ -773,12 +744,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                   .AddMessage($"{Region} Get Match Monitor Detail Error: " + ex.Message + ex.StackTrace)
-                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                ex.LogError($"{Region} Get Match Monitor Detail Error: " + ex.Message + ex.StackTrace);
             }
 
             return Json(new
@@ -843,12 +809,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                 .AddMessage($"{Region} Get All Match Monitor Detail Error: " + ex.Message + ex.StackTrace)
-                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                ex.LogError($"{Region} Get All Match Monitor Detail Error: " + ex.Message + ex.StackTrace);
             }
 
             return mdResult;
@@ -945,12 +906,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                  .AddMessage($"{Region} Get Fraud MM Detail For Cache Error: " + ex.Message + ex.StackTrace)
-                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                ex.LogError($"{Region} Get Fraud MM Detail For Cache Error: " + ex.Message + ex.StackTrace);
             }
 
             return fraudMMDetailResult;
@@ -1097,14 +1053,9 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                 .AddMessage($"{Region} Verify Trans MM Detail Error: " + ex.Message + ex.StackTrace + "\n"
+                ex.LogError($"{Region} Verify Trans MM Detail Error: " + ex.Message + ex.StackTrace + "\n"
                   + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                  + ex.InnerException.StackTrace)
-                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                  + ex.InnerException.StackTrace);
 
                 result.ErrorCode = -1;
                 result.ErrorMsg = ex.Message;
@@ -1242,7 +1193,7 @@
 
                     if (!updateResult.isSuccess)
                     {
-                        LogService.Error($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Update hold key status - Exception: "
+                        LogExtension.LogError($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Update hold key status - Exception: "
                                          + updateResult.msg
                                          + $" DataInput: {JsonConvert.SerializeObject(paramter) + "\n"}");
                     }
@@ -1256,7 +1207,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Update hold key status - Exception: "
+                LogExtension.LogError($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Update hold key status - Exception: "
                                  + ex.Message
                                  + ex.StackTrace + "\n"
                                  + ex?.InnerException?.Message + "\n"
@@ -1311,7 +1262,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Get hold key status - Exception: "
+                LogExtension.LogError($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Get hold key status - Exception: "
                   + ex.Message
                   + ex.StackTrace + "\n"
                   + ex?.InnerException?.Message + "\n"
@@ -1354,7 +1305,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Redirect to Ticket Voiding - Exception: "
+                LogExtension.LogError($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Redirect to Ticket Voiding - Exception: "
                                  + ex.Message
                                  + ex.StackTrace + "\n"
                                  + ex?.InnerException?.Message + "\n"
@@ -1397,7 +1348,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Redirect to Mark PA - Exception: "
+                LogExtension.LogError($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Redirect to Mark PA - Exception: "
                                  + ex.Message
                                  + ex.StackTrace + "\n"
                                  + ex?.InnerException?.Message + "\n"

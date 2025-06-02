@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using Fanex.Data;
-    using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Criteria.ManageSubscriber;
     using Fanex.NAP.CTS.Model.ManageSubscriber;
@@ -72,7 +72,7 @@
                 }
                 catch (Exception ex)
                 {
-                    LogService.Error("CTS - Update Manage Subscriber throws exception: " + ex.Message, ex);
+                    LogExtension.LogError("CTS - Update Manage Subscriber throws exception: " + ex.Message, ex);
 
                     return rs;
                 }
@@ -112,7 +112,7 @@
                 }
                 catch (Exception ex)
                 {
-                    LogService.Error("CTS - Remove Manage Subscriber throws exception: " + ex.Message, ex);
+                    LogExtension.LogError("CTS - Remove Manage Subscriber throws exception: " + ex.Message, ex);
 
                     return new DBResult
                     {

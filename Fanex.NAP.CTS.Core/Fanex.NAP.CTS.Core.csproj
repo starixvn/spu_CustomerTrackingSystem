@@ -84,6 +84,9 @@
     <Reference Include="Fanex.Logging.Extensions, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.Logging.Extensions.1.0.6\lib\net461\Fanex.Logging.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="Fanex.Logging.Extensions.Database, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Logging.Extensions.Database.1.0.8\lib\net461\Fanex.Logging.Extensions.Database.dll</HintPath>
+    </Reference>
     <Reference Include="Fanex.MailDelivery.Client, Version=1.1.0.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.MailStation.2.0.2\lib\net461\Fanex.MailDelivery.Client.dll</HintPath>
     </Reference>
@@ -269,6 +272,7 @@
     <Compile Include="Extentions\DictionaryExtension.cs" />
     <Compile Include="Extentions\EnumExtensions.cs" />
     <Compile Include="Extentions\IEnumerableExtension.cs" />
+    <Compile Include="Extentions\LogExtension.cs" />
     <Compile Include="Helpers\Api\ApiHelper.cs" />
     <Compile Include="Helpers\AppSettings.cs" />
     <Compile Include="Helpers\BetListHelper.cs" />

@@ -3,9 +3,7 @@
     using System;
     using System.Web.Mvc;
     using Newtonsoft.Json;
-    using Fanex.Logging;
-    using Fanex.Logging.Extensions.Database;
-    using Fanex.Logging.Extensions;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Service.Implement.RobotReport;
     using Fanex.NAP.CTS.Service.Interface.RobotReport;
@@ -56,7 +54,7 @@
             {
                 var parameterJson = JsonConvert.SerializeObject(param ?? new RobotReportParamModel());
                 var innterException = ex.InnerException != null ? ex.InnerException.Message + ex.InnerException.Source + ex.InnerException + ex.InnerException.StackTrace : string.Empty;
-                LogService.Error("Get Robot Report Error: " + ex.Message + ex.StackTrace + "\n"
+                LogExtension.LogError("Get Robot Report Error: " + ex.Message + ex.StackTrace + "\n"
                      + innterException + "\n"
                      + parameterJson);
             }
@@ -81,7 +79,7 @@
             {
                 var parameterJson = JsonConvert.SerializeObject(param ?? new RobotReportParamModel());
                 var innterException = ex.InnerException != null ? ex.InnerException.Message + ex.InnerException.Source + ex.InnerException + ex.InnerException.StackTrace : string.Empty;
-                LogService.Error("Get AI Robot Report Error: " + ex.Message + ex.StackTrace + "\n"
+                LogExtension.LogError("Get AI Robot Report Error: " + ex.Message + ex.StackTrace + "\n"
                      + innterException + "\n"
                      + parameterJson);
             }
@@ -111,12 +109,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                    .AddMessage("CTS - Robot Report Page")
-                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                LogExtension.LogError("CTS - Robot Report Page");
             }
 
             return new EmptyResult();
@@ -141,12 +134,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                    .AddMessage("CTS - Robot Report Page")
-                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                LogExtension.LogError("CTS - Robot Report Page");
             }
 
             return new EmptyResult();

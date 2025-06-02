@@ -1,9 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
     using Fanex.Data.Repository;
-    using Fanex.Logging;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Criteria.DangerMonitor;
@@ -18,7 +15,6 @@
     using Fanex.NAP.TGRS.Core.ExcelUtility;
     using Newtonsoft.Json;
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -378,12 +374,12 @@
 
                             if (ctsCustIDHomeIsZero != null && ctsCustIDHomeIsZero.Any())
                             {
-                                LogService.Error($"{Region} Get Match Monitor Detail with CTSCustIDHome=0: {JsonConvert.SerializeObject(ctsCustIDHomeIsZero)}");
+                                LogExtension.LogError($"{Region} Get Match Monitor Detail with CTSCustIDHome=0: {JsonConvert.SerializeObject(ctsCustIDHomeIsZero)}");
                             }
 
                             if (ctsCustIDAwayIsZero != null && ctsCustIDAwayIsZero.Any())
                             {
-                                LogService.Error($"{Region} Get Match Monitor Detail with CTSCustIDAway=0: {JsonConvert.SerializeObject(ctsCustIDAwayIsZero)}");
+                                LogExtension.LogError($"{Region} Get Match Monitor Detail with CTSCustIDAway=0: {JsonConvert.SerializeObject(ctsCustIDAwayIsZero)}");
                             }
                         }
 
@@ -452,14 +448,9 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                  .AddMessage($"{Region} Get Fraud MM Detail For Cache Error: " + ex.Message + ex.StackTrace + "\n"
+                ex.LogError($"{Region} Get Fraud MM Detail For Cache Error: " + ex.Message + ex.StackTrace + "\n"
                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                   + ex.InnerException.StackTrace)
-                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                   + ex.InnerException.StackTrace);
             }
 
             return fraudMMDetailResult;
@@ -562,14 +553,9 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                 .AddMessage($"{Region} Get All Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
+                ex.LogError($"{Region} Get All Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
                   + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                  + ex.InnerException.StackTrace)
-                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                  + ex.InnerException.StackTrace);
             }
 
             return mdResult;
@@ -788,14 +774,9 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                    .AddMessage($"{Region} Get All MM Filter Error: " + ex.Message + ex.StackTrace + "\n"
+                ex.LogError($"{Region} Get All MM Filter Error: " + ex.Message + ex.StackTrace + "\n"
                      + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                     + ex.InnerException.StackTrace)
-                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                     + ex.InnerException.StackTrace);
 
                 throw;
             }

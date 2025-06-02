@@ -1,13 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
-    using Fanex.Logging;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
-    using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.Extentions;
-    using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.AssociationReport;
     using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
@@ -15,7 +10,6 @@
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.LatestTransaction;
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -81,14 +75,9 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                  .AddMessage("Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
+                ex.LogError("Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                   + ex.InnerException.StackTrace)
-                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                   + ex.InnerException.StackTrace);
             }
           
 

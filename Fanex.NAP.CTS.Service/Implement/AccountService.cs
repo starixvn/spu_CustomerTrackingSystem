@@ -2,7 +2,7 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Core.Extentions;
@@ -321,7 +321,7 @@
             catch (Exception ex)
             {
                 isException = true;
-                LogService.Error("CTS - Validate manual association multiple - exception: " + ex.Message, ex);
+                LogExtension.LogError("CTS - Validate manual association multiple - exception: " + ex.Message, ex);
 
                 return GenerateAssociationErrorList(toUserNameList);
             }
@@ -364,7 +364,7 @@
                 }
                 catch (Exception ex)
                 {
-                    LogService.Error("CTS - Insert manual association multiple - exception: " + ex.Message, ex);
+                    LogExtension.LogError("CTS - Insert manual association multiple - exception: " + ex.Message, ex);
 
                     return new DBResult
                     {
@@ -761,7 +761,7 @@
                 }
                 catch (Exception ex)
                 {
-                    LogService.Error("CTS - Remove Flagged Evidence Manual throws exception: " + ex.Message, ex);
+                    LogExtension.LogError("CTS - Remove Flagged Evidence Manual throws exception: " + ex.Message, ex);
 
                     return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
                 }
@@ -940,7 +940,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error("CTS - AccountService - GetCustomerClassificationHistory exception: " + ex.Message, ex);
+                LogExtension.LogError("CTS - AccountService - GetCustomerClassificationHistory exception: " + ex.Message, ex);
             }
 
             return new List<CustomerClassificationHistoryModel>();
@@ -980,7 +980,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error($"CTS - AddQueueCustomerCategory exception: { ex.Message }", ex);
+                LogExtension.LogError($"CTS - AddQueueCustomerCategory exception: { ex.Message }", ex);
 
                 return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
             }

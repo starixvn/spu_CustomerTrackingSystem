@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.Data.Repository;
-    using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
@@ -135,7 +135,7 @@
 
                     if (result.ErrorCode == 200)
                     {
-                        LogService.Error($"CTS - PushDataToExternalService - exception not existing CustIDs in mainDB, error msg: {result.ErrorMsg}");
+                        LogExtension.LogError($"CTS - PushDataToExternalService - exception not existing CustIDs in mainDB, error msg: {result.ErrorMsg}");
                     }
 
                     if (result.ErrorCode == 200 || result.ErrorCode == 0)
@@ -145,7 +145,7 @@
 
                     if (retryTime == 0)
                     {
-                        LogService.Error($"CTS - PushDataToExternalService - exception from MainDB with error code: {result.ErrorCode}, error msg: {result.ErrorMsg} with listCust: {JsonConvert.SerializeObject(customerClassifications)}");
+                        LogExtension.LogError($"CTS - PushDataToExternalService - exception from MainDB with error code: {result.ErrorCode}, error msg: {result.ErrorMsg} with listCust: {JsonConvert.SerializeObject(customerClassifications)}");
 
                         return false;
                     }
@@ -158,7 +158,7 @@
                     {
                         var jsonDataForLog = JsonConvert.SerializeObject(customerClassifications);
 
-                        LogService.Error($"PushDataToExternalService - PushCustomerClassificationToMain exception {ex.Message} with listCust: {jsonDataForLog}", ex);
+                        LogExtension.LogError($"PushDataToExternalService - PushCustomerClassificationToMain exception {ex.Message} with listCust: {jsonDataForLog}", ex);
 
                         return false;
                     }
@@ -185,7 +185,7 @@
 
                     if (result.ErrorCode != 0 && retryTime == 0)
                     {
-                        LogService.Error($"CTS - UpdateDangerLevelToMainDB throws exception {result.ErrorMsg} with listCust: {JsonConvert.SerializeObject(dangerLevels)}");
+                        LogExtension.LogError($"CTS - UpdateDangerLevelToMainDB throws exception {result.ErrorMsg} with listCust: {JsonConvert.SerializeObject(dangerLevels)}");
 
                         return false;
                     }
@@ -202,7 +202,7 @@
                 {
                     if (retryTime == 0)
                     {
-                        LogService.Error($"CTS - UpdateDangerLevelToMainDB throws exception {ex.Message} with listCust: {JsonConvert.SerializeObject(dangerLevels)}");
+                        LogExtension.LogError($"CTS - UpdateDangerLevelToMainDB throws exception {ex.Message} with listCust: {JsonConvert.SerializeObject(dangerLevels)}");
 
                         return false;
                     }

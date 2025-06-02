@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.User.Controllers
 {
     using Fanex.Common;
-    using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Models;
     using Fanex.NAP.Core.Models.ParameterObject;
@@ -17,13 +17,9 @@
     using System.Web.Mvc;
     using System.Web.Security;
     using Fanex.NAP.CTS.Core.Utilities;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
     using ONEbook.UM.Services;
     using Fanex.NAP.CTS.User.Helper;
     using Fanex.NAP.CTS.Service;
-    using ONEbook.UM.Transport;
-    using ONEbook.UM.Configurations;
     using ONEbook.UM;
 
     /// <summary>
@@ -143,11 +139,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                                       .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                ex.LogError();
 
                 throw;
             }
@@ -208,11 +200,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                                      .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                                      .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                ex.LogError();
 
                 return Redirect(FormsAuthentication.LoginUrl);
             }

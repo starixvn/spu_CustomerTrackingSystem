@@ -22,12 +22,8 @@
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Security;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
-    using ONEbook.UM.Transport;
-    using ONEbook.UM.Configurations;
     using ONEbook.UM;
-    using Fanex.NAP.CTS.User.Helper;
+    using Fanex.NAP.CTS.Core.Extentions;
 
     /// <summary>
     /// Login controller.
@@ -212,12 +208,7 @@
                     }
                     catch (Exception exception)
                     {
-                        var logMessage = new LogMessage(exception.Message)
-                                        .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(exception))
-                                        .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(exception)).ToString();
-
-                        LogService.Error(logMessage);
-
+                        exception.LogError();
                         throw;
                     }
                 }
@@ -302,11 +293,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                                      .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                                      .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                ex.LogError();
 
                 throw;
             }

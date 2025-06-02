@@ -1,23 +1,20 @@
 ﻿namespace Fanex.NAP.CTS.Site
 {
+    using Fanex.Logging;
     using Fanex.BetList.Core;
-    using Fanex.BetList.Core.RemotingRef;
+	using Fanex.BetList.Core.RemotingRef;
     using Fanex.Caching;
     using Fanex.Data;
     using Fanex.Data.MySql;
     using Fanex.Data.SqlServer;
-    using Fanex.Logging;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.Logging.Sentry;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.RemotingRef;
     using ONEbook.UM;
-    using ONEbook.UM.AspNetMVC.Filters;
     using ONEbook.UM.Configurations;
     using ONEbook.UM.Helpers;
     using ONEbook.UM.NETFramework;
-    using ONEbook.UM.Services;
     using ONEbook.UM.Transport;
     using Sentry;
     using System;
@@ -78,11 +75,7 @@
         {
             Exception ex = Server.GetLastError().GetBaseException();
 
-            var logMessage = new LogMessage(ex.Message)
-              .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-              .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-            LogService.Error(logMessage);
+            ex.LogError();
         }
     }
 }

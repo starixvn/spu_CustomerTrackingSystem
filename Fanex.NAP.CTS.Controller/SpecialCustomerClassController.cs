@@ -1,13 +1,10 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
-    using Fanex.Logging;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.SpecialCustomerClass;
     using Fanex.NAP.CTS.Resource.Consts;
@@ -63,14 +60,9 @@
             {
                 Response.StatusCode = (int)HttpStatus.InternalServerError;
 
-                var logMessage = new LogMessage(ex.Message)
-                   .AddMessage($"Special Customer Class Get Function Error: " + ex.Message + ex.StackTrace + "\n"
+                LogExtension.LogError($"Special Customer Class Get Function Error: " + ex.Message + ex.StackTrace + "\n"
                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                    + ex.InnerException.StackTrace)
-                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                    + ex.InnerException.StackTrace);
             }
 
             return Json(new { data = result }, JsonRequestBehavior.AllowGet);
@@ -100,14 +92,9 @@
             {
                 Response.StatusCode = (int)HttpStatus.InternalServerError;
 
-                var logMessage = new LogMessage(ex.Message)
-                   .AddMessage($"Special Customer Class Add Function Error: " + ex.Message + ex.StackTrace + "\n"
+                LogExtension.LogError($"Special Customer Class Add Function Error: " + ex.Message + ex.StackTrace + "\n"
                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                    + ex.InnerException.StackTrace)
-                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                    + ex.InnerException.StackTrace);
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -137,14 +124,9 @@
             {
                 Response.StatusCode = (int)HttpStatus.InternalServerError;
 
-                var logMessage = new LogMessage(ex.Message)
-                   .AddMessage($"Special Customer Class Remove Function Error: " + ex.Message + ex.StackTrace + "\n"
+                LogExtension.LogError($"Special Customer Class Remove Function Error: " + ex.Message + ex.StackTrace + "\n"
                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                    + ex.InnerException.StackTrace)
-                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                    + ex.InnerException.StackTrace);
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);

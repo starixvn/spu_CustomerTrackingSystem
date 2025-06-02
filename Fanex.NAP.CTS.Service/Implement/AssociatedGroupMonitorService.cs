@@ -1,9 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
     using Fanex.Data.Repository;
-    using Fanex.Logging;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Criteria.Account.CustomerInfo;
     using Fanex.NAP.CTS.Criteria.AssociatedGroupMonitor;
@@ -24,7 +22,7 @@
     using System.Linq;
 
     public interface IAssociatedGroupMonitorService
-    {        
+    {
         IEnumerable<AssociatedGroupMonitorModel> GetAssociatedGroupMonitor();
 
         IEnumerable<AssociatedGroupSiteModel> GetAssociatedGroupSites(long groupID);
@@ -137,19 +135,15 @@
             };
 
             try
-            {              
+            {
                 var custInfos = repository.Fetch<CustInfoAssociatedAccountModel>(criteria);
 
-                return new ResultAddAssociatedAccountModel {  ErrorCode = 0, CustInfos = custInfos };
+                return new ResultAddAssociatedAccountModel { ErrorCode = 0, CustInfos = custInfos };
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+                ex.LogError($"Add associated account Exception");
 
-                LogService.Error($"Add associated account Exception { logMessage }", ex);
-                
                 return new ResultAddAssociatedAccountModel { ErrorCode = -1, ErrorMsg = ex.Message };
             }
         }
@@ -183,11 +177,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error($"Set ProblemCategoryByGroupID Exception { logMessage }", ex);
+                ex.LogError($"Set ProblemCategoryByGroupID Exception");
 
                 return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
             }
@@ -199,7 +189,7 @@
 
             try
             {
-               
+
                 if (valueABI > 0)
                 {
                     var custToUpdateABI = custInfos.Where(x => x.Danger2 == 0).Select(x => new DangerLevelModel
@@ -212,20 +202,16 @@
                     {
                         customerClassificationService.UpdateDangerLevelToMainDB(custToUpdateABI, 2);
                     }
-                }                
+                }
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
                 var jsonData = JsonConvert.SerializeObject(custInfos);
 
-                LogService.Error($"Update ABI To MainDB Exception { logMessage } with listCust: {jsonData}", ex);
+                ex.LogError($"Update ABI To MainDB Exception with listCust: {jsonData}");
 
                 return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
-            }            
+            }
 
             return new DBResult { ErrorCode = 0 };
         }
@@ -253,15 +239,11 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
                 var jsonData = JsonConvert.SerializeObject(custInfos);
 
-                LogService.Error($"Update Ori To MainDB Exception { logMessage } with listCust: {jsonData}", ex);
+                ex.LogError($"Update Ori To MainDB Exception with listCust: {jsonData}");
 
-                return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };              
+                return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
             }
 
             return new DBResult { ErrorCode = 0 };
@@ -281,15 +263,11 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error($"Get ABI from MainDB Exception { logMessage } custIdList: {custIdList } sourceType: {sourceType}", ex);
+                ex.LogError($"Get ABI from MainDB Exception custIdList: {custIdList} sourceType: {sourceType}");
             }
 
             return Enumerable.Empty<CustomerInfoByCustIdsModel>();
-        }       
+        }
 
         public DBResult AddAssociatedGroupMonitor(AddAssociatedGroupModel model)
         {
@@ -319,11 +297,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error($"Add associated group monitor Exception { logMessage }", ex);
+               ex.LogError($"Add associated group monitor Exception");
 
                 return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
             }
@@ -368,11 +342,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error($"Update associated group monitor Exception { logMessage }", ex);
+                ex.LogError($"Update associated group monitor Exception");
 
                 return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
             }
@@ -394,11 +364,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error($"Remove associated group monitor Exception { logMessage }", ex);
+                ex.LogError($"Remove associated group monitor Exception");
 
                 return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
             }
@@ -413,7 +379,7 @@
         }
 
         public IEnumerable<ValidateUserAssociatedAccountModel> ValidateUsernameTransferAccount(string userNames, long groupID)
-        {           
+        {
             return repository.Fetch<ValidateUserAssociatedAccountModel>(new ValidateUsernameTransferAccountCriteria
             {
                 UserNames = userNames,
@@ -441,11 +407,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error($"Save Transfer Account Exception { logMessage }", ex);
+                ex.LogError($"Save Transfer Account Exception");
 
                 return new SaveTransferAccountResultModel { ErrorCode = -1, ErrorMsg = ex.Message };
             }
@@ -458,7 +420,7 @@
         {
             var writer = new ExcelTemplateWriter(templatePath, fileName, "GMR");
             writer.CopyRows(0, 1);
-            
+
             FilterBlock(model, ref writer);
 
             writer.CopyRows(2, 1);
@@ -493,7 +455,7 @@
 
                 if (!string.IsNullOrEmpty(model.LicenseeSites))
                     AppendBlockContent(ref contentRender, ref lineCount, "- Licensee", boldFont, model.LicenseeSites, normalFont, "\n");
-            }           
+            }
 
             if (!string.IsNullOrEmpty(model.AssociatedType))
                 AppendBlockContent(ref contentRender, ref lineCount, "Associated Type", boldFont, model.AssociatedType, normalFont, "\n");
@@ -541,7 +503,7 @@
                     item.ABI,
                     item.Ori,
                     item.Category,
-                    item.Remark,                    
+                    item.Remark,
                     item.DetectedDate,
                     item.DetectedBy
                 };

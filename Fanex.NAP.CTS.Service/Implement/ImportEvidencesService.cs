@@ -15,7 +15,7 @@
     using Fanex.NAP.CTS.Resource;
     using Fanex.NAP.CTS.Core.ExportExcel;
     using System;
-    using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
 
@@ -44,7 +44,7 @@
                 catch (Exception ex)
                 {
                     var errorMessage = string.Format(ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_PARSE_FILE_ERROR), fileName);
-                    LogService.Error(errorMessage, ex);
+                    LogExtension.LogError(errorMessage, ex);
 
                     return errorMessage;
                 }                
@@ -64,7 +64,7 @@
                 catch (Exception ex)
                 {
                     var errorMessage = string.Format(ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_PARSE_FILE_ERROR), fileName);
-                    LogService.Error(errorMessage, ex);
+                    LogExtension.LogError(errorMessage, ex);
 
                     return errorMessage;
                 }                
@@ -192,7 +192,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error("CTS - Import Evidence - CheckRuleAddAccountEvidence exception: ", ex);
+                LogExtension.LogError("CTS - Import Evidence - CheckRuleAddAccountEvidence exception: ", ex);
 
                 var resultException = new List<ResultCheckAccountEvidenceModel>();
                 resultException.Add(new ResultCheckAccountEvidenceModel
@@ -240,7 +240,7 @@
                     {
                         var errorMessage = string.Format("CTS - Import file name: {0} - userId: {1} - import error: {2} - Content: {3}"
                                                       , fileName, userId, criteria.ErrorMessage, jsonData);
-                        LogService.Error(errorMessage);
+                        LogExtension.LogError(errorMessage);
 
                         SendMail(resultCheckCustEvidenceList, customerEvidences, userId, criteria.ErrorMessage);
                     }
@@ -251,7 +251,7 @@
                 var errorMessage = string.Format("CTS - Import file name: {0} - userId: {1} - import error: {2} - Content: {3}"
                                                , fileName, userId, ex.Message, jsonData);
 
-                LogService.Error(errorMessage, ex);
+                LogExtension.LogError(errorMessage, ex);
 
                 SendMail(resultCheckCustEvidenceList, customerEvidences, userId, ex.Message);
             }
@@ -279,7 +279,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error(string.Format("CTS - Import file - send mail error: ", ex.Message), ex);
+                LogExtension.LogError(string.Format("CTS - Import file - send mail error: ", ex.Message), ex);
             }
         }
 
@@ -345,7 +345,7 @@
                     {                        
                         var errorMessage = string.Format("CTS - InsertAccountEvidencesQueue: remove evidence failed userId: {0}, Message: {1}, Content: {2}"
                                                       , userId, criteria.ErrorMessage, jsonCustEvidences);
-                        LogService.Error(errorMessage);
+                        LogExtension.LogError(errorMessage);
 
                         return new DBResult
                         {
@@ -356,7 +356,7 @@
             }
             catch (Exception ex)
             {               
-                LogService.Error(ex.Message, ex);
+                LogExtension.LogError(ex.Message, ex);
 
                 return new DBResult
                 {

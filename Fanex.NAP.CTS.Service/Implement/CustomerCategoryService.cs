@@ -1,7 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
     using Fanex.Data.Repository;
-    using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Criteria.Category;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
@@ -33,7 +34,7 @@
             catch (Exception ex)
             {
                 var errorMessage = string.Format(ResourcesManager.GetValue(ConstsResources.CATEGORY_CUSTOMER_CLASS));
-                LogService.Error(errorMessage, ex);
+                LogExtension.LogError(errorMessage, ex);
 
                 return new List<CategoryCustomerClassModel>();
             }

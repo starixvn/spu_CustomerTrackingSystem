@@ -7,7 +7,7 @@
     using Fanex.NAP.CTS.Core;
     using System;
     using System.Linq;
-    using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Extentions;
 
     public class NotificationService : INotificationService
     {
@@ -26,7 +26,7 @@
             {
                 var errorMessage = "CTS - Notification - Get Association Messages exception: " + ex.Message;
 
-                LogService.Error(errorMessage, ex);
+                LogExtension.LogError(errorMessage, ex);
 
                 return new List<AssociatedMessageModel>();
             }
@@ -47,7 +47,7 @@
             {
                 var errorMessage = "CTS - Notification - Get Probation Messages exception: " + ex.Message;
 
-                LogService.Error(errorMessage, ex);
+                LogExtension.LogError(errorMessage, ex);
 
                 return new List<ProbationMessageModel>();
             }
@@ -71,7 +71,7 @@
             {
                 var errorMessage = "CTS - Notification Setting - Get Status exception: " + ex.Message;
 
-                LogService.Error(errorMessage, ex);
+                LogExtension.LogError(errorMessage, ex);
 
                 return new List<NotifiedSettingStatusModel>();
             }
@@ -111,7 +111,7 @@
                 }
                 catch (Exception ex)
                 {
-                    LogService.Error("CTS - Notification Setting - Update Status throws exception: " + ex.Message, ex);
+                    LogExtension.LogError("CTS - Notification Setting - Update Status throws exception: " + ex.Message, ex);
 
                     return new DBResult
                     {

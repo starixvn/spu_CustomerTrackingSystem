@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
-    using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Service.Interface;
     using Newtonsoft.Json;
@@ -32,7 +32,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Info("Memory Cache Error: " + ex.Message + ex.StackTrace + "\n"
+                LogExtension.LogInfo("Memory Cache Error: " + ex.Message + ex.StackTrace + "\n"
                      + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                      + ex.InnerException.StackTrace);
             }
@@ -53,7 +53,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Info("Memory Cache Error: " + ex.Message + ex.StackTrace + "\n"
+                LogExtension.LogInfo("Memory Cache Error: " + ex.Message + ex.StackTrace + "\n"
                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                     + ex.InnerException.StackTrace);
             }
@@ -75,7 +75,7 @@
                 }
                 catch (Exception ex)
                 {
-                    LogService.Info("Memory Cache Error: " + ex.Message + ex.StackTrace + "\n"
+                    LogExtension.LogInfo("Memory Cache Error: " + ex.Message + ex.StackTrace + "\n"
                         + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                         + ex.InnerException.StackTrace);
                 }
@@ -99,7 +99,7 @@
                 }
                 catch (Exception ex)
                 {
-                    LogService.Info("Memory Cache Error: " + ex.Message + ex.StackTrace + "\n"
+                    LogExtension.LogInfo("Memory Cache Error: " + ex.Message + ex.StackTrace + "\n"
                         + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                         + ex.InnerException.StackTrace);
                 }
@@ -123,7 +123,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Info("Memory Cache Error: " + ex.Message + ex.StackTrace + "\n"
+                LogExtension.LogInfo("Memory Cache Error: " + ex.Message + ex.StackTrace + "\n"
                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                     + ex.InnerException.StackTrace);
             }

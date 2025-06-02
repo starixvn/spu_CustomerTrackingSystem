@@ -1,15 +1,12 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
-    using Fanex.Logging;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.BaseClasses;
-    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
@@ -122,12 +119,7 @@
                         }
                         catch (Exception ex)
                         {
-                            var logMessage = new LogMessage(ex.Message)
-                                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                            LogService.Error(logMessage);
-
+                            ex.LogError();
                             throw;
                         }
                     },
@@ -141,12 +133,7 @@
                         }
                         catch (Exception ex)
                         {
-                            var logMessage = new LogMessage(ex.Message)
-                                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                            LogService.Error(logMessage);
-
+                            ex.LogError();
                             throw;
                         }
                     });
@@ -155,7 +142,7 @@
                 }
                 else
                 {
-                    LogService.Info($"Account Index customerInfoFromCTS {Id} is null");
+                    LogExtension.LogInfo($"Account Index customerInfoFromCTS {Id} is null");
                 }
             }
 
@@ -296,12 +283,7 @@
                 }
                 catch (Exception ex)
                 {
-                    var logMessage = new LogMessage(ex.Message)
-                          .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                          .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                    LogService.Error(logMessage);
-
+                    ex.LogError();
                     throw;
                 }
             },
@@ -322,12 +304,7 @@
                 }
                 catch (Exception ex)
                 {
-                    var logMessage = new LogMessage(ex.Message)
-                          .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                          .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                    LogService.Error(logMessage);
-
+                    ex.LogError();
                     throw;
                 }
             });
@@ -734,16 +711,12 @@
 
                 if (groupBettingAssociation.ErrorCode != 0)
                 {
-                    LogService.Error($"Association Detail throws exception - SPU_AIML_GB_GetAssociationInfo: {groupBettingAssociation.ErrorMessage} - {JsonConvert.SerializeObject(new { para1, para2, originGroupIDs })}");
+                    LogExtension.LogError($"Association Detail throws exception - SPU_AIML_GB_GetAssociationInfo: {groupBettingAssociation.ErrorMessage} - {JsonConvert.SerializeObject(new { para1, para2, originGroupIDs })}");
                 }
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                ex.LogError();
             }
             return Json(data, JsonRequestBehavior.AllowGet);
         }
@@ -810,11 +783,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                         .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                         .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                ex.LogError();
             }
             return Json(data, JsonRequestBehavior.AllowGet);
         }
@@ -860,11 +829,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                ex.LogError();
             }
 
             return Json(data, JsonRequestBehavior.AllowGet);
@@ -906,11 +871,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                         .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                         .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                ex.LogError();
             }
 
             return Json(data, JsonRequestBehavior.AllowGet);
@@ -1093,11 +1054,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                ex.LogError();
             }
 
             return Json(data, JsonRequestBehavior.AllowGet);
@@ -1123,11 +1080,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
+                ex.LogError();
             }
 
             return Json(data, JsonRequestBehavior.AllowGet);
@@ -1678,7 +1631,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error($"CTS - ExcludeTaggingAssociationWithPA exception: {ex.Message}", ex);
+                LogExtension.LogError($"CTS - ExcludeTaggingAssociationWithPA exception: {ex.Message}", ex);
 
                 return Json(new { errorCode = -1, errorMessage = ex.Message }, JsonRequestBehavior.AllowGet);
             }
@@ -1772,12 +1725,7 @@
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                            .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                            .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
-
+                ex.LogError();
                 return false;
             }
 
@@ -1878,7 +1826,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error($"CTS - Unmark VVIP exception: {ex.Message}", ex);
+                LogExtension.LogError($"CTS - Unmark VVIP exception: {ex.Message}", ex);
 
                 dataLogTrackingServices.LogErrorData(ex, "WEB-UnmarkVVIP");
 
@@ -2122,7 +2070,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error(ex.Message);
+                LogExtension.LogError(ex.Message);
 
                 result = Enumerable.Empty<RobotBettingDetailViewModel>();
             }
@@ -2268,12 +2216,7 @@
                 }
                 catch (Exception ex)
                 {
-                    var logMessage = new LogMessage(ex.Message)
-                           .AddMessage("CTS - Profile Page Get Performance By Sport")
-                           .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                           .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                    LogService.Error(logMessage);
+                    ex.LogError("CTS - Profile Page Get Performance By Sport");
                 }
             }
 

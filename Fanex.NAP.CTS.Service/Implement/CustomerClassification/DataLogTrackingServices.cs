@@ -1,14 +1,11 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.Data.Repository;
-    using Fanex.Logging;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Newtonsoft.Json;
     using System;
-    using System.Linq;
 
     public class DataLogTrackingServices : IDataLogTrackingServices
     {
@@ -25,27 +22,17 @@
             {
                 var logInfo = new LogErrorDataModel
                 {
-                    Message = new LogMessage(exception.Message)
-                                   .AddMessage($"{serviceName}")
-                                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(exception))
-                                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(exception))
-                                   .AddMessage($"{ DateTime.Now}").ToString(),
+                    Message = exception.CreateLogMessage(serviceName),
                     FromFlow = serviceName,
-                    SPName = DatabaseInfoGetters.GetDbExceptionInfo(exception)?.Where(c => c.Key == "SpName")?.FirstOrDefault().Value?.ToString(),
-                    Parameters = DatabaseInfoGetters.GetDbExceptionInfo(exception)?.Where(c => c.Key == "Parameters")?.FirstOrDefault().Value?.ToString(),
+                    SPName = exception.GetDbExceptionInfo(c => c.Key == "SpName"),
+                    Parameters = exception.GetDbExceptionInfo(c => c.Key == "Parameters"),
                 };
 
                 LogErrorData(logInfo);
             }
             catch (Exception ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                                 .AddMessage($"{serviceName}")
-                                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
-                                 .AddMessage($"{ DateTime.Now}").ToString();
-
-                LogService.Error(logMessage);
+                ex.LogError(serviceName);
             }
         }
 
