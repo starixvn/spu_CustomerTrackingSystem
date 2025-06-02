@@ -2,7 +2,7 @@
 {
     using Fanex.Logging;
     using Fanex.BetList.Core;
-	using Fanex.BetList.Core.RemotingRef;
+    using Fanex.BetList.Core.RemotingRef;
     using Fanex.Caching;
     using Fanex.Data;
     using Fanex.Data.MySql;
@@ -33,7 +33,7 @@
                 .StartNewSession()
                 .WithSqlServer()
                 .WithMySql()
-                .UseDefaultDbSettingProvider(ConfigSettings.StoredProcedurePath)
+                .UseDefaultDbSettingProvider(ConfigSettings.StoredProcedurePath, true)
                 .UseDefaultConnectionStringProvider()
                 .Run();
 
@@ -52,7 +52,7 @@
 
             BetListManager.RegisterRemotingRef(new CacheRef());
 
-            AreaRegistration.RegisterAllAreas();            
+            AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
@@ -63,7 +63,7 @@
                .UseConfig(umConfig)
                .UseCacheService(new UMCacheService(new CacheService()))
                .UseRestClient(new UMRestClient(umConfig))
-               .UseHttpContext(new HttpContextHelper());           
+               .UseHttpContext(new HttpContextHelper());
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
