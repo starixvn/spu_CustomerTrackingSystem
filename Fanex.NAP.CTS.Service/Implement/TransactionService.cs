@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using Fanex.NAP.CTS.Model.Transaction;
-    using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Model.IP;
     using System.Net;
     using System;
@@ -11,9 +10,17 @@
     using Fanex.NAP.CTS.Model.LatestTransaction;
     using Fanex.NAP.CTS.Criteria.LatestTransaction;
     using Fanex.Data;
+    using Fanex.NAP.CTS.Core.Service;
 
     public class TransactionService : ITransactionService
-    {      
+    {
+        private readonly ICriteriaService _repository;
+
+        public TransactionService()
+        {
+            _repository = new CriteriaService();
+        }
+
         private IpModel Ip2Long(string ipAddress)
         {
             var ipAd = IPAddress.Parse(ipAddress);
@@ -66,7 +73,7 @@
                 TotalItem = 0
             };
 
-            var result = DataService.GetData<HistoryTransactionModel>(criteria);
+            var result = _repository.Fetch<HistoryTransactionModel>(criteria);
 
             totalItem = criteria.TotalItem;
 

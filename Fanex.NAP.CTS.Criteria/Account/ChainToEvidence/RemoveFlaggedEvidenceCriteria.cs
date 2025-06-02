@@ -4,7 +4,7 @@
     using Fanex.Data.Repository;
     using System;
 
-    public class RemoveFlaggedEvidenceCriteria : CriteriaBase
+    public class RemoveFlaggedEvidenceCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_CTSCustID")]
         public Int64 CTSCustId { get; set; }       

@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
-    using Fanex.NAP.CTS.Core.BaseClasses;
+    using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Criteria.TransactionReport;
     using Fanex.NAP.CTS.Model.TransactionReport;
     using Fanex.NAP.CTS.Service.Interface;
@@ -9,6 +9,13 @@
 
     public class TransactionReportService : ITransactionReportService
     {
+        private readonly ICriteriaService _repository;
+
+        public TransactionReportService()
+        {
+            _repository = new CriteriaService();
+        }
+
         public IEnumerable<TransactionModel> GetTransactions(TransactionFilterViewModel filterModel, out int totalItem)
         {
             var criteria = new TransactionReportCriteria
@@ -21,7 +28,7 @@
                 TotalItem = 0
             };
 
-            var result = DataService.GetData<TransactionModel>(criteria);
+            var result = _repository.Fetch<TransactionModel>(criteria);
 
             totalItem = criteria.TotalItem;
 

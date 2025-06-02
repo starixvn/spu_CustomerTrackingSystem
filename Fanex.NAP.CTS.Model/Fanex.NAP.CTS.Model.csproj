@@ -386,6 +386,7 @@
     <Compile Include="DangerMonitor\DangerMonitorSearchModel.cs" />
     <Compile Include="DTO\CustomerEvidence.cs" />
     <Compile Include="DTO\CustomerEvidenceForTW.cs" />
+    <Compile Include="Home\SearchAccountResultModel.cs" />
     <Compile Include="LogInputData\LogInputViewModel.cs" />
     <Compile Include="CustomerClassification\LogInputDataModel.cs" />
     <Compile Include="CustomerClassification\RoleCustomerModel.cs" />

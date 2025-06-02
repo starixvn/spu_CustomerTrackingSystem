@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement.Api
 {
-    using Fanex.Data.Repository;
-    using Fanex.NAP.CTS.Core.BaseClasses;
+    using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Criteria.Api.FPS.Account;
     using Fanex.NAP.CTS.Criteria.Api.FPS.Device;
     using Fanex.NAP.CTS.Criteria.Api.FPS.Search;
@@ -18,11 +17,11 @@
 
     public class FpsService : IFpsService
     {
-        private readonly IDynamicRepository repository;
+        private readonly ICriteriaService _repository;
 
         public FpsService()
         {
-            repository = new DynamicRepository();
+            _repository = new CriteriaService();
         }
 
         #region cts
@@ -41,7 +40,7 @@
                     Skip = param.Skip
                 };
 
-                data.Items = repository.Fetch<SearchAccountItemModel>(criteria);
+                data.Items = _repository.Fetch<SearchAccountItemModel>(criteria);
                 data.TotalItem = criteria.TotalItem;
             }
             else
@@ -52,7 +51,7 @@
                     UserName = param.UserName
                 };
 
-                data.Items = repository.Fetch<SearchAccountItemModel>(criteria);
+                data.Items = _repository.Fetch<SearchAccountItemModel>(criteria);
             }
 
             return data;
@@ -66,7 +65,7 @@
                 SubscriberID = param.SubscriberID
             };
 
-            return DataService.GetSingle<GetAssAccountInfoByCustSubscriberModel>(criteria);
+            return _repository.Get<GetAssAccountInfoByCustSubscriberModel>(criteria);
         }
 
         public GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriber_DCSCenter(GetAssAccountsByCustSubscriberParamModel param)
@@ -80,7 +79,7 @@
                 NoOfRecord = param.NoOfRecord
             };
 
-            data.Items = repository.Fetch<GetAssAccountsByCustSubscriberItemModel>(criteria);
+            data.Items = _repository.Fetch<GetAssAccountsByCustSubscriberItemModel>(criteria);
 
             return data;
         }
@@ -96,7 +95,7 @@
                 NoOfRecord = param.NoOfRecord
             };
 
-            data.Items = repository.Fetch<GetAssDevicesByCustSubscriberItemModel>(criteria);
+            data.Items = _repository.Fetch<GetAssDevicesByCustSubscriberItemModel>(criteria);
 
             return data;
         }
@@ -112,7 +111,7 @@
                 NoOfDevice = param.NoOfDevice
             };
 
-            data.Items = repository.Fetch<GetAssMatrixAccountByCustSubscriberItemModel>(criteria);
+            data.Items = _repository.Fetch<GetAssMatrixAccountByCustSubscriberItemModel>(criteria);
 
             return data;
         }
@@ -141,7 +140,7 @@
                 Take = param.Take
             };
 
-            data.Items = repository.Fetch<TransactionItemModel>(criteria);
+            data.Items = _repository.Fetch<TransactionItemModel>(criteria);
             data.TotalItem = criteria.TotalItem;
 
             return data;
@@ -162,7 +161,7 @@
                 Take = param.Take
             };
 
-            data.Items = repository.Fetch<TransactionItemModel>(criteria);
+            data.Items = _repository.Fetch<TransactionItemModel>(criteria);
             data.TotalItem = criteria.TotalItem;
 
             return data;
@@ -180,7 +179,7 @@
                 Take = param.Take
             };
 
-            data.Items = repository.Fetch<LatestTransactionDCSCenterItemModel>(criteria).Select(x => new LatestTransactionItemModel()
+            data.Items = _repository.Fetch<LatestTransactionDCSCenterItemModel>(criteria).Select(x => new LatestTransactionItemModel()
             {
                 Action = x.Action,
                 ActionResult = x.ActionResult,
@@ -215,7 +214,7 @@
                 PageIndex = param.PageIndex
             };
 
-            data.Items = repository.Fetch<GetAccountsPerDeviceItemModel>(criteria);
+            data.Items = _repository.Fetch<GetAccountsPerDeviceItemModel>(criteria);
             data.TotalRows = criteria.TotalRows;
             return data;
         }
@@ -233,7 +232,7 @@
                 PageIndex = param.PageIndex
             };
 
-            data.Items = repository.Fetch<GetDevicesPerAccountItemModel>(criteria);
+            data.Items = _repository.Fetch<GetDevicesPerAccountItemModel>(criteria);
             data.TotalRows = criteria.TotalRows;
             return data;
         }
@@ -258,7 +257,7 @@
                     Skip = param.Skip
                 };
 
-                items = repository.Fetch<SearchAccountItemDCSExtraModel>(criteria);
+                items = _repository.Fetch<SearchAccountItemDCSExtraModel>(criteria);
                 data.TotalItem = criteria.TotalItem;
             }
             else
@@ -269,7 +268,7 @@
                     UserName = param.UserName
                 };
 
-                items = repository.Fetch<SearchAccountItemDCSExtraModel>(criteria);
+                items = _repository.Fetch<SearchAccountItemDCSExtraModel>(criteria);
             }
 
             data.Items = items.Select(x => new SearchAccountItemModel()
@@ -290,7 +289,7 @@
                 DeviceCode = param.DeviceCode
             };
 
-            var items = repository.Fetch<SearchDeviceItemDCSExtraModel>(criteria);
+            var items = _repository.Fetch<SearchDeviceItemDCSExtraModel>(criteria);
             return items;
         }
         #endregion
@@ -304,7 +303,7 @@
                 SubscriberID = param.SubscriberID
             };
 
-            return DataService.GetSingle<GetAssAccountInfoByCustSubscriberModel>(criteria);
+            return _repository.Get<GetAssAccountInfoByCustSubscriberModel>(criteria);
         }
 
         public GetAssAccountsByCustSubscriberResultModel GetAssAccountsByCustSubscriber_DCSExtra(GetAssAccountsByCustSubscriberParamModel param)
@@ -318,7 +317,7 @@
                 NoOfRecord = param.NoOfRecord
             };
 
-            data.Items = repository.Fetch<GetAssAccountsByCustSubscriberItemDcsModel>(criteria).Select(x => new GetAssAccountsByCustSubscriberItemModel
+            data.Items = _repository.Fetch<GetAssAccountsByCustSubscriberItemDcsModel>(criteria).Select(x => new GetAssAccountsByCustSubscriberItemModel
             {
                 AssociatedAccount = x.AssociatedAccount,
                 CTSCustID = x.AccountID,
@@ -341,7 +340,7 @@
                 NoOfRecord = param.NoOfRecord
             };
 
-            data.Items = repository.Fetch<GetAssDevicesByCustSubscriberItemModel>(criteria);
+            data.Items = _repository.Fetch<GetAssDevicesByCustSubscriberItemModel>(criteria);
 
             return data;
         }
@@ -357,7 +356,7 @@
                 NoOfDevice = param.NoOfDevice
             };
 
-            data.Items = repository.Fetch<GetAssMatrixAccountByCustSubscriberItemDCSExtraModel>(criteria).Select(x => new GetAssMatrixAccountByCustSubscriberItemModel
+            data.Items = _repository.Fetch<GetAssMatrixAccountByCustSubscriberItemDCSExtraModel>(criteria).Select(x => new GetAssMatrixAccountByCustSubscriberItemModel
             {
                 CreatedTime = x.CreatedTime,
                 CTSCustID = x.AccountID,
@@ -380,7 +379,7 @@
                 SubscriberID = param.SubscriberID,
             };
 
-            var data = repository.FetchMultiple<GetAssDeviceInfoByIDSubscriberModel, GetAssDeviceFirstSeen>(criteria);
+            var data = _repository.Fetch<GetAssDeviceInfoByIDSubscriberModel, GetAssDeviceFirstSeen>(criteria);
             var result = data.firstResultSet.FirstOrDefault() ?? new GetAssDeviceInfoByIDSubscriberModel();
             result.FirstSeenBySubscriber = data.secondResultSet;
 
@@ -396,7 +395,7 @@
                 SubscriberID = param.SubscriberID,
             };
 
-            return repository.Fetch<GetAssAccByDevSubscriberItemModel>(criteria);
+            return _repository.Fetch<GetAssAccByDevSubscriberItemModel>(criteria);
         }
 
         public IEnumerable<GetAssDevByDevSubscriberItemModel> GetAssDevByDevSubscriber_DCSExtra(GetAssDevByDevSubscriberParamModel param)
@@ -408,7 +407,7 @@
                 SubscriberID = param.SubscriberID,
             };
 
-            return repository.Fetch<GetAssDevByDevSubscriberItemModel>(criteria);
+            return _repository.Fetch<GetAssDevByDevSubscriberItemModel>(criteria);
         }
 
         public IEnumerable<GetAssMatrixByDeviceSubscriberItemModel> GetAssMatrixByDeviceSubscriber_DCSExtra(GetAssMatrixByDeviceSubscriberParamModel param)
@@ -421,7 +420,7 @@
                 SubscriberID = param.SubscriberID,
             };
 
-            return repository.Fetch<GetAssMatrixByDeviceSubscriberItemModel>(criteria);
+            return _repository.Fetch<GetAssMatrixByDeviceSubscriberItemModel>(criteria);
         }
         #endregion
 
@@ -440,7 +439,7 @@
 
             return new TransactionHistoryByDeviceDCSExtraResultModel()
             {
-                Items = repository.Fetch<TransactionHistoryByDeviceDCSExtraItemModel>(criteria),
+                Items = _repository.Fetch<TransactionHistoryByDeviceDCSExtraItemModel>(criteria),
                 TotalItem = criteria.TotalItem
             };
         }
@@ -459,7 +458,7 @@
 
             return new TransactionHistoryByAccountDCSExtraResultModel()
             {
-                Items = repository.Fetch<TransactionHistoryByAccountDCSExtraItemModel>(criteria),
+                Items = _repository.Fetch<TransactionHistoryByAccountDCSExtraItemModel>(criteria),
                 TotalItem = criteria.TotalItem
             };
         }
@@ -484,7 +483,7 @@
                 Take = param.Take
             };
 
-            data.Items = repository.Fetch<TransactionDCSExtraItemModel>(criteria).Select(x => new TransactionItemModel()
+            data.Items = _repository.Fetch<TransactionDCSExtraItemModel>(criteria).Select(x => new TransactionItemModel()
             {
                 Action = x.Action,
                 ActionResult = x.ActionResult,
@@ -522,7 +521,7 @@
                 Take = param.Take
             };
 
-            data.Items = repository.Fetch<LatestTransactionDCSExtraItemModel>(criteria).Select(x => new LatestTransactionItemModel()
+            data.Items = _repository.Fetch<LatestTransactionDCSExtraItemModel>(criteria).Select(x => new LatestTransactionItemModel()
             {
                 Action = x.Action,
                 ActionResult = x.ActionResult,

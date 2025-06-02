@@ -1,14 +1,22 @@
-﻿using Fanex.NAP.CTS.Core.BaseClasses;
-using Fanex.NAP.CTS.Criteria.Api;
-using Fanex.NAP.CTS.Criteria.Api.FPS.Subscriber;
-using Fanex.NAP.CTS.Model.API.FPS.Subscriber;
-using Fanex.NAP.CTS.Model.Subscriber;
-using Fanex.NAP.CTS.Service.Interface;
-
+﻿
 namespace Fanex.NAP.CTS.Service.Implement
 {
+    using Fanex.NAP.CTS.Core.Service;
+    using Fanex.NAP.CTS.Criteria.Api;
+    using Fanex.NAP.CTS.Criteria.Api.FPS.Subscriber;
+    using Fanex.NAP.CTS.Model.API.FPS.Subscriber;
+    using Fanex.NAP.CTS.Model.Subscriber;
+    using Fanex.NAP.CTS.Service.Interface;
+
     public class SubscriberService : ISubscriberService
     {
+        private readonly ICriteriaService _repository;
+
+        public SubscriberService()
+        {
+            _repository = new CriteriaService();
+        }
+
         public SubscriberInfo GetSubscriberBySubscriberName(string subscriberName)
         {
             var criteria = new GetSubscriberInfoBySubscriberName
@@ -16,7 +24,7 @@ namespace Fanex.NAP.CTS.Service.Implement
                 SubscriberName = subscriberName
             };
 
-            return DataService.GetSingle<SubscriberInfo>(criteria);
+            return _repository.Get<SubscriberInfo>(criteria);
         }
 
         public SubscriberFpsInfo GetSubscriberBySubscriberName_DCSExtra(string subscriberName)
@@ -26,7 +34,7 @@ namespace Fanex.NAP.CTS.Service.Implement
                 SubscriberName = subscriberName
             };
 
-            return DataService.GetSingle<SubscriberFpsInfo>(criteria);
+            return _repository.Get<SubscriberFpsInfo>(criteria);
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using Fanex.Data;
-    using Fanex.Data.Repository;
-    using Fanex.NAP.CTS.Core.Extentions;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
     using Fanex.NAP.CTS.Core;
-    using Fanex.NAP.CTS.Core.BaseClasses;
+    using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Criteria.Account;
@@ -23,24 +24,19 @@
     using Fanex.NAP.CTS.Model.Account.CustomerInfo;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassification;
-    using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Model.Transaction;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class AccountService : IAccountService
     {
-        private readonly IDynamicRepository repository;
+        private readonly ICriteriaService _repository;
 
         public AccountService()
         {
-            repository = new DynamicRepository();
+            _repository = new CriteriaService();
         }
 
         #region Customer Profile
@@ -52,7 +48,7 @@
                 CustIDs = custIDs
             };
 
-            return repository.Fetch<CustInfoModel>(criteria);
+            return _repository.Fetch<CustInfoModel>(criteria);
         }
 
         public CustomerInfoByCtsCustIdModel GetCustomerInfoByCTSCustId(Int64 ctsCustId)
@@ -62,12 +58,7 @@
                 CTSCustId = ctsCustId
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.QueryEntity<CustomerInfoByCtsCustIdModel>(criteria);
-
-                return result;
-            }
+            return _repository.Get<CustomerInfoByCtsCustIdModel>(criteria);
         }
 
         public CustomerInfoByCustIdsModel GetCustomerInfoDangerous(long custId)
@@ -77,12 +68,7 @@
                 CustIdList = custId.ToString(),
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.QueryEntity<CustomerInfoByCustIdsModel>(criteria);
-
-                return result;
-            }
+            return _repository.Get<CustomerInfoByCustIdsModel>(criteria);
         }
 
         public CustomerInfoAssociationAccountModel GetCustomerInfoAssociationAccount(long ctsCustId)
@@ -92,10 +78,7 @@
                 CTSCustId = ctsCustId
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.QueryEntity<CustomerInfoAssociationAccountModel>(criteria);
-            }
+            return _repository.Get<CustomerInfoAssociationAccountModel>(criteria);
         }
 
         public IEnumerable<CustomerInfoEvidenceModel> GetCustomerInfoEvidence(long ctsCustId)
@@ -105,10 +88,7 @@
                 CTSCustId = ctsCustId
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<CustomerInfoEvidenceModel>(criteria);
-            }
+            return _repository.Fetch<CustomerInfoEvidenceModel>(criteria);
         }
 
         public CustomerInfoLoginStatsModel GetCustomerInfoLoginStats(long ctsCustId, DateTime fromDate, DateTime toDate)
@@ -120,10 +100,7 @@
                 ToDate = toDate
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.QueryEntity<CustomerInfoLoginStatsModel>(criteria);
-            }
+            return _repository.Get<CustomerInfoLoginStatsModel>(criteria);
         }
 
         public CustomerInfoDateModel GetCustProfileDates(long ctsCustId, ROLE_CUSTOMER roleID)
@@ -134,10 +111,7 @@
                 RoleID = roleID
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.QueryEntity<CustomerInfoDateModel>(criteria);
-            }
+            return _repository.Get<CustomerInfoDateModel>(criteria);
         }
 
         #endregion
@@ -150,21 +124,9 @@
                 Username = username
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.Query<SearchResultModel, Currency, Role, Subscriber, SearchResultModel>((model, currency, role, subscriber) =>
-                {
-                    model.Currency = currency;
-                    model.Role = role;
-                    model.Subscriber = subscriber;
+            var result = _repository.Fetch<SearchAccountResultModel>(criteria);
 
-                    return model;
-                },
-                "CurrencyId, RoleId, SubscriberId",
-                criteria).ToList();
-
-                return result;
-            }
+            return result?.Select(x => new SearchResultModel(x)).ToList() ?? new List<SearchResultModel>();
         }
 
         public List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(long ctsCustId)
@@ -174,12 +136,7 @@
                 CTSCustId = ctsCustId
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.Query<CustomerEvidenceByCTSCustIdModel>(criteria);
-
-                return result.ToList();
-            }
+            return _repository.Fetch<CustomerEvidenceByCTSCustIdModel>(criteria)?.ToList() ?? new List<CustomerEvidenceByCTSCustIdModel>();
         }
 
         public List<CustomerStaticStatusModel> GetCustomerStaticStatus(int listId, bool status)
@@ -190,12 +147,7 @@
                 Status = status
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.Query<CustomerStaticStatusModel>(criteria);
-
-                return result.ToList();
-            }
+            return _repository.Fetch<CustomerStaticStatusModel>(criteria)?.ToList() ?? new List<CustomerStaticStatusModel>();
         }
 
         public CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(long custId)
@@ -205,15 +157,7 @@
                 CustId = custId
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var fraudCaseList = db.Query<FraudCaseModel>(criteria).ToList();
-
-                return new CustomerProfileFraudInfoModel
-                {
-                    FraudCaseList = fraudCaseList
-                };
-            }
+            return _repository.Get<CustomerProfileFraudInfoModel>(criteria);
         }
 
         public List<TagModel> GetDirectAssociatedAccountTagFlagged(string custIdsAssInfo)
@@ -223,13 +167,8 @@
                 CustAssInfo = custIdsAssInfo
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.Query<TagModel>(criteria);
-
-                return result.ToList();
-            }
-        }   
+            return _repository.Fetch<TagModel>(criteria)?.ToList() ?? new List<TagModel>();
+        }
 
         public CustomerFlagInfoModel GetCustomerFlagInfo(Int64 ctsCustId)
         {
@@ -238,12 +177,7 @@
                 CTSCustId = ctsCustId
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.QueryEntity<CustomerFlagInfoModel>(criteria);
-
-                return result;
-            }
+            return _repository.Get<CustomerFlagInfoModel>(criteria);
         }
 
         public AssociatedAccountPagingModel GetAssociatedAccount(AssociatedFilterModel filterModel)
@@ -259,19 +193,16 @@
                 SubscriberIDs = filterModel.SubscriberIds,
                 Skip = filterModel.start,
                 Take = filterModel.length,
-                TotalItems = 0     
+                TotalItems = 0
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.Query<AssociatedAccountModel>(criteria);
+            var result = _repository.Fetch<AssociatedAccountModel>(criteria);
 
-                return new AssociatedAccountPagingModel
-                {
-                    AssociationList = result.ToList(),
-                    TotalItems = criteria.TotalItems
-                };
-            }
+            return new AssociatedAccountPagingModel
+            {
+                AssociationList = result?.ToList() ?? new List<AssociatedAccountModel>(),
+                TotalItems = criteria.TotalItems
+            };
         }
 
         public List<AccountStaticStatusModel> GetAccountStaticStatuses(int listId, bool status)
@@ -299,7 +230,7 @@
             }
 
             return groupStatuses;
-        }       
+        }
 
         public IEnumerable<ValidateManualAssociationMultipleModel> ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList, out bool isException)
         {
@@ -313,10 +244,7 @@
 
             try
             {
-                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-                {
-                    return db.Query<ValidateManualAssociationMultipleModel>(criteria).ToList();
-                }
+                return _repository.Fetch<ValidateManualAssociationMultipleModel>(criteria);
             }
             catch (Exception ex)
             {
@@ -350,28 +278,25 @@
                 AssociationListJson = associationListJson
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            try
             {
-                try
-                {
-                    db.ExecuteNonQuery(criteria);
+                _repository.Execute(criteria);
 
-                    return new DBResult
-                    {
-                        ErrorCode = 0,
-                        ErrorMsg = string.Empty
-                    };
-                }
-                catch (Exception ex)
+                return new DBResult
                 {
-                    LogExtension.LogError("CTS - Insert manual association multiple - exception: " + ex.Message, ex);
+                    ErrorCode = 0,
+                    ErrorMsg = string.Empty
+                };
+            }
+            catch (Exception ex)
+            {
+                LogExtension.LogError("CTS - Insert manual association multiple - exception: " + ex.Message, ex);
 
-                    return new DBResult
-                    {
-                        ErrorCode = -1,
-                        ErrorMsg = ex.Message
-                    };
-                }
+                return new DBResult
+                {
+                    ErrorCode = -1,
+                    ErrorMsg = ex.Message
+                };
             }
         }
 
@@ -389,18 +314,15 @@
                 ErrorMessage = string.Empty
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                db.ExecuteNonQuery(criteria);
+            _repository.Execute(criteria);
 
-                return new DBResult
-                {
-                    ErrorCode = string.IsNullOrWhiteSpace(criteria.ErrorMessage) ? 0 : -1,
-                    ErrorMsg = criteria.ErrorMessage
-                };
-            }
+            return new DBResult
+            {
+                ErrorCode = string.IsNullOrWhiteSpace(criteria.ErrorMessage) ? 0 : -1,
+                ErrorMsg = criteria.ErrorMessage
+            };
         }
-      
+
         public MatchesAssociationByAIModel GetGBAssociationFromAI(long custID1, long custID2, string groupList)
         {
             var result = new MatchesAssociationByAIModel();
@@ -411,7 +333,7 @@
                 CustID2 = custID2,
                 GroupList = groupList
             };
-            result.MatchesInfo = repository.Fetch<GBAssociationAIModel>(criteria) ?? Enumerable.Empty<GBAssociationAIModel>();
+            result.MatchesInfo = _repository.Fetch<GBAssociationAIModel>(criteria) ?? Enumerable.Empty<GBAssociationAIModel>();
             result.ErrorMessage = criteria.ErrorMessage;
             result.ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1;
             result.TotalMatchCount = (int)criteria.TotalMatchCount;
@@ -426,10 +348,7 @@
                 MatchIds = matchIDs
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<MatchesModel>(criteria);
-            }
+            return _repository.Fetch<MatchesModel>(criteria);
         }
 
         public IEnumerable<MatchesInfoModel> GetBettingPatternMatchesInfo(string matchIDs, string custIds)
@@ -440,10 +359,8 @@
                 CustIds = custIds
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<MatchesInfoModel>(criteria);
-            }
+
+            return _repository.Fetch<MatchesInfoModel>(criteria);
         }
 
         public IEnumerable<CustomerGroupModel> GetCustGroupAssociation(string originalGroupIDs)
@@ -455,7 +372,7 @@
                     GroupList = originalGroupIDs
                 };
 
-                return repository.Fetch<CustomerGroupModel>(criteria) ?? Enumerable.Empty<CustomerGroupModel>();
+                return _repository.Fetch<CustomerGroupModel>(criteria) ?? Enumerable.Empty<CustomerGroupModel>();
             }
 
             return Enumerable.Empty<CustomerGroupModel>();
@@ -472,7 +389,7 @@
                     CustIds = custIds,
                     MatchId = macthInfo.MatchId
                 };
-                return repository.Fetch<MatchesDetailInfoModel>(criteria) ?? Enumerable.Empty<MatchesDetailInfoModel>();
+                return _repository.Fetch<MatchesDetailInfoModel>(criteria) ?? Enumerable.Empty<MatchesDetailInfoModel>();
             }
 
             return Enumerable.Empty<MatchesDetailInfoModel>();
@@ -557,10 +474,7 @@
         {
             var criteria = new GetCategoryInfoCriteria();
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<CategoryInfoModel>(criteria);
-            }
+            return _repository.Fetch<CategoryInfoModel>(criteria);
         }
 
         public AssociationByIPInfoModel GetAssociationByIPInfo(long custId1, long custId2)
@@ -571,14 +485,11 @@
                 CustId2 = custId2
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            return new AssociationByIPInfoModel
             {
-                return new AssociationByIPInfoModel
-                {
-                    ItemList = db.Query<AssociationByIPItemModel>(criteria),
-                    ErrorMessage = criteria.ErrorMessage
-                };
-            }
+                ItemList = _repository.Fetch<AssociationByIPItemModel>(criteria),
+                ErrorMessage = criteria.ErrorMessage
+            };
         }
 
         public IEnumerable<int> GetAssociationByIPType(long custID1, long custID2)
@@ -589,10 +500,7 @@
                 CustID2 = custID2
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<int>(criteria);
-            }
+            return _repository.Fetch<int>(criteria);
         }
 
         public IEnumerable<AssByIPTicketStakeModel> GetAssociationBy5GIPDetail(long custID1, long custID2)
@@ -603,10 +511,7 @@
                 CustID2 = custID2
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<AssByIPTicketStakeModel>(criteria);
-            }
+            return _repository.Fetch<AssByIPTicketStakeModel>(criteria);
         }
 
         public CoupleInfoViewModel GetCoupleInfos(long custID1, long custID2)
@@ -619,10 +524,7 @@
 
             var result = new CoupleInfoViewModel();
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                result.CoupleInfo = db.Query<CoupleInfoModel>(criteria);
-            }
+            result.CoupleInfo = _repository.Fetch<CoupleInfoModel>(criteria);
 
             return result;
         }
@@ -636,7 +538,7 @@
                 AssType = (int)pattern
             };
 
-            return repository.Fetch<DateTime>(criteria);
+            return _repository.Fetch<DateTime>(criteria);
         }
 
         public IEnumerable<CoupleFraudDetailModel> GetCoupleFraudDetails(string coupleInfoJson)
@@ -646,7 +548,7 @@
                 CoupleInfoDetails = coupleInfoJson
             };
 
-            return repository.Fetch<CoupleFraudDetailModel>(criteria);
+            return _repository.Fetch<CoupleFraudDetailModel>(criteria);
         }
 
         public IEnumerable<CoupleIPFraudDetailModel> GetCoupleIPFraudDetails(string coupleInfoJson)
@@ -655,10 +557,8 @@
             {
                 CoupleInfoDetails = coupleInfoJson
             };
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<CoupleIPFraudDetailModel>(criteria);
-            }
+
+            return _repository.Fetch<CoupleIPFraudDetailModel>(criteria);
         }
 
         public IEnumerable<TicketDetailsModel> GetAIAssociationTicketDetails(string transIds, int? transSize, int? matchSize)
@@ -671,10 +571,8 @@
                 TransSize = transSize,
                 MatchSize = matchSize
             };
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<TicketDetailsModel>(criteria);
-            }
+
+            return _repository.Fetch<TicketDetailsModel>(criteria);
         }
 
         public AssociationOTGBViewModel GetAssociationByOTGB(long custID1, long custID2, AccountAssociationByOTGB fraudType)
@@ -688,21 +586,16 @@
                 FraudType = (int)fraudType
             };
 
-            var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
-
-            var data = db.QueryMultiple(criteria);
-
             if (fraudType != AccountAssociationByOTGB.CheckExist)
             {
-                result.AssociationOTGBRoun1 = data?.Read<AssociationOTGBModel>() ?? Enumerable.Empty<AssociationOTGBModel>();
-                result.AssociationOTGBRoun2 = data?.Read<AssociationOTGBModel>() ?? Enumerable.Empty<AssociationOTGBModel>();
-                result.AssociationOTGBRoun3 = data?.Read<AssociationOTGBModel>() ?? Enumerable.Empty<AssociationOTGBModel>();
+                (result.AssociationOTGBRoun1, result.AssociationOTGBRoun2, result.AssociationOTGBRoun3) = _repository.Fetch<AssociationOTGBModel, AssociationOTGBModel, AssociationOTGBModel>(criteria);
             }
             else
             {
-                result.ScoreRound1 = data?.Read<bool>().FirstOrDefault() ?? false;
-                result.ScoreRound2 = data?.Read<bool>().FirstOrDefault() ?? false;
-                result.ScoreRound3 = data?.Read<bool>().FirstOrDefault() ?? false;
+                (var scoreRound1s, var scoreRound2s, var scoreRound3s) = _repository.Fetch<bool, bool, bool>(criteria);
+                result.ScoreRound1 = scoreRound1s?.FirstOrDefault() ?? false;
+                result.ScoreRound2 = scoreRound2s?.FirstOrDefault() ?? false;
+                result.ScoreRound3 = scoreRound3s?.FirstOrDefault() ?? false;
             }
 
             return result;
@@ -715,10 +608,7 @@
         {
             var criteria = new GetAllEvidenceCriteria();
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<EvidenceModel>(criteria);
-            }
+            return _repository.Fetch<EvidenceModel>(criteria);
         }
 
         public IEnumerable<FlaggedEvidenceModel> GetFlaggedEvidences(Int64 ctsCustId, string evidenceCodes)
@@ -729,10 +619,7 @@
                 EvidenceCodes = evidenceCodes
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<FlaggedEvidenceModel>(criteria);
-            }
+            return _repository.Fetch<FlaggedEvidenceModel>(criteria);
         }
 
         public DBResult RemoveFlaggedEvidence(RemoveEvidenceModel model)
@@ -744,27 +631,24 @@
                 UserId = model.UserId
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            try
             {
-                try
-                {
-                    db.ExecuteNonQuery(criteria);
+                _repository.Execute(criteria);
 
-                    if (!string.IsNullOrEmpty(criteria.ErrorMessage))
-                    {
-                        return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
-                    }
-                    else
-                    {
-                        return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
-                    }
-                }
-                catch (Exception ex)
+                if (!string.IsNullOrEmpty(criteria.ErrorMessage))
                 {
-                    LogExtension.LogError("CTS - Remove Flagged Evidence Manual throws exception: " + ex.Message, ex);
-
-                    return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
+                    return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
                 }
+                else
+                {
+                    return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
+                }
+            }
+            catch (Exception ex)
+            {
+                LogExtension.LogError("CTS - Remove Flagged Evidence Manual throws exception: " + ex.Message, ex);
+
+                return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
             }
         }
 
@@ -775,10 +659,7 @@
                 CTSCustId = ctsCustId
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<AccountExceptionsModel>(criteria).ToList();
-            }
+            return _repository.Fetch<AccountExceptionsModel>(criteria)?.ToList() ?? new List<AccountExceptionsModel>();
         }
 
         public DBResult AddAccountException(UpdateAccountExceptionModel model)
@@ -794,7 +675,7 @@
 
             try
             {
-                repository.Execute(criteria);
+                _repository.Execute(criteria);
             }
             catch (Exception ex)
             {
@@ -820,12 +701,9 @@
                 ToCTSCustId = model.ToCTSCustId
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                db.ExecuteNonQuery(criteria);
+            _repository.Execute(criteria);
 
-                return 0;
-            }
+            return 0;
         }
 
         public AffectedRetractEvidenceModel GetAffectedRetractEvidences(Int64 ctsCustId, string evidenceCodes)
@@ -836,17 +714,13 @@
                 EvidenceCodes = evidenceCodes
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            (var affectedEvidenceList, var retractEvidenceList) = _repository.Fetch<AffectedEvidenceModel, AffectedEvidenceModel>(criteria);
+
+            return new AffectedRetractEvidenceModel
             {
-                using (var result = db.QueryMultiple(criteria))
-                {
-                    return new AffectedRetractEvidenceModel
-                    {
-                        AffectedEvidenceList = result.Read<AffectedEvidenceModel>().ToList(),
-                        RetractEvidenceList = result.Read<AffectedEvidenceModel>().ToList()
-                    };
-                }
-            }
+                AffectedEvidenceList = affectedEvidenceList?.ToList() ?? new List<AffectedEvidenceModel>(),
+                RetractEvidenceList = retractEvidenceList?.ToList() ?? new List<AffectedEvidenceModel>()
+            };
         }
 
         public int RetractAffectedEvidence(RemoveEvidenceModel model)
@@ -859,7 +733,7 @@
                 UserId = model.UserId
             };
 
-            var result = DataService.UpdateData(criteria, "Retract affected evidence");
+            var result = _repository.UpdateData(criteria, "Retract affected evidence");
 
             return result.ErrorCode;
         }
@@ -873,7 +747,7 @@
                 UserId = model.UserId
             };
 
-            var result = DataService.UpdateData(criteria, "Restore affected evidence");
+            var result = _repository.UpdateData(criteria, "Restore affected evidence");
 
             return result.ErrorCode;
         }
@@ -886,10 +760,7 @@
                 ToCTSCustID = toCTSCustID
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<AffectedEvidenceListBetweenCustsModel>(criteria);
-            }
+            return _repository.Fetch<AffectedEvidenceListBetweenCustsModel>(criteria);
         }
 
         #endregion
@@ -897,31 +768,19 @@
         #region Customer Category           
 
         public IEnumerable<GetCustomerClassificationModel> GetCustomerClassification(long ctsCustId, ROLE_CUSTOMER roleID, out bool isExcludedTagAssPA)
-        {         
-            isExcludedTagAssPA = false;
-
+        {
             var criteria = new GetCTSCustomerClassificationCriteria
             {
                 CTSCustID = ctsCustId,
                 RoleID = roleID
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                using (var result = db.QueryMultiple(criteria))
-                {                   
-                    var excludedTagAssPA = result.Read<bool>();
-                    var categories = result.Read<GetCustomerClassificationModel>();
-                   
-                    if (excludedTagAssPA != null && excludedTagAssPA.Any())
-                    {
-                        isExcludedTagAssPA = excludedTagAssPA.ToList()[0];
-                    }
+            (var excludedTagAssPA, var categories) = _repository.Fetch<bool, GetCustomerClassificationModel>(criteria);
 
-                    return categories;
-                }
-            }
-        }       
+            isExcludedTagAssPA = excludedTagAssPA.IsNotNullOrEmpty() ? excludedTagAssPA.ToList()[0] : false;
+
+            return categories;
+        }
 
         public IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long ctsCustId, ROLE_CUSTOMER roleID)
         {
@@ -933,10 +792,7 @@
 
             try
             {
-                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-                {
-                    return db.Query<CustomerClassificationHistoryModel>(criteria);
-                }
+                return _repository.Fetch<CustomerClassificationHistoryModel>(criteria);
             }
             catch (Exception ex)
             {
@@ -954,11 +810,8 @@
                 ParentCateIdList = parentCateIdList
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<GetCustomerClassificationModel>(criteria);
-            }
-        }     
+            return _repository.Fetch<GetCustomerClassificationModel>(criteria);
+        }
 
         public DBResult AddQueueAffectDownlinesCustomerCategory(CustomerCategoryModel categoryModel)
         {
@@ -973,21 +826,21 @@
                 Remark = categoryModel.Remark,
                 ActionType = (int)categoryModel.ActionType
             };
-            
+
             try
             {
-                repository.Execute(criteria);
+                _repository.Execute(criteria);
             }
             catch (Exception ex)
             {
-                LogExtension.LogError($"CTS - AddQueueCustomerCategory exception: { ex.Message }", ex);
+                LogExtension.LogError($"CTS - AddQueueCustomerCategory exception: {ex.Message}", ex);
 
                 return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
             }
 
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
-      
+
         public DBResult ChangeExcludedTagAssPA(long ctsCustId, int subscriberId, bool isExcludedTagAssPA, int createdBy)
         {
             var criteria = new ChangeUpdateTaggingAssWithPACriteria
@@ -998,17 +851,9 @@
                 CreatedBy = createdBy
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                db.ExecuteNonQuery(criteria);
+            _repository.Execute(criteria);
 
-                if (string.IsNullOrWhiteSpace(criteria.ErrorMessage))
-                {
-                    return new DBResult { ErrorCode = 0, ErrorMsg = criteria.ErrorMessage };
-                }
-            }
-
-            return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
+            return new DBResult { ErrorCode = string.IsNullOrWhiteSpace(criteria.ErrorMessage) ? 0 : -1, ErrorMsg = criteria.ErrorMessage };
         }
 
         public IEnumerable<CustomerClassificationGeneralInfoModel> GetCustomerClassificationByCategory(string categoryIdList)
@@ -1018,10 +863,7 @@
                 CategoryIDList = categoryIdList
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<CustomerClassificationGeneralInfoModel>(criteria);
-            }
+            return _repository.Fetch<CustomerClassificationGeneralInfoModel>(criteria);
         }
         #endregion
 
@@ -1030,10 +872,7 @@
         {
             var criteria = new GetCustomerClassificationBySportCriteria { CTSCustID = ctsCustID };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<GetCustomerCategoryBySportModel>(criteria);
-            }
+            return _repository.Fetch<GetCustomerCategoryBySportModel>(criteria);
         }
 
         public IEnumerable<GetCustomerCategoryHistoryBySportModel> GetCustomerCategoryHistoryBySport(long ctsCustID, int sportID)
@@ -1044,10 +883,7 @@
                 SportID = sportID
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<GetCustomerCategoryHistoryBySportModel>(criteria);
-            }
+            return _repository.Fetch<GetCustomerCategoryHistoryBySportModel>(criteria);
         }
         #endregion
 
@@ -1060,10 +896,7 @@
                 GetTop = getTop
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<PerformanceBySportModel>(criteria);
-            }
+            return _repository.Fetch<PerformanceBySportModel>(criteria);
         }
 
         public IEnumerable<PerformanceByBettypeModel> GetPerformanceByBettype(long custId, int getTop)
@@ -1074,10 +907,7 @@
                 GetTop = getTop
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<PerformanceByBettypeModel>(criteria);
-            }
+            return _repository.Fetch<PerformanceByBettypeModel>(criteria);
         }
 
         public IEnumerable<PerformanceDailyModel> GetPerformanceDaily(long custId)
@@ -1087,10 +917,7 @@
                 CustId = custId
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<PerformanceDailyModel>(criteria);
-            }
+            return _repository.Fetch<PerformanceDailyModel>(criteria);
         }
         #endregion
 
@@ -1103,7 +930,7 @@
                 ToDate = toDate
             };
 
-            return repository.Fetch<CTSCustomer>(criteria);
+            return _repository.Fetch<CTSCustomer>(criteria);
         }
 
     }
