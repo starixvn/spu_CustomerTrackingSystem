@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.Common.Extensions;
-    using Fanex.Data;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;

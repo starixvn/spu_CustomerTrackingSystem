@@ -2,10 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using Fanex.Logging;
     using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
 
     public static class LogExtension
     {
@@ -35,14 +33,15 @@
         {
             return new LogMessage(ex.Message)
                 .AddMessage(message)
-                .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                //.AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
                 .AddMessage($"{DateTime.Now}").ToString();
         }
 
         public static string GetDbExceptionInfo(this Exception ex, Func<KeyValuePair<string, object>, bool> func)
         {
-            return DatabaseInfoGetters.GetDbExceptionInfo(ex)?.Where(func)?.FirstOrDefault().Value?.ToString();
+            return string.Empty;
+            //return DatabaseInfoGetters.GetDbExceptionInfo(ex)?.Where(func)?.FirstOrDefault().Value?.ToString();
         }
     }
 }

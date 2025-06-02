@@ -5,11 +5,8 @@
     using Fanex.BetList.Core.RemotingRef;
     using Fanex.Caching;
     using Fanex.Data;
-    using Fanex.Data.MySql;
-    using Fanex.Data.SqlServer;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.Logging.Sentry;
-    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.RemotingRef;
     using ONEbook.UM;
     using ONEbook.UM.Configurations;
@@ -29,13 +26,13 @@
     {
         protected void Application_Start()
         {
-            DbSettingProviderManager
-                .StartNewSession()
-                .WithSqlServer()
-                .WithMySql()
-                .UseDefaultDbSettingProvider(ConfigSettings.StoredProcedurePath, true)
-                .UseDefaultConnectionStringProvider()
-                .Run();
+            var umConfig = new UMClientConfiguration().Initialize();
+
+            UMClientManager
+               .UseConfig(umConfig)
+               .UseCacheService(new UMCacheService(new CacheService()))
+               .UseRestClient(new UMRestClient(umConfig))
+               .UseHttpContext(new HttpContextHelper());
 
             LogManager.SetDefaultLogCategory(ConfigurationManager.AppSettings["Sentry-Log-Category"])
                   .Use(new List<ILogEngine>
@@ -45,6 +42,12 @@
                              Dsn = new Dsn(ConfigurationManager.AppSettings["Sentry-Log-Config"])
                          })
                   });
+
+            var setting = DbSettingProviderManager
+                .StartNewSession()
+                .Register(true);
+            
+            setting.Run();
 
             RefDataTypeContainer
                 .ConnectTo(new Uri(ConfigurationManager.AppSettings["Fanex.RemotingRef.Service.Url"]))
@@ -56,14 +59,6 @@
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            var umConfig = new UMClientConfiguration().Initialize();
-
-            UMClientManager
-               .UseConfig(umConfig)
-               .UseCacheService(new UMCacheService(new CacheService()))
-               .UseRestClient(new UMRestClient(umConfig))
-               .UseHttpContext(new HttpContextHelper());
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)

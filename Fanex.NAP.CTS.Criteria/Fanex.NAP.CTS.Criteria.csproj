@@ -243,11 +243,8 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Fanex.Data">
-      <Version>4.3.4</Version>
-    </PackageReference>
-    <PackageReference Include="Fanex.Data.Repository">
-      <Version>4.3.4</Version>
+    <PackageReference Include="Fanex.Data.ProxyClient">
+      <Version>1.0.3.6</Version>
     </PackageReference>
     <PackageReference Include="System.ValueTuple">
       <Version>4.5.0</Version>
