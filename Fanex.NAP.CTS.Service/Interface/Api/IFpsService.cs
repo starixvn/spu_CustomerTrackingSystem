@@ -12,6 +12,8 @@
         #region cts
         SearchAccountResultModel SearchAccount_DCSCenter(SearchAccountParamModel param);
 
+        IEnumerable<SearchDeviceItemModel> SearchDevice_DCSCenter(SearchDeviceParamModel param);
+
         GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriber_DCSCenter(GetAssAccountInfoByCustSubscriberParamModel param);
 
         TransactionResultModel GetTransactionHistory_DCSCenter(TransactionParamModel param);

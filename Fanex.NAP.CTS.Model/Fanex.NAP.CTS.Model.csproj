@@ -222,6 +222,8 @@
     <Compile Include="API\FPS\Device\GetAssMatrixByDeviceSubscriberParamModel.cs" />
     <Compile Include="API\FPS\Device\GetDevicesPerAccountItemModel.cs" />
     <Compile Include="API\FPS\Device\GetDevicesPerAccountResultModel.cs" />
+    <Compile Include="API\FPS\Search\SearchDeviceItemModel.cs" />
+    <Compile Include="API\FPS\Search\SearchDeviceResultModel.cs" />
     <Compile Include="API\FPS\Transaction\LatestTransactionDCSCenterItemModel.cs" />
     <Compile Include="API\FPS\Transaction\TransactionHistoryByAccountDCSExtraItemModel.cs" />
     <Compile Include="API\FPS\Transaction\TransactionHistoryByAccountDCSExtraResultModel.cs" />

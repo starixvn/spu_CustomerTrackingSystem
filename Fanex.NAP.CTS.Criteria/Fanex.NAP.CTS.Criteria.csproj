@@ -98,6 +98,7 @@
     <Compile Include="Api\FPS\Search\GetListAccountByUserNameSubscriberDCSCenterCriteria.cs" />
     <Compile Include="Api\FPS\Search\GetListAccountByUserNameSubscriberDCSExtraCriteria.cs" />
     <Compile Include="Api\FPS\Search\GetListDeviceByCodeSubscriberDCSExtraCriteria.cs" />
+    <Compile Include="Api\FPS\Search\GetDeviceByDeviceCodeSubscriberDCSCenterCriteria.cs" />
     <Compile Include="Api\FPS\Subscriber\GetSubscriberDcsExBySubscriberName.cs" />
     <Compile Include="Api\FPS\Transaction\GetLastestTransactionDCSCenterCriteria.cs" />
     <Compile Include="Api\FPS\Transaction\GetLastestTransactionDCSExtraCriteria.cs" />

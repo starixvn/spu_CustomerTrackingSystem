@@ -94,6 +94,7 @@
 		<Setting Key="DCS_DC_Transaction_GetLatestBySubscriber" SpName="DCS_DC_Transaction_GetLatestBySubscriber" DbName="MySQL.DCS_DataCenter.Reporter" />
 		<Setting Key="DCS_DC_Association_GetAccountsPerDevice" SpName="DCS_DC_Association_GetAccountsPerDevice" DbName="MySQL.DCS_DataCenter.Reporter" />
 		<Setting Key="DCS_DC_Association_GetDevicesPerAccount" SpName="DCS_DC_Association_GetDevicesPerAccount" DbName="MySQL.DCS_DataCenter.Reporter" />
+		<Setting Key="DCS_DC_Device_GetByDeviceCodeSubscriber" SpName="DCS_DC_Device_GetByDeviceCodeSubscriber" DbName="MySQL.DCS_DataCenter.Reporter" />
 		<Setting Key="DCS_ET_Subscriber_GetInfoBySubscriberName" SpName="DCS_ET_Subscriber_GetInfoBySubscriberName" DbName="MySQL.DCS_Extra.Reporter" />
 		<Setting Key="DCS_ET_Transaction_GetHistoryByAccountSubscriber" SpName="DCS_ET_Transaction_GetHistoryByAccountSubscriber" DbName="MySQL.DCS_Extra.Reporter" />
 		<Setting Key="DCS_ET_Transaction_GetHistoryBySubscriber" SpName="DCS_ET_Transaction_GetHistoryBySubscriber" DbName="MySQL.DCS_Extra.Reporter" />

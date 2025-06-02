@@ -58,6 +58,18 @@
             return data;
         }
 
+        public IEnumerable<SearchDeviceItemModel> SearchDevice_DCSCenter(SearchDeviceParamModel param)
+        {
+            var criteria = new GetDeviceByDeviceCodeSubscriberDCSCenterCriteria
+            {
+                SubscriberID = param.SubscriberID,
+                DeviceCode = param.DeviceCode
+            };
+
+            var items = repository.Fetch<SearchDeviceItemModel>(criteria);
+            return items;
+        }
+
         public GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriber_DCSCenter(GetAssAccountInfoByCustSubscriberParamModel param)
         {
             var criteria = new GetAssAccountInfoByCustSubscriberDCSCenterCriteria

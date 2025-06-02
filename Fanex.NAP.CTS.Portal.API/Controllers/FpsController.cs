@@ -47,6 +47,22 @@
         }
 
         [HttpPost]
+        public JsonResult<List<SearchDeviceItemModel>> SearchDeviceDCSCenter(SearchDeviceParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.SearchDevice_DCSCenter(param);
+
+                return Json(data.ToList());
+
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Search Device DCS Center exception: " + ex.Message);
+                return Json(new List<SearchDeviceItemModel>());
+            }
+        }
+        [HttpPost]
         public JsonResult<GetAssAccountInfoByCustSubscriberModel> GetAssAccountInfoByCustSubscriberDCSCenter(GetAssAccountInfoByCustSubscriberParamModel param)
         {
             try
