@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.Criteria.Common
 {
-    using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class GetCommonCustomerClassCriteria : CriteriaBase

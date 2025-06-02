@@ -1,8 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using Fanex.Data;
-    using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core;
+    using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.Account.Associated;
     using Fanex.NAP.CTS.Criteria.AssociationReport;
@@ -14,6 +13,13 @@
 
     public class AssociationReportService : IAssociationReportService
     {
+        private readonly ICriteriaService _repository;
+
+        public AssociationReportService()
+        {
+            _repository = new CriteriaService();
+        }
+
         #region Query From MySQL
 
         public List<CustomerStaticStatusModel> GetCustomerStaticStatus(int listId, bool status)
@@ -24,12 +30,8 @@
                 Status = status
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.Query<CustomerStaticStatusModel>(criteria);
-
-                return result.ToList();
-            }
+            var result = _repository.Fetch<CustomerStaticStatusModel>(criteria);
+            return result.ToList();
         }
 
         public IEnumerable<AccountStaticStatusModel> GetAccountStaticStatuses()
@@ -54,11 +56,7 @@
         public IEnumerable<EvidenceModel> GetEvidenceList()
         {
             var criteria = new GetAllEvidenceCriteria();
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<EvidenceModel>(criteria);
-            }
+            return _repository.Fetch<EvidenceModel>(criteria);
         }
 
         public DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, int createdBy, bool isRemoveAction)
@@ -73,16 +71,13 @@
                 IsActionRemove = isRemoveAction
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                db.ExecuteNonQuery(criteria);
+            _repository.Execute(criteria);
 
-                return new DBResult
-                {
-                    ErrorCode = string.IsNullOrWhiteSpace(criteria.ErrorMessage) ? 0 : -1,
-                    ErrorMsg = criteria.ErrorMessage
-                };
-            }
+            return new DBResult
+            {
+                ErrorCode = string.IsNullOrWhiteSpace(criteria.ErrorMessage) ? 0 : -1,
+                ErrorMsg = criteria.ErrorMessage
+            };
         }
 
         public IEnumerable<AssociationFromMySqlModel> GetAssociationReportFromMySql(AssociationFilterViewModel filter, out int totalItems)
@@ -102,16 +97,10 @@
                 SkipRow = filter.start
             };
 
-            var repository = new DynamicRepository();
+            var data = _repository.Fetch<AssociationFromMySqlModel>(criteria);
+            totalItems = criteria.TotalItems;
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var data = repository.Fetch<AssociationFromMySqlModel>(criteria);
-
-                totalItems = criteria.TotalItems;
-
-                return data;
-            }
+            return data;
         }
 
         public IEnumerable<AssociationDetailFromMySqlModel> GetAssociationDetailFromMySql(AssociationDetailFilterViewModel filter, out int totalItems)
@@ -128,16 +117,10 @@
                 SkipRow = filter.start
             };
 
-            var repository = new DynamicRepository();
+            var data = _repository.Fetch<AssociationDetailFromMySqlModel>(criteria);
+            totalItems = criteria.TotalItems;
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var data = repository.Fetch<AssociationDetailFromMySqlModel>(criteria);
-
-                totalItems = criteria.TotalItems;
-
-                return data;
-            }
+            return data;
         }
 
         #endregion

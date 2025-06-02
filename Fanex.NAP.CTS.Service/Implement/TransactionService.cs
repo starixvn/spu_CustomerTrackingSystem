@@ -9,7 +9,6 @@
     using Fanex.NAP.CTS.Criteria.Account.TransactionHistory;
     using Fanex.NAP.CTS.Model.LatestTransaction;
     using Fanex.NAP.CTS.Criteria.LatestTransaction;
-    using Fanex.Data;
     using Fanex.NAP.CTS.Core.Service;
 
     public class TransactionService : ITransactionService
@@ -88,10 +87,7 @@
                 Length = length
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<LatestTransactionModel>(criteria);
-            }
+            return _repository.Fetch<LatestTransactionModel>(criteria);
         }
     }
 }

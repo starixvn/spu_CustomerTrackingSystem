@@ -1,21 +1,20 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
-    using Fanex.Data.Repository;
+    using System.Linq;
+    using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Service.Interface;
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class RobotClassificationService : IRobotClassificationService
     {
-        private readonly IDynamicRepository repository;
+        private readonly ICriteriaService repository;
 
         public RobotClassificationService()
         {
-            repository = new DynamicRepository();
+            repository = new CriteriaService();
         }      
         
         public CustomerRobotUserStatusModel GetStatusRobotClassification(long custID, ROLE_CUSTOMER RoleID)

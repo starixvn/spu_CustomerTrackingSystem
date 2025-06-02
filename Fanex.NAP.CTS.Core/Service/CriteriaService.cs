@@ -4,8 +4,6 @@
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Resource;
     using System.Collections.Generic;
-    using System.Data.SqlTypes;
-    using System.Linq;
 
     public class CriteriaService : ICriteriaService
     {

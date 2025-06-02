@@ -1,17 +1,17 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement.CustomerClassificationAgency
 {
-    using Fanex.Data.Repository;
+    using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Criteria.CustomerClassificationAgency.BaseCustomerClassificationAgency;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassificationAgency.BaseCustomerClassificationAgency;
 
     public class BaseCustomerClassificationAgencyService
     {
-        protected readonly IDynamicRepository _repository;
+        protected readonly ICriteriaService _repository;
 
         public BaseCustomerClassificationAgencyService()
         {
-            _repository = new DynamicRepository();
+            _repository = new CriteriaService();
         }
 
         public GetRescanCustomerClassificationAgencyModel GetRescanCustomerClassificationAgency(string custIDs)

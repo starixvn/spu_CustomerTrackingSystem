@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
-    using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Criteria.Account.CustomerInfo;
@@ -20,6 +19,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Fanex.NAP.CTS.Core.Service;
 
     public interface IAssociatedGroupMonitorService
     {
@@ -66,12 +66,12 @@
 
     public class AssociatedGroupMonitorService : IAssociatedGroupMonitorService
     {
-        private readonly IDynamicRepository repository;
+        private readonly ICriteriaService repository;
         private readonly ICustomerClassificationService customerClassificationService;
 
         public AssociatedGroupMonitorService()
         {
-            repository = new DynamicRepository();
+            repository = new CriteriaService();
             customerClassificationService = new CustomerClassificationService();
         }
 

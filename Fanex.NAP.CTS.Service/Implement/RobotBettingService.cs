@@ -1,10 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using Fanex.Data;
-    using Fanex.Data.Repository;
+    using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Criteria.Account.RobotSetting;
     using Fanex.NAP.CTS.Model.Account.RobotBetting;
-    using Fanex.NAP.CTS.Resource.Consts;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
@@ -13,11 +11,11 @@
 
     public class RobotBettingService : IRobotBettingService
     {
-        private readonly IDynamicRepository repository;
+        private readonly ICriteriaService _repository;
 
         public RobotBettingService()
         {
-            repository = new DynamicRepository();
+            _repository = new CriteriaService();
         }
 
         public RobotBettingModel GetRobotBetting(long custID)
@@ -27,26 +25,20 @@
                 CustID = custID
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                using (var result = db.QueryMultiple(criteria))
-                {                 
-                    var robotAIs = result.Read<RobotBettingAIModel>();
-                    var robotImpervas = result.Read<RobotBettingImpervaModel>();
-                    var firstLastRobotDate = new RobotDateAndTypeModel
-                    {
-                        FirstRobotDate = criteria.FirstRobotDate,
-                        LastRobotDate = criteria.LastRobotDate,
-                    };
+            (var robotAIs, var robotImpervas) = _repository.Fetch<RobotBettingAIModel, RobotBettingImpervaModel>(criteria);
 
-                    return new RobotBettingModel
-                    {
-                        FirstLastRobotDate = firstLastRobotDate,                       
-                        RobotBettingAI = robotAIs,
-                        RobotBettingImperva = robotImpervas
-                    };
-                }
-            }
+            var firstLastRobotDate = new RobotDateAndTypeModel
+            {
+                FirstRobotDate = criteria.FirstRobotDate,
+                LastRobotDate = criteria.LastRobotDate,
+            };
+
+            return new RobotBettingModel
+            {
+                FirstLastRobotDate = firstLastRobotDate,
+                RobotBettingAI = robotAIs,
+                RobotBettingImperva = robotImpervas
+            };
         }
 
         public IEnumerable<RobotUserDetailModel> GetRobotDetectionDetails(long custID, int periodRangeType)
@@ -57,7 +49,7 @@
                 PeriodRangeType = periodRangeType
             };
 
-            return repository.Fetch<RobotUserDetailModel>(criteria);
+            return _repository.Fetch<RobotUserDetailModel>(criteria);
         }
 
         public IEnumerable<RobotUserDetailSceModel> GetRobotDetectionSCEDetails(RobotBettingSceDetailParaModel parameters)
@@ -72,7 +64,7 @@
                 ClusterID = parameters.ClusterId
             };
 
-            return repository.Fetch<RobotUserDetailSceModel>(criteria);
+            return _repository.Fetch<RobotUserDetailSceModel>(criteria);
         }
 
         public IEnumerable<RobotBettingTicketDetailModel> GetRobotBettingTicketDetails(string tranIdList, bool isSCETicketDetails)
@@ -85,7 +77,7 @@
                     MatchBatchSize = isSCETicketDetails ? 1000 : 50
                 };
 
-                return repository.Fetch<RobotBettingTicketDetailModel>(criteria);
+                return _repository.Fetch<RobotBettingTicketDetailModel>(criteria);
             }
             else
             {
@@ -165,7 +157,7 @@
                 CustID = custID
             };
 
-            return repository.Fetch<RobotRDMatchModel>(criteria);
+            return _repository.Fetch<RobotRDMatchModel>(criteria);
         }
 
         public IEnumerable<RobotRDTicketDetailModel> GetRobotRDTrans(int periodRangeType, long custID, long matchID)
@@ -177,7 +169,7 @@
                 MatchID = matchID
             };
 
-            return repository.Fetch<RobotRDTicketDetailModel>(criteria);
+            return _repository.Fetch<RobotRDTicketDetailModel>(criteria);
         }
 
         public IEnumerable<RobotAiLpDetailModel> GetRobotAiLpDetail(long custID, int periodRangeType)
@@ -188,7 +180,7 @@
                 PeriodRangeType = periodRangeType                         
             };
 
-            return repository.Fetch<RobotAiLpDetailModel>(criteria);
+            return _repository.Fetch<RobotAiLpDetailModel>(criteria);
         }
 
     }

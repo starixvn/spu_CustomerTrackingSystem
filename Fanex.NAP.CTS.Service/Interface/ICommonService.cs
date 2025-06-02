@@ -33,8 +33,6 @@
 
         IEnumerable<ValidateUserNameModel> ValidateUsernameForMain(string userName);
 
-        void CheckConnection();
-
         IEnumerable<CustomerRoleViewModel> GetRoles();
     }
 }

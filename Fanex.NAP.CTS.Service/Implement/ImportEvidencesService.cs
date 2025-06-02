@@ -5,28 +5,29 @@
     using NPOI.HSSF.UserModel;
     using System.Linq;
     using System.IO;
-    using Fanex.NAP.CTS.Model.ImportEvidences;    
+    using Fanex.NAP.CTS.Model.ImportEvidences;
     using System.Collections.Generic;
-    using Fanex.NAP.CTS.Core.Extentions;    
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Criteria.ImportEvidences;
-    using Fanex.Data;
     using Fanex.NAP.CTS.Core;
     using Newtonsoft.Json;
     using Fanex.NAP.CTS.Resource;
     using Fanex.NAP.CTS.Core.ExportExcel;
     using System;
-    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Core.Service;
 
     public class ImportEvidencesService : IImportEvidencesService
     {
+        private readonly ICriteriaService _repository;
         private readonly List<CheckAccountEvidenceModel> _checkAccountEvidenceList;
         private readonly List<RawAccountEvidenceModel> _rawAccountEvidenceList;
         private string _fileErrorTemplate = string.Empty;
 
         public ImportEvidencesService()
         {
+            _repository = new CriteriaService();
             _checkAccountEvidenceList = new List<CheckAccountEvidenceModel>();
             _rawAccountEvidenceList = new List<RawAccountEvidenceModel>();
         }
@@ -47,7 +48,7 @@
                     LogExtension.LogError(errorMessage, ex);
 
                     return errorMessage;
-                }                
+                }
             }
         }
 
@@ -67,7 +68,7 @@
                     LogExtension.LogError(errorMessage, ex);
 
                     return errorMessage;
-                }                
+                }
             }
         }
 
@@ -179,16 +180,13 @@
                     IsOverride = isOverride
                 };
 
-                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-                {
-                    var resultVerifyDbList = db.Query<ResultCheckAccountEvidenceModel>(criteria);
+                var resultVerifyDbList = _repository.Fetch<ResultCheckAccountEvidenceModel>(criteria);
 
-                    return resultVerifyDbList
-                        .Union(duplicateList)
-                        .Union(exceedlengthUsernameList)
-                        .Union(exceedlengthEvidenceCodeList)
-                        .OrderBy(x => x.RowId);
-                }
+                return resultVerifyDbList
+                    .Union(duplicateList)
+                    .Union(exceedlengthUsernameList)
+                    .Union(exceedlengthEvidenceCodeList)
+                    .OrderBy(x => x.RowId);
             }
             catch (Exception ex)
             {
@@ -232,18 +230,15 @@
                     FileKey = fileKey
                 };
 
-                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                _repository.Execute(criteria);
+
+                if (!string.IsNullOrEmpty(criteria.ErrorMessage))
                 {
-                    db.ExecuteNonQuery(criteria);
+                    var errorMessage = string.Format("CTS - Import file name: {0} - userId: {1} - import error: {2} - Content: {3}"
+                                                  , fileName, userId, criteria.ErrorMessage, jsonData);
+                    LogExtension.LogError(errorMessage);
 
-                    if (!string.IsNullOrEmpty(criteria.ErrorMessage))
-                    {
-                        var errorMessage = string.Format("CTS - Import file name: {0} - userId: {1} - import error: {2} - Content: {3}"
-                                                      , fileName, userId, criteria.ErrorMessage, jsonData);
-                        LogExtension.LogError(errorMessage);
-
-                        SendMail(resultCheckCustEvidenceList, customerEvidences, userId, criteria.ErrorMessage);
-                    }
+                    SendMail(resultCheckCustEvidenceList, customerEvidences, userId, criteria.ErrorMessage);
                 }
             }
             catch (Exception ex)
@@ -264,7 +259,7 @@
         {
             var attachmentFileName = ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_ATTACHMENT_FILENAME);
             var subject = string.Format(ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_SUBJECT),
-                    ConfigSettings.EnvironmentName, userId, DateTime.Now);            
+                    ConfigSettings.EnvironmentName, userId, DateTime.Now);
             var errorContent = string.Format(ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_ERROR_CONTENT), errorMessage);
             var body = ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_BODY) + errorContent;
 
@@ -310,7 +305,7 @@
                 {
                     sheet.ShiftRows(sheet.LastRowNum, sheet.LastRowNum, 1, true, false);
 
-                    var newRowIndex = sheet.LastRowNum - 1;                    
+                    var newRowIndex = sheet.LastRowNum - 1;
                     var rowNew = sheet.CreateRow(newRowIndex);
                     ExcelUtilities.CopyRow(rowTemplate, rowNew);
 
@@ -321,8 +316,8 @@
             }
 
             return workbook.ToBytes();
-        }               
-    
+        }
+
         public DBResult InsertAccountEvidencesQueue(string jsonCustEvidences, int userId)
         {
             var fileKey = long.Parse(DateTime.Now.ToString("yyyyMMddHHmmssffff"));
@@ -337,30 +332,29 @@
 
             try
             {
-                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                _repository.Execute(criteria);
+
+                if (!string.IsNullOrEmpty(criteria.ErrorMessage))
                 {
-                    db.ExecuteNonQuery(criteria);
+                    var errorMessage = string.Format("CTS - InsertAccountEvidencesQueue: remove evidence failed userId: {0}, Message: {1}, Content: {2}"
+                                                  , userId, criteria.ErrorMessage, jsonCustEvidences);
+                    LogExtension.LogError(errorMessage);
 
-                    if (!string.IsNullOrEmpty(criteria.ErrorMessage))
-                    {                        
-                        var errorMessage = string.Format("CTS - InsertAccountEvidencesQueue: remove evidence failed userId: {0}, Message: {1}, Content: {2}"
-                                                      , userId, criteria.ErrorMessage, jsonCustEvidences);
-                        LogExtension.LogError(errorMessage);
-
-                        return new DBResult
-                        {
-                            ErrorCode = -1, ErrorMsg = criteria.ErrorMessage
-                        };
-                    }
+                    return new DBResult
+                    {
+                        ErrorCode = -1,
+                        ErrorMsg = criteria.ErrorMessage
+                    };
                 }
             }
             catch (Exception ex)
-            {               
+            {
                 LogExtension.LogError(ex.Message, ex);
 
                 return new DBResult
                 {
-                    ErrorCode = -1, ErrorMsg = ex.Message
+                    ErrorCode = -1,
+                    ErrorMsg = ex.Message
                 };
             }
 

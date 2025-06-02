@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using Fanex.Data;
-    using Fanex.Data.Repository;
+    using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.ProblemAccountManagement;
     using Fanex.NAP.CTS.Model;
@@ -10,23 +9,27 @@
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement;
     using Fanex.NAP.TGRS.Core.ExcelUtility;
-    using Fanex.NAP.TGRS.Core.ExcelUtility.RichTextExtensions;    
+    using Fanex.NAP.TGRS.Core.ExcelUtility.RichTextExtensions;
     using NPOI.SS.UserModel;
-    using NPOI.XSSF.UserModel;    
+    using NPOI.XSSF.UserModel;
     using System.Collections.Generic;
     using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class ProblemAccountManagementService : IProblemAccountManagementService
-    {     
+    {
+        private readonly ICriteriaService _repository;
+
+        public ProblemAccountManagementService()
+        {
+            _repository = new CriteriaService();
+        }
+
         public IEnumerable<CategoryInfoModel> GetAllCategory()
         {
             var criteria = new GetCategoryInfoCriteria();
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<CategoryInfoModel>(criteria);
-            }
+            return _repository.Fetch<CategoryInfoModel>(criteria);
         }
 
         public IEnumerable<GetProblemAccountModel> GetProblemAccounts(ProblemAccountFilterViewModel filter)
@@ -42,20 +45,14 @@
                 HasDownline = filter.HasDownline
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<GetProblemAccountModel>(criteria).ToList();
-            }
+            return _repository.Fetch<GetProblemAccountModel>(criteria);
         }
 
         public IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories(ViewCategoryQueryType queryType)
         {
-            var criteria = new GetProblemAccountCategoryCriteria() {  QueryType = (int)queryType };
+            var criteria = new GetProblemAccountCategoryCriteria() { QueryType = (int)queryType };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<ProblemAccountCategoryModel>(criteria);
-            }
+            return _repository.Fetch<ProblemAccountCategoryModel>(criteria);
         }
 
         public int GetVvipCategoryID(ROLE_CUSTOMER roleID)
@@ -70,32 +67,29 @@
             var result = Enumerable.Empty<ProblemAccountValidatedModel>();
             var criteria = new ValidateUserNamesInputCriteria
             {
-                UserNames = model.UserNames             
+                UserNames = model.UserNames
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var data = db.Query<ProblemAccountValidatedModel>(criteria);
+            var data = _repository.Fetch<ProblemAccountValidatedModel>(criteria);
 
-                if (data != null && data.Any())
+            if (data != null && data.Any())
+            {
+                result = data.Select(x => new ProblemAccountValidatedModel
                 {
-                    result = data.Select(x => new ProblemAccountValidatedModel
-                    {
-                        CTSCustID = x.CTSCustID,
-                        SubscriberID = x.SubscriberID,
-                        RoleID = x.RoleID,
-                        CustID = x.CustID,                        
-                        UserName = x.UserName,
-                        IsLicensee = x.IsLicensee,
-                        ActionID = x.ActionID,
-                        ErrorMsg = x.ErrorMsg
-                    });
-                }
+                    CTSCustID = x.CTSCustID,
+                    SubscriberID = x.SubscriberID,
+                    RoleID = x.RoleID,
+                    CustID = x.CustID,
+                    UserName = x.UserName,
+                    IsLicensee = x.IsLicensee,
+                    ActionID = x.ActionID,
+                    ErrorMsg = x.ErrorMsg
+                });
             }
-          
+
             return result;
         }
-     
+
         public byte[] ExportProblemAccount(IEnumerable<GetProblemAccountViewModel> problemAccounts, string fileName, string templatePath, ProblemAccountFilterViewModel filter)
         {
             var writer = new ExcelTemplateWriter(templatePath, fileName, "PAM");
@@ -117,7 +111,7 @@
             var lineCount = 1;
             var contentRender = new RichTextRender().Clear();
 
-            AppendBlockContent(ref contentRender, ref lineCount, "From", boldFont, filter.FromDate.ToString(Consts.FormatDateToString_MMMddyyyy), normalFont, "\n");                   
+            AppendBlockContent(ref contentRender, ref lineCount, "From", boldFont, filter.FromDate.ToString(Consts.FormatDateToString_MMMddyyyy), normalFont, "\n");
             AppendBlockContent(ref contentRender, ref lineCount, "To", boldFont, filter.ToDate.ToString(Consts.FormatDateToString_MMMddyyyy), normalFont, "\n");
 
             if (filter.IsAllSites)
@@ -128,26 +122,26 @@
             {
                 AppendBlockContent(ref contentRender, ref lineCount, "Site", boldFont, " ", normalFont, "\n");
 
-                if (!string.IsNullOrEmpty(filter.CreditSiteNames))                
+                if (!string.IsNullOrEmpty(filter.CreditSiteNames))
                     AppendBlockContent(ref contentRender, ref lineCount, "- Credit", boldFont, filter.CreditSiteNames, normalFont, "\n");
-                
-                if (!string.IsNullOrEmpty(filter.LicenseeSiteNames))                
+
+                if (!string.IsNullOrEmpty(filter.LicenseeSiteNames))
                     AppendBlockContent(ref contentRender, ref lineCount, "- Licensee", boldFont, filter.LicenseeSiteNames, normalFont, "\n");
-                
-                if (!string.IsNullOrEmpty(filter.CN88SiteNames))                
-                    AppendBlockContent(ref contentRender, ref lineCount, "- CN88", boldFont, filter.CN88SiteNames, normalFont, "\n");                
+
+                if (!string.IsNullOrEmpty(filter.CN88SiteNames))
+                    AppendBlockContent(ref contentRender, ref lineCount, "- CN88", boldFont, filter.CN88SiteNames, normalFont, "\n");
             }
 
             AppendBlockContent(ref contentRender, ref lineCount, "Problem Category", boldFont, filter.IsAllCategories ? "All" : filter.CategoryNames, normalFont, "\n");
-            
+
             var userName = string.IsNullOrEmpty(filter.UserName) ? " " : filter.UserName;
-            AppendBlockContent(ref contentRender, ref lineCount, "Username", boldFont, userName, normalFont, "\n");                      
-            AppendBlockContent(ref contentRender, ref lineCount, "Search downlines of this account", boldFont, filter.HasDownline ? "yes" : " ", normalFont, "\n");           
+            AppendBlockContent(ref contentRender, ref lineCount, "Username", boldFont, userName, normalFont, "\n");
+            AppendBlockContent(ref contentRender, ref lineCount, "Search downlines of this account", boldFont, filter.HasDownline ? "yes" : " ", normalFont, "\n");
             AppendBlockContent(ref contentRender, ref lineCount, "Total items", boldFont, totalItems.ToString(), normalFont, "\n");
-            
-            var dateTime = filter.DateTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss2);            
-            AppendBlockContent(ref contentRender, ref lineCount, "Export date time", boldFont, dateTime, normalFont, "\n");       
-            
+
+            var dateTime = filter.DateTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss2);
+            AppendBlockContent(ref contentRender, ref lineCount, "Export date time", boldFont, dateTime, normalFont, "\n");
+
             WriteRickText(contentRender, ref writer, 4);
 
             writer.SetRowHeight(1, 225 * lineCount);
@@ -173,7 +167,7 @@
                      item.Category,
                      item.Comment,
                      item.CreatedDateStr,
-                     item.CreatedBy                     
+                     item.CreatedBy
                 };
 
                 writer.WriteRow(3, record);

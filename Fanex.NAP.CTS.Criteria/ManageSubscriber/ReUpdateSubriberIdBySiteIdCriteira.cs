@@ -3,7 +3,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class ReUpdateSubriberIdBySiteIdCriteira : CriteriaBase
+    public class ReUpdateSubriberIdBySiteIdCriteira : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_SubsSiteJson")]
         public string SubsSiteJson { get; set; }

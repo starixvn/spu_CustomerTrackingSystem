@@ -3,7 +3,6 @@
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core;
-    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Criteria.CustomerClassification.PushDataToExternal.CustClassificationToMainDB;
     using Fanex.NAP.CTS.Model.CustomerClassification;
@@ -13,14 +12,15 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Fanex.NAP.CTS.Core.Service;
 
     public class CustomerClassificationBySportService : ICustomerClassificationBySportService
     {
-        private readonly IDynamicRepository _repository;
+        private readonly ICriteriaService _repository;
 
         public CustomerClassificationBySportService()
         {
-            _repository = new DynamicRepository();
+            _repository = new CriteriaService();
         }
 
         public bool PushCCBySportToMainDB(IEnumerable<InsertNormalAccountCustInfoModel> custInfos, int batchExternalSize)

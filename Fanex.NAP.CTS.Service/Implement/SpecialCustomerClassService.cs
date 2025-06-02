@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.SpecialCustomerClass;
     using Fanex.NAP.CTS.Model;
@@ -29,7 +29,7 @@
         private readonly ICustomerClassificationBySportService _customerClassificationBySportService;
         private readonly IRescanCustomerClassificationService _rescanGeneralService;
         private readonly IRescanCustomerClassificationBySportService _rescanBySportService;
-        private readonly IDynamicRepository _repository;
+        private readonly ICriteriaService _repository;
 
         public SpecialCustomerClassService()
         {
@@ -37,7 +37,7 @@
             _customerClassificationBySportService = new CustomerClassificationBySportService();
             _rescanGeneralService = new RescanCustomerClassificationService();
             _rescanBySportService = new RescanCustomerClassificationBySportService();
-            _repository = new DynamicRepository();
+            _repository = new CriteriaService();
         }
         #endregion
 

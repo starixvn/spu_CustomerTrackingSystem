@@ -1,8 +1,8 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
-
-namespace Fanex.NAP.CTS.Criteria.AssociationDetection
+﻿namespace Fanex.NAP.CTS.Criteria.AssociationDetection
 {
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+
     public class GetAssociationDetectionCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_CTSCustIDs")]

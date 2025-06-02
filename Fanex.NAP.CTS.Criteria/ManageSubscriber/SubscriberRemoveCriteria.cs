@@ -3,7 +3,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class SubscriberRemoveCriteria : CriteriaBase
+    public class SubscriberRemoveCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_SubscriberID")]
         public int SubscriberID { get; set; }

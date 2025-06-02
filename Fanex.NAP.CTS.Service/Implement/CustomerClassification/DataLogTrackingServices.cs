@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Newtonsoft.Json;
@@ -9,11 +9,11 @@
 
     public class DataLogTrackingServices : IDataLogTrackingServices
     {
-        private readonly IDynamicRepository repository;
+        private readonly ICriteriaService repository;
 
         public DataLogTrackingServices()
         {
-            repository = new DynamicRepository();
+            repository = new CriteriaService();
         }
 
         public void LogErrorData(Exception exception, string serviceName)

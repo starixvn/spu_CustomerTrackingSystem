@@ -3,7 +3,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class InsertCTSUserCriteria : CriteriaBase
+    public class InsertCTSUserCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_userId")]
         public int UserId { get; set; }

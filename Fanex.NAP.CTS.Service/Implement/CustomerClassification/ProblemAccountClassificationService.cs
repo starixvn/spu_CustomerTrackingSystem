@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
-    using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Utilities;
@@ -14,17 +13,18 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Fanex.NAP.CTS.Core.Service;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class ProblemAccountClassificationService : BaseCustomerClassificationService, IProblemAccountClassificationService
     {
-        private readonly IDynamicRepository _repository;
+        private readonly ICriteriaService _repository;
         private readonly ICustomerClassificationService _ccService;
         private readonly IDataLogTrackingServices dataLogTrackingServices;
 
         public ProblemAccountClassificationService()
         {
-            _repository = new DynamicRepository();
+            _repository = new CriteriaService();
             _ccService = new CustomerClassificationService();
             dataLogTrackingServices = new DataLogTrackingServices();
         }

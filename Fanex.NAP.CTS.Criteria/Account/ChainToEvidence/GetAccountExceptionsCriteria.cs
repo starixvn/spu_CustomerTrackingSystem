@@ -1,9 +1,8 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
-using System;
-
-namespace Fanex.NAP.CTS.Criteria.Account.ChainToEvidence
+﻿namespace Fanex.NAP.CTS.Criteria.Account.ChainToEvidence
 {
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+    using System;
     public class GetAccountExceptionsCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_CTSCustID")]

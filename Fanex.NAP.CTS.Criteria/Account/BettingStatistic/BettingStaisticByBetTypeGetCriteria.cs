@@ -1,8 +1,8 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
-
-namespace Fanex.NAP.CTS.Criteria.Account.BettingStatistic
+﻿namespace Fanex.NAP.CTS.Criteria.Account.BettingStatistic
 {
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+
     public class BettingStaisticByBetTypeGetCriteria: CriteriaBase
     {
         [SpParam(SqlParamName = "CustId")]

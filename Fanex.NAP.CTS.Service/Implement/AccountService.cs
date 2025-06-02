@@ -29,6 +29,7 @@
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
+    using Fanex.NAP.CTS.Model.Account.CustomerCategory;
 
     public class AccountService : IAccountService
     {
@@ -775,9 +776,9 @@
                 RoleID = roleID
             };
 
-            (var excludedTagAssPA, var categories) = _repository.Fetch<bool, GetCustomerClassificationModel>(criteria);
+            (var excludedTagAssPA, var categories) = _repository.Fetch<IsExcludeTagAssPAModel, GetCustomerClassificationModel>(criteria);
 
-            isExcludedTagAssPA = excludedTagAssPA.IsNotNullOrEmpty() ? excludedTagAssPA.ToList()[0] : false;
+            isExcludedTagAssPA = excludedTagAssPA.IsNotNullOrEmpty() ? excludedTagAssPA.ToList()[0].IsExcludedTagAssPA == 1 : false;
 
             return categories;
         }

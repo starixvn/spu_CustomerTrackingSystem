@@ -1,8 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
-    using Fanex.Data;
-    using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Criteria.Common;
     using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Service.Interface;
@@ -14,11 +13,11 @@
 
     public class CommonService : ICommonService
     {
-        private readonly IDynamicRepository repository;
+        private readonly ICriteriaService _repository;
 
         public CommonService()
         {
-            repository = new DynamicRepository();
+            _repository = new CriteriaService();
         }
 
         public IEnumerable<SubscriberGroupViewModel> GetSubscriberGroups()
@@ -50,10 +49,7 @@
         {
             var criteria = new GetSubscriberGroupCriteria();
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<SubscriberGroupModel>(criteria);
-            }
+            return _repository.Fetch<SubscriberGroupModel>(criteria);
         }
 
         public IEnumerable<ValidateUserNameModel> ValidateUsernames(string userNames, out bool isException)
@@ -67,10 +63,7 @@
 
             try
             {
-                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-                {
-                    return db.Query<ValidateUserNameModel>(criteria);
-                }
+                return _repository.Fetch<ValidateUserNameModel>(criteria);
             }
             catch (Exception ex)
             {
@@ -85,10 +78,7 @@
         {
             var criteria = new GetSitesCriteria { IsNestedCalled = isNestedCalled };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<SiteModel>(criteria);
-            }
+            return _repository.Fetch<SiteModel>(criteria);
         }
 
         public IEnumerable<MainMatchModel> GetMainMatchInfosByIDs(string matchIDs)
@@ -98,10 +88,7 @@
                 MatchIds = matchIDs
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<MainMatchModel>(criteria);
-            }
+            return _repository.Fetch<MainMatchModel>(criteria);
         }
 
         public IEnumerable<MainTicketDetailModel> GetMainTicketDetails(string transIds, int? transSize, int? matchSize)
@@ -113,10 +100,7 @@
                 MatchSize = matchSize
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<MainTicketDetailModel>(criteria);
-            }
+            return _repository.Fetch<MainTicketDetailModel>(criteria);
         }
 
         public IEnumerable<CCGroupModel> GetGroupCustomerClass()
@@ -124,20 +108,17 @@
             var groupCCList = Enumerable.Empty<CCGroupModel>();
             var criteria = new GetCommonCustomerClassCriteria();
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var data = db.Query<CommonCustomerClassModel>(criteria);
+            var data = _repository.Fetch<CommonCustomerClassModel>(criteria);
 
-                if (data != null && data.Any())
-                {
-                    groupCCList = data.GroupBy(g => g.CustomerClassGroup)
-                         .Select(x => new { CCGroupName = x.Key, CCList = x.ToList() })
-                         .Select(x => new CCGroupModel
-                         {
-                             CCGroupName = x.CCGroupName,
-                             CCList = x.CCList.OrderBy(y => y.CustomerClass).Select(y => y.CustomerClass)?.ToList()
-                         });
-                }
+            if (data != null && data.Any())
+            {
+                groupCCList = data.GroupBy(g => g.CustomerClassGroup)
+                     .Select(x => new { CCGroupName = x.Key, CCList = x.ToList() })
+                     .Select(x => new CCGroupModel
+                     {
+                         CCGroupName = x.CCGroupName,
+                         CCList = x.CCList.OrderBy(y => y.CustomerClass).Select(y => y.CustomerClass)?.ToList()
+                     });
             }
 
             return groupCCList;
@@ -165,7 +146,7 @@
                 IsStatusActive = isStatusActive
             };
 
-            return repository.Fetch<StaticListModel>(criteria);
+            return _repository.Fetch<StaticListModel>(criteria);
         }
 
         public IEnumerable<BetTypeSettingModel> GetBetTypeSettings(BetTypeSettingParaModel infos)
@@ -181,7 +162,7 @@
                 Status = infos.Status
             };
 
-            return repository.Fetch<BetTypeSettingModel>(criteria);
+            return _repository.Fetch<BetTypeSettingModel>(criteria);
         }
 
         public IEnumerable<SportBettypeViewModel> GetMainSportBettype(SportBettypeModel model)
@@ -192,31 +173,21 @@
                 SportBettypeList = model.SportBettypeList
             };
 
-            return repository.Fetch<SportBettypeViewModel>(criteria);
+            return _repository.Fetch<SportBettypeViewModel>(criteria);
         }
 
         public IEnumerable<LeagueGroupViewModel> GetLeagueGroup()
         {
             var criteria = new GetCommonLeagueGroupCriteria();
 
-            return repository.Fetch<LeagueGroupViewModel>(criteria);
-        }
-
-        public void CheckConnection()
-        {
-            using (var db = ObjectDbFactory.CreateInstance(new HealthCheckCriteria().GetSettingKey()))
-            {
-                var connection = db.CreateDbConnection();
-                connection.Open();
-                connection.Close();
-            }
+            return _repository.Fetch<LeagueGroupViewModel>(criteria);
         }
 
         public IEnumerable<ValidateUserNameModel> ValidateUsernameForMain(string userName)
         {
             var criteria = new ValidateUsernameForMainCriteria { UsernameList = userName };
 
-            return repository.Fetch<ValidateUserNameModel>(criteria);
+            return _repository.Fetch<ValidateUserNameModel>(criteria);
         }
 
         public IEnumerable<CustomerRoleViewModel> GetRoles()

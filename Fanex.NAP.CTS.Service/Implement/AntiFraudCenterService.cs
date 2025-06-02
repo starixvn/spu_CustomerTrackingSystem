@@ -1,7 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using Fanex.Data.Repository;
-    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Utilities;
@@ -14,13 +12,6 @@
 
     public class AntiFraudCenterService : IAntiFraudCenterService
     {
-        private readonly IDynamicRepository repository;
-
-        public AntiFraudCenterService()
-        {
-            repository = new DynamicRepository();
-        }
-
         public async Task InsertAFCAccounts(IEnumerable<long> custIds, FromFlow fromFlow, bool isSyncAFC)
         {
             try

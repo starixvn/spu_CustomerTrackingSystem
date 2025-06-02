@@ -2,8 +2,6 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using System;
-
     public class GetCoupleIPFraudDetailCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_CoupleInfoDetails")]

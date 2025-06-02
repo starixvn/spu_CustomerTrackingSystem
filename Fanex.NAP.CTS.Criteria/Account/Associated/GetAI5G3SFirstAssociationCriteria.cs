@@ -3,8 +3,6 @@ namespace Fanex.NAP.CTS.Criteria.Account.Associated
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using System;
-
     public class GetAI5G3SFirstAssociationCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_CustID1")]

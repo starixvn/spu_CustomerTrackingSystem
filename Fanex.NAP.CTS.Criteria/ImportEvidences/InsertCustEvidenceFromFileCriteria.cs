@@ -2,9 +2,8 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using System;
 
-    public class InsertCustEvidenceFromFileCriteria : CriteriaBase
+    public class InsertCustEvidenceFromFileCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_CustomerEvidences")]
         public string CustomerEvidencesJson { get; set; }

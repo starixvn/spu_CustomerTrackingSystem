@@ -1,26 +1,29 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
+    using System;
     using Fanex.NAP.CTS.Model.Notification;
     using Criteria.Notification;
     using System.Collections.Generic;
-    using Fanex.Data;
     using Fanex.NAP.CTS.Core;
-    using System;
-    using System.Linq;
+    using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Core.Extentions;
 
     public class NotificationService : INotificationService
     {
+        private readonly ICriteriaService _repository;
+
+        public NotificationService()
+        {
+            _repository = new CriteriaService();
+        }
+
         public IEnumerable<AssociatedMessageModel> GetAssociatedMessages(long custId, long maxAssociationID)
         {
             var criteria = new AssociatedMessagesGetCriteria(custId, maxAssociationID);
 
             try
             {
-                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-                {
-                    return db.Query<AssociatedMessageModel>(criteria);
-                }
+                return _repository.Fetch<AssociatedMessageModel>(criteria);
             }
             catch (Exception ex)
             {
@@ -38,10 +41,7 @@
 
             try
             {
-                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-                {
-                    return db.Query<ProbationMessageModel>(criteria);
-                }
+                return _repository.Fetch<ProbationMessageModel>(criteria);
             }
             catch (Exception ex)
             {
@@ -62,10 +62,7 @@
 
             try
             {
-                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-                {
-                    return db.Query<NotifiedSettingStatusModel>(criteria);
-                }
+                return _repository.Fetch<NotifiedSettingStatusModel>(criteria);
             }
             catch (Exception ex)
             {
@@ -86,39 +83,36 @@
                 IsTurningOnPermission = notifiedSettingStatus.IsTurningOnPermission
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            try
             {
-                try
-                {
-                    db.ExecuteNonQuery(criteria);
+                _repository.Execute(criteria);
 
-                    if (!string.IsNullOrEmpty(criteria.ErrorMessage))
-                    {
-                        return new DBResult
-                        {
-                            ErrorCode = -1,
-                            ErrorMsg = criteria.ErrorMessage
-                        };
-                    }
-                    else
-                    {
-                        return new DBResult
-                        {
-                            ErrorCode = 0,
-                            ErrorMsg = string.Empty
-                        };
-                    }
-                }
-                catch (Exception ex)
+                if (!string.IsNullOrEmpty(criteria.ErrorMessage))
                 {
-                    LogExtension.LogError("CTS - Notification Setting - Update Status throws exception: " + ex.Message, ex);
-
                     return new DBResult
                     {
                         ErrorCode = -1,
-                        ErrorMsg = ex.Message
+                        ErrorMsg = criteria.ErrorMessage
                     };
                 }
+                else
+                {
+                    return new DBResult
+                    {
+                        ErrorCode = 0,
+                        ErrorMsg = string.Empty
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                LogExtension.LogError("CTS - Notification Setting - Update Status throws exception: " + ex.Message, ex);
+
+                return new DBResult
+                {
+                    ErrorCode = -1,
+                    ErrorMsg = ex.Message
+                };
             }
         }
     }

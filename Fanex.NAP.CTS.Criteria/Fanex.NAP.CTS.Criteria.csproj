@@ -79,36 +79,6 @@
     <Compile Include="Account\RobotSetting\GetRDTransCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRobotAiLpDetailCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRobotUsersSCEDetailsCriteria.cs" />
-    <Compile Include="Api\CtsAssociationAPI\DetectAssociationByTypeCriteria.cs" />
-    <Compile Include="Api\FPS\Account\GetAccountsPerDeviceDCSCenterCriteria.cs" />
-    <Compile Include="Api\FPS\Account\GetAssAccByDevSubscriberDCSExtraCriteria.cs" />
-    <Compile Include="Api\FPS\Account\GetAssAccountInfoByCustSubscriberDCSCenterCriteria.cs" />
-    <Compile Include="Api\FPS\Account\GetAssAccountInfoByCustSubscriberDCSExtraCriteria.cs" />
-    <Compile Include="Api\FPS\Account\GetAssAccountsByCustSubscriberDCSCenterCriteria.cs" />
-    <Compile Include="Api\FPS\Account\GetAssAccountsByCustSubscriberDCSExtraCriteria.cs" />
-    <Compile Include="Api\FPS\Account\GetAssMatrixAccountByCustSubscriberDCSCenterCriteria.cs" />
-    <Compile Include="Api\FPS\Account\GetAssMatrixAccountByCustSubscriberDCSExtraCriteria.cs" />
-    <Compile Include="Api\FPS\Device\GetDevicesPerAccountDCSCenterCriteria.cs" />
-    <Compile Include="Api\FPS\Device\GetAssDevByDevSubscriberDCSExtraCriteria.cs" />
-    <Compile Include="Api\FPS\Device\GetAssDeviceInfoByIDSubscriberDCSExtraCriteria.cs" />
-    <Compile Include="Api\FPS\Device\GetAssDevicesByCustSubscriberDCSCenterCriteria.cs" />
-    <Compile Include="Api\FPS\Device\GetAssDevicesByCustSubscriberDCSExtraCriteria.cs" />
-    <Compile Include="Api\FPS\Device\GetAssMatrixByDeviceSubsriberDCSExtraCriteria.cs" />
-    <Compile Include="Api\FPS\Search\GetAccountByNameSubscriberDCSCenterCriteria.cs" />
-    <Compile Include="Api\FPS\Search\GetAccountByNameSubscriberDCSExtraCriteria.cs" />
-    <Compile Include="Api\FPS\Search\GetListAccountByUserNameSubscriberDCSCenterCriteria.cs" />
-    <Compile Include="Api\FPS\Search\GetListAccountByUserNameSubscriberDCSExtraCriteria.cs" />
-    <Compile Include="Api\FPS\Search\GetListDeviceByCodeSubscriberDCSExtraCriteria.cs" />
-    <Compile Include="Api\FPS\Subscriber\GetSubscriberDcsExBySubscriberName.cs" />
-    <Compile Include="Api\FPS\Transaction\GetLastestTransactionDCSCenterCriteria.cs" />
-    <Compile Include="Api\FPS\Transaction\GetLastestTransactionDCSExtraCriteria.cs" />
-    <Compile Include="Api\FPS\Transaction\GetTransactionHistoryByCustSubscriberDCSCenterCriteria.cs" />
-    <Compile Include="Api\FPS\Transaction\GetTransactionHistoryByCustSubscriberDCSExtraCriteria.cs" />
-    <Compile Include="Api\FPS\Transaction\GetTransactionHistoryBySubscriberDCSCenterCriteria.cs" />
-    <Compile Include="Api\FPS\Transaction\GetTransactionHistoryBySubscriberDCSExtraCriteria.cs" />
-    <Compile Include="Api\FPS\Transaction\GetTransHistoryByDevSubDCSExtraCriteria.cs" />
-    <Compile Include="Api\TWSpecialLicSub\InsertTWSpecialLicSubCriteria.cs" />
-    <Compile Include="Api\TW\InsertTWInitialSmartCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedAccountCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedGroupMonitorCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\GetAssociatedAccountCriteria.cs" />
@@ -171,13 +141,9 @@
     <Compile Include="Account\RobotSetting\GetRobotDetectionCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRobotDetectionTicketDetailsCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRobotUsersDetailsCriteria.cs" />
-    <Compile Include="Api\GetAssociationForExtAccCriteria.cs" />
-    <Compile Include="Api\GetSubscriberInfoBySubscriberName.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectionCriteria.cs" />
-    <Compile Include="Api\ProblemCaseMonitor\ProblemCaseCriteria.cs" />
     <Compile Include="AssociationReport\AssociationDetailReportGetCriteria.cs" />
     <Compile Include="AssociationReport\AssociationReportGetCriteria.cs" />
-    <Compile Include="Api\GetFlaggedEvidenceByLevel2AssociationCriteria.cs" />
     <Compile Include="Common\GetSubscriberGroupCriteria.cs" />
     <Compile Include="Category\GetCategoryCustomerClassCriteria.cs" />
     <Compile Include="Common\ValidateUsernameCriteria.cs" />
@@ -197,7 +163,6 @@
     <Compile Include="ImportEvidences\InsertCustEvidenceQueueCriteria.cs" />
     <Compile Include="LatestTransaction\GetLatestTransactionCriteria.cs" />
     <Compile Include="ManageSubscriber\ReUpdateSubriberIdBySiteIdCriteira.cs" />
-    <Compile Include="Api\GetFlaggedEvidenceByDirectAssociationCriteria.cs" />
     <Compile Include="MatchMonitor\GetMatchFromMainInfoCriteria.cs" />
     <Compile Include="MatchMonitor\HoldKey\HoldKeyLogInsertCriteria.cs" />
     <Compile Include="MatchMonitor\MMDetailMergeGroupCriteria.cs" />
@@ -238,9 +203,6 @@
     <Compile Include="Account\CustomerInfoByCTSCustIdCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetFlaggedEvidenceCriteria.cs" />
     <Compile Include="Account\TransactionHistory\GetTransactionHistoryCriteria.cs" />
-    <Compile Include="Api\FlaggedAccountDeleteCriteria.cs" />
-    <Compile Include="Api\MultiCustomerEvidencesInsertCriteria.cs" />
-    <Compile Include="Api\FlaggedAccountInsertCriteria.cs" />
     <Compile Include="CTSUser\InsertCTSUserCriteria.cs" />
     <Compile Include="ManageSubscriber\SubscriberGetDetailedSiteCriteria.cs" />
     <Compile Include="Notification\NotificationSettingStatusUpdateCriteria.cs" />
@@ -288,8 +250,6 @@
       <Version>4.5.0</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Api\UpdateCategoryWhenPAUpdated\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

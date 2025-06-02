@@ -1,8 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
-    using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers;
+    using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Criteria.DangerMonitor;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Common;
@@ -23,7 +23,7 @@
     public class DangerMonitorService : IDangerMonitorService
     {
         private readonly ICommonService _commonService;
-        private readonly IDynamicRepository _repository;
+        private readonly ICriteriaService _repository;
         private readonly IMemoryCacheService _memoryCacheService;
         private readonly IMatchMonitorService _matchMonitorService;
 
@@ -36,7 +36,7 @@
         public DangerMonitorService(string region, string userID)
         {
             _commonService = new CommonService();
-            _repository = new DynamicRepository();
+            _repository = new CriteriaService();
             _matchMonitorService = new MatchMonitorService(MMQueryType.DangerMMReport);
 
             _memoryCacheService = new MemoryCacheService();

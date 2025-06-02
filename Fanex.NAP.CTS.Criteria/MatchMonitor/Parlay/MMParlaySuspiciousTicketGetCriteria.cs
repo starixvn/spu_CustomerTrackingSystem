@@ -2,8 +2,6 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using System;
-
     public class MMParlaySuspiciousTicketGetCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_MatchID")]

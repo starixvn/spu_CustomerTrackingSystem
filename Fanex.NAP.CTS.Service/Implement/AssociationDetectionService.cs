@@ -1,8 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
-    using Fanex.Data;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers;
+    using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Criteria.AssociationDetection;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationDetection;
@@ -45,10 +45,12 @@
 
     public class AssociationDetectionService : IAssociationDetectionService
     {
+        private readonly ICriteriaService _repository;
         private readonly ICommonService _commonService;
 
         public AssociationDetectionService()
         {
+            _repository = new CriteriaService();
             _commonService = new CommonService();
         }
 
@@ -130,10 +132,7 @@
                 IsIP = filter.IsIP
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<DetectAssociationByPrimaryModel>(criteria);
-            }
+            return _repository.Fetch<DetectAssociationByPrimaryModel>(criteria);
         }
 
         public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByAgent(string ctsCustIDs)
@@ -143,10 +142,7 @@
                 CTSCustIDs = ctsCustIDs
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<DetectAssociationByPrimaryModel>(criteria);
-            }
+            return _repository.Fetch<DetectAssociationByPrimaryModel>(criteria);
         }
 
         public IEnumerable<DetectAssociationMergeGroupModel> DetectGroupDetectAssociation(MergeGroupInfoModel model)
@@ -163,10 +159,7 @@
                 IsGetLogTransInfo = model.IsGetLogTransInfo
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<DetectAssociationMergeGroupModel>(criteria);
-            }
+            return _repository.Fetch<DetectAssociationMergeGroupModel>(criteria);
         }
 
         public IEnumerable<GetCustStatisticsInfoRealtimeModel> GetCustStatisticsInfoRealtime(string custIDList)
@@ -177,10 +170,7 @@
                 IsResetBalance = true
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<GetCustStatisticsInfoRealtimeModel>(criteria);
-            }
+            return _repository.Fetch<GetCustStatisticsInfoRealtimeModel>(criteria);
         }
 
         public IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList)
@@ -191,10 +181,7 @@
                 QueryType = (int)DetectAssociation_QueryType.DetectAss
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<DetectAssociationBySharedIPMatchesModel>(criteria);
-            }
+            return _repository.Fetch<DetectAssociationBySharedIPMatchesModel>(criteria);
         }
 
         public IEnumerable<SharedIPInfoModel> DetectAssociationByIP(Dictionary<int, ValidateUserNameModel> validateUsernames, string custIds)
@@ -241,10 +228,7 @@
                 QueryType = (int)DetectAssociation_QueryType.GetAssByGroup
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<long>(criteria);
-            }
+            return _repository.Fetch<long>(criteria);
         }
 
         public IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel model)
@@ -262,10 +246,7 @@
                 IsAgent = model.IsAgent
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<GetAssociationDetectDetailModel>(criteria);
-            }
+            return _repository.Fetch<GetAssociationDetectDetailModel>(criteria);
         }
 
         public IEnumerable<GetAssociationDetectDetailMatchModel> GetDetectAssociationDetailMatch(long rootCustID, string custIDList, int queryType)
@@ -281,10 +262,7 @@
                 criteria.RootCustID = rootCustID;
             }
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<GetAssociationDetectDetailMatchModel>(criteria);
-            }
+            return _repository.Fetch<GetAssociationDetectDetailMatchModel>(criteria);
         }
 
         public byte[] ExportToExcelAssociationDetect(IEnumerable<ExportAssociationDetectModel> associationDetect, string fileName, string templatePath)
@@ -341,10 +319,7 @@
                 ListCustId = custIDList
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<DetectAssociationBySharedIPModel>(criteria);
-            }
+            return _repository.Fetch<DetectAssociationBySharedIPModel>(criteria);
         }
 
         private string GetAssociationCustByIP(IEnumerable<SharedIPInfoModel> ass)

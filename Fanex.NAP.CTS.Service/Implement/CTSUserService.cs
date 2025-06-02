@@ -1,13 +1,20 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using Fanex.Data;
     using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Criteria.CTSUser;
     using Fanex.NAP.CTS.Resource;
     using System;
 
     public class CTSUserService : ICTSUserService
     {
+        private readonly ICriteriaService _repository;
+
+        public CTSUserService()
+        {
+            _repository = new CriteriaService();
+        }
+
         public void InsertCTSUser(int userId, string userName)
         {
             var criteria = new InsertCTSUserCriteria
@@ -18,10 +25,7 @@
 
             try
             {
-                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-                {
-                    db.ExecuteNonQuery(criteria);
-                }
+                _repository.Execute(criteria);
             }
             catch (Exception ex)
             {

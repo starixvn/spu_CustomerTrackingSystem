@@ -1,8 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
-    using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.Extentions;
-    using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Criteria.Category;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
@@ -18,11 +17,11 @@
 
     public class CustomerCategoryService : BaseCustomerClassificationService, ICustomerCategoryService
     {
-        private IDynamicRepository _repository;
+        private ICriteriaService _repository;
 
         public CustomerCategoryService()
         {
-            _repository = new DynamicRepository();
+            _repository = new CriteriaService();
         }
 
         public IEnumerable<CategoryCustomerClassModel> GetCustomerClassCategory()

@@ -1,8 +1,8 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
-
-namespace Fanex.NAP.CTS.Criteria.Account.Associated
+﻿namespace Fanex.NAP.CTS.Criteria.Account.Associated
 {
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+
     public class ActiveRemoveAssociationCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_FromSubscriberID")]

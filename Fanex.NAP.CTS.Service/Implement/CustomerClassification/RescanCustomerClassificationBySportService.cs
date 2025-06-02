@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement.CustomerClassification
 {
-    using Fanex.Data.Repository;
+    using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Criteria.CustomerClassification.RescanNormalClassificationBySport;
     using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.CTS.Service.Interface.CustomerClassification;
@@ -11,11 +11,11 @@
 
     public class RescanCustomerClassificationBySportService : IRescanCustomerClassificationBySportService
     {
-        private readonly IDynamicRepository _repository;
+        private readonly ICriteriaService _repository;
 
         public RescanCustomerClassificationBySportService()
         {
-            _repository = new DynamicRepository();
+            _repository = new CriteriaService();
         }
 
         public void ResanNormalBySportForNewCustomers(IEnumerable<RescanNormalBySportListCustModel> custIds, BySport_FunctionId functionId)

@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
-    using Fanex.Data.Repository;
+    using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Criteria.CustomerClassification.BaseCustomerClassification;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;   
@@ -8,11 +8,11 @@
 
     public class BaseCustomerClassificationService : IBaseCustomerClassificationService
     {
-        private readonly IDynamicRepository repository;
+        private readonly ICriteriaService repository;
 
         public BaseCustomerClassificationService()
         {
-            repository = new DynamicRepository();
+            repository = new CriteriaService();
         }
 
         public GetRescanCustomerClassificationModel GetRescanCustomerClassification(string custIDs)

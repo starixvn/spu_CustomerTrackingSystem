@@ -1,8 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Core.Extentions;
-    using Fanex.Data;
-    using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Criteria.MatchMonitor;
     using Fanex.NAP.CTS.Model.MatchMonitor;
@@ -23,17 +21,18 @@
     using Fanex.NAP.CTS.Model.MatchMonitor.Parlay;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.Parlay;
+    using Fanex.NAP.CTS.Core.Service;
 
     public class MatchMonitorService : IMatchMonitorService
     {
-        private readonly IDynamicRepository _repository;
+        private readonly ICriteriaService _repository;
         private readonly ICommonService _commonService;
         private readonly MMQueryType _mmQueryType;
         private readonly IMemoryCacheService _memoryCacheService;
 
         public MatchMonitorService(MMQueryType mmQueryType)
         {
-            _repository = new DynamicRepository();
+            _repository = new CriteriaService();
             _commonService = new CommonService();
             _mmQueryType = mmQueryType;
             _memoryCacheService = new MemoryCacheService();
@@ -113,7 +112,7 @@
 
 
             (var custs, var matchDetails, var verifiedTrans) =
-                _repository.FetchMultiple<MMDetailCustModel, MatchMonitorDetailModel, MatchMonitorDetailVerifyTransResultModel>(criteria);
+                _repository.Fetch<MMDetailCustModel, MatchMonitorDetailModel, MatchMonitorDetailVerifyTransResultModel>(criteria);
 
             return new MMDetailResultModel
             {
@@ -1266,7 +1265,7 @@
             };
 
             (var custs, var matchDetails, var verifiedTrans) =
-                _repository.FetchMultiple<MMDetailCustModel, MatchMonitorDetailModel, MatchMonitorDetailVerifyTransResultModel>(criteria);
+                _repository.Fetch<MMDetailCustModel, MatchMonitorDetailModel, MatchMonitorDetailVerifyTransResultModel>(criteria);
 
             return new MMDetailResultModel
             {

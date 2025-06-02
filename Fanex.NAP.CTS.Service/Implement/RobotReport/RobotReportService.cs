@@ -8,17 +8,17 @@
     using Fanex.NAP.CTS.Model.RobotReport;
     using Fanex.NAP.CTS.ViewModel.RobotReport;
     using Fanex.NAP.CTS.Service.Interface.RobotReport;
-    using Fanex.Data.Repository;
+    using Fanex.NAP.CTS.Core.Service;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class RobotReportService : IRobotReportService
     {
-        private readonly IDynamicRepository _repository;
+        private readonly ICriteriaService _repository;
         private readonly IExportRobotReportService _exportExcelService;
 
         public RobotReportService()
         {
-            _repository = new DynamicRepository();
+            _repository = new CriteriaService();
             _exportExcelService = new ExportRobotReportService();
         }
 
@@ -34,7 +34,7 @@
                 IsLicensee = param.Sites == MMSites.All ? null : (bool?)(param.Sites == MMSites.Licensee)
             };
 
-            var result = _repository.FetchMultiple<AIRobotReportModel, AIRobotReportModel>(criteria);
+            var result = _repository.Fetch<AIRobotReportModel, AIRobotReportModel>(criteria);
 
             return new AIRobotReportViewModel
             {
@@ -57,7 +57,7 @@
                 IsLicensee = param.Sites == MMSites.All ? null : (bool?)(param.Sites == MMSites.Licensee)
             };
 
-            var result = _repository.FetchMultiple<RobotReportModel, RobotReportModel>(criteria);
+            var result = _repository.Fetch<RobotReportModel, RobotReportModel>(criteria);
 
             return new RobotReportViewModel
             {

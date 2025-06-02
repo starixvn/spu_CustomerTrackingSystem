@@ -3,7 +3,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class NotificationSettingStatusUpdateCriteria : CriteriaBase
+    public class NotificationSettingStatusUpdateCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_UserID")]
         public long UserID { get; set; }

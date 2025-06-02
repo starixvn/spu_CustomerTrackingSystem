@@ -1,9 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core;
-    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
     using Fanex.NAP.CTS.Criteria.SyncCustomerToMainDb;
@@ -14,16 +12,17 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Fanex.NAP.CTS.Core.Service;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class CustomerClassificationService : ICustomerClassificationService
     {
-        private readonly IDynamicRepository repository;
+        private readonly ICriteriaService repository;
         private readonly IAntiFraudCenterService _antiFraudCenterService;
 
         public CustomerClassificationService()
         {
-            repository = new DynamicRepository();
+            repository = new CriteriaService();
             _antiFraudCenterService = new AntiFraudCenterService();
         }
 
