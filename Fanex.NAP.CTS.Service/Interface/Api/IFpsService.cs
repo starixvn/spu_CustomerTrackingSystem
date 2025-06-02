@@ -29,6 +29,14 @@
         GetAccountsPerDeviceResultModel GetAccountsPerDevice_DCSCenter(GetAccountPerDeviceParamModel param);
 
         GetDevicesPerAccountResultModel GetDevicesPerAccount_DCSCenter(GetDevicesPerAccountParamModel param);
+
+        GetAssDeviceInfoByIDSubscriberModel GetAssDeviceInfoByIDSubscriber_DCSCenter(GetAssDeviceInfoByIDSubscriberParamModel param);
+
+        IEnumerable<GetAssAccByDevSubscriberItemDCSCenterModel> GetAssAccByDevSubscriber_DCSCenter(GetAssAccByDevSubscriberParamModel param);
+
+        IEnumerable<GetAssDevByDevSubscriberItemModel> GetAssDevByDevSubscriber_DCSCenter(GetAssDevByDevSubscriberParamModel param);
+
+        IEnumerable<GetAssMatrixByDeviceSubscriberItemDataCenterModel> GetAssMatrixByDeviceSubscriber_DCSCenter(GetAssMatrixByDeviceSubscriberParamModel param);
         #endregion cts
 
         #region dcs

@@ -166,6 +166,7 @@
             }
         }
 
+        #region device
         [HttpPost]
         public JsonResult<GetDevicesPerAccountResultModel> GetDevicesPerAccountDCSCenter(GetDevicesPerAccountParamModel param)
         {
@@ -197,6 +198,76 @@
                 return Json(new GetAccountsPerDeviceResultModel());
             }
         }
+
+        [HttpPost]
+        public JsonResult<GetAssDeviceInfoByIDSubscriberModel> GetAssDeviceInfoByIdSubscriberDCSCenter(GetAssDeviceInfoByIDSubscriberParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetAssDeviceInfoByIDSubscriber_DCSCenter(param);
+
+                return Json(data);
+
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Ass Account info by id subscriber DCS Extra exception: " + ex.Message);
+                return Json(new GetAssDeviceInfoByIDSubscriberModel());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult<List<GetAssAccByDevSubscriberItemDCSCenterModel>> GetAssAccountsByDeviceSubscriberDCSCenter(GetAssAccByDevSubscriberParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetAssAccByDevSubscriber_DCSCenter(param);
+
+                return Json(data.ToList());
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Ass Account by Device subscriber DCS Extra exception: " + ex.Message);
+                return Json(new List<GetAssAccByDevSubscriberItemDCSCenterModel>());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult<List<GetAssDevByDevSubscriberItemModel>> GetAssDevByDeviceSubscriberDCSCenter(GetAssDevByDevSubscriberParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetAssDevByDevSubscriber_DCSCenter(param);
+
+                return Json(data.ToList());
+
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Ass Device by Device subscriber DCS Extra exception: " + ex.Message);
+                return Json(new List<GetAssDevByDevSubscriberItemModel>());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult<List<GetAssMatrixByDeviceSubscriberItemDataCenterModel>> GetAssMatrixByDeviceSubscriberDCSCenter(GetAssMatrixByDeviceSubscriberParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetAssMatrixByDeviceSubscriber_DCSCenter(param);
+
+                return Json(data.ToList());
+
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Ass Matrix by Device subscriber DCS Extra exception: " + ex.Message);
+                return Json(new List<GetAssMatrixByDeviceSubscriberItemDataCenterModel>());
+            }
+        }
+
+        #endregion device
+
         #endregion dcs center
 
         #region dcs extra
