@@ -270,6 +270,7 @@
     <Compile Include="Common\BetTypeSettingParaModel.cs" />
     <Compile Include="Common\CCGroupModel.cs" />
     <Compile Include="Common\CommonCustomerClassModel.cs" />
+    <Compile Include="Common\Entities\StaticListEntity.cs" />
     <Compile Include="Common\MainMatchModel.cs" />
     <Compile Include="Common\SiteModel.cs" />
     <Compile Include="Common\SportBettypeModel.cs" />
@@ -367,6 +368,9 @@
     <Compile Include="ManageSubscriber\ReUpdateSubscribeBySiteIDModel.cs" />
     <Compile Include="ManageSubscriber\DetailedSiteModel.cs" />
     <Compile Include="ManageSubscriber\UpdateSubsciberResultModel.cs" />
+    <Compile Include="MatchMonitor\Entities\GetMatchMonitorEntity.cs" />
+    <Compile Include="MatchMonitor\Entities\MMDetailFilterTicketInfoEntity.cs" />
+    <Compile Include="MatchMonitor\Entities\TicketDetailEntity.cs" />
     <Compile Include="MatchMonitor\FraudTransModel.cs" />
     <Compile Include="MatchMonitor\HoldKey\HoldKeyStatusGetResultModel.cs" />
     <Compile Include="MatchMonitor\HoldKey\HoldKeyUpdateModel.cs" />
@@ -388,6 +392,7 @@
     <Compile Include="MatchMonitor\MMDetailBetTeamModel.cs" />
     <Compile Include="MatchMonitor\MMDetailCustModel.cs" />
     <Compile Include="MatchMonitor\MMDetailMergeGroupModel.cs" />
+    <Compile Include="MatchMonitor\MMFraudTicketsSummaryEntity.cs" />
     <Compile Include="MatchMonitor\MMFraudTicketsSummaryModel.cs" />
     <Compile Include="MatchMonitor\MMTicketDetailInfoModel.cs" />
     <Compile Include="MatchMonitor\Parlay\ParlayTicketInfoModel.cs" />

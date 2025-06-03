@@ -1,25 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions>
 	<Function name="SubscriberAssignment">
-		<Setting Key="FPS_AD_InsertSubscriberByUser" SpName="FPS_AD_InsertSubscriberByUser_xtest" DbName="MySQL.CTS_Admin.Admin" />
-		<Setting Key="CTS_AD_Subscriber_GetAll" SpName="CTS_AD_Subscriber_GetAll_xtest" DbName="MySQL.CTS_Admin.Admin" />
+		<Setting Key="FPS_AD_InsertSubscriberByUser" SpName="FPS_AD_InsertSubscriberByUser_xtest" DbName="CTSMain.CTS_Admin.ctsWebAdmin" />
+		<Setting Key="CTS_AD_Subscriber_GetAll" SpName="CTS_AD_Subscriber_GetAll_xtest" DbName="CTSMain.CTS_Admin.ctsWebAdmin" />
 	</Function>
 
 	<Function Name="InsertCTSUser">
-		<Setting Key="CTS_AD_CTSUser_Insert" SpName="CTS_AD_CTSUser_Insert_xtest" DbName="MySQL.CTS_Admin.Admin" />
+		<Setting Key="CTS_AD_CTSUser_Insert" SpName="CTS_AD_CTSUser_Insert_xtest" DbName="CTSMain.CTS_Admin.ctsWebAdmin" />
 	</Function>
 
 	<Function Name="Common">
-		<Setting Key="DCS_DC_Transaction_GetHistory" SpName="DCS_DC_Transaction_GetHistory_xtest" DbName="MySQL.DCS_DataCenter.Reporter" Timeout="300" />
-		<Setting Key="CTS_DC_Common_ValidateUsername" SpName="CTS_DC_Common_ValidateUsername_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_Common_GetSites" SpName="CTS_DC_Common_GetSites_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_Common_CustomerClass_Get" SpName="CTS_DC_Common_CustomerClass_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_Common_BettypeSetting_Get" SpName="CTS_DC_Common_BettypeSetting_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_Common_GetStaticList" SpName="CTS_DC_Common_GetStaticList_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="DCS_DC_Transaction_GetHistory" SpName="DCS_DC_Transaction_GetHistory_xtest" DbName="DCSMain.DCS_DataCenter.ctsWeb" Timeout="300" />
+		<Setting Key="CTS_DC_Common_ValidateUsername" SpName="CTS_DC_Common_ValidateUsername_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_Common_GetSites" SpName="CTS_DC_Common_GetSites_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_Common_CustomerClass_Get" SpName="CTS_DC_Common_CustomerClass_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_Common_BettypeSetting_Get" SpName="CTS_DC_Common_BettypeSetting_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_Common_GetStaticList" SpName="CTS_DC_Common_GetStaticList_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 	</Function>
 
 	<Function name="CustInfo">
-		<Setting Key="CTS_DC_CustInfo_GetByUsername" SpName="CTS_DC_CustInfo_GetByUsername_xtest" DbName="MySQL.CTS_DataCenter.Reporter">
+		<Setting Key="CTS_DC_CustInfo_GetByUsername" SpName="CTS_DC_CustInfo_GetByUsername_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb">
 			<Mapping DataField="CurrencyId" ObjectProperty="Id" Class="Currency" />
 			<Mapping DataField="Currency" ObjectProperty="Name" Class="Currency" />
 			<Mapping DataField="RoleId" ObjectProperty="Id" Class="Role" />
@@ -27,200 +27,200 @@
 			<Mapping DataField="SubscriberId" ObjectProperty="Id" Class="Subscriber" />
 			<Mapping DataField="SubscriberName" ObjectProperty="Name" Class="Subscriber" />
 		</Setting>
-		<Setting Key="CTS_DC_CustInfo_GetByCTSCustID" SpName="CTS_DC_CustInfo_GetByCTSCustID_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustInfo_GetFlagged" SpName="CTS_DC_CustInfo_GetFlagged_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustInfo_GetCustIDsRole" SpName="CTS_DC_CustInfo_GetCustIDsRole_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustInfo_GetCustInfoDangerous" SpName="CTS_DC_CustInfo_GetCustInfoDangerous_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustInfo_GetByCTSCustID" SpName="CTS_DC_CustInfo_GetByCTSCustID_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustInfo_GetFlagged" SpName="CTS_DC_CustInfo_GetFlagged_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustInfo_GetCustIDsRole" SpName="CTS_DC_CustInfo_GetCustIDsRole_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustInfo_GetCustInfoDangerous" SpName="CTS_DC_CustInfo_GetCustInfoDangerous_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 	</Function>
 
 	<Function Name="Notification">
-		<Setting Key="CTS_DC_Notification_GetNewAssociation" SpName="CTS_DC_Notification_GetNewAssociation_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_Notification_GetProbation" SpName="CTS_DC_Notification_GetProbation_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_Notification_GetSettings" SpName="CTS_DC_Notification_GetSettings_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_Notification_UpdateSettings" SpName="CTS_DC_Notification_UpdateSettings_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_Notification_GetNewAssociation" SpName="CTS_DC_Notification_GetNewAssociation_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_Notification_GetProbation" SpName="CTS_DC_Notification_GetProbation_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_Notification_GetSettings" SpName="CTS_DC_Notification_GetSettings_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_Notification_UpdateSettings" SpName="CTS_DC_Notification_UpdateSettings_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 	</Function>
 
 	<Function Name="Evidence">
-		<Setting Key="CTS_DC_Evidences_GetAll" SpName="CTS_DC_Evidences_GetAll_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustEvidence_GetFlaggedEvidences" SpName="CTS_DC_CustEvidence_GetFlaggedEvidences_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustEvidence_RemoveFlagged" SpName="CTS_DC_CustEvidence_RemoveFlagged_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustEvidence_GetAffectedEvidences" SpName="CTS_DC_CustEvidence_GetAffectedEvidences_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustEvidence_RemoveAffected" SpName="CTS_DC_CustEvidence_RemoveAffected_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustEvidence_RestoreAffected" SpName="CTS_DC_CustEvidence_RestoreAffected_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustEvidence_GetFlaggedFromCustList" SpName="CTS_DC_CustEvidence_GetFlaggedFromCustList_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustEvidence_ValidateMultipleInput" SpName="CTS_DC_CustEvidence_ValidateMultipleInput_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustEvidence_InsertMultiple" SpName="CTS_DC_CustEvidence_InsertMultiple_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustEvidence_RemoveAllEvidenceByCTSCustIDs" SpName="CTS_DC_CustEvidence_RemoveAllEvidenceByCTSCustIDs_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustEvidence_Get" SpName="CTS_DC_CustEvidence_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustEvidence_GetFlaggedStatus" SpName="CTS_DC_CustEvidence_GetFlaggedStatus_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustEvidenceFromFile_Insert" SpName="CTS_DC_CustEvidenceFromFile_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustEvidenceQueue_Insert" SpName="CTS_DC_CustEvidenceQueue_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustEvidence_CheckCleanCust" SpName="CTS_DC_CustEvidence_CheckCleanCust_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_Evidences_GetAll" SpName="CTS_DC_Evidences_GetAll_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustEvidence_GetFlaggedEvidences" SpName="CTS_DC_CustEvidence_GetFlaggedEvidences_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustEvidence_RemoveFlagged" SpName="CTS_DC_CustEvidence_RemoveFlagged_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_CustEvidence_GetAffectedEvidences" SpName="CTS_DC_CustEvidence_GetAffectedEvidences_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustEvidence_RemoveAffected" SpName="CTS_DC_CustEvidence_RemoveAffected_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_CustEvidence_RestoreAffected" SpName="CTS_DC_CustEvidence_RestoreAffected_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_CustEvidence_GetFlaggedFromCustList" SpName="CTS_DC_CustEvidence_GetFlaggedFromCustList_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustEvidence_ValidateMultipleInput" SpName="CTS_DC_CustEvidence_ValidateMultipleInput_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustEvidence_InsertMultiple" SpName="CTS_DC_CustEvidence_InsertMultiple_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_CustEvidence_RemoveAllEvidenceByCTSCustIDs" SpName="CTS_DC_CustEvidence_RemoveAllEvidenceByCTSCustIDs_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_CustEvidence_Get" SpName="CTS_DC_CustEvidence_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustEvidence_GetFlaggedStatus" SpName="CTS_DC_CustEvidence_GetFlaggedStatus_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustEvidenceFromFile_Insert" SpName="CTS_DC_CustEvidenceFromFile_Insert_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_CustEvidenceQueue_Insert" SpName="CTS_DC_CustEvidenceQueue_Insert_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_CustEvidence_CheckCleanCust" SpName="CTS_DC_CustEvidence_CheckCleanCust_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 	</Function>
 
 	<Function Name="Association">
-		<Setting Key="CTS_DC_Association_InsertException" SpName="CTS_DC_Association_InsertException_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_Association_RemoveException" SpName="CTS_DC_Association_RemoveException_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_Association_GetException" SpName="CTS_DC_Association_GetException_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_Association_ValidateManualMultipleInput" SpName="CTS_DC_Association_ValidateManualMultipleInput_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_Association_InsertManualMultiple" SpName="CTS_DC_Association_InsertManualMultiple_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_Association_UpdateAssociationRemove" SpName="CTS_DC_Association_UpdateAssociationRemove_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_Association_Profile_Get" SpName="CTS_DC_Association_Profile_Get_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociationByIP_GetAssType" SpName="CTS_DC_AssociationByIP_GetAssType_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="SPU_AIML_GB_5GIP_GetDetails" SpName="SPU_AIML_GB_5GIP_GetDetails_xtest" DbName="MySQL.SPU_AIML.Reporter" />
-		<Setting Key="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" SpName="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_Category_Get" SpName="CTS_DC_Category_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="SPU_AIML_GB_3S_GetCoupleInfo" SpName="SPU_AIML_GB_3S_GetCoupleInfo" DbName="MySQL.SPU_AIML.Reporter" />
-		<Setting Key="SPU_AIML_GB_3S_GetCouple_FraudDetails" SpName="SPU_AIML_GB_3S_GetCouple_FraudDetails" DbName="MySQL.SPU_AIML.Reporter" />
-		<Setting Key="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" SpName="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" DbName="MySQL.SPU_AIML.Reporter" />
-		<Setting Key="CTS_DC_AssociationByAI_GetFirstAssociationDate" SpName="CTS_DC_AssociationByAI_GetFirstAssociationDate_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="SPU_AIML_OTGB_GetCouple_FraudDetails" SpName="SPU_AIML_OTGB_GetCouple_FraudDetails_xtest" DbName="MySQL.SPU_AIML.Reporter" />
+		<Setting Key="CTS_DC_Association_InsertException" SpName="CTS_DC_Association_InsertException_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_Association_RemoveException" SpName="CTS_DC_Association_RemoveException_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_Association_GetException" SpName="CTS_DC_Association_GetException_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_Association_ValidateManualMultipleInput" SpName="CTS_DC_Association_ValidateManualMultipleInput_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_Association_InsertManualMultiple" SpName="CTS_DC_Association_InsertManualMultiple_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_Association_UpdateAssociationRemove" SpName="CTS_DC_Association_UpdateAssociationRemove_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_Association_Profile_Get" SpName="CTS_DC_Association_Profile_Get_xtest" DbName="CTSMain2.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_AssociationByIP_GetAssType" SpName="CTS_DC_AssociationByIP_GetAssType_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="SPU_AIML_GB_5GIP_GetDetails" SpName="SPU_AIML_GB_5GIP_GetDetails_xtest" DbName="AIMain.SPU_AIML.aimlWeb" />
+		<Setting Key="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" SpName="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_Category_Get" SpName="CTS_DC_Category_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="SPU_AIML_GB_3S_GetCoupleInfo" SpName="SPU_AIML_GB_3S_GetCoupleInfo" DbName="AIMain.SPU_AIML.aimlWeb" />
+		<Setting Key="SPU_AIML_GB_3S_GetCouple_FraudDetails" SpName="SPU_AIML_GB_3S_GetCouple_FraudDetails" DbName="AIMain.SPU_AIML.aimlWeb" />
+		<Setting Key="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" SpName="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" DbName="AIMain.SPU_AIML.aimlWeb" />
+		<Setting Key="CTS_DC_AssociationByAI_GetFirstAssociationDate" SpName="CTS_DC_AssociationByAI_GetFirstAssociationDate_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="SPU_AIML_OTGB_GetCouple_FraudDetails" SpName="SPU_AIML_OTGB_GetCouple_FraudDetails_xtest" DbName="AIMain.SPU_AIML.aimlWeb" />
 	</Function>
 
 	<Function Name="AssociationDetection">
-		<Setting Key="CTS_DC_RPT_AssociationDetection" SpName="CTS_DC_RPT_AssociationDetection_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_Association_Primary_GetCustEdge" SpName="CTS_DC_Association_Primary_GetCustEdge_xtest" DbName="MySQL.CTS_DataCenter.Reporter" Timeout="300" />
-		<Setting Key="CTS_DC_Association_Agent_GetCustEdge" SpName="CTS_DC_Association_Agent_GetCustEdge_xtest" DbName="MySQL.CTS_DataCenter.Reporter" Timeout="300" />
-		<Setting Key="CTS_DC_Association_DetectGroup" SpName="CTS_DC_Association_DetectGroup_xtest" DbName="MySQL.CTS_DataCenter.Reporter" Timeout="300" />
-		<Setting Key="CTS_DC_AssociationDetection_GetDetail" SpName="CTS_DC_AssociationDetection_GetDetail_xtest" DbName="MySQL.CTS_DataCenter.Reporter" Timeout="300" />
+		<Setting Key="CTS_DC_RPT_AssociationDetection" SpName="CTS_DC_RPT_AssociationDetection_xtest" DbName="CTSMain2.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_Association_Primary_GetCustEdge" SpName="CTS_DC_Association_Primary_GetCustEdge_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="300" />
+		<Setting Key="CTS_DC_Association_Agent_GetCustEdge" SpName="CTS_DC_Association_Agent_GetCustEdge_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="300" />
+		<Setting Key="CTS_DC_Association_DetectGroup" SpName="CTS_DC_Association_DetectGroup_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="300" />
+		<Setting Key="CTS_DC_AssociationDetection_GetDetail" SpName="CTS_DC_AssociationDetection_GetDetail_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="300" />
 	</Function>
 
 	<Function Name="AssociationDetail">
-		<Setting Key="CTS_DC_AssociationGroupByAI_GetCustomersByGroup" SpName="CTS_DC_AssociationGroupByAI_GetCustomersByGroup" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="SPU_AIML_GB_GetAssociationInfo" SpName="SPU_AIML_GB_GetAssociationInfo" DbName="MySQL.SPU_AIML.Reporter" />
-		<Setting Key="SPU_AIML_GetAssociationByIPInfo" SpName="SPU_AIML_GetAssociationByIPInfo" DbName="MySQL.SPU_AIML.Reporter" />
+		<Setting Key="CTS_DC_AssociationGroupByAI_GetCustomersByGroup" SpName="CTS_DC_AssociationGroupByAI_GetCustomersByGroup" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="SPU_AIML_GB_GetAssociationInfo" SpName="SPU_AIML_GB_GetAssociationInfo" DbName="AIMain.SPU_AIML.aimlWeb" />
+		<Setting Key="SPU_AIML_GetAssociationByIPInfo" SpName="SPU_AIML_GetAssociationByIPInfo" DbName="AIMain.SPU_AIML.aimlWeb" />
 	</Function>
 
 	<Function Name="CustomerClassification">
-		<Setting Key="CTS_DC_CustClassification_Get" SpName="CTS_DC_CustClassification_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_ViewHistory" SpName="CTS_DC_CustClassification_ViewHistory_xtest" DbName="MySQL.CTS_DataCenter.Reporter" Timeout="600" />
+		<Setting Key="CTS_DC_CustClassification_Get" SpName="CTS_DC_CustClassification_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustClassification_ViewHistory" SpName="CTS_DC_CustClassification_ViewHistory_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="600" />
 
-		<Setting Key="CTS_DC_CustClassification_LogInputData" SpName="CTS_DC_CustClassification_LogInputData" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_Queue_Insert" SpName="CTS_DC_CustClassification_Queue_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_ProblemAccount_InsertByCategory" SpName="CTS_DC_CustClassification_ProblemAccount_InsertByCategory_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_BySport_GetCC" SpName="CTS_DC_CustClassification_BySport_GetCC_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_Insert" SpName="CTS_DC_CustClassification_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" Timeout="600" />
-		<Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove_xtest" DbName="MySQL.CTS_DataCenter.Admin" Timeout="600" />
-		<Setting Key="CTS_DC_CustClassificationAgency_Remove" SpName="CTS_DC_CustClassificationAgency_Remove_xtest" DbName="MySQL.CTS_DataCenter.Admin" Timeout="600" />
-		<Setting Key="CTS_DC_CustClassification_Rescan_Get" SpName="CTS_DC_CustClassification_Rescan_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassificationAgency_Rescan_Get" SpName="CTS_DC_CustClassificationAgency_Rescan_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassificationAgency_ViewHistory" SpName="CTS_DC_CustClassificationAgency_ViewHistory_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="600" />
-		<Setting Key="CTS_DC_CustClassificationAgency_Get" SpName="CTS_DC_CustClassificationAgency_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassificationAgency_Insert" SpName="CTS_DC_CustClassificationAgency_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_LogInputData" SpName="CTS_DC_CustClassification_LogInputData" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_CustClassification_Queue_Insert" SpName="CTS_DC_CustClassification_Queue_Insert_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_CustClassification_ProblemAccount_InsertByCategory" SpName="CTS_DC_CustClassification_ProblemAccount_InsertByCategory_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_CustClassification_BySport_GetCC" SpName="CTS_DC_CustClassification_BySport_GetCC_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustClassification_Insert" SpName="CTS_DC_CustClassification_Insert_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" Timeout="600" />
+		<Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" Timeout="600" />
+		<Setting Key="CTS_DC_CustClassificationAgency_Remove" SpName="CTS_DC_CustClassificationAgency_Remove_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" Timeout="600" />
+		<Setting Key="CTS_DC_CustClassification_Rescan_Get" SpName="CTS_DC_CustClassification_Rescan_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustClassificationAgency_Rescan_Get" SpName="CTS_DC_CustClassificationAgency_Rescan_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustClassificationAgency_ViewHistory" SpName="CTS_DC_CustClassificationAgency_ViewHistory_xtest" DbName="CTSMain2.CTS_DataCenter.ctsWeb" Timeout="600" />
+		<Setting Key="CTS_DC_CustClassificationAgency_Get" SpName="CTS_DC_CustClassificationAgency_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustClassificationAgency_Insert" SpName="CTS_DC_CustClassificationAgency_Insert_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 	</Function>
 
 	<Function name="SpecialCustomerClass">
-		<Setting Key="CTS_DC_SpecialCustClass_GetAll" SpName="CTS_DC_SpecialCustClass_GetAll_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_SpecialCustClass_ValidateUsername" SpName="CTS_DC_SpecialCustClass_ValidateUsername" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_SpecialCustClass_GetAll" SpName="CTS_DC_SpecialCustClass_GetAll_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_SpecialCustClass_ValidateUsername" SpName="CTS_DC_SpecialCustClass_ValidateUsername" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 	</Function>
 
 	<Function name="Subscriber">
-		<Setting Key="CTS_DC_Subscriber_GetAll " SpName="CTS_DC_Subscriber_GetAll_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_Subscriber_GetDetails" SpName="CTS_DC_Subscriber_GetDetails_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_Subscriber_Remove" SpName="CTS_DC_Subscriber_Remove_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_Subscriber_Update" SpName="CTS_DC_Subscriber_Update_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CTSCustomer_UpdateSubscriberIDBySiteID" SpName="CTS_DC_CTSCustomer_UpdateSubscriberIDBySiteID" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_Subscriber_GetAll " SpName="CTS_DC_Subscriber_GetAll_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_Subscriber_GetDetails" SpName="CTS_DC_Subscriber_GetDetails_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_Subscriber_Remove" SpName="CTS_DC_Subscriber_Remove_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_Subscriber_Update" SpName="CTS_DC_Subscriber_Update_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_CTSCustomer_UpdateSubscriberIDBySiteID" SpName="CTS_DC_CTSCustomer_UpdateSubscriberIDBySiteID" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 	</Function>
 
 	<Function name="AssociationReport">
-		<Setting Key="CTS_DC_Subscriber_GetByGroup " SpName="CTS_DC_Subscriber_GetByGroup_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_RPT_AssociatedAccount " SpName="CTS_DC_RPT_AssociatedAccount_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="600" />
-		<Setting Key="CTS_DC_RPT_AssociatedAccount_Detail " SpName="CTS_DC_RPT_AssociatedAccount_Detail_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="600" />
+		<Setting Key="CTS_DC_Subscriber_GetByGroup " SpName="CTS_DC_Subscriber_GetByGroup_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_RPT_AssociatedAccount " SpName="CTS_DC_RPT_AssociatedAccount_xtest" DbName="CTSMain2.CTS_DataCenter.ctsWeb" Timeout="600" />
+		<Setting Key="CTS_DC_RPT_AssociatedAccount_Detail " SpName="CTS_DC_RPT_AssociatedAccount_Detail_xtest" DbName="CTSMain2.CTS_DataCenter.ctsWeb" Timeout="600" />
 	</Function>
 
 	<Function name="LatestTransaction">
-		<Setting Key="DCS_DC_Transaction_GetLatest" SpName="DCS_DC_Transaction_GetLatest_xtest" DbName="MySQL.DCS_DataCenter.Reporter" Timeout="600"/>
+		<Setting Key="DCS_DC_Transaction_GetLatest" SpName="DCS_DC_Transaction_GetLatest_xtest" DbName="DCSMain.DCS_DataCenter.ctsWeb" Timeout="600"/>
 	</Function>
 
 	<Function name="MatchMonitor">
-		<Setting Key="CTS_DC_MatchMonitor_Get" SpName="CTS_DC_MatchMonitor_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_MatchMonitor_Details_Verify" SpName="CTS_DC_MatchMonitor_Details_Verify_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_MatchMonitor_Details_Get" SpName="CTS_DC_MatchMonitor_Details_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustInfo_GetByCustID" SpName="CTS_DC_CustInfo_GetByCustID_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_RobotClassification_GetRobotStatusByTransList" SpName="CTS_DC_RobotClassification_GetRobotStatusByTransList_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_MatchMonitor_Details_MergeGroup" SpName="CTS_DC_MatchMonitor_Details_MergeGroup_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_MatchMonitor_UserComment_Get" SpName="CTS_DC_MatchMonitor_UserComment_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_MatchMonitor_UserComment_Insert" SpName="CTS_DC_MatchMonitor_UserComment_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_MatchMonitor_UserComment_Update" SpName="CTS_DC_MatchMonitor_UserComment_Update_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_MatchMonitor_UserComment_Delete" SpName="CTS_DC_MatchMonitor_UserComment_Delete_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_MatchMonitor_HoldKey_InsertLog" SpName="CTS_DC_MatchMonitor_HoldKey_InsertLog_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-    <Setting Key="CTS_DC_MatchMonitorParlay_Details_Get" SpName="CTS_DC_MatchMonitorParlay_Details_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_MatchMonitor_Get" SpName="CTS_DC_MatchMonitor_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_MatchMonitor_Details_Verify" SpName="CTS_DC_MatchMonitor_Details_Verify_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_MatchMonitor_Details_Get" SpName="CTS_DC_MatchMonitor_Details_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustInfo_GetByCustID" SpName="CTS_DC_CustInfo_GetByCustID_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_RobotClassification_GetRobotStatusByTransList" SpName="CTS_DC_RobotClassification_GetRobotStatusByTransList_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_MatchMonitor_Details_MergeGroup" SpName="CTS_DC_MatchMonitor_Details_MergeGroup_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_MatchMonitor_UserComment_Get" SpName="CTS_DC_MatchMonitor_UserComment_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_MatchMonitor_UserComment_Insert" SpName="CTS_DC_MatchMonitor_UserComment_Insert_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_MatchMonitor_UserComment_Update" SpName="CTS_DC_MatchMonitor_UserComment_Update_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_MatchMonitor_UserComment_Delete" SpName="CTS_DC_MatchMonitor_UserComment_Delete_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_MatchMonitor_HoldKey_InsertLog" SpName="CTS_DC_MatchMonitor_HoldKey_InsertLog_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+    <Setting Key="CTS_DC_MatchMonitorParlay_Details_Get" SpName="CTS_DC_MatchMonitorParlay_Details_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 	</Function>
 
 	<Function name="RobotClassification">
-		<Setting Key="CTS_DC_RobotClassification_GetHistory" SpName="CTS_DC_RobotClassification_GetHistory_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_RobotClassification_GetRobotStatus" SpName="CTS_DC_RobotClassification_GetRobotStatus_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-    <Setting Key="CTS_DC_RobotClassificationAgency_GetRobotStatus" SpName="CTS_DC_RobotClassificationAgency_GetRobotStatus_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_RobotClassification_GetHistory" SpName="CTS_DC_RobotClassification_GetHistory_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_RobotClassification_GetRobotStatus" SpName="CTS_DC_RobotClassification_GetRobotStatus_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+    <Setting Key="CTS_DC_RobotClassificationAgency_GetRobotStatus" SpName="CTS_DC_RobotClassificationAgency_GetRobotStatus_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 	</Function>
 
 	<Function name="TransactionMonitoringReport">
-		<Setting Key="DCS_DC_RPT_Transaction" SpName="DCS_DC_RPT_Transaction_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
+		<Setting Key="DCS_DC_RPT_Transaction" SpName="DCS_DC_RPT_Transaction_xtest" DbName="DCSMain.DCS_DataCenter.ctsWeb" />
 	</Function>
 
 	<Function name="RobotBetting">
-		<Setting Key="CTS_DC_RobotDetection_Get" SpName="CTS_DC_RobotDetection_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="SPU_AIML_RD_GetRobotUsersDetails" SpName="SPU_AIML_RD_GetRobotUsersDetails_xtest" DbName="MySQL.SPU_AIML.Reporter" />
-		<Setting Key="SPU_AIML_RD_SCE_GetRobotUsersDetails" SpName="SPU_AIML_RD_SCE_GetRobotUsersDetails_xtest" DbName="MySQL.SPU_AIML.Reporter" />
-		<Setting Key="SPU_AIML_RD_GetRobotUserMatch" SpName="SPU_AIML_RD_GetRobotUserMatch_xtest" DbName="MySQL.SPU_AIML.Reporter" />
-		<Setting Key="SPU_AIML_RD_GetRobotUserMatchTransList" SpName="SPU_AIML_RD_GetRobotUserMatchTransList_xtest" DbName="MySQL.SPU_AIML.Reporter" />
-    <Setting Key="SPU_AIML_RD_LP_GetRobotDetails" SpName="SPU_AIML_RD_LP_GetRobotDetails_xtest" DbName="MySQL.SPU_AIML.Reporter" />
+		<Setting Key="CTS_DC_RobotDetection_Get" SpName="CTS_DC_RobotDetection_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="SPU_AIML_RD_GetRobotUsersDetails" SpName="SPU_AIML_RD_GetRobotUsersDetails_xtest" DbName="AIMain.SPU_AIML.aimlWeb" />
+		<Setting Key="SPU_AIML_RD_SCE_GetRobotUsersDetails" SpName="SPU_AIML_RD_SCE_GetRobotUsersDetails_xtest" DbName="AIMain.SPU_AIML.aimlWeb" />
+		<Setting Key="SPU_AIML_RD_GetRobotUserMatch" SpName="SPU_AIML_RD_GetRobotUserMatch_xtest" DbName="AIMain.SPU_AIML.aimlWeb" />
+		<Setting Key="SPU_AIML_RD_GetRobotUserMatchTransList" SpName="SPU_AIML_RD_GetRobotUserMatchTransList_xtest" DbName="AIMain.SPU_AIML.aimlWeb" />
+    <Setting Key="SPU_AIML_RD_LP_GetRobotDetails" SpName="SPU_AIML_RD_LP_GetRobotDetails_xtest" DbName="AIMain.SPU_AIML.aimlWeb" />
 	</Function>
 
 	<Function name="CustomerProfile">
-		<Setting Key="CTS_DC_CustInfo_Profile_GetAssociationAccount" SpName="CTS_DC_CustInfo_Profile_GetAssociationAccount_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustInfo_Profile_GetEvidence" SpName="CTS_DC_CustInfo_Profile_GetEvidence_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustInfo_Profile_GetLoginStats" SpName="CTS_DC_CustInfo_Profile_GetLoginStats_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustInfo_Profile_GetDate" SpName="CTS_DC_CustInfo_Profile_GetDate_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustInfoAgency_Profile_GetDate" SpName="CTS_DC_CustInfoAgency_Profile_GetDate_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustInfo_Profile_GetAssociationAccount" SpName="CTS_DC_CustInfo_Profile_GetAssociationAccount_xtest" DbName="CTSMain2.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustInfo_Profile_GetEvidence" SpName="CTS_DC_CustInfo_Profile_GetEvidence_xtest" DbName="CTSMain2.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustInfo_Profile_GetLoginStats" SpName="CTS_DC_CustInfo_Profile_GetLoginStats_xtest" DbName="CTSMain2.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustInfo_Profile_GetDate" SpName="CTS_DC_CustInfo_Profile_GetDate_xtest" DbName="CTSMain2.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustInfoAgency_Profile_GetDate" SpName="CTS_DC_CustInfoAgency_Profile_GetDate_xtest" DbName="CTSMain2.CTS_DataCenter.ctsWeb" />
 	</Function>
 
 	<Function name="MonitorCTSFunction">
-		<Setting Key="SPU_Stats_Accessment_Insert" SpName="SPU_Stats_Accessment_Insert_xtest" DbName="MySQL.SPU_Stats.Admin" />
+		<Setting Key="SPU_Stats_Accessment_Insert" SpName="SPU_Stats_Accessment_Insert_xtest" DbName="CTSMain.SPU_Stats.spustatsServiceAdmin" />
 	</Function>
 
 	<Function name="ProblemAccountManagement">
-		<Setting Key="CTS_DC_ProblemAccountManagement_Get" SpName="CTS_DC_ProblemAccountManagement_Get_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" TimeOut="600" />
-		<Setting Key="CTS_DC_ProblemAccountManagement_GetCategories" SpName="CTS_DC_ProblemAccountManagement_GetCategories_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_ProblemAccountManagement_ValidateUserName" SpName="CTS_DC_ProblemAccountManagement_ValidateUserName_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_ProblemAccountManagement_Get" SpName="CTS_DC_ProblemAccountManagement_Get_xtest" DbName="CTSMain2.CTS_DataCenter.ctsWeb" TimeOut="600" />
+		<Setting Key="CTS_DC_ProblemAccountManagement_GetCategories" SpName="CTS_DC_ProblemAccountManagement_GetCategories_xtest" DbName="CTSMain2.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_ProblemAccountManagement_ValidateUserName" SpName="CTS_DC_ProblemAccountManagement_ValidateUserName_xtest" DbName="CTSMain2.CTS_DataCenter.ctsWeb" />
 	</Function>
 	<Function name="RescanCustomerClassification">
-		<Setting Key="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" SpName="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA_xtest" DbName="MySQL.CTS_Archive.Admin" />
+		<Setting Key="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" SpName="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA_xtest" DbName="CTSMain.CTS_Archive.ctsWebAdmin" />
 
-		<Setting Key="CTS_DC_CustClassification_GetCCAndDangerLevel" SpName="CTS_DC_CustClassification_GetCCAndDangerLevel_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_GetCCAndDangerLevel" SpName="CTS_DC_CustClassification_GetCCAndDangerLevel_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 	</Function>
 
 	<Function name="AssociatedGroupMonitor">
-		<Setting Key="CTS_DC_Common_GetSites" SpName="CTS_DC_Common_GetSites_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociatedGroup_Get" SpName="CTS_DC_AssociatedGroup_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociatedGroup_GetSites" SpName="CTS_DC_AssociatedGroup_GetSites_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociatedGroup_Create" SpName="CTS_DC_AssociatedGroup_Create_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_AssociatedGroup_Remove" SpName="CTS_DC_AssociatedGroup_Remove_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_AssociatedGroup_Account_Add" SpName="CTS_DC_AssociatedGroup_Account_Add_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_AssociatedGroup_Account_Get" SpName="CTS_DC_AssociatedGroup_Account_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociatedGroup_ValidateUsername" SpName="CTS_DC_AssociatedGroup_ValidateUsername_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociatedGroup_GetByID" SpName="CTS_DC_AssociatedGroup_GetByID_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociatedGroup_Update" SpName="CTS_DC_AssociatedGroup_Update_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_AssociatedGroup_GetProblemCategoryByGroupID" SpName="CTS_DC_AssociatedGroup_GetProblemCategoryByGroupID_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociatedGroup_SetProblemCategoryByGroupID" SpName="CTS_DC_AssociatedGroup_SetProblemCategoryByGroupID_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_AssociatedGroup_GetPASites" SpName="CTS_DC_AssociatedGroup_GetPASites_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociatedGroup_TransferAccount_GetGroup" SpName="CTS_DC_AssociatedGroup_TransferAccount_GetGroup_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociatedGroup_TransferAccount_ValidateUsername" SpName="CTS_DC_AssociatedGroup_TransferAccount_ValidateUsername_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociatedGroup_TransferAccount_Update" SpName="CTS_DC_AssociatedGroup_TransferAccount_Update_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_Common_GetSites" SpName="CTS_DC_Common_GetSites_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_AssociatedGroup_Get" SpName="CTS_DC_AssociatedGroup_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_AssociatedGroup_GetSites" SpName="CTS_DC_AssociatedGroup_GetSites_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_AssociatedGroup_Create" SpName="CTS_DC_AssociatedGroup_Create_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_AssociatedGroup_Remove" SpName="CTS_DC_AssociatedGroup_Remove_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_AssociatedGroup_Account_Add" SpName="CTS_DC_AssociatedGroup_Account_Add_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_AssociatedGroup_Account_Get" SpName="CTS_DC_AssociatedGroup_Account_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_AssociatedGroup_ValidateUsername" SpName="CTS_DC_AssociatedGroup_ValidateUsername_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_AssociatedGroup_GetByID" SpName="CTS_DC_AssociatedGroup_GetByID_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_AssociatedGroup_Update" SpName="CTS_DC_AssociatedGroup_Update_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_AssociatedGroup_GetProblemCategoryByGroupID" SpName="CTS_DC_AssociatedGroup_GetProblemCategoryByGroupID_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_AssociatedGroup_SetProblemCategoryByGroupID" SpName="CTS_DC_AssociatedGroup_SetProblemCategoryByGroupID_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_AssociatedGroup_GetPASites" SpName="CTS_DC_AssociatedGroup_GetPASites_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_AssociatedGroup_TransferAccount_GetGroup" SpName="CTS_DC_AssociatedGroup_TransferAccount_GetGroup_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_AssociatedGroup_TransferAccount_ValidateUsername" SpName="CTS_DC_AssociatedGroup_TransferAccount_ValidateUsername_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_AssociatedGroup_TransferAccount_Update" SpName="CTS_DC_AssociatedGroup_TransferAccount_Update_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 	</Function>
 
 	<Function name="LogData">
-		<Setting Key="CTS_Archive_Log_Insert" SpName="CTS_Archive_Log_Insert_xtest" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />
+		<Setting Key="CTS_Archive_Log_Insert" SpName="CTS_Archive_Log_Insert_xtest" DbName="CTSMain.CTS_Archive.ctsServiceAdmin" />
 	</Function>
 
 	<Function name="CustomerClassificationBySport">
-		<Setting Key="CTS_DC_CustClassification_BySport_Get" SpName="CTS_DC_CustClassification_BySport_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_BySport_History_Get" SpName="CTS_DC_CustClassification_BySport_History_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_BySport_Insert" SpName="CTS_DC_CustClassification_BySport_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_BySport_Remove" SpName="CTS_DC_CustClassification_BySport_Remove_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_BySport_Get" SpName="CTS_DC_CustClassification_BySport_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustClassification_BySport_History_Get" SpName="CTS_DC_CustClassification_BySport_History_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustClassification_BySport_Insert" SpName="CTS_DC_CustClassification_BySport_Insert_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_CustClassification_BySport_Remove" SpName="CTS_DC_CustClassification_BySport_Remove_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 	</Function>
 
 	<Function name="RobotReport">
-		<Setting Key="CTS_DC_RPT_RobotStatistic" SpName="CTS_DC_RPT_RobotStatistic_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
-		<Setting Key="CTS_DC_RPT_RobotStatistic_AI" SpName="CTS_DC_RPT_RobotStatistic_AI_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
+		<Setting Key="CTS_DC_RPT_RobotStatistic" SpName="CTS_DC_RPT_RobotStatistic_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb"/>
+		<Setting Key="CTS_DC_RPT_RobotStatistic_AI" SpName="CTS_DC_RPT_RobotStatistic_AI_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb"/>
 	</Function>
 </Functions>

@@ -361,7 +361,7 @@
                 matchFromCTSInfos = _matchMonitorService.GetMatchMonitor(para, matchJson);
                 matchFromCTSInfos = matchFromCTSInfos.Join(matchFromMainInfos, x => x.MatchID, y => y.MatchId, (x, y) =>
                 {
-                    x.IsSupportShowAllTickets = y.IsGetDataFromOrigin == 1;
+                    x.IsSupportShowAllTickets = y.IsGetDataFromOrigin;
                     x.DataSource = y.DataSource;
                     x.HomeName = y.HomeName;
                     x.AwayName = y.AwayName;
@@ -396,7 +396,7 @@
                         AwayName = m2.AwayName,
                         LeagueID = m1.LeagueID,
                         LeagueName = m2.LeagueName,
-                        SportTypeId = m1.SportTypeId,
+                        Sporttype = m1.Sporttype,
                         BettypeID = m1.BettypeID,
                         BetID = m1.BetID,
                         Reason = m1.Reason,
@@ -405,7 +405,7 @@
                         KickOffTime = m2.KickOffTime,
                         EventDate = m2.EventDate,
                         MatchSection = m2.MatchSection,
-                        IsSupportShowAllTickets = m2.IsGetDataFromOrigin == 1,
+                        IsSupportShowAllTickets = m2.IsGetDataFromOrigin,
                         DataSource = m2.DataSource,
                         FraudTrans = m1.FraudTrans,
                         FraudRefno = m1.FraudRefno,

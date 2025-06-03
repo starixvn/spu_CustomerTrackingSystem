@@ -1,10 +1,42 @@
 ﻿namespace Fanex.NAP.CTS.Model.MatchMonitor
 {
-    using Newtonsoft.Json;
+    using Fanex.NAP.CTS.Model.MatchMonitor.Entities;
     using System;
 
     public class GetMatchMonitorModel
     {
+        public GetMatchMonitorModel() { }
+
+        public GetMatchMonitorModel(GetMatchMonitorEntity entity)
+        {
+            ID = entity.ID;
+            MatchID = entity.MatchID;
+            EventDate = entity.EventDate;
+            Market = entity.Market;
+            HomeID = entity.HomeID;
+            HomeName = entity.HomeName;
+            AwayID = entity.AwayID;
+            AwayName = entity.AwayName;
+            LeagueID = entity.LeagueID;
+            LeagueName = entity.LeagueName;
+            Sporttype = entity.SportTypeId;
+            BettypeID = entity.BettypeID;
+            BetID = entity.BetID;
+            Reason = entity.Reason;
+            MatchSection = entity.MatchSection;
+            IsVerified = entity.IsVerified;
+            VerifiedBy = entity.VerifiedBy;
+            KickOffTime = entity.KickOffTime;
+            IsSupportShowAllTickets = entity.IsSupportShowAllTickets;
+            FraudTrans = entity.FraudTrans;
+            FraudRefno = entity.FraudRefno;
+            DataSource = entity.DataSource;
+            BettypeNameDisplay = entity.BettypeNameDisplay;
+            DetailsX = entity.DetailsX;
+            DetailsY = entity.DetailsY;
+            TicketType = entity.TicketType; // 1: Single, 2: Parlay
+        }
+
         public Int64 ID { get; set; }
 
         public Int64 MatchID { get; set; }
@@ -25,14 +57,13 @@
 
         public string LeagueName { get; set; }
 
-        [JsonProperty("Sporttype")]
-        public int SportTypeId { get; set; }
+        public int Sporttype { get; set; }
 
         public int BettypeID { get; set; }
 
         public int? BetID { get; set; }
 
-        public string Reason { get; set; }        
+        public string Reason { get; set; }
 
         public int MatchSection { get; set; }
 

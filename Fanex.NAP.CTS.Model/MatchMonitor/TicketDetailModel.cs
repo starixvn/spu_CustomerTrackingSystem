@@ -1,11 +1,64 @@
 ﻿namespace Fanex.NAP.CTS.Model.MatchMonitor
 {
+    using Fanex.NAP.CTS.Model.MatchMonitor.Entities;
     using Fanex.NAP.CTS.Model.MatchMonitor.Parlay;
     using System;
     using System.Collections.Generic;
 
     public class TicketDetailModel
     {
+        public TicketDetailModel() { }
+
+        public TicketDetailModel(TicketDetailEntity entity)
+        {
+            SequenceID = entity.SequenceID;
+            TransId = entity.TransId;
+            TransDate = entity.TransDate;
+            MatchId = entity.MatchId;
+            HomeId = entity.HomeId;
+            HomeName = entity.HomeName;
+            AwayId = entity.AwayId;
+            AwayName = entity.AwayName;
+            LeagueId = entity.LeagueId;
+            LeagueName = entity.LeagueName;
+            EventDate = entity.EventDate;
+            EventStatus = entity.EventStatus;
+            KickOffTime = entity.KickOffTime;
+            BetType = entity.BetType;
+            BetID = entity.BetID;
+            CustId = entity.CustId;
+            BettypeName = entity.BettypeName;
+            SportType = entity.SportType;
+            BetTeam = entity.BetTeam;
+            BetTeamFullName = entity.BetTeamFullName;
+            BetFrom = entity.BetFrom;
+            Stake = entity.Stake;
+            OrgStake = entity.OrgStake;
+            Odds = entity.Odds;
+            MalayOdds = entity.MalayOdds;
+            Hdp1 = entity.Hdp1;
+            Hdp2 = entity.Hdp2;
+            Choice = entity.Choice;
+            LiveHomeScore = entity.LiveHomeScore;
+            LiveAwayScore = entity.LiveAwayScore;
+            LiveIndicator = entity.LiveIndicator;
+            TicketStatus = entity.TicketStatus;
+            Danger1 = entity.Danger1;
+            Danger2 = entity.Danger2;
+            Danger3 = entity.Danger3;
+            Danger4 = entity.Danger4;
+            Danger5 = entity.Danger5;
+            CustomerClass = entity.CustomerClass;
+            CurrencyName = entity.CurrencyName;
+            CurrencyId = entity.CurrencyId;
+            Hdp = entity.Hdp;
+            IsLicensee = entity.IsLicensee ? 1 : 0;
+            ChoiceOrder = entity.ChoiceOrder;
+            TicketOrder = entity.TicketOrder;
+            Refno = entity.Refno;
+            Combinition = entity.Combinition;
+        }
+
         public long SequenceID { get; set; }
 
         public Int64 TransId { get; set; }

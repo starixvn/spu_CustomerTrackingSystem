@@ -11,7 +11,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Implement;
@@ -22,6 +21,8 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.Parlay;
     using Fanex.NAP.CTS.Core.Service;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
+    using Fanex.NAP.CTS.Model.MatchMonitor.Entities;
 
     public class MatchMonitorService : IMatchMonitorService
     {
@@ -69,7 +70,9 @@
                 MatchInfosJson = matchInfoFromMainJson
             };
 
-            return _repository.Fetch<GetMatchMonitorModel>(criteria);
+            var result = _repository.Fetch<GetMatchMonitorEntity>(criteria);
+
+            return result.Select(x => new GetMatchMonitorModel(x));
         }
 
         public IEnumerable<MMFraudTicketsSummaryViewModel> GetMMFraudTicketsSummary(IEnumerable<MMFraudTicketsSummaryModel> mmModels)
@@ -79,7 +82,9 @@
                 FraudTickets = JsonConvert.SerializeObject(mmModels)
             };
 
-            return _repository.Fetch<MMFraudTicketsSummaryViewModel>(criteria);
+            var result = _repository.Fetch<MMFraudTicketsSummaryEntity>(criteria);
+
+            return result.Select(x => new MMFraudTicketsSummaryViewModel(x));
         }
 
         public DBResult VerifyTransMatchMonitorDetail(MatchMonitorDetailVerifyTransParaModel para)
@@ -538,7 +543,7 @@
                 ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null
             };
 
-            var result = _repository.Fetch<MMDetailFilterTicketInfoModel>(criteria);
+            var result = _repository.Fetch<MMDetailFilterTicketInfoEntity>(criteria);
 
             return new MMTicketDetailInfoModel
             {
@@ -547,7 +552,7 @@
                 TotalTicketAll = criteria.TotalTicketAll,
                 TotalTicketCredit = criteria.TotalTicketCredit,
                 TotalTicketLicensee = criteria.TotalTicketLicensee,
-                TicketInfoList = result
+                TicketInfoList = result.Select(x => new MMDetailFilterTicketInfoModel(x))
             };
         }
 
@@ -576,7 +581,7 @@
                 ToTransDate = para.TranstimeTo != null ? para.TranstimeTo.Value.ToUniversalTime() : (DateTime?)null
             };
 
-            var result = _repository.Fetch<MMDetailFilterTicketInfoModel>(criteria);
+            var result = _repository.Fetch<MMDetailFilterTicketInfoEntity>(criteria);
 
             return new MMTicketDetailInfoModel
             {
@@ -585,7 +590,7 @@
                 TotalTicketAll = criteria.TotalTicketAll,
                 TotalTicketCredit = criteria.TotalTicketCredit,
                 TotalTicketLicensee = criteria.TotalTicketLicensee,
-                TicketInfoList = result
+                TicketInfoList = result.Select(x => new MMDetailFilterTicketInfoModel(x))
             };
         }
 
@@ -717,7 +722,7 @@
         }
 
         private void FillRowDataBadmintonDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems,
-            IEnumerable<ExExcelTicketInfoViewModel> awayMItems,   
+            IEnumerable<ExExcelTicketInfoViewModel> awayMItems,
             ref ExcelTemplateWriter writer)
         {
             var tblHome = homeMItems != null ? homeMItems.ToArray() : new ExExcelTicketInfoViewModel[0];
@@ -787,7 +792,7 @@
                     itemH.CustomerClass == -1 ? "-" : itemH.CustomerClass.ToString(),
                     (itemH.IsRobot ? "x" : "-"),
                     itemH.DangerToString,
-                    (itemH.Game == 0 ? "-" : itemH.Game.ToString()), 
+                    (itemH.Game == 0 ? "-" : itemH.Game.ToString()),
                     itemH.Odds,
                     itemH.MalayOdds,
                     itemH.BetID.ToString(),
@@ -1325,11 +1330,11 @@
                 criteria.ListMGroup = filter.MGroupList == null ? null : string.Join(",", filter.MGroupList).Replace('-', '0');
             }
 
-            var data = _repository.Fetch<TicketDetailModel>(criteria);
+            var data = _repository.Fetch<TicketDetailEntity>(criteria);
 
             return new TicketDetailViewModel
             {
-                TicketDetails = data,
+                TicketDetails = data.Select(x => new TicketDetailModel(x)),
                 MinSequenceId = criteria.MinSequenceId,
                 MinTransDate = criteria.MinTransDate,
                 TotalTicket = criteria.TotalTicket
@@ -1424,11 +1429,11 @@
                 criteria.ListMGroup = filter.MGroupList == null ? null : string.Join(",", filter.MGroupList).Replace('-', '0');
             }
 
-            var data = _repository.Fetch<TicketDetailModel>(criteria);
+            var data = _repository.Fetch<TicketDetailEntity>(criteria);
 
             return new TicketDetailViewModel
             {
-                TicketDetails = GroupParlayTickets(data),
+                TicketDetails = GroupParlayTickets(data.Select(x => new TicketDetailModel(x))),
                 MinSequenceId = criteria.MinSequenceId,
                 MinTransDate = criteria.MinTransDate,
                 TotalTicket = criteria.TotalTicket

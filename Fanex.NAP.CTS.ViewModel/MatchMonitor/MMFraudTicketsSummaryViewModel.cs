@@ -1,9 +1,23 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
+    using Fanex.NAP.CTS.Model.MatchMonitor;
     using System;
 
     public class MMFraudTicketsSummaryViewModel
     {
+        public MMFraudTicketsSummaryViewModel() { }
+
+        public MMFraudTicketsSummaryViewModel(MMFraudTicketsSummaryEntity entity)
+        {
+            MatchId = entity.MatchId;
+            IsLive = entity.IsLive ? 1 : 0;
+            Bettype = entity.Bettype;
+            Betteam = entity.Betteam;
+            BetId = entity.BetId;
+            Turnover = entity.Turnover;
+            BetCount = entity.BetCount;
+        }
+
         public Int64 MatchId { get; set; }
 
         public int IsLive { get; set; }

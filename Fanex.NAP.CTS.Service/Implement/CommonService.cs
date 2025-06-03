@@ -4,6 +4,7 @@
     using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Criteria.Common;
     using Fanex.NAP.CTS.Model.Common;
+    using Fanex.NAP.CTS.Model.Common.Entities;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.Common;
     using System;
@@ -146,7 +147,9 @@
                 IsStatusActive = isStatusActive
             };
 
-            return _repository.Fetch<StaticListModel>(criteria);
+            var result = _repository.Fetch<StaticListEntity>(criteria);
+
+            return result.Select(x => new StaticListModel(x));
         }
 
         public IEnumerable<BetTypeSettingModel> GetBetTypeSettings(BetTypeSettingParaModel infos)

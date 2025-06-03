@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
-    using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
@@ -27,7 +26,7 @@
             this.BetID = data.BetID;
             this.Reason = data.Reason;
             this.ReasonName = this.GetReasonName(reasons, data.Reason);
-            this.SportType = data.SportTypeId;
+            this.SportType = data.Sporttype;
             this.MatchSection = data.MatchSection;
             this.IsVerified = data.IsVerified;
             this.VerifiedBy = data.VerifiedBy;

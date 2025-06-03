@@ -2,75 +2,75 @@
 <Functions>
 
 	<Function Name="FS_API">
-		<Setting Key="FS_FlaggedAccount_Insert" SpName="FS_FlaggedAccount_Insert" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-		<Setting Key="FlaggedAccount_Delete" SpName="FS_FlaggedAccount_Delete" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-		<Setting Key="FS_DelayGoalAccount_ImportFromFPS" SpName="FS_DelayGoalAccount_ImportFromFPS" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
+		<Setting Key="FS_FlaggedAccount_Insert" SpName="FS_FlaggedAccount_Insert" DbName="DBFS.bodb_FraudSensor.wsv_cts" />
+		<Setting Key="FlaggedAccount_Delete" SpName="FS_FlaggedAccount_Delete" DbName="DBFS.bodb_FraudSensor.wsv_cts" />
+		<Setting Key="FS_DelayGoalAccount_ImportFromFPS" SpName="FS_DelayGoalAccount_ImportFromFPS" DbName="DBFS.bodb_FraudSensor.wsv_cts" />
 	</Function>
 
 	<Function name="Common">		
-		<Setting Key="CTS_CustomerClass_GetByCustId" SpName="CTS_CustomerClass_GetByCustId" DbName="DBCTS.bodb02.bodbSPUNet" />	
-		<Setting Key="CTS_CustomerStatistics_GetPerformance_ByBettype" SpName="CTS_CustomerStatistics_GetPerformance_ByBettype" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
-		<Setting Key="CTS_CustomerStatistics_GetPerformanceDaily" SpName="CTS_CustomerStatistics_GetPerformanceDaily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
-		<Setting Key="CTS_CustomerStatistics_GetPerformance_BySport" SpName="CTS_CustomerStatistics_GetPerformance_BySport" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />					
-		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
-		<Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />		
-		<Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />				
-		<Setting Key="CTS_MatchInfo_Get" SpName="CTS_MatchInfo_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_SportBettype_Get" SpName="CTS_SportBettype_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_LeagueGroup_Get" SpName="CTS_LeagueGroup_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_ValidateUsername" SpName="CTS_ValidateUsername" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_CustomerClass_GetByCustId" SpName="CTS_CustomerClass_GetByCustId" DbName="DBCTS.bodb02.wsv_cts" />	
+		<Setting Key="CTS_CustomerStatistics_GetPerformance_ByBettype" SpName="CTS_CustomerStatistics_GetPerformance_ByBettype" DbName="DBVR2.bodb_VR2Model.wsv_cts" />
+		<Setting Key="CTS_CustomerStatistics_GetPerformanceDaily" SpName="CTS_CustomerStatistics_GetPerformanceDaily" DbName="DBVR2.bodb_VR2Model.wsv_cts" />
+		<Setting Key="CTS_CustomerStatistics_GetPerformance_BySport" SpName="CTS_CustomerStatistics_GetPerformance_BySport" DbName="DBVR2.bodb_VR2Model.wsv_cts" />					
+		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged" DbName="DBCust.CustDB.wsv_nap" TimeOut="300" />
+		<Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged" DbName="DBCust.CustDB.wsv_nap" TimeOut="300" />		
+		<Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get" DbName="DBFS.bodb_FraudSensor.wsv_cts" />				
+		<Setting Key="CTS_MatchInfo_Get" SpName="CTS_MatchInfo_Get" DbName="DBCTS.bodb02.wsv_cts" />
+		<Setting Key="CTS_SportBettype_Get" SpName="CTS_SportBettype_Get" DbName="DBCTS.bodb02.wsv_cts" />
+		<Setting Key="CTS_LeagueGroup_Get" SpName="CTS_LeagueGroup_Get" DbName="DBCTS.bodb02.wsv_cts" />
+		<Setting Key="CTS_ValidateUsername" SpName="CTS_ValidateUsername" DbName="DBCTS.bodb02.wsv_cts" />
 	</Function>
 
 	<Function name="CustomerClassification">
-		<Setting Key="Acc_CustomerUpdateCustomerClass" SpName="Acc_CustomerUpdateCustomerClass" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
-		<Setting Key="CTS_CustomerUpdDanger" SpName="CTS_CustomerUpdDanger" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
-		<Setting Key="CTS_GeneralNormalClassification_RescanNormal_Preprocess" SpName="CTS_GeneralNormalClassification_RescanNormal_Preprocess" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
-		<Setting Key="CTS_GeneralNormalClassificationAgency_RescanNormal_Preprocess" SpName="CTS_GeneralNormalClassificationAgency_RescanNormal_Preprocess" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
-		<Setting Key="Acc_CustomerUpdateCustomerClassBySport" SpName="Acc_CustomerUpdateCustomerClassBySport" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="600" />
+		<Setting Key="Acc_CustomerUpdateCustomerClass" SpName="Acc_CustomerUpdateCustomerClass" DbName="DBCust.CustDB.wsv_nap" TimeOut="300" />
+		<Setting Key="CTS_CustomerUpdDanger" SpName="CTS_CustomerUpdDanger" DbName="DBCust.CustDB.wsv_nap" TimeOut="300" />
+		<Setting Key="CTS_GeneralNormalClassification_RescanNormal_Preprocess" SpName="CTS_GeneralNormalClassification_RescanNormal_Preprocess" DbName="DBVR2.bodb_VR2Model.wsv_cts" />
+		<Setting Key="CTS_GeneralNormalClassificationAgency_RescanNormal_Preprocess" SpName="CTS_GeneralNormalClassificationAgency_RescanNormal_Preprocess" DbName="DBVR2.bodb_VR2Model.wsv_cts" />
+		<Setting Key="Acc_CustomerUpdateCustomerClassBySport" SpName="Acc_CustomerUpdateCustomerClassBySport" DbName="DBCust.CustDB.wsv_nap" TimeOut="600" />
 	</Function>
 	
 	<Function name="MatchMonitor">
-		<Setting Key="CTS_MatchMonitor_Details_GetTicket" SpName="CTS_MatchMonitor_Details_GetTicket" DbName="SQL.WASAVerse.bodbSPUNet" />
-		<Setting Key="CTS_Rpt_MatchMonitor_MatchInfo" SpName="CTS_Rpt_MatchMonitor_MatchInfo" DbName="SQL.WASAVerse.bodbSPUNet" />
-		<Setting Key="CTS_MatchMonitor_Details_GetFilter" SpName="CTS_MatchMonitor_Details_GetFilter" DbName="SQL.WASAVerse.bodbSPUNet" />
-		<Setting Key="CTS_MatchMonitor_FraudTicketsSummary" SpName="CTS_MatchMonitor_FraudTicketsSummary" DbName="SQL.WASAVerse.bodbSPUNet" />
-    <Setting Key="CTS_MatchMonitorParlay_FraudTicketSummary" SpName="CTS_MatchMonitorParlay_FraudTicketSummary" DbName="SQL.WASAVerse.bodbSPUNet" TimeOut="600" />     
-    <Setting Key="CTS_MatchMonitorParlay_Details_GetTicket" SpName="CTS_MatchMonitorParlay_Details_GetTicket" DbName="SQL.WASAVerse.bodbSPUNet" />
-    <Setting Key="CTS_MatchMonitorParlay_Details_GetFilter" SpName="CTS_MatchMonitorParlay_Details_GetFilter" DbName="SQL.WASAVerse.bodbSPUNet" />
+		<Setting Key="CTS_MatchMonitor_Details_GetTicket" SpName="CTS_MatchMonitor_Details_GetTicket" DbName="DBWASA.WASAVerse.wsv_cts" />
+		<Setting Key="CTS_Rpt_MatchMonitor_MatchInfo" SpName="CTS_Rpt_MatchMonitor_MatchInfo" DbName="DBWASA.WASAVerse.wsv_cts" />
+		<Setting Key="CTS_MatchMonitor_Details_GetFilter" SpName="CTS_MatchMonitor_Details_GetFilter" DbName="DBWASA.WASAVerse.wsv_cts" />
+		<Setting Key="CTS_MatchMonitor_FraudTicketsSummary" SpName="CTS_MatchMonitor_FraudTicketsSummary" DbName="DBWASA.WASAVerse.wsv_cts" />
+    <Setting Key="CTS_MatchMonitorParlay_FraudTicketSummary" SpName="CTS_MatchMonitorParlay_FraudTicketSummary" DbName="DBWASA.WASAVerse.wsv_cts" TimeOut="600" />     
+    <Setting Key="CTS_MatchMonitorParlay_Details_GetTicket" SpName="CTS_MatchMonitorParlay_Details_GetTicket" DbName="DBWASA.WASAVerse.wsv_cts" />
+    <Setting Key="CTS_MatchMonitorParlay_Details_GetFilter" SpName="CTS_MatchMonitorParlay_Details_GetFilter" DbName="DBWASA.WASAVerse.wsv_cts" />
 	</Function>
 
 	<Function name="RobotBetting">
-		<Setting Key="CTS_Rpt_RobotDetection_TicketDetails" SpName="CTS_Rpt_RobotDetection_TicketDetails" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_Rpt_RobotDetection_TicketDetails" SpName="CTS_Rpt_RobotDetection_TicketDetails" DbName="DBCTS.bodb02.wsv_cts" />
 	</Function>
 
 	<Function name="CustomerProfile">
-		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList" DbName="SQL.WASAVerse.bodbSPUNet" />
-		<Setting Key="CTS_Rpt_BettingPattern_MatchInfo" SpName="CTS_Rpt_BettingPattern_MatchInfo" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_Rpt_BettingPattern_TicketDetails" SpName="CTS_Rpt_BettingPattern_TicketDetails" DbName="SQL.WASAVerse.bodbSPUNet" TimeOut="300"/>
-		<Setting Key="CTS_TicketDetails_Get" SpName="CTS_TicketDetails_Get" DbName="SQL.WASAVerse.bodbSPUNet" TimeOut="300"/>
+		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList" DbName="DBWASA.WASAVerse.wsv_cts" />
+		<Setting Key="CTS_Rpt_BettingPattern_MatchInfo" SpName="CTS_Rpt_BettingPattern_MatchInfo" DbName="DBCTS.bodb02.wsv_cts" />
+		<Setting Key="CTS_Rpt_BettingPattern_TicketDetails" SpName="CTS_Rpt_BettingPattern_TicketDetails" DbName="DBWASA.WASAVerse.wsv_cts" TimeOut="300"/>
+		<Setting Key="CTS_TicketDetails_Get" SpName="CTS_TicketDetails_Get" DbName="DBWASA.WASAVerse.wsv_cts" TimeOut="300"/>
 	</Function>
 
 	<Function Name="DailyProblemClassification">
-		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" TimeOut="300" />
-    <Setting Key="CTS_ProblemAccountsClassificationAgency_Daily" SpName="CTS_ProblemAccountsClassificationAgency_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" TimeOut="300" />
+		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily" DbName="DBVR2.bodb_VR2Model.wsv_cts" TimeOut="300" />
+    <Setting Key="CTS_ProblemAccountsClassificationAgency_Daily" SpName="CTS_ProblemAccountsClassificationAgency_Daily" DbName="DBVR2.bodb_VR2Model.wsv_cts" TimeOut="300" />
 	</Function>
 
 	<Function Name="AssociationDetection">
-		<Setting Key="CTS_Association_GetBySharedMatches" SpName="CTS_Association_GetBySharedMatches" DbName="DBCTS.bodb02.bodbSPUNet" TimeOut="300" />
-		<Setting Key="Acc_Rpt_CTS_GetCustStatisticsInfo" SpName="Acc_Rpt_CTS_GetCustStatisticsInfo" DbName="DBDW.bodb_dwrs.bodbSPUNet" TimeOut="300" />
-		<Setting Key="CTS_Association_IpSharedLast3Days" SpName="CTS_Association_IpSharedLast3Days" DbName="DBCTS.bodb02.bodbSPUNet" TimeOut="300" />
+		<Setting Key="CTS_Association_GetBySharedMatches" SpName="CTS_Association_GetBySharedMatches" DbName="DBCTS.bodb02.wsv_cts" TimeOut="300" />
+		<Setting Key="Acc_Rpt_CTS_GetCustStatisticsInfo" SpName="Acc_Rpt_CTS_GetCustStatisticsInfo" DbName="DBDW.bodb_dwrs.wsv_cts" TimeOut="300" />
+		<Setting Key="CTS_Association_IpSharedLast3Days" SpName="CTS_Association_IpSharedLast3Days" DbName="DBCTS.bodb02.wsv_cts" TimeOut="300" />
 	</Function>
 
 	<Function name="RobotReport">
-		<Setting Key="CTS_Customer_RobotListSelByDate" SpName="CTS_Customer_RobotListSelByDate" DbName="DBONUSER.ON_USER.bodbSPUNet"/>
+		<Setting Key="CTS_Customer_RobotListSelByDate" SpName="CTS_Customer_RobotListSelByDate" DbName="DBONUSER.ON_USER.wsv_cts"/>
 	</Function>
 
 	<Function name="DangerMonitor">
-		<Setting Key="CTS_MatchTicketInfo_Get" SpName="CTS_MatchTicketInfo_Get" DbName="SQL.WASAVerse.bodbSPUNet" TimeOut="300" />
+		<Setting Key="CTS_MatchTicketInfo_Get" SpName="CTS_MatchTicketInfo_Get" DbName="DBWASA.WASAVerse.wsv_cts" TimeOut="300" />
 	</Function>
 
 	<Function name="RescanNormalClassificationBySport">
-		<Setting Key="CTS_BySportNormalClassification_RescanNormal_Preprocess" SpName="CTS_BySportNormalClassification_RescanNormal_Preprocess" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
+		<Setting Key="CTS_BySportNormalClassification_RescanNormal_Preprocess" SpName="CTS_BySportNormalClassification_RescanNormal_Preprocess" DbName="DBVR2.bodb_VR2Model.wsv_cts" />
 	</Function>
 
 </Functions>

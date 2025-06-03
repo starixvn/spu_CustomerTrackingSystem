@@ -12,7 +12,7 @@
 
         public int MatchSection { get; set; }
 
-        public int IsGetDataFromOrigin { get; set; }
+        public bool IsGetDataFromOrigin { get; set; }
 
         public short DataSource { get; set; }
 
