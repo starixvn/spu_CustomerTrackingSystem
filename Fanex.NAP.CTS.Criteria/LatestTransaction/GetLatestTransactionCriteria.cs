@@ -1,14 +1,14 @@
-﻿namespace Fanex.NAP.CTS.Criteria.LatestTransaction
+namespace Fanex.NAP.CTS.Criteria.LatestTransaction
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class GetLatestTransactionCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_SubscriberId")]
+        [SpParam(SqlParamName = "ip_SubscriberId", AllowNull = true)]
         public int SubscriberId { get; set; }
 
-        [SpParam(SqlParamName = "ip_Length")]
+        [SpParam(SqlParamName = "ip_Length", AllowNull = true)]
         public int Length { get; set; }
 
         public override string GetSettingKey()

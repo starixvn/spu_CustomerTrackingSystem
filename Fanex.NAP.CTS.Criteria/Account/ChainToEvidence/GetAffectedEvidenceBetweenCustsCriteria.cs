@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Account
+namespace Fanex.NAP.CTS.Criteria.Account
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
@@ -6,10 +6,10 @@
 
     public class GetAffectedEvidenceBetweenCustsCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_FromCTSCustID")]
+        [SpParam(SqlParamName = "ip_FromCTSCustID", AllowNull = true)]
         public Int64 FromCTSCustID { get; set; }
 
-        [SpParam(SqlParamName = "ip_ToCTSCustID")]
+        [SpParam(SqlParamName = "ip_ToCTSCustID", AllowNull = true)]
         public Int64 ToCTSCustID { get; set; }
 
         public override string GetSettingKey()

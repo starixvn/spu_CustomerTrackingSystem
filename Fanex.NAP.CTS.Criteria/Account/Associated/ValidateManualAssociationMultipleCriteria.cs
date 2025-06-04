@@ -1,14 +1,14 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Account.Associated
+namespace Fanex.NAP.CTS.Criteria.Account.Associated
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class ValidateManualAssociationMultipleCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_RootCTSCustID")]
+        [SpParam(SqlParamName = "ip_RootCTSCustID", AllowNull = true)]
         public long FromCTSCustID { get; set; }
 
-        [SpParam(SqlParamName = "ip_UsernameList")]
+        [SpParam(SqlParamName = "ip_UsernameList", AllowNull = true)]
         public string ToUserNameList { get; set; }        
 
         public override string GetSettingKey()

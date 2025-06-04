@@ -1,14 +1,14 @@
-﻿namespace Fanex.NAP.CTS.Criteria.MatchMonitor
+namespace Fanex.NAP.CTS.Criteria.MatchMonitor
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class DeleteMMUserFeedbackCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_UserID")]
+        [SpParam(SqlParamName = "ip_UserID", AllowNull = true)]
         public int UserID { get; set; }
 
-        [SpParam(SqlParamName = "ip_MMUserCommentID")]
+        [SpParam(SqlParamName = "ip_MMUserCommentID", AllowNull = true)]
         public long MMUserCommentID { get; set; }
      
         public override string GetSettingKey()

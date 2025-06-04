@@ -1,11 +1,11 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Account.Associated
+namespace Fanex.NAP.CTS.Criteria.Account.Associated
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class GetCustomerGroupCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_GroupList")]
+        [SpParam(SqlParamName = "ip_GroupList", AllowNull = true)]
         public string GroupList { get; set; }
 
         public override string GetSettingKey()

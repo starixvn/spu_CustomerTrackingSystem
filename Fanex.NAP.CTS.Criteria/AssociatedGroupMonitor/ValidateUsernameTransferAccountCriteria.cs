@@ -1,14 +1,14 @@
-﻿namespace Fanex.NAP.CTS.Criteria.AssociatedGroupMonitor
+namespace Fanex.NAP.CTS.Criteria.AssociatedGroupMonitor
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class ValidateUsernameTransferAccountCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_ListUsername")]
+        [SpParam(SqlParamName = "ip_ListUsername", AllowNull = true)]
         public string UserNames { get; set; }
 
-        [SpParam(SqlParamName = "ip_GroupID")]
+        [SpParam(SqlParamName = "ip_GroupID", AllowNull = true)]
         public long GroupID { get; set; }
 
         public override string GetSettingKey()

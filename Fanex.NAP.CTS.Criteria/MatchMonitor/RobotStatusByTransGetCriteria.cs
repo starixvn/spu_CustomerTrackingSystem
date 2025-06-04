@@ -1,11 +1,11 @@
-﻿namespace Fanex.NAP.CTS.Criteria.MatchMonitor
+namespace Fanex.NAP.CTS.Criteria.MatchMonitor
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class RobotStatusByTransGetCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_TransList")]
+        [SpParam(SqlParamName = "ip_TransList", AllowNull = true)]
         public string TransJson { get; set; }
 
         public override string GetSettingKey()

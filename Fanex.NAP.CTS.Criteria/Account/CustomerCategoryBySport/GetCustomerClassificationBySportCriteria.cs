@@ -1,11 +1,11 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategoryBySport
+namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategoryBySport
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
    
     public class GetCustomerClassificationBySportCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_CTSCustID")]
+        [SpParam(SqlParamName = "ip_CTSCustID", AllowNull = true)]
         public long CTSCustID { get; set; }
 
         public override string GetSettingKey()

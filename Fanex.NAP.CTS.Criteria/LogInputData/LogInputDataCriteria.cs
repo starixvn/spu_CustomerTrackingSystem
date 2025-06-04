@@ -1,17 +1,17 @@
-﻿namespace Fanex.NAP.CTS.Criteria.LogInputData
+namespace Fanex.NAP.CTS.Criteria.LogInputData
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class LogInputDataCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_InputData")]
+        [SpParam(SqlParamName = "ip_InputData", AllowNull = true)]
         public string InputData { get; set; }
 
-        [SpParam(SqlParamName = "ip_FunctionID")]
+        [SpParam(SqlParamName = "ip_FunctionID", AllowNull = true)]
         public int FunctionID { get; set; }
 
-        [SpParam(SqlParamName = "op_ErrorMessage")]
+        [SpParam(SqlParamName = "op_ErrorMessage", AllowNull = true)]
         public string ErrorMessage { get; set; }
 
         public override string GetSettingKey()

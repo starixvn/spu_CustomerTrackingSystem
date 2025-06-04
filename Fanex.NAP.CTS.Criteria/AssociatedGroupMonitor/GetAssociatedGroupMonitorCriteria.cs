@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Criteria.AssociatedGroupMonitor
+namespace Fanex.NAP.CTS.Criteria.AssociatedGroupMonitor
 {
     using Fanex.Data.Repository;
 

@@ -101,8 +101,6 @@
         IEnumerable<GetCustomerCategoryHistoryBySportModel> GetCustomerCategoryHistoryBySport(long ctsCustID, int sportID);
         #endregion
 
-        IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIds, DateTime fromDate, DateTime toDate);
-
         MatchesAssociationByAIModel GetGBAssociationFromAI(long custID1, long custID2, string groupList);
 
         IEnumerable<MatchesInfoModel> GetBettingPatternMatchesInfo(string matchIDs, string custIds);

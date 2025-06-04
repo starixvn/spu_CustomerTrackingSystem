@@ -65,7 +65,6 @@
     <Compile Include="Account\Associated\ValidateManualAssociationMultipleCriteria.cs" />
     <Compile Include="Account\Associated\CustomerStaticAccountStatusCriteria.cs" />
     <Compile Include="Account\Associated\GetDirectAssociatedAccountTagFlaggedCriteria.cs" />
-    <Compile Include="Account\Associated\GetDirectAssociationByAccountCriteria.cs" />
     <Compile Include="Account\BettingStatistic\BettingStaisticBySportGetCriteria.cs" />
     <Compile Include="Account\BettingStatistic\BettingStaisticByBetTypeGetCriteria.cs" />
     <Compile Include="Account\BettingStatistic\BettingStatictisDaily.cs" />
@@ -106,7 +105,6 @@
     <Compile Include="Common\GetCommonCustomerClassCriteria.cs" />
     <Compile Include="Common\GetCommonLeagueGroupCriteria.cs" />
     <Compile Include="Common\GetCommonSportBettypeCriteria.cs" />
-    <Compile Include="Common\HealthCheckCriteria.cs" />
     <Compile Include="Common\GetCommonStaticListCriteria.cs" />
     <Compile Include="Common\GetMatchesInfoCriteria.cs" />
     <Compile Include="Common\GetSitesCriteria.cs" />
@@ -137,7 +135,6 @@
     <Compile Include="Account\CustomerInfo\GetCustomerInfoLoginStatsCriteria.cs" />
     <Compile Include="Account\RobotClassification\GetHistoryRobotClassificationCriteria.cs" />
     <Compile Include="Account\RobotClassification\GetStatusRobotClassificationCriteria.cs" />
-    <Compile Include="Account\RobotClassification\GetLastestRobotClassificationCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRobotDetectionCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRobotDetectionTicketDetailsCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRobotUsersDetailsCriteria.cs" />
@@ -190,7 +187,6 @@
     <Compile Include="Account\ChainToEvidence\RemoveAccountExceptionCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\RestoreAffectedEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\RetractAffectedEvidenceCriteria.cs" />
-    <Compile Include="Account\CheckCustNotExistedByCustIdsCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCustomerCategoryByCategoryIdsCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCTSCustomerClassificationForAPICriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCTSCustomerClassificationCriteria.cs" />
@@ -225,9 +221,6 @@
     <Compile Include="SyncCustomerToMainDb\SyncCustomerClassToMainDbCriteria.cs" />
     <Compile Include="TransactionReport\TransactionReportCriteria.cs" />
     <Compile Include="Transaction\GetTicketDetailsCriteria.cs" />
-    <Compile Include="TWProblemAccountDetection\GetCustomerPerformanceCriteria.cs" />
-    <Compile Include="TWProblemAccountDetection\NapProblemAccInsertCriteria.cs" />
-    <Compile Include="TWProblemAccountDetection\TWProblemAccountParams.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NAP.CTS.Core\Fanex.NAP.CTS.Core.csproj">
@@ -250,6 +243,8 @@
       <Version>4.5.0</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="TWProblemAccountDetection\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

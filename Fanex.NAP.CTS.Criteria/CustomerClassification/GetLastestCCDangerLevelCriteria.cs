@@ -1,11 +1,11 @@
-﻿namespace Fanex.NAP.CTS.Criteria.CustomerClassification
+namespace Fanex.NAP.CTS.Criteria.CustomerClassification
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class GetLastestCCDangerLevelCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_CustIDs")]
+        [SpParam(SqlParamName = "ip_CustIDs", AllowNull = true)]
         public string CustIds { get; set; }
 
         public override string GetSettingKey()

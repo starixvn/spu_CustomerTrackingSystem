@@ -1,11 +1,11 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Account
+namespace Fanex.NAP.CTS.Criteria.Account
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class GetHistoryRobotClassificationCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_CustID")]
+        [SpParam(SqlParamName = "ip_CustID", AllowNull = true)]
         public long CustId { get; set; }
 
         public override string GetSettingKey()

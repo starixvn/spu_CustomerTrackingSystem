@@ -1,14 +1,14 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategory
+namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategory
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class GetCTSCustomerClassificationForAPICriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_CustIDs")]
+        [SpParam(SqlParamName = "ip_CustIDs", AllowNull = true)]
         public string CustIdList { get; set; }
 
-        [SpParam(SqlParamName = "ip_ParentCateIDs")]
+        [SpParam(SqlParamName = "ip_ParentCateIDs", AllowNull = true)]
         public string ParentCateIdList { get; set; }
 
         public override string GetSettingKey()

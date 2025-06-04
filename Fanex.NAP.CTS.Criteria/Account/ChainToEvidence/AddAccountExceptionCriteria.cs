@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Account.ChainToEvidence
+namespace Fanex.NAP.CTS.Criteria.Account.ChainToEvidence
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
@@ -6,22 +6,22 @@
 
     public class AddAccountExceptionCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_UserID")]
+        [SpParam(SqlParamName = "ip_UserID", AllowNull = true)]
         public int UserId { get; set; }
 
-        [SpParam(SqlParamName = "ip_FromCTSCustID")]
+        [SpParam(SqlParamName = "ip_FromCTSCustID", AllowNull = true)]
         public long FromCTSCustId { get; set; }
 
-        [SpParam(SqlParamName = "ip_ToUserName")]
+        [SpParam(SqlParamName = "ip_ToUserName", AllowNull = true)]
         public string ToUserName { get; set; }
 
-        [SpParam(SqlParamName = "ip_Comment")]
+        [SpParam(SqlParamName = "ip_Comment", AllowNull = true)]
         public string Comment { get; set; }
 
-        [SpParam(SqlParamName = "op_Error")]
+        [SpParam(SqlParamName = "op_Error", AllowNull = true)]
         public int ErrorCode { get; set; }
 
-        [SpParam(SqlParamName = "op_ToCTSCustID")]
+        [SpParam(SqlParamName = "op_ToCTSCustID", AllowNull = true)]
         public UInt64 ToCTSCustId { get; set; }
 
         public override string GetSettingKey()

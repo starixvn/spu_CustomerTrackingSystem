@@ -1,11 +1,11 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategory
+namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategory
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class GetCustomerCategoryByCategoryIdsCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_CategoryIDList")]
+        [SpParam(SqlParamName = "ip_CategoryIDList", AllowNull = true)]
         public string CategoryIDList { get; set; }
 
         public override string GetSettingKey()

@@ -1,19 +1,19 @@
-﻿namespace Fanex.NAP.CTS.Criteria.MatchMonitor.Parlay
+namespace Fanex.NAP.CTS.Criteria.MatchMonitor.Parlay
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
     public class MMParlaySuspiciousTicketGetCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_MatchID")]
+        [SpParam(SqlParamName = "ip_MatchID", AllowNull = true)]
         public long MatchID { get; set; }
 
-        [SpParam(SqlParamName = "ip_LiveIndicator")]
+        [SpParam(SqlParamName = "ip_LiveIndicator", AllowNull = true)]
         public bool LiveIndicator { get; set; }
 
-        [SpParam(SqlParamName = "ip_BettypeID")]
+        [SpParam(SqlParamName = "ip_BettypeID", AllowNull = true)]
         public int BettypeID { get; set; }
 
-        [SpParam(SqlParamName = "ip_BetID")]
+        [SpParam(SqlParamName = "ip_BetID", AllowNull = true)]
         public long BetID { get; set; }
 
         public override string GetSettingKey()

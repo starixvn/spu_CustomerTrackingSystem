@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Account
+namespace Fanex.NAP.CTS.Criteria.Account
 {
     using Fanex.Data;
     using Fanex.NAP.CTS.Core.BaseClasses;
@@ -9,16 +9,16 @@
         [SpParam(Ignored = true)]
         public override int ErrCode { get; set; }
 
-        [SpParam(SqlParamName = "ip_CTSCustID")]
+        [SpParam(SqlParamName = "ip_CTSCustID", AllowNull = true)]
         public Int64 CTSCustId { get; set; }
 
-        [SpParam(SqlParamName = "ip_EvidenceID")]
+        [SpParam(SqlParamName = "ip_EvidenceID", AllowNull = true)]
         public int EvidenceId { get; set; }
 
-        [SpParam(SqlParamName = "ip_Remark")]
+        [SpParam(SqlParamName = "ip_Remark", AllowNull = true)]
         public string Comment { get; set; }
 
-        [SpParam(SqlParamName = "ip_UserID")]
+        [SpParam(SqlParamName = "ip_UserID", AllowNull = true)]
         public int UserId { get; set; }
 
         public override string GetSettingKey()

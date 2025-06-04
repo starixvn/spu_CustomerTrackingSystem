@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Account.RobotSetting
+namespace Fanex.NAP.CTS.Criteria.Account.RobotSetting
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
@@ -6,10 +6,10 @@
 
     public class GetRobotUsersDetailsCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_CustID")]
+        [SpParam(SqlParamName = "ip_CustID", AllowNull = true)]
         public long CustID { get; set; }
 
-        [SpParam(SqlParamName = "ip_PeriodRangeType")]
+        [SpParam(SqlParamName = "ip_PeriodRangeType", AllowNull = true)]
         public int PeriodRangeType { get; set; }
 
         public override string GetSettingKey()

@@ -1,32 +1,32 @@
-﻿namespace Fanex.NAP.CTS.Criteria.AssociationDetection
+namespace Fanex.NAP.CTS.Criteria.AssociationDetection
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class DetectAssociationMergeGroupCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_CTSCustIDs")]
+        [SpParam(SqlParamName = "ip_CTSCustIDs", AllowNull = true)]
         public string CTSCustIDs { get; set; }
 
-        [SpParam(SqlParamName = "ip_Device")]
+        [SpParam(SqlParamName = "ip_Device", AllowNull = true)]
         public string DeviceJson { get; set; }
 
-        [SpParam(SqlParamName = "ip_AI")]
+        [SpParam(SqlParamName = "ip_AI", AllowNull = true)]
         public string AIJson { get; set; }
 
-        [SpParam(SqlParamName = "ip_IP")]
+        [SpParam(SqlParamName = "ip_IP", AllowNull = true)]
         public string IPJson { get; set; }
 
-        [SpParam(SqlParamName = "ip_Agent")]
+        [SpParam(SqlParamName = "ip_Agent", AllowNull = true)]
         public string AgentJson { get; set; }
 
-        [SpParam(SqlParamName = "ip_SharedIP")]
+        [SpParam(SqlParamName = "ip_SharedIP", AllowNull = true)]
         public string SharedIPJson { get; set; }
 
-        [SpParam(SqlParamName = "ip_SharedMatches")]
+        [SpParam(SqlParamName = "ip_SharedMatches", AllowNull = true)]
         public string SharedMatchesJson { get; set; }
 
-        [SpParam(SqlParamName = "ip_IsGetLogTransInfo")]
+        [SpParam(SqlParamName = "ip_IsGetLogTransInfo", AllowNull = true)]
         public bool IsGetLogTransInfo { get; set; }
 
         public override string GetSettingKey()

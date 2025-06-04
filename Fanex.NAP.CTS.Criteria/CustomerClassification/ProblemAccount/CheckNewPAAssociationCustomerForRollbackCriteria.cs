@@ -1,11 +1,11 @@
-﻿namespace Fanex.NAP.CTS.Criteria.CustomerClassification
+namespace Fanex.NAP.CTS.Criteria.CustomerClassification
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class CheckNewPAAssociationCustomerForRollbackCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_CustInfo")]
+        [SpParam(SqlParamName = "ip_CustInfo", AllowNull = true)]
         public string CustInfoJson { get; set; }
 
         public override string GetSettingKey()

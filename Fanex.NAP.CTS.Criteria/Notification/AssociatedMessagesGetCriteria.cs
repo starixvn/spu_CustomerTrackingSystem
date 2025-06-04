@@ -1,14 +1,14 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Notification
+namespace Fanex.NAP.CTS.Criteria.Notification
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class AssociatedMessagesGetCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_UserID")]
+        [SpParam(SqlParamName = "ip_UserID", AllowNull = true)]
         public long UserID { get; set; }
 
-        [SpParam(SqlParamName = "ip_MaxNewAssID")]
+        [SpParam(SqlParamName = "ip_MaxNewAssID", AllowNull = true)]
         public long MaxNewAssID { get; set; }
 
         public AssociatedMessagesGetCriteria(long userId, long aMaxNewAssID)

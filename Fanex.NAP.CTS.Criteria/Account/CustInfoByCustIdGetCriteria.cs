@@ -1,11 +1,11 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Account
+namespace Fanex.NAP.CTS.Criteria.Account
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class CustInfoByCustIdGetCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_ListCustID")]
+        [SpParam(SqlParamName = "ip_ListCustID", AllowNull = true)]
         public string CustIDs { get; set; }
 
         public override string GetSettingKey()

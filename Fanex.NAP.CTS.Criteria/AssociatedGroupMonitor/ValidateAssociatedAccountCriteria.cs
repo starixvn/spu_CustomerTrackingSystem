@@ -1,11 +1,11 @@
-﻿namespace Fanex.NAP.CTS.Criteria.AssociatedGroupMonitor
+namespace Fanex.NAP.CTS.Criteria.AssociatedGroupMonitor
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class ValidateAssociatedAccountCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_ListUsername")]
+        [SpParam(SqlParamName = "ip_ListUsername", AllowNull = true)]
         public string UserNames { get; set; }
 
         public override string GetSettingKey()

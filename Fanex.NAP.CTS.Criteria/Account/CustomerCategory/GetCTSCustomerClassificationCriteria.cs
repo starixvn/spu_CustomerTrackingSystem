@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategory
+namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategory
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
@@ -6,7 +6,7 @@
 
     public class GetCTSCustomerClassificationCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_CTSCustID")]
+        [SpParam(SqlParamName = "ip_CTSCustID", AllowNull = true)]
         public long CTSCustID { get; set; }
 
         [SpParam(Ignored = true)]

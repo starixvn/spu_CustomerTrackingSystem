@@ -1,4 +1,3 @@
-﻿
 namespace Fanex.NAP.CTS.Criteria.Account.Associated
 {
     using Fanex.Data;
@@ -6,7 +5,7 @@ namespace Fanex.NAP.CTS.Criteria.Account.Associated
 
     public class GetCoupleFraudDetailCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_CoupleInfoDetails")]
+        [SpParam(SqlParamName = "ip_CoupleInfoDetails", AllowNull = true)]
         public string CoupleInfoDetails { get; set; }
 
         public override string GetSettingKey()

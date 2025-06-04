@@ -1,20 +1,20 @@
-﻿namespace Fanex.NAP.CTS.Criteria.AssociationDetection
+namespace Fanex.NAP.CTS.Criteria.AssociationDetection
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class DetectAssociationByPrimaryCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_CTSCustIDs")]
+        [SpParam(SqlParamName = "ip_CTSCustIDs", AllowNull = true)]
         public string CTSCustIDs { get; set; }
 
-        [SpParam(SqlParamName = "ip_HasDevice")]
+        [SpParam(SqlParamName = "ip_HasDevice", AllowNull = true)]
         public bool IsDevice { get; set; }
 
-        [SpParam(SqlParamName = "ip_HasAI")]
+        [SpParam(SqlParamName = "ip_HasAI", AllowNull = true)]
         public bool IsAI { get; set; }       
 
-        [SpParam(SqlParamName = "ip_HasIP")]
+        [SpParam(SqlParamName = "ip_HasIP", AllowNull = true)]
         public bool IsIP { get; set; }
 
         public override string GetSettingKey()

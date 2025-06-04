@@ -1,11 +1,11 @@
-﻿namespace Fanex.NAP.CTS.Criteria.ProblemAccountManagement
+namespace Fanex.NAP.CTS.Criteria.ProblemAccountManagement
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class ValidateUserNamesInputCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_UserNames")]
+        [SpParam(SqlParamName = "ip_UserNames", AllowNull = true)]
         public string UserNames { get; set; }
       
         public override string GetSettingKey()

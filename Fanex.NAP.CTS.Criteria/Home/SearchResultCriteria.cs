@@ -1,11 +1,11 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Home
+namespace Fanex.NAP.CTS.Criteria.Home
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class SearchResultCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_username")]
+        [SpParam(SqlParamName = "ip_username", AllowNull = true)]
         public string Username { get; set; }
 
         public override string GetSettingKey()

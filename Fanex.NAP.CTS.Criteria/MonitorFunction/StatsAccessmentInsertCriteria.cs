@@ -1,20 +1,20 @@
-﻿namespace Fanex.NAP.CTS.Criteria.MonitorFunction
+namespace Fanex.NAP.CTS.Criteria.MonitorFunction
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class StatsAccessmentInsertCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_SystemId")]
+        [SpParam(SqlParamName = "ip_SystemId", AllowNull = true)]
         public long SystemId { get; set; }
 
-        [SpParam(SqlParamName = "ip_FunctionId")]
+        [SpParam(SqlParamName = "ip_FunctionId", AllowNull = true)]
         public int FunctionId { get; set; }
 
-        [SpParam(SqlParamName = "ip_UserId")]
+        [SpParam(SqlParamName = "ip_UserId", AllowNull = true)]
         public int UserId { get; set; }
 
-        [SpParam(SqlParamName = "op_ErrorMessage")]
+        [SpParam(SqlParamName = "op_ErrorMessage", AllowNull = true)]
         public string ErrorMessage { get; set; }
 
         public override string GetSettingKey()

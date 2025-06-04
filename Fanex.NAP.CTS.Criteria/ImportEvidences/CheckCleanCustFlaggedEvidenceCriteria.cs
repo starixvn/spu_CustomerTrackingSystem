@@ -1,11 +1,11 @@
-﻿namespace Fanex.NAP.CTS.Criteria.ImportEvidences
+namespace Fanex.NAP.CTS.Criteria.ImportEvidences
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class CheckCleanCustFlaggedEvidenceCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_CTSCustIDList")]
+        [SpParam(SqlParamName = "ip_CTSCustIDList", AllowNull = true)]
         public string CTSCustIds { get; set; }
 
         public override string GetSettingKey()

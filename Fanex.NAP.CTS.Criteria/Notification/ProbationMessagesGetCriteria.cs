@@ -1,14 +1,14 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Notification
+namespace Fanex.NAP.CTS.Criteria.Notification
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class ProbationMessageGetCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_UserID")]
+        [SpParam(SqlParamName = "ip_UserID", AllowNull = true)]
         public long UserID { get; set; }
 
-        [SpParam(SqlParamName = "ip_ReadNotificationID")]
+        [SpParam(SqlParamName = "ip_ReadNotificationID", AllowNull = true)]
         public long MaxNotificationID { get; set; }
 
         public ProbationMessageGetCriteria(long userId, long maxNotificationID)

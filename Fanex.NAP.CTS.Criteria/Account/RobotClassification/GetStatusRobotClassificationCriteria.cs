@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Account
+namespace Fanex.NAP.CTS.Criteria.Account
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
@@ -6,7 +6,7 @@
 
     public class GetStatusRobotClassificationCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_CustID")]
+        [SpParam(SqlParamName = "ip_CustID", AllowNull = true)]
         public long CustID { get; set; }
 
         [SpParam(Ignored = true)]

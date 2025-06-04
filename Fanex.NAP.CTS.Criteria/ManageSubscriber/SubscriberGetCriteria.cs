@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Criteria.ManageSubscriber
+namespace Fanex.NAP.CTS.Criteria.ManageSubscriber
 {
     using Fanex.Data.Repository;
 

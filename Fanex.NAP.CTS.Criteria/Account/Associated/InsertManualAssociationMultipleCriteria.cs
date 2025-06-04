@@ -1,11 +1,11 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Account.Associated
+namespace Fanex.NAP.CTS.Criteria.Account.Associated
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class InsertManualAssociationMultipleCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_ManualAssociationList")]
+        [SpParam(SqlParamName = "ip_ManualAssociationList", AllowNull = true)]
         public string AssociationListJson { get; set; }
 
         public override string GetSettingKey()

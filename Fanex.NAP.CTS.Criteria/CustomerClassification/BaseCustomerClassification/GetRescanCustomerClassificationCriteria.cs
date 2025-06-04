@@ -1,11 +1,11 @@
-﻿namespace Fanex.NAP.CTS.Criteria.CustomerClassification.BaseCustomerClassification
+namespace Fanex.NAP.CTS.Criteria.CustomerClassification.BaseCustomerClassification
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class GetRescanCustomerClassificationCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_CustIDs")]
+        [SpParam(SqlParamName = "ip_CustIDs", AllowNull = true)]
         public string CustIDs { get; set; }
 
         public override string GetSettingKey()

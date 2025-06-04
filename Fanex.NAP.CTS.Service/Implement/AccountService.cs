@@ -921,18 +921,5 @@
             return _repository.Fetch<PerformanceDailyModel>(criteria);
         }
         #endregion
-
-        public IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIds, DateTime fromDate, DateTime toDate)
-        {
-            var criteria = new CheckCustNotExistedByCustIdsCriteria
-            {
-                CustIds = custIds,
-                FromDate = fromDate,
-                ToDate = toDate
-            };
-
-            return _repository.Fetch<CTSCustomer>(criteria);
-        }
-
     }
 }

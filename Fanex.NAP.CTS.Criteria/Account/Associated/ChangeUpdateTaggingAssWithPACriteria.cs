@@ -1,23 +1,23 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Account.Associated
+namespace Fanex.NAP.CTS.Criteria.Account.Associated
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class ChangeUpdateTaggingAssWithPACriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_CTSCustID")]
+        [SpParam(SqlParamName = "ip_CTSCustID", AllowNull = true)]
         public long CTSCustId { get; set; }
 
-        [SpParam(SqlParamName = "ip_SubscriberID")]
+        [SpParam(SqlParamName = "ip_SubscriberID", AllowNull = true)]
         public int SubscriberId { get; set; }
 
-        [SpParam(SqlParamName = "ip_CreatedBy")]
+        [SpParam(SqlParamName = "ip_CreatedBy", AllowNull = true)]
         public int CreatedBy { get; set; }
 
-        [SpParam(SqlParamName = "ip_IsExcludedTagAssPA")]
+        [SpParam(SqlParamName = "ip_IsExcludedTagAssPA", AllowNull = true)]
         public bool IsExcludedTagAssPA { get; set; }
 
-        [SpParam(SqlParamName = "op_ErrorMessage")]
+        [SpParam(SqlParamName = "op_ErrorMessage", AllowNull = true)]
         public string ErrorMessage { get; set; }
 
         public override string GetSettingKey()

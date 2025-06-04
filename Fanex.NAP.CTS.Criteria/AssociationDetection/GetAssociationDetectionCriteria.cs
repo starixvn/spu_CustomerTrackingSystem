@@ -1,11 +1,11 @@
-﻿namespace Fanex.NAP.CTS.Criteria.AssociationDetection
+namespace Fanex.NAP.CTS.Criteria.AssociationDetection
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class GetAssociationDetectionCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_CTSCustIDs")]
+        [SpParam(SqlParamName = "ip_CTSCustIDs", AllowNull = true)]
         public string CTSCustIds { get; set; }
 
         public override string GetSettingKey()

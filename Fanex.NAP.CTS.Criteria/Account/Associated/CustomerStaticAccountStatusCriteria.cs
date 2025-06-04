@@ -1,14 +1,14 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Account.Associated
+namespace Fanex.NAP.CTS.Criteria.Account.Associated
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class CustomerStaticAccountStatusCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_ListID")]
+        [SpParam(SqlParamName = "ip_ListID", AllowNull = true)]
         public int ListId{ get; set; }
 
-        [SpParam(SqlParamName = "ip_Status")]
+        [SpParam(SqlParamName = "ip_Status", AllowNull = true)]
         public bool Status { get; set; }
 
         public override string GetSettingKey()

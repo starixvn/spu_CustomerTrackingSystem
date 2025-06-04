@@ -1,11 +1,11 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Account.Associated
+namespace Fanex.NAP.CTS.Criteria.Account.Associated
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class GetDirectAssociatedAccountTagFlaggedCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_CTSCustJson")]
+        [SpParam(SqlParamName = "ip_CTSCustJson", AllowNull = true)]
         public string CustAssInfo { get; set; }
 
         public override string GetSettingKey()
