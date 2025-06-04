@@ -211,7 +211,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Ass Account info by id subscriber DCS Extra exception: " + ex.Message);
+                LogService.Error("FPS Get Ass Account info by id subscriber DCS Center exception: " + ex.Message);
                 return Json(new GetAssDeviceInfoByIDSubscriberModel());
             }
         }
@@ -227,7 +227,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Ass Account by Device subscriber DCS Extra exception: " + ex.Message);
+                LogService.Error("FPS Get Ass Account by Device subscriber DCS Center exception: " + ex.Message);
                 return Json(new List<GetAssAccByDevSubscriberItemDCSCenterModel>());
             }
         }
@@ -244,7 +244,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Ass Device by Device subscriber DCS Extra exception: " + ex.Message);
+                LogService.Error("FPS Get Ass Device by Device subscriber DCS Center exception: " + ex.Message);
                 return Json(new List<GetAssDevByDevSubscriberItemModel>());
             }
         }
@@ -261,7 +261,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error("FPS Get Ass Matrix by Device subscriber DCS Extra exception: " + ex.Message);
+                LogService.Error("FPS Get Ass Matrix by Device subscriber DCS Center exception: " + ex.Message);
                 return Json(new List<GetAssMatrixByDeviceSubscriberItemDataCenterModel>());
             }
         }
