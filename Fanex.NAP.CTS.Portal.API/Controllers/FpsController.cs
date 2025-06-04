@@ -268,6 +268,28 @@
 
         #endregion device
 
+        [HttpPost]
+        public JsonResult<TransactionHistoryByDeviceDCSCenterResultModel> GetTransactionHistoryByDeviceDCSCenter(TransactionHistoryByDeviceParamModel param)
+        {
+            try
+            {
+                var data = _fpsService.GetTransactionHistoryByDeviceDCSCenter(param);
+
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("FPS Get Transaction History By Device DCS Center exception: " + ex.Message);
+
+                if (!string.IsNullOrEmpty(ex.Message) && ex.Message.ToLower().Contains("timeout expired"))
+                {
+                    return Json(new TransactionHistoryByDeviceDCSCenterResultModel() { IsTimeout = true });
+                }
+
+                return Json(new TransactionHistoryByDeviceDCSCenterResultModel());
+            }
+        }
+
         #endregion dcs center
 
         #region dcs extra

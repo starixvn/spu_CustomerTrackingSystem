@@ -302,6 +302,25 @@
             return repository.Fetch<GetAssMatrixByDeviceSubscriberItemDataCenterModel>(criteria);
         }
 
+        public TransactionHistoryByDeviceDCSCenterResultModel GetTransactionHistoryByDeviceDCSCenter(TransactionHistoryByDeviceParamModel param)
+        {
+            var criteria = new GetTransHistoryByDevSubDCSCenterCriteria
+            {
+                DeviceID = param.DeviceID,
+                FromDate = param.FromDate,
+                ToDate = param.ToDate,
+                SubscriberID = param.SubscriberID,
+                Skip = param.Skip,
+                Take = param.Take,
+            };
+
+            return new TransactionHistoryByDeviceDCSCenterResultModel()
+            {
+                Items = repository.Fetch<TransactionHistoryByDeviceDCSCenterItemModel>(criteria),
+                TotalItem = criteria.TotalItem
+            };
+        }
+
         #endregion cts
 
         #region dcs

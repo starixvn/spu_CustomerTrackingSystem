@@ -230,6 +230,8 @@
     <Compile Include="API\FPS\Transaction\TransactionHistoryByAccountDCSExtraItemModel.cs" />
     <Compile Include="API\FPS\Transaction\TransactionHistoryByAccountDCSExtraResultModel.cs" />
     <Compile Include="API\FPS\Transaction\TransactionHistoryByAccountParamModel.cs" />
+    <Compile Include="API\FPS\Transaction\TransactionHistoryByDeviceDCSCenterItemModel.cs" />
+    <Compile Include="API\FPS\Transaction\TransactionHistoryByDeviceDCSCenterResultModel.cs" />
     <Compile Include="API\FPS\Transaction\TransactionHistoryByDeviceDCSExtraItemModel.cs" />
     <Compile Include="API\FPS\Transaction\TransactionHistoryByDeviceParamModel.cs" />
     <Compile Include="API\FPS\Search\SearchAccountItemDCSExtraModel.cs" />

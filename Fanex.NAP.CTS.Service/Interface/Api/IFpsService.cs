@@ -37,6 +37,9 @@
         IEnumerable<GetAssDevByDevSubscriberItemModel> GetAssDevByDevSubscriber_DCSCenter(GetAssDevByDevSubscriberParamModel param);
 
         IEnumerable<GetAssMatrixByDeviceSubscriberItemDataCenterModel> GetAssMatrixByDeviceSubscriber_DCSCenter(GetAssMatrixByDeviceSubscriberParamModel param);
+
+        TransactionHistoryByDeviceDCSCenterResultModel GetTransactionHistoryByDeviceDCSCenter(TransactionHistoryByDeviceParamModel param);
+
         #endregion cts
 
         #region dcs

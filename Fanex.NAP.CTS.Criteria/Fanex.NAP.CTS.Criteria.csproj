@@ -110,6 +110,7 @@
     <Compile Include="Api\FPS\Transaction\GetTransactionHistoryByCustSubscriberDCSExtraCriteria.cs" />
     <Compile Include="Api\FPS\Transaction\GetTransactionHistoryBySubscriberDCSCenterCriteria.cs" />
     <Compile Include="Api\FPS\Transaction\GetTransactionHistoryBySubscriberDCSExtraCriteria.cs" />
+    <Compile Include="Api\FPS\Transaction\GetTransHistoryByDevSubDCSCenterCriteria.cs" />
     <Compile Include="Api\FPS\Transaction\GetTransHistoryByDevSubDCSExtraCriteria.cs" />
     <Compile Include="Api\TWSpecialLicSub\InsertTWSpecialLicSubCriteria.cs" />
     <Compile Include="Api\TW\InsertTWInitialSmartCriteria.cs" />
