@@ -1192,7 +1192,7 @@
 
                     if (!updateResult.isSuccess)
                     {
-                        LogExtension.LogError($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Update hold key status - Exception: "
+                        LogExtension.LogError($"Match Monitor Detail - Update hold key status - Exception: "
                                          + updateResult.msg
                                          + $" DataInput: {JsonConvert.SerializeObject(paramter) + "\n"}");
                     }
@@ -1206,7 +1206,7 @@
             }
             catch (Exception ex)
             {
-                LogExtension.LogError($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Update hold key status - Exception: "
+                LogExtension.LogError($"Match Monitor Detail - Update hold key status - Exception: "
                                  + ex.Message
                                  + ex.StackTrace + "\n"
                                  + ex?.InnerException?.Message + "\n"
@@ -1261,7 +1261,7 @@
             }
             catch (Exception ex)
             {
-                LogExtension.LogError($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Get hold key status - Exception: "
+                LogExtension.LogError($"Match Monitor Detail - Get hold key status - Exception: "
                   + ex.Message
                   + ex.StackTrace + "\n"
                   + ex?.InnerException?.Message + "\n"
@@ -1304,7 +1304,7 @@
             }
             catch (Exception ex)
             {
-                LogExtension.LogError($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Redirect to Ticket Voiding - Exception: "
+                LogExtension.LogError($"Match Monitor Detail - Redirect to Ticket Voiding - Exception: "
                                  + ex.Message
                                  + ex.StackTrace + "\n"
                                  + ex?.InnerException?.Message + "\n"
@@ -1347,7 +1347,7 @@
             }
             catch (Exception ex)
             {
-                LogExtension.LogError($"{ConfigSettings.EnvironmentName} - Match Monitor Detail - Redirect to Mark PA - Exception: "
+                LogExtension.LogError($"Match Monitor Detail - Redirect to Mark PA - Exception: "
                                  + ex.Message
                                  + ex.StackTrace + "\n"
                                  + ex?.InnerException?.Message + "\n"

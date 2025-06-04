@@ -23,7 +23,7 @@
             }
             catch (Exception ex)
             {
-                LogExtension.LogError($"{ConfigSettings.EnvironmentName} - AntiFraudCener - {fromFlow} - Insert Accounts - Exception: "
+                LogExtension.LogError($"AntiFraudCener - {fromFlow} - Insert Accounts - Exception: "
                     + ex.Message
                     + ex.StackTrace + "\n"
                     + ex?.InnerException?.Message + "\n"
@@ -44,7 +44,7 @@
             }
             catch (Exception ex)
             {
-                LogExtension.LogError($"{ConfigSettings.EnvironmentName} - AntiFraudCener - {fromFlow} - Delete Accounts to AFC DB - Exception: "
+                LogExtension.LogError($"AntiFraudCener - {fromFlow} - Delete Accounts to AFC DB - Exception: "
                 + ex.Message
                 + ex.StackTrace + "\n"
                 + ex?.InnerException.Message + "\n"
