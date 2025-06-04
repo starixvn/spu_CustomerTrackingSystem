@@ -2,7 +2,7 @@
 {
     public class GetAssAccByDevSubscriberItemDCSCenterModel
     {
-        public int AccountID { get; set; }
+        public ulong AccountID { get; set; }
 
         public string RegisterName { get; set; }
 
