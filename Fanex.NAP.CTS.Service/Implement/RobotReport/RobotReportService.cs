@@ -17,9 +17,9 @@
         private readonly ICriteriaService _repository;
         private readonly IExportRobotReportService _exportExcelService;
 
-        public RobotReportService()
+        public RobotReportService(ICriteriaService repository = null)
         {
-            _repository = new CriteriaService();
+            _repository = repository ?? new CriteriaService();
             _exportExcelService = new ExportRobotReportService();
         }
 
@@ -92,7 +92,7 @@
 
             var result = _repository.Fetch<RobotReportCounterEntity>(criteria);
 
-            return result.Select(x => new RobotReportCounterModel(x));
+            return result?.Select(x => new RobotReportCounterModel(x)) ?? Enumerable.Empty<RobotReportCounterModel>();
         }
 
         private IEnumerable<RobotReportModel> MergeRobotReportListWithCalendar(IEnumerable<RobotReportModel> data, RobotReportParamModel param)

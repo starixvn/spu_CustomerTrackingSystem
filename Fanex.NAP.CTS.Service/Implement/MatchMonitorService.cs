@@ -31,9 +31,9 @@
         private readonly MMQueryType _mmQueryType;
         private readonly IMemoryCacheService _memoryCacheService;
 
-        public MatchMonitorService(MMQueryType mmQueryType)
+        public MatchMonitorService(MMQueryType mmQueryType, ICriteriaService repository = null)
         {
-            _repository = new CriteriaService();
+            _repository = repository ?? new CriteriaService();
             _commonService = new CommonService();
             _mmQueryType = mmQueryType;
             _memoryCacheService = new MemoryCacheService();
@@ -62,9 +62,9 @@
             {
                 FromDate = filter?.FromDate ?? DateTime.Now,
                 ToDate = filter?.ToDate ?? DateTime.Now,
-                SportType = JsonConvert.SerializeObject(filter.Sports),
+                SportType = filter.Sports.IsNotNullOrEmpty() ? JsonConvert.SerializeObject(filter.Sports) : "[]",
                 Market = filter.Market,
-                BetTypes = JsonConvert.SerializeObject(filter.BetTypes),
+                BetTypes = filter.BetTypes.IsNotNullOrEmpty() ? JsonConvert.SerializeObject(filter.BetTypes) : "[]",
                 IsVerified = filter.IsVerified,
                 Reasons = filter.Reasons,
                 MatchInfosJson = matchInfoFromMainJson
@@ -72,7 +72,7 @@
 
             var result = _repository.Fetch<GetMatchMonitorEntity>(criteria);
 
-            return result.Select(x => new GetMatchMonitorModel(x));
+            return result?.Select(x => new GetMatchMonitorModel(x)) ?? Enumerable.Empty<GetMatchMonitorModel>();
         }
 
         public IEnumerable<MMFraudTicketsSummaryViewModel> GetMMFraudTicketsSummary(IEnumerable<MMFraudTicketsSummaryModel> mmModels)
@@ -84,7 +84,7 @@
 
             var result = _repository.Fetch<MMFraudTicketsSummaryEntity>(criteria);
 
-            return result.Select(x => new MMFraudTicketsSummaryViewModel(x));
+            return result?.Select(x => new MMFraudTicketsSummaryViewModel(x)) ?? Enumerable.Empty<MMFraudTicketsSummaryViewModel>();
         }
 
         public DBResult VerifyTransMatchMonitorDetail(MatchMonitorDetailVerifyTransParaModel para)
@@ -552,7 +552,7 @@
                 TotalTicketAll = criteria.TotalTicketAll,
                 TotalTicketCredit = criteria.TotalTicketCredit,
                 TotalTicketLicensee = criteria.TotalTicketLicensee,
-                TicketInfoList = result.Select(x => new MMDetailFilterTicketInfoModel(x))
+                TicketInfoList = result?.Select(x => new MMDetailFilterTicketInfoModel(x)) ?? Enumerable.Empty<MMDetailFilterTicketInfoModel>()
             };
         }
 
@@ -590,7 +590,7 @@
                 TotalTicketAll = criteria.TotalTicketAll,
                 TotalTicketCredit = criteria.TotalTicketCredit,
                 TotalTicketLicensee = criteria.TotalTicketLicensee,
-                TicketInfoList = result.Select(x => new MMDetailFilterTicketInfoModel(x))
+                TicketInfoList = result?.Select(x => new MMDetailFilterTicketInfoModel(x)) ?? Enumerable.Empty<MMDetailFilterTicketInfoModel>()
             };
         }
 
@@ -1334,7 +1334,7 @@
 
             return new TicketDetailViewModel
             {
-                TicketDetails = data.Select(x => new TicketDetailModel(x)),
+                TicketDetails = data?.Select(x => new TicketDetailModel(x)) ?? Enumerable.Empty<TicketDetailModel>(),
                 MinSequenceId = criteria.MinSequenceId,
                 MinTransDate = criteria.MinTransDate,
                 TotalTicket = criteria.TotalTicket
@@ -1433,7 +1433,7 @@
 
             return new TicketDetailViewModel
             {
-                TicketDetails = GroupParlayTickets(data.Select(x => new TicketDetailModel(x))),
+                TicketDetails = GroupParlayTickets(data?.Select(x => new TicketDetailModel(x))) ?? Enumerable.Empty<TicketDetailModel>(),
                 MinSequenceId = criteria.MinSequenceId,
                 MinTransDate = criteria.MinTransDate,
                 TotalTicket = criteria.TotalTicket

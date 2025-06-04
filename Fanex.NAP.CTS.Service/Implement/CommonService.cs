@@ -16,9 +16,9 @@
     {
         private readonly ICriteriaService _repository;
 
-        public CommonService()
+        public CommonService(ICriteriaService repository = null)
         {
-            _repository = new CriteriaService();
+            _repository = repository ?? new CriteriaService();
         }
 
         public IEnumerable<SubscriberGroupViewModel> GetSubscriberGroups()
@@ -149,7 +149,7 @@
 
             var result = _repository.Fetch<StaticListEntity>(criteria);
 
-            return result.Select(x => new StaticListModel(x));
+            return result?.Select(x => new StaticListModel(x)) ?? Enumerable.Empty<StaticListModel>();
         }
 
         public IEnumerable<BetTypeSettingModel> GetBetTypeSettings(BetTypeSettingParaModel infos)

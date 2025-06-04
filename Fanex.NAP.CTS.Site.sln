@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NAP.CTS.Model", "Fanex.NAP.CTS.Model\Fanex.NAP.CTS.Model.csproj", "{5CE0BA40-0A37-4C89-A33B-D61C7944BE08}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NAP.CTS.Service", "Fanex.NAP.CTS.Service\Fanex.NAP.CTS.Service.csproj", "{3ED1D03F-97F1-4826-8CDD-258485A07546}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NAP.CTS.User", "Fanex.NAP.CTS.User\Fanex.NAP.CTS.User.csproj", "{072A03DC-0C4F-4BC9-A1C9-D4D62C7AFCCB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NAP.CTS.Test", "Fanex.NAP.CTS.Test\Fanex.NAP.CTS.Test.csproj", "{4BD16980-313C-4CC7-9DC5-A940791799B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{072A03DC-0C4F-4BC9-A1C9-D4D62C7AFCCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{072A03DC-0C4F-4BC9-A1C9-D4D62C7AFCCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{072A03DC-0C4F-4BC9-A1C9-D4D62C7AFCCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BD16980-313C-4CC7-9DC5-A940791799B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BD16980-313C-4CC7-9DC5-A940791799B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BD16980-313C-4CC7-9DC5-A940791799B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BD16980-313C-4CC7-9DC5-A940791799B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
