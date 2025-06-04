@@ -10,6 +10,7 @@
     using Fanex.NAP.CTS.Service.Interface.RobotReport;
     using Fanex.NAP.CTS.Core.Service;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
+    using Fanex.NAP.CTS.Model.RobotReport.Entities;
 
     public class RobotReportService : IRobotReportService
     {
@@ -45,7 +46,7 @@
 
         public RobotReportViewModel GetRobotReport(RobotReportParamModel param)
         {
-            var custCounter = GetRobotReportCounter(param) ?? new List<RobotReportCounterView>();
+            var custCounter = GetRobotReportCounter(param) ?? new List<RobotReportCounterModel>();
 
             var criteria = new GetRobotReportCriteria
             {
@@ -80,7 +81,7 @@
         #endregion
 
         #region private method
-        private IEnumerable<RobotReportCounterView> GetRobotReportCounter(RobotReportParamModel param)
+        private IEnumerable<RobotReportCounterModel> GetRobotReportCounter(RobotReportParamModel param)
         {
             var criteria = new GetRobotReportCounterCriteria
             {
@@ -89,7 +90,9 @@
                 IsLicensee = param.Sites == MMSites.All ? 2 : (param.Sites == MMSites.Licensee ? 1 : 0)
             };
 
-            return _repository.Fetch<RobotReportCounterView>(criteria);
+            var result = _repository.Fetch<RobotReportCounterEntity>(criteria);
+
+            return result.Select(x => new RobotReportCounterModel(x));
         }
 
         private IEnumerable<RobotReportModel> MergeRobotReportListWithCalendar(IEnumerable<RobotReportModel> data, RobotReportParamModel param)

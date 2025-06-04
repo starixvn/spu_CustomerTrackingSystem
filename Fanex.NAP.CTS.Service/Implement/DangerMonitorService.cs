@@ -7,6 +7,7 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Model.DangerMonitor;
+    using Fanex.NAP.CTS.Model.DangerMonitor.Entities;
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Interface;
@@ -146,7 +147,7 @@
         #endregion
 
         #region private method
-        private IEnumerable<GetDangerMonitorItemViewModel> MappingDangerMonitorWithSportBettype(IEnumerable<DangerMMTicketInfoViewModel> dangerMonitors)
+        private IEnumerable<GetDangerMonitorItemViewModel> MappingDangerMonitorWithSportBettype(IEnumerable<DangerMMTicketInfoModel> dangerMonitors)
         {
             var sportBettypes = GetBettypesFromCache();
 
@@ -171,7 +172,7 @@
             return _commonService.GetBetTypeSettings(paras);
         }
 
-        private IEnumerable<DangerMMTicketInfoViewModel> GetDangerMonitorSummary(DangerMonitorSearchModel filter)
+        private IEnumerable<DangerMMTicketInfoModel> GetDangerMonitorSummary(DangerMonitorSearchModel filter)
         {
             var criteria = new DangerMonitorTicketSummaryCriteria
             {
@@ -190,9 +191,9 @@
                 UserAmount = filter.UserAmount
             };
 
-            var result = _repository.Fetch<DangerMMTicketInfoViewModel>(criteria);
+            var result = _repository.Fetch<DangerMMTicketInfoEntity>(criteria);
 
-            return result;
+            return result.Select(x => new DangerMMTicketInfoModel(x));
         }
 
         private void FillRowDataSG(IEnumerable<ExExcelTicketInfoViewModel> items, ref ExcelTemplateWriter writer)

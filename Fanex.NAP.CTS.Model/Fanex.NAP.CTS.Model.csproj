@@ -352,7 +352,9 @@
     <Compile Include="CustomerClassification\ProblemAccount\InsertProblemAccountModel.cs" />
     <Compile Include="CustomerClassification\LatestClassification4ReportModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\RescanCustClassificationModel.cs" />
+    <Compile Include="DangerMonitor\DangerMMTicketInfoModel.cs" />
     <Compile Include="DangerMonitor\DangerMonitorSearchModel.cs" />
+    <Compile Include="DangerMonitor\Entities\DangerMMTicketInfoEntity.cs" />
     <Compile Include="DTO\CustomerEvidence.cs" />
     <Compile Include="DTO\CustomerEvidenceForTW.cs" />
     <Compile Include="Home\SearchAccountResultModel.cs" />
@@ -418,7 +420,8 @@
     <Compile Include="CustomerClassification\PushDataToExternal\DangerLevelModel.cs" />
     <Compile Include="API\RemoveLicenseeBABySiteLogDataModel.cs" />
     <Compile Include="RobotReport\AIRobotReportModel.cs" />
-    <Compile Include="RobotReport\RobotReportCounterView.cs" />
+    <Compile Include="RobotReport\Entities\RobotReportCounterEntity.cs" />
+    <Compile Include="RobotReport\RobotReportCounterModel.cs" />
     <Compile Include="RobotReport\RobotReportModel.cs" />
     <Compile Include="RobotReport\RobotReportParamModel.cs" />
     <Compile Include="SpecialCustomerClass\AddSpecialCCParamsModel.cs" />

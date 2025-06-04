@@ -2,7 +2,6 @@ namespace Fanex.NAP.CTS.Criteria.Account.TransactionHistory
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using System;
 
     public class GetTransactionHistoryCriteria : CriteriaBase
     {

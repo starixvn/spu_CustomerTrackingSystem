@@ -1,17 +1,17 @@
-﻿namespace Fanex.NAP.CTS.ViewModel.DangerMonitor
+﻿namespace Fanex.NAP.CTS.Model.DangerMonitor.Entities
 {
     using System;
 
-    public class DangerMMTicketInfoViewModel
+    public class DangerMMTicketInfoEntity
     {
         public int MatchSection { get; set; }
 
         public DateTime EventDate { get; set; }
-        
+
         public long MatchId { get; set; }
-        
-        public int LiveIndicator { get; set; }
-        
+
+        public bool LiveIndicator { get; set; }
+
         public int Bettype { get; set; }
 
         public int? BetID { get; set; }
@@ -27,7 +27,7 @@
         public int LeagueGroupID { get; set; }
 
         public DateTime GlobalShowTime { get; set; }
-        
+
         public int Homeid { get; set; }
 
         public string HomeName { get; set; }

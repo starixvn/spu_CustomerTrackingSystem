@@ -154,7 +154,6 @@
     <Compile Include="Common\SportBettypeViewModel.cs" />
     <Compile Include="Common\SubscriberGroupViewModel.cs" />
     <Compile Include="Common\SubscriberViewModel.cs" />
-    <Compile Include="DangerMonitor\DangerMMTicketInfoViewModel.cs" />
     <Compile Include="DangerMonitor\DangerMonitorSporTypeBetTypeViewModel.cs" />
     <Compile Include="DangerMonitor\DangerMonitorDetailViewModel.cs" />
     <Compile Include="DangerMonitor\DangerMonitorLeagueGroupViewModel.cs" />

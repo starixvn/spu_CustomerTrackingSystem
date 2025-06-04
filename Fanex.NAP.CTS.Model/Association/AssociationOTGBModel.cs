@@ -4,10 +4,8 @@
 
     public class AssociationOTGBModel
     {
-        [JsonProperty(PropertyName = "TransID")]
         public long TransID { get; set; }
 
-        [JsonProperty(PropertyName = "MatchID")]
         public long MatchID { get; set; }
 
         [JsonIgnore]

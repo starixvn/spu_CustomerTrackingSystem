@@ -1,12 +1,13 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.DangerMonitor
 {
+    using Fanex.NAP.CTS.Model.DangerMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using System;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class GetDangerMonitorItemViewModel
     {
-        public GetDangerMonitorItemViewModel(DangerMMTicketInfoViewModel matchSummary, DangerMonitorSporTypeBetTypeViewModel sportBettype)
+        public GetDangerMonitorItemViewModel(DangerMMTicketInfoModel matchSummary, DangerMonitorSporTypeBetTypeViewModel sportBettype)
         {
             MatchID = matchSummary.MatchId;
 

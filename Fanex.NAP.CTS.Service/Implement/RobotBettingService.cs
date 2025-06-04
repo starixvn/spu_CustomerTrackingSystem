@@ -29,8 +29,8 @@
 
             var firstLastRobotDate = new RobotDateAndTypeModel
             {
-                FirstRobotDate = criteria.FirstRobotDate,
-                LastRobotDate = criteria.LastRobotDate,
+                FirstRobotDate = criteria.FirstRobotDate.GetValueOrDefault(),
+                LastRobotDate = criteria.LastRobotDate.GetValueOrDefault(),
             };
 
             return new RobotBettingModel
