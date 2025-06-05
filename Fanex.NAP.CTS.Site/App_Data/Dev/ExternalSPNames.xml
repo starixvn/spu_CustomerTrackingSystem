@@ -4,7 +4,7 @@
 		<Setting Key="FS_Rpt_MatchMonitor_Get"  SpName="FS_Rpt_MatchMonitor_Get" DbName="DBFS.bodb_FraudSensor.wsv_cts" />
 		<Setting Key="FS_League_Get" SpName="FS_League_Get" DbName="DBFS.bodb_FraudSensor.wsv_cts" />
 		<Setting Key="FS_Rpt_MatchMonitorVerification_Update" SpName="FS_Rpt_MatchMonitorVerification_Update" DbName="DBFS.bodb_FraudSensor.wsv_cts" />
-		<Setting Key="Age_SelBalanceUpDay" SpName="Age_SelBalanceUpDay" DbName="DBACC2.bodb02.wsv_nap" />
+		<Setting Key="Age_SelBalanceUpDay" SpName="Age_SelBalanceUpDay" DbName="DBCTS.bodb02.wsv_nap" />
 		<Setting Key="FS_Rpt_MatchMonitorNotes_Update" SpName="FS_Rpt_MatchMonitorNotes_Update" DbName="DBFS.bodb_FraudSensor.wsv_cts" />
 	</Function>
 
@@ -37,13 +37,13 @@
 	</Function>
 
 	<Function name="MatchMonitor">
-		<Setting Key="CTS_MatchMonitor_Details_GetTicket" SpName="CTS_MatchMonitor_Details_GetTicket" DbName="DBWASA.WASAVerse.wsv_cts" />
-		<Setting Key="CTS_Rpt_MatchMonitor_MatchInfo" SpName="CTS_Rpt_MatchMonitor_MatchInfo" DbName="DBWASA.WASAVerse.wsv_cts" />
-		<Setting Key="CTS_MatchMonitor_Details_GetFilter" SpName="CTS_MatchMonitor_Details_GetFilter" DbName="DBWASA.WASAVerse.wsv_cts" />
-		<Setting Key="CTS_MatchMonitor_FraudTicketsSummary" SpName="CTS_MatchMonitor_FraudTicketsSummary" DbName="DBWASA.WASAVerse.wsv_cts" />
-    <Setting Key="CTS_MatchMonitorParlay_FraudTicketSummary" SpName="CTS_MatchMonitorParlay_FraudTicketSummary" DbName="DBWASA.WASAVerse.wsv_cts" />     
-    <Setting Key="CTS_MatchMonitorParlay_Details_GetTicket" SpName="CTS_MatchMonitorParlay_Details_GetTicket" DbName="DBWASA.WASAVerse.wsv_cts" />
-    <Setting Key="CTS_MatchMonitorParlay_Details_GetFilter" SpName="CTS_MatchMonitorParlay_Details_GetFilter" DbName="DBWASA.WASAVerse.wsv_cts" />
+		<Setting Key="CTS_MatchMonitor_Details_GetTicket" SpName="CTS_MatchMonitor_Details_GetTicket" DbName="DBCTS.WASAVerse.wsv_cts" />
+		<Setting Key="CTS_Rpt_MatchMonitor_MatchInfo" SpName="CTS_Rpt_MatchMonitor_MatchInfo" DbName="DBCTS.WASAVerse.wsv_cts" />
+		<Setting Key="CTS_MatchMonitor_Details_GetFilter" SpName="CTS_MatchMonitor_Details_GetFilter" DbName="DBCTS.WASAVerse.wsv_cts" />
+		<Setting Key="CTS_MatchMonitor_FraudTicketsSummary" SpName="CTS_MatchMonitor_FraudTicketsSummary" DbName="DBCTS.WASAVerse.wsv_cts" />
+    <Setting Key="CTS_MatchMonitorParlay_FraudTicketSummary" SpName="CTS_MatchMonitorParlay_FraudTicketSummary" DbName="DBCTS.WASAVerse.wsv_cts" />     
+    <Setting Key="CTS_MatchMonitorParlay_Details_GetTicket" SpName="CTS_MatchMonitorParlay_Details_GetTicket" DbName="DBCTS.WASAVerse.wsv_cts" />
+    <Setting Key="CTS_MatchMonitorParlay_Details_GetFilter" SpName="CTS_MatchMonitorParlay_Details_GetFilter" DbName="DBCTS.WASAVerse.wsv_cts" />
 	</Function>
 
 	<Function name="RobotBetting">
@@ -51,10 +51,10 @@
 	</Function>
 
 	<Function name="CustomerProfile">
-		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList" DbName="DBWASA.WASAVerse.wsv_cts" />
+		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList" DbName="DBCTS.WASAVerse.wsv_cts" />
 		<Setting Key="CTS_Rpt_BettingPattern_MatchInfo" SpName="CTS_Rpt_BettingPattern_MatchInfo" DbName="DBCTS.bodb02.wsv_cts" />
-		<Setting Key="CTS_Rpt_BettingPattern_TicketDetails" SpName="CTS_Rpt_BettingPattern_TicketDetails" DbName="DBWASA.WASAVerse.wsv_cts" />
-		<Setting Key="CTS_TicketDetails_Get" SpName="CTS_TicketDetails_Get" DbName="DBWASA.WASAVerse.wsv_cts" />
+		<Setting Key="CTS_Rpt_BettingPattern_TicketDetails" SpName="CTS_Rpt_BettingPattern_TicketDetails" DbName="DBCTS.WASAVerse.wsv_cts" />
+		<Setting Key="CTS_TicketDetails_Get" SpName="CTS_TicketDetails_Get" DbName="DBCTS.WASAVerse.wsv_cts" />
 	</Function>
 
 	<Function Name="DailyProblemClassification">
@@ -73,7 +73,7 @@
 	</Function>
 
 	<Function name="DangerMonitor">
-		<Setting Key="CTS_MatchTicketInfo_Get" SpName="CTS_MatchTicketInfo_Get" DbName="DBWASA.WASAVerse.wsv_cts" />
+		<Setting Key="CTS_MatchTicketInfo_Get" SpName="CTS_MatchTicketInfo_Get" DbName="DBCTS.WASAVerse.wsv_cts" />
 	</Function>
 
 	<Function name="RescanNormalClassificationBySport">

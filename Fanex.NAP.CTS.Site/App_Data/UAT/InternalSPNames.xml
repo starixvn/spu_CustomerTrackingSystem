@@ -67,14 +67,14 @@
 		<Setting Key="CTS_DC_Association_UpdateAssociationRemove" SpName="CTS_DC_Association_UpdateAssociationRemove_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_Association_Profile_Get" SpName="CTS_DC_Association_Profile_Get_xtest" DbName="CTSMain2.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_AssociationByIP_GetAssType" SpName="CTS_DC_AssociationByIP_GetAssType_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="SPU_AIML_GB_5GIP_GetDetails" SpName="SPU_AIML_GB_5GIP_GetDetails_xtest" DbName="AIMain.SPU_AIML.aimlWeb" />
+		<Setting Key="SPU_AIML_GB_5GIP_GetDetails" SpName="SPU_AIML_GB_5GIP_GetDetails_xtest" DbName="AIMain.SPU_AIML.aimlService" />
 		<Setting Key="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" SpName="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_Category_Get" SpName="CTS_DC_Category_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="SPU_AIML_GB_3S_GetCoupleInfo" SpName="SPU_AIML_GB_3S_GetCoupleInfo" DbName="AIMain.SPU_AIML.aimlWeb" />
-		<Setting Key="SPU_AIML_GB_3S_GetCouple_FraudDetails" SpName="SPU_AIML_GB_3S_GetCouple_FraudDetails" DbName="AIMain.SPU_AIML.aimlWeb" />
-		<Setting Key="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" SpName="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" DbName="AIMain.SPU_AIML.aimlWeb" />
+		<Setting Key="SPU_AIML_GB_3S_GetCoupleInfo" SpName="SPU_AIML_GB_3S_GetCoupleInfo" DbName="AIMain.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_GB_3S_GetCouple_FraudDetails" SpName="SPU_AIML_GB_3S_GetCouple_FraudDetails" DbName="AIMain.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" SpName="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" DbName="AIMain.SPU_AIML.aimlService" />
 		<Setting Key="CTS_DC_AssociationByAI_GetFirstAssociationDate" SpName="CTS_DC_AssociationByAI_GetFirstAssociationDate_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="SPU_AIML_OTGB_GetCouple_FraudDetails" SpName="SPU_AIML_OTGB_GetCouple_FraudDetails_xtest" DbName="AIMain.SPU_AIML.aimlWeb" />
+		<Setting Key="SPU_AIML_OTGB_GetCouple_FraudDetails" SpName="SPU_AIML_OTGB_GetCouple_FraudDetails_xtest" DbName="AIMain.SPU_AIML.aimlService" />
 	</Function>
 
 	<Function Name="AssociationDetection">
@@ -87,8 +87,8 @@
 
 	<Function Name="AssociationDetail">
 		<Setting Key="CTS_DC_AssociationGroupByAI_GetCustomersByGroup" SpName="CTS_DC_AssociationGroupByAI_GetCustomersByGroup" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="SPU_AIML_GB_GetAssociationInfo" SpName="SPU_AIML_GB_GetAssociationInfo" DbName="AIMain.SPU_AIML.aimlWeb" />
-		<Setting Key="SPU_AIML_GetAssociationByIPInfo" SpName="SPU_AIML_GetAssociationByIPInfo" DbName="AIMain.SPU_AIML.aimlWeb" />
+		<Setting Key="SPU_AIML_GB_GetAssociationInfo" SpName="SPU_AIML_GB_GetAssociationInfo" DbName="AIMain.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_GetAssociationByIPInfo" SpName="SPU_AIML_GetAssociationByIPInfo" DbName="AIMain.SPU_AIML.aimlService" />
 	</Function>
 
 	<Function Name="CustomerClassification">
@@ -159,11 +159,11 @@
 
 	<Function name="RobotBetting">
 		<Setting Key="CTS_DC_RobotDetection_Get" SpName="CTS_DC_RobotDetection_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="SPU_AIML_RD_GetRobotUsersDetails" SpName="SPU_AIML_RD_GetRobotUsersDetails_xtest" DbName="AIMain.SPU_AIML.aimlWeb" />
-		<Setting Key="SPU_AIML_RD_SCE_GetRobotUsersDetails" SpName="SPU_AIML_RD_SCE_GetRobotUsersDetails_xtest" DbName="AIMain.SPU_AIML.aimlWeb" />
-		<Setting Key="SPU_AIML_RD_GetRobotUserMatch" SpName="SPU_AIML_RD_GetRobotUserMatch_xtest" DbName="AIMain.SPU_AIML.aimlWeb" />
-		<Setting Key="SPU_AIML_RD_GetRobotUserMatchTransList" SpName="SPU_AIML_RD_GetRobotUserMatchTransList_xtest" DbName="AIMain.SPU_AIML.aimlWeb" />
-    <Setting Key="SPU_AIML_RD_LP_GetRobotDetails" SpName="SPU_AIML_RD_LP_GetRobotDetails_xtest" DbName="AIMain.SPU_AIML.aimlWeb" />
+		<Setting Key="SPU_AIML_RD_GetRobotUsersDetails" SpName="SPU_AIML_RD_GetRobotUsersDetails_xtest" DbName="AIMain.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_RD_SCE_GetRobotUsersDetails" SpName="SPU_AIML_RD_SCE_GetRobotUsersDetails_xtest" DbName="AIMain.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_RD_GetRobotUserMatch" SpName="SPU_AIML_RD_GetRobotUserMatch_xtest" DbName="AIMain.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_RD_GetRobotUserMatchTransList" SpName="SPU_AIML_RD_GetRobotUserMatchTransList_xtest" DbName="AIMain.SPU_AIML.aimlService" />
+    <Setting Key="SPU_AIML_RD_LP_GetRobotDetails" SpName="SPU_AIML_RD_LP_GetRobotDetails_xtest" DbName="AIMain.SPU_AIML.aimlService" />
 	</Function>
 
 	<Function name="CustomerProfile">
@@ -209,7 +209,7 @@
 	</Function>
 
 	<Function name="LogData">
-		<Setting Key="CTS_Archive_Log_Insert" SpName="CTS_Archive_Log_Insert_xtest" DbName="CTSMain.CTS_Archive.ctsServiceAdmin" />
+		<Setting Key="CTS_Archive_Log_Insert" SpName="CTS_Archive_Log_Insert_xtest" DbName="CTSArchive.CTS_Archive.ctsServiceAdmin" />
 	</Function>
 
 	<Function name="CustomerClassificationBySport">
