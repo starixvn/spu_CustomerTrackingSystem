@@ -468,11 +468,24 @@ function MatchMonitorDetail() {
         });
     }
 
+    let defaultGameSet = null;
+
     function SetupValueDefaultGameOrSetFilter() {
         if (domElements.sportType == SportTypeConst.Volleyball) {
             domElements.cbbGame.multiselect().empty();
-            for (var i = 1; i <= 5; i++) {
-                var selected = domElements.betIDToString % 10;
+
+            let selected = null;
+
+            if (domElements.betIDToString) {
+                selected = domElements.betIDToString % 10;
+            } else if (domElements.cbbGame.val()) {
+                selected = parseInt(domElements.cbbGame.val()[0]);
+            }
+
+            defaultGameSet = selected;
+
+            for (let i = 1; i <= 5; i++) {
+                //var selected = domElements.betIDToString % 10;
                 domElements.cbbGame.append(
                     `<option value='${i}' ${selected == i ? "selected" : ""}>${i}</option>`
                 );
@@ -2483,7 +2496,24 @@ function MatchMonitorDetail() {
         domElements.spanMarketInfo.text(`${txtMarket}`);
 
         let txtBetType = $("option:selected", domElements.cbbBetType).text();
-        domElements.spanSportBetTypeInfo.text(`${domElements.sportName} - ${txtBetType} -`);
+
+        let betText = txtBetType;
+
+
+        if (betText.includes('X')) {
+            let selectedSets = domElements.cbbGame.val();
+
+            if (selectedSets && selectedSets.length === 1) {
+                // Chỉ chọn 1 set -> show set đó
+                betText = betText.replace('X', selectedSets[0]);
+            } else {
+                // Chọn nhiều set (>=2) hoặc không chọn set nào -> show 'X'
+                betText = betText.replace('X', 'X');
+            }
+        }
+        domElements.spanSportBetTypeInfo.text(`${domElements.sportName} - ${betText} -`);
+
+
 
         currentType = Number(domElements.cbbTypeOfTickets.val());
 
@@ -3478,8 +3508,17 @@ function MatchMonitorDetail() {
         });
 
         domElements.cbbGame.change(function () {
+            const pattern = GetAttributeBetTypeSelected('data-betidpattern'); // eg: '80X'
+            const selected = domElements.cbbGame.val(); // eg: [1]
+
+            if (pattern && selected && selected.length > 0) {
+                const gameValue = selected[0];
+                domElements.betIDToString = pattern.replace('X', gameValue);
+            }
+
             OnchangeFilter();
         });
+
         domElements.cbbMatchScore.change(function () { ScoreOnChange(); });
         domElements.cbbSites.change(function () { FilterDependOnSelected(IndexFilterSelected.Site); });
         domElements.cbbCC.change(function () { FilterDependOnSelected(IndexFilterSelected.CC); });
