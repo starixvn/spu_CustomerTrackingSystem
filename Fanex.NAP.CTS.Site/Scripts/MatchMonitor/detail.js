@@ -485,7 +485,6 @@ function MatchMonitorDetail() {
             defaultGameSet = selected;
 
             for (let i = 1; i <= 5; i++) {
-                //var selected = domElements.betIDToString % 10;
                 domElements.cbbGame.append(
                     `<option value='${i}' ${selected == i ? "selected" : ""}>${i}</option>`
                 );
@@ -2504,10 +2503,8 @@ function MatchMonitorDetail() {
             let selectedSets = domElements.cbbGame.val();
 
             if (selectedSets && selectedSets.length === 1) {
-                // Chỉ chọn 1 set -> show set đó
                 betText = betText.replace('X', selectedSets[0]);
             } else {
-                // Chọn nhiều set (>=2) hoặc không chọn set nào -> show 'X'
                 betText = betText.replace('X', 'X');
             }
         }
@@ -3455,7 +3452,9 @@ function MatchMonitorDetail() {
     //#endregion Ticket Voiding
 
     function Initial() {
-        SetupMultiselectFilter(domElements.cbbGame, "Game");
+        const gameLabel = (domElements.sportType == SportTypeConst.Volleyball) ? "Set" : "Game";
+
+        SetupMultiselectFilter(domElements.cbbGame, gameLabel);
         SetupMultiselectFilter(domElements.cbbCC, "CC");
         SetupMultiselectFilter(domElements.cbbDanger, "Danger");
         SetupMultiselectFilter(domElements.cbbCurrency, "Currency");
