@@ -60,5 +60,8 @@
                 return sb.ToString();
             }
         }
+
+        public static string CleanSpecialCharactor(this string input) =>
+            string.IsNullOrEmpty(input) ? "" : input.Replace("\r\n", string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty).Trim();
     }
 }

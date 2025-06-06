@@ -1423,11 +1423,11 @@
             var serializer = new JavaScriptSerializer();
             serializer.MaxJsonLength = Int32.MaxValue;
 
-            var matchInfo = serializer.Deserialize<ExExlMatchInfoViewModel>(from["match"]);            
+            var matchInfo = serializer.Deserialize<ExExlMatchInfoViewModel>(from["match"]);
             var isDisplaySingleGrid = from["isDisplaySingleGrid"];
             var isViewParlay = !string.IsNullOrEmpty(from["isViewParlay"]) && from["isViewParlay"].ToLower() == "true";
 
-            int.TryParse(from["sportType"], out int sportType);           
+            int.TryParse(from["sportType"], out int sportType);
 
             if (!string.IsNullOrEmpty(isDisplaySingleGrid) && isDisplaySingleGrid.ToLower() == "true")
             {
@@ -1436,7 +1436,7 @@
                 //var templatePath = Server.MapPath(MMDetailSingleGridTemplate);
                 var templatePath = GetExcelTemplatePath(isViewParlay, true, sportType);
 
-                var fileName = string.Format("MM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr);
+                var fileName = string.Format("MM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr).CleanSpecialCharactor();
 
                 var excelFile = _matchMonitorService.ExportExcelMMDetailSG(items, fileName, templatePath);
 
@@ -1451,7 +1451,7 @@
                 //var templatePath = isViewParlay ? Server.MapPath(MMParlayDoubleGridTemplate) : Server.MapPath(MMDetailDoubleGridTemplate);
                 var templatePath = GetExcelTemplatePath(isViewParlay, false, sportType);
 
-                var fileName = string.Format("MM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr);
+                var fileName = string.Format("MM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr).CleanSpecialCharactor();
 
                 var excelFile = _matchMonitorService.ExportExcelMMDetailDG(homeMItems, awayMItems, fileName, templatePath, isViewParlay, sportType);
 
@@ -1524,7 +1524,7 @@
             }
 
             return ticket;
-        }       
+        }
 
         private IEnumerable<DetectGroupAssociationItemViewModel> RearrangeAssGroup(IEnumerable<DetectGroupAssociationItemViewModel> assGroupList, bool isDisableNone)
         {
@@ -1590,7 +1590,7 @@
                     return Server.MapPath(MMDetailDoubleGridTemplate);
                 default:
                     return string.Empty;
-            }           
+            }
         }
         #endregion Private Methods
     }
