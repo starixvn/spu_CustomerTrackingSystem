@@ -671,7 +671,7 @@
                     FillRowDataParlayDG(homeMItems, awayMItems, ref writer);
                     writer.SyncColumnsWidth(37);
                     break;
-                case false when(sportType == (int)MatchMonitorSportType.Badminton):
+                case false when(sportType == (int)MatchMonitorSportType.Badminton || sportType == (int)MatchMonitorSportType.Volleyball):
                     FillRowDataBadmintonDG(homeMItems, awayMItems, ref writer);
                     writer.SyncColumnsWidth(39);
                     break;

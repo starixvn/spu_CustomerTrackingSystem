@@ -26,9 +26,10 @@ const IndexFilterSelected = {
 
 const SportTypeConst = {
     Basketball: "2",
+    Volleyball: "6",
     Badminton: "9",
     ESports: "43",
-    Cricket: "50"    
+    Cricket: "50"
 }
 
 function ConvertNumberToThousandsString(x) {
@@ -178,6 +179,10 @@ function MatchMonitorDetail() {
 
     //#region Initial Grid
     function InitialDetailGird(element) {
+        const isColumnVisible =
+            domElements.sportType === SportTypeConst.Badminton ||
+            domElements.sportType === SportTypeConst.Volleyball;
+
         element.DataTable({
             serverSide: false,
             // dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
@@ -207,10 +212,10 @@ function MatchMonitorDetail() {
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0], className: "text-center" },
                 {
-                    targets: [0], width: "3%", render: function (data, type, obj, meta) {                                             
+                    targets: [0], width: "3%", render: function (data, type, obj, meta) {
                         if (obj.IsSelected == true) {
                             return '<label><input type="checkbox" class="col-checkbox" name="chkbx" checked /></label>';
-                        } else {                            
+                        } else {
                             return '<label><input type="checkbox" class="col-checkbox" name="chkbx" /></label>';
                         }
                     } // Checkbox
@@ -219,11 +224,11 @@ function MatchMonitorDetail() {
                 { targets: [2], width: "4%", className: "text-center col-customerclass" }, // CC
                 { targets: [3], width: "4%", className: "text-center col-bot" }, // Bot
                 { targets: [4], width: "10%", className: "text-center col-dgr" }, // Dgr
-                { targets: [5], width: "5%", className: "text-center col-game", visible: domElements.sportType == SportTypeConst.Badminton },
+                { targets: [5], width: "5%", className: "text-center col-game", visible: isColumnVisible }, // Game or Set
                 { targets: [6], width: "5%", className: "text-center col-odds" }, // Odds
                 { targets: [7], width: "5%", className: "text-center col-myodds" }, // MY.Odds
                 { targets: [8], width: "5%", className: "text-left col-betid" }, // BetID
-                { targets: [9], width: "5%", className: "text-center col-currency"}, // Cur
+                { targets: [9], width: "5%", className: "text-center col-currency" }, // Cur
                 { targets: [10], width: "5%", className: "text-right col-amt" }, // Amt
                 { targets: [11], width: "4%", className: "text-center col-hdp" }, // HDP
                 { targets: [12], width: "5%", className: "text-center col-score" }, // Score
@@ -258,7 +263,7 @@ function MatchMonitorDetail() {
                 {
                     data: obj => () => {
                         return obj.BetIDFromDB > 0 ? obj.BetIDFromDB % 10 : "-"
-                    } 
+                    }
                 },
                 { data: obj => RenderOdds(obj) },
                 { data: obj => RenderMalayOdds(obj) },
@@ -318,9 +323,9 @@ function MatchMonitorDetail() {
                 if (data.SubscriberType === "L") {
                     $(row.cells[1]).addClass('username-hightlight');
                 }
-               
+
                 if (data.ViewMoreInfo) {
-                    if (data.IsParlay) {                           
+                    if (data.IsParlay) {
                         let myArr = [17, 16, 15, 14, 13, 12, 4, 3, 2, 1, 0];
                         myArr.forEach(function (value, _) {
                             $(row.cells[value]).remove();
@@ -332,16 +337,16 @@ function MatchMonitorDetail() {
                                 $(row.cells[value]).addClass('bg-parlay-main');
                             })
                         }
-                                              
-                    } else {    
+
+                    } else {
                         let myArr = [0, 1, 2, 3, 4, 12, 13, 14, 15, 16, 17];
                         myArr.forEach(function (value, _) {
                             $(row.cells[value]).attr('rowspan', data.Combinition + 1);
                         });
 
-                    }                  
-                } 
-            }            
+                    }
+                }
+            }
         });
 
         OnclickBetInfo(element);
@@ -351,16 +356,16 @@ function MatchMonitorDetail() {
         $('tbody', element).on('click', 'td span.icon-toggle', function () {
             let $td = $(this).parent().parent();
             let $tr = $td.parent();
-           
-            let rowIndex = -1; 
+
+            let rowIndex = -1;
 
             let visibleRows = element.DataTable().rows().nodes().to$().filter(function () {
                 return $(this).css('display') != 'none';
             });
 
             $(visibleRows).each(function (idx, trEle) {
-                let tr1 = $tr.eq(0); 
-                let tr2 = $(trEle).eq(0); 
+                let tr1 = $tr.eq(0);
+                let tr2 = $(trEle).eq(0);
 
                 if (tr1.is(tr2)) {
                     rowIndex = idx;
@@ -371,34 +376,34 @@ function MatchMonitorDetail() {
                 return;
             }
 
-            let row = element.DataTable().row($td);          
+            let row = element.DataTable().row($td);
             let data = row.data();
-            data.IsSelected = $(row.node()).find('.col-checkbox').prop('checked');            
+            data.IsSelected = $(row.node()).find('.col-checkbox').prop('checked');
 
             if (data.ViewMoreInfo) {
                 data.ViewMoreInfo = false;
                 CollapseParlayTicket(element, rowIndex);
             } else {
                 data.ViewMoreInfo = true;
-                ExpandParlayTicket(element, data.ParlayTickets, rowIndex, data.TicketStatus); 
+                ExpandParlayTicket(element, data.ParlayTickets, rowIndex, data.TicketStatus);
             }
         })
     }
 
     function CollapseParlayTicket(element, rowIndex) {
         let table = element.DataTable();
-      
+
         let rowWithRowspan = $(table.row(rowIndex).node());
 
         $(rowWithRowspan).find('td div.more-info').empty();
         $(rowWithRowspan).find('td span.icon-toggle').removeClass('icon-chevron-down').addClass('icon-chevron-right');
 
-        let rowspanCell = rowWithRowspan.find('td[rowspan]');        
+        let rowspanCell = rowWithRowspan.find('td[rowspan]');
 
         if (rowspanCell.length) {
-       
+
             let currentRowspan = parseInt(rowspanCell.attr('rowspan'), 10);
-                      
+
             while (currentRowspan > 1) {
                 rowspanCell.attr('rowspan', currentRowspan - 1);
 
@@ -412,17 +417,17 @@ function MatchMonitorDetail() {
         }
     }
 
-    function ExpandParlayTicket(element, parlayTickets, rowIndex, ticketStatus) {       
+    function ExpandParlayTicket(element, parlayTickets, rowIndex, ticketStatus) {
         if (parlayTickets.length > 0) {
             let table = element.DataTable();
-          
-            let visibleRows = table.rows().nodes().to$().filter(function () {               
-                return $(this).css('display') != 'none';              
-            });            
 
-            let data = table.rows(visibleRows).data().toArray();       
+            let visibleRows = table.rows().nodes().to$().filter(function () {
+                return $(this).css('display') != 'none';
+            });
 
-            parlayTickets.forEach(function (value, _) {               
+            let data = table.rows(visibleRows).data().toArray();
+
+            parlayTickets.forEach(function (value, _) {
                 let newRowData = { Combinition: value.Combinition, ParlayTicket: value, ViewMoreInfo: true, IsParlay: value.IsParlay, TicketStatus: ticketStatus };
 
                 // Insert new row data at the clicked row's index + 1
@@ -463,6 +468,32 @@ function MatchMonitorDetail() {
         });
     }
 
+    let defaultGameSet = null;
+
+    function SetupValueDefaultGameOrSetFilter() {
+        if (domElements.sportType == SportTypeConst.Volleyball) {
+            domElements.cbbGame.multiselect().empty();
+
+            let selected = null;
+
+            if (domElements.betIDToString) {
+                selected = domElements.betIDToString % 10;
+            } else if (domElements.cbbGame.val()) {
+                selected = parseInt(domElements.cbbGame.val()[0]);
+            }
+
+            defaultGameSet = selected;
+
+            for (let i = 1; i <= 5; i++) {
+                domElements.cbbGame.append(
+                    `<option value='${i}' ${selected == i ? "selected" : ""}>${i}</option>`
+                );
+            }
+
+            domElements.cbbGame.multiselect("refresh");
+        }
+    }
+
     function SetupMultiselectGroup(ccb, selectName, menuWidth = 260, menuHeight = 280) {
         ccb.multiselect({
             menuWidth: menuWidth,
@@ -492,7 +523,7 @@ function MatchMonitorDetail() {
                         selected = false;
                     }
                 }
-              
+
                 let optgroup = `<optgroup label='Detect By v.v...'>`;
                 if (selected) {
                     optgroup += `<option selected value='${data[i]}'>${data[i]}</option>`;
@@ -875,6 +906,13 @@ function MatchMonitorDetail() {
     }
 
     function SetupDoubleDataTable() {
+        const sportLabelMap = {
+            [SportTypeConst.Volleyball]: 'Set',
+            [SportTypeConst.Badminton]: 'Game',
+        };
+
+        const gameOrSetText = sportLabelMap[domElements.sportType] || 'Game';
+
         $("#tbrMMHomeTeam").html(`
                                 <table id="tblMMHomeTeam" class="table table-striped table-monitor-detail">
                                 <thead>
@@ -884,7 +922,7 @@ function MatchMonitorDetail() {
                                         <th>CC</th>
                                         <th>Bot</th>
                                         <th>Dgr</th>
-                                        <th>Game</th>
+                                        <th>${gameOrSetText}</th>
                                         <th>Odds</th>
                                         <th>MY.Odds</th>
                                         <th>
@@ -929,7 +967,7 @@ function MatchMonitorDetail() {
                                         <th>CC</th>
                                         <th>Bot</th>
                                         <th>Dgr</th>
-                                        <th>Game</th>
+                                        <th>${gameOrSetText}</th>
                                         <th>Odds</th>
                                         <th>MY.Odds</th>
                                         <th>
@@ -1159,7 +1197,7 @@ function MatchMonitorDetail() {
     function GetBetIDSelected() {
         let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
 
-        if (![SportTypeConst.Basketball, SportTypeConst.Badminton].includes(domElements.sportType) && betidpattern.includes('X')) {
+        if (![SportTypeConst.Basketball, SportTypeConst.Badminton, SportTypeConst.Volleyball].includes(domElements.sportType) && betidpattern.includes('X')) {
             let betIDString = "80" + domElements.cbbMapX.val();
 
             if (betidpattern.includes('YY')) {
@@ -1169,10 +1207,10 @@ function MatchMonitorDetail() {
 
         } else if (domElements.sportType == SportTypeConst.Basketball) {
             return $("option:selected", domElements.cbbBetType).attr('data-betid');
-        } else if (domElements.sportType == SportTypeConst.Badminton && betidpattern.includes('X') && domElements.cbbGame.val()) {
+        } else if ((domElements.sportType == SportTypeConst.Badminton || domElements.sportType == SportTypeConst.Volleyball) && betidpattern.includes('X') && domElements.cbbGame.val()) {
             return domElements.cbbGame.val().map(it => betidpattern.replace('X', it)).toString();
         }
-        
+
         return 0; //default
     }
 
@@ -1301,7 +1339,7 @@ function MatchMonitorDetail() {
         SetupFilterScore(domElements.cbbMatchScore, data.ScoreList);
 
         cacheFilterDefault.AGrList = data.GroupList;
-        cacheFilterDefault.ReasonList = data.ReasonList;   
+        cacheFilterDefault.ReasonList = data.ReasonList;
 
         SetupFilterGroupReason(domElements.cbbReason, data.ReasonList);
 
@@ -1542,13 +1580,13 @@ function MatchMonitorDetail() {
                 GetMatchMonitorTotalTicket(params, lastScannedSequenceID);
 
                 GetMatchMonitorDetail(params, lastScannedSequenceID, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
-       
+
                 if (recordsTotalGlobal == 0) {
-                    
+
                     domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
                     domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
                     domElements.tblMMSG.find('tbody').removeClass('loading');
-                }                
+                }
             }, 10)
         }
     }
@@ -1778,7 +1816,7 @@ function MatchMonitorDetail() {
         return html;
     }
 
-    function RenderOdds(obj) {  
+    function RenderOdds(obj) {
         if (obj.IsParlay && obj.ParlayTicket != undefined) {
             return obj.ParlayTicket.Odds;
         }
@@ -1812,9 +1850,9 @@ function MatchMonitorDetail() {
     function RenderParlayBetInfo(obj) {
         let html = '';
 
-        if (obj.ViewMoreInfo && obj.ParlayTicket != undefined) {           
-            let ticket = obj.ParlayTicket;           
-            
+        if (obj.ViewMoreInfo && obj.ParlayTicket != undefined) {
+            let ticket = obj.ParlayTicket;
+
             if (ticket.IsMainTicket) {
                 html = `<div>
                             <ul><li class='parlay-li'>${ticket.HomeName} vs ${ticket.AwayName}</li></ul>
@@ -1831,7 +1869,7 @@ function MatchMonitorDetail() {
             return `<span class='span-betid' data-bet-id=${obj.TransIdToString}>${html} </span>`;
         } else if (obj.ViewMoreInfo) {
             let description = obj.Combinition == 2 ? "Double (1 Bet)" : "Treble(1 Bet)";
-            
+
             return `<div class='div-col-betinfo'>
                         <span class='span-betid' data-bet-id=${obj.TransIdToString}>${obj.TransIdToString} </span>
                         <span class="icon-toggle icon-chevron-down"></span>                        
@@ -1849,7 +1887,7 @@ function MatchMonitorDetail() {
     }
 
     function RenderCurrency(obj) {
-        if (obj.IsParlay && obj.ParlayTicket != undefined) {               
+        if (obj.IsParlay && obj.ParlayTicket != undefined) {
             return '-';
         }
 
@@ -1867,7 +1905,7 @@ function MatchMonitorDetail() {
         if (obj.IsParlay && obj.ParlayTicket != undefined) {
             return obj.ParlayTicket.Choice;
         }
-        return isDisplaySingleGrid ? obj.BetTeam : obj.HDP;        
+        return isDisplaySingleGrid ? obj.BetTeam : obj.HDP;
     }
 
     function RenderScore(obj) {
@@ -1927,8 +1965,7 @@ function MatchMonitorDetail() {
         return tranIds;
     }
 
-    function GetDataForMultiBetID()
-    {
+    function GetDataForMultiBetID() {
         const tickets = [];
         domElements.tblMMHomeTeam.DataTable().rows(function (idx, data, node) {
             if (data.PICVerified == '-' || data.PICVerified == '' || data.PICVerified == null) {
@@ -1942,8 +1979,7 @@ function MatchMonitorDetail() {
         });
 
         const tranIdsByBetID = tickets.reduce((arr, ticket) => {
-            if (!arr[ticket.BetIDFromDB])
-            {
+            if (!arr[ticket.BetIDFromDB]) {
                 arr[ticket.BetIDFromDB] = [];
             }
 
@@ -1961,8 +1997,9 @@ function MatchMonitorDetail() {
                     BettypeID: GetBetTypeSelected(),
                     BetID: betid,
                     TranIds: tickets.join(),
-                    TicketType:  domElements.ticketType
-            }};
+                    TicketType: domElements.ticketType
+                }
+            };
         });
 
         return transformedData;
@@ -1970,17 +2007,15 @@ function MatchMonitorDetail() {
 
     function VerifyTransMatchMonitorDetail() {
         let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
-        if (domElements.sportType == SportTypeConst.Badminton && betidpattern.includes("X"))
-        {
+        if (domElements.sportType == SportTypeConst.Badminton && betidpattern.includes("X")) {
             common.postMultipleAPI(GetDataForMultiBetID())
-            .done(function(...responses) {
-                window.close();
-            }).fail(function() {
-                console.log("One or more requests failed");
-            });
+                .done(function (...responses) {
+                    window.close();
+                }).fail(function () {
+                    console.log("One or more requests failed");
+                });
         }
-        else
-        {
+        else {
             $.ajax(common.modifyRelativeUrl('MatchMonitor/VerifyTransMMDetail'), {
                 type: 'POST',
                 data:
@@ -1990,7 +2025,7 @@ function MatchMonitorDetail() {
                     BettypeID: GetBetTypeSelected(),
                     BetID: GetBetIDSelected(),
                     TranIds: GetTranIds().join(),
-                    TicketType:  domElements.ticketType
+                    TicketType: domElements.ticketType
                 },
                 beforeSend: function () {
                     domElements.tblMMHomeTeam.addClass('loading-value');
@@ -2067,7 +2102,7 @@ function MatchMonitorDetail() {
                     } else {
                         BindChangeGroupAssWithOptions(domElements.tblMMHomeTeam, itemList);
                         BindChangeGroupAssWithOptions(domElements.tblMMAwayTeam, itemList);
-                        
+
                         if (domElements.ticketType == TicketType.Single) {
                             itemMMHomeTeam = domElements.tblMMHomeTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
                             itemMMAwayTeam = domElements.tblMMAwayTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.BetID]; });
@@ -2075,7 +2110,7 @@ function MatchMonitorDetail() {
                             itemMMHomeTeam = domElements.tblMMHomeTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.RefnoToString]; });
                             itemMMAwayTeam = domElements.tblMMAwayTeam.DataTable().rows().data().filter(function (x) { return cacheMGroup.selectMgroup[x.RefnoToString]; });
                         }
-                        
+
                         totalItem = itemMMHomeTeam.length + itemMMAwayTeam.length;
                     }
                 }
@@ -2170,7 +2205,7 @@ function MatchMonitorDetail() {
     }
 
     function BindChangeGroupAssWithOptions(tblElement, itemList) {
-        
+
         tblElement.DataTable().rows().every(function (rowIdx) {
             let rowData = this.data();
             if (rowData != undefined) {
@@ -2201,7 +2236,7 @@ function MatchMonitorDetail() {
                 }
 
                 this.invalidate();
-            }            
+            }
         })
     }
 
@@ -2221,7 +2256,7 @@ function MatchMonitorDetail() {
                     MGrName: cacheMGroup.allMGroup[refnoToString].GroupName
                 });
             })
-        }        
+        }
 
         return JSON.stringify(arrMGrTranIDs);
     }
@@ -2303,7 +2338,7 @@ function MatchMonitorDetail() {
     function GetDataSelectedInGrid(table) {
         let datas = '';
         table.rows(function (idx, data, node) {
-            
+
             if ($(node).find('input[type="checkbox"][name="chkbx"]').prop('checked')) {
                 if (!$(node).is(':hidden')) {
                     datas += `{&quot;SubscriberType&quot;:&quot;${data.SubscriberType}&quot;`;
@@ -2319,7 +2354,7 @@ function MatchMonitorDetail() {
                     datas += `,&quot;BetID&quot;:&quot;${data.BetID}&quot;`;
                     datas += `,&quot;BetTeam&quot;:&quot;${data.BetTeam}&quot;`;
                     datas += `,&quot;Currency&quot;:&quot;${data.CurrencyName}&quot;`;
-                    datas += `,&quot;Amount&quot;:&quot;${data.Amount}&quot;`;                 
+                    datas += `,&quot;Amount&quot;:&quot;${data.Amount}&quot;`;
                     datas += `,&quot;HDP&quot;:&quot;${data.HDP}&quot;`;
                     datas += `,&quot;Score&quot;:&quot;${data.Score}&quot;`;
                     datas += `,&quot;TransTimeToString&quot;:&quot;${data.TransTimeToString}&quot;`;
@@ -2358,8 +2393,8 @@ function MatchMonitorDetail() {
             datas += `,&quot;Score&quot;:&quot;${value.Score}&quot;`;
             datas += `},`;
         })
-            
-                
+
+
         return datas != '' ? datas.slice(0, -1) : datas;
     }
 
@@ -2460,7 +2495,22 @@ function MatchMonitorDetail() {
         domElements.spanMarketInfo.text(`${txtMarket}`);
 
         let txtBetType = $("option:selected", domElements.cbbBetType).text();
-        domElements.spanSportBetTypeInfo.text(`${domElements.sportName} - ${txtBetType} -`);
+
+        let betText = txtBetType;
+
+
+        if (betText.includes('X')) {
+            let selectedSets = domElements.cbbGame.val();
+
+            if (selectedSets && selectedSets.length === 1) {
+                betText = betText.replace('X', selectedSets[0]);
+            } else {
+                betText = betText.replace('X', 'X');
+            }
+        }
+        domElements.spanSportBetTypeInfo.text(`${domElements.sportName} - ${betText} -`);
+
+
 
         currentType = Number(domElements.cbbTypeOfTickets.val());
 
@@ -2637,7 +2687,7 @@ function MatchMonitorDetail() {
                 BuildReasonGroup(reasonItems);
 
                 RefreshReason(reasonItems);
-                
+
                 aGrItems = DistinctByAGr(dependOnFilter);
                 RefreshAGr(aGrItems);
                 break;
@@ -2649,7 +2699,7 @@ function MatchMonitorDetail() {
                     reasonItems = DistinctByReason(dependOnFilter);
                     BuildReasonGroup(reasonItems);
 
-                    RefreshReason(reasonItems);                    
+                    RefreshReason(reasonItems);
 
                     aGrItems = DistinctByAGr(dependOnFilter);
                     RefreshAGr(aGrItems);
@@ -2811,9 +2861,9 @@ function MatchMonitorDetail() {
         if (reasonItems.length > 0) {
             if (cacheSelectedReason.length > 0) {
                 reasonItems.forEach(item => {
-                    if ($.inArray(item.toString(), cacheSelectedReason) != -1) {                       
+                    if ($.inArray(item.toString(), cacheSelectedReason) != -1) {
                         domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "selected");
-                    } else {                      
+                    } else {
                         domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "");
                     }
                 });
@@ -2821,16 +2871,16 @@ function MatchMonitorDetail() {
                 let arrReason = cacheDefaultReason.split(',');
 
                 reasonItems.forEach(item => {
-                    if ($.inArray(item.toString(), arrReason) != -1) {                      
+                    if ($.inArray(item.toString(), arrReason) != -1) {
                         domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "selected");
-                    } else {                      
+                    } else {
                         domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "");
                     }
                 });
 
                 cacheDefaultReason = null;
             } else {
-                reasonItems.forEach(item => {                 
+                reasonItems.forEach(item => {
                     domElements.cbbReason.find(`option[value='${item}']`).prop("selected", "selected");
                 });
             }
@@ -2839,7 +2889,7 @@ function MatchMonitorDetail() {
     }
 
     function BuildReasonGroup(reasonItems) {
-        domElements.cbbReason.multiselect().empty();      
+        domElements.cbbReason.multiselect().empty();
 
         domElements.cbbReasonGroupHidden.find('optgroup').each(function () {
             let optGroup = $(this);
@@ -2853,7 +2903,7 @@ function MatchMonitorDetail() {
 
             if (reasonMatched.length > 0) {
                 let optgroup = `<optgroup label='${groupName}'>`;
-                reasonMatched.forEach(reason => {                   
+                reasonMatched.forEach(reason => {
                     optgroup += `<option value='${reason}'>${reason}</option>`;
                 });
 
@@ -2862,7 +2912,7 @@ function MatchMonitorDetail() {
             }
         });
 
-        domElements.cbbReason.multiselect("refresh");       
+        domElements.cbbReason.multiselect("refresh");
     }
 
     function RefreshAGr(aGrItems) {
@@ -2952,7 +3002,7 @@ function MatchMonitorDetail() {
         $('input[type="checkbox"][name="chkbx"]:not(:hidden)', nodes).prop('checked', input.is(":checked"));
     }
 
-    function ToggleBetID(tblElement, isExpand) {        
+    function ToggleBetID(tblElement, isExpand) {
         if (domElements.ticketType == TicketType.Single) {
             $('tr', tblElement).each(function (idx, tr) {
                 let spanBetID = $(tr).find('span.span-betid').first();
@@ -3004,18 +3054,18 @@ function MatchMonitorDetail() {
                             CollapseParlayTicket(tblElement, rowIdx);
                         }
                     }
-                }                              
+                }
             });
 
             if (arrDataExpand.length > 0) {
                 $.each(arrDataExpand, function (index, value) {
                     ExpandParlayTicket(tblElement, value.ParlayTickets, value.rowIdx, value.TicketStatus);
-                });                
-            }      
+                });
+            }
         }
     }
 
-    function ToggleMapXYY(isBetTypeChange) {       
+    function ToggleMapXYY(isBetTypeChange) {
         let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
 
         if (domElements.sportType == SportTypeConst.ESports && betidpattern.includes('X')) {
@@ -3041,10 +3091,11 @@ function MatchMonitorDetail() {
         }
     }
 
-    function ToggleGameX(isBetTypeChange) {        
+    function ToggleGameX(isBetTypeChange) {
         let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
 
-        if (domElements.sportType == SportTypeConst.Badminton && betidpattern.includes('X')) {            
+        if ((domElements.sportType == SportTypeConst.Badminton || domElements.sportType == SportTypeConst.Volleyball)
+            && betidpattern && betidpattern.includes('X')) {
             domElements.cbbGame.parent().show();
             domElements.cbbMapX.parent().hide();
             domElements.cbbMapYY.parent().hide();
@@ -3052,7 +3103,7 @@ function MatchMonitorDetail() {
             domElements.cbbGame.parent().hide();
             domElements.cbbMapX.parent().show();
             domElements.cbbMapYY.parent().show();
-        }            
+        }
     }
 
     //#endregion Event Toggle
@@ -3213,7 +3264,7 @@ function MatchMonitorDetail() {
 
     //#region Hold Key
     function UpdateHoldKeyStatus(matchId, matchSection, sportType, isHold) {
-        common.showConfirmation('<div class="popup - content"> Are you sure to turn ' + (isHold ? 'on' : 'off')+ ' the Hold Key?</div>', function () { 
+        common.showConfirmation('<div class="popup - content"> Are you sure to turn ' + (isHold ? 'on' : 'off') + ' the Hold Key?</div>', function () {
             $.ajax(common.modifyRelativeUrl('MatchMonitor/UpdateHoldKeyStatus'), {
                 type: 'POST',
                 data:
@@ -3336,11 +3387,10 @@ function MatchMonitorDetail() {
         }
 
         userNames = userNames.filter(OnlyUnique);
-        
-        if (IsValidMarkPA(userNames.length))
-        {
+
+        if (IsValidMarkPA(userNames.length)) {
             const data = {
-                "usernames" : userNames.join()
+                "usernames": userNames.join()
             };
 
             $.ajax(common.modifyRelativeUrl('MatchMonitor/MarkPA'), {
@@ -3402,7 +3452,9 @@ function MatchMonitorDetail() {
     //#endregion Ticket Voiding
 
     function Initial() {
-        SetupMultiselectFilter(domElements.cbbGame, "Game");
+        const gameLabel = (domElements.sportType == SportTypeConst.Volleyball) ? "Set" : "Game";
+
+        SetupMultiselectFilter(domElements.cbbGame, gameLabel);
         SetupMultiselectFilter(domElements.cbbCC, "CC");
         SetupMultiselectFilter(domElements.cbbDanger, "Danger");
         SetupMultiselectFilter(domElements.cbbCurrency, "Currency");
@@ -3419,6 +3471,7 @@ function MatchMonitorDetail() {
         domElements.iconClearUsnAmt.addClass("hide");
         domElements.inputTranstimeFrom.val('');
         domElements.inputTranstimeTo.val('');
+        SetupValueDefaultGameOrSetFilter();
 
         if (domElements.mapX != "0" && domElements.sportType != SportTypeConst.Basketball) {
             domElements.cbbMapX.val(domElements.mapX).trigger('change');
@@ -3454,8 +3507,17 @@ function MatchMonitorDetail() {
         });
 
         domElements.cbbGame.change(function () {
+            const pattern = GetAttributeBetTypeSelected('data-betidpattern'); // eg: '80X'
+            const selected = domElements.cbbGame.val(); // eg: [1]
+
+            if (pattern && selected && selected.length > 0) {
+                const gameValue = selected[0];
+                domElements.betIDToString = pattern.replace('X', gameValue);
+            }
+
             OnchangeFilter();
         });
+
         domElements.cbbMatchScore.change(function () { ScoreOnChange(); });
         domElements.cbbSites.change(function () { FilterDependOnSelected(IndexFilterSelected.Site); });
         domElements.cbbCC.change(function () { FilterDependOnSelected(IndexFilterSelected.CC); });

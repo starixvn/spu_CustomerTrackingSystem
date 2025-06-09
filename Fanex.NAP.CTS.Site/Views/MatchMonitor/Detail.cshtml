@@ -57,42 +57,46 @@
                             <select class="control info-select" id="cbbBetType" name="state">
                                 @foreach (var item in ViewBag.BetTypeSettings)
                                 {
-                                    var itemValue = item.BetTypeID + "_" + item.BetID;
+                                var itemValue = item.BetTypeID + "_" + item.BetID;
 
-                                    if (!item.IsSupportSuspicious)
-                                    {
-                                        <option value="@itemValue" data-bettypeid="@item.BetTypeID" data-betidpattern="@item.BetIDPattern" data-betchoicetype="@item.BetChoiceType" 
-                                                data-betchoicehome="@item.BetChoiceHome" data-betchoicehomedisplay="@item.BetChoiceHomeDisplay" data-betchoicehomefullname="@item.BetChoiceHomeFullName"  
-                                                data-betchoiceaway="@item.BetChoiceAway" data-betchoiceawaydisplay="@item.BetChoiceAwayDisplay" data-betchoiceawayfullname="@item.BetChoiceAwayFullName"                                                 
-                                                data-betid="@item.BetID" data-is-support-suspicious="false" class="readOnly">@item.BetTypeName</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@itemValue" data-bettypeid="@item.BetTypeID" data-betidpattern="@item.BetIDPattern" data-betchoicetype="@item.BetChoiceType" 
-                                               data-betchoicehome="@item.BetChoiceHome" data-betchoicehomedisplay="@item.BetChoiceHomeDisplay" data-betchoicehomefullname="@item.BetChoiceHomeFullName"  
-                                               data-betchoiceaway="@item.BetChoiceAway" data-betchoiceawaydisplay="@item.BetChoiceAwayDisplay" data-betchoiceawayfullname="@item.BetChoiceAwayFullName"    
-                                               data-betid="@item.BetID">@item.BetTypeName</option>
-                                    }
+                                if (!item.IsSupportSuspicious)
+                                {
+                                <option value="@itemValue" data-bettypeid="@item.BetTypeID" data-betidpattern="@item.BetIDPattern" data-betchoicetype="@item.BetChoiceType"
+                                        data-betchoicehome="@item.BetChoiceHome" data-betchoicehomedisplay="@item.BetChoiceHomeDisplay" data-betchoicehomefullname="@item.BetChoiceHomeFullName"
+                                        data-betchoiceaway="@item.BetChoiceAway" data-betchoiceawaydisplay="@item.BetChoiceAwayDisplay" data-betchoiceawayfullname="@item.BetChoiceAwayFullName"
+                                        data-betid="@item.BetID" data-is-support-suspicious="false" class="readOnly">
+                                    @item.BetTypeName
+                                </option>
+                                }
+                                else
+                                {
+                                <option value="@itemValue" data-bettypeid="@item.BetTypeID" data-betidpattern="@item.BetIDPattern" data-betchoicetype="@item.BetChoiceType"
+                                        data-betchoicehome="@item.BetChoiceHome" data-betchoicehomedisplay="@item.BetChoiceHomeDisplay" data-betchoicehomefullname="@item.BetChoiceHomeFullName"
+                                        data-betchoiceaway="@item.BetChoiceAway" data-betchoiceawaydisplay="@item.BetChoiceAwayDisplay" data-betchoiceawayfullname="@item.BetChoiceAwayFullName"
+                                        data-betid="@item.BetID">
+	                                @item.BetTypeName
+                                </option>
+                                }
                                 }
 
                             </select>
                         </div>
 
-                        <div class="first-row-info">
-                            @*<label class="text">Game</label>*@
-                            <select class="control width-select" id="cbbGame" multiple="multiple">
-                                @for (int i = 1; i < 4; i++)
-                                {
-                                    <option value="@i" selected>@i</option>
-                                }                                
-                            </select>
-                        </div>
+	                    <div class="first-row-info">
+		                    @*<label class="text">Game</label>*@
+		                    <select class="control width-select" id="cbbGame" multiple="multiple">
+			                    @for (int i = 1; i < 4; i++)
+			                    {
+				                    <option value="@i" selected>@i</option>
+			                    }
+		                    </select>
+	                    </div>
 
                         <div class="first-row-info" style="width:80px" id="divMapX">
                             <select class="control info-select" id="cbbMapX" name="state">
                                 @for (int i = 1; i < 10; i++)
                                 {
-                                    <option value="@i">@i</option>
+                                <option value="@i">@i</option>
                                 }
                             </select>
                         </div>
@@ -101,7 +105,7 @@
                             <select class="control info-select" id="cbbMapYY" name="state">
                                 @for (int i = 1; i < 99; i++)
                                 {
-                                    <option value="@i">@i</option>
+                                <option value="@i">@i</option>
                                 }
                             </select>
                         </div>

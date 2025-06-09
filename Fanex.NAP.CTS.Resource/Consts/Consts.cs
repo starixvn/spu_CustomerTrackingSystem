@@ -221,6 +221,7 @@
         {
             Soccer = 1,
             Basketball = 2,
+            Volleyball = 6,
             Badminton = 9,
             TableTennis = 18,
             ESport = 43,
@@ -609,7 +610,8 @@
             { (int) MatchMonitorSportType.ESport        , "E-Sports"                                },
             { (int) MatchMonitorSportType.Cricket       , nameof(MatchMonitorSportType.Cricket)     },
             { (int) MatchMonitorSportType.Badminton       , nameof(MatchMonitorSportType.Badminton) },
-            { (int) MatchMonitorSportType.TableTennis       , "Table Tennis" }
+            { (int) MatchMonitorSportType.TableTennis       , "Table Tennis" },
+            { (int) MatchMonitorSportType.Volleyball    , nameof(MatchMonitorSportType.Volleyball)  }
         };
 
         public static readonly List<int> ConditionExcludeScoreForMM = new List<int>

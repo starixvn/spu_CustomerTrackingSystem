@@ -23,7 +23,7 @@
 
         public int BetIDFromDB { get; set; }
 
-        public int Game { get { return this.BetIDFromDB % 10; } }        
+        public int Game { get { return this.BetIDFromDB % 10; } }
 
         public decimal Odds { get; set; }
 
