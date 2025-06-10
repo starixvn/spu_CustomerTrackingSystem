@@ -1173,6 +1173,7 @@
     <None Include="WebConfigs\Web.KLSIMPLE.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Views\Home\AITEST.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

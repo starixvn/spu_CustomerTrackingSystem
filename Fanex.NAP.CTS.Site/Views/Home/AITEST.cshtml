@@ -1,0 +1,10 @@
+﻿@model string
+
+@{
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+@if (!string.IsNullOrEmpty(Model))
+{
+    @Html.Raw(Model)
+}
