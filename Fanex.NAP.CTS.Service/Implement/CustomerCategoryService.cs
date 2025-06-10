@@ -2,6 +2,8 @@
 {
     using Fanex.Data.Repository;
     using Fanex.Logging;
+    using Fanex.Logging.Extensions.Database;
+    using Fanex.Logging.Extensions;
     using Fanex.NAP.CTS.Criteria.Category;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
@@ -32,8 +34,14 @@
             }
             catch (Exception ex)
             {
-                var errorMessage = string.Format(ResourcesManager.GetValue(ConstsResources.CATEGORY_CUSTOMER_CLASS));
-                LogService.Error(errorMessage, ex);
+                //var errorMessage = string.Format(ResourcesManager.GetValue(ConstsResources.CATEGORY_CUSTOMER_CLASS));                
+
+                var logMessage = new LogMessage(ex.Message)
+                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
+                    .ToString();
+
+                LogService.Error(logMessage);
 
                 return new List<CategoryCustomerClassModel>();
             }
