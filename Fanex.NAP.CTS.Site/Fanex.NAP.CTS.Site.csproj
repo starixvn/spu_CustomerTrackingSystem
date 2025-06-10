@@ -1181,6 +1181,7 @@
     </Content>
     <Content Include="Views\DangerMonitor\Detail.cshtml" />
     <Content Include="Views\DangerMonitor\Index.cshtml" />
+    <Content Include="Views\Home\AITEST.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />
