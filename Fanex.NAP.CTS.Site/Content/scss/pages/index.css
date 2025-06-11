@@ -2207,7 +2207,7 @@ body {
   .search-box .input-field {
     width: 100%;
     border: 0;
-    font-size: 18px; }
+    font-size: 16px; }
     .search-box .input-field:focus {
       box-shadow: none; }
     .search-box .input-field::placeholder {
