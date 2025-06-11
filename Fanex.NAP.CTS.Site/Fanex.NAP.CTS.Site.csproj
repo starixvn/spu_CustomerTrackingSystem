@@ -511,6 +511,7 @@
     <None Include="Content\scss\components\_notification.scss" />
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.svg" />
     <Content Include="Content\scss\images\chevron-down.png" />
+    <Content Include="Content\scss\images\excel-logo.png" />
     <Content Include="Content\scss\images\icon-export-excel.png" />
     <Content Include="Content\scss\images\loading.svg" />
     <Content Include="Content\scss\images\login-CTS.png" />
@@ -518,6 +519,10 @@
     <Content Include="Content\scss\images\logo-CTS.svg" />
     <Content Include="Content\scss\images\logo-header.png" />
     <Content Include="Content\scss\images\logo-header.svg" />
+    <Content Include="Content\scss\images\logo-Wasa-AI-Assistant.png" />
+    <Content Include="Content\scss\images\search-icon-enable.png" />
+    <Content Include="Content\scss\images\search-icon.png" />
+    <Content Include="Content\scss\images\search-icon.svg" />
     <Content Include="Content\scss\pages\account\account-fps.css">
       <DependentUpon>account-fps.scss</DependentUpon>
     </Content>
