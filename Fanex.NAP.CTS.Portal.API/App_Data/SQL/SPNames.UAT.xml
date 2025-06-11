@@ -93,6 +93,11 @@
 		<Setting Key="DCS_DC_Association_GetAccountsPerDevice" SpName="DCS_DC_Association_GetAccountsPerDevice_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
 		<Setting Key="DCS_DC_Association_GetDevicesPerAccount" SpName="DCS_DC_Association_GetDevicesPerAccount_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
 		<Setting Key="DCS_DC_Device_GetByDeviceCodeSubscriber" SpName="DCS_DC_Device_GetByDeviceCodeSubscriber_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
+		<Setting Key="DCS_DC_Association_GetDeviceInfoByDeviceSubscriber" SpName="DCS_DC_Association_GetDeviceInfoByDeviceSubscriber_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
+		<Setting Key="DCS_DC_Association_GetAssociationAccountByDeviceSubscriber" SpName="DCS_DC_Association_GetAssociationAccountByDeviceSubscriber_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
+		<Setting Key="DCS_DC_Association_GetAssociationDeviceByDeviceSubscriber" SpName="DCS_DC_Association_GetAssociationDeviceByDeviceSubscriber_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
+		<Setting Key="DCS_DC_Association_GetAssociationMatrixByDeviceSubscriber" SpName="DCS_DC_Association_GetAssociationMatrixByDeviceSubscriber_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
+		<Setting Key="DCS_DC_Transaction_GetHistoryByDeviceSubscriber" SpName="DCS_DC_Transaction_GetHistoryByDeviceSubscriber_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
 		<Setting Key="DCS_ET_Subscriber_GetInfoBySubscriberName" SpName="DCS_ET_Subscriber_GetInfoBySubscriberName_xtest" DbName="MySQL.DCS_Extra.Reporter" />
 		<Setting Key="DCS_ET_Transaction_GetHistoryByAccountSubscriber" SpName="DCS_ET_Transaction_GetHistoryByAccountSubscriber_xtest" DbName="MySQL.DCS_Extra.Reporter" />
 		<Setting Key="DCS_ET_Transaction_GetHistoryBySubscriber" SpName="DCS_ET_Transaction_GetHistoryBySubscriber_xtest" DbName="MySQL.DCS_Extra.Reporter" />
