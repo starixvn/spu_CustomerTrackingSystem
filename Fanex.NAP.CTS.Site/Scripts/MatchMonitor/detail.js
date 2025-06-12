@@ -181,9 +181,9 @@ function MatchMonitorDetail() {
     //#region Initial Grid
     function InitialDetailGird(element) {
         const isColumnVisible =
-            domElements.sportType === SportTypeConst.Badminton ||
-            domElements.sportType === SportTypeConst.Volleyball||
-            domElements.sportType === SportTypeConst.Tennis;
+            domElements.sportType == SportTypeConst.Badminton ||
+            domElements.sportType == SportTypeConst.Volleyball||
+            domElements.sportType == SportTypeConst.Tennis;
 
         element.DataTable({
             serverSide: false,
@@ -1202,7 +1202,7 @@ function MatchMonitorDetail() {
     function GetBetIDSelected() {
         let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
 
-        if (![SportTypeConst.Basketball, SportTypeConst.Badminton, SportTypeConst.Volleyball,, SportTypeConst.Tennis].includes(domElements.sportType) && betidpattern.includes('X')) {
+        if (![SportTypeConst.Basketball, SportTypeConst.Badminton, SportTypeConst.Volleyball, SportTypeConst.Tennis].includes(domElements.sportType) && betidpattern.includes('X')) {
             let betIDString = "80" + domElements.cbbMapX.val();
 
             if (betidpattern.includes('YY')) {
@@ -1212,7 +1212,7 @@ function MatchMonitorDetail() {
 
         } else if (domElements.sportType == SportTypeConst.Basketball) {
             return $("option:selected", domElements.cbbBetType).attr('data-betid');
-        } else if ((domElements.sportType == SportTypeConst.Badminton || domElements.sportType == SportTypeConst.Volleyball) && betidpattern.includes('X') && domElements.cbbGame.val()) {
+        } else if ((domElements.sportType == SportTypeConst.Badminton || domElements.sportType == SportTypeConst.Volleyball || domElements.sportType == SportTypeConst.Tenn) && betidpattern.includes('X') && domElements.cbbGame.val()) {
             return domElements.cbbGame.val().map(it => betidpattern.replace('X', it)).toString();
         }
 
