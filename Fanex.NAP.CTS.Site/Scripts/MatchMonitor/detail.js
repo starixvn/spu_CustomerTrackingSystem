@@ -26,6 +26,7 @@ const IndexFilterSelected = {
 
 const SportTypeConst = {
     Basketball: "2",
+    Tennis: "5",
     Volleyball: "6",
     Badminton: "9",
     ESports: "43",
@@ -181,7 +182,8 @@ function MatchMonitorDetail() {
     function InitialDetailGird(element) {
         const isColumnVisible =
             domElements.sportType === SportTypeConst.Badminton ||
-            domElements.sportType === SportTypeConst.Volleyball;
+            domElements.sportType === SportTypeConst.Volleyball||
+            domElements.sportType === SportTypeConst.Tennis;
 
         element.DataTable({
             serverSide: false,
@@ -471,7 +473,9 @@ function MatchMonitorDetail() {
     let defaultGameSet = null;
 
     function SetupValueDefaultGameOrSetFilter() {
-        if (domElements.sportType == SportTypeConst.Volleyball) {
+        if (domElements.sportType == SportTypeConst.Volleyball ||
+            domElements.sportType == SportTypeConst.Tennis
+        ) {
             domElements.cbbGame.multiselect().empty();
 
             let selected = null;
@@ -907,6 +911,7 @@ function MatchMonitorDetail() {
 
     function SetupDoubleDataTable() {
         const sportLabelMap = {
+            [SportTypeConst.Tennis]: 'Set',
             [SportTypeConst.Volleyball]: 'Set',
             [SportTypeConst.Badminton]: 'Game',
         };
@@ -1197,7 +1202,7 @@ function MatchMonitorDetail() {
     function GetBetIDSelected() {
         let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
 
-        if (![SportTypeConst.Basketball, SportTypeConst.Badminton, SportTypeConst.Volleyball].includes(domElements.sportType) && betidpattern.includes('X')) {
+        if (![SportTypeConst.Basketball, SportTypeConst.Badminton, SportTypeConst.Volleyball,, SportTypeConst.Tennis].includes(domElements.sportType) && betidpattern.includes('X')) {
             let betIDString = "80" + domElements.cbbMapX.val();
 
             if (betidpattern.includes('YY')) {
@@ -3094,7 +3099,7 @@ function MatchMonitorDetail() {
     function ToggleGameX(isBetTypeChange) {
         let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
 
-        if ((domElements.sportType == SportTypeConst.Badminton || domElements.sportType == SportTypeConst.Volleyball)
+        if ((domElements.sportType == SportTypeConst.Badminton || domElements.sportType == SportTypeConst.Volleyball|| domElements.sportType == SportTypeConst.Tennis)
             && betidpattern && betidpattern.includes('X')) {
             domElements.cbbGame.parent().show();
             domElements.cbbMapX.parent().hide();
@@ -3452,7 +3457,7 @@ function MatchMonitorDetail() {
     //#endregion Ticket Voiding
 
     function Initial() {
-        const gameLabel = (domElements.sportType == SportTypeConst.Volleyball) ? "Set" : "Game";
+        const gameLabel = (domElements.sportType == SportTypeConst.Volleyball || domElements.sportType == SportTypeConst.Tennis) ? "Set" : "Game";
 
         SetupMultiselectFilter(domElements.cbbGame, gameLabel);
         SetupMultiselectFilter(domElements.cbbCC, "CC");
