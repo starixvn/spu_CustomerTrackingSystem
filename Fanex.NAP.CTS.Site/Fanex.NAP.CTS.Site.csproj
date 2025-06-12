@@ -1181,6 +1181,15 @@
     </Content>
     <Content Include="Views\DangerMonitor\Detail.cshtml" />
     <Content Include="Views\DangerMonitor\Index.cshtml" />
+    <None Include="WebConfigs\Web.AppSettings.KLPRO.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="WebConfigs\Web.ConnectionString.KLPRO.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="WebConfigs\Web.KLPRO.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />
