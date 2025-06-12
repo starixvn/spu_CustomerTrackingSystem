@@ -58,6 +58,18 @@
             return data;
         }
 
+        public IEnumerable<SearchDeviceItemModel> SearchDevice_DCSCenter(SearchDeviceParamModel param)
+        {
+            var criteria = new GetDeviceByDeviceCodeSubscriberDCSCenterCriteria
+            {
+                SubscriberID = param.SubscriberID,
+                DeviceCode = param.DeviceCode
+            };
+
+            var items = repository.Fetch<SearchDeviceItemModel>(criteria);
+            return items;
+        }
+
         public GetAssAccountInfoByCustSubscriberModel GetAssAccountInfoByCustSubscriber_DCSCenter(GetAssAccountInfoByCustSubscriberParamModel param)
         {
             var criteria = new GetAssAccountInfoByCustSubscriberDCSCenterCriteria
@@ -236,6 +248,77 @@
             data.Items = repository.Fetch<GetDevicesPerAccountItemModel>(criteria);
             data.TotalRows = criteria.TotalRows;
             return data;
+        }
+
+        public GetAssDeviceInfoByIDSubscriberModel GetAssDeviceInfoByIDSubscriber_DCSCenter(GetAssDeviceInfoByIDSubscriberParamModel param)
+        {
+            var criteria = new GetAssDeviceInfoByIDSubscriberDCSCenterCriteria()
+            {
+                DeviceID = param.DeviceID,
+                SubscriberID = param.SubscriberID,
+            };
+
+            var data = repository.FetchMultiple<GetAssDeviceInfoByIDSubscriberModel, GetAssDeviceFirstSeen>(criteria);
+            var result = data.firstResultSet.FirstOrDefault() ?? new GetAssDeviceInfoByIDSubscriberModel();
+            result.FirstSeenBySubscriber = data.secondResultSet;
+
+            return result;
+        }
+
+        public IEnumerable<GetAssAccByDevSubscriberItemDCSCenterModel> GetAssAccByDevSubscriber_DCSCenter(GetAssAccByDevSubscriberParamModel param)
+        {
+            var criteria = new GetAssAccByDevSubscriberDCSCenterCriteria
+            {
+                DeviceID = param.DeviceID,
+                NoOfRecord = param.NoOfRecord,
+                SubscriberID = param.SubscriberID,
+            };
+
+            return repository.Fetch<GetAssAccByDevSubscriberItemDCSCenterModel>(criteria);
+        }
+
+        public IEnumerable<GetAssDevByDevSubscriberItemModel> GetAssDevByDevSubscriber_DCSCenter(GetAssDevByDevSubscriberParamModel param)
+        {
+            var criteria = new GetAssDevByDevSubscriberDCSCenterCriteria
+            {
+                DeviceID = param.DeviceID,
+                NoOfRecord = param.NoOfRecord,
+                SubscriberID = param.SubscriberID,
+            };
+
+            return repository.Fetch<GetAssDevByDevSubscriberItemModel>(criteria);
+        }
+
+        public IEnumerable<GetAssMatrixByDeviceSubscriberItemDataCenterModel> GetAssMatrixByDeviceSubscriber_DCSCenter(GetAssMatrixByDeviceSubscriberParamModel param)
+        {
+            var criteria = new GetAssMatrixByDeviceSubsriberDCSCenterCriteria
+            {
+                DeviceID = param.DeviceID,
+                NoOfCustomer = param.NoOfCustomer,
+                NoOfDevice = param.NoOfDevice,
+                SubscriberID = param.SubscriberID,
+            };
+
+            return repository.Fetch<GetAssMatrixByDeviceSubscriberItemDataCenterModel>(criteria);
+        }
+
+        public TransactionHistoryByDeviceDCSCenterResultModel GetTransactionHistoryByDeviceDCSCenter(TransactionHistoryByDeviceParamModel param)
+        {
+            var criteria = new GetTransHistoryByDevSubDCSCenterCriteria
+            {
+                DeviceID = param.DeviceID,
+                FromDate = param.FromDate,
+                ToDate = param.ToDate,
+                SubscriberID = param.SubscriberID,
+                Skip = param.Skip,
+                Take = param.Take,
+            };
+
+            return new TransactionHistoryByDeviceDCSCenterResultModel()
+            {
+                Items = repository.Fetch<TransactionHistoryByDeviceDCSCenterItemModel>(criteria),
+                TotalItem = criteria.TotalItem
+            };
         }
 
         #endregion cts
