@@ -2313,14 +2313,14 @@ function MatchMonitorDetail() {
             })
         }
 
-        if (homeCheckedL + awayCheckedL + itemCheckL < 1) {
-            common.showError("Please select at least 1 record to proceed!")
-            return false;
-        }
-        if (homeCheckedL + awayCheckedL + itemCheckL > 40000) {
-            common.showError("Export fail due to size limitation, please contact Administrator for further support.")
-            return false;
-        }
+         if (homeCheckedL + awayCheckedL + itemCheckL < 1) {
+             common.showError("Please select at least 1 record to proceed!")
+             return false;
+         }
+         if (homeCheckedL + awayCheckedL + itemCheckL > 40000) {
+             common.showError("Export fail due to size limitation, please contact Administrator for further support.")
+             return false;
+         }
 
         return true;
     }
@@ -2329,9 +2329,9 @@ function MatchMonitorDetail() {
         let datas = '';
         let betTypeName = $('option:selected', domElements.cbbBetType).text();
 
-        datas += `{&quot;MatchName&quot;:&quot;${domElements.matchName}&quot;`;
-        datas += `,&quot;EventDateStr&quot;:&quot;${domElements.eventDataToString}&quot;`;
-        datas += `,&quot;BetTypeName&quot;:&quot;${betTypeName}&quot;}`;
+        datas += `{&quot;MatchName&quot;:&quot;${domElements.matchName.trim()}&quot;`;
+        datas += `,&quot;EventDateStr&quot;:&quot;${domElements.eventDataToString.trim()}&quot;`;
+        datas += `,&quot;BetTypeName&quot;:&quot;${betTypeName.trim()}&quot;}`;
         return datas;
     }
 
