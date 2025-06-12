@@ -437,7 +437,7 @@
                 ViewBag.BetTypeID = para?.BetTypeID;
                 ViewBag.BettypeName = para?.BettypeName ?? string.Empty;
                 ViewBag.BetIDToString = para?.BetID.ToString();
-                ViewBag.BetTypeSettings = GetBetTypeSettingsWithSupportSuspicious(para.SportType.ToString(), false, false, para.SportType != (int)MatchMonitorSportType.Volleyball);
+                ViewBag.BetTypeSettings = GetBetTypeSettingsWithSupportSuspicious(para.SportType.ToString(), false, false, para.SportType != (int)MatchMonitorSportType.Volleyball && para.SportType != (int)MatchMonitorSportType.Tennis);
                 ViewBag.MapX = para?.MX;
                 ViewBag.MapYY = para?.MY;
                 ViewBag.HomeName = para?.HomeName.ToUpper() ?? string.Empty;
@@ -1532,7 +1532,7 @@
                     return Server.MapPath(MMParlayDoubleGridTemplate);
                 case false when (sportType == (int)MatchMonitorSportType.Badminton):
                     return Server.MapPath(MMDetailBadmintonDoubleGridTemplate);
-                case false when (sportType == (int)MatchMonitorSportType.Volleyball):
+                case false when (sportType == (int)MatchMonitorSportType.Volleyball || sportType == (int)MatchMonitorSportType.Tennis):
                     return Server.MapPath(MMDetailVolleyballDoubleGridTemplate);
                 case false when (sportType != (int)MatchMonitorSportType.Badminton):
                     return Server.MapPath(MMDetailDoubleGridTemplate);
