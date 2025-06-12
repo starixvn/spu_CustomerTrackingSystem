@@ -55,7 +55,8 @@
         {
             get
             {
-                return CachedRef.GetTeamName(HomeID);
+                //return CachedRef.GetTeamName(HomeID); RemotingRef not working
+                return HomeID.ToString();
             }
         }
 
@@ -63,7 +64,8 @@
         {
             get
             {
-                return CachedRef.GetTeamName(AwayID);
+                //return CachedRef.GetTeamName(AwayID); RemotingRef not working
+                return AwayID.ToString();
             }
         }
 
@@ -71,7 +73,8 @@
         {
             get
             {
-                return CachedRef.GetLeagueName(LeagueID).ToLower();
+                //return CachedRef.GetLeagueName(LeagueID).ToLower(); RemotingRef not working
+                return LeagueID.ToString().ToLower(); // Assuming LeagueName is directly available in the model
             }
         }
 

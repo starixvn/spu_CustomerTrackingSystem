@@ -12,7 +12,8 @@
             this.TransID = ticket.TransId.ToString();
             this.IP = ticket.IP;
             this.BetType = ticket.BetType;
-            this.BetTypeName = CachedRef.GetBettypeName(ticket.BetType);
+            //this.BetTypeName = CachedRef.GetBettypeName(ticket.BetType); RemotingRef not working
+            this.BetTypeName = ticket.BetType.ToString(); // Assuming BetType is an enum or has a string representation
             this.BetTeam = ticket.BetTeam;
             this.Stake = ticket.Stake;
             this.Odds = ticket.Odds;

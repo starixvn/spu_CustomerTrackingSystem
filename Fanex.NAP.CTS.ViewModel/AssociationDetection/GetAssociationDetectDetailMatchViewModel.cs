@@ -13,9 +13,11 @@
         public GetAssociationDetectDetailMatchViewModel(GetAssociationDetectDetailMatchModel ticket)
         {       
             this.LeagueID = ticket.LeagueID;
-            this.LeagueName = CachedRef.GetLeagueName(ticket.LeagueID);
+            //this.LeagueName = CachedRef.GetLeagueName(ticket.LeagueID); RemotingRef not working
+            this.LeagueName = ticket.LeagueID.ToString(); // Assuming LeagueName is directly available in the model
             this.MatchID = ticket.MatchID;
-            this.MatchName = CachedRef.GetTeamName(ticket.HomeID) + " vs " + CachedRef.GetTeamName(ticket.AwayID);            
+            //this.MatchName = CachedRef.GetTeamName(ticket.HomeID) + " vs " + CachedRef.GetTeamName(ticket.AwayID); RemotingRef not working           
+            this.MatchName = $"{ticket.HomeID} vs {ticket.AwayID}"; // Assuming HomeID and AwayID are team names or IDs
             this.HomeID = ticket.HomeID;
             this.AwayID = ticket.AwayID;
             this.EventDate = ticket.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy);
@@ -24,7 +26,8 @@
             this.TransDate = ticket.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss);
             this.TransID = ticket.TransID.ToString();
             this.BetTypeID = ticket.BetType;
-            this.BetTypeName = CachedRef.GetBettypeName(ticket.BetType);
+            //this.BetTypeName = CachedRef.GetBettypeName(ticket.BetType); RemotingRef not working
+            this.BetTypeName = ticket.BetType.ToString(); // Assuming BetType is an enum or has a string representation
             this.BetTeam = ticket.BetTeam;
             this.Stake = ticket.Stake;
             this.Odd = ticket.Odds;

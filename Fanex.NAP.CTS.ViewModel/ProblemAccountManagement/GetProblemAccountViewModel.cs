@@ -17,7 +17,8 @@
             this.CreatedDateStr = data.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyy);
             this.TVSRequestID = data.TVSRequestID;                 
             this.IssueTypeID = data.IssueTypeID;
-            this.SportName = data.SportType != null ? CachedRef.GetSportTypeName(data.SportType.Value) : string.Empty;
+            this.SportName = data.SportType.ToString();
+            //this.SportName = data.SportType != null ? CachedRef.GetSportTypeName(data.SportType.Value) : string.Empty; comment for check KL RemotingRef Not Working
 
             this.Comment = this.BuildComment(data);
         }

@@ -10,7 +10,8 @@
         public RobotRDMatchViewModel(MainMatchModel match, int totalTicket)
         {
             this.MatchID = match.MatchID;
-            this.MatchName = CachedRef.GetTeamName(match.HomeId) + " vs " + CachedRef.GetTeamName(match.AwayId);
+            //this.MatchName = CachedRef.GetTeamName(match.HomeId) + " vs " + CachedRef.GetTeamName(match.AwayId); RemotingRef not working
+            this.MatchName = $"{match.HomeId} vs {match.AwayId}"; // Assuming HomeId and AwayId are team names or IDs
             this.EventDate = match.EventDate;
             this.EventDateStr = match.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy);
             this.TotalTicket = totalTicket;

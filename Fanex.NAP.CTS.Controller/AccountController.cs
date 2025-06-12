@@ -1213,9 +1213,15 @@
 
                 data.IPMatchBettypeList = info.ItemList.Select(x =>
                 {
-                    var homeName = CachedRef.GetTeamName(x.HomeID);
-                    var awayName = CachedRef.GetTeamName(x.AwayID);
-                    var leagueName = CachedRef.GetLeagueName(x.LeagueID);
+                    // RemotingRef not working
+                    //var homeName = CachedRef.GetTeamName(x.HomeID);
+                    //var awayName = CachedRef.GetTeamName(x.AwayID);
+                    //var leagueName = CachedRef.GetLeagueName(x.LeagueID);
+
+                    var homeName = x.HomeID.ToString();
+                    var awayName = x.AwayID.ToString();
+                    var leagueName = x.LeagueID.ToString();
+
                     var betTypeList = new List<string>();
                     var ip = x.IP != null ? x.IP.Replace(",", ", ") : "-";
                     var eventDateStr = "-";
@@ -1228,7 +1234,9 @@
                         {
                             int.TryParse(item, out int betTypeId);
 
-                            betTypeList.Add(CachedRef.GetBettypeName(betTypeId));
+                            //RemotingRef not working
+                            // betTypeList.Add(CachedRef.GetBettypeName(betTypeId));
+                            betTypeList.Add(betTypeId.ToString());
                         }
                     }
 
@@ -2110,7 +2118,8 @@
                             AwayID = x.AwayId,
                             TransID = x.TransId.ToString(),
                             BetType = x.BetType,
-                            BetTypeName = CachedRef.GetBettypeName(x.BetType),
+                            //BetTypeName = CachedRef.GetBettypeName(x.BetType), RemotingRef not working
+                            BetTypeName = x.BetType.ToString(),
                             BetTeam = x.BetTeam,
                             Stake = x.Stake,
                             Odds = x.Odds,
@@ -2147,8 +2156,12 @@
         {
             var rs = "-";
 
-            var HomeName = CachedRef.GetTeamName(ticket.HomeId);
-            var AwayName = CachedRef.GetTeamName(ticket.AwayId);
+            // RemotingRef not working
+            //var HomeName = CachedRef.GetTeamName(ticket.HomeId);
+            //var AwayName = CachedRef.GetTeamName(ticket.AwayId);
+
+            var HomeName = ticket.HomeId.ToString();
+            var AwayName = ticket.AwayId.ToString();
 
             if (!string.IsNullOrEmpty(HomeName) || !string.IsNullOrEmpty(AwayName))
             {

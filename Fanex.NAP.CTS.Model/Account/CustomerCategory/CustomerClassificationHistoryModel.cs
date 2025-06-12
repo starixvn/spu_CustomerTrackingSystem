@@ -26,7 +26,9 @@
             {
                 if (this.SportType != null)
                 {
-                    return CachedRef.GetSportTypeName(this.SportType.Value);
+                    //return CachedRef.GetSportTypeName(this.SportType.Value); RemotingRef not working
+
+                    return this.SportType.Value.ToString();
                 }
 
                 return string.Empty;
