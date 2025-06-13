@@ -78,6 +78,8 @@
 
         public static string MarkPAURL => GetConfigStringByName("MMDetail_MarkPAURL");
 
+        public static string AIInsightsAnalyzeUrl => GetConfigStringByName("AIInsightsAnalyzeUrl");
+
         public static int ImportEvidenceChunkSize
         {
             get

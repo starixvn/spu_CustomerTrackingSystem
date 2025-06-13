@@ -1,29 +1,70 @@
-﻿using System.IO;
-using System.Web;
-using System.Web.Mvc;
-using Fanex.NAP.Core.Web.Attribute;
-
-namespace Fanex.NAP.CTS.Controller
+﻿namespace Fanex.NAP.CTS.Controller
 {
+    using System;
+    using System.IO;
+    using System.Web;
+    using System.Web.Mvc;
+    using Fanex.Logging.Extensions.Database;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging;
+    using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Model.AIInsights;
+    using Fanex.NAP.CTS.Service;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
+    using Fanex.NAP.CTS.Model;
+
     [NapSuperAuth]
     public class AIInsightsController : BaseController
     {
+        private readonly IAIInsightsService _aIInsightsService;
+
+        public AIInsightsController()
+        {
+            _aIInsightsService = new AIInsightsService();
+        }
+
         public ActionResult Index()
         {
-            var fileName = Session["UploadedFileName"] as string;
-            var fileBytes = Session["UploadedFileBytes"] as byte[];
+            return View();
+        }
 
-            if (fileName == null || fileBytes == null)
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AIInsightsAnalyzeFile)]
+        public ActionResult AnalyzeFile()
+        {           
+            try
             {
-                ViewBag.Message = "No file uploaded.";
-                return View();
+                //var fileName = Session["UploadedFileName"] as string;
+                //var fileBytes = Session["UploadedFileBytes"] as byte[];
+
+                //if (fileName == null || fileBytes == null)
+                //{
+                //    ViewBag.Message = "No file uploaded.";
+
+                //    return View();
+                //}
+
+                //var fileContentBase64 = Convert.ToBase64String(fileBytes);
+
+                //var request = new AIInsightsAnalyzeRequestModel
+                //{
+                //    data_path = fileName,
+                //    file_content = fileContentBase64,
+                //    mode_type = 2,
+                //    changing_column_definition = ""
+                //};
+          
+                //var response = _aIInsightsService.Analyze(request, ConfigSettings.AIInsightsAnalyzeUrl);
+
             }
-
-            ViewBag.FileName = fileName;
-            ViewBag.FileSize = fileBytes.Length;
-
-            using (var ms = new MemoryStream(fileBytes))
+            catch (Exception ex)
             {
+                var logMessage = new LogMessage(ex.Message)
+                                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
             }
 
             return View();

@@ -1,12 +1,12 @@
-document.addEventListener('DOMContentLoaded', () => {
+function AIInsights() {
     const container = document.querySelector('.ai-insights-container');
     const fileInput = document.getElementById('fileInput');
     const fileNameLabel = document.getElementById('file-name-label');
     const chatbotPanel = document.getElementById('chatbotPanel');
     const chatbotToggle = document.querySelector('.chatbot-toggle');
     const closeChatbot = document.querySelector('.close-chatbot');
+
     const viewOptions = document.querySelectorAll('input[name="view"]');
-    const contentWrapper = container.querySelector('.ai-insights-content') || document.createElement('div');
 
     const sections = {
         summary: document.getElementById('summary-section'),
@@ -15,86 +15,77 @@ document.addEventListener('DOMContentLoaded', () => {
         columnStats: document.getElementById('column-statistics-section')
     };
 
-    if (!container.querySelector('.ai-insights-content')) {
-        contentWrapper.classList.add('ai-insights-content');
-        while (container.firstChild) {
-            if (container.firstChild.className !== 'chatbot-toggle' && container.firstChild.id !== 'chatbotPanel') {
-                contentWrapper.appendChild(container.firstChild);
-            }
-        }
-        container.appendChild(contentWrapper);
-    }
-
-    function toggleSections(view) {
+    function ToggleSections(view) {
         switch (view) {
             case 'visualization':
-                showSections(['summary', 'chart']);
-                hideSections(['overview', 'columnStats']);
+                ShowSections(['summary', 'chart']);
+                HideSections(['overview', 'columnStats']);
                 break;
             case 'statistics':
-                showSections(['overview', 'columnStats']);
-                hideSections(['summary', 'chart']);
+                ShowSections(['overview', 'columnStats']);
+                HideSections(['summary', 'chart']);
                 break;
             default:
-                showSections(['summary', 'chart']);
-                hideSections(['overview', 'columnStats']);
+                ShowSections(['summary', 'chart']);
+                HideSections(['overview', 'columnStats']);
         }
     }
 
-    function showSections(sectionIds) {
+    function ShowSections(sectionIds) {
         Object.values(sections).forEach(section => {
-            section.style.display = 'none'; 
+            section.style.display = 'none';
         });
-
         sectionIds.forEach(id => {
             if (sections[id]) sections[id].style.display = 'block';
         });
     }
 
-    function hideSections(sectionIds) {
+    function HideSections(sectionIds) {
         sectionIds.forEach(id => {
             if (sections[id]) sections[id].style.display = 'none';
         });
     }
 
-    function attachEventListeners() {
+    function AttachEventListeners() {
         viewOptions.forEach(option => {
             option.addEventListener('change', (e) => {
-                toggleSections(e.target.value);
+                ToggleSections(e.target.value);
             });
         });
     }
 
-    function toggleChatbot() {
+    function ToggleChatbot() {
         if (chatbotPanel && container) {
             const isOpen = chatbotPanel.classList.contains('active');
 
-            chatbotPanel.classList.toggle('active');
-            contentWrapper.classList.toggle('chatbot-open', !isOpen);
-            chatbotToggle.style.display = isOpen ? 'flex' : 'none';
-            closeChatbot.style.display = isOpen ? 'none' : 'flex';
+            if (isOpen) {
+                chatbotPanel.classList.remove('active');
+                container.classList.remove('chatbot-open');
+            } else {
+                chatbotPanel.classList.add('active');
+                container.classList.add('chatbot-open');
+            }
+            console.log('Chatbot state:', isOpen ? 'closed' : 'opened');
         }
     }
 
     if (chatbotToggle) {
-        chatbotToggle.addEventListener('click', toggleChatbot);
+        chatbotToggle.addEventListener('click', ToggleChatbot);
     }
 
     if (closeChatbot) {
-        closeChatbot.addEventListener('click', toggleChatbot);
+        closeChatbot.addEventListener('click', ToggleChatbot);
     }
 
-    function updateTitle() {
+    function UpdateTitle() {
         const currentText = fileNameLabel.textContent;
         fileNameLabel.setAttribute('title', currentText || 'No file uploaded');
     }
 
     if (fileInput && fileNameLabel) {
         const initialFileName = fileNameLabel.textContent || 'No file uploaded';
-
         fileNameLabel.textContent = initialFileName;
-
-        updateTitle();
+        UpdateTitle();
 
         fileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
@@ -103,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const formData = new FormData();
 
                 fileNameLabel.textContent = file.name;
-                updateTitle();
+                UpdateTitle();
 
                 formData.append("uploadFile", file);
 
@@ -118,30 +109,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     .then(fileName => {
                         console.log("Upload success, file name:", fileName);
                         fileNameLabel.textContent = fileName;
-                        updateTitle();
+                        UpdateTitle();
                     })
                     .catch(error => {
                         console.error("Upload error:", error);
                     });
             } else {
                 fileNameLabel.textContent = "No file uploaded";
-                updateTitle();
+                UpdateTitle();
             }
         });
     }
 
-    function initialize() {
-        attachEventListeners();
-        toggleSections('visualization'); 
-
-        if (chatbotToggle) {
-            chatbotToggle.addEventListener('click', toggleChatbot);
-        }
-
-        if (closeChatbot) {
-            closeChatbot.addEventListener('click', toggleChatbot);
-        }
+    function Initial() {
+        AttachEventListeners();
+        ToggleSections('visualization');
     }
 
-    initialize();
-});
+    $(document).ready(function () {
+        Initial();
+    })
+}
+
+$(AIInsights);

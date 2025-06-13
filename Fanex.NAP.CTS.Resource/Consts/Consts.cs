@@ -439,6 +439,7 @@
             MatchMonitorDetailTicketVoiding = 85,
             MatchMonitorDetailMarkPA = 86,
             DangerMonitorUsernameRpt = 87,
+            AIInsightsAnalyzeFile = 88,
 
             //PlaceEvidenceForMultipleCustAPI = 200,
             //GetFlaggedCustomersByLevelAPI = 201,
