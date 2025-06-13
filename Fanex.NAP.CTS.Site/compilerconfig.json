@@ -154,5 +154,9 @@
   {
     "outputFile": "Content/scss/pages/ai-insights/ai-insights.css",
     "inputFile": "Content/scss/pages/ai-insights/ai-insights.scss"
+  },
+  {
+    "outputFile": "Content/scss/pages/ai-insights/chatbox.css",
+    "inputFile": "Content/scss/pages/ai-insights/chatbox.scss"
   }
 ]

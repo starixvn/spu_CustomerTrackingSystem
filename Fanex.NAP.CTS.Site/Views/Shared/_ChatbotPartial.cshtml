@@ -1,16 +1,39 @@
-﻿<div class="chatbot-toggle">💬</div>
+﻿<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<div class="chatbot-toggle">💬</div>
 
 <div class="chatbot-panel" id="chatbotPanel">
     <div class="chatbot-header">
-        <span class="chatbot-title"><i class="icon-Robot-User"></i>Wasa AI Assistant</span>
-	    <span class="close-chatbot">&lt;</span>
+        <div class="chatbot-title">
+            <i class="fa-solid fa-robot"></i>
+            <span>Wasa AI Assistant</span>
+        </div>
     </div>
-    <div class="chatbot-body">
-	    <div class="chat-content">
-		    <span>Type your message...</span>
 
-		    @*<input type="text" id="chatInput" placeholder="Type your message..."/>
-		    <button id="sendButton"><i class="icon-add-account"></i></button>*@
-	    </div>
+    <div class="chatbot-body">
+        <div class="chat-messages">
+            <div class="message bot-message">
+                <div class="icon-wrapper bot-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+
+                <div class="message-text">Hello! How can I help you today?</div>
+            </div>
+
+            <div class="message user-message">
+                <div class="icon-wrapper user-icon">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+
+                <div class="message-text">What is the status of order #1234?What is the status of order #1234?What is the status of order #1234?What is the status of order #1234?</div>
+            </div>
+        </div>
+
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Type your message..." />
+            <button id="sendButton"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
     </div>
 </div>
+
+<span class="close-chatbot"><i class="fas fa-angle-right"></i></span>

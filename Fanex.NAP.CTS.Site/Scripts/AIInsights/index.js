@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatbotPanel = document.getElementById('chatbotPanel');
     const chatbotToggle = document.querySelector('.chatbot-toggle');
     const closeChatbot = document.querySelector('.close-chatbot');
-
     const viewOptions = document.querySelectorAll('input[name="view"]');
+    const contentWrapper = container.querySelector('.ai-insights-content') || document.createElement('div');
 
     const sections = {
         summary: document.getElementById('summary-section'),
@@ -14,6 +14,16 @@ document.addEventListener('DOMContentLoaded', () => {
         overview: document.getElementById('overview-section'),
         columnStats: document.getElementById('column-statistics-section')
     };
+
+    if (!container.querySelector('.ai-insights-content')) {
+        contentWrapper.classList.add('ai-insights-content');
+        while (container.firstChild) {
+            if (container.firstChild.className !== 'chatbot-toggle' && container.firstChild.id !== 'chatbotPanel') {
+                contentWrapper.appendChild(container.firstChild);
+            }
+        }
+        container.appendChild(contentWrapper);
+    }
 
     function toggleSections(view) {
         switch (view) {
@@ -35,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Object.values(sections).forEach(section => {
             section.style.display = 'none'; 
         });
+
         sectionIds.forEach(id => {
             if (sections[id]) sections[id].style.display = 'block';
         });
@@ -58,14 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (chatbotPanel && container) {
             const isOpen = chatbotPanel.classList.contains('active');
 
-            if (isOpen) {
-                chatbotPanel.classList.remove('active');
-                container.classList.remove('chatbot-open');
-            } else {
-                chatbotPanel.classList.add('active');
-                container.classList.add('chatbot-open');
-            }
-            console.log('Chatbot state:', isOpen ? 'closed' : 'opened');
+            chatbotPanel.classList.toggle('active');
+            contentWrapper.classList.toggle('chatbot-open', !isOpen);
+            chatbotToggle.style.display = isOpen ? 'flex' : 'none';
+            closeChatbot.style.display = isOpen ? 'none' : 'flex';
         }
     }
 
@@ -84,7 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (fileInput && fileNameLabel) {
         const initialFileName = fileNameLabel.textContent || 'No file uploaded';
+
         fileNameLabel.textContent = initialFileName;
+
         updateTitle();
 
         fileInput.addEventListener('change', (e) => {
@@ -124,6 +133,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function initialize() {
         attachEventListeners();
         toggleSections('visualization'); 
+
+        if (chatbotToggle) {
+            chatbotToggle.addEventListener('click', toggleChatbot);
+        }
+
+        if (closeChatbot) {
+            closeChatbot.addEventListener('click', toggleChatbot);
+        }
     }
 
     initialize();

@@ -558,6 +558,12 @@
     <Content Include="Content\scss\pages\ai-insights\ai-insights.min.css">
       <DependentUpon>ai-insights.css</DependentUpon>
     </Content>
+    <Content Include="Content\scss\pages\ai-insights\chatbox.css">
+      <DependentUpon>chatbox.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\ai-insights\chatbox.min.css">
+      <DependentUpon>chatbox.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\pages\associated-account-monitor\associated-account-monitor.css">
       <DependentUpon>associated-account-monitor.scss</DependentUpon>
     </Content>
@@ -619,6 +625,7 @@
     <Content Include="Content\scss\pages\danger-monitor\danger-monitor-detail.scss" />
     <Content Include="Content\scss\pages\danger-monitor\danger-monitor.scss" />
     <Content Include="Content\scss\pages\ai-insights\ai-insights.scss" />
+    <Content Include="Content\scss\pages\ai-insights\chatbox.scss" />
     <None Include="Content\scss\pages\latest-transaction\latest-transaction.scss" />
     <Content Include="Content\scss\pages\latest-transaction\latest-transaction.css">
       <DependentUpon>latest-transaction.scss</DependentUpon>
@@ -1194,7 +1201,6 @@
     </Content>
     <Content Include="Views\DangerMonitor\Detail.cshtml" />
     <Content Include="Views\DangerMonitor\Index.cshtml" />
-    <Content Include="Views\Home\AITEST.cshtml" />
     <Content Include="Views\AIInsights\Index.cshtml" />
     <Content Include="Views\Shared\_ChatbotPartial.cshtml" />
   </ItemGroup>
