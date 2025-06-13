@@ -33,7 +33,7 @@ namespace Fanex.NAP.CTS.Criteria.Account.Associated
         public int Take { get; set; }
 
         [SpParam(SqlParamName = "op_TotalItems", AllowNull = true)]        
-        public int TotalItems { get; set; }
+        public int? TotalItems { get; set; }
        
         public override string GetSettingKey() => "CTS_DC_Association_Profile_Get";
         

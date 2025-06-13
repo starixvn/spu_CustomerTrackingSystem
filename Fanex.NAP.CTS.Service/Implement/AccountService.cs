@@ -202,7 +202,7 @@
             return new AssociatedAccountPagingModel
             {
                 AssociationList = result?.ToList() ?? new List<AssociatedAccountModel>(),
-                TotalItems = criteria.TotalItems
+                TotalItems = criteria.TotalItems ?? 0
             };
         }
 
