@@ -1256,7 +1256,9 @@
                 FraudTickets = JsonConvert.SerializeObject(mmModels)
             };
 
-            return _repository.Fetch<MMFraudTicketsSummaryViewModel>(criteria);
+            var result = _repository.Fetch<MMFraudTicketsSummaryEntity>(criteria);
+
+            return result?.Select(x => new MMFraudTicketsSummaryViewModel(x)) ?? Enumerable.Empty<MMFraudTicketsSummaryViewModel>();
         }
 
         public MMDetailResultModel GetMatchMonitorParlayDetail(MMDetailInfoViewModel filter)
