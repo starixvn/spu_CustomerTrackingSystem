@@ -10,6 +10,7 @@
     var uploadedFile = $('.uploaded-file');
     var fileNameSpan = $('.file-name');
     var removeFile = $('.remove-file');
+    let hasDraggedFile = false;
 
     $(window).scroll(function () {
         var scroll = $(window).scrollTop();
@@ -68,7 +69,8 @@
         removeFile.on('click', function () {
             uploadedFile.hide();
             fileInput.val(''); 
-            errorMessage.addClass('hide');
+            hasDraggedFile = false;
+            errorMessage.addClass('hide').text('');
 
             $('.search-icon').attr('src', '/Content/scss/images/search-icon.png');
         });
@@ -81,27 +83,31 @@
             if (file.name.endsWith('.xls')) {
                 const dataTransfer = new DataTransfer();
 
-                errorMessage.addClass('hide');
+                errorMessage.addClass('hide').text('');
 
-                fileNameSpan.text(file.name)
-                    .attr('title', file.name);
+                fileNameSpan.text(file.name).attr('title', file.name);
 
                 uploadedFile.show();
                 dataTransfer.items.add(file);
-                fileInput[0].files = dataTransfer.files;
+                fileInput[0].files = dataTransfer.files; 
+
+                hasDraggedFile = true;
 
                 $('.search-icon').attr('src', '/Content/scss/images/search-icon-enable.png');
             } else {
-                errorMessage.textContent = 'Please upload a .xls file!';
-                errorMessage.removeClass('hide');
-                fileInput.val(''); 
+                fileInput.val('');
+                uploadedFile.hide();
+                hasDraggedFile = false;
+
+                errorMessage.text('Please upload a .xls file!').removeClass('hide');
             }
         }
     }
 
     function SearchActive() {
-        const hasText = input.val().trim().length > 1;
-        const hasFile = fileInput[0].files.length > 0;
+        const text = input.val().trim();
+        const hasText = text.length >= 2;
+        const hasFile = fileInput[0].files.length > 0 || hasDraggedFile; 
 
         if (!hasText && !hasFile) {
             errorMessage.show();
@@ -109,6 +115,7 @@
             return false;
         }
         else {
+            errorMessage.addClass('hide');
             frmSearch.submit();
         }
     }
