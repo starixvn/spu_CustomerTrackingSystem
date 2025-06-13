@@ -133,30 +133,27 @@
         border-radius: 3px;
 
         .card-header {
+            font-size: 16px;
+            color: #2097fd;
             padding: 1rem 1.2rem;
             border-bottom: 1px solid #DDE2E5;
-            font-size: 16px;
-
-            .icon {
-                font-size: 16px;
-            }
 
             .info {
                 margin: 0 0.8rem 0.8rem;
-                color: #2097fd;
                 font-weight: bold;
                 cursor: pointer;
             }
         }
 
         .card-body {
-            padding: 2.5rem;
-            color: #333;
-            font-size: 13px;
-            line-height: 1.6;
+            //font-size: 13px;
+            font-size: 14px;
+            color: #474747;
             display: flex;
             flex-direction: column;
             gap: 3rem;
+            padding: 2.5rem;
+            line-height: 1.6;
 
             ul {
                 list-style-type: none;
@@ -170,20 +167,23 @@
 
                 li:before {
                     content: "-";
-                    color: #396ef8;
                     position: absolute;
                     left: 0;
                 }
             }
 
             .chart-item {
+                font-size: 16px;
+                color: #2097fd;
                 display: flex;
                 flex-direction: column;
                 gap: 3rem;
 
                 .chart-title h3 {
-                    font-weight: 600;
+                    //font-size: 13px;
+                    font-size: 14px;
                     color: #2b2b2b;
+                    font-weight: 600;
                     margin-bottom: 0.5rem;
                     padding-bottom: 0.5rem;
                     text-align: center;
@@ -200,20 +200,18 @@
                 }
 
                 .chart-content {
+                    font-size: 13px;
                     margin-top: 1rem;
                     padding: 1rem;
                     border-radius: 0.3rem;
 
                     p {
                         margin: 0.5rem 0;
-                        color: #444;
-                    }
-
-                    strong {
-                        color: #1e2d4c;
+                        color: #545454;
                     }
 
                     ul {
+                        color: #474747;
                         margin-bottom: 2rem;
                     }
                 }
@@ -276,7 +274,7 @@
 
                     .plotly-graph-div {
                         width: 100% !important;
-                        height: 200px !important;
+                        height: 200px;
                     }
                 }
 
@@ -286,22 +284,26 @@
 
                     .stats-row {
                         display: flex;
+                        flex-direction: column;
+                        gap: 8px;
+                    }
+
+                    .stat-row-item {
+                        display: flex;
                         justify-content: space-between;
-                        margin-bottom: 4px;
+                        align-items: center;
 
-                        .stat-row-item {
-                            display: flex;
-                            flex-direction: column;
+                        .stat-label {
+                            font-weight: 400;
+                            color: #999999;
+                            flex: 1;
+                        }
 
-                            .stat-label {
-                                font-weight: 400;
-                                color: #999999;
-                            }
-
-                            .stat-value {
-                                font-weight: 600;
-                                color: #333333;
-                            }
+                        .stat-value {
+                            font-weight: 600;
+                            color: #333333;
+                            flex: 1;
+                            text-align: right;
                         }
                     }
                 }
@@ -335,6 +337,7 @@
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
                 .label {
+                    //font-size: 12px;
                     color: #474747;
                     margin-bottom: 0.5rem;
                 }

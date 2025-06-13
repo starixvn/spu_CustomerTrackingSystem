@@ -544,27 +544,24 @@
   border-radius: 3px;
 }
 .content-card-section .content-card .card-header {
+  font-size: 16px;
+  color: #2097fd;
   padding: 1rem 1.2rem;
   border-bottom: 1px solid #DDE2E5;
-  font-size: 16px;
-}
-.content-card-section .content-card .card-header .icon {
-  font-size: 16px;
 }
 .content-card-section .content-card .card-header .info {
   margin: 0 0.8rem 0.8rem;
-  color: #2097fd;
   font-weight: bold;
   cursor: pointer;
 }
 .content-card-section .content-card .card-body {
-  padding: 2.5rem;
-  color: #333;
-  font-size: 13px;
-  line-height: 1.6;
+  font-size: 14px;
+  color: #474747;
   display: flex;
   flex-direction: column;
   gap: 3rem;
+  padding: 2.5rem;
+  line-height: 1.6;
 }
 .content-card-section .content-card .card-body ul {
   list-style-type: none;
@@ -577,18 +574,20 @@
 }
 .content-card-section .content-card .card-body ul li:before {
   content: "-";
-  color: #396ef8;
   position: absolute;
   left: 0;
 }
 .content-card-section .content-card .card-body .chart-item {
+  font-size: 16px;
+  color: #2097fd;
   display: flex;
   flex-direction: column;
   gap: 3rem;
 }
 .content-card-section .content-card .card-body .chart-item .chart-title h3 {
-  font-weight: 600;
+  font-size: 14px;
   color: #2b2b2b;
+  font-weight: 600;
   margin-bottom: 0.5rem;
   padding-bottom: 0.5rem;
   text-align: center;
@@ -602,18 +601,17 @@
   border-radius: 0.3rem;
 }
 .content-card-section .content-card .card-body .chart-item .chart-content {
+  font-size: 13px;
   margin-top: 1rem;
   padding: 1rem;
   border-radius: 0.3rem;
 }
 .content-card-section .content-card .card-body .chart-item .chart-content p {
   margin: 0.5rem 0;
-  color: #444;
-}
-.content-card-section .content-card .card-body .chart-item .chart-content strong {
-  color: #1e2d4c;
+  color: #545454;
 }
 .content-card-section .content-card .card-body .chart-item .chart-content ul {
+  color: #474747;
   margin-bottom: 2rem;
 }
 .content-card-section .content-card .card-body .stats-item {
@@ -667,7 +665,7 @@
 }
 .content-card-section .content-card .card-body .stats-item .stats-chart .plotly-graph-div {
   width: 100% !important;
-  height: 200px !important;
+  height: 200px;
 }
 .content-card-section .content-card .card-body .stats-item .stats-content {
   flex: 1 0 auto;
@@ -675,20 +673,24 @@
 }
 .content-card-section .content-card .card-body .stats-item .stats-content .stats-row {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 4px;
-}
-.content-card-section .content-card .card-body .stats-item .stats-content .stats-row .stat-row-item {
-  display: flex;
   flex-direction: column;
+  gap: 8px;
 }
-.content-card-section .content-card .card-body .stats-item .stats-content .stats-row .stat-row-item .stat-label {
+.content-card-section .content-card .card-body .stats-item .stats-content .stat-row-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.content-card-section .content-card .card-body .stats-item .stats-content .stat-row-item .stat-label {
   font-weight: 400;
   color: #999999;
+  flex: 1;
 }
-.content-card-section .content-card .card-body .stats-item .stats-content .stats-row .stat-row-item .stat-value {
+.content-card-section .content-card .card-body .stats-item .stats-content .stat-row-item .stat-value {
   font-weight: 600;
   color: #333333;
+  flex: 1;
+  text-align: right;
 }
 .content-card-section .content-card .card-body .divider {
   border-bottom: 1px solid #e0e0e0;
