@@ -21,7 +21,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
-    <Use64BitIISExpress />
+    <Use64BitIISExpress>false</Use64BitIISExpress>
     <UseGlobalApplicationHostFile />
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
@@ -552,6 +552,12 @@
     <Content Include="Content\scss\pages\account\account.min.css">
       <DependentUpon>account.css</DependentUpon>
     </Content>
+    <Content Include="Content\scss\pages\ai-insights\ai-insights.css">
+      <DependentUpon>ai-insights.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\ai-insights\ai-insights.min.css">
+      <DependentUpon>ai-insights.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\pages\associated-account-monitor\associated-account-monitor.css">
       <DependentUpon>associated-account-monitor.scss</DependentUpon>
     </Content>
@@ -612,6 +618,7 @@
     <Content Include="Content\scss\components\_vertical-tabs.scss" />
     <Content Include="Content\scss\pages\danger-monitor\danger-monitor-detail.scss" />
     <Content Include="Content\scss\pages\danger-monitor\danger-monitor.scss" />
+    <Content Include="Content\scss\pages\ai-insights\ai-insights.scss" />
     <None Include="Content\scss\pages\latest-transaction\latest-transaction.scss" />
     <Content Include="Content\scss\pages\latest-transaction\latest-transaction.css">
       <DependentUpon>latest-transaction.scss</DependentUpon>
@@ -729,6 +736,7 @@
     <Content Include="Scripts\Account\BettingStatistic\winlost-statistic-scripts.js" />
     <Content Include="Scripts\Account\RobotBetting\robot-betting.js" />
     <Content Include="Scripts\Account\RobotClassification\robot-classification.js" />
+    <Content Include="Scripts\AIInsights\index.js" />
     <Content Include="Scripts\AssociatedAccountMonitor\index.js" />
     <Content Include="Scripts\AssociatedGroupMonitor\index.js" />
     <Content Include="Scripts\AssociatedGroupMonitor\transfer-account.js" />
@@ -1187,6 +1195,8 @@
     <Content Include="Views\DangerMonitor\Detail.cshtml" />
     <Content Include="Views\DangerMonitor\Index.cshtml" />
     <Content Include="Views\Home\AITEST.cshtml" />
+    <Content Include="Views\AIInsights\Index.cshtml" />
+    <Content Include="Views\Shared\_ChatbotPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

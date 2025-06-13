@@ -1,0 +1,492 @@
+@import "../../abstracts/variables";
+@import "../../abstracts/mixins";
+@import "../../components/popup";
+
+.ai-insights-container {
+    transition: margin-right 0.3s ease;
+    margin-right: 0;
+}
+
+.ai-insights {
+    .content {
+        width: 100%;
+        position: sticky;
+        top: 6rem;
+        z-index: 999;
+        //font-size: 16px;
+    }
+
+    .ai-insights-container {
+        margin: 0 1.6rem 1rem 1.6rem;
+
+        .group-control {
+            position: sticky;
+            top: 9rem;
+            z-index: 99;
+            background: $page-bg;
+            padding: 1rem 0 0 0;
+
+            .form-filter {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 16px;
+                flex-wrap: nowrap;
+                height: 3rem;
+
+                .chatbot-toggle {
+                    background-color: #2053d9;
+                    color: white;
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    z-index: 1000;
+                    margin-left: auto;
+                    align-self: center;
+                }
+
+                .chatbot-panel.active {
+                    display: flex;
+                }
+
+                .chatbot-panel {
+                    position: fixed;
+                    top: 9rem;
+                    right: 0;
+                    width: 20%;
+                    height: calc(100vh - 9rem);
+                    background: white;
+                    border: 1px solid #ccc;
+                    display: none;
+                    flex-direction: column;
+                    z-index: 999;
+                    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+
+                    .chatbot-header {
+                        background-color: #2053d9;
+                        color: white;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding: 20px;
+                        font-size: 18px;
+
+                        i {
+                            margin-right: 10px;
+                        }
+
+                        .close-chatbot {
+                            cursor: pointer;
+                        }
+
+                        .chatbot-open {
+                            margin-right: 20%;
+                        }
+                    }
+
+                    .chatbot-body {
+                        padding: 20px;
+
+                        .chat-content {
+                            flex: 1;
+                            overflow-y: auto;
+                            margin-bottom: 10px;
+                            width: 100%;
+
+
+                            .chat-input {
+                                display: flex;
+                                align-items: center;
+                                gap: 5px;
+                            }
+
+                            #chatInput {
+                                flex: 1;
+                                padding: 5px;
+                                border: 1px solid #ccc;
+                                border-radius: 4px;
+                                outline: none;
+                                box-sizing: border-box;
+                            }
+
+                            #sendButton {
+                                background: #396EF8;
+                                color: white;
+                                border: none;
+                                border-radius: 4px;
+                                padding: 5px 10px;
+                                cursor: pointer;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                min-width: 40px;
+                                box-sizing: border-box;
+                            }
+                        }
+                    }
+                }
+
+                .file-wrapper {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    line-height: 1.7rem;
+                    padding: 0 0 0 8px;
+                    border-radius: 0.2rem;
+                    background-color: #e3e9f6;
+                    border: 1px solid #e3e9f6;
+                    height: 3rem;
+
+                    &:hover {
+                        background-color: #dbeafe;
+                    }
+
+                    input[type="file"] {
+                        display: none;
+                    }
+
+                    label {
+                        margin: 0;
+                        color: #2053d9;
+                    }
+
+                    .file-name-container {
+                        display: flex;
+                        align-items: center;
+                        border: 1px solid #d1d5db;
+                        padding: 0 10px;
+                        border-radius: 0.2rem;
+                        align-self: flex-end;
+                        margin-left: 8px;
+                        height: 2.9rem;
+                    }
+
+                    .file-name-label {
+                        width: 300px;
+                        max-width: 300px;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        flex-grow: 1;
+                    }
+
+                    .edit-icon {
+                        height: 3rem;
+                        cursor: pointer;
+                        padding: 8px;
+                        transition: color 0.2s;
+                        color: #fff;
+                        background: #396EF8;
+                        display: flex;
+                        align-items: center;
+                        border-radius: 0.2rem;
+                        transition: background-color 0.2s ease;
+
+                        &:hover {
+                            background: #1e40af;
+                        }
+                    }
+                }
+
+                button#btnGenerate {
+                    outline: none;
+                    border: 0;
+                    background: #396EF8;
+                    cursor: pointer;
+                    color: #fff;
+                    line-height: 1.7rem;
+                    border-radius: 0.2rem;
+                    padding: 0.7rem 2rem 0.6rem 2rem;
+                    height: auto;
+                    margin: 0;
+                }
+
+                .view-options {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    margin-left: 10px;
+                }
+            }
+        }
+
+        .section-title {
+            font-size: 16px;
+            color: #2097fd;
+            margin-top: 20px;
+        }
+
+        .section-body {
+            font-size: 13px;
+            color: #474747;
+        }
+    }
+}
+
+
+
+.content-card-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .content-card {
+        margin-top: 1rem;
+        border: 1px solid #DFDFDF;
+        box-sizing: border-box;
+        box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.15);
+        border-radius: 3px;
+
+        .card-header {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid #DDE2E5;
+            font-size: 1.5rem;
+
+            .icon {
+                font-size: 1rem;
+            }
+
+            .info {
+                margin: 0 0.8rem 0.8rem;
+                color: #2097fd;
+                font-weight: bold;
+                cursor: pointer;
+            }
+        }
+
+        .card-body {
+            padding: 2.5rem;
+            color: #333;
+            font-size: 13px;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+
+            ul {
+                list-style-type: none;
+                padding-left: 0;
+
+                li {
+                    margin-bottom: 1rem;
+                    padding-left: 1.5rem;
+                    position: relative;
+                }
+
+                li:before {
+                    content: "-";
+                    color: #396ef8;
+                    position: absolute;
+                    left: 0;
+                    font-size: 1.2rem;
+                }
+            }
+
+            .chart-item {
+                display: flex;
+                flex-direction: column;
+                gap: 3rem;
+
+                .chart-title h3 {
+                    font-size: 13px;
+                    font-weight: 600;
+                    color: #2b2b2b;
+                    margin-bottom: 0.5rem;
+                    padding-bottom: 0.5rem;
+                    text-align: center;
+                }
+
+                .chart-image {
+                    text-align: center;
+                }
+
+                .chart-image img {
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 0.3rem;
+                }
+
+                .chart-content {
+                    margin-top: 1rem;
+                    padding: 1rem;
+                    border-radius: 0.3rem;
+
+                    p {
+                        margin: 0.5rem 0;
+                        color: #444;
+                    }
+
+                    strong {
+                        color: #1e2d4c;
+                    }
+
+                    ul {
+                        margin-bottom: 2rem;
+                    }
+                }
+            }
+
+            .stats-item {
+                flex: 1 0 calc(25% - 0.75rem);
+                max-width: calc(25% - 0.75rem);
+                min-width: 250px;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                border-radius: 4px;
+                padding: 12px;
+                box-sizing: border-box;
+
+                .stats-title {
+                    display: flex;
+                    flex-direction: column;
+                    margin-bottom: 12px;
+                    gap: 1rem;
+
+                    h3 {
+                        font-size: 14px;
+                        font-weight: bold;
+                        margin: 0 8px 0 0;
+                    }
+
+                    .stats-group {
+                        display: flex;
+                        flex-direction: row;
+
+                        .type-indicator {
+                            display: inline-block;
+                            width: 20px;
+                            height: 20px;
+                            line-height: 20px;
+                            text-align: center;
+                            border-radius: 3px;
+                            margin-right: 5px;
+                            font-weight: bold;
+                        }
+
+                        .type-indicator.numeric-type {
+                            background-color: rgba(144, 238, 144, 0.2);
+                            color: #28a745;
+                        }
+
+                        .type-indicator.character-type {
+                            background-color: rgba(135, 206, 250, 0.2);
+                            color: #0066ff;
+                        }
+                    }
+                }
+
+                .stats-chart {
+                    flex: 0 0 auto;
+                    margin-bottom: 12px;
+
+                    .plotly-graph-div {
+                        width: 100% !important;
+                        height: 200px !important;
+                    }
+                }
+
+                .stats-content {
+                    flex: 1 0 auto;
+                    font-size: 12px;
+                    margin-top: 12px;
+
+                    .stats-row {
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: 4px;
+
+                        .stat-row-item {
+                            display: flex;
+                            flex-direction: column;
+
+                            .stat-label {
+                                font-weight: 400;
+                                color: #999999;
+                            }
+
+                            .stat-value {
+                                font-weight: 600;
+                                color: #333333;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .divider {
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            .vertical-divider {
+                display: flex;
+                width: 1px;
+                align-self: stretch;
+                background-color: #ccc;
+            }
+        }
+
+        .overview-info {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            flex-wrap: nowrap;
+            gap: 1rem;
+
+            .info-item {
+                flex: 1;
+                text-align: center;
+                padding: 1rem;
+                background: #f9f9f9;
+                border-radius: 0.3rem;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+                .label {
+                    font-size: 12px;
+                    color: #474747;
+                    margin-bottom: 0.5rem;
+                }
+
+                .value {
+                    font-size: 18px;
+                    color: #2b2b2b;
+                    font-weight: 600;
+                }
+
+                .value:before {
+                    content: attr(data-value);
+                }
+            }
+        }
+    }
+}
+
+.column-statistics-section {
+    display: flex;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    gap: 0.3rem !important;
+}
+
+@media (max-width: 1200px) {
+    .stats-item {
+        flex: 1 1 calc(33.33% - 12px); 
+    }
+}
+
+@media (max-width: 800px) {
+    .stats-item {
+        flex: 1 1 calc(50% - 12px); 
+    }
+}
+
+@media (max-width: 500px) {
+    .stats-item {
+        flex: 1 1 100%; 
+    }
+}

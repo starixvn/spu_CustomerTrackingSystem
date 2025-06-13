@@ -17,6 +17,8 @@
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.Logging;
     using Newtonsoft.Json;
+    using System.IO;
+    using System.Web;
 
     [NapSuperAuth]
     public class HomeController : BaseController
@@ -90,24 +92,40 @@
         }
 
         [HttpPost]
-        public ActionResult Search(FormCollection form)
+        public ActionResult Search(FormCollection form, HttpPostedFileBase uploadFile)
         {
-            string inputValue = form["txtInput"].Trim();
+            string inputValue = form["txtInput"]?.Trim();
 
-            if (string.IsNullOrEmpty(inputValue) || inputValue.Length <= 1 || inputValue.Length > 50)
-            {
-                return View(new SearchResultViewModel { SearchResults = null, InputValue = inputValue });
-            }            
+            bool hasText = !string.IsNullOrEmpty(inputValue) && inputValue.Length > 1 && inputValue.Length <= 50;
+            bool hasFile = uploadFile != null && uploadFile.ContentLength > 0 && uploadFile.FileName.EndsWith(".xls");
 
-            var result = accountService.SearchAccounts(inputValue);
-            
-            if (result.Count.Equals(1))
+            if (hasFile && !hasText)
             {
-                return RedirectToAction("Index", "Account", new { Id = result.FirstOrDefault().CTSCustId });
+                using (var ms = new MemoryStream())
+                {
+                    uploadFile.InputStream.CopyTo(ms);
+                    Session["UploadedFileName"] = uploadFile.FileName;
+                    Session["UploadedFileBytes"] = ms.ToArray();
+                }
+
+                return RedirectToAction("Index", "AIInsights");
             }
 
-            return View(new SearchResultViewModel { SearchResults = result, InputValue = inputValue });
+            if (hasText)
+            {
+                var result = accountService.SearchAccounts(inputValue);
+
+                if (result.Count == 1)
+                {
+                    return RedirectToAction("Index", "Account", new { Id = result.First().CTSCustId });
+                }
+
+                return View(new SearchResultViewModel { SearchResults = result, InputValue = inputValue });
+            }
+
+            return View(new SearchResultViewModel { SearchResults = null, InputValue = inputValue });
         }
+
 
         private string ValidateUserName(string inputUserName)
         {

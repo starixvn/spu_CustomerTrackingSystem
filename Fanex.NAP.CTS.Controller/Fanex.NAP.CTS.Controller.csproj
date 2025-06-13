@@ -176,6 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountController.cs" />
+    <Compile Include="AIInsightsController.cs" />
     <Compile Include="AssociatedGroupMonitorController.cs" />
     <Compile Include="AssociationDetectionController.cs" />
     <Compile Include="AssociationReportController.cs" />

@@ -44,7 +44,6 @@
             SearchActive();
         });
 
-        // Drag and Drop events
         searchBox.on('dragover', function (e) {
             e.preventDefault();
             searchBox.addClass('dragover');
@@ -80,15 +79,14 @@
             const file = files[0];
 
             if (file.name.endsWith('.xls')) {
+                const dataTransfer = new DataTransfer();
+
                 errorMessage.addClass('hide');
 
                 fileNameSpan.text(file.name)
                     .attr('title', file.name);
 
                 uploadedFile.show();
-
-                const dataTransfer = new DataTransfer();
-
                 dataTransfer.items.add(file);
                 fileInput[0].files = dataTransfer.files;
 
@@ -102,9 +100,12 @@
     }
 
     function SearchActive() {
-        if (input.val().length <= 1) {
-            errorMessage.show();
+        const hasText = input.val().trim().length > 1;
+        const hasFile = fileInput[0].files.length > 0;
 
+        if (!hasText && !hasFile) {
+            errorMessage.show();
+            errorMessage.removeClass('hide');
             return false;
         }
         else {
