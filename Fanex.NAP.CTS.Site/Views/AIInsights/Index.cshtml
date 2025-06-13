@@ -5,6 +5,7 @@
 }
 @section styles{
     <link href="~/Content/scss/pages/ai-insights/ai-insights.min.css" rel="stylesheet" />
+    <link href="~/Content/scss/pages/ai-insights/chatbox.min.css" rel="stylesheet" />
 }
 
 <div class="ai-insights-page">
@@ -16,33 +17,31 @@
         <div class="ai-insights-container">
             <div class="form-filter-section">
                 <div class="group-control">
-	                <div class="form-filter">
-		                @using (Html.BeginForm("UploadFile", "AIInsights", FormMethod.Post, new { enctype = "multipart/form-data", id = "fileUploadForm" }))
-		                {
-			                <div class="file-wrapper">
-				                <label>File</label>
+                    <div class="form-filter">
+                        @using (Html.BeginForm("UploadFile", "AIInsights", FormMethod.Post, new { enctype = "multipart/form-data", id = "fileUploadForm" }))
+                        {
+                            <div class="file-wrapper">
+                                <label>File</label>
 
-				                <div class="file-name-container">
-					                <span id="file-name-label" class="file-name-label" title="">@((ViewBag.FileName ?? "No file uploaded"))</span>
-				                </div>
+                                <div class="file-name-container">
+                                    <span id="file-name-label" class="file-name-label" title="">@((ViewBag.FileName ?? "No file uploaded"))</span>
+                                </div>
 
-				                <label for="fileInput" class="edit-icon">
-					                <i class="icon-edit"></i>
-				                </label>
+                                <label for="fileInput" class="edit-icon">
+                                    <i class="icon-edit"></i>
+                                </label>
 
-				                <input type="file" id="fileInput" name="uploadFile" accept=".xls"/>
-			                </div>
-		                }
+                                <input type="file" id="fileInput" name="uploadFile" accept=".xls" />
+                            </div>
+                        }
 
-		                <button class="button button-generate" id="btnGenerate">Generate</button>
+                        <button class="button button-generate" id="btnGenerate">Generate</button>
 
-		                <div class="view-options">
-			                <label><input type="radio" name="view" value="visualization" checked/> Visualization</label>
-			                <label><input type="radio" name="view" value="statistics"/> Statistics</label>
-		                </div>
-
-		                @Html.Partial("_ChatbotPartial")
-	                </div>
+                        <div class="view-options">
+                            <label><input type="radio" name="view" value="visualization" checked /> Visualization</label>
+                            <label><input type="radio" name="view" value="statistics" /> Statistics</label>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -655,12 +654,13 @@
                 </div>
             </div>
         </div>
+
+        @Html.Partial("_ChatbotPartial")
     </section>
 </div>
 
 
 @section scripts {
-    @Scripts.Render("~/AIInsights-scripts")
-    @*<script src="~/Scripts/AIInsights/index.js"></script>*@
+    <script src="~/Scripts/AIInsights/index.js"></script>
 }
 

@@ -7,6 +7,7 @@ function AIInsights() {
     const closeChatbot = document.querySelector('.close-chatbot');
 
     const viewOptions = document.querySelectorAll('input[name="view"]');
+    const contentWrapper = container.querySelector('.ai-insights-content') || document.createElement('div');
 
     const sections = {
         summary: document.getElementById('summary-section'),
@@ -14,6 +15,16 @@ function AIInsights() {
         overview: document.getElementById('overview-section'),
         columnStats: document.getElementById('column-statistics-section')
     };
+
+    if (!container.querySelector('.ai-insights-content')) {
+        contentWrapper.classList.add('ai-insights-content');
+        while (container.firstChild) {
+            if (container.firstChild.className !== 'chatbot-toggle' && container.firstChild.id !== 'chatbotPanel') {
+                contentWrapper.appendChild(container.firstChild);
+            }
+        }
+        container.appendChild(contentWrapper);
+    }
 
     function ToggleSections(view) {
         switch (view) {
@@ -58,16 +69,13 @@ function AIInsights() {
         if (chatbotPanel && container) {
             const isOpen = chatbotPanel.classList.contains('active');
 
-            if (isOpen) {
-                chatbotPanel.classList.remove('active');
-                container.classList.remove('chatbot-open');
-            } else {
-                chatbotPanel.classList.add('active');
-                container.classList.add('chatbot-open');
-            }
-            console.log('Chatbot state:', isOpen ? 'closed' : 'opened');
+            chatbotPanel.classList.toggle('active');
+            contentWrapper.classList.toggle('chatbot-open', !isOpen);
+            chatbotToggle.style.display = isOpen ? 'flex' : 'none';
+            closeChatbot.style.display = isOpen ? 'none' : 'flex';
         }
     }
+
 
     if (chatbotToggle) {
         chatbotToggle.addEventListener('click', ToggleChatbot);
@@ -124,6 +132,14 @@ function AIInsights() {
     function Initial() {
         AttachEventListeners();
         ToggleSections('visualization');
+
+        if (chatbotToggle) {
+            chatbotToggle.addEventListener('click', ToggleChatbot);
+        }
+
+        if (closeChatbot) {
+            closeChatbot.addEventListener('click', ToggleChatbot);
+        }
     }
 
     $(document).ready(function () {
