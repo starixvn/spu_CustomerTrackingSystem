@@ -146,7 +146,7 @@
 		<Setting Key="CTS_DC_MatchMonitor_UserComment_Get" SpName="CTS_DC_MatchMonitor_UserComment_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_MatchMonitor_UserComment_Insert" SpName="CTS_DC_MatchMonitor_UserComment_Insert" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_MatchMonitor_UserComment_Update" SpName="CTS_DC_MatchMonitor_UserComment_Update" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
-		
+		<Setting Key="CTS_DC_MatchMonitor_UserComment_Delete" SpName="CTS_DC_MatchMonitor_UserComment_Delete" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 
 		<Setting Key="CTS_DC_MatchMonitor_HoldKey_InsertLog" SpName="CTS_DC_MatchMonitor_HoldKey_InsertLog" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
     <Setting Key="CTS_DC_MatchMonitorParlay_Details_Get" SpName="CTS_DC_MatchMonitorParlay_Details_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
