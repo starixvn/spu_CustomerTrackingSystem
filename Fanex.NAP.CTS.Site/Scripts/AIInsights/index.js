@@ -15,8 +15,8 @@ function AIInsights() {
     }    
 
     const ViewMode = {
-        VISUALIZATION: "Visualization",
-        STATISTICS: "Statistics"
+        VISUALIZATION: "visualization",
+        STATISTICS: "statistics"
     };
 
     let $contentWrapper = EnsureContentWrapperExists();
