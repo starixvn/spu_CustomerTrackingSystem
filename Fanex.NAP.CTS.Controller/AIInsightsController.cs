@@ -26,6 +26,8 @@
 
         public ActionResult Index()
         {
+            ViewBag.FileName = Session["UploadedFileName"] as string;
+
             return View();
         }
 

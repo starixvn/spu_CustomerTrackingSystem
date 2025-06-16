@@ -116,9 +116,7 @@ function AIInsights() {
             type: 'POST',
           /*  data: params,*/
             beforeSend: function () {       
-                common.showLoading();
-                domElements.divVisualization.empty();
-                domElements.divStatistics.empty();
+                common.showLoading();                
                 domElements.btnGenerate.prop('disabled', true);
             },
             success: function (response) {              
@@ -162,7 +160,7 @@ function AIInsights() {
                             </div>
                         </div>
                         <div class="chart-image">
-                            <img src="data:image/png;base64,${ chart.base64_image }" alt="${chart.name}" />
+                            <img src="data:image/png;base64,${chart.base64_image}" alt="${chart.name}" />
                         </div>
                         <div class="chart-content">
                             <div class="chart-analysis">
@@ -183,18 +181,19 @@ function AIInsights() {
 
                 $chartSection.append($card);
             });
-
-        } else {
-            domElements.divVisualization.html('<p>No visualization data available.</p>');
         }
+        //} else {
+        //    domElements.divVisualization.html('<p>No visualization data available.</p>');
+        //}
     }
 
     function RenderStatistics(statisticsHtml) {
         if (statisticsHtml) {
             domElements.divStatistics.html(statisticsHtml);
-        } else {
-            domElements.divStatistics.html('<p>No statistics data available.</p>');
         }
+        //} else {
+        //    domElements.divStatistics.html('<p>No statistics data available.</p>');
+        //}
     }
 
     function SendChatMessage() {
