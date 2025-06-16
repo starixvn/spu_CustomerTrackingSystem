@@ -8,27 +8,40 @@ function AIInsights() {
         chatbotPanel: $('#chatbotPanel'),
         container: $('.ai-insights-container'),
         divVisualization: $('#divVisualization'),
-        divStatistics: $('#divStatistics')
+        divStatistics: $('#divStatistics'),
+        chatInput: $('#chatInput'),
+        chatMessages: $('.chat-messages'),
+        viewOptions: $('input[name="view"]')
     }    
 
     const ViewMode = {
         VISUALIZATION: "Visualization",
         STATISTICS: "Statistics"
     };
-  
-    const $viewOptions = $('input[name="view"]');
-    let $contentWrapper = domElements.container.find('.ai-insights-content');
 
-    if ($contentWrapper.length === 0) {
-        $contentWrapper = $('<div class="ai-insights-content"></div>');
-        domElements.container.children().each(function () {
-            const $child = $(this);
-            if (!$child.hasClass('chatbot-toggle') && $child.attr('id') !== 'chatbotPanel') {
-                $contentWrapper.append($child);
-            }
-        });
-        domElements.container.append($contentWrapper);
-    }    
+    let $contentWrapper = EnsureContentWrapperExists();
+
+    function EnsureContentWrapperExists() {
+        let $wrapper = domElements.container.find('.ai-insights-content');
+
+        if ($wrapper.length === 0) {
+            $wrapper = $('<div class="ai-insights-content"></div>');
+
+            domElements.container.children().each(function () {
+                const $child = $(this);
+                const isChatbotToggle = $child.hasClass('chatbot-toggle');
+                const isChatbotPanel = $child.attr('id') === 'chatbotPanel';
+
+                if (!isChatbotToggle && !isChatbotPanel) {
+                    $wrapper.append($child);
+                }
+            });
+
+            domElements.container.append($wrapper);
+        }
+
+        return $wrapper;
+    }
 
     function ToggleSections(viewMode) {        
         switch (viewMode) {
@@ -48,7 +61,7 @@ function AIInsights() {
     }
   
     function AttachEventListeners() {
-        $viewOptions.on('change', function () {
+        domElements.viewOptions.on('change', function () {
             ToggleSections($(this).val());
         });
     }
@@ -197,9 +210,8 @@ function AIInsights() {
     }
 
     function SendChatMessage() {
-        const $input = $('#chatInput');
-        const message = $input.val().trim();
-        const $chatMessages = $('.chat-messages');
+        const message = $chatInput.val().trim();
+        const $chatMessages = domElements.chatMessages;
 
         if (!message) return;
 
@@ -210,7 +222,8 @@ function AIInsights() {
         </div>
     `);
         $chatMessages.append($userMessage);
-        $input.val('');
+
+        $chatInput.val('');
 
         const requestData = {
             session_id: 1,
@@ -226,6 +239,7 @@ function AIInsights() {
             },
             success: function (response) {
                 const answer = response?.answer || 'No response from bot.';
+
                 const $botMessage = $(`
                 <div class="message bot-message">
                     <div class="icon-wrapper bot-icon"><i class="fas fa-robot"></i></div>
@@ -233,12 +247,14 @@ function AIInsights() {
                 </div>
             `);
                 $chatMessages.append($botMessage);
+
                 $chatMessages.scrollTop($chatMessages[0].scrollHeight);
             },
             complete: function () {
             },
             error: function (xhr, status, error) {
                 console.error('Chatbot error:', error);
+
                 const $errorMessage = $(`
                 <div class="message bot-message">
                     <div class="icon-wrapper bot-icon"><i class="fas fa-robot"></i></div>
