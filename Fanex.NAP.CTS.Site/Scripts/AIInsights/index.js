@@ -1,5 +1,5 @@
 function AIInsights() {
-    let domElements = {
+    let domElements = {    
         btnGenerate: $('#btnGenerate'),
         chatbotToggle: $('.chatbot-toggle'),
         closeChatbot: $('.close-chatbot'),
@@ -9,13 +9,11 @@ function AIInsights() {
         container: $('.ai-insights-container'),
         divVisualization: $('#divVisualization'),
         divStatistics: $('#divStatistics')
-    }
+    }    
 
-    let $sections = {
-        summary: $('#summary-section'),
-        chart: $('#chart-section'),
-        overview: $('#overview-section'),
-        columnStats: $('#column-statistics-section')
+    const ViewMode = {
+        VISUALIZATION: "Visualization",
+        STATISTICS: "Statistics"
     };
   
     const $viewOptions = $('input[name="view"]');
@@ -32,45 +30,23 @@ function AIInsights() {
         domElements.container.append($contentWrapper);
     }    
 
-    function ToggleSections(view) {
-        switch (view) {
-            case 'visualization':
-                //ShowSections(['summary', 'chart']);
-                //HideSections(['overview', 'columnStats']);
-                domElements.divVisualization.show();
-                domElements.divStatistics.hide();
+    function ToggleSections(viewMode) {        
+        switch (viewMode) {
+            case ViewMode.VISUALIZATION:               
+                domElements.divVisualization.removeClass('hidden');
+                domElements.divStatistics.addClass('hidden');
 
                 break;
-            case 'statistics':
-                //ShowSections(['overview', 'columnStats']);
-                //HideSections(['summary', 'chart']);
-                domElements.divVisualization.show();
-                domElements.divStatistics.hide();
+            case ViewMode.STATISTICS:             
+                domElements.divVisualization.addClass('hidden');
+                domElements.divStatistics.removeClass('hidden');
                 break;
-            default:               
-                //ShowSections(['summary', 'chart']);
-                //HideSections(['overview', 'columnStats']);
-                domElements.divVisualization.show();
-                domElements.divStatistics.hide();
+            default:
+                domElements.divVisualization.removeClass('hidden');
+                domElements.divStatistics.addClass('hidden');
         }
     }
-
-    function ShowSections(sectionIds) {
-        $.each($sections, (key, $section) => {
-            $section.hide();
-        });
-
-        sectionIds.forEach(id => {
-            if ($sections[id]) $sections[id].show();
-        });
-    }
-
-    function HideSections(sectionIds) {
-        sectionIds.forEach(id => {
-            if ($sections[id]) $sections[id].hide();
-        });
-    }
-
+  
     function AttachEventListeners() {
         $viewOptions.on('change', function () {
             ToggleSections($(this).val());
@@ -139,17 +115,26 @@ function AIInsights() {
         $.ajax(common.modifyRelativeUrl('AIInsights/AnalyzeFile'), {
             type: 'POST',
           /*  data: params,*/
-            beforeSend: function () {                
+            beforeSend: function () {       
+                common.showLoading();
+                domElements.divVisualization.empty();
+                domElements.divStatistics.empty();
+                domElements.btnGenerate.prop('disabled', true);
             },
-            success: function (response) {
+            success: function (response) {              
+                domElements.btnGenerate.prop('disabled', false);
+
                 if (response) {
                     RenderVisualization(response.visualization_response);
                     RenderStatistics(response.statistics_html);
                 }
             },
-            complete: function () {                
+            complete: function () {
+                common.closeLoading();
             },
-            error: function (errMsg) {              
+            error: function (errMsg) {  
+                common.closeLoading();
+                domElements.btnGenerate.prop('disabled', false);
                 console.log(errMsg);
             }
         });
@@ -215,7 +200,7 @@ function AIInsights() {
     function Initial() {
         AttachEventListeners();
 
-        ToggleSections('visualization');
+        ToggleSections(ViewMode.VISUALIZATION);
 
         domElements.chatbotToggle.on('click', function () { ToggleChatbot(); });
 

@@ -736,6 +736,44 @@
   gap: 0.3rem !important;
 }
 
+.button-generate:disabled {
+  background-color: #ccc;
+  color: #888;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.hidden {
+  display: none;
+}
+
+.loader-container {
+  position: relative;
+  width: 100%;
+  height: 100px; /* or your desired size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top: 4px solid #3498db; /* spinner color */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* animation keyframes */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 @media (max-width: 1200px) {
   .stats-item {
     flex: 1 1 calc(33.33% - 12px);
