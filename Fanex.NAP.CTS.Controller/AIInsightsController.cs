@@ -11,12 +11,15 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.AIInsights;
     using Fanex.NAP.CTS.Service;
-    using static Fanex.NAP.CTS.Resource.Consts.Consts;
-    using Fanex.NAP.CTS.Model;
+    using System.Linq;
 
     [NapSuperAuth]
     public class AIInsightsController : BaseController
     {
+        private readonly string tempFolder = "~/TempFiles";
+        private const int maxFileSizeBytes = 5 * 1024 * 1024; // 5 MB
+        private readonly string[] allowedExtensions = { ".xls" };
+
         private readonly IAIInsightsService _aIInsightsService;
 
         public AIInsightsController()
@@ -105,12 +108,96 @@
                 string fileName = Path.GetFileName(uploadFile.FileName);
 
                 Session["UploadedFileName"] = fileName;
-                ViewBag.FileName = fileName; 
+                ViewBag.FileName = fileName;
 
                 return Content(fileName);
             }
 
-            return RedirectToAction("Index"); 
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult Upload(HttpPostedFileBase uploadFile)
+        {           
+            CleanupOldTempFiles();
+
+            if (uploadFile == null || uploadFile.ContentLength == 0)
+            {              
+                return RedirectToAction("Upload");
+            }
+
+            if (uploadFile.ContentLength > maxFileSizeBytes)
+            {              
+                return RedirectToAction("Upload");
+            }
+
+            var extension = Path.GetExtension(uploadFile.FileName).ToLower();
+            if (!allowedExtensions.Contains(extension))
+            {
+                return RedirectToAction("Upload");
+            }
+
+            
+            var fileName = Guid.NewGuid() + extension;
+            var fullPath = Server.MapPath(Path.Combine(tempFolder, fileName));
+          
+            Directory.CreateDirectory(Server.MapPath(tempFolder));
+           
+            uploadFile.SaveAs(fullPath);
+
+         
+            Session["AnalysisFilePath"] = fullPath;
+
+            Session["UploadTime"] = DateTime.Now;
+
+            TempData["Message"] = "Upload Successful.";
+
+            return RedirectToAction("Analyze");
+        }
+
+        public ActionResult Analyze()
+        {
+            var filePath = Session["AnalysisFilePath"] as string;
+            var uploadTime = Session["UploadTime"] as DateTime?;
+
+            if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath))
+                return Content("Does not exit a file.");
+
+            if (uploadTime == null || DateTime.Now - uploadTime > TimeSpan.FromHours(1))
+            {
+               
+                System.IO.File.Delete(filePath);
+                Session.Remove("AnalysisFilePath");
+
+                return Content("a file expired or deleted.");
+            }
+          
+            var lines = System.IO.File.ReadAllLines(filePath);
+
+            return Content("Successful: " + lines.Length + " rows.");
+        }
+
+        private void CleanupOldTempFiles()
+        {
+            string path = Server.MapPath(tempFolder);
+            if (!Directory.Exists(path)) return;
+
+            var files = Directory.GetFiles(path);
+            foreach (var file in files)
+            {
+                try
+                {
+                    var creationTime = System.IO.File.GetCreationTime(file);
+                    if (DateTime.Now - creationTime > TimeSpan.FromHours(1))
+                    {
+                        System.IO.File.Delete(file);
+                    }
+                }
+                catch 
+                { 
+                
+                }
+            }
         }
 
     }
