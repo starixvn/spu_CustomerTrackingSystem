@@ -54,7 +54,7 @@
 		<Setting Key="CTS_DC_CustEvidence_Get" SpName="CTS_DC_CustEvidence_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustEvidence_GetFlaggedStatus" SpName="CTS_DC_CustEvidence_GetFlaggedStatus" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustEvidenceFromFile_Insert" SpName="CTS_DC_CustEvidenceFromFile_Insert" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
-
+		<Setting Key="CTS_DC_MatchMonitor_UserComment_Delete" SpName="CTS_DC_MatchMonitor_UserComment_Delete" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_CustEvidenceQueue_Insert" SpName="CTS_DC_CustEvidenceQueue_Insert" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_CustEvidence_CheckCleanCust" SpName="CTS_DC_CustEvidence_CheckCleanCust" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 	</Function>
