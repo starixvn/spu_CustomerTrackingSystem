@@ -52,6 +52,12 @@
                     return View();
                 }
 
+                // Test 
+                var fullPath = GetAnalysisFilePath(fileName);
+                fileBytes = GetUploadedFileBytes(fullPath);
+
+                // End Test
+
                 var fileContentBase64 = Convert.ToBase64String(fileBytes);
 
                 var request = new AIInsightsAnalyzeRequestModel
@@ -64,8 +70,7 @@
                     language = "en"
                 };
 
-                data = _aIInsightsService.Analyze(request, ConfigSettings.AIInsightsAnalyzeUrl);
-                
+                data = _aIInsightsService.Analyze(request, ConfigSettings.AIInsightsAnalyzeUrl);                
             }
             catch (Exception ex)
             {
@@ -100,24 +105,24 @@
             return Json(response.response, JsonRequestBehavior.AllowGet);
         }
 
+        //[HttpPost]
+        //public ActionResult UploadFile(HttpPostedFileBase uploadFile)
+        //{
+        //    if (uploadFile != null && uploadFile.ContentLength > 0 && uploadFile.FileName.EndsWith(".xls"))
+        //    {
+        //        string fileName = Path.GetFileName(uploadFile.FileName);
+
+        //        Session["UploadedFileName"] = fileName;
+        //        ViewBag.FileName = fileName;
+
+        //        return Content(fileName);
+        //    }
+
+        //    return RedirectToAction("Index");
+        //}
+
         [HttpPost]
         public ActionResult UploadFile(HttpPostedFileBase uploadFile)
-        {
-            if (uploadFile != null && uploadFile.ContentLength > 0 && uploadFile.FileName.EndsWith(".xls"))
-            {
-                string fileName = Path.GetFileName(uploadFile.FileName);
-
-                Session["UploadedFileName"] = fileName;
-                ViewBag.FileName = fileName;
-
-                return Content(fileName);
-            }
-
-            return RedirectToAction("Index");
-        }
-
-        [HttpPost]
-        public ActionResult Upload(HttpPostedFileBase uploadFile)
         {           
             CleanupOldTempFiles();
 
@@ -132,50 +137,71 @@
             }
 
             var extension = Path.GetExtension(uploadFile.FileName).ToLower();
+
             if (!allowedExtensions.Contains(extension))
             {
                 return RedirectToAction("Upload");
-            }
+            }           
 
-            
-            var fileName = Guid.NewGuid() + extension;
+            var fileName = Path.GetFileName(uploadFile.FileName);
+
             var fullPath = Server.MapPath(Path.Combine(tempFolder, fileName));
           
             Directory.CreateDirectory(Server.MapPath(tempFolder));
            
             uploadFile.SaveAs(fullPath);
-
          
             Session["AnalysisFilePath"] = fullPath;
 
             Session["UploadTime"] = DateTime.Now;
 
-            TempData["Message"] = "Upload Successful.";
+            Session["UploadedFileName"] = fileName;
 
-            return RedirectToAction("Analyze");
+            ViewBag.FileName = fileName;
+
+            return Content(fileName);          
         }
 
-        public ActionResult Analyze()
+        private string GetAnalysisFilePath(string fileName)
         {
-            var filePath = Session["AnalysisFilePath"] as string;
-            var uploadTime = Session["UploadTime"] as DateTime?;
+            var fullPath = Server.MapPath(Path.Combine(tempFolder, fileName));
 
-            if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath))
-                return Content("Does not exit a file.");
-
-            if (uploadTime == null || DateTime.Now - uploadTime > TimeSpan.FromHours(1))
-            {
-               
-                System.IO.File.Delete(filePath);
-                Session.Remove("AnalysisFilePath");
-
-                return Content("a file expired or deleted.");
-            }
-          
-            var lines = System.IO.File.ReadAllLines(filePath);
-
-            return Content("Successful: " + lines.Length + " rows.");
+            return fullPath;
         }
+
+        private byte[] GetUploadedFileBytes(string fullPath)
+        {
+            byte[] fileBytes;
+            using (FileStream fs = new FileStream(fullPath, FileMode.Open, FileAccess.Read))
+            {
+                fileBytes = new byte[fs.Length];
+                fs.Read(fileBytes, 0, fileBytes.Length);
+            }
+
+            return fileBytes;
+        }
+
+        //public ActionResult Analyze()
+        //{
+        //    var filePath = Session["AnalysisFilePath"] as string;
+        //    var uploadTime = Session["UploadTime"] as DateTime?;
+
+        //    if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath))
+        //        return Content("Does not exit a file.");
+
+        //    if (uploadTime == null || DateTime.Now - uploadTime > TimeSpan.FromHours(1))
+        //    {
+
+        //        System.IO.File.Delete(filePath);
+        //        Session.Remove("AnalysisFilePath");
+
+        //        return Content("a file expired or deleted.");
+        //    }
+
+        //    var lines = System.IO.File.ReadAllLines(filePath);
+
+        //    return Content("Successful: " + lines.Length + " rows.");
+        //}
 
         private void CleanupOldTempFiles()
         {
@@ -193,9 +219,13 @@
                         System.IO.File.Delete(file);
                     }
                 }
-                catch 
-                { 
-                
+                catch (Exception ex)
+                {
+                    var logMessage = new LogMessage(ex.Message)
+                                     .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                                     .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                    LogService.Error(logMessage);
                 }
             }
         }
