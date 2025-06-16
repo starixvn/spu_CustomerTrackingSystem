@@ -3,5 +3,9 @@
     public class AIInsightsAnalyzeDataModel
     {
         public string data_definition_html { get; set; }
+
+        public string statistics_html { get; set; }
+
+        public VisualizationModel visualization_response { get; set; }
     }
 }

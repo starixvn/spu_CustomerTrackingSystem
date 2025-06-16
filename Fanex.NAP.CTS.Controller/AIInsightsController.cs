@@ -30,33 +30,37 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AIInsightsAnalyzeFile)]
+        //[TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AIInsightsAnalyzeFile)]
         public ActionResult AnalyzeFile()
-        {           
+        {
+            var data = new AIInsightsAnalyzeResponseModel();          
+
             try
             {
-                //var fileName = Session["UploadedFileName"] as string;
-                //var fileBytes = Session["UploadedFileBytes"] as byte[];
+                var fileName = Session["UploadedFileName"] as string;
+                var fileBytes = Session["UploadedFileBytes"] as byte[];
 
-                //if (fileName == null || fileBytes == null)
-                //{
-                //    ViewBag.Message = "No file uploaded.";
+                if (fileName == null || fileBytes == null)
+                {
+                    ViewBag.Message = "No file uploaded.";
 
-                //    return View();
-                //}
+                    return View();
+                }
 
-                //var fileContentBase64 = Convert.ToBase64String(fileBytes);
+                var fileContentBase64 = Convert.ToBase64String(fileBytes);
 
-                //var request = new AIInsightsAnalyzeRequestModel
-                //{
-                //    data_path = fileName,
-                //    file_content = fileContentBase64,
-                //    mode_type = 2,
-                //    changing_column_definition = ""
-                //};
-          
-                //var response = _aIInsightsService.Analyze(request, ConfigSettings.AIInsightsAnalyzeUrl);
+                var request = new AIInsightsAnalyzeRequestModel
+                {
+                    file_name = fileName,
+                    file_content = fileContentBase64,
+                    mode_type = 2,
+                    changing_column_definition = "",
+                    session_id = "1",
+                    language = "en"
+                };
 
+                data = _aIInsightsService.Analyze(request, ConfigSettings.AIInsightsAnalyzeUrl);
+                
             }
             catch (Exception ex)
             {
@@ -67,7 +71,7 @@
                 LogService.Error(logMessage);
             }
 
-            return View();
+            return Json(data.response, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

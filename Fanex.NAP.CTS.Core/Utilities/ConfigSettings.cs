@@ -80,6 +80,8 @@
 
         public static string AIInsightsAnalyzeUrl => GetConfigStringByName("AIInsightsAnalyzeUrl");
 
+        public static string AIInsightsChatBotUrl => GetConfigStringByName("AIInsightsChatBotUrl");
+
         public static int ImportEvidenceChunkSize
         {
             get
