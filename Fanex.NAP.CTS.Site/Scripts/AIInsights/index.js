@@ -197,10 +197,78 @@ function AIInsights() {
         }
     }
 
+    function SendChatMessage() {
+        const $input = $('#chatInput');
+        const message = $input.val().trim();
+        const $chatMessages = $('.chat-messages');
+
+        if (!message) return;
+
+        const $userMessage = $(`
+        <div class="message user-message">
+            <div class="icon-wrapper user-icon"><i class="fas fa-briefcase"></i></div>
+            <div class="message-text">${message}</div>
+        </div>
+    `);
+        $chatMessages.append($userMessage);
+        $input.val('');
+
+        const requestData = {
+            session_id: 1,
+            question: message
+        };
+
+        $.ajax(common.modifyRelativeUrl('AIInsights/AskChatbot'), {
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(requestData),
+            beforeSend: function () {
+            },
+            success: function (response) {
+                const answer = response?.answer || 'No response from bot.';
+                const $botMessage = $(`
+                <div class="message bot-message">
+                    <div class="icon-wrapper bot-icon"><i class="fas fa-robot"></i></div>
+                    <div class="message-text">${answer}</div>
+                </div>
+            `);
+                $chatMessages.append($botMessage);
+                $chatMessages.scrollTop($chatMessages[0].scrollHeight);
+            },
+            complete: function () {
+            },
+            error: function (xhr, status, error) {
+                console.error('Chatbot error:', error);
+                const $errorMessage = $(`
+                <div class="message bot-message">
+                    <div class="icon-wrapper bot-icon"><i class="fas fa-robot"></i></div>
+                    <div class="message-text">Oops! Something went wrong.</div>
+                </div>
+            `);
+                $chatMessages.append($errorMessage);
+            }
+        });
+    }
+
+    function AttachChatbotEvents() {
+        $('#sendButton').on('click', SendChatMessage);
+
+        $('#chatInput').on('keypress', function (e) {
+            if (e.which === 13) {
+                e.preventDefault();
+
+                SendChatMessage();
+            }
+        });
+    }
+
     function Initial() {
         AttachEventListeners();
 
-        ToggleSections(ViewMode.VISUALIZATION);
+        AttachChatbotEvents();
+
+        ToggleSections('visualization');
 
         domElements.chatbotToggle.on('click', function () { ToggleChatbot(); });
 

@@ -75,13 +75,36 @@
         }
 
         [HttpPost]
+        public ActionResult AskChatbot(AIInsightsChatbotRequestModel request)
+        {
+            var response = new AIInsightsChatbotResponseModel();
+
+            try
+            {
+                response = _aIInsightsService.AskChatbot(request, ConfigSettings.AIInsightsChatBotUrl);
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+            }
+
+            return Json(response.response, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         public ActionResult UploadFile(HttpPostedFileBase uploadFile)
         {
             if (uploadFile != null && uploadFile.ContentLength > 0 && uploadFile.FileName.EndsWith(".xls"))
             {
                 string fileName = Path.GetFileName(uploadFile.FileName);
+
                 Session["UploadedFileName"] = fileName;
                 ViewBag.FileName = fileName; 
+
                 return Content(fileName);
             }
 

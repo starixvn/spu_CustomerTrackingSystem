@@ -18,5 +18,14 @@
 
             return result.Result;
         }
+
+        public AIInsightsChatbotResponseModel AskChatbot(AIInsightsChatbotRequestModel request, string url)
+        {
+            var result = ApiHelper.Post<AIInsightsChatbotResponseModel>(url, request, 120);
+
+            Task.WhenAll(result);
+
+            return result.Result;
+        }
     }
 }

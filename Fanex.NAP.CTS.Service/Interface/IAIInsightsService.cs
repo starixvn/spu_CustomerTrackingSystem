@@ -5,5 +5,7 @@
     public interface IAIInsightsService
     {
         AIInsightsAnalyzeResponseModel Analyze(AIInsightsAnalyzeRequestModel request, string url);
+
+        AIInsightsChatbotResponseModel AskChatbot(AIInsightsChatbotRequestModel request, string url);
     }
 }
