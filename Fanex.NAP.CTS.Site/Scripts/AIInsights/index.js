@@ -95,6 +95,14 @@ function AIInsights() {
         domElements.fileInput.on('change', function (e) {
             const file = e.target.files[0];
 
+            if (file && !file.name.toLowerCase().endsWith('.xls')) {                
+                common.showError('Only .xls files are allowed!');
+
+                $(this).val('');
+
+                return;
+            }
+
             if (file) {
                 const formData = new FormData();
                 domElements.fileNameLabel.text(file.name);

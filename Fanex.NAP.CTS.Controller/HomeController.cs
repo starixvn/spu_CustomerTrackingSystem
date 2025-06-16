@@ -12,12 +12,7 @@
     using System.Linq;
     using System.Text;
     using System.Web.Mvc;
-
-    using Fanex.NAP.CTS.Service.Implement;
-    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.Logging;
-    using Newtonsoft.Json;
-    using System.IO;
     using System.Web;
 
     [NapSuperAuth]
@@ -101,12 +96,16 @@
 
             if (hasFile && !hasText)
             {
+                /*
                 using (var ms = new MemoryStream())
                 {
                     uploadFile.InputStream.CopyTo(ms);
                     Session["UploadedFileName"] = uploadFile.FileName;
                     Session["UploadedFileBytes"] = ms.ToArray();
                 }
+                */
+
+                base.SaveUploadedFile(uploadFile);
 
                 return RedirectToAction("Index", "AIInsights");
             }
@@ -124,8 +123,7 @@
             }
 
             return View(new SearchResultViewModel { SearchResults = null, InputValue = inputValue });
-        }
-
+        }              
 
         private string ValidateUserName(string inputUserName)
         {

@@ -12,19 +12,19 @@
     using Fanex.NAP.CTS.Model.AIInsights;
     using Fanex.NAP.CTS.Service;
     using System.Linq;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
+    using Fanex.NAP.CTS.Model;
 
     [NapSuperAuth]
     public class AIInsightsController : BaseController
-    {
-        private readonly string tempFolder = "~/TempFiles";
-        private const int maxFileSizeBytes = 5 * 1024 * 1024; // 5 MB
-        private readonly string[] allowedExtensions = { ".xls" };
-
+    {       
         private readonly IAIInsightsService _aIInsightsService;
+        private AIInsightsFileUploadModel _aiInsightsFileUploadModel;
 
         public AIInsightsController()
         {
             _aIInsightsService = new AIInsightsService();
+            _aiInsightsFileUploadModel = new AIInsightsFileUploadModel();
         }
 
         public ActionResult Index()
@@ -42,21 +42,16 @@
 
             try
             {
-                var fileName = Session["UploadedFileName"] as string;
-                var fileBytes = Session["UploadedFileBytes"] as byte[];
+                var fileName = Session["UploadedFileName"] as string;               
+                var fullPath = GetAnalysisFilePath(fileName);
+                var fileBytes = GetUploadedFileBytes(fullPath);
 
                 if (fileName == null || fileBytes == null)
                 {
                     ViewBag.Message = "No file uploaded.";
 
                     return View();
-                }
-
-                // Test 
-                var fullPath = GetAnalysisFilePath(fileName);
-                fileBytes = GetUploadedFileBytes(fullPath);
-
-                // End Test
+                }             
 
                 var fileContentBase64 = Convert.ToBase64String(fileBytes);
 
@@ -66,7 +61,7 @@
                     file_content = fileContentBase64,
                     mode_type = 2,
                     changing_column_definition = "",
-                    session_id = "1",
+                    session_id = CurrentSession.SessionId,
                     language = "en"
                 };
 
@@ -85,6 +80,7 @@
         }
 
         [HttpPost]
+        //[TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AIInsightsAskChatBot)]
         public ActionResult AskChatbot(AIInsightsChatbotRequestModel request)
         {
             var response = new AIInsightsChatbotResponseModel();
@@ -103,57 +99,31 @@
             }
 
             return Json(response.response, JsonRequestBehavior.AllowGet);
-        }
-
-        //[HttpPost]
-        //public ActionResult UploadFile(HttpPostedFileBase uploadFile)
-        //{
-        //    if (uploadFile != null && uploadFile.ContentLength > 0 && uploadFile.FileName.EndsWith(".xls"))
-        //    {
-        //        string fileName = Path.GetFileName(uploadFile.FileName);
-
-        //        Session["UploadedFileName"] = fileName;
-        //        ViewBag.FileName = fileName;
-
-        //        return Content(fileName);
-        //    }
-
-        //    return RedirectToAction("Index");
-        //}
+        }       
 
         [HttpPost]
         public ActionResult UploadFile(HttpPostedFileBase uploadFile)
-        {           
-            CleanupOldTempFiles();
-
+        {            
             if (uploadFile == null || uploadFile.ContentLength == 0)
             {              
                 return RedirectToAction("Upload");
             }
 
-            if (uploadFile.ContentLength > maxFileSizeBytes)
+            if (uploadFile.ContentLength > _aiInsightsFileUploadModel.MaxFileSizeBytes)
             {              
                 return RedirectToAction("Upload");
             }
 
             var extension = Path.GetExtension(uploadFile.FileName).ToLower();
 
-            if (!allowedExtensions.Contains(extension))
+            if (!_aiInsightsFileUploadModel.AllowedExtensions.Contains(extension))
             {
                 return RedirectToAction("Upload");
-            }           
+            }
 
             var fileName = Path.GetFileName(uploadFile.FileName);
 
-            var fullPath = Server.MapPath(Path.Combine(tempFolder, fileName));
-          
-            Directory.CreateDirectory(Server.MapPath(tempFolder));
-           
-            uploadFile.SaveAs(fullPath);
-         
-            Session["AnalysisFilePath"] = fullPath;
-
-            Session["UploadTime"] = DateTime.Now;
+            base.SaveUploadedFile(uploadFile);
 
             Session["UploadedFileName"] = fileName;
 
@@ -161,10 +131,10 @@
 
             return Content(fileName);          
         }
-
+       
         private string GetAnalysisFilePath(string fileName)
         {
-            var fullPath = Server.MapPath(Path.Combine(tempFolder, fileName));
+            var fullPath = Server.MapPath(Path.Combine(_aiInsightsFileUploadModel.TempFolder, fileName));
 
             return fullPath;
         }
@@ -179,55 +149,6 @@
             }
 
             return fileBytes;
-        }
-
-        //public ActionResult Analyze()
-        //{
-        //    var filePath = Session["AnalysisFilePath"] as string;
-        //    var uploadTime = Session["UploadTime"] as DateTime?;
-
-        //    if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath))
-        //        return Content("Does not exit a file.");
-
-        //    if (uploadTime == null || DateTime.Now - uploadTime > TimeSpan.FromHours(1))
-        //    {
-
-        //        System.IO.File.Delete(filePath);
-        //        Session.Remove("AnalysisFilePath");
-
-        //        return Content("a file expired or deleted.");
-        //    }
-
-        //    var lines = System.IO.File.ReadAllLines(filePath);
-
-        //    return Content("Successful: " + lines.Length + " rows.");
-        //}
-
-        private void CleanupOldTempFiles()
-        {
-            string path = Server.MapPath(tempFolder);
-            if (!Directory.Exists(path)) return;
-
-            var files = Directory.GetFiles(path);
-            foreach (var file in files)
-            {
-                try
-                {
-                    var creationTime = System.IO.File.GetCreationTime(file);
-                    if (DateTime.Now - creationTime > TimeSpan.FromHours(1))
-                    {
-                        System.IO.File.Delete(file);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    var logMessage = new LogMessage(ex.Message)
-                                     .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                                     .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                    LogService.Error(logMessage);
-                }
-            }
         }
 
     }

@@ -11,6 +11,7 @@
     using Fanex.NAP.Core.Web.Session;
     using Fanex.NAP.CTS.Core.ExportExcel;
     using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Model.AIInsights;
     using Fanex.NAP.CTS.Resource.Consts;
     using NPOI.SS.UserModel;
     using Sentry;
@@ -18,6 +19,7 @@
     using System.Collections.Generic;
     using System.Configuration;
     using System.IO;
+    using System.Web;
     using System.Web.Mvc;
 
     public class BaseController : Controller
@@ -152,5 +154,64 @@
                 .RenderSheet(config, legend, data, summary)
                 .ToBytes();
         }
+
+        protected void SaveUploadedFile(HttpPostedFileBase uploadFile)
+        {
+            var aiInsightsFileUploadModel = new AIInsightsFileUploadModel();
+
+            CleanupOldTempFiles(aiInsightsFileUploadModel);
+
+            var fileName = Path.GetFileName(uploadFile.FileName);
+
+            SaveUploadedFile(uploadFile, fileName, aiInsightsFileUploadModel);
+
+            Session["UploadedFileName"] = fileName;
+
+            ViewBag.FileName = fileName;
+        }
+
+        protected void SaveUploadedFile(HttpPostedFileBase uploadFile, string fileName, AIInsightsFileUploadModel aiInsightsFileUploadModel)
+        {
+            var fullPath = Server.MapPath(Path.Combine(aiInsightsFileUploadModel.TempFolder, fileName));
+
+            Directory.CreateDirectory(Server.MapPath(aiInsightsFileUploadModel.TempFolder));
+
+            uploadFile.SaveAs(fullPath);
+
+            Session["UploadTime"] = DateTime.Now;
+
+            Session["UploadedFileName"] = fileName;
+        }
+
+        protected void CleanupOldTempFiles(AIInsightsFileUploadModel aiInsightsFileUploadMode)
+        {
+            string path = Server.MapPath(aiInsightsFileUploadMode.TempFolder);
+
+            if (!Directory.Exists(path)) 
+                return;
+
+            var files = Directory.GetFiles(path);
+            foreach (var file in files)
+            {
+                try
+                {
+                    var creationTime = System.IO.File.GetCreationTime(file);
+
+                    if (DateTime.Now - creationTime > TimeSpan.FromHours(1))
+                    {
+                        System.IO.File.Delete(file);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var logMessage = new LogMessage(ex.Message)
+                                     .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                                     .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                    LogService.Error(logMessage);
+                }
+            }
+        }
+
     }
 }
