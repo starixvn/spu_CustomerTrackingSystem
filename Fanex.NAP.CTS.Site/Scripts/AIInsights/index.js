@@ -11,7 +11,10 @@ function AIInsights() {
         divStatistics: $('#divStatistics'),
         chatInput: $('#chatInput'),
         chatMessages: $('.chat-messages'),
-        viewOptions: $('input[name="view"]')
+        sendButton: $('#sendButton'),
+        viewOptions: $('input[name="view"]'),
+        summarySection: $('#summary-section ul'),
+        chartSection: $('#chart-section')
     }    
 
     const ViewMode = {
@@ -155,14 +158,14 @@ function AIInsights() {
         if (visualizationData) {
             var summaries = visualizationData.summary_list;
 
-            var $ul = $('#summary-section ul');
+            var $ul = domElements.summarySection;
             $ul.empty();
 
             summaries.forEach(function (summary) {
                 $ul.append(`<li>${summary}</li>`);
             });
 
-            var $chartSection = $('#chart-section');
+            var $chartSection = domElements.chartSection;
 
             visualizationData.chart_infos.forEach(function (chart) {
                 var $card = $(`
@@ -210,7 +213,7 @@ function AIInsights() {
     }
 
     function SendChatMessage() {
-        const message = $chatInput.val().trim();
+        const message = domElements.chatInput.val().trim();
         const $chatMessages = domElements.chatMessages;
 
         if (!message) return;
@@ -223,7 +226,7 @@ function AIInsights() {
     `);
         $chatMessages.append($userMessage);
 
-        $chatInput.val('');
+        domElements.chatInput.val('');
 
         const requestData = {
             session_id: 1,
@@ -267,9 +270,9 @@ function AIInsights() {
     }
 
     function AttachChatbotEvents() {
-        $('#sendButton').on('click', SendChatMessage);
+        domElements.sendButton.on('click', SendChatMessage);
 
-        $('#chatInput').on('keypress', function (e) {
+        domElements.chatInput.on('keypress', function (e) {
             if (e.which === 13) {
                 e.preventDefault();
 
@@ -283,7 +286,7 @@ function AIInsights() {
 
         AttachChatbotEvents();
 
-        ToggleSections('visualization');
+        ToggleSections(ViewMode.VISUALIZATION);
 
         domElements.chatbotToggle.on('click', function () { ToggleChatbot(); });
 
