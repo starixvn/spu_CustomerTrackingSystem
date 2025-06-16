@@ -66,7 +66,7 @@
 		<Setting Key="CTS_DC_Association_ValidateManualMultipleInput" SpName="CTS_DC_Association_ValidateManualMultipleInput" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_Association_InsertManualMultiple" SpName="CTS_DC_Association_InsertManualMultiple" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_Association_UpdateAssociationRemove" SpName="CTS_DC_Association_UpdateAssociationRemove" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
-		<Setting Key="CTS_DC_Association_Profile_Get" SpName="CTS_DC_Association_Profile_Get" DbName="CTSMain2.CTS_DataCenter.ctsWeb" Timeout="1200" />
+		<Setting Key="CTS_DC_Association_Profile_Get" SpName="CTS_DC_Association_Profile_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="1200" />
 		<Setting Key="CTS_DC_AssociationByIP_GetAssType" SpName="CTS_DC_AssociationByIP_GetAssType" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="SPU_AIML_GB_5GIP_GetDetails" SpName="SPU_AIML_GB_5GIP_GetDetails" DbName="AIMain.SPU_AIML.aimlService" />
 		<Setting Key="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" SpName="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
@@ -79,9 +79,10 @@
 	</Function>
 
 	<Function Name="AssociationDetection">
-		<Setting Key="CTS_DC_RPT_AssociationDetection" SpName="CTS_DC_RPT_AssociationDetection" DbName="CTSMain2.CTS_DataCenter.ctsWeb" Timeout="600" />
-		<Setting Key="CTS_DC_AssociationDetection_Primary_GetEdge" SpName="CTS_DC_AssociationDetection_Primary_GetEdge" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="300" />
-		<Setting Key="CTS_DC_AssociationDetection_Agent_DetectGroup" SpName="CTS_DC_AssociationDetection_Agent_DetectGroup" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="300" />
+		<Setting Key="CTS_DC_RPT_AssociationDetection" SpName="CTS_DC_RPT_AssociationDetection" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="600" />
+		<Setting Key="CTS_DC_Association_Primary_GetCustEdge" SpName="CTS_DC_Association_Primary_GetCustEdge" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="300" />
+		<Setting Key="CTS_DC_Association_Agent_GetCustEdge" SpName="CTS_DC_Association_Agent_GetCustEdge" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="300" />
+		<Setting Key="CTS_DC_Association_DetectGroup" SpName="CTS_DC_Association_DetectGroup" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="300" />
 		<Setting Key="CTS_DC_AssociationDetection_GetDetail" SpName="CTS_DC_AssociationDetection_GetDetail" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="300" />
 	</Function>
 
@@ -93,7 +94,7 @@
 
 	<Function Name="CustomerClassification">
 		<Setting Key="CTS_DC_CustClassification_Get" SpName="CTS_DC_CustClassification_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustClassification_ViewHistory" SpName="CTS_DC_CustClassification_ViewHistory" DbName="CTSMain2.CTS_DataCenter.ctsWeb" Timeout="600" />
+		<Setting Key="CTS_DC_CustClassification_ViewHistory" SpName="CTS_DC_CustClassification_ViewHistory" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="600" />
 
 		<Setting Key="CTS_DC_CustEvidence_GetByCustIDs" SpName="CTS_DC_CustEvidence_GetByCustIDs" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 
@@ -106,7 +107,7 @@
 		<Setting Key="CTS_DC_CustClassificationAgency_Remove" SpName="CTS_DC_CustClassificationAgency_Remove" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_CustClassification_Rescan_Get" SpName="CTS_DC_CustClassification_Rescan_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustClassificationAgency_Rescan_Get" SpName="CTS_DC_CustClassificationAgency_Rescan_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustClassificationAgency_ViewHistory" SpName="CTS_DC_CustClassificationAgency_ViewHistory" DbName="CTSMain2.CTS_DataCenter.ctsWeb" Timeout="600" />
+		<Setting Key="CTS_DC_CustClassificationAgency_ViewHistory" SpName="CTS_DC_CustClassificationAgency_ViewHistory" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="600" />
 		<Setting Key="CTS_DC_CustClassificationAgency_Get" SpName="CTS_DC_CustClassificationAgency_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustClassificationAgency_Insert" SpName="CTS_DC_CustClassificationAgency_Insert" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 	</Function>
@@ -126,8 +127,8 @@
 
 	<Function name="AssociationReport">
 		<Setting Key="CTS_DC_Subscriber_GetByGroup " SpName="CTS_DC_Subscriber_GetByGroup" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_RPT_AssociatedAccount " SpName="CTS_DC_RPT_AssociatedAccount" DbName="CTSMain2.CTS_DataCenter.ctsWeb" Timeout="600" />
-		<Setting Key="CTS_DC_RPT_AssociatedAccount_Detail " SpName="CTS_DC_RPT_AssociatedAccount_Detail" DbName="CTSMain2.CTS_DataCenter.ctsWeb" Timeout="600" />
+		<Setting Key="CTS_DC_RPT_AssociatedAccount " SpName="CTS_DC_RPT_AssociatedAccount" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="600" />
+		<Setting Key="CTS_DC_RPT_AssociatedAccount_Detail " SpName="CTS_DC_RPT_AssociatedAccount_Detail" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="600" />
 	</Function>
 
 	<Function name="LatestTransaction">
@@ -171,11 +172,11 @@
 	</Function>
 
 	<Function name="CustomerProfile">
-		<Setting Key="CTS_DC_CustInfo_Profile_GetAssociationAccount" SpName="CTS_DC_CustInfo_Profile_GetAssociationAccount" DbName="CTSMain2.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustInfo_Profile_GetEvidence" SpName="CTS_DC_CustInfo_Profile_GetEvidence" DbName="CTSMain2.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustInfo_Profile_GetLoginStats" SpName="CTS_DC_CustInfo_Profile_GetLoginStats" DbName="CTSMain2.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustInfo_Profile_GetDate" SpName="CTS_DC_CustInfo_Profile_GetDate" DbName="CTSMain2.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustInfoAgency_Profile_GetDate" SpName="CTS_DC_CustInfoAgency_Profile_GetDate" DbName="CTSMain2.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustInfo_Profile_GetAssociationAccount" SpName="CTS_DC_CustInfo_Profile_GetAssociationAccount" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustInfo_Profile_GetEvidence" SpName="CTS_DC_CustInfo_Profile_GetEvidence" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustInfo_Profile_GetLoginStats" SpName="CTS_DC_CustInfo_Profile_GetLoginStats" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustInfo_Profile_GetDate" SpName="CTS_DC_CustInfo_Profile_GetDate" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustInfoAgency_Profile_GetDate" SpName="CTS_DC_CustInfoAgency_Profile_GetDate" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 	</Function>
 
 	<Function name="MonitorCTSFunction">
@@ -183,9 +184,9 @@
 	</Function>
 
 	<Function name="ProblemAccountManagement">
-		<Setting Key="CTS_DC_ProblemAccountManagement_Get" SpName="CTS_DC_ProblemAccountManagement_Get" DbName="CTSMain2.CTS_DataCenter.ctsWeb" TimeOut="600" />
-		<Setting Key="CTS_DC_ProblemAccountManagement_GetCategories" SpName="CTS_DC_ProblemAccountManagement_GetCategories" DbName="CTSMain2.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_ProblemAccountManagement_ValidateUserName" SpName="CTS_DC_ProblemAccountManagement_ValidateUserName" DbName="CTSMain2.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_ProblemAccountManagement_Get" SpName="CTS_DC_ProblemAccountManagement_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" TimeOut="600" />
+		<Setting Key="CTS_DC_ProblemAccountManagement_GetCategories" SpName="CTS_DC_ProblemAccountManagement_GetCategories" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_ProblemAccountManagement_ValidateUserName" SpName="CTS_DC_ProblemAccountManagement_ValidateUserName" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 	</Function>
 	<Function name="RescanCustomerClassification">
 		<Setting Key="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" SpName="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" DbName="CTSMain.CTS_Archive.ctsWebAdmin" />

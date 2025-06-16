@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement.CustomerClassification
 {
-    using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
