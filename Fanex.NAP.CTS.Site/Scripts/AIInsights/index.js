@@ -137,8 +137,7 @@ function AIInsights() {
 
     function AnalyzeFile() { 
         $.ajax(common.modifyRelativeUrl('AIInsights/AnalyzeFile'), {
-            type: 'POST',
-          /*  data: params,*/
+            type: 'POST',       
             beforeSend: function () {       
                 common.showLoading();                
                 domElements.btnGenerate.prop('disabled', true);
@@ -147,7 +146,11 @@ function AIInsights() {
                 domElements.btnGenerate.prop('disabled', false);
 
                 if (response) {
-                    RenderVisualization(response.visualization_response);
+                    if (response.visualization_response) {
+                        RenderVisualizationSummary(response.visualization_response.summary_list);
+                        RenderVisualizationChart(response.visualization_response.chart_infos);
+                    }
+                    
                     RenderStatistics(response.statistics_html);
                 }
             },
@@ -160,6 +163,57 @@ function AIInsights() {
                 console.log(errMsg);
             }
         });
+    }
+
+    function RenderVisualizationSummary(visualizationSummary) {
+        if (visualizationSummary) {            
+            var $ul = domElements.summarySection;
+            $ul.empty();
+
+            visualizationSummary.forEach(function (summary) {
+                $ul.append(`<li>${summary}</li>`);
+            });
+        }
+    }
+
+    function RenderVisualizationChart(visualizationChart) {
+        if (visualizationChart.length > 0) {
+            var $chartSection = domElements.chartSection;
+            $chartSection.empty();
+
+            visualizationChart.forEach(function (chart) {
+                var $card = $(`
+                    <div class="card-body">
+                        <div class="chart-item">
+                            <div class="chart-title">
+                                <h3>${chart.title}</h3>
+                            </div>
+                        </div>
+                        <div class="chart-image">
+                            <img src="data:image/png;base64,${chart.base64_image}" alt="${chart.name}" />
+                        </div>
+                        <div class="chart-content">
+                            <div class="chart-analysis">
+                                <p><strong>Analysis:</strong></p>
+                                <ul>
+                                    <li>${chart.analysis}</li>
+                                </ul>
+                            </div>
+                            <div class="chart-suggestion">
+                                <p><strong>Suggestion:</strong></p>
+                                <ul>
+                                    ${chart.suggestions.map(s => `<li>${s}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+                `);
+
+                $chartSection.append($card);
+            });
+        }
     }
 
     function RenderVisualization(visualizationData) {
@@ -207,19 +261,13 @@ function AIInsights() {
 
                 $chartSection.append($card);
             });
-        }
-        //} else {
-        //    domElements.divVisualization.html('<p>No visualization data available.</p>');
-        //}
+        }      
     }
 
     function RenderStatistics(statisticsHtml) {
         if (statisticsHtml) {
             domElements.divStatistics.html(statisticsHtml);
-        }
-        //} else {
-        //    domElements.divStatistics.html('<p>No statistics data available.</p>');
-        //}
+        }      
     }
 
     function SendChatMessage() {
@@ -229,11 +277,11 @@ function AIInsights() {
         if (!message) return;
 
         const $userMessage = $(`
-        <div class="message user-message">
-            <div class="icon-placeholder"></div>
-            <div class="message-text">${message}</div>
-        </div>
-    `);
+            <div class="message user-message">
+                <div class="icon-placeholder"></div>
+                <div class="message-text">${message}</div>
+            </div>
+        `);
         $chatMessages.append($userMessage);
 
         domElements.chatInput.val('');
@@ -253,15 +301,17 @@ function AIInsights() {
                 const answer = response?.answer || 'No response from bot.';
 
                 const $botMessage = $(`
-                <div class="message bot-message">
-                    <div class="icon-wrapper bot-icon"><i class="fas fa-robot"></i></div>
-                    <div class="message-text">${answer}</div>
-                </div>
-            `);
+                    <div class="message bot-message">
+                        <div class="icon-wrapper bot-icon"><i class="fas fa-robot"></i></div>
+                        <div class="message-text">${answer}</div>
+                    </div>
+                `);
 
-            $chatMessages.append($botMessage);
+                $chatMessages.append($botMessage);
 
-            $chatMessages.scrollTop($chatMessages[0].scrollHeight);
+                $chatMessages.scrollTop($chatMessages[0].scrollHeight);
+
+                RenderVisualizationChart(response.chart_infos);
             },
             complete: function () {
             },
@@ -269,11 +319,11 @@ function AIInsights() {
                 console.error('Chatbot error:', error);
 
                 const $errorMessage = $(`
-                <div class="message bot-message">
-                    <div class="icon-wrapper bot-icon"><i class="fas fa-robot"></i></div>
-                    <div class="message-text">Oops! Something went wrong.</div>
-                </div>
-            `);
+                    <div class="message bot-message">
+                        <div class="icon-wrapper bot-icon"><i class="fas fa-robot"></i></div>
+                        <div class="message-text">Oops! Something went wrong.</div>
+                    </div>
+                `);
                 $chatMessages.append($errorMessage);
             }
         });
