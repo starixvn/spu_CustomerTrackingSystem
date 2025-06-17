@@ -72,9 +72,7 @@
             hasDraggedFile = false;
             errorMessage.addClass('hide').text('');
 
-            iconSearch
-                .removeClass('search-icon-enable')
-                .addClass('search-icon-default');
+            iconSearch.attr('src', $('#searchIcon').data('default'));
         });
     }    
 
@@ -95,15 +93,15 @@
 
                 hasDraggedFile = true;
 
-                iconSearch
-                    .removeClass('search-icon-default')
-                    .addClass('search-icon-enable');
+                iconSearch.attr('src', $('#searchIcon').data('enabled'));
             } else {
                 fileInput.val('');
                 uploadedFile.hide();
                 hasDraggedFile = false;
 
                 errorMessage.text('Please upload a .xls file!').removeClass('hide');
+
+                iconSearch.attr('src', $('#searchIcon').data('default'));
             }
         }
     }

@@ -107,6 +107,8 @@
 
                 base.SaveUploadedFile(uploadFile);
 
+                TempData["HasFile"] = true;
+
                 return RedirectToAction("Index", "AIInsights");
             }
 

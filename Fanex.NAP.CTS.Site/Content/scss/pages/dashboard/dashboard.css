@@ -260,18 +260,7 @@
 }
 
 .search-icon {
-  display: inline-block;
   width: 30px;
   height: 30px;
-  background-size: contain;
-  background-repeat: no-repeat;
   cursor: pointer;
-}
-
-.search-icon-default {
-  background-image: url("/Content/scss/images/search-icon.png");
-}
-
-.search-icon-enable {
-  background-image: url("/Content/scss/images/search-icon-enable.png");
 }
