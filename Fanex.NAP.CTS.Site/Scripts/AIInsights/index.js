@@ -201,6 +201,8 @@ function AIInsights() {
                             </div>
                         </div>
                     </div>
+
+                    <div class="divider"></div>
                 `);
 
                 $chartSection.append($card);

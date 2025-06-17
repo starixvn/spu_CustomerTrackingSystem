@@ -259,7 +259,8 @@
 
     input {
         &::placeholder {
-            font-size: 16px;
+            font-size: 16px !important;
+            color: #9f9f9f;
         }
     }
 }
