@@ -179,7 +179,8 @@ function AIInsights() {
     function RenderVisualizationChart(visualizationChart) {
         if (visualizationChart.length > 0) {
             var $chartSection = domElements.chartSection;
-            $chartSection.empty();
+
+            $('#chart-section .card-body').remove();
 
             visualizationChart.forEach(function (chart) {
                 var $card = $(`
@@ -269,18 +270,54 @@ function AIInsights() {
         }      
     }
 
+    function LoadHistoryChatMessage() {
+        $.ajax(common.modifyRelativeUrl('AIInsights/LoadHistoryChatMessage'), {
+            type: 'POST',
+            beforeSend: function () { },
+            success: function (response) {                
+                if (response) {
+                    let $chatMessages = domElements.chatMessages;
+                    $.each(response, function (index, item) {                       
+                        let $message = item.Sender == 'u' ?
+                            $(`
+                                <div class="message user-message">
+                                    <div class="icon-placeholder"></div>
+                                    <div class="message-text">${item.Message}</div>
+                                </div>
+                            `) : 
+                            $(`
+                                <div class="message bot-message">
+                                    <div class="icon-wrapper bot-icon"><i class="fas fa-robot"></i></div>
+                                    <div class="message-text">${item.Message}</div>
+                                </div>
+                            `);
+
+                        $chatMessages.append($message);
+         
+                    });                                     
+                }
+            },
+            complete: function () { },
+            error: function (errMsg) {               
+                console.log(errMsg);
+            }
+        });
+    }
+
     function SendChatMessage() {
-        let message = domElements.chatInput.val().trim();
-        const $chatMessages = domElements.chatMessages;
+        let $chatMessages = domElements.chatMessages;
+
+        let message = domElements.chatInput.val().trim();        
 
         if (!message) return;
 
-        const $userMessage = $(`
+        let $userMessage = $(`
             <div class="message user-message">
                 <div class="icon-placeholder"></div>
                 <div class="message-text">${message}</div>
             </div>
         `);
+
         $chatMessages.append($userMessage);
 
         domElements.chatInput.val('');
@@ -354,6 +391,8 @@ function AIInsights() {
         AnalyzeFile();
 
         domElements.btnGenerate.on('click', function () { AnalyzeFile(); });
+
+        LoadHistoryChatMessage();
     }
 
     $(document).ready(function () {

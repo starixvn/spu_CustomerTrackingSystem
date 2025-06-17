@@ -96,7 +96,7 @@
                 
                 response = _aIInsightsService.AskChatbot(request, ConfigSettings.AIInsightsChatBotUrl);
 
-                response.ChatMessages = SendMessage(request.question, response.response.answer);
+                SendMessage(request.question, response.response.answer);
             }
             catch (Exception ex)
             {
@@ -110,13 +110,32 @@
             return Json(response.response, JsonRequestBehavior.AllowGet);
         }
 
-        private List<ChatMessageModel> SendMessage(string userMessage, string botMessage)
-        {           
-            SaveMessage("User", userMessage);          
+        [HttpPost]
+        public ActionResult LoadHistoryChatMessage()
+        {
+            var chatHistory = new List<ChatMessageModel>();
 
-            SaveMessage("Bot", botMessage);
-            
-            return GetChatHistory();
+            try
+            {
+                chatHistory = Session[ChatSessionKey] as List<ChatMessageModel> ?? new List<ChatMessageModel>();
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+            }
+
+            return Json(chatHistory, JsonRequestBehavior.AllowGet);
+        }
+
+        private void SendMessage(string userMessage, string botMessage)
+        {           
+            SaveMessage("u", userMessage);          
+
+            SaveMessage("b", botMessage);                       
         }
 
         private void SaveMessage(string sender, string message)
@@ -131,12 +150,7 @@
             });
 
             Session[ChatSessionKey] = chatHistory;
-        }
-
-        public List<ChatMessageModel> GetChatHistory()
-        {
-            return Session[ChatSessionKey] as List<ChatMessageModel> ?? new List<ChatMessageModel>();
-        }
+        }        
 
         [HttpPost]
         public ActionResult UploadFile(HttpPostedFileBase uploadFile)
