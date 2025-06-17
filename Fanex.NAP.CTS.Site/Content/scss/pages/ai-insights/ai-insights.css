@@ -550,9 +550,10 @@
   border-bottom: 1px solid #DDE2E5;
 }
 .content-card-section .content-card .card-header .info {
-  margin: 0 0.8rem 0.8rem;
+  margin: 0 0.8rem 0 0.8rem;
   font-weight: bold;
   cursor: pointer;
+  font-size: 16px;
 }
 .content-card-section .content-card .card-body {
   font-size: 14px;
@@ -596,6 +597,7 @@
   text-align: center;
 }
 .content-card-section .content-card .card-body .chart-item .chart-image img {
+  display: inline-block;
   max-width: 100%;
   height: auto;
   border-radius: 0.3rem;

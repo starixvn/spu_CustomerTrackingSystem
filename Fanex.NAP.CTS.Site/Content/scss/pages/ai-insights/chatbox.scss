@@ -28,7 +28,7 @@
     top: 9.5rem;
     right: 0;
     width: calc(100vw / 5);
-    height: calc(100vh - 9rem);
+    height: calc(100vh - 9.5rem);
     background: white;
     border: none;
     z-index: 999;
@@ -66,20 +66,18 @@
 
     .chatbot-body {
         display: flex;
-        flex-direction: column;
-        position: relative;
-        height: 100%;
         flex: 1;
-        overflow: hidden;
+        flex-direction: column;
+        height: 100%;
 
         .chat-messages {
             display: flex;
+            flex-grow: 1;
             flex-direction: column;
             gap: 12px;
             overflow-y: auto;
             padding: 16px;
             background: #f8f9fa;
-            height: calc(100% - 68px);
 
             .message {
                 display: flex;
@@ -145,6 +143,7 @@
 
         .chat-input {
             display: flex;
+            flex-shrink: 0;
             align-items: center;
             position: sticky;
             height: 68px;
@@ -223,5 +222,70 @@
 
     .chatbot-panel.active + & {
         display: flex;
+    }
+}
+
+
+@media (max-width: 500px) {
+    .chatbot-panel {
+        width: 100%;
+        height: calc(100vh - 9.5rem);
+        top: 9.5rem;
+
+        .chatbot-header {
+            padding: 12px;
+            height: 45px;
+        }
+
+        .chatbot-body {
+            .chat-messages {
+                padding: 12px;
+            }
+
+            .chat-input {
+                padding: 10px 12px;
+                height: 60px;
+                display: flex;
+                gap: 10px;
+                width: 100%;
+
+                input {
+                    height: 32px;
+                    line-height: 32px;
+                    padding: 0 16px;
+                    font-size: 13px;
+                    min-width: 0;
+                    flex: 1 1 auto;
+
+                    &::placeholder {
+                        line-height: 32px;
+                    }
+                }
+
+                button {
+                    width: 32px;
+                    height: 32px;
+                    font-size: 14px;
+                    padding: 8px;
+                    flex-shrink: 0;
+                }
+            }
+        }
+    }
+
+    .chatbot-toggle {
+        top: calc(9rem + 8px);
+        right: 8px;
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+
+    .close-chatbot {
+        right: 0;
+        top: 9.5rem;
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
     }
 }
