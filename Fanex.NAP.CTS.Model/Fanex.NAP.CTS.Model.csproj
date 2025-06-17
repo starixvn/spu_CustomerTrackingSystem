@@ -195,6 +195,7 @@
     <Compile Include="AIInsights\AIInsightsChatbotRequestModel.cs" />
     <Compile Include="AIInsights\AIInsightsChatbotResponseModel.cs" />
     <Compile Include="AIInsights\AIInsightsFileUploadModel.cs" />
+    <Compile Include="AIInsights\ChatMessageModel.cs" />
     <Compile Include="AIInsights\VisualizationModel.cs" />
     <Compile Include="API\CustomerClassCategory\CategoryCustomerClassModel.cs" />
     <Compile Include="API\CtsAssociationAPI\DetectAssociationByTypeFilterModel.cs" />

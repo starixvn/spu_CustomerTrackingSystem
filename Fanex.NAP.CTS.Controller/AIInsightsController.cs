@@ -14,6 +14,7 @@
     using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using Fanex.NAP.CTS.Model;
+    using System.Collections.Generic;
 
     [NapSuperAuth]
     public class AIInsightsController : BaseController
@@ -21,6 +22,7 @@
         private readonly IAIInsightsService _aIInsightsService;
         private AIInsightsFileUploadModel _aiInsightsFileUploadModel;
         private readonly string UserID = "AIInsightsUserID";
+        private const string ChatSessionKey = "ChatHistory";
 
 
         public AIInsightsController()
@@ -93,6 +95,8 @@
                 request.session_id = CurrentSession.SessionId;
                 
                 response = _aIInsightsService.AskChatbot(request, ConfigSettings.AIInsightsChatBotUrl);
+
+                response.ChatMessages = SendMessage(request.question, response.response.answer);
             }
             catch (Exception ex)
             {
@@ -104,7 +108,35 @@
             }
 
             return Json(response.response, JsonRequestBehavior.AllowGet);
-        }       
+        }
+
+        private List<ChatMessageModel> SendMessage(string userMessage, string botMessage)
+        {           
+            SaveMessage("User", userMessage);          
+
+            SaveMessage("Bot", botMessage);
+            
+            return GetChatHistory();
+        }
+
+        private void SaveMessage(string sender, string message)
+        {
+            var chatHistory = Session[ChatSessionKey] as List<ChatMessageModel> ?? new List<ChatMessageModel>();
+
+            chatHistory.Add(new ChatMessageModel
+            {
+                Sender = sender,
+                Message = message,
+                Timestamp = DateTime.Now
+            });
+
+            Session[ChatSessionKey] = chatHistory;
+        }
+
+        public List<ChatMessageModel> GetChatHistory()
+        {
+            return Session[ChatSessionKey] as List<ChatMessageModel> ?? new List<ChatMessageModel>();
+        }
 
         [HttpPost]
         public ActionResult UploadFile(HttpPostedFileBase uploadFile)

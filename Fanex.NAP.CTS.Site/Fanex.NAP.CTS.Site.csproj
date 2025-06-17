@@ -632,6 +632,9 @@
     <Content Include="Content\scss\pages\ai-insights\ai-insights.scss" />
     <Content Include="Content\scss\pages\ai-insights\chatbox.scss" />
     <None Include="Content\scss\pages\latest-transaction\latest-transaction.scss" />
+    <Content Include="Content\scss\pages\index.min.css">
+      <DependentUpon>index.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\pages\latest-transaction\latest-transaction.css">
       <DependentUpon>latest-transaction.scss</DependentUpon>
     </Content>
@@ -1276,9 +1279,6 @@
       <DependentUpon>errors.css</DependentUpon>
     </Content>
     <Content Include="Content\scss\pages\index.css" />
-    <Content Include="Content\scss\pages\index.min.css">
-      <DependentUpon>index.css</DependentUpon>
-    </Content>
     <Content Include="Content\scss\pages\login\login.css" />
     <Content Include="Content\scss\pages\login\login.min.css">
       <DependentUpon>login.css</DependentUpon>
