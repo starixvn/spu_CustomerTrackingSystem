@@ -513,7 +513,7 @@
   border-radius: 18px;
   word-wrap: break-word;
   line-height: 1.5;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   word-break: break-word;
   overflow-wrap: break-word;
   max-width: 85%;
@@ -537,6 +537,9 @@
 .chatbot-panel .chatbot-body .chat-messages .message .bot-icon i {
   font-size: 14px;
 }
+.chatbot-panel .chatbot-body .chat-messages .message .icon-placeholder {
+  height: 28px;
+}
 .chatbot-panel .chatbot-body .chat-messages .message .message-text {
   flex: 1;
 }
@@ -551,6 +554,7 @@
   align-self: flex-end;
   text-align: right;
   background-color: #e6ecf5;
+  align-items: center;
 }
 .chatbot-panel .chatbot-body .chat-input {
   display: flex;

@@ -89,7 +89,7 @@
                 border-radius: 18px;
                 word-wrap: break-word;
                 line-height: 1.5;
-                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
                 word-break: break-word;
                 overflow-wrap: break-word;
                 max-width: 85%;
@@ -117,10 +117,9 @@
                     }
                 }
 
-                //.user-icon {
-                //    background: #FFC94B;
-                //    color: white;
-                //}
+                .icon-placeholder {
+                    height: 28px;
+                }
 
                 .message-text {
                     flex: 1;
@@ -140,6 +139,7 @@
                 align-self: flex-end;
                 text-align: right;
                 background-color: #e6ecf5;
+                align-items: center;
             }
         }
 

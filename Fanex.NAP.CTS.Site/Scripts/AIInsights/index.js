@@ -228,7 +228,7 @@ function AIInsights() {
 
         const $userMessage = $(`
         <div class="message user-message">
-
+            <div class="icon-placeholder"></div>
             <div class="message-text">${message}</div>
         </div>
     `);

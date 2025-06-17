@@ -73,8 +73,8 @@
             catch (Exception ex)
             {
                 var logMessage = new LogMessage(ex.Message)
-                                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+                                      .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                                      .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
                 LogService.Error(logMessage);
             }
@@ -90,16 +90,9 @@
 
             try
             {
-
-                int userId = 0;
-
-                if (CurrentSession.UserId != null && int.TryParse(CurrentSession.UserId.ToString(), out var parsedId))
-                {
-                    userId = parsedId;
-                }
-                request.session_id = userId;
-
-                response = _aIInsightsService.AskChatbot(request, ConfigSettings.AIInsightsChatBotUrl, userId.ToString());
+                request.session_id = CurrentSession.SessionId;
+                
+                response = _aIInsightsService.AskChatbot(request, ConfigSettings.AIInsightsChatBotUrl);
             }
             catch (Exception ex)
             {
