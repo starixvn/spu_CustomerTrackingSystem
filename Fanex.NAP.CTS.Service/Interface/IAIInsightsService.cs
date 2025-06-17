@@ -6,6 +6,6 @@
     {
         AIInsightsAnalyzeResponseModel Analyze(AIInsightsAnalyzeRequestModel request, string url);
 
-        AIInsightsChatbotResponseModel AskChatbot(AIInsightsChatbotRequestModel request, string url);
+        AIInsightsChatbotResponseModel AskChatbot(AIInsightsChatbotRequestModel request, string url, string userId);
     }
 }

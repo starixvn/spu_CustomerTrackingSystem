@@ -47,8 +47,8 @@
         align-items: center;
         color: #fff;
         background-color: #2053d9;
-        padding: 20px;
-        height: 60px;
+        padding: 16px;
+        height: 50px;
         flex-shrink: 0;
 
         .chatbot-title {
@@ -56,7 +56,11 @@
             align-items: center;
             gap: 15px;
             font-weight: 500;
-            font-size: 20px;
+            font-size: 16px;
+        }
+
+        i {
+            font-size: 18px;
         }
     }
 
@@ -88,16 +92,16 @@
                 box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
                 word-break: break-word;
                 overflow-wrap: break-word;
-                max-width: 100%;
+                max-width: 85%;
 
                 .icon-wrapper {
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     flex-shrink: 0;
-                    width: 36px;
-                    height: 36px;
-                    border-radius: 10px;
+                    width: 28px;
+                    height: 28px;
+                    border-radius: 8px;
 
                     i {
                         font-size: 18px;
@@ -105,14 +109,18 @@
                 }
 
                 .bot-icon {
-                    background: #FF6B6B;
+                    background-color: #2053d9;
                     color: white;
+
+                    i {
+                        font-size: 14px;
+                    }
                 }
 
-                .user-icon {
-                    background: #FFC94B;
-                    color: white;
-                }
+                //.user-icon {
+                //    background: #FFC94B;
+                //    color: white;
+                //}
 
                 .message-text {
                     flex: 1;
@@ -120,12 +128,17 @@
             }
 
             .bot-message, .user-message {
-                align-self: flex-start;
                 color: #545454;
-                width: 100%;
+                width: auto;
             }
 
             .bot-message {
+                align-self: flex-start;
+            }
+
+            .user-message {
+                align-self: flex-end;
+                text-align: right;
                 background-color: #e6ecf5;
             }
         }

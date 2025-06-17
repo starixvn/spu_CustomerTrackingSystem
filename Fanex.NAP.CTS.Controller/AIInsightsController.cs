@@ -20,11 +20,14 @@
     {       
         private readonly IAIInsightsService _aIInsightsService;
         private AIInsightsFileUploadModel _aiInsightsFileUploadModel;
+        private readonly string UserID = "AIInsightsUserID";
+
 
         public AIInsightsController()
         {
             _aIInsightsService = new AIInsightsService();
             _aiInsightsFileUploadModel = new AIInsightsFileUploadModel();
+            UserID = CurrentSession.UserId.ToString();
         }
 
         public ActionResult Index()
@@ -87,7 +90,16 @@
 
             try
             {
-                response = _aIInsightsService.AskChatbot(request, ConfigSettings.AIInsightsChatBotUrl);
+
+                int userId = 0;
+
+                if (CurrentSession.UserId != null && int.TryParse(CurrentSession.UserId.ToString(), out var parsedId))
+                {
+                    userId = parsedId;
+                }
+                request.session_id = userId;
+
+                response = _aIInsightsService.AskChatbot(request, ConfigSettings.AIInsightsChatBotUrl, userId.ToString());
             }
             catch (Exception ex)
             {

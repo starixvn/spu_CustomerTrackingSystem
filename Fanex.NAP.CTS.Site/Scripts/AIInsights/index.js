@@ -228,7 +228,7 @@ function AIInsights() {
 
         const $userMessage = $(`
         <div class="message user-message">
-            <div class="icon-wrapper user-icon"><i class="fas fa-briefcase"></i></div>
+
             <div class="message-text">${message}</div>
         </div>
     `);
@@ -237,7 +237,7 @@ function AIInsights() {
         domElements.chatInput.val('');
 
         const requestData = {
-            session_id: 1,
+            //session_id: 1
             question: message
         };
 

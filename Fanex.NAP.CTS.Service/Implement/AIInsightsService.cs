@@ -2,6 +2,8 @@
 {
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Model.AIInsights;
+    using System.Configuration;
+    using System;
     using System.Threading.Tasks;
 
     public class AIInsightsService : IAIInsightsService
@@ -19,9 +21,13 @@
             return result.Result;
         }
 
-        public AIInsightsChatbotResponseModel AskChatbot(AIInsightsChatbotRequestModel request, string url)
+        public AIInsightsChatbotResponseModel AskChatbot(AIInsightsChatbotRequestModel request, string url, string userId)
         {
-            var result = ApiHelper.Post<AIInsightsChatbotResponseModel>(url, request, 120);
+            var chatbotRequestTimeout = ConfigurationManager.AppSettings["ChatbotRequestTimeout"];
+
+            var timeout = int.TryParse(chatbotRequestTimeout, out var parsed) ? parsed : 30;
+
+            var result = ApiHelper.Post<AIInsightsChatbotResponseModel>(url, request, timeout);
 
             Task.WhenAll(result);
 

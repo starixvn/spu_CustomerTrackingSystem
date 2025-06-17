@@ -474,8 +474,8 @@
   align-items: center;
   color: #fff;
   background-color: #2053d9;
-  padding: 20px;
-  height: 60px;
+  padding: 16px;
+  height: 50px;
   flex-shrink: 0;
 }
 .chatbot-panel .chatbot-header .chatbot-title {
@@ -483,7 +483,10 @@
   align-items: center;
   gap: 15px;
   font-weight: 500;
-  font-size: 20px;
+  font-size: 16px;
+}
+.chatbot-panel .chatbot-header i {
+  font-size: 18px;
 }
 .chatbot-panel .chatbot-body {
   display: flex;
@@ -513,37 +516,40 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
   word-break: break-word;
   overflow-wrap: break-word;
-  max-width: 100%;
+  max-width: 85%;
 }
 .chatbot-panel .chatbot-body .chat-messages .message .icon-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
 }
 .chatbot-panel .chatbot-body .chat-messages .message .icon-wrapper i {
   font-size: 18px;
 }
 .chatbot-panel .chatbot-body .chat-messages .message .bot-icon {
-  background: #FF6B6B;
+  background-color: #2053d9;
   color: white;
 }
-.chatbot-panel .chatbot-body .chat-messages .message .user-icon {
-  background: #FFC94B;
-  color: white;
+.chatbot-panel .chatbot-body .chat-messages .message .bot-icon i {
+  font-size: 14px;
 }
 .chatbot-panel .chatbot-body .chat-messages .message .message-text {
   flex: 1;
 }
 .chatbot-panel .chatbot-body .chat-messages .bot-message, .chatbot-panel .chatbot-body .chat-messages .user-message {
-  align-self: flex-start;
   color: #545454;
-  width: 100%;
+  width: auto;
 }
 .chatbot-panel .chatbot-body .chat-messages .bot-message {
+  align-self: flex-start;
+}
+.chatbot-panel .chatbot-body .chat-messages .user-message {
+  align-self: flex-end;
+  text-align: right;
   background-color: #e6ecf5;
 }
 .chatbot-panel .chatbot-body .chat-input {
