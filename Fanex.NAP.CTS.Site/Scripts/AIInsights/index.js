@@ -96,7 +96,7 @@ function AIInsights() {
             const file = e.target.files[0];
 
             if (file && !file.name.toLowerCase().endsWith('.xls')) {                
-                common.showError('Only .xls files are allowed!');
+                common.showError('Please upload a .xls file!');
 
                 $(this).val('');
 

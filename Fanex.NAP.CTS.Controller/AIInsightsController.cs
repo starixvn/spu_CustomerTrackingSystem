@@ -38,7 +38,7 @@
         }
 
         [HttpPost]
-        //[TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AIInsightsAnalyzeFile)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AIInsightsAnalyzeFile)]
         public ActionResult AnalyzeFile()
         {
             var data = new AIInsightsAnalyzeResponseModel();          
@@ -83,7 +83,7 @@
         }
 
         [HttpPost]
-        //[TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AIInsightsAskChatBot)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AIInsightsAskChatBot)]
         public ActionResult AskChatbot(AIInsightsChatbotRequestModel request)
         {
             var response = new AIInsightsChatbotResponseModel();
