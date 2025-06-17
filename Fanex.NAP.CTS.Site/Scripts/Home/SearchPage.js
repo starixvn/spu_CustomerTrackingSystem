@@ -72,7 +72,7 @@
             hasDraggedFile = false;
             errorMessage.addClass('hide').text('');
 
-            $('.search-icon').attr('src', '/Content/scss/images/search-icon.png');
+            $('.search-icon').attr('src', '~/Content/scss/images/search-icon.png');
         });
     }    
 
@@ -93,7 +93,7 @@
 
                 hasDraggedFile = true;
 
-                $('.search-icon').attr('src', '/Content/scss/images/search-icon-enable.png');
+                $('.search-icon').attr('src', '~/Content/scss/images/search-icon-enable.png');
             } else {
                 fileInput.val('');
                 uploadedFile.hide();

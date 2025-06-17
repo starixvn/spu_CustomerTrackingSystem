@@ -221,7 +221,7 @@ function AIInsights() {
     }
 
     function SendChatMessage() {
-        const message = domElements.chatInput.val().trim();
+        let message = domElements.chatInput.val().trim();
         const $chatMessages = domElements.chatMessages;
 
         if (!message) return;
@@ -236,8 +236,7 @@ function AIInsights() {
 
         domElements.chatInput.val('');
 
-        const requestData = {
-            //session_id: 1
+        let requestParam = {          
             question: message
         };
 
@@ -245,7 +244,7 @@ function AIInsights() {
             type: 'POST',
             contentType: 'application/json',
             dataType: 'json',
-            data: JSON.stringify(requestData),
+            data: JSON.stringify(requestParam),
             beforeSend: function () {
             },
             success: function (response) {
@@ -257,9 +256,10 @@ function AIInsights() {
                     <div class="message-text">${answer}</div>
                 </div>
             `);
-                $chatMessages.append($botMessage);
 
-                $chatMessages.scrollTop($chatMessages[0].scrollHeight);
+            $chatMessages.append($botMessage);
+
+            $chatMessages.scrollTop($chatMessages[0].scrollHeight);
             },
             complete: function () {
             },

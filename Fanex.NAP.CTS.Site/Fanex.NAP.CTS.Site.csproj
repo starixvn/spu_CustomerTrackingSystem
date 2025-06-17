@@ -536,8 +536,12 @@
     <Content Include="Content\scss\images\logo-header.png" />
     <Content Include="Content\scss\images\logo-header.svg" />
     <Content Include="Content\scss\images\logo-Wasa-AI-Assistant.png" />
-    <Content Include="Content\scss\images\search-icon-enable.png" />
-    <Content Include="Content\scss\images\search-icon.png" />
+    <Content Include="Content\scss\images\search-icon-enable.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\scss\images\search-icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\scss\pages\account\account-fps.css">
       <DependentUpon>account-fps.scss</DependentUpon>
     </Content>
