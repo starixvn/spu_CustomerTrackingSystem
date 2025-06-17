@@ -1,7 +1,7 @@
 ﻿function SearchPage() {
     var common = new UICommon();
     var input = $('#txtInput');
-    var iconSearch = $('.icon-magnify');
+    var iconSearch = $('.search-icon');
     var errorMessage = $('#errMessage');
     var frmSearch = $('form');
     var searchFixed = $(".search-result > form");
@@ -72,7 +72,9 @@
             hasDraggedFile = false;
             errorMessage.addClass('hide').text('');
 
-            $('.search-icon').attr('src', '~/Content/scss/images/search-icon.png');
+            iconSearch
+                .removeClass('search-icon-enable')
+                .addClass('search-icon-default');
         });
     }    
 
@@ -93,7 +95,9 @@
 
                 hasDraggedFile = true;
 
-                $('.search-icon').attr('src', '~/Content/scss/images/search-icon-enable.png');
+                iconSearch
+                    .removeClass('search-icon-default')
+                    .addClass('search-icon-enable');
             } else {
                 fileInput.val('');
                 uploadedFile.hide();
