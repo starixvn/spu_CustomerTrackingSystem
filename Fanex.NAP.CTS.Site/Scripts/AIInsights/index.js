@@ -238,7 +238,7 @@ function AIInsights() {
                             </div>
                         </div>
                         <div class="chart-image">
-                            <img src="data:image/png;base64,${chart.base64_image}" alt="${chart.name}" />
+                            <img src="data:image/png;base64,${chart.base64_image}" alt="${chart.name}" style="display: block; margin: auto; max-width: 80%; height: auto;" />
                         </div>
                         <div class="chart-content">
                             <div class="chart-analysis">
@@ -254,9 +254,8 @@ function AIInsights() {
                                 </ul>
                             </div>
                         </div>
+                        <div class="divider"></div>
                     </div>
-
-                    <div class="divider"></div>
                 `);
 
                 $chartSection.append($card);

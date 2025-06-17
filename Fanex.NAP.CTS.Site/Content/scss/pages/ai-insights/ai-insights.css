@@ -506,6 +506,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   flex-grow: 1;
+  color: #9f9f9f;
 }
 .ai-insights .ai-insights-container .group-control .form-filter .file-wrapper .edit-icon {
   display: flex;
