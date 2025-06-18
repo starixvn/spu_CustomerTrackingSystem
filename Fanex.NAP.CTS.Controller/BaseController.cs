@@ -159,7 +159,7 @@
         {
             var aiInsightsFileUploadModel = new AIInsightsFileUploadModel();
 
-            CleanupOldTempFiles(aiInsightsFileUploadModel);
+            CleanupOldTempFiles(aiInsightsFileUploadModel, TimeSpan.FromMinutes(1));
 
             var fileName = Path.GetFileName(uploadFile.FileName);
 
@@ -172,9 +172,15 @@
 
         protected void SaveUploadedFile(HttpPostedFileBase uploadFile, string fileName, AIInsightsFileUploadModel aiInsightsFileUploadModel)
         {
-            var fullPath = Server.MapPath(Path.Combine(aiInsightsFileUploadModel.TempFolder, fileName));
+            var userID = CurrentSession.UserId.ToString();
 
-            Directory.CreateDirectory(Server.MapPath(aiInsightsFileUploadModel.TempFolder));
+            var userSubFolder = Path.Combine(aiInsightsFileUploadModel.TempFolder, userID);
+
+            var serverUserFolderPath = Server.MapPath(userSubFolder);
+
+            Directory.CreateDirectory(serverUserFolderPath);
+           
+            var fullPath = Path.Combine(serverUserFolderPath, fileName);          
 
             uploadFile.SaveAs(fullPath);
 
@@ -183,21 +189,26 @@
             Session["UploadedFileName"] = fileName;
         }
 
-        protected void CleanupOldTempFiles(AIInsightsFileUploadModel aiInsightsFileUploadMode)
+        protected void CleanupOldTempFiles(AIInsightsFileUploadModel aiInsightsFileUploadModel, TimeSpan maxAge)
         {
-            string path = Server.MapPath(aiInsightsFileUploadMode.TempFolder);
+            var userID = CurrentSession.UserId.ToString();
 
-            if (!Directory.Exists(path)) 
+            var userSubFolder = Path.Combine(aiInsightsFileUploadModel.TempFolder, userID);
+
+            var folderPath = Server.MapPath(userSubFolder);           
+
+            if (!Directory.Exists(folderPath)) 
                 return;
 
-            var files = Directory.GetFiles(path);
+            var files = Directory.GetFiles(folderPath);
+
             foreach (var file in files)
             {
                 try
                 {
                     var creationTime = System.IO.File.GetCreationTime(file);
 
-                    if (DateTime.Now - creationTime > TimeSpan.FromHours(1))
+                    if (DateTime.Now - creationTime > maxAge)
                     {
                         System.IO.File.Delete(file);
                     }

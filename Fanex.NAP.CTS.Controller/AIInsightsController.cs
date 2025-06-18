@@ -170,11 +170,11 @@
             if (!_aiInsightsFileUploadModel.AllowedExtensions.Contains(extension))
             {
                 return RedirectToAction("Upload");
-            }
-
-            var fileName = Path.GetFileName(uploadFile.FileName);
+            }            
 
             base.SaveUploadedFile(uploadFile);
+
+            var fileName = Path.GetFileName(uploadFile.FileName);
 
             Session["UploadedFileName"] = fileName;
 
@@ -185,7 +185,9 @@
        
         private string GetAnalysisFilePath(string fileName)
         {
-            var fullPath = Server.MapPath(Path.Combine(_aiInsightsFileUploadModel.TempFolder, fileName));
+            var userSubFolder = Path.Combine(_aiInsightsFileUploadModel.TempFolder, CurrentSession.UserId.ToString());
+
+            var fullPath = Server.MapPath(Path.Combine(userSubFolder, fileName));
 
             return fullPath;
         }
