@@ -189,7 +189,8 @@ function AIInsights() {
                             <div class="chart-title">
                                 <h3>${chart.title}</h3>
                             </div>
-                             <div class="chart-image">
+
+                            <div class="chart-image">
                                 <img src="data:image/png;base64,${chart.base64_image}" alt="${chart.name}" />
                             </div>
 
@@ -197,7 +198,18 @@ function AIInsights() {
                                 <div class="chart-analysis">
                                     <p><strong>Analysis:</strong></p>
                                     <ul>
-                                        <li>${chart.analysis}</li>
+                                        ${
+                                            chart.analysis
+                                                ? chart.analysis
+                                                    .split('\n') 
+                                                    .filter((a) => a.trim() !== '')
+                                                    .map((a) => {
+                                                        let text = a.trim().replace(/^[-\d.]+\s*/, '');
+                                                        return `<li>${text}</li>`;
+                                                    })
+                                                    .join('')
+                                                : ''
+                                        }
                                     </ul>
                                 </div>
                                 <div class="chart-suggestion">
@@ -207,62 +219,62 @@ function AIInsights() {
                                     </ul>
                                 </div>
                             </div>
-                        </div> 
+                        </div>
                         <div class="divider"></div>
-                    </div>                    
+                    </div>
                 `);
-
                 $chartSection.append($card);
             });
         }
     }
 
-    function RenderVisualization(visualizationData) {
-        if (visualizationData) {
-            var summaries = visualizationData.summary_list;
+    //function RenderVisualization(visualizationData) {
+    //    if (visualizationData) {
+    //        var summaries = visualizationData.summary_list;
 
-            var $ul = domElements.summarySection;
-            $ul.empty();
+    //        var $ul = domElements.summarySection;
+    //        $ul.empty();
 
-            summaries.forEach(function (summary) {
-                $ul.append(`<li>${summary}</li>`);
-            });
+    //        summaries.forEach(function (summary) {
+    //            $ul.append(`<li>${summary}</li>`);
+    //        });
 
-            var $chartSection = domElements.chartSection;
+    //        var $chartSection = domElements.chartSection;
 
-            visualizationData.chart_infos.forEach(function (chart) {
-                var $card = $(`
-                    <div class="card-body">
-                        <div class="chart-item">
-                            <div class="chart-title">
-                                <h3>${chart.title}</h3>
-                            </div>
-                        </div>
-                        <div class="chart-image">
-                            <img src="data:image/png;base64,${chart.base64_image}" alt="${chart.name}" style="display: block; margin: auto; max-width: 80%; height: auto;" />
-                        </div>
-                        <div class="chart-content">
-                            <div class="chart-analysis">
-                                <p><strong>Analysis:</strong></p>
-                                <ul>
-                                    <li>${chart.analysis}</li>
-                                </ul>
-                            </div>
-                            <div class="chart-suggestion">
-                                <p><strong>Suggestion:</strong></p>
-                                <ul>
-                                    ${chart.suggestions.map(s => `<li>${s}</li>`).join('')}
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="divider"></div>
-                    </div>
-                `);
+    //        visualizationChart.forEach(function (chart) {
+    //            var $card = $(`
+    //                <div class="card-body">
+    //                    <div class="chart-item">
+    //                        <div class="chart-title">
+    //                            <h3>${chart.title}</h3>
+    //                        </div>
 
-                $chartSection.append($card);
-            });
-        }      
-    }
+    //                        <div class="chart-image">
+    //                            <img src="data:image/png;base64,${chart.base64_image}" alt="${chart.name}" />
+    //                        </div>
+
+    //                        <div class="chart-content">
+    //                            <div class="chart-analysis">
+    //                                <p><strong>Analysis:</strong></p>
+    //                                <ul>
+    //                                    <li>${chart.analysis}</li>
+    //                                </ul>
+    //                            </div>
+    //                            <div class="chart-suggestion">
+    //                                <p><strong>Suggestion:</strong></p>
+    //                                <ul>
+    //                                    ${chart.suggestions.map(s => `<li>${s}</li>`).join('')}
+    //                                </ul>
+    //                            </div>
+    //                        </div>
+    //                    </div>
+    //                    <div class="divider"></div>
+    //                </div>
+    //            `);
+    //            $chartSection.append($card);
+    //        });
+    //    }      
+    //}
 
     function RenderStatistics(statisticsHtml) {
         if (statisticsHtml) {
@@ -322,6 +334,10 @@ function AIInsights() {
 
         domElements.chatInput.val('');
 
+        let textarea = domElements.chatInput[0];
+        textarea.style.height = 'auto';
+        textarea.style.height = '36px';
+
         let requestParam = {          
             question: message
         };
@@ -344,7 +360,6 @@ function AIInsights() {
                 `);
 
                 $chatMessages.append($botMessage);
-
                 $chatMessages.scrollTop($chatMessages[0].scrollHeight);
 
                 RenderVisualizationChart(response.chart_infos);
@@ -365,18 +380,51 @@ function AIInsights() {
         });
     }
 
+    //function AttachChatbotEvents() {
+    //    domElements.sendButton.on('click', SendChatMessage);
+
+    //    domElements.chatInput.on('keypress', function (e) {
+    //        if (e.which === 13) {
+    //            e.preventDefault();
+
+    //            SendChatMessage();
+    //        }
+    //    });
+
+    //}
+
     function AttachChatbotEvents() {
         domElements.sendButton.on('click', SendChatMessage);
 
         domElements.chatInput.on('keypress', function (e) {
-            if (e.which === 13) {
+            if (e.which === 13 && !e.shiftKey) {
                 e.preventDefault();
-
                 SendChatMessage();
             }
         });
+
+        function autoResizeTextarea() {
+            let textarea = domElements.chatInput[0];
+            if (!textarea) return;
+
+            textarea.style.height = 'auto'; 
+            const maxHeight = window.innerHeight / 3;
+
+            if (textarea.scrollHeight > maxHeight) {
+                textarea.style.height = maxHeight + 'px';
+                textarea.style.overflowY = 'auto';
+            } else {
+                textarea.style.height = textarea.scrollHeight + 'px';
+                textarea.style.overflowY = 'hidden';
+            }
+        }
+
+        domElements.chatInput.on('input', autoResizeTextarea);
+
+        autoResizeTextarea();
     }
 
+   
     function Initial() {
         AttachEventListeners();
 

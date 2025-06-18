@@ -21,7 +21,6 @@
     {       
         private readonly IAIInsightsService _aIInsightsService;
         private AIInsightsFileUploadModel _aiInsightsFileUploadModel;
-        private readonly string UserID = "AIInsightsUserID";
         private const string ChatSessionKey = "ChatHistory";
 
 
@@ -29,7 +28,6 @@
         {
             _aIInsightsService = new AIInsightsService();
             _aiInsightsFileUploadModel = new AIInsightsFileUploadModel();
-            UserID = CurrentSession.UserId.ToString();
         }
 
         public ActionResult Index()
@@ -70,7 +68,7 @@
                     language = "en"
                 };
 
-                data = _aIInsightsService.Analyze(request, ConfigSettings.AIInsightsAnalyzeUrl);                
+                data = _aIInsightsService.Analyze(request, ConfigSettings.AIInsightsAnalyzeUrl);
             }
             catch (Exception ex)
             {

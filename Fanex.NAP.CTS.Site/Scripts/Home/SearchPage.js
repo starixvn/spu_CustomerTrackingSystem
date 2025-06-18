@@ -22,7 +22,14 @@
         }
     });
 
-    function Initial() {        
+    function Initial() {
+        fileInput.val('');
+        uploadedFile.hide();
+        fileNameSpan.text('').attr('title', '');
+        errorMessage.addClass('hide').text('');
+        hasDraggedFile = false;
+        iconSearch.attr('src', $('#searchIcon').data('default'));
+
         input.focus(function () {
             searchBox.addClass("has-shadow");
         }).focusout(function () {            
@@ -84,23 +91,17 @@
                 const dataTransfer = new DataTransfer();
 
                 errorMessage.addClass('hide').text('');
-
                 fileNameSpan.text(file.name).attr('title', file.name);
-
                 uploadedFile.show();
                 dataTransfer.items.add(file);
                 fileInput[0].files = dataTransfer.files; 
-
                 hasDraggedFile = true;
-
                 iconSearch.attr('src', $('#searchIcon').data('enabled'));
             } else {
                 fileInput.val('');
                 uploadedFile.hide();
                 hasDraggedFile = false;
-
                 errorMessage.text('Please upload a .xls file!').removeClass('hide');
-
                 iconSearch.attr('src', $('#searchIcon').data('default'));
             }
         }
