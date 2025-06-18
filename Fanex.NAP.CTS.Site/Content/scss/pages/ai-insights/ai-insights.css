@@ -460,6 +460,10 @@
   z-index: 101;
   background: #FFFFFF;
 }
+.ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image img {
+    max-width: 68% !important;
+    height: auto;
+}
 .ai-insights .ai-insights-container .form-filter-section .group-control {
   background: #fff;
   padding: 1rem 0 0 0;
@@ -509,7 +513,6 @@
   flex: 1 1 auto;
   align-items: center;
   border: 1px solid #d1d5db;
-  border-radius: 0.2rem;
   align-self: flex-end;
   height: 2.9rem;
   padding: 0 10px;
@@ -533,7 +536,8 @@
   transition: color 0.2s;
   color: #fff;
   background: #396EF8;
-  border-radius: 0.2rem;
+  border-top-right-radius: 0.2rem;
+  border-bottom-right-radius: 0.2rem;
   transition: background-color 0.2s ease;
 }
 .ai-insights .ai-insights-container .form-filter-section .group-control .form-filter .file-wrapper .edit-icon:hover {
@@ -563,6 +567,9 @@
   display: flex;
   flex-direction: column;
 }
+.content-card-section #summary-section .card-body {
+  padding: 24px !important;
+}
 .content-card-section .content-card {
   margin-top: 1rem;
   margin-bottom: 0;
@@ -589,6 +596,7 @@
   flex-direction: column;
   gap: 1.5rem;
   line-height: 1.5;
+  padding: 24px 24px 0;
 }
 .content-card-section .content-card .card-body ul {
   list-style-type: none;
@@ -714,6 +722,7 @@
 }
 .content-card-section .content-card .card-body .divider {
   border-bottom: 1px solid #e0e0e0;
+  padding-top: 12px;
 }
 .content-card-section .content-card .card-body .vertical-divider {
   display: flex;

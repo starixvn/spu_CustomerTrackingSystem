@@ -27,6 +27,13 @@
 
             &.chatbot-open {
                 width: calc(100% - (100vw / 5));
+
+                .chart-image {
+                    img {
+                        max-width: 68% !important;
+                        height: auto;
+                    }
+                }
             }
         }
 
@@ -85,17 +92,17 @@
                             width: 30px;
                         }
 
-                        .file-name-container {
-                            display: flex;
-                            flex: 1 1 auto;
-                            align-items: center;
-                            border: 1px solid #d1d5db;
-                            border-radius: 0.2rem;
-                            align-self: flex-end;
-                            height: 2.9rem;
-                            padding: 0 10px;
-                            overflow: hidden;
-                        }
+                    .file-name-container {
+                        display: flex;
+                        flex: 1 1 auto;
+                        align-items: center;
+                        border: 1px solid #d1d5db;
+                        border-radius: 0.2rem;
+                        align-self: flex-end;
+                        height: 2.9rem;
+                        padding: 0 10px;
+                        overflow: hidden;
+                    }
 
                         .file-name-label {
                             flex: 1;
@@ -106,18 +113,19 @@
                             color: #9f9f9f;
                         }
 
-                        .edit-icon {
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            width: 30px;
-                            height: 3rem;
-                            cursor: pointer;
-                            transition: color 0.2s;
-                            color: #fff;
-                            background: #396EF8;
-                            border-radius: 0.2rem;
-                            transition: background-color 0.2s ease;
+                    .edit-icon {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 30px;
+                        height: 3rem;
+                        cursor: pointer;
+                        transition: color 0.2s;
+                        color: #fff;
+                        background: #396EF8;
+                        border-top-right-radius: 0.2rem;
+                        border-bottom-right-radius: 0.2rem;
+                        transition: background-color 0.2s ease;
 
                             &:hover {
                                 background: #1e40af;
@@ -155,6 +163,12 @@
     display: flex;
     flex-direction: column;
 
+    #summary-section {
+        .card-body {
+            padding: 24px !important;
+        }
+    }
+
     .content-card {
         margin-top: 1rem;
         margin-bottom: 0;
@@ -183,6 +197,7 @@
             flex-direction: column;
             gap: 1.5rem;
             line-height: 1.5;
+            padding: 24px 24px 0;
 
             ul {
                 list-style-type: none;
@@ -331,6 +346,7 @@
 
             .divider {
                 border-bottom: 1px solid #e0e0e0;
+                padding-top: 12px;
             }
 
             .vertical-divider {
