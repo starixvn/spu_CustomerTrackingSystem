@@ -454,28 +454,34 @@
 .ai-insights .ai-insights-container .ai-insights-content.chatbot-open {
   width: calc(100% - 20vw);
 }
-.ai-insights .ai-insights-container .group-control {
+.ai-insights .ai-insights-container .form-filter-section {
+  position: sticky;
+  top: 8rem;
+  z-index: 101;
+  background: #FFFFFF;
+}
+.ai-insights .ai-insights-container .form-filter-section .group-control {
   background: #fff;
   padding: 1rem 0 0 0;
   width: 50%;
   transition: width 0.3s ease;
   padding-top: 2.5rem;
 }
-.chatbot-open .ai-insights .ai-insights-container .group-control {
+.chatbot-open .ai-insights .ai-insights-container .form-filter-section .group-control {
   width: 40%;
 }
-.ai-insights .ai-insights-container .group-control .form-filter {
+.ai-insights .ai-insights-container .form-filter-section .group-control .form-filter {
   display: flex;
   align-items: center;
   gap: 16px;
   flex-wrap: nowrap;
   height: 3rem;
 }
-.ai-insights .ai-insights-container .group-control .form-filter > * {
+.ai-insights .ai-insights-container .form-filter-section .group-control .form-filter > * {
   flex: 1 1 0;
   max-width: 100%;
 }
-.ai-insights .ai-insights-container .group-control .form-filter .file-wrapper {
+.ai-insights .ai-insights-container .form-filter-section .group-control .form-filter .file-wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -486,19 +492,19 @@
   border: 1px solid #e3e9f6;
   height: 3rem;
 }
-.ai-insights .ai-insights-container .group-control .form-filter .file-wrapper:hover {
+.ai-insights .ai-insights-container .form-filter-section .group-control .form-filter .file-wrapper:hover {
   background-color: #dbeafe;
 }
-.ai-insights .ai-insights-container .group-control .form-filter .file-wrapper input[type=file] {
+.ai-insights .ai-insights-container .form-filter-section .group-control .form-filter .file-wrapper input[type=file] {
   display: none;
 }
-.ai-insights .ai-insights-container .group-control .form-filter .file-wrapper label {
+.ai-insights .ai-insights-container .form-filter-section .group-control .form-filter .file-wrapper label {
   margin: 0;
   color: #2053d9;
   font-weight: bold;
   width: 30px;
 }
-.ai-insights .ai-insights-container .group-control .form-filter .file-wrapper .file-name-container {
+.ai-insights .ai-insights-container .form-filter-section .group-control .form-filter .file-wrapper .file-name-container {
   display: flex;
   flex: 1 1 auto;
   align-items: center;
@@ -509,7 +515,7 @@
   padding: 0 10px;
   overflow: hidden;
 }
-.ai-insights .ai-insights-container .group-control .form-filter .file-wrapper .file-name-label {
+.ai-insights .ai-insights-container .form-filter-section .group-control .form-filter .file-wrapper .file-name-label {
   flex: 1;
   overflow: hidden;
   white-space: nowrap;
@@ -517,7 +523,7 @@
   flex-grow: 1;
   color: #9f9f9f;
 }
-.ai-insights .ai-insights-container .group-control .form-filter .file-wrapper .edit-icon {
+.ai-insights .ai-insights-container .form-filter-section .group-control .form-filter .file-wrapper .edit-icon {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -530,10 +536,10 @@
   border-radius: 0.2rem;
   transition: background-color 0.2s ease;
 }
-.ai-insights .ai-insights-container .group-control .form-filter .file-wrapper .edit-icon:hover {
+.ai-insights .ai-insights-container .form-filter-section .group-control .form-filter .file-wrapper .edit-icon:hover {
   background: #1e40af;
 }
-.ai-insights .ai-insights-container .group-control .form-filter button#btnGenerate {
+.ai-insights .ai-insights-container .form-filter-section .group-control .form-filter button#btnGenerate {
   outline: none;
   border: 0;
   background: #396EF8;
@@ -546,7 +552,7 @@
   margin: 0;
   flex: 0 0 auto;
 }
-.ai-insights .ai-insights-container .group-control .form-filter .view-options {
+.ai-insights .ai-insights-container .form-filter-section .group-control .form-filter .view-options {
   flex: 0 0 auto;
   display: flex;
   align-items: center;

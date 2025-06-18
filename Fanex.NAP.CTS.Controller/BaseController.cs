@@ -10,7 +10,6 @@
     using Fanex.NAP.Core.Web.Context;
     using Fanex.NAP.Core.Web.Session;
     using Fanex.NAP.CTS.Core.ExportExcel;
-    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AIInsights;
     using Fanex.NAP.CTS.Resource.Consts;
     using NPOI.SS.UserModel;
@@ -206,6 +205,9 @@
             {
                 try
                 {
+                    if (!System.IO.File.Exists(file))
+                        continue;
+
                     var creationTime = System.IO.File.GetCreationTime(file);
 
                     if (DateTime.Now - creationTime > maxAge)
