@@ -159,7 +159,7 @@
         {
             var aiInsightsFileUploadModel = new AIInsightsFileUploadModel();
 
-            CleanupOldTempFiles(aiInsightsFileUploadModel, TimeSpan.FromMinutes(1));
+            CleanupOldTempFiles(aiInsightsFileUploadModel, TimeSpan.FromHours(1));
 
             var fileName = Path.GetFileName(uploadFile.FileName);
 
