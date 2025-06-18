@@ -454,15 +454,16 @@
 .ai-insights .ai-insights-container .ai-insights-content.chatbot-open {
   width: calc(100% - 20vw);
 }
+.ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image img {
+  max-width: 68% !important;
+  height: auto;
+}
 .ai-insights .ai-insights-container .form-filter-section {
   position: sticky;
   top: 8rem;
   z-index: 101;
   background: #FFFFFF;
-}
-.ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image img {
-    max-width: 68% !important;
-    height: auto;
+  padding-bottom: 1rem;
 }
 .ai-insights .ai-insights-container .form-filter-section .group-control {
   background: #fff;
@@ -513,6 +514,7 @@
   flex: 1 1 auto;
   align-items: center;
   border: 1px solid #d1d5db;
+  border-radius: 0.2rem;
   align-self: flex-end;
   height: 2.9rem;
   padding: 0 10px;
@@ -571,8 +573,7 @@
   padding: 24px !important;
 }
 .content-card-section .content-card {
-  margin-top: 1rem;
-  margin-bottom: 0;
+  margin-bottom: 1rem;
   border: 1px solid #DFDFDF;
   box-sizing: border-box;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.15);
@@ -636,7 +637,7 @@
 }
 .content-card-section .content-card .card-body .chart-item .chart-content {
   font-size: 14px;
-  padding: 1rem;
+  padding: 24px 0;
 }
 .content-card-section .content-card .card-body .chart-item .chart-content p {
   margin: 0.5rem 0;
@@ -694,6 +695,12 @@
 .content-card-section .content-card .card-body .stats-item .stats-chart .plotly-graph-div {
   width: 100% !important;
   height: 200px;
+}
+.content-card-section .content-card .card-body .stats-item .stats-chart .plotly-graph-div .svg-container {
+  width: 100%;
+}
+.content-card-section .content-card .card-body .stats-item .stats-chart .plotly-graph-div .svg-container svg {
+  width: 90%;
 }
 .content-card-section .content-card .card-body .stats-item .stats-content {
   flex: 1 0 auto;
