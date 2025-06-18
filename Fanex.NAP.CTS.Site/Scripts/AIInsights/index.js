@@ -189,27 +189,27 @@ function AIInsights() {
                             <div class="chart-title">
                                 <h3>${chart.title}</h3>
                             </div>
-                        </div>
-                        <div class="chart-image">
-                            <img src="data:image/png;base64,${chart.base64_image}" alt="${chart.name}" />
-                        </div>
-                        <div class="chart-content">
-                            <div class="chart-analysis">
-                                <p><strong>Analysis:</strong></p>
-                                <ul>
-                                    <li>${chart.analysis}</li>
-                                </ul>
+                             <div class="chart-image">
+                                <img src="data:image/png;base64,${chart.base64_image}" alt="${chart.name}" />
                             </div>
-                            <div class="chart-suggestion">
-                                <p><strong>Suggestion:</strong></p>
-                                <ul>
-                                    ${chart.suggestions.map(s => `<li>${s}</li>`).join('')}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="divider"></div>
+                            <div class="chart-content">
+                                <div class="chart-analysis">
+                                    <p><strong>Analysis:</strong></p>
+                                    <ul>
+                                        <li>${chart.analysis}</li>
+                                    </ul>
+                                </div>
+                                <div class="chart-suggestion">
+                                    <p><strong>Suggestion:</strong></p>
+                                    <ul>
+                                        ${chart.suggestions.map(s => `<li>${s}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="divider"></div>
+                    </div>                    
                 `);
 
                 $chartSection.append($card);
