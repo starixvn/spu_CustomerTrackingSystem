@@ -587,6 +587,7 @@
   line-height: 20px;
   border: 0;
   box-sizing: border-box;
+  font-family: "Lato", Tahoma, sans-serif;
 }
 .chatbot-panel .chatbot-body .chat-input textarea::placeholder {
   color: #545454;
@@ -676,6 +677,7 @@
     line-height: 20px;
     border: 0;
     box-sizing: border-box;
+    font-family: "Lato", Tahoma, sans-serif;
   }
   .chatbot-panel .chatbot-body .chat-input textarea::placeholder {
     color: #545454;

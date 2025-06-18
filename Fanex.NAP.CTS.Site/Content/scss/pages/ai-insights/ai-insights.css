@@ -430,10 +430,21 @@
   height: 30px;
 }
 
+.ai-insights .content {
+  position: fixed;
+  top: 6rem;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  z-index: 100;
+  margin: 0;
+  box-sizing: border-box;
+}
 .ai-insights .ai-insights-container {
   margin: 0 1.6rem 1rem 1.6rem;
   position: relative;
   box-sizing: border-box;
+  padding-top: 2rem;
 }
 .ai-insights .ai-insights-container .ai-insights-content {
   transition: width 0.3s ease;
@@ -444,13 +455,11 @@
   width: calc(100% - 20vw);
 }
 .ai-insights .ai-insights-container .group-control {
-  position: sticky;
-  top: 9rem;
-  z-index: 99;
   background: #fff;
   padding: 1rem 0 0 0;
   width: 50%;
   transition: width 0.3s ease;
+  padding-top: 2.5rem;
 }
 .chatbot-open .ai-insights .ai-insights-container .group-control {
   width: 40%;
@@ -547,10 +556,10 @@
 .content-card-section {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
 }
 .content-card-section .content-card {
   margin-top: 1rem;
+  margin-bottom: 0;
   border: 1px solid #DFDFDF;
   box-sizing: border-box;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.15);
