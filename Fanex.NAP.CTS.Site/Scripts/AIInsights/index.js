@@ -283,6 +283,7 @@ function AIInsights() {
             });
         }
     }
+
     function LoadHistoryChatMessage() {
         $.ajax(common.modifyRelativeUrl('AIInsights/LoadHistoryChatMessage'), {
             type: 'POST',

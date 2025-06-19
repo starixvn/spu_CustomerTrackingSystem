@@ -101,7 +101,7 @@
                 fileInput.val('');
                 uploadedFile.hide();
                 hasDraggedFile = false;
-                errorMessage.text('Please upload a .xls file!').removeClass('hide');
+                common.showError('Please upload a .xls file!');
                 iconSearch.attr('src', $('#searchIcon').data('default'));
             }
         }
