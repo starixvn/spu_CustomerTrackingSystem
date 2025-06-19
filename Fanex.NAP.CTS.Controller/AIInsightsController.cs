@@ -15,6 +15,7 @@
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using Fanex.NAP.CTS.Model;
     using System.Collections.Generic;
+    using Newtonsoft.Json;
 
     [NapSuperAuth]
     public class AIInsightsController : BaseController
@@ -67,6 +68,8 @@
                     session_id = CurrentSession.SessionId,
                     language = "en"
                 };
+
+                LogService.Info($"Test Now: {DateTime.Now} UserID: {CurrentSession.UserId} Request API: {JsonConvert.SerializeObject(request)}");
 
                 data = _aIInsightsService.Analyze(request, ConfigSettings.AIInsightsAnalyzeUrl);
             }

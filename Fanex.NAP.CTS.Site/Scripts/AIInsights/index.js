@@ -111,7 +111,7 @@ function AIInsights() {
 
                 formData.append("uploadFile", file);
 
-                fetch("/AIInsights/UploadFile", {
+                fetch(common.modifyRelativeUrl("/AIInsights/UploadFile"), {
                     method: "POST",
                     body: formData
                 })
