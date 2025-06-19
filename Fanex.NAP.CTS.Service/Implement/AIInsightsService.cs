@@ -12,8 +12,10 @@
         }
 
         public AIInsightsAnalyzeResponseModel Analyze(AIInsightsAnalyzeRequestModel param, string url)
-        {           
-            var result = ApiHelper.Post<AIInsightsAnalyzeResponseModel>(url, param, 120);
+        {          
+            var timeout = int.TryParse(ConfigurationManager.AppSettings["ChatbotRequestTimeout"], out var parsed) ? parsed : 120;
+
+            var result = ApiHelper.Post<AIInsightsAnalyzeResponseModel>(url, param, timeout);
 
             Task.WhenAll(result);
 

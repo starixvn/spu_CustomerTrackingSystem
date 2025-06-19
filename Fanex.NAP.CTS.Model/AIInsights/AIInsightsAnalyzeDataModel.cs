@@ -7,5 +7,9 @@
         public string statistics_html { get; set; }
 
         public VisualizationModel visualization_response { get; set; }
+
+        public int ErrorCode { get; set; }
+
+        public string ErrorMessage { get; set; }
     }
 }

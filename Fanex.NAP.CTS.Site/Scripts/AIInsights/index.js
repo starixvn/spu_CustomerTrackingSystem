@@ -56,6 +56,9 @@ function AIInsights() {
             case ViewMode.STATISTICS:             
                 domElements.divVisualization.addClass('hidden');
                 domElements.divStatistics.removeClass('hidden');
+                $('#divStatistics .js-plotly-plot').each(function () {
+                    Plotly.Plots.resize(this);
+                });
                 break;
             default:
                 domElements.divVisualization.removeClass('hidden');
@@ -145,13 +148,18 @@ function AIInsights() {
             success: function (response) {              
                 domElements.btnGenerate.prop('disabled', false);
 
-                if (response) {
+                if (response && response.ErrorCode != -1) {
                     if (response.visualization_response) {
                         RenderVisualizationSummary(response.visualization_response.summary_list);
                         RenderVisualizationChart(response.visualization_response.chart_infos);
                     }
                     
-                    RenderStatistics(response.statistics_html);
+                    RenderStatistics(response.statistics_html);                    
+
+                } else {
+                    common.showError('Sorry Analyze File failed: ' + response.ErrorMessage);
+
+                    console.log(response.ErrorMessage);
                 }
             },
             complete: function () {
@@ -229,43 +237,22 @@ function AIInsights() {
     }
    
     function RenderStatistics(statisticsHtml) {
-        if (statisticsHtml) {
-            let cleanedHtml = $('<div>' + statisticsHtml + '</div>');
-            let style = cleanedHtml.find('style');
-            cleanedHtml.find('script[src*="plotly"]').remove();
-
-            domElements.divStatistics.html(cleanedHtml.html());                      
-
-            forceRepaint(domElements.divStatistics);
-            reinitializeLayoutOrCharts();
+        if (statisticsHtml) {           
+            domElements.divStatistics.html(statisticsHtml);            
+           
+            $('#divStatistics .js-plotly-plot').each(function () {
+                Plotly.Plots.resize(this);
+            });
         }
-    }
+    }        
 
-    function forceRepaint($element) {
-        $element.hide().show(0);         
-    }
-
-    function reinitializeLayoutOrCharts() {
-        setTimeout(() => $(window).trigger('resize'), 300);
-        setTimeout(() => $(window).trigger('resize'), 2000);    
-
-        $('.main-svg').each(function () {
-            ReloadHtml($(this));
-        });
-    }
-
-    function RenderStatistics(statisticsHtml) {
-        if (statisticsHtml) {
-            domElements.divStatistics.html(statisticsHtml);
-            AdjustStatsItemsLayout(); 
-        }    
-    }
-
-    function ReloadHtml($element) {
-        let currentHtml = $element.html();
-        $element.html(currentHtml);
-    }
-
+    //function RenderStatistics(statisticsHtml) {
+    //    if (statisticsHtml) {
+    //        domElements.divStatistics.html(statisticsHtml);
+    //        AdjustStatsItemsLayout(); 
+    //    }    
+    //}
+   
     function AdjustStatsItemsLayout() {
         const $items = $('.column-statistics-section .stats-item');
         const total = $items.length;

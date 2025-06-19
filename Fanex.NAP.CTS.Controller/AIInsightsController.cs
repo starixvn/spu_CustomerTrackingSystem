@@ -73,6 +73,12 @@
             }
             catch (Exception ex)
             {
+                data.response = new AIInsightsAnalyzeDataModel
+                {
+                    ErrorCode = -1,
+                    ErrorMessage = ex.Message
+                };
+
                 var logMessage = new LogMessage(ex.Message)
                                       .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
                                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
