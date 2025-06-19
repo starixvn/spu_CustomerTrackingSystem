@@ -227,59 +227,36 @@ function AIInsights() {
             });
         }
     }
-
-    //function RenderVisualization(visualizationData) {
-    //    if (visualizationData) {
-    //        var summaries = visualizationData.summary_list;
-
-    //        var $ul = domElements.summarySection;
-    //        $ul.empty();
-
-    //        summaries.forEach(function (summary) {
-    //            $ul.append(`<li>${summary}</li>`);
-    //        });
-
-    //        var $chartSection = domElements.chartSection;
-
-    //        visualizationChart.forEach(function (chart) {
-    //            var $card = $(`
-    //                <div class="card-body">
-    //                    <div class="chart-item">
-    //                        <div class="chart-title">
-    //                            <h3>${chart.title}</h3>
-    //                        </div>
-
-    //                        <div class="chart-image">
-    //                            <img src="data:image/png;base64,${chart.base64_image}" alt="${chart.name}" />
-    //                        </div>
-
-    //                        <div class="chart-content">
-    //                            <div class="chart-analysis">
-    //                                <p><strong>Analysis:</strong></p>
-    //                                <ul>
-    //                                    <li>${chart.analysis}</li>
-    //                                </ul>
-    //                            </div>
-    //                            <div class="chart-suggestion">
-    //                                <p><strong>Suggestion:</strong></p>
-    //                                <ul>
-    //                                    ${chart.suggestions.map(s => `<li>${s}</li>`).join('')}
-    //                                </ul>
-    //                            </div>
-    //                        </div>
-    //                    </div>
-    //                    <div class="divider"></div>
-    //                </div>
-    //            `);
-    //            $chartSection.append($card);
-    //        });
-    //    }      
-    //}
-
+   
     function RenderStatistics(statisticsHtml) {
         if (statisticsHtml) {
-            domElements.divStatistics.html(statisticsHtml);
-        }      
+            let cleanedHtml = $('<div>' + statisticsHtml + '</div>');
+            cleanedHtml.find('style').remove();
+            cleanedHtml.find('script[src*="plotly"]').remove();
+
+            domElements.divStatistics.html(cleanedHtml.html());
+           
+            $('.stats-chart').each(function () {
+                ReloadHtml($(this));
+            });
+
+            forceRepaint(domElements.divStatistics);
+            reinitializeLayoutOrCharts();
+        }
+    }
+
+    function forceRepaint($element) {
+        $element.hide().show(0);         
+    }
+
+    function reinitializeLayoutOrCharts() {
+        setTimeout(() => $(window).trigger('resize'), 300);
+        setTimeout(() => $(window).trigger('resize'), 2000);       
+    }
+
+    function ReloadHtml($element) {
+        let currentHtml = $element.html();
+        $element.html(currentHtml);
     }
 
     function LoadHistoryChatMessage() {
