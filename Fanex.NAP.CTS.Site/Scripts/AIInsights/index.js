@@ -231,7 +231,7 @@ function AIInsights() {
     function RenderStatistics(statisticsHtml) {
         if (statisticsHtml) {
             let cleanedHtml = $('<div>' + statisticsHtml + '</div>');
-            cleanedHtml.find('style').remove();
+            let style = cleanedHtml.find('style');
             cleanedHtml.find('script[src*="plotly"]').remove();
 
             domElements.divStatistics.html(cleanedHtml.html());                      
