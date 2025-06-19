@@ -68,9 +68,7 @@
                     session_id = CurrentSession.SessionId,
                     language = "en"
                 };
-
-                LogService.Info($"Test Now: {DateTime.Now} UserID: {CurrentSession.UserId} Request API: {JsonConvert.SerializeObject(request)}");
-
+               
                 data = _aIInsightsService.Analyze(request, ConfigSettings.AIInsightsAnalyzeUrl);
             }
             catch (Exception ex)

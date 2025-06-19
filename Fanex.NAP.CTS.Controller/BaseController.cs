@@ -165,10 +165,9 @@
             var fileName = Path.GetFileName(uploadFile.FileName);
 
             SaveUploadedFile(uploadFile, fileName, aiInsightsFileUploadModel);
+
             Session["UploadedFileName"] = fileName;
-
-            LogService.Info($"Test Now: {DateTime.Now} UserID: {CurrentSession.UserId} UploadedFileName: {Session["UploadedFileName"]}");
-
+          
             ViewBag.FileName = fileName;
         }
 
