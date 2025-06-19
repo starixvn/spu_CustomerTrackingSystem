@@ -10,7 +10,7 @@ function AIInsights() {
         divVisualization: $('#divVisualization'),
         divStatistics: $('#divStatistics'),
         chatInput: $('#chatInput'),
-        chatMessages: $('.chat-messages'),
+        chatMessages: $('#chatMessages'),
         sendButton: $('#sendButton'),
         viewOptions: $('input[name="view"]'),
         summarySection: $('#summary-section ul'),
@@ -318,20 +318,15 @@ function AIInsights() {
 
     function SendChatMessage() {
         let $chatMessages = domElements.chatMessages;
-
         let message = domElements.chatInput.val().trim();        
 
         if (!message) return;
 
-        let $userMessage = $(`
-            <div class="message user-message">
-                <div class="icon-placeholder"></div>
-                <div class="message-text">${message}</div>
-            </div>
-        `);
+        let $userMessage = $('<div class="message user-message">');
+        $userMessage.append('<div class="icon-placeholder"></div>');
+        $userMessage.append($('<div class="message-text">').text(message));
 
         $chatMessages.append($userMessage);
-
         domElements.chatInput.val('');
 
         let textarea = domElements.chatInput[0];
@@ -347,8 +342,6 @@ function AIInsights() {
             contentType: 'application/json',
             dataType: 'json',
             data: JSON.stringify(requestParam),
-            beforeSend: function () {
-            },
             success: function (response) {
                 const answer = response?.answer || 'No response from bot.';
 
@@ -364,11 +357,7 @@ function AIInsights() {
 
                 RenderVisualizationChart(response.chart_infos);
             },
-            complete: function () {
-            },
             error: function (xhr, status, error) {
-                console.error('Chatbot error:', error);
-
                 const $errorMessage = $(`
                     <div class="message bot-message">
                         <div class="icon-wrapper bot-icon"><i class="fas fa-robot"></i></div>
@@ -379,20 +368,6 @@ function AIInsights() {
             }
         });
     }
-
-    //function AttachChatbotEvents() {
-    //    domElements.sendButton.on('click', SendChatMessage);
-
-    //    domElements.chatInput.on('keypress', function (e) {
-    //        if (e.which === 13) {
-    //            e.preventDefault();
-
-    //            SendChatMessage();
-    //        }
-    //    });
-
-    //}
-
     function AttachChatbotEvents() {
         domElements.sendButton.on('click', SendChatMessage);
 
@@ -420,26 +395,17 @@ function AIInsights() {
         }
 
         domElements.chatInput.on('input', autoResizeTextarea);
-
         autoResizeTextarea();
     }
 
-   
     function Initial() {
         AttachEventListeners();
-
         AttachChatbotEvents();
-
         ToggleSections(ViewMode.VISUALIZATION);
-
         domElements.chatbotToggle.on('click', function () { ToggleChatbot(); });
-
         domElements.closeChatbot.on('click', function () { ToggleChatbot(); });      
-
         AnalyzeFile();
-
         domElements.btnGenerate.on('click', function () { AnalyzeFile(); });
-
         LoadHistoryChatMessage();
     }
 

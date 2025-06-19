@@ -448,6 +448,9 @@
   z-index: 1000;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
+.chatbot-toggle i {
+  font-size: 16px;
+}
 
 .chatbot-panel {
   display: none;
@@ -542,6 +545,7 @@
 }
 .chatbot-panel .chatbot-body .chat-messages .message .message-text {
   flex: 1;
+  white-space: pre-wrap;
 }
 .chatbot-panel .chatbot-body .chat-messages .bot-message, .chatbot-panel .chatbot-body .chat-messages .user-message {
   color: #545454;
@@ -588,6 +592,7 @@
   border: 0;
   box-sizing: border-box;
   font-family: "Lato", Tahoma, sans-serif;
+  transition: border 0.2s ease;
 }
 .chatbot-panel .chatbot-body .chat-input textarea::placeholder {
   color: #545454;
