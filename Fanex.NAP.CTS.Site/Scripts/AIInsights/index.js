@@ -215,7 +215,7 @@ function AIInsights() {
                                 <div class="chart-suggestion">
                                     <p><strong>Suggestion:</strong></p>
                                     <ul>
-                                        ${chart.suggestions.map(s => `<li>${s}</li>`).join('')}
+                                        ${chart.suggestions.map(s => `<li>${s.replace(/^[-–•\s]+/, '').trim()}</li>`).join('')}
                                     </ul>
                                 </div>
                             </div>

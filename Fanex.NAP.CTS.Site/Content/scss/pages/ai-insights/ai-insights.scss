@@ -260,8 +260,8 @@
             }
 
             .stats-item {
-                flex: 0 0 calc(25% - 0.3rem);
-                max-width: calc(25% - 0.3rem);
+                flex: 0 0 calc(25% - 1.25rem);
+                max-width: calc(25% - 1.25rem);
                 min-width: 250px;
                 height: auto;
                 display: flex;
@@ -273,18 +273,18 @@
                 overflow: hidden;
 
                 &.last-3 {
-                    flex: 0 0 calc(30% - 0.3rem);
-                    max-width: calc(30% - 0.3rem);
+                    flex: 0 0 calc(30% - 1.25rem);
+                    max-width: calc(30% - 1.25rem);
                 }
 
                 &.last-2 {
-                    flex: 0 0 calc(50% - 0.3rem);
-                    max-width: calc(50% - 0.3rem);
+                    flex: 0 0 calc(50% - 1.25rem);
+                    max-width: calc(50% - 1.25rem);
                 }
 
                 &.last-1 {
-                    flex: 0 0 100%;
-                    max-width: 100%;
+                    flex: 0 0 calc(100% - 1.25rem);
+                    max-width: 0 0 calc(100% - 1.25rem);
                 }
 
                 .stats-title {
@@ -332,17 +332,13 @@
                     margin-bottom: 12px;
                     //overflow: hidden;
                     //width: 90% !important;
-
                     //.plotly-graph-div {
                     //    width: 90% !important;
                     //    height: auto !important;
-
                     //    .plot-container plotly {
                     //        width: 90% !important;
-
                     //        .svg-container {
                     //            width: 90% !important;
-
                     //            .main-svg {
                     //                width: 90% !important;
                     //            }
@@ -431,9 +427,10 @@
     justify-content: center;
     flex-direction: row !important;
     flex-wrap: wrap;
-    gap: 0.3rem !important;
+    gap: 1.5rem !important;
     width: 100%;
     box-sizing: border-box;
+    padding: 24px !important;
 }
 
 .button-generate:disabled {
