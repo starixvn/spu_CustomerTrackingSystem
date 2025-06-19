@@ -234,11 +234,7 @@ function AIInsights() {
             cleanedHtml.find('style').remove();
             cleanedHtml.find('script[src*="plotly"]').remove();
 
-            domElements.divStatistics.html(cleanedHtml.html());
-           
-            $('.stats-chart').each(function () {
-                ReloadHtml($(this));
-            });
+            domElements.divStatistics.html(cleanedHtml.html());                      
 
             forceRepaint(domElements.divStatistics);
             reinitializeLayoutOrCharts();
@@ -251,7 +247,11 @@ function AIInsights() {
 
     function reinitializeLayoutOrCharts() {
         setTimeout(() => $(window).trigger('resize'), 300);
-        setTimeout(() => $(window).trigger('resize'), 2000);       
+        setTimeout(() => $(window).trigger('resize'), 2000);    
+
+        $('.main-svg').each(function () {
+            ReloadHtml($(this));
+        });
     }
 
     function RenderStatistics(statisticsHtml) {
