@@ -3,6 +3,8 @@
 @import "../../components/popup";
 
 .ai-insights {
+    font-family: 'Lato', Tahoma, sans-serif !important;
+
     .content {
         position: fixed;
         top: 6rem;
@@ -43,6 +45,7 @@
             z-index: 101;
             background: #FFFFFF;
             padding-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
 
             .group-control {
                 background: $page-bg;
@@ -93,17 +96,17 @@
                             width: 30px;
                         }
 
-                    .file-name-container {
-                        display: flex;
-                        flex: 1 1 auto;
-                        align-items: center;
-                        border: 1px solid #d1d5db;
-                        border-radius: 0.2rem;
-                        align-self: flex-end;
-                        height: 2.9rem;
-                        padding: 0 10px;
-                        overflow: hidden;
-                    }
+                        .file-name-container {
+                            display: flex;
+                            flex: 1 1 auto;
+                            align-items: center;
+                            border: 1px solid #d1d5db;
+                            border-radius: 0.2rem;
+                            align-self: flex-end;
+                            height: 2.9rem;
+                            padding: 0 10px;
+                            overflow: hidden;
+                        }
 
                         .file-name-label {
                             flex: 1;
@@ -114,19 +117,19 @@
                             color: #9f9f9f;
                         }
 
-                    .edit-icon {
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        width: 30px;
-                        height: 3rem;
-                        cursor: pointer;
-                        transition: color 0.2s;
-                        color: #fff;
-                        background: #396EF8;
-                        border-top-right-radius: 0.2rem;
-                        border-bottom-right-radius: 0.2rem;
-                        transition: background-color 0.2s ease;
+                        .edit-icon {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            width: 30px;
+                            height: 3rem;
+                            cursor: pointer;
+                            transition: color 0.2s;
+                            color: #fff;
+                            background: #396EF8;
+                            border-top-right-radius: 0.2rem;
+                            border-bottom-right-radius: 0.2rem;
+                            transition: background-color 0.2s ease;
 
                             &:hover {
                                 background: #1e40af;
@@ -202,7 +205,6 @@
             display: flex;
             flex-direction: column;
             line-height: 1.5;
-            //padding: 24px 24px 0;
 
             ul {
                 list-style-type: none;
@@ -258,8 +260,8 @@
             }
 
             .stats-item {
-                flex: 1 0 calc(25% - 1rem);
-                max-width: calc(25% - 1rem);
+                flex: 0 0 calc(25% - 0.3rem);
+                max-width: calc(25% - 0.3rem);
                 min-width: 250px;
                 height: auto;
                 display: flex;
@@ -268,10 +270,27 @@
                 border-radius: 4px;
                 padding: 12px;
                 box-sizing: border-box;
+                overflow: hidden;
+
+                &.last-3 {
+                    flex: 0 0 calc(30% - 0.3rem);
+                    max-width: calc(30% - 0.3rem);
+                }
+
+                &.last-2 {
+                    flex: 0 0 calc(50% - 0.3rem);
+                    max-width: calc(50% - 0.3rem);
+                }
+
+                &.last-1 {
+                    flex: 0 0 100%;
+                    max-width: 100%;
+                }
 
                 .stats-title {
                     display: flex;
-                    flex-direction: column;
+                    flex-direction: row;
+                    align-items: center;
                     margin-bottom: 12px;
                     gap: 1rem;
 
@@ -311,19 +330,25 @@
                 .stats-chart {
                     flex: 0 0 auto;
                     margin-bottom: 12px;
+                    //overflow: hidden;
+                    //width: 90% !important;
 
-                    .plotly-graph-div {
-                        width: 100% !important;
-                        height: 200px;
+                    //.plotly-graph-div {
+                    //    width: 90% !important;
+                    //    height: auto !important;
 
-                        .svg-container {
-                            width: 100%;
+                    //    .plot-container plotly {
+                    //        width: 90% !important;
 
-                            svg {
-                                width: 90%;
-                            }
-                        }
-                    }
+                    //        .svg-container {
+                    //            width: 90% !important;
+
+                    //            .main-svg {
+                    //                width: 90% !important;
+                    //            }
+                    //        }
+                    //    }
+                    //}
                 }
 
                 .stats-content {
@@ -343,13 +368,11 @@
 
                         .stat-label {
                             font-weight: 400;
-                            color: #999999;
                             flex: 1;
                         }
 
                         .stat-value {
-                            font-weight: 600;
-                            color: #333333;
+                            font-weight: 600 !important;
                             flex: 1;
                             text-align: right;
                         }
@@ -359,7 +382,6 @@
 
             .divider {
                 border-bottom: 1px solid #e0e0e0;
-                //padding-top: 12px;
             }
 
             .vertical-divider {
@@ -406,9 +428,12 @@
 
 .column-statistics-section {
     display: flex;
+    justify-content: center;
     flex-direction: row !important;
     flex-wrap: wrap;
     gap: 0.3rem !important;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .button-generate:disabled {

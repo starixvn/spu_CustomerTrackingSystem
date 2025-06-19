@@ -254,11 +254,35 @@ function AIInsights() {
         setTimeout(() => $(window).trigger('resize'), 2000);       
     }
 
+    function RenderStatistics(statisticsHtml) {
+        if (statisticsHtml) {
+            domElements.divStatistics.html(statisticsHtml);
+            AdjustStatsItemsLayout(); 
+        }    
+    }
+
     function ReloadHtml($element) {
         let currentHtml = $element.html();
         $element.html(currentHtml);
     }
 
+    function AdjustStatsItemsLayout() {
+        const $items = $('.column-statistics-section .stats-item');
+        const total = $items.length;
+        const fullRows = Math.floor(total / 4);
+        const remaining = total % 4;
+
+        $items.removeClass('last-1 last-2 last-3');
+
+        if (remaining > 0) {
+            const startIndex = fullRows * 4;
+            const $lastItems = $items.slice(startIndex);
+
+            $lastItems.each(function () {
+                $(this).addClass(`last-${remaining}`);
+            });
+        }
+    }
     function LoadHistoryChatMessage() {
         $.ajax(common.modifyRelativeUrl('AIInsights/LoadHistoryChatMessage'), {
             type: 'POST',

@@ -430,6 +430,9 @@
   height: 30px;
 }
 
+.ai-insights {
+  font-family: "Lato", Tahoma, sans-serif !important;
+}
 .ai-insights .content {
   position: fixed;
   top: 6rem;
@@ -464,6 +467,7 @@
   z-index: 101;
   background: #FFFFFF;
   padding-bottom: 1rem;
+  border-bottom: 1px solid #e0e0e0;
 }
 .ai-insights .ai-insights-container .form-filter-section .group-control {
   background: #fff;
@@ -651,8 +655,8 @@
   color: #545454;
 }
 .content-card-section .content-card .card-body .stats-item {
-  flex: 1 0 calc(25% - 1rem);
-  max-width: calc(25% - 1rem);
+  flex: 0 0 calc(25% - 0.3rem);
+  max-width: calc(25% - 0.3rem);
   min-width: 250px;
   height: auto;
   display: flex;
@@ -661,10 +665,24 @@
   border-radius: 4px;
   padding: 12px;
   box-sizing: border-box;
+  overflow: hidden;
+}
+.content-card-section .content-card .card-body .stats-item.last-3 {
+  flex: 0 0 calc(30% - 0.3rem);
+  max-width: calc(30% - 0.3rem);
+}
+.content-card-section .content-card .card-body .stats-item.last-2 {
+  flex: 0 0 calc(50% - 0.3rem);
+  max-width: calc(50% - 0.3rem);
+}
+.content-card-section .content-card .card-body .stats-item.last-1 {
+  flex: 0 0 100%;
+  max-width: 100%;
 }
 .content-card-section .content-card .card-body .stats-item .stats-title {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   margin-bottom: 12px;
   gap: 1rem;
 }
@@ -699,16 +717,6 @@
   flex: 0 0 auto;
   margin-bottom: 12px;
 }
-.content-card-section .content-card .card-body .stats-item .stats-chart .plotly-graph-div {
-  width: 100% !important;
-  height: 200px;
-}
-.content-card-section .content-card .card-body .stats-item .stats-chart .plotly-graph-div .svg-container {
-  width: 100%;
-}
-.content-card-section .content-card .card-body .stats-item .stats-chart .plotly-graph-div .svg-container svg {
-  width: 90%;
-}
 .content-card-section .content-card .card-body .stats-item .stats-content {
   flex: 1 0 auto;
   margin-top: 12px;
@@ -725,12 +733,10 @@
 }
 .content-card-section .content-card .card-body .stats-item .stats-content .stat-row-item .stat-label {
   font-weight: 400;
-  color: #999999;
   flex: 1;
 }
 .content-card-section .content-card .card-body .stats-item .stats-content .stat-row-item .stat-value {
-  font-weight: 600;
-  color: #333333;
+  font-weight: 600 !important;
   flex: 1;
   text-align: right;
 }
@@ -773,9 +779,12 @@
 
 .column-statistics-section {
   display: flex;
+  justify-content: center;
   flex-direction: row !important;
   flex-wrap: wrap;
   gap: 0.3rem !important;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .button-generate:disabled {
