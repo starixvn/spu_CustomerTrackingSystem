@@ -10,7 +10,7 @@
 	</Function>
 
 	<Function Name="Common">
-		<Setting Key="DCS_DC_Transaction_GetHistory" SpName="DCS_DC_Transaction_GetHistory_xtest" DbName="DCSMain.DCS_DataCenter.ctsWeb" Timeout="300" />
+		<Setting Key="DCS_DC_Transaction_GetHistory" SpName="DCS_DC_Transaction_GetHistory_xtest" DbName="CTSMain.DCS_DataCenter.ctsWeb" Timeout="300" />
 		<Setting Key="CTS_DC_Common_ValidateUsername" SpName="CTS_DC_Common_ValidateUsername_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_Common_GetSites" SpName="CTS_DC_Common_GetSites_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_Common_CustomerClass_Get" SpName="CTS_DC_Common_CustomerClass_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
@@ -129,7 +129,7 @@
 	</Function>
 
 	<Function name="LatestTransaction">
-		<Setting Key="DCS_DC_Transaction_GetLatest" SpName="DCS_DC_Transaction_GetLatest_xtest" DbName="DCSMain.DCS_DataCenter.ctsWeb" Timeout="600"/>
+		<Setting Key="DCS_DC_Transaction_GetLatest" SpName="DCS_DC_Transaction_GetLatest_xtest" DbName="CTSMain.DCS_DataCenter.ctsWeb" Timeout="600"/>
 	</Function>
 
 	<Function name="MatchMonitor">
@@ -154,7 +154,7 @@
 	</Function>
 
 	<Function name="TransactionMonitoringReport">
-		<Setting Key="DCS_DC_RPT_Transaction" SpName="DCS_DC_RPT_Transaction_xtest" DbName="DCSMain.DCS_DataCenter.ctsWeb" />
+		<Setting Key="DCS_DC_RPT_Transaction" SpName="DCS_DC_RPT_Transaction_xtest" DbName="CTSMain.DCS_DataCenter.ctsWeb" />
 	</Function>
 
 	<Function name="RobotBetting">
@@ -209,7 +209,7 @@
 	</Function>
 
 	<Function name="LogData">
-		<Setting Key="CTS_Archive_Log_Insert" SpName="CTS_Archive_Log_Insert_xtest" DbName="CTSArchive.CTS_Archive.ctsServiceAdmin" />
+		<Setting Key="CTS_Archive_Log_Insert" SpName="CTS_Archive_Log_Insert_xtest" DbName="CTSARC.CTS_Archive.ctsServiceAdmin" />
 	</Function>
 
 	<Function name="CustomerClassificationBySport">
