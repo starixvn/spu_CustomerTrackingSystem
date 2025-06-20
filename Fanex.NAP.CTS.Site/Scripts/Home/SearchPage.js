@@ -85,7 +85,18 @@
 
     function handleFiles(files) {
         if (files.length > 0) {
+            const maxSize = 20 * 1024 * 1024; // 20MB in bytes
             const file = files[0];
+
+            if (file.size > maxSize) {
+                common.showError('Exceeds the allowed limit of ' + maxSize + " MB");
+                fileInput.val('');
+                uploadedFile.hide();
+                hasDraggedFile = false;                
+                iconSearch.attr('src', $('#searchIcon').data('default'));
+
+                return;
+            }
 
             if (file.name.endsWith('.xls')) {
                 const dataTransfer = new DataTransfer();

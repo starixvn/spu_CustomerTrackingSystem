@@ -116,7 +116,7 @@ function AIInsights() {
                 const formData = new FormData();
                 domElements.fileNameLabel.text(file.name);
                
-                formData.append("uploadFile", file);
+                formData.append("uploadFile", file);                
 
                 fetch(common.modifyRelativeUrl("/AIInsights/UploadFile"), {
                     method: "POST",
@@ -125,6 +125,7 @@ function AIInsights() {
                     .then(response => response.json())
                     .then(response => {
                         if (response.success == false) {
+                            domElements.btnGenerate.prop('disabled', true);
                             domElements.fileNameLabel.text(NoFileUpload);
 
                             UpdateTitle();
@@ -132,6 +133,8 @@ function AIInsights() {
                             common.showError("Upload failed " + response.message);
 
                             throw new Error("Upload failed" + response.message);
+                        } else {
+                            domElements.btnGenerate.prop('disabled', false);
                         }
 
                         return response.message;
