@@ -80,6 +80,10 @@ function AIInsights() {
             $contentWrapper.toggleClass('chatbot-open', !isOpen);
             domElements.chatbotToggle.css('display', isOpen ? 'flex' : 'none');
             domElements.closeChatbot.css('display', isOpen ? 'none' : 'flex');
+
+            if (!isOpen) {
+                setTimeout(ScrollToBottomChat, 100);
+            }
         }
     }
   
@@ -288,8 +292,9 @@ function AIInsights() {
                             `);
 
                         $chatMessages.append($message);
-         
-                    });                                     
+                    });          
+
+                    ScrollToBottomChat();
                 }
             },
             complete: function () { },
@@ -336,6 +341,8 @@ function AIInsights() {
                 `);
 
                 $chatMessages.append($botMessage);
+                ScrollToBottomChat();
+
                 $chatMessages.scrollTop($chatMessages[0].scrollHeight);
 
                 RenderVisualizationChart(response.chart_infos);
@@ -380,6 +387,11 @@ function AIInsights() {
 
         domElements.chatInput.on('input', autoResizeTextarea);
         autoResizeTextarea();
+    }
+
+    function ScrollToBottomChat() {
+        let $chatMessages = domElements.chatMessages;
+        $chatMessages.scrollTop($chatMessages[0].scrollHeight);
     }
 
     function Initial() {
