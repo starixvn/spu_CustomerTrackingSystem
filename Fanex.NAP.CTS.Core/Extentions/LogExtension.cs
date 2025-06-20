@@ -17,6 +17,8 @@
         public static void LogInfo(this string message)
         {
             LogService.Info(ConfigSettings.EnvironmentName + " " + message);
+
+            LogService.Error(ConfigSettings.EnvironmentName + " " + message);
         }
 
         public static void LogError(this Exception ex, string message = null)
