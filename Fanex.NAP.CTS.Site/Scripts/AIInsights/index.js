@@ -22,6 +22,8 @@ function AIInsights() {
         STATISTICS: "statistics"
     };
 
+    const NoFileUpload = "No file uploaded";
+
     let $contentWrapper = EnsureContentWrapperExists();
 
     function EnsureContentWrapperExists() {
@@ -89,11 +91,11 @@ function AIInsights() {
   
     function UpdateTitle() {
         let currentText = domElements.fileNameLabel.text();
-        domElements.fileNameLabel.attr('title', currentText || 'No file uploaded');
+        domElements.fileNameLabel.attr('title', currentText || NoFileUpload);
     }
 
     if (domElements.fileInput.length && domElements.fileNameLabel.length) {
-        let initialFileName = domElements.fileNameLabel.text() || 'No file uploaded';
+        let initialFileName = domElements.fileNameLabel.text() || NoFileUpload;
 
         domElements.fileNameLabel.text(initialFileName);
 
@@ -113,36 +115,59 @@ function AIInsights() {
             if (file) {
                 const formData = new FormData();
                 domElements.fileNameLabel.text(file.name);
-
-                UpdateTitle();
-
+               
                 formData.append("uploadFile", file);
 
                 fetch(common.modifyRelativeUrl("/AIInsights/UploadFile"), {
                     method: "POST",
                     body: formData
                 })
+                    .then(response => response.json())
                     .then(response => {
-                        if (!response.ok) throw new Error("Upload failed");
-                        return response.text();
+                        if (response.success == false) {
+                            domElements.fileNameLabel.text(NoFileUpload);
+
+                            UpdateTitle();
+
+                            common.showError("Upload failed " + response.message);
+
+                            throw new Error("Upload failed" + response.message);
+                        }
+
+                        return response.message;
                     })
                     .then(fileName => {
                         console.log("Upload success, file name:", fileName);
+
                         domElements.fileNameLabel.text(fileName);
 
                         UpdateTitle();
+
+                        common.showSuccess('File uploaded successfully: ' + fileName, 2000);
+                        
                     })
                     .catch(error => {
                         console.error("Upload error:", error);
+
+                        common.showError("Upload failed, file name:" + fileName);                        
                     });
             } else {
-                domElements.fileNameLabel.text("No file uploaded");
-                UpdateTitle();
+                if (domElements.fileNameLabel.tex.trim() != NoFileUpload) {
+                    domElements.fileNameLabel.text(NoFileUpload);
+                    UpdateTitle();
+                }               
             }
         });
     }
 
     function AnalyzeFile() { 
+
+        let fileName = domElements.fileNameLabel.text().trim();
+
+        if (fileName == NoFileUpload || fileName == '') {
+            return;
+        }
+
         $.ajax(common.modifyRelativeUrl('AIInsights/AnalyzeFile'), {
             type: 'POST',       
             beforeSend: function () {       

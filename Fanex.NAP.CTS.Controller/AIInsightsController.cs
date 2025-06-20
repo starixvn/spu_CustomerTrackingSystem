@@ -16,6 +16,7 @@
     using Fanex.NAP.CTS.Model;
     using System.Collections.Generic;
     using Newtonsoft.Json;
+    using EasyNetQ;
 
     [NapSuperAuth]
     public class AIInsightsController : BaseController
@@ -161,22 +162,23 @@
         public ActionResult UploadFile(HttpPostedFileBase uploadFile)
         {            
             if (uploadFile == null || uploadFile.ContentLength == 0)
-            {              
-                return RedirectToAction("Upload");
+            {                
+                return Json(new
+                {
+                    success = false,
+                    message = $"Content cannot be empty."
+                }, JsonRequestBehavior.AllowGet);
             }
 
             if (uploadFile.ContentLength > _aiInsightsFileUploadModel.MaxFileSizeBytes)
-            {              
-                return RedirectToAction("Upload");
-            }
-
-            var extension = Path.GetExtension(uploadFile.FileName).ToLower();
-
-            if (!_aiInsightsFileUploadModel.AllowedExtensions.Contains(extension))
             {
-                return RedirectToAction("Upload");
-            }            
-
+                return Json(new
+                {
+                    success = false,
+                    message = $"Exceeds the allowed limit of {_aiInsightsFileUploadModel.MaxFileSizeBytes} MB."
+                }, JsonRequestBehavior.AllowGet);               
+            }
+            
             base.SaveUploadedFile(uploadFile);
 
             var fileName = Path.GetFileName(uploadFile.FileName);
@@ -185,7 +187,11 @@
 
             ViewBag.FileName = fileName;
 
-            return Content(fileName);          
+            return Json(new
+            {
+                success = true,
+                message = fileName
+            }, JsonRequestBehavior.AllowGet);
         }
        
         private string GetAnalysisFilePath(string fileName)
