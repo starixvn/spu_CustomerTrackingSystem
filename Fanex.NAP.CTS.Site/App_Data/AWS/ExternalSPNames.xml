@@ -29,8 +29,8 @@
 	</Function>
 
 	<Function Name="Association">
-		<Setting Key="SPU_AIML_GetAssociationInfo" SpName="SPU_AIML_GetAssociationInfo" DbName="AIMain.SPU_AIML.aimlService" />
-		<Setting Key="SPU_AIML_GetAssociationByIPInfo" SpName="SPU_AIML_GetAssociationByIPInfo" DbName="AIMain.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_GetAssociationInfo" SpName="SPU_AIML_GetAssociationInfo" DbName="CTSARC.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_GetAssociationByIPInfo" SpName="SPU_AIML_GetAssociationByIPInfo" DbName="CTSARC.SPU_AIML.aimlService" />
 	</Function>
 
 	<Function name="MatchMonitor">
