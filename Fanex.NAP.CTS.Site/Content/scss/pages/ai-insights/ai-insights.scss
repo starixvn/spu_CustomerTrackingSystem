@@ -260,8 +260,8 @@
             }
 
             .stats-item {
-                flex: 0 0 calc(25% - 1.25rem);
-                max-width: calc(25% - 1.25rem);
+                flex: 0 0 calc((100% - 4.5rem) / 4);
+                max-width: calc((100% - 4.5rem) / 4);
                 min-width: 250px;
                 height: auto;
                 display: flex;
@@ -273,18 +273,18 @@
                 overflow: hidden;
 
                 &.last-3 {
-                    flex: 0 0 calc(30% - 1.25rem);
-                    max-width: calc(30% - 1.25rem);
+                    flex: 0 0 calc((100% - 3rem) / 3);
+                    max-width: calc((100% - 3rem) / 3);
                 }
 
                 &.last-2 {
-                    flex: 0 0 calc(50% - 1.25rem);
-                    max-width: calc(50% - 1.25rem);
+                    flex: 0 0 calc((100% - 1.5rem) / 2);
+                    max-width: calc((100% - 1.5rem) / 2);
                 }
 
                 &.last-1 {
-                    flex: 0 0 calc(100% - 1.25rem);
-                    max-width: 0 0 calc(100% - 1.25rem);
+                    flex: 0 0 100%;
+                    max-width: 100%;
                 }
 
                 .stats-title {
@@ -330,21 +330,6 @@
                 .stats-chart {
                     flex: 0 0 auto;
                     margin-bottom: 12px;
-                    //overflow: hidden;
-                    //width: 90% !important;
-                    //.plotly-graph-div {
-                    //    width: 90% !important;
-                    //    height: auto !important;
-                    //    .plot-container plotly {
-                    //        width: 90% !important;
-                    //        .svg-container {
-                    //            width: 90% !important;
-                    //            .main-svg {
-                    //                width: 90% !important;
-                    //            }
-                    //        }
-                    //    }
-                    //}
                 }
 
                 .stats-content {

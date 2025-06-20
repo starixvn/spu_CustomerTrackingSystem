@@ -239,19 +239,13 @@ function AIInsights() {
     function RenderStatistics(statisticsHtml) {
         if (statisticsHtml) {           
             domElements.divStatistics.html(statisticsHtml);            
-           
+            AdjustStatsItemsLayout(); 
+
             $('#divStatistics .js-plotly-plot').each(function () {
                 Plotly.Plots.resize(this);
             });
         }
     }        
-
-    //function RenderStatistics(statisticsHtml) {
-    //    if (statisticsHtml) {
-    //        domElements.divStatistics.html(statisticsHtml);
-    //        AdjustStatsItemsLayout(); 
-    //    }    
-    //}
    
     function AdjustStatsItemsLayout() {
         const $items = $('.column-statistics-section .stats-item');
@@ -357,6 +351,7 @@ function AIInsights() {
             }
         });
     }
+
     function AttachChatbotEvents() {
         domElements.sendButton.on('click', SendChatMessage);
 
