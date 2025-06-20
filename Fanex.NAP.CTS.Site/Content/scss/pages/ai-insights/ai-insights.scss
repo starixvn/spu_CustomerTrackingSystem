@@ -248,6 +248,21 @@
                     }
                 }
 
+                .chart-image img.aspect-wide {
+                    max-width: 55%;
+                    max-height: 260px;
+                }
+
+                .chart-image img.aspect-tall {
+                    max-width: 40%;
+                    max-height: 200px;
+                }
+
+                .chart-image img.aspect-square {
+                    max-width: 45%;
+                    max-height: 220px;
+                }
+
                 .chart-content {
                     font-size: 14px;
                     padding: 24px 0;
@@ -364,7 +379,7 @@
                         }
 
                         .stat-value {
-                            font-weight: 600 !important;
+                            font-weight: bold !important;
                             flex: 1;
                             text-align: right;
                         }

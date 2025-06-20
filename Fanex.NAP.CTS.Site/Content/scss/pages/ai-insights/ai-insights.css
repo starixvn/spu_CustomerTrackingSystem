@@ -646,6 +646,18 @@
   height: auto;
   border-radius: 0.3rem;
 }
+.content-card-section .content-card .card-body .chart-item .chart-image img.aspect-wide {
+  max-width: 55%;
+  max-height: 260px;
+}
+.content-card-section .content-card .card-body .chart-item .chart-image img.aspect-tall {
+  max-width: 40%;
+  max-height: 200px;
+}
+.content-card-section .content-card .card-body .chart-item .chart-image img.aspect-square {
+  max-width: 45%;
+  max-height: 220px;
+}
 .content-card-section .content-card .card-body .chart-item .chart-content {
   font-size: 14px;
   padding: 24px 0;
@@ -745,7 +757,7 @@
   flex: 1;
 }
 .content-card-section .content-card .card-body .stats-item .stats-content .stat-row-item .stat-value {
-  font-weight: 600 !important;
+  font-weight: bold !important;
   flex: 1;
   text-align: right;
 }

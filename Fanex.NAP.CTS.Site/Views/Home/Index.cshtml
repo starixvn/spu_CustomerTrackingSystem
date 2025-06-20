@@ -48,28 +48,32 @@
 			         <input id="txtInput" name="txtInput" class="input-field" placeholder="Search Account Profile by Username/LoginID or provide Data Insights" type="text" />
 		         </div>
 
-		         <div class="upload-wrapper">
-			         <label for="fileUpload" class="upload-label">
-				         <span class="plus-icon">+</span> 
-				         <span class="file-type">Supported File Type: .xls</span>
-			         </label>
+		         <div class="action-row">
+			         <div class="upload-wrapper">
+				         <label for="fileUpload" class="upload-label">
+					         <span class="plus-icon">+</span> 
+					         <span class="file-type">Supported file type: .xls (Limit 20MB per file)</span>
+				         </label>
 
-			         <input id="fileUpload" name="uploadFile" type="file" class="file-input" accept=".xls" />
-		         </div>
-                
-		         <div class="search-icon-wrapper">
+				         <input id="fileUpload" name="uploadFile" type="file" class="file-input" accept=".xls" />
+			         </div>
+
 			         <div class="search-icon-wrapper">
-				         @{
-					         var hasFileInSession = TempData["HasFile"] != null && (bool)TempData["HasFile"];
-				         }
-				         <img id="searchIcon"
-				              class="search-icon"
-				              src="@(hasFileInSession ? Url.Content("~/Content/scss/images/search-icon-enable.png") : Url.Content("~/Content/scss/images/search-icon.png"))"
-				              data-default="@Url.Content("~/Content/scss/images/search-icon.png")"
-				              data-enabled="@Url.Content("~/Content/scss/images/search-icon-enable.png")"
-				              width="30" height="30" alt="Search Icon"/>
+				         <div class="search-icon-wrapper">
+					         @{
+						         var hasFileInSession = TempData["HasFile"] != null && (bool)TempData["HasFile"];
+					         }
+					         <img id="searchIcon"
+					              class="search-icon"
+					              src="@(hasFileInSession ? Url.Content("~/Content/scss/images/search-icon-enable.png") : Url.Content("~/Content/scss/images/search-icon.png"))"
+					              data-default="@Url.Content("~/Content/scss/images/search-icon.png")"
+					              data-enabled="@Url.Content("~/Content/scss/images/search-icon-enable.png")"
+					              width="30" height="30" alt="Search Icon"/>
+				         </div>
 			         </div>
 		         </div>
+
+			    
 	         </div>
 
              <div id="errMessage" class="error-alert hide">At least two letters are required!</div>

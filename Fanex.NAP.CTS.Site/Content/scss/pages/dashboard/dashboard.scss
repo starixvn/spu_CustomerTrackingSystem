@@ -193,6 +193,14 @@
     width: 550px;
 }
 
+.action-row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    padding-top: 20px;
+}
+
 .uploaded-file {
     display: flex;
     align-items: center;
@@ -266,9 +274,11 @@
 }
 
 .upload-wrapper {
-    margin-top: 15px;
     align-self: flex-start;
     padding: 0 6px;
+    flex: 1;
+    display: flex;
+    align-items: center;
 
     .upload-label {
         display: inline-flex;
@@ -297,10 +307,11 @@
 }
 
 .search-icon-wrapper {
-    width: 100%;
     display: flex;
     justify-content: flex-end;
     padding: 0 6px;
+    align-items: center;
+    flex: 0 0 auto;
 }
 
 .search-icon {
