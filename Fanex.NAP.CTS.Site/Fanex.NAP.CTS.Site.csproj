@@ -429,14 +429,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="App_Data\AWS\ExternalSPNames.xml" />
     <Content Include="App_Data\AWS\InternalSPNames.xml" />
-    <Content Include="App_Data\AWS\NAPFrameworkSpNames.xml" />
     <Content Include="App_Data\Dev\ExternalSPNames.xml" />
     <Content Include="App_Data\Dev\InternalSPNames.xml" />
-    <Content Include="App_Data\Dev\NAPFrameworkSpNames.xml" />
     <Content Include="App_Data\Local\InternalSPNames.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="App_Data\Local\NAPFrameworkSpNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App_Data\Local\ExternalSPNames.xml">
@@ -449,13 +444,7 @@
     <Content Include="App_Data\KLDR\InternalSPNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\KLDR\NAPFrameworkSpNames.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="App_Data\PRO\InternalSPNames.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="App_Data\PRO\NAPFrameworkSpNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App_Data\PRO\ExternalSPNames.xml">
@@ -468,13 +457,7 @@
     <Content Include="App_Data\SIT\InternalSPNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\SIT\NAPFrameworkSpNames.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="App_Data\UAT\InternalSPNames.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="App_Data\UAT\NAPFrameworkSpNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App_Data\UAT\ExternalSPNames.xml">
