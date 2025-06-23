@@ -212,14 +212,25 @@
 
                 li {
                     margin-bottom: 1rem;
-                    padding-left: 1.5rem;
+                    padding-left: 2em;
                     position: relative;
                 }
 
-                li:before {
-                    content: "-";
+                li::before {
                     position: absolute;
                     left: 0;
+                    width: 1.5em;
+                    display: inline-block;
+                    text-align: right;
+                    padding-right: 0.25em;
+                }
+
+                li.bulleted::before {
+                    content: "-";
+                }
+
+                li.numbered::before {
+                    content: attr(data-number) ".";
                 }
             }
 

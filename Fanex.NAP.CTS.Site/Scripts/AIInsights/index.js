@@ -206,13 +206,15 @@ function AIInsights() {
     }
 
     function RenderVisualizationSummary(visualizationSummary) {
-        if (visualizationSummary) {            
-            var $ul = domElements.summarySection;
+        if (visualizationSummary) {
+            const $ul = domElements.summarySection;
             $ul.empty();
 
             visualizationSummary.forEach(function (summary) {
-                const normalizedText = summary.trim().replace(/^[-–•\d.]+\s*/, ''); 
-                $ul.append(`<li>${normalizedText}</li>`);
+                const { content, isNumbered, isBulleted, numberValue } = NormalizeLine(summary);
+                const className = isNumbered ? 'numbered' : isBulleted ? 'bulleted' : '';
+                const numberAttr = isNumbered ? `data-number="${numberValue}"` : '';
+                $ul.append(`<li class="${className}" ${numberAttr}>${content}</li>`);
             });
         }
     }
@@ -220,10 +222,34 @@ function AIInsights() {
     function RenderVisualizationChart(visualizationChart) {
         if (visualizationChart.length > 0) {
             var $chartSection = domElements.chartSection;
-
             $('#chart-section .card-body').remove();
 
             visualizationChart.forEach(function (chart) {
+                var analysisItems = (chart.analysis || '')
+                    .split('\n')
+                    .filter(a => a.trim() !== '')
+                    .map(a => {
+                        const { content, isNumbered, isBulleted, numberValue } = NormalizeLine(a);
+                        const className = isNumbered ? 'numbered' : isBulleted ? 'bulleted' : '';
+                        const numberAttr = isNumbered ? `data-number="${numberValue}"` : '';
+
+                        return `<li class="${className}" ${numberAttr}>${content}</li>`;
+                    })
+                    .join('');
+
+                var suggestionItems = (chart.suggestions || [])
+                    .filter(s => s.trim() !== '')
+                    .map(s => {
+                        const { content, isNumbered, isBulleted, numberValue } = NormalizeLine(s);
+                        const className = isNumbered ? 'numbered' : isBulleted ? 'bulleted' : '';
+                        const numberAttr = isNumbered ? `data-number="${numberValue}"` : '';
+
+                        const prefix = (!isNumbered && !isBulleted) ? '- ' : '';
+                        return `<li class="${className}" ${numberAttr}>${prefix}${content}</li>`;
+                    }).join('');
+
+
+
                 var $card = $(`
                     <div class="card-body">
                         <div class="chart-item">
@@ -238,37 +264,50 @@ function AIInsights() {
                             <div class="chart-content">
                                 <div class="chart-analysis">
                                     <p><strong>Analysis:</strong></p>
-                                    <ul>
-                                        ${
-                                            chart.analysis
-                                                ? chart.analysis
-                                                    .split('\n') 
-                                                    .filter((a) => a.trim() !== '')
-                                                    .map((a) => {
-                                                        let text = a.trim().replace(/^[-\d.]+\s*/, '');
-                                                        return `<li>${text}</li>`;
-                                                    })
-                                                    .join('')
-                                                : ''
-                                        }
-                                    </ul>
+                                    <ul>${analysisItems}</ul>
                                 </div>
                                 <div class="chart-suggestion">
                                     <p><strong>Suggestion:</strong></p>
-                                    <ul>
-                                        ${chart.suggestions.map(s => `<li>${s.replace(/^[-–•\s]+/, '').trim()}</li>`).join('')}
-                                    </ul>
+                                    <ul>${suggestionItems}</ul>
                                 </div>
                             </div>
                         </div>
                         <div class="divider"></div>
                     </div>
                 `);
+
                 $chartSection.append($card);
             });
         }
     }
-   
+
+    function NormalizeLine(line) {
+        const trimmed = line.trim();
+        const numberMatch = trimmed.match(/^(\d+)\.\s*(.*)$/);
+
+        if (numberMatch) {
+            return {
+                content: numberMatch[2],
+                isNumbered: true,
+                numberValue: numberMatch[1],
+                isBulleted: false
+            };
+        } else if (/^[-–•]\s+/.test(trimmed)) {
+            const cleaned = trimmed.replace(/^[-–•]\s+/, '').trim();
+            return {
+                content: cleaned,
+                isNumbered: false,
+                isBulleted: true
+            };
+        } else {
+            return {
+                content: trimmed,
+                isNumbered: false,
+                isBulleted: false
+            };
+        }
+    }
+
     function RenderStatistics(statisticsHtml) {
         if (statisticsHtml) {           
             domElements.divStatistics.html(statisticsHtml);            
