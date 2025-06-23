@@ -18,9 +18,9 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
-    <IISExpressUseClassicPipelineMode />
+	<IISExpressAnonymousAuthentication />
+	<IISExpressWindowsAuthentication />
+	<IISExpressUseClassicPipelineMode />
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
     <TargetFrameworkProfile />
@@ -1167,24 +1167,24 @@
     <Content Include="Template\RobotReport\RobotReportDailyTemplate.xlsx" />
     <Content Include="Template\RobotReport\RobotReportMonthlyTemplate.xlsx" />
     <Content Include="Views\MatchMonitor\Feedback.cshtml" />
-    <Content Include="WebConfigs\Web.AppSettings.KLDR.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="WebConfigs\Web.ConnectionString.KLDR.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="WebConfigs\Web.KLDR.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Views\DangerMonitor\Detail.cshtml" />
     <Content Include="Views\DangerMonitor\Index.cshtml" />
     <None Include="WebConfigs\Web.AppSettings.KLPROD.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="WebConfigs\Web.AppSettings.KLSIMPLE.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="WebConfigs\Web.ConnectionString.KLPROD.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="WebConfigs\Web.ConnectionString.KLSIMPLE.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="WebConfigs\Web.KLPROD.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="WebConfigs\Web.KLSIMPLE.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
