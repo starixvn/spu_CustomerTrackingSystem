@@ -237,17 +237,26 @@ function AIInsights() {
                     })
                     .join('');
 
+                //var suggestionItems = (chart.suggestions || [])
+                //    .filter(s => s.trim() !== '')
+                //    .map(s => {
+                //        const { content, isNumbered, isBulleted, numberValue } = NormalizeLine(s);
+                //        const className = isNumbered ? 'numbered' : isBulleted ? 'bulleted' : '';
+                //        const numberAttr = isNumbered ? `data-number="${numberValue}"` : '';
+
+                //        const prefix = (!isNumbered && !isBulleted) ? '- ' : '';
+                //        return `<li class="${className}" ${numberAttr}>${prefix}${content}</li>`;
+                //    }).join('');
+
                 var suggestionItems = (chart.suggestions || [])
                     .filter(s => s.trim() !== '')
                     .map(s => {
                         const { content, isNumbered, isBulleted, numberValue } = NormalizeLine(s);
-                        const className = isNumbered ? 'numbered' : isBulleted ? 'bulleted' : '';
+                        let className = isNumbered ? 'numbered' : isBulleted ? 'bulleted' : 'bulleted'; 
                         const numberAttr = isNumbered ? `data-number="${numberValue}"` : '';
 
-                        const prefix = (!isNumbered && !isBulleted) ? '- ' : '';
-                        return `<li class="${className}" ${numberAttr}>${prefix}${content}</li>`;
+                        return `<li class="${className}" ${numberAttr}>${content}</li>`;
                     }).join('');
-
 
 
                 var $card = $(`
@@ -281,6 +290,32 @@ function AIInsights() {
         }
     }
 
+    //function NormalizeLine(line) {
+    //    const trimmed = line.trim();
+    //    const numberMatch = trimmed.match(/^(\d+)\.\s*(.*)$/);
+
+    //    if (numberMatch) {
+    //        return {
+    //            content: numberMatch[2],
+    //            isNumbered: true,
+    //            numberValue: numberMatch[1],
+    //            isBulleted: false
+    //        };
+    //    } else if (/^[-–•]\s+/.test(trimmed)) {
+    //        const cleaned = trimmed.replace(/^[-–•]\s+/, '').trim();
+    //        return {
+    //            content: cleaned,
+    //            isNumbered: false,
+    //            isBulleted: true
+    //        };
+    //    } else {
+    //        return {
+    //            content: trimmed,
+    //            isNumbered: false,
+    //            isBulleted: false
+    //        };
+    //    }
+    //}
     function NormalizeLine(line) {
         const trimmed = line.trim();
         const numberMatch = trimmed.match(/^(\d+)\.\s*(.*)$/);
@@ -307,6 +342,7 @@ function AIInsights() {
             };
         }
     }
+
 
     function RenderStatistics(statisticsHtml) {
         if (statisticsHtml) {           
