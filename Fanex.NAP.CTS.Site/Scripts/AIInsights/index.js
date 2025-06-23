@@ -211,7 +211,8 @@ function AIInsights() {
             $ul.empty();
 
             visualizationSummary.forEach(function (summary) {
-                $ul.append(`<li>${summary}</li>`);
+                const normalizedText = summary.trim().replace(/^[-–•\d.]+\s*/, ''); 
+                $ul.append(`<li>${normalizedText}</li>`);
             });
         }
     }
@@ -341,13 +342,27 @@ function AIInsights() {
         let $userMessage = $('<div class="message user-message">');
         $userMessage.append('<div class="icon-placeholder"></div>');
         $userMessage.append($('<div class="message-text">').text(message));
-
         $chatMessages.append($userMessage);
-        domElements.chatInput.val('');
 
+        domElements.chatInput.val('');
         let textarea = domElements.chatInput[0];
         textarea.style.height = 'auto';
         textarea.style.height = '36px';
+
+        const $loadingDots = $('<span class="dot-loading dot-1"><i class="fas fa-circle dot"></i><i class="fas fa-circle dot"></i><i class="fas fa-circle dot"></i></span>');
+
+        const $loadingMessage = $(`
+        <div class="message bot-message loading-message">
+            <div class="icon-wrapper bot-icon"><i class="fas fa-robot"></i></div>
+            <div class="message-text"></div>
+        </div>
+        `);
+
+        $loadingMessage.find('.message-text').append($loadingDots);
+        $chatMessages.append($loadingMessage);
+        ScrollToBottomChat();
+
+        const stopLoading = StartDotLoading($loadingDots);
 
         let requestParam = {          
             question: message
@@ -359,6 +374,9 @@ function AIInsights() {
             dataType: 'json',
             data: JSON.stringify(requestParam),
             success: function (response) {
+                stopLoading();
+                $loadingMessage.remove(); 
+
                 const answer = response?.answer || 'No response from bot.';
 
                 const $botMessage = $(`
@@ -371,11 +389,12 @@ function AIInsights() {
                 $chatMessages.append($botMessage);
                 ScrollToBottomChat();
 
-                $chatMessages.scrollTop($chatMessages[0].scrollHeight);
-
                 RenderVisualizationChart(response.chart_infos);
             },
             error: function (xhr, status, error) {
+                stopLoading();
+                $loadingMessage.remove(); 
+
                 const $errorMessage = $(`
                     <div class="message bot-message">
                         <div class="icon-wrapper bot-icon"><i class="fas fa-robot"></i></div>
@@ -383,6 +402,7 @@ function AIInsights() {
                     </div>
                 `);
                 $chatMessages.append($errorMessage);
+                ScrollToBottomChat();
             }
         });
     }
@@ -422,6 +442,26 @@ function AIInsights() {
         $chatMessages.scrollTop($chatMessages[0].scrollHeight);
     }
 
+    function StartDotLoading($el) {
+        if (!$el || !$el.length || !$el.find('.dot').length) {
+            console.error('StartDotLoading: Invalid or missing $el or .dot elements', $el);
+            return () => { };
+        }
+
+        let step = 1;
+        const maxDots = 3;
+        const $dots = $el.find('.dot');
+
+        const interval = setInterval(() => {
+            $dots.css('opacity', '0.2');
+            for (let i = 0; i < step; i++) {
+                $dots.eq(i).css('opacity', '1');
+            }
+            step = step < maxDots ? step + 1 : 1;
+        }, 400);
+
+        return () => clearInterval(interval);
+    }
     function Initial() {
         AttachEventListeners();
         AttachChatbotEvents();
