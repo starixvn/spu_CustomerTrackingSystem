@@ -90,6 +90,7 @@
 
             if (file.size > maxSize) {
                 common.showError('Exceeds the allowed limit of ' + maxSize + " MB");
+
                 fileInput.val('');
                 uploadedFile.hide();
                 hasDraggedFile = false;                
@@ -108,11 +109,14 @@
                 fileInput[0].files = dataTransfer.files; 
                 hasDraggedFile = true;
                 iconSearch.attr('src', $('#searchIcon').data('enabled'));
+
+                common.showSuccess('File uploaded successfully: ' + file.name, 2000);
             } else {
+                common.showError('Please upload a .xls file!');
+
                 fileInput.val('');
                 uploadedFile.hide();
                 hasDraggedFile = false;
-                common.showError('Please upload a .xls file!');
                 iconSearch.attr('src', $('#searchIcon').data('default'));
             }
         }
