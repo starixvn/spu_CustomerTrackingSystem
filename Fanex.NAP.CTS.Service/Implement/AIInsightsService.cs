@@ -12,8 +12,13 @@
         }
 
         public AIInsightsAnalyzeResponseModel Analyze(AIInsightsAnalyzeRequestModel param, string url)
-        {          
-            var timeout = int.TryParse(ConfigurationManager.AppSettings["ChatbotRequestTimeout"], out var parsed) ? parsed : 120;
+        {
+            if (string.IsNullOrEmpty(url))
+            {
+                return new AIInsightsAnalyzeResponseModel();
+            }
+
+            var timeout = int.TryParse(ConfigurationManager.AppSettings["ChatbotRequestTimeout"], out var parsed) ? parsed : 300;
 
             var result = ApiHelper.Post<AIInsightsAnalyzeResponseModel>(url, param, timeout);
 
@@ -24,9 +29,14 @@
 
         public AIInsightsChatbotResponseModel AskChatbot(AIInsightsChatbotRequestModel request, string url)
         {
+            if (string.IsNullOrEmpty(url))
+            {
+                return new AIInsightsChatbotResponseModel();
+            }
+
             var chatbotRequestTimeout = ConfigurationManager.AppSettings["ChatbotRequestTimeout"];
 
-            var timeout = int.TryParse(chatbotRequestTimeout, out var parsed) ? parsed : 30;
+            var timeout = int.TryParse(chatbotRequestTimeout, out var parsed) ? parsed : 300;
 
             var result = ApiHelper.Post<AIInsightsChatbotResponseModel>(url, request, timeout);
 
