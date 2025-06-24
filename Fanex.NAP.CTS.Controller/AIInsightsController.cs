@@ -45,27 +45,17 @@
             try
             {
                 var fileName = Session["UploadedFileName"] as string;
-                var fileContentBase64 = string.Empty;
+                var fileContentBase64 = ConfigSettings.AIInsightsStoreFile
+                        ? GetFileContent(fileName)
+                        : Session["UploadedFileToBase64String"] as string;
 
-                if (ConfigSettings.AIInsightsStoreFile)
+                if (fileName == null || string.IsNullOrEmpty(fileContentBase64))
                 {
-                    var fullPath = GetAnalysisFilePath(fileName);
-                    var fileBytes = GetUploadedFileBytes(fullPath);
+                    ViewBag.Message = "No file uploaded.";
 
-                    if (fileName == null || fileBytes == null)
-                    {
-                        ViewBag.Message = "No file uploaded.";
-
-                        return View();
-                    }
-
-                    fileContentBase64 = Convert.ToBase64String(fileBytes);
+                    return View();
                 }
-                else
-                {
-                    fileContentBase64 = Session["UploadedFileToBase64String"] as string;
-                }
-                
+
                 var request = new AIInsightsAnalyzeRequestModel
                 {
                     file_name = fileName,
@@ -210,7 +200,15 @@
                 message = fileName
             }, JsonRequestBehavior.AllowGet);
         }
-       
+
+        private string GetFileContent(string fileName)
+        {           
+            var fullPath = GetAnalysisFilePath(fileName);
+            var fileBytes = GetUploadedFileBytes(fullPath);
+
+            return Convert.ToBase64String(fileBytes);
+        }
+
         private string GetAnalysisFilePath(string fileName)
         {
             var userSubFolder = Path.Combine(_aiInsightsFileUploadModel.TempFolder, CurrentSession.UserId.ToString());

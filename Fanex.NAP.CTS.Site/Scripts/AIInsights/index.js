@@ -115,6 +115,7 @@ function AIInsights() {
             if (file) {
                 const formData = new FormData();
                 domElements.fileNameLabel.text(file.name);
+                domElements.btnGenerate.prop('disabled', true);
                
                 formData.append("uploadFile", file);                
 
@@ -124,8 +125,7 @@ function AIInsights() {
                 })
                     .then(response => response.json())
                     .then(response => {
-                        if (response.success == false) {
-                            domElements.btnGenerate.prop('disabled', true);
+                        if (response.success == false) {                            
                             domElements.fileNameLabel.text(NoFileUpload);
 
                             UpdateTitle();
