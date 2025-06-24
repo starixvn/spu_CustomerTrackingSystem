@@ -1,14 +1,14 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
-    using Fanex.NAP.CTS.Core.Extentions;
-    using Fanex.NAP.CTS.Core.Extentions;
-    using Fanex.NAP.CTS.Service.Interface;
-    using Newtonsoft.Json;
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Caching;
     using System.Threading.Tasks;
+    using System.Collections.Generic;
+    using Newtonsoft.Json;
+    using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Service.Interface;
+
 
     public class MemoryCacheService : IMemoryCacheService
     {
@@ -27,14 +27,12 @@
             try
             {
                 var jsonObject = key.IsNotNullOrEmpty() ? _memoryCache.Get(key) : null;
-                
+
                 return jsonObject != null ? JsonConvert.DeserializeObject<T>((string)jsonObject) : null;
             }
             catch (Exception ex)
             {
-                LogExtension.LogInfo("Memory Cache Error: " + ex.Message + ex.StackTrace + "\n"
-                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                     + ex.InnerException.StackTrace);
+                LogExtension.LogError(ex, $"Memory Cache Error {nameof(GetValue)}");
             }
 
             return null;
@@ -53,9 +51,7 @@
             }
             catch (Exception ex)
             {
-                LogExtension.LogInfo("Memory Cache Error: " + ex.Message + ex.StackTrace + "\n"
-                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                    + ex.InnerException.StackTrace);
+                LogExtension.LogError(ex, $"Memory Cache Error {nameof(PushValue)}");
             }
 
             return result;
@@ -75,9 +71,7 @@
                 }
                 catch (Exception ex)
                 {
-                    LogExtension.LogInfo("Memory Cache Error: " + ex.Message + ex.StackTrace + "\n"
-                        + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                        + ex.InnerException.StackTrace);
+                    LogExtension.LogError(ex, $"Memory Cache Error {nameof(PushValueAsync)}");
                 }
 
                 return result;
@@ -99,9 +93,7 @@
                 }
                 catch (Exception ex)
                 {
-                    LogExtension.LogInfo("Memory Cache Error: " + ex.Message + ex.StackTrace + "\n"
-                        + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                        + ex.InnerException.StackTrace);
+                    LogExtension.LogError(ex, $"Memory Cache Error {nameof(RemoveValueAsync)}");
                 }
 
                 return result;
@@ -123,9 +115,7 @@
             }
             catch (Exception ex)
             {
-                LogExtension.LogInfo("Memory Cache Error: " + ex.Message + ex.StackTrace + "\n"
-                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                    + ex.InnerException.StackTrace);
+                LogExtension.LogError(ex, $"Memory Cache Error {nameof(RemoveKeyContainsValue)}");
             }
         }
 
