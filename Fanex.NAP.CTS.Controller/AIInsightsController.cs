@@ -11,12 +11,9 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.AIInsights;
     using Fanex.NAP.CTS.Service;
-    using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using Fanex.NAP.CTS.Model;
     using System.Collections.Generic;
-    using Newtonsoft.Json;
-    using EasyNetQ;
 
     [NapSuperAuth]
     public class AIInsightsController : BaseController
@@ -47,19 +44,28 @@
 
             try
             {
-                var fileName = Session["UploadedFileName"] as string;               
-                var fullPath = GetAnalysisFilePath(fileName);
-                var fileBytes = GetUploadedFileBytes(fullPath);
+                var fileName = Session["UploadedFileName"] as string;
+                var fileContentBase64 = string.Empty;
 
-                if (fileName == null || fileBytes == null)
+                if (ConfigSettings.AIInsightsStoreFile)
                 {
-                    ViewBag.Message = "No file uploaded.";
+                    var fullPath = GetAnalysisFilePath(fileName);
+                    var fileBytes = GetUploadedFileBytes(fullPath);
 
-                    return View();
-                }             
+                    if (fileName == null || fileBytes == null)
+                    {
+                        ViewBag.Message = "No file uploaded.";
 
-                var fileContentBase64 = Convert.ToBase64String(fileBytes);
+                        return View();
+                    }
 
+                    fileContentBase64 = Convert.ToBase64String(fileBytes);
+                }
+                else
+                {
+                    fileContentBase64 = Session["UploadedFileToBase64String"] as string;
+                }
+                
                 var request = new AIInsightsAnalyzeRequestModel
                 {
                     file_name = fileName,
@@ -178,8 +184,19 @@
                     message = $"Exceeds the allowed limit of {_aiInsightsFileUploadModel.MaxFileSizeBytes} MB."
                 }, JsonRequestBehavior.AllowGet);               
             }
-            
-            base.SaveUploadedFile(uploadFile);
+
+            if (ConfigSettings.AIInsightsStoreFile)
+            {
+                base.SaveUploadedFile(uploadFile);
+            }
+            else
+            {
+                using (var ms = new MemoryStream())
+                {
+                    uploadFile.InputStream.CopyTo(ms);                   
+                    Session["UploadedFileToBase64String"] = Convert.ToBase64String(ms.ToArray());
+                }
+            }
 
             var fileName = Path.GetFileName(uploadFile.FileName);
 

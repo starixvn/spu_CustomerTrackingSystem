@@ -14,6 +14,9 @@
     using System.Web.Mvc;
     using Fanex.Logging;
     using System.Web;
+    using Fanex.NAP.CTS.Core.Utilities;
+    using System.IO;
+    using System;
 
     [NapSuperAuth]
     public class HomeController : BaseController
@@ -96,16 +99,19 @@
 
             if (hasFile && !hasText)
             {
-                /*
-                using (var ms = new MemoryStream())
+                if (ConfigSettings.AIInsightsStoreFile)
                 {
-                    uploadFile.InputStream.CopyTo(ms);
-                    Session["UploadedFileName"] = uploadFile.FileName;
-                    Session["UploadedFileBytes"] = ms.ToArray();
+                    base.SaveUploadedFile(uploadFile);
                 }
-                */
-
-                base.SaveUploadedFile(uploadFile);
+                else
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        uploadFile.InputStream.CopyTo(ms);
+                        Session["UploadedFileName"] = uploadFile.FileName;
+                        Session["UploadedFileToBase64String"] = Convert.ToBase64String(ms.ToArray());
+                    }
+                }
 
                 TempData["HasFile"] = true;
 

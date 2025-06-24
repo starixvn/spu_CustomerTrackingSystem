@@ -78,6 +78,19 @@
 
         public static string MarkPAURL => GetConfigStringByName("MMDetail_MarkPAURL");
 
+        public static bool AIInsightsStoreFile 
+        {
+            get
+            {
+                var isStoreFile = false;
+                var storeFile = GetConfigStringByName("AIInsightsStoreFile");
+
+                bool.TryParse(storeFile, out isStoreFile);
+
+                return isStoreFile;
+            }
+        }
+
         public static string AIInsightsAnalyzeUrl => GetConfigStringByName("AIInsightsAnalyzeUrl");
 
         public static string AIInsightsChatBotUrl => GetConfigStringByName("AIInsightsChatBotUrl");
