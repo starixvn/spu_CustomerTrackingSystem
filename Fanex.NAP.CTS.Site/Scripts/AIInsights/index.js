@@ -290,8 +290,9 @@ function AIInsights() {
                 numberValue: numberMatch[1],
                 isBulleted: false
             };
-        } else if (/^[-–•]\s+/.test(trimmed)) {
-            const cleaned = trimmed.replace(/^[-–•]\s+/, '').trim();
+        } else if (/^[-–•]\s*/.test(trimmed)) {
+            const cleaned = trimmed.replace(/^[-–•]\s*/, '').trim();
+
             return {
                 content: cleaned,
                 isNumbered: false,
