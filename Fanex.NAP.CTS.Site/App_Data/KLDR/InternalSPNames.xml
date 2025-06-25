@@ -68,14 +68,14 @@
 		<Setting Key="CTS_DC_Association_UpdateAssociationRemove" SpName="CTS_DC_Association_UpdateAssociationRemove" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_Association_Profile_Get" SpName="CTS_DC_Association_Profile_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="1200" />
 		<Setting Key="CTS_DC_AssociationByIP_GetAssType" SpName="CTS_DC_AssociationByIP_GetAssType" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="SPU_AIML_GB_5GIP_GetDetails" SpName="SPU_AIML_GB_5GIP_GetDetails" DbName="CTSARC.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_GB_5GIP_GetDetails" SpName="SPU_AIML_GB_5GIP_GetDetails" DbName="DBAIML.SPU_AIML.aimlService" />
 		<Setting Key="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" SpName="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_Category_Get" SpName="CTS_DC_Category_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="SPU_AIML_GB_3S_GetCoupleInfo" SpName="SPU_AIML_GB_3S_GetCoupleInfo" DbName="CTSARC.SPU_AIML.aimlService" />
-		<Setting Key="SPU_AIML_GB_3S_GetCouple_FraudDetails" SpName="SPU_AIML_GB_3S_GetCouple_FraudDetails" DbName="CTSARC.SPU_AIML.aimlService" />
-		<Setting Key="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" SpName="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" DbName="CTSARC.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_GB_3S_GetCoupleInfo" SpName="SPU_AIML_GB_3S_GetCoupleInfo" DbName="DBAIML.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_GB_3S_GetCouple_FraudDetails" SpName="SPU_AIML_GB_3S_GetCouple_FraudDetails" DbName="DBAIML.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" SpName="SPU_AIML_GB_3S_GetCoupleIP_FraudDetails" DbName="DBAIML.SPU_AIML.aimlService" />
 		<Setting Key="CTS_DC_AssociationByAI_GetFirstAssociationDate" SpName="CTS_DC_AssociationByAI_GetFirstAssociationDate" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="SPU_AIML_OTGB_GetCouple_FraudDetails" SpName="SPU_AIML_OTGB_GetCouple_FraudDetails" DbName="CTSARC.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_OTGB_GetCouple_FraudDetails" SpName="SPU_AIML_OTGB_GetCouple_FraudDetails" DbName="DBAIML.SPU_AIML.aimlService" />
 	</Function>
 
 	<Function Name="AssociationDetection">
@@ -88,8 +88,8 @@
 
 	<Function Name="AssociationDetail">
 		<Setting Key="CTS_DC_AssociationGroupByAI_GetCustomersByGroup" SpName="CTS_DC_AssociationGroupByAI_GetCustomersByGroup" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="SPU_AIML_GB_GetAssociationInfo" SpName="SPU_AIML_GB_GetAssociationInfo" DbName="CTSARC.SPU_AIML.aimlService" />
-		<Setting Key="SPU_AIML_GetAssociationByIPInfo" SpName="SPU_AIML_GetAssociationByIPInfo" DbName="CTSARC.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_GB_GetAssociationInfo" SpName="SPU_AIML_GB_GetAssociationInfo" DbName="DBAIML.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_GetAssociationByIPInfo" SpName="SPU_AIML_GetAssociationByIPInfo" DbName="DBAIML.SPU_AIML.aimlService" />
 	</Function>
 
 	<Function Name="CustomerClassification">
@@ -164,11 +164,11 @@
 
 	<Function name="RobotBetting">
 		<Setting Key="CTS_DC_RobotDetection_Get" SpName="CTS_DC_RobotDetection_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="SPU_AIML_RD_GetRobotUsersDetails" SpName="SPU_AIML_RD_GetRobotUsersDetails" DbName="CTSARC.SPU_AIML.aimlService" />
-		<Setting Key="SPU_AIML_RD_SCE_GetRobotUsersDetails" SpName="SPU_AIML_RD_SCE_GetRobotUsersDetails" DbName="CTSARC.SPU_AIML.aimlService" />
-		<Setting Key="SPU_AIML_RD_GetRobotUserMatch" SpName="SPU_AIML_RD_GetRobotUserMatch" DbName="CTSARC.SPU_AIML.aimlService" />
-		<Setting Key="SPU_AIML_RD_GetRobotUserMatchTransList" SpName="SPU_AIML_RD_GetRobotUserMatchTransList" DbName="CTSARC.SPU_AIML.aimlService" />
-    <Setting Key="SPU_AIML_RD_LP_GetRobotDetails" SpName="SPU_AIML_RD_LP_GetRobotDetails" DbName="CTSARC.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_RD_GetRobotUsersDetails" SpName="SPU_AIML_RD_GetRobotUsersDetails" DbName="DBAIML.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_RD_SCE_GetRobotUsersDetails" SpName="SPU_AIML_RD_SCE_GetRobotUsersDetails" DbName="DBAIML.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_RD_GetRobotUserMatch" SpName="SPU_AIML_RD_GetRobotUserMatch" DbName="DBAIML.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_RD_GetRobotUserMatchTransList" SpName="SPU_AIML_RD_GetRobotUserMatchTransList" DbName="DBAIML.SPU_AIML.aimlService" />
+    <Setting Key="SPU_AIML_RD_LP_GetRobotDetails" SpName="SPU_AIML_RD_LP_GetRobotDetails" DbName="DBAIML.SPU_AIML.aimlService" />
 	</Function>
 
 	<Function name="CustomerProfile">
