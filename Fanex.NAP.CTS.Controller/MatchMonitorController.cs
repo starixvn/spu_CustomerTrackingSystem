@@ -466,9 +466,7 @@
             }
             catch (Exception ex)
             {
-                ex.LogError($"{Region} Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
-                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                    + ex.InnerException.StackTrace);
+                ex.LogError($"{Region} Match Monitor Detail Error: ");
             }
 
             return View();
