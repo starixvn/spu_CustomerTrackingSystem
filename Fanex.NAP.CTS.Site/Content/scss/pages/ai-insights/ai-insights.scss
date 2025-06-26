@@ -216,7 +216,7 @@
                     position: relative;
                 }
 
-                li::before {
+                li:before {
                     position: absolute;
                     left: 0;
                     width: 1.5em;
@@ -225,11 +225,11 @@
                     padding-right: 0.25em;
                 }
 
-                li.bulleted::before {
+                li.bulleted:before {
                     content: "-";
                 }
 
-                li.numbered::before {
+                li.numbered:before {
                     content: attr(data-number) ".";
                 }
             }

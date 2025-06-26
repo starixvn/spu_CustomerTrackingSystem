@@ -619,7 +619,7 @@
   padding-left: 2em;
   position: relative;
 }
-.content-card-section .content-card .card-body ul li::before {
+.content-card-section .content-card .card-body ul li:before {
   position: absolute;
   left: 0;
   width: 1.5em;
@@ -627,10 +627,10 @@
   text-align: right;
   padding-right: 0.25em;
 }
-.content-card-section .content-card .card-body ul li.bulleted::before {
+.content-card-section .content-card .card-body ul li.bulleted:before {
   content: "-";
 }
-.content-card-section .content-card .card-body ul li.numbered::before {
+.content-card-section .content-card .card-body ul li.numbered:before {
   content: attr(data-number) ".";
 }
 .content-card-section .content-card .card-body .chart-item {

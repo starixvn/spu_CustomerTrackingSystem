@@ -288,23 +288,32 @@ function AIInsights() {
                 numberValue: numberMatch[1],
                 isBulleted: false
             };
-        } else if (/^[-–•]\s*/.test(trimmed)) {
-            const cleaned = trimmed.replace(/^[-–•]\s*/, '').trim();
+        }
 
+        const bulletMatch = trimmed.match(/^[-–•]\s*(.*)$/);
+        if (bulletMatch) {
             return {
-                content: cleaned,
+                content: bulletMatch[1].trim(),
                 isNumbered: false,
                 isBulleted: true
             };
-        } else {
+        }
+
+        const weirdBulletMatch = trimmed.match(/^[-–•]\.?\s*(.*)$/);
+        if (weirdBulletMatch) {
             return {
-                content: trimmed,
+                content: weirdBulletMatch[1].trim(),
                 isNumbered: false,
-                isBulleted: false
+                isBulleted: true
             };
         }
-    }
 
+        return {
+            content: trimmed,
+            isNumbered: false,
+            isBulleted: true
+        };
+    }
 
     function RenderStatistics(statisticsHtml) {
         if (statisticsHtml) {           
