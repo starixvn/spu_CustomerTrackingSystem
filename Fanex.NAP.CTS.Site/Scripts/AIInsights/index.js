@@ -114,46 +114,44 @@ function AIInsights() {
 
             if (file) {
                 const formData = new FormData();
-                domElements.fileNameLabel.text(file.name);
-                domElements.btnGenerate.prop('disabled', true);
+                let fileName = file.name;
+                domElements.fileNameLabel.text(fileName);
                
-                formData.append("uploadFile", file);                
+                formData.append("uploadFile", file);    
 
-                fetch(common.modifyRelativeUrl("/AIInsights/UploadFile"), {
-                    method: "POST",
-                    body: formData
-                })
-                    .then(response => response.json())
-                    .then(response => {
-                        if (response.success == false) {                            
+                $.ajax(common.modifyRelativeUrl('AIInsights/UploadFile'), {
+                    type: 'POST',
+                    data: formData,
+                    processData: false, 
+                    contentType: false, 
+                    beforeSend: function () {
+                        common.showLoading();
+                        domElements.btnGenerate.prop('disabled', true);
+                    },
+                    success: function (response) {
+                        if (response.success == false) {
                             domElements.fileNameLabel.text(NoFileUpload);
-
-                            UpdateTitle();
 
                             common.showError("Upload failed " + response.message);
 
-                            throw new Error("Upload failed" + response.message);
                         } else {
                             domElements.btnGenerate.prop('disabled', false);
+                            domElements.fileNameLabel.text(fileName);
+                            common.showSuccess('File uploaded successfully: ' + fileName, 2000);
                         }
-
-                        return response.message;
-                    })
-                    .then(fileName => {
-                        console.log("Upload success, file name:", fileName);
-
-                        domElements.fileNameLabel.text(fileName);
-
-                        UpdateTitle();
-
-                        common.showSuccess('File uploaded successfully: ' + fileName, 2000);
                         
-                    })
-                    .catch(error => {
-                        console.error("Upload error:", error);
+                        UpdateTitle();
+                    },
+                    complete: function () {
+                        common.closeLoading();
+                    },
+                    error: function (errMsg) {
+                        common.closeLoading();
+                        domElements.btnGenerate.prop('disabled', false);
+                        console.log(errMsg);
+                    }
+                });
 
-                        common.showError("Upload failed, file name:" + fileName);                        
-                    });
             } else {
                 if (domElements.fileNameLabel.tex.trim() != NoFileUpload) {
                     domElements.fileNameLabel.text(NoFileUpload);
