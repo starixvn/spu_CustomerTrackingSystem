@@ -187,6 +187,16 @@
     <Compile Include="Account\RobotBetting\RobotUserDetailModel.cs" />
     <Compile Include="Account\RobotBetting\RobotBettingAIModel.cs" />
     <Compile Include="Account\RobotClassification.cs" />
+    <Compile Include="AIInsights\AIInsightsAnalyzeDataModel.cs" />
+    <Compile Include="AIInsights\AIInsightsAnalyzeRequestModel.cs" />
+    <Compile Include="AIInsights\AIInsightsAnalyzeResponseModel.cs" />
+    <Compile Include="AIInsights\ChartInfoModel.cs" />
+    <Compile Include="AIInsights\AIInsightsChatbotDataModel.cs" />
+    <Compile Include="AIInsights\AIInsightsChatbotRequestModel.cs" />
+    <Compile Include="AIInsights\AIInsightsChatbotResponseModel.cs" />
+    <Compile Include="AIInsights\AIInsightsFileUploadModel.cs" />
+    <Compile Include="AIInsights\ChatMessageModel.cs" />
+    <Compile Include="AIInsights\VisualizationModel.cs" />
     <Compile Include="API\CustomerClassCategory\CategoryCustomerClassModel.cs" />
     <Compile Include="API\CtsAssociationAPI\DetectAssociationByTypeFilterModel.cs" />
     <Compile Include="API\CtsAssociationAPI\CheckAssociationByCustIdModel.cs" />

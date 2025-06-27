@@ -18,7 +18,8 @@
     }
 
     .search-box {
-        margin-top: 40px;
+        //margin-top: 40px;
+        margin-top: 20px;
     }
 
     .col {
@@ -181,4 +182,139 @@
         border-bottom: 1px solid #E1E1E1;
         transition: all .2s ease;
     }
+}
+
+.search-box-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 20px;
+    padding: 16px;
+    width: 550px;
+}
+
+.action-row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    padding-top: 16px;
+}
+
+.uploaded-file {
+    display: flex;
+    align-items: center;
+    position: relative;
+    align-self: flex-start;
+    max-width: 50%;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+
+    .file-icon .icon-excel {
+        margin-right: 10px;
+        line-height: 40px;
+        font-size: 24px;
+    }
+
+    .file-content {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        min-width: 0;
+        overflow: hidden;
+    }
+
+    .file-name {
+        max-width: 100%;
+        font-size: 14px;
+        color: #1d2e4f;
+        font-weight: 500;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        flex-grow: 1;
+    }
+
+    .file-type {
+        color: #6c757d;
+        margin-top: 5px;
+    }
+
+    .remove-file {
+        font-size: 16px;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        margin-left: 12px;
+        transition: color 0.2s;
+        background-color: #545454;
+        border-radius: 100%;
+        width: 16px;
+        height: 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-self: flex-start;
+        flex-shrink: 0;
+    }
+}
+
+.search-input-wrapper {
+    position: relative;
+    width: 100%;
+
+    input {
+        &::placeholder {
+            font-size: 16px !important;
+            color: #9f9f9f;
+        }
+    }
+}
+
+.upload-wrapper {
+    padding: 0 6px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+
+    .upload-label {
+        display: inline-flex;
+        align-items: center;
+        font-size: 12px;
+        color: #346BFC;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    span.plus-icon {
+        font-size: 20px;
+        font-weight: bold;
+        margin-right: 6px;
+        color: #545454;
+    }
+
+    span {
+        color: #9f9f9f;
+        font-size: 14px;
+    }
+
+    .file-input {
+        display: none;
+    }
+}
+
+.search-icon-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 6px;
+    align-items: center;
+    flex: 0 0 auto;
+}
+
+.search-icon {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
 }

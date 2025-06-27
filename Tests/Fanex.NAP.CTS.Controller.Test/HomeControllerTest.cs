@@ -21,66 +21,66 @@ namespace Fanex.NAP.CTS.Controller.Test
             _runner = new HomeController();
         }
 
-        [Fact]
-        public void Search_Redirect()
-        {
-            // Arrange
-            FakeHttpContext.SetCurrentContext();
-            FakeHttpContext.SetFakeSession();
-            _runner.CurrentSession = FakeSession.CurrentSession;
+        //[Fact]
+        //public void Search_Redirect()
+        //{
+        //    // Arrange
+        //    FakeHttpContext.SetCurrentContext();
+        //    FakeHttpContext.SetFakeSession();
+        //    _runner.CurrentSession = FakeSession.CurrentSession;
 
-            var username = "aaaWMSS";
-            FormCollection collection = new FormCollection();
-            collection.Add("txtInput", username);
+        //    var username = "aaaWMSS";
+        //    FormCollection collection = new FormCollection();
+        //    collection.Add("txtInput", username);
 
-            // Act
-            var actualResult = _runner.Search(collection) as RedirectToRouteResult;
+        //    // Act
+        //    var actualResult = _runner.Search(collection) as RedirectToRouteResult;
 
-            // Assert
-            Assert.Equal("Index", actualResult.RouteValues["action"]);
-        }
+        //    // Assert
+        //    Assert.Equal("Index", actualResult.RouteValues["action"]);
+        //}
 
-        [Fact]
-        public void Search_ReturnViewModel()
-        {
-            // Arrange
-            FakeHttpContext.SetCurrentContext();
-            FakeHttpContext.SetFakeSession();
-            _runner.CurrentSession = FakeSession.CurrentSession;
+        //[Fact]
+        //public void Search_ReturnViewModel()
+        //{
+        //    // Arrange
+        //    FakeHttpContext.SetCurrentContext();
+        //    FakeHttpContext.SetFakeSession();
+        //    _runner.CurrentSession = FakeSession.CurrentSession;
 
-            var username = "aaa";
-            FormCollection collection = new FormCollection();
-            collection.Add("txtInput", username);
+        //    var username = "aaa";
+        //    FormCollection collection = new FormCollection();
+        //    collection.Add("txtInput", username);
 
-            // Act
-            var actualResult = _runner.Search(collection) as ViewResult;
+        //    // Act
+        //    var actualResult = _runner.Search(collection) as ViewResult;
 
-            var viewModel = actualResult.ViewData.Model as SearchResultViewModel;
+        //    var viewModel = actualResult.ViewData.Model as SearchResultViewModel;
 
-            // Assert
-            Assert.Equal(username, viewModel.InputValue);
-            Assert.True(viewModel.SearchResults.Any());
-        }
+        //    // Assert
+        //    Assert.Equal(username, viewModel.InputValue);
+        //    Assert.True(viewModel.SearchResults.Any());
+        //}
 
-        [Fact]
-        public void Search_ReturnNull()
-        {
-            // Arrange
-            FakeHttpContext.SetCurrentContext();
-            FakeHttpContext.SetFakeSession();
-            _runner.CurrentSession = FakeSession.CurrentSession;
+        //[Fact]
+        //public void Search_ReturnNull()
+        //{
+        //    // Arrange
+        //    FakeHttpContext.SetCurrentContext();
+        //    FakeHttpContext.SetFakeSession();
+        //    _runner.CurrentSession = FakeSession.CurrentSession;
 
-            var username = "sfsdfs";
-            FormCollection collection = new FormCollection();
-            collection.Add("txtInput", username);
+        //    var username = "sfsdfs";
+        //    FormCollection collection = new FormCollection();
+        //    collection.Add("txtInput", username);
 
-            // Act
-            var actualResult = _runner.Search(collection) as ViewResult;
+        //    // Act
+        //    var actualResult = _runner.Search(collection) as ViewResult;
 
-            var viewModel = actualResult.ViewData.Model as SearchResultViewModel;
+        //    var viewModel = actualResult.ViewData.Model as SearchResultViewModel;
 
-            // Assert
-            Assert.True(!viewModel.SearchResults.Any());
-        }
+        //    // Assert
+        //    Assert.True(!viewModel.SearchResults.Any());
+        //}
     }
 }

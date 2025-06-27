@@ -12,11 +12,11 @@
     using System.Linq;
     using System.Text;
     using System.Web.Mvc;
-
-    using Fanex.NAP.CTS.Service.Implement;
-    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.Logging;
-    using Newtonsoft.Json;
+    using System.Web;
+    using Fanex.NAP.CTS.Core.Utilities;
+    using System.IO;
+    using System;
 
     [NapSuperAuth]
     public class HomeController : BaseController
@@ -34,7 +34,7 @@
         public void test()
         {
             LogService.Info($"CTS test site");
-        }
+        }       
 
         public ActionResult Index()
         {
@@ -83,24 +83,48 @@
         }
 
         [HttpPost]
-        public ActionResult Search(FormCollection form)
+        public ActionResult Search(FormCollection form, HttpPostedFileBase uploadFile)
         {
-            string inputValue = form["txtInput"].Trim();
+            string inputValue = form["txtInput"]?.Trim();
 
-            if (string.IsNullOrEmpty(inputValue) || inputValue.Length <= 1 || inputValue.Length > 50)
-            {
-                return View(new SearchResultViewModel { SearchResults = null, InputValue = inputValue });
-            }            
+            bool hasText = !string.IsNullOrEmpty(inputValue) && inputValue.Length > 1 && inputValue.Length <= 50;
+            bool hasFile = uploadFile != null && uploadFile.ContentLength > 0 && uploadFile.FileName.EndsWith(".xls");
 
-            var result = accountService.SearchAccounts(inputValue);
-            
-            if (result.Count.Equals(1))
+            if (hasFile && !hasText)
             {
-                return RedirectToAction("Index", "Account", new { Id = result.FirstOrDefault().CTSCustId });
+                if (ConfigSettings.AIInsightsStoreFile)
+                {
+                    base.SaveUploadedFile(uploadFile);
+                }
+                else
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        uploadFile.InputStream.CopyTo(ms);
+                        Session["UploadedFileName"] = uploadFile.FileName;
+                        Session["UploadedFileToBase64String"] = Convert.ToBase64String(ms.ToArray());
+                    }
+                }
+
+                TempData["HasFile"] = true;
+
+                return RedirectToAction("Index", "AIInsights");
             }
 
-            return View(new SearchResultViewModel { SearchResults = result, InputValue = inputValue });
-        }
+            if (hasText)
+            {
+                var result = accountService.SearchAccounts(inputValue);
+
+                if (result.Count == 1)
+                {
+                    return RedirectToAction("Index", "Account", new { Id = result.First().CTSCustId });
+                }
+
+                return View(new SearchResultViewModel { SearchResults = result, InputValue = inputValue });
+            }
+
+            return View(new SearchResultViewModel { SearchResults = null, InputValue = inputValue });
+        }              
 
         private string ValidateUserName(string inputUserName)
         {

@@ -21,27 +21,70 @@
     };
 }
 @section styles{
-    <link href="~/Content/scss/pages/dashboard/dashboard.min.css" rel="stylesheet" />
+	<link href="~/Content/scss/pages/dashboard/dashboard.min.css" rel="stylesheet" />
 }
-    <div class="dashboard">
-        @using (Html.BeginForm("Search", "Home", FormMethod.Post))
-        {
-            <div class="logo">
-                <svg width="180" height="58">
-                    <image xlink:href="~/Content/scss/images/logo-CTS.svg" src="~/Content/scss/images/logo-CTS.png" width="180" height="58" alt="Customer Tracking System" />
-                </svg>
-            </div>
-            <div class="search-box">
-                <input id="txtInput" name="txtInput" class="input-field" placeholder="Type in Username or Login ID to search" type="text" />
-                <i class="icon-magnify"></i>
-            </div>
-            <div id="errMessage" class="error-alert hide">At least two letters are required!</div>
-        }
+    <div class="dashboard">    
+        @using (Html.BeginForm("Search", "Home", FormMethod.Post, new { enctype = "multipart/form-data" })) 
+         {
+	         <div class="logo">
+		        <img src="~/Content/scss/images/logo-Wasa-AI-Assistant.png" width="300" height="85" alt="Customer Tracking System">
+	         </div>
 
-            <div hidden>
-                <div id="divUserId">@ViewBag.UserId</div>
-                <div id="divOnUserId">@ViewBag.OnUserId</div>
-            </div>      
+	         <div class="search-box search-box-wrapper" id="dropZone">
+		         <div class="uploaded-file" style="display: none;">
+			         <span class="file-icon">
+				         <i class="icon icon-excel"></i>
+			         </span>
+
+			         <div class="file-content">
+				         <span class="file-name" title=""></span>
+				         <span class="file-type">Spreadsheet</span>
+			         </div>
+
+			         <span class="remove-file">×</span>
+		         </div>
+                 
+		         <div class="search-input-wrapper">
+			         <input id="txtInput" name="txtInput" class="input-field" placeholder="Search Account Profile by Username/LoginID or provide Data Insights" type="text" />
+		         </div>
+
+		         <div class="action-row">
+			         <div class="upload-wrapper">
+				         <label for="fileUpload" class="upload-label">
+					         <span class="plus-icon">+</span> 
+					         <span class="file-type">Supported file type: .xls (Limit 20MB per file)</span>
+				         </label>
+
+				         <input id="fileUpload" name="uploadFile" type="file" class="file-input" accept=".xls" />
+			         </div>
+
+			         <div class="search-icon-wrapper">
+				         <div class="search-icon-wrapper">
+					         @{
+						         var hasFileInSession = TempData["HasFile"] != null && (bool)TempData["HasFile"];
+					         }
+					         <img id="searchIcon"
+					              class="search-icon"
+					              src="@(hasFileInSession ? Url.Content("~/Content/scss/images/search-icon-enable.png") : Url.Content("~/Content/scss/images/search-icon.png"))"
+					              data-default="@Url.Content("~/Content/scss/images/search-icon.png")"
+					              data-enabled="@Url.Content("~/Content/scss/images/search-icon-enable.png")"
+					              width="30" height="30" alt="Search Icon"/>
+				         </div>
+			         </div>
+		         </div>
+
+			    
+	         </div>
+
+             <div id="errMessage" class="error-alert hide">At least two letters are required!</div>
+         }
+
+    <div hidden>
+        <div id="divUserId">@ViewBag.UserId</div>
+        <div id="divOnUserId">@ViewBag.OnUserId</div>
+        <img class="search-icon" src="~/Content/scss/images/search-icon.png" width="30" height="30" alt="Customer Tracking System" hidden />
+        <img class="search-icon-enable" src="~/Content/scss/images/search-icon-enable.png" width="30" height="30" alt="Customer Tracking System" hidden />
+    </div>      
     </div>
 
 @section scripts{
