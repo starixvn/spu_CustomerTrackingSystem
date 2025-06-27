@@ -6,14 +6,12 @@
     using Fanex.Caching;
     using Fanex.Data;
     using Fanex.NAP.CTS.Core.Extentions;
-    using Fanex.Logging.Sentry;
     using Fanex.RemotingRef;
     using ONEbook.UM;
     using ONEbook.UM.Configurations;
     using ONEbook.UM.Helpers;
     using ONEbook.UM.NETFramework;
     using ONEbook.UM.Transport;
-    using Sentry;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
@@ -21,6 +19,8 @@
     using System.Web.Mvc;
     using System.Web.Optimization;
     using System.Web.Routing;
+    using Fanex.Logging.Sentry.RavenClient;
+    using SharpRaven;
 
     public class MvcApplication : HttpApplication
     {

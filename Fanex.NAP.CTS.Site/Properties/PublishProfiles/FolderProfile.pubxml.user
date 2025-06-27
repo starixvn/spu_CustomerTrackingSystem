@@ -645,9 +645,6 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="bin/System.Runtime.InteropServices.dll">
       <publishTime>09/27/2019 14:28:32</publishTime>
     </File>
-    <File Include="bin/System.Runtime.InteropServices.RuntimeInformation.dll">
-      <publishTime>09/27/2019 14:28:32</publishTime>
-    </File>
     <File Include="bin/System.Runtime.Numerics.dll">
       <publishTime>09/27/2019 14:28:32</publishTime>
     </File>

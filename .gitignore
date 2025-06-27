@@ -322,3 +322,4 @@ ASALocalRun/
 *.binlog
 
 node_modules/
+/Fanex.NAP.CTS.Site/Fanex.NAP.CTS.Site.csproj.user
