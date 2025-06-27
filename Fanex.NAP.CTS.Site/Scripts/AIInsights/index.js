@@ -408,17 +408,13 @@ function AIInsights() {
         $chatMessages.append($loadingMessage);
         ScrollToBottomChat();
 
-        const stopLoading = StartDotLoading($loadingDots);
-
-        let requestParam = {          
-            question: message
-        };
+        const stopLoading = StartDotLoading($loadingDots);       
 
         $.ajax(common.modifyRelativeUrl('AIInsights/AskChatbot'), {
-            type: 'POST',
-            contentType: 'application/json',
-            dataType: 'json',
-            data: JSON.stringify(requestParam),
+            type: 'POST',           
+            data: {
+                question: message
+            },
             success: function (response) {
                 stopLoading();
                 $loadingMessage.remove(); 

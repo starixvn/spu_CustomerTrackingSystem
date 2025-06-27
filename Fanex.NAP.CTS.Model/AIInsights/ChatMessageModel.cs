@@ -2,6 +2,7 @@
 {
     using System;
 
+    [Serializable]
     public class ChatMessageModel
     {
         public string Sender { get; set; } // "User" or "Bot"
