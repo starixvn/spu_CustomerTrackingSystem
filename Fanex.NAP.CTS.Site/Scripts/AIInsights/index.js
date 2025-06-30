@@ -148,12 +148,11 @@ function AIInsights() {
                     error: function (errMsg) {
                         common.closeLoading();
                         domElements.btnGenerate.prop('disabled', false);
-                        console.log(errMsg);
                     }
                 });
 
             } else {
-                if (domElements.fileNameLabel.tex.trim() != NoFileUpload) {
+                if (domElements.fileNameLabel.text().trim() != NoFileUpload) {
                     domElements.fileNameLabel.text(NoFileUpload);
                     UpdateTitle();
                 }               
