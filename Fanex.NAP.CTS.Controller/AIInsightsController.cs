@@ -95,7 +95,11 @@
             try
             {
                 request.session_id = CurrentSession.SessionId;
-                
+                request.file_name = Session["UploadedFileName"] as string;
+                request.file_content = ConfigSettings.AIInsightsStoreFile
+                        ? GetFileContent(request.file_name)
+                        : Session["UploadedFileToBase64String"] as string;
+
                 response = _aIInsightsService.AskChatbot(request, ConfigSettings.AIInsightsChatBotUrl);
 
                 SendMessage(request.question, response.response.answer);
