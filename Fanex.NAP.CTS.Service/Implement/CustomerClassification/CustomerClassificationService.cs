@@ -112,7 +112,9 @@
                     CustId = c.CustID,
                     Category = c.CategoryID,
                     CustomerClass = c.CustomerClass
-                });
+                })
+                .GroupBy(c => new { c.CustId, c.CustomerClass, c.Category })
+                .Select(g => g.First());
 
                 isSuccess = RetryPushCCToMainDB(custClassification, roleGroupType, retryTime);
             }
