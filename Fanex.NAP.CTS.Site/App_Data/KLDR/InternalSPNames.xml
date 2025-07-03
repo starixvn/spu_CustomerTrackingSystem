@@ -102,9 +102,9 @@
 		<Setting Key="CTS_DC_CustClassification_Queue_Insert" SpName="CTS_DC_CustClassification_Queue_Insert" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_CustClassification_ProblemAccount_InsertByCategory" SpName="CTS_DC_CustClassification_ProblemAccount_InsertByCategory" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_CustClassification_BySport_GetCC" SpName="CTS_DC_CustClassification_BySport_GetCC" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustClassification_Insert" SpName="CTS_DC_CustClassification_Insert" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
-		<Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
-		<Setting Key="CTS_DC_CustClassificationAgency_Remove" SpName="CTS_DC_CustClassificationAgency_Remove" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_CustClassification_Insert" SpName="CTS_DC_CustClassification_Insert" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" Timeout="600" />
+		<Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" Timeout="600" />
+		<Setting Key="CTS_DC_CustClassificationAgency_Remove" SpName="CTS_DC_CustClassificationAgency_Remove" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" Timeout="600" />
 		<Setting Key="CTS_DC_CustClassification_Rescan_Get" SpName="CTS_DC_CustClassification_Rescan_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustClassificationAgency_Rescan_Get" SpName="CTS_DC_CustClassificationAgency_Rescan_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustClassificationAgency_ViewHistory" SpName="CTS_DC_CustClassificationAgency_ViewHistory" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="600" />
@@ -141,21 +141,19 @@
 		<Setting Key="CTS_DC_MatchMonitor_Details_Get" SpName="CTS_DC_MatchMonitor_Details_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustInfo_GetByCustID" SpName="CTS_DC_CustInfo_GetByCustID" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_RobotClassification_GetRobotStatusByTransList" SpName="CTS_DC_RobotClassification_GetRobotStatusByTransList" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_MatchMonitor_GetStaticList " SpName="CTS_DC_MatchMonitor_GetStaticList" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_MatchMonitor_Details_MergeGroup" SpName="CTS_DC_MatchMonitor_Details_MergeGroup" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_MatchMonitor_UserComment_Get" SpName="CTS_DC_MatchMonitor_UserComment_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_MatchMonitor_UserComment_Insert" SpName="CTS_DC_MatchMonitor_UserComment_Insert" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_MatchMonitor_UserComment_Update" SpName="CTS_DC_MatchMonitor_UserComment_Update" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_MatchMonitor_UserComment_Delete" SpName="CTS_DC_MatchMonitor_UserComment_Delete" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_MatchMonitor_HoldKey_InsertLog" SpName="CTS_DC_MatchMonitor_HoldKey_InsertLog" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
-    <Setting Key="CTS_DC_MatchMonitorParlay_Details_Get" SpName="CTS_DC_MatchMonitorParlay_Details_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-
+		<Setting Key="CTS_DC_MatchMonitorParlay_Details_Get" SpName="CTS_DC_MatchMonitorParlay_Details_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 	</Function>
 
 	<Function name="RobotClassification">
 		<Setting Key="CTS_DC_RobotClassification_GetHistory" SpName="CTS_DC_RobotClassification_GetHistory" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_RobotClassification_GetRobotStatus" SpName="CTS_DC_RobotClassification_GetRobotStatus" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-    <Setting Key="CTS_DC_RobotClassificationAgency_GetRobotStatus" SpName="CTS_DC_RobotClassificationAgency_GetRobotStatus" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_RobotClassificationAgency_GetRobotStatus" SpName="CTS_DC_RobotClassificationAgency_GetRobotStatus" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 	</Function>
 
 	<Function name="TransactionMonitoringReport">
@@ -168,7 +166,7 @@
 		<Setting Key="SPU_AIML_RD_SCE_GetRobotUsersDetails" SpName="SPU_AIML_RD_SCE_GetRobotUsersDetails" DbName="DBAIML.SPU_AIML.aimlService" />
 		<Setting Key="SPU_AIML_RD_GetRobotUserMatch" SpName="SPU_AIML_RD_GetRobotUserMatch" DbName="DBAIML.SPU_AIML.aimlService" />
 		<Setting Key="SPU_AIML_RD_GetRobotUserMatchTransList" SpName="SPU_AIML_RD_GetRobotUserMatchTransList" DbName="DBAIML.SPU_AIML.aimlService" />
-    <Setting Key="SPU_AIML_RD_LP_GetRobotDetails" SpName="SPU_AIML_RD_LP_GetRobotDetails" DbName="DBAIML.SPU_AIML.aimlService" />
+		<Setting Key="SPU_AIML_RD_LP_GetRobotDetails" SpName="SPU_AIML_RD_LP_GetRobotDetails" DbName="DBAIML.SPU_AIML.aimlService" />
 	</Function>
 
 	<Function name="CustomerProfile">
