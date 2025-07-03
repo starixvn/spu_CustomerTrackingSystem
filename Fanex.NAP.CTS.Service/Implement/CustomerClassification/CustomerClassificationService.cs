@@ -72,35 +72,52 @@
             return isSuccess;
         }
 
-        private bool UpdateDangerLevelToMainDB(IEnumerable<LatestCCDangerLevelModel> lastestClassifications)
+        private bool UpdateDangerLevelToMainDB(IEnumerable<LatestCCDangerLevelModel> latestClassifications)
         {
-            if (lastestClassifications != null && lastestClassifications.Any())
+            if (latestClassifications == null || !latestClassifications.Any())
             {
-                var groupDangerType = lastestClassifications.Where(c => c.DangerLevel != null).GroupBy(c => c.DangerLevelType);
+                return true;
+            }
 
-                if (groupDangerType != null && groupDangerType.Any())
-                {
-                    foreach (var dangerBatch in groupDangerType)
-                    {
-                        var updateDangerLevel = dangerBatch.Select(c => new DangerLevelModel()
-                        {
-                            CustId = c.CustID,
-                            DangerLevel = c.DangerLevel.Value
-                        });
+            if (!UpdateDangerLevelABI(latestClassifications))
+            {
+                return false;
+            }
 
-                        var isUpdateSuccessful = RetryUpdateDangerLevelToMainDB(updateDangerLevel, dangerBatch.Key.Value, Consts.Retry);
-
-                        if (!isUpdateSuccessful)
-                        {
-                            return isUpdateSuccessful;
-                        }
-                    }
-                }
+            if (!UpdateDangerLevelOri(latestClassifications))
+            {
+                return false;
             }
 
             return true;
         }
 
+        private bool UpdateDangerLevelABI(IEnumerable<LatestCCDangerLevelModel> latestClassifications)
+        {
+            var dangerLevelABI = latestClassifications
+                .Where(c => c.DangerLevel.HasValue)
+                .Select(c => new DangerLevelModel
+                {
+                    CustId = c.CustID,
+                    DangerLevel = c.DangerLevel.Value
+                });
+
+            return RetryUpdateDangerLevelToMainDB(dangerLevelABI, (int)DangerType.ABI, Consts.Retry);
+        }
+
+        private bool UpdateDangerLevelOri(IEnumerable<LatestCCDangerLevelModel> latestClassifications)
+        {
+            var dangerLevelOri = latestClassifications
+                .Where(c => c.Danger1.HasValue)
+                .Select(c => new DangerLevelModel
+                {
+                    CustId = c.CustID,
+                    DangerLevel = c.Danger1.Value
+                });
+
+            return RetryUpdateDangerLevelToMainDB(dangerLevelOri, (int)DangerType.Ori, Consts.Retry);
+        }
+       
         private bool PushCCToMainDB(IEnumerable<LatestCCDangerLevelModel> lastestClassifications, RoleGroupType roleGroupType, int retryTime)
         {
             bool isSuccess = true;
