@@ -17,11 +17,11 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort>44300</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
-    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <Use64BitIISExpress>false</Use64BitIISExpress>
     <UseGlobalApplicationHostFile />
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
@@ -511,7 +511,6 @@
     <None Include="Content\scss\components\_notification.scss" />
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.svg" />
     <Content Include="Content\scss\images\chevron-down.png" />
-    <Content Include="Content\scss\images\excel-logo.png" />
     <Content Include="Content\scss\images\icon-export-excel.png" />
     <Content Include="Content\scss\images\loading.svg" />
     <Content Include="Content\scss\images\login-CTS.png" />
@@ -520,9 +519,12 @@
     <Content Include="Content\scss\images\logo-header.png" />
     <Content Include="Content\scss\images\logo-header.svg" />
     <Content Include="Content\scss\images\logo-Wasa-AI-Assistant.png" />
-    <Content Include="Content\scss\images\search-icon-enable.png" />
-    <Content Include="Content\scss\images\search-icon.png" />
-    <Content Include="Content\scss\images\search-icon.svg" />
+    <Content Include="Content\scss\images\search-icon-enable.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\scss\images\search-icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\scss\pages\account\account-fps.css">
       <DependentUpon>account-fps.scss</DependentUpon>
     </Content>
@@ -534,6 +536,18 @@
     </Content>
     <Content Include="Content\scss\pages\account\account.min.css">
       <DependentUpon>account.css</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\ai-insights\ai-insights.css">
+      <DependentUpon>ai-insights.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\ai-insights\ai-insights.min.css">
+      <DependentUpon>ai-insights.css</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\ai-insights\chatbox.css">
+      <DependentUpon>chatbox.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\ai-insights\chatbox.min.css">
+      <DependentUpon>chatbox.css</DependentUpon>
     </Content>
     <Content Include="Content\scss\pages\associated-account-monitor\associated-account-monitor.css">
       <DependentUpon>associated-account-monitor.scss</DependentUpon>
@@ -577,6 +591,9 @@
     <Content Include="Content\scss\pages\danger-monitor\danger-monitor.min.css">
       <DependentUpon>danger-monitor.css</DependentUpon>
     </Content>
+    <Content Include="Content\scss\pages\dashboard\dashboard.min.css">
+      <DependentUpon>dashboard.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\pages\evidence\evidence.css">
       <DependentUpon>evidence.scss</DependentUpon>
     </Content>
@@ -595,7 +612,12 @@
     <Content Include="Content\scss\components\_vertical-tabs.scss" />
     <Content Include="Content\scss\pages\danger-monitor\danger-monitor-detail.scss" />
     <Content Include="Content\scss\pages\danger-monitor\danger-monitor.scss" />
+    <Content Include="Content\scss\pages\ai-insights\ai-insights.scss" />
+    <Content Include="Content\scss\pages\ai-insights\chatbox.scss" />
     <None Include="Content\scss\pages\latest-transaction\latest-transaction.scss" />
+    <Content Include="Content\scss\pages\index.min.css">
+      <DependentUpon>index.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\pages\latest-transaction\latest-transaction.css">
       <DependentUpon>latest-transaction.scss</DependentUpon>
     </Content>
@@ -712,6 +734,7 @@
     <Content Include="Scripts\Account\BettingStatistic\winlost-statistic-scripts.js" />
     <Content Include="Scripts\Account\RobotBetting\robot-betting.js" />
     <Content Include="Scripts\Account\RobotClassification\robot-classification.js" />
+    <Content Include="Scripts\AIInsights\index.js" />
     <Content Include="Scripts\AssociatedAccountMonitor\index.js" />
     <Content Include="Scripts\AssociatedGroupMonitor\index.js" />
     <Content Include="Scripts\AssociatedGroupMonitor\transfer-account.js" />
@@ -1178,7 +1201,10 @@
     <None Include="WebConfigs\Web.KLSIMPLE.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="Views\Home\AITEST.cshtml" />
+    <Content Include="Views\AIInsights\Index.cshtml" />
+    <Content Include="Views\Shared\_ChatbotPartial.cshtml" />
+    <Content Include="Views\AIInsights\Index.cshtml" />
+    <Content Include="Views\Shared\_ChatbotPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />
@@ -1242,17 +1268,11 @@
     <Content Include="Content\scss\pages\dashboard\dashboard.css">
       <DependentUpon>dashboard.scss</DependentUpon>
     </Content>
-    <Content Include="Content\scss\pages\dashboard\dashboard.min.css">
-      <DependentUpon>dashboard.css</DependentUpon>
-    </Content>
     <Content Include="Content\scss\pages\errors\errors.css" />
     <Content Include="Content\scss\pages\errors\errors.min.css">
       <DependentUpon>errors.css</DependentUpon>
     </Content>
     <Content Include="Content\scss\pages\index.css" />
-    <Content Include="Content\scss\pages\index.min.css">
-      <DependentUpon>index.css</DependentUpon>
-    </Content>
     <Content Include="Content\scss\pages\login\login.css" />
     <Content Include="Content\scss\pages\login\login.min.css">
       <DependentUpon>login.css</DependentUpon>

@@ -1,0 +1,110 @@
+﻿@model string
+@{
+    ViewBag.Title = "AI INSIGHTS";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    @Styles.Render("~/ai-insights-styles")
+}
+
+<div class="ai-insights-page">
+    <section class="ai-insights">
+        <div class="content">
+            <h2 class="page-title">AI DATA INSIGHTS</h2>
+        </div>
+
+        <div class="ai-insights-container">
+            <div class="form-filter-section">
+                <div class="group-control">
+                    <div class="form-filter">
+                        @using (Html.BeginForm("UploadFile", "AIInsights", FormMethod.Post, new { enctype = "multipart/form-data", id = "fileUploadForm" }))
+                        {
+                            <div class="file-wrapper">
+                                <label>File</label>
+
+                                <div class="file-name-container">
+                                    <span id="file-name-label" class="file-name-label" title="">@((ViewBag.FileName ?? "No file uploaded"))</span>
+                                </div>
+
+                                <label for="fileInput" class="edit-icon">
+                                    <i class="icon-edit"></i>
+                                </label>
+
+                                <input type="file" id="fileInput" name="uploadFile" accept=".xls" />
+                            </div>
+                        }
+
+                        <button class="button button-generate" id="btnGenerate">Generate</button>
+
+                        <div class="view-options">
+                            <label><input type="radio" name="view" value="visualization" checked /> Visualization</label>
+                            <label><input type="radio" name="view" value="statistics" /> Statistics</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card-section">
+                <div id="divVisualization">
+                    @*Summary*@
+                    <div class="content-card" id="summary-section">
+                        <div class="card-header" id="card-header">
+                            <span class="info">Summary</span>
+                        </div>
+
+                        <div class="card-body">
+	                        <ul>
+	                        </ul>
+                        </div>
+                    </div>
+
+                    @*Chart*@
+                    <div class="content-card" id="chart-section">
+                        <div class="card-header" id="card-header">
+                            <span class="info">Chart</span>
+                        </div>
+
+                        <div class="card-body">
+                                <div class="chart-item">
+                                   
+                                </div>
+
+                                @*<div class="divider"></div>*@
+                            </div>
+
+                    </div>
+
+                </div>
+
+                <div id="divStatistics">
+                    @*Overview*@
+                    <div class="content-card" id="overview-section">
+                        
+                    </div>
+
+
+                    @*Column Statistics*@
+                    <div class="content-card" id="column-statistics-section">
+
+                       
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        @Html.Partial("_ChatbotPartial")
+    </section>
+</div>
+
+
+@section scripts {
+    <script type="text/javascript">
+        window.PlotlyConfig = { MathJaxConfig: "local" };
+    </script>
+    <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>
+    @Scripts.Render("~/ai-insights-scripts")
+}
+

@@ -84,6 +84,18 @@
             RegisterAssociatedGroupMonitor(bundles);
 
             RegisterRobotReport(bundles);
+
+            RegisterAIInsightsBundles(bundles);
+        }
+
+        private static void RegisterAIInsightsBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/ai-insights-scripts").Include(
+                "~/Scripts/AIInsights/index.js"));
+
+            bundles.Add(new StyleBundle("~/ai-insights-styles").Include(
+                "~/Content/scss/pages/ai-insights/ai-insights.css",
+                "~/Content/scss/pages/ai-insights/chatbox.css"));
         }
 
         private static void RegisterDangerMonitorDetailBundles(BundleCollection bundles)

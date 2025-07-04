@@ -8,11 +8,17 @@
     using Fanex.NAP.Core.Web.Context;
     using Fanex.NAP.Core.Web.Session;
     using Fanex.NAP.CTS.Core.ExportExcel;
+    using Fanex.NAP.CTS.Model.AIInsights.AIInsights;
     using Fanex.NAP.CTS.Resource.Consts;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json;
     using NPOI.SS.UserModel;
+    using Sentry.Protocol;
+    using Sentry.Protocol;
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Web;
     using System.Web.Mvc;
 
     public class BaseController : Controller
@@ -143,5 +149,78 @@
                 .RenderSheet(config, legend, data, summary)
                 .ToBytes();
         }
+
+        protected void SaveUploadedFile(HttpPostedFileBase uploadFile)
+        {
+            var aiInsightsFileUploadModel = new AIInsightsFileUploadModel();
+
+            CleanupOldTempFiles(aiInsightsFileUploadModel, TimeSpan.FromHours(1));
+
+            var fileName = Path.GetFileName(uploadFile.FileName);
+
+            SaveUploadedFile(uploadFile, fileName, aiInsightsFileUploadModel);
+
+            Session["UploadedFileName"] = fileName;
+          
+            ViewBag.FileName = fileName;
+        }
+
+        protected void SaveUploadedFile(HttpPostedFileBase uploadFile, string fileName, AIInsightsFileUploadModel aiInsightsFileUploadModel)
+        {
+            var userID = CurrentSession.UserId.ToString();
+
+            var userSubFolder = Path.Combine(aiInsightsFileUploadModel.TempFolder, userID);
+
+            var serverUserFolderPath = Server.MapPath(userSubFolder);
+
+            Directory.CreateDirectory(serverUserFolderPath);
+           
+            var fullPath = Path.Combine(serverUserFolderPath, fileName);          
+
+            uploadFile.SaveAs(fullPath);
+
+            Session["UploadTime"] = DateTime.Now;
+
+            Session["UploadedFileName"] = fileName;
+        }
+
+        protected void CleanupOldTempFiles(AIInsightsFileUploadModel aiInsightsFileUploadModel, TimeSpan maxAge)
+        {
+            var userID = CurrentSession.UserId.ToString();
+
+            var userSubFolder = Path.Combine(aiInsightsFileUploadModel.TempFolder, userID);
+
+            var folderPath = Server.MapPath(userSubFolder);           
+
+            if (!Directory.Exists(folderPath)) 
+                return;
+
+            var files = Directory.GetFiles(folderPath);
+
+            foreach (var file in files)
+            {
+                try
+                {
+                    if (!System.IO.File.Exists(file))
+                        continue;
+
+                    var creationTime = System.IO.File.GetCreationTime(file);
+
+                    if (DateTime.Now - creationTime > maxAge)
+                    {
+                        System.IO.File.Delete(file);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var logMessage = new LogMessage(ex.Message)
+                                     .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                                     .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                    LogService.Error(logMessage);
+                }
+            }
+        }
+
     }
 }
