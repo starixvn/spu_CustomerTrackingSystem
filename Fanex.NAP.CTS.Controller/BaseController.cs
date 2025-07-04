@@ -8,18 +8,14 @@
     using Fanex.NAP.Core.Web.Context;
     using Fanex.NAP.Core.Web.Session;
     using Fanex.NAP.CTS.Core.ExportExcel;
-    using Fanex.NAP.CTS.Model.AIInsights.AIInsights;
     using Fanex.NAP.CTS.Resource.Consts;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json;
     using NPOI.SS.UserModel;
-    using Sentry.Protocol;
-    using Sentry.Protocol;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Web;
     using System.Web.Mvc;
+    using Fanex.NAP.CTS.Model.AIInsights;
 
     public class BaseController : Controller
     {
@@ -213,11 +209,7 @@
                 }
                 catch (Exception ex)
                 {
-                    var logMessage = new LogMessage(ex.Message)
-                                     .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                                     .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                    LogService.Error(logMessage);
+                    ex.LogError();
                 }
             }
         }
