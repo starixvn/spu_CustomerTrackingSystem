@@ -107,6 +107,7 @@ function AIInsights() {
 
             RenderVisualizationSummary('');
             RenderVisualizationChart('');
+            RenderStatistics('');
             domElements.contentCardSection.hide();
 
             if (file && !file.name.toLowerCase().endsWith('.xls')) {                
@@ -317,8 +318,9 @@ function AIInsights() {
     }
 
     function RenderStatistics(statisticsHtml) {
+        domElements.divStatistics.html(statisticsHtml);            
+
         if (statisticsHtml) {           
-            domElements.divStatistics.html(statisticsHtml);            
             AdjustStatsItemsLayout(); 
 
             $('#divStatistics .js-plotly-plot').each(function () {
