@@ -105,6 +105,8 @@ function AIInsights() {
         domElements.fileInput.on('change', function (e) {
             const file = e.target.files[0];
 
+            domElements.contentCardSection.hide();
+
             if (file && !file.name.toLowerCase().endsWith('.xls')) {                
                 common.showError('Please upload a .xls file!');
 
@@ -114,8 +116,6 @@ function AIInsights() {
             }
 
             if (file) {
-                domElements.contentCardSection.children().remove();
-
                 const formData = new FormData();
                 let fileName = file.name;
                 domElements.fileNameLabel.text(fileName);
@@ -188,10 +188,9 @@ function AIInsights() {
                     
                     RenderStatistics(response.statistics_html);                    
 
+                    domElements.contentCardSection.show();
                 } else {
                     common.showError('Sorry Analyze File failed: ' + response.ErrorMessage);
-
-                    console.log(response.ErrorMessage);
                 }
             },
             complete: function () {
@@ -200,7 +199,6 @@ function AIInsights() {
             error: function (errMsg) {  
                 common.closeLoading();
                 domElements.btnGenerate.prop('disabled', false);
-                console.log(errMsg);
             }
         });
     }
