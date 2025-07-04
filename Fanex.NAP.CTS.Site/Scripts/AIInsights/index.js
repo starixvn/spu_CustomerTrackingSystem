@@ -14,7 +14,8 @@ function AIInsights() {
         sendButton: $('#sendButton'),
         viewOptions: $('input[name="view"]'),
         summarySection: $('#summary-section ul'),
-        chartSection: $('#chart-section')
+        chartSection: $('#chart-section'),
+        contentCardSection: $('.content-card-section')
     }    
 
     const ViewMode = {
@@ -113,6 +114,8 @@ function AIInsights() {
             }
 
             if (file) {
+                domElements.contentCardSection.children().remove();
+
                 const formData = new FormData();
                 let fileName = file.name;
                 domElements.fileNameLabel.text(fileName);
