@@ -105,11 +105,12 @@ function AIInsights() {
         domElements.fileInput.on('change', function (e) {
             const file = e.target.files[0];
 
+            RenderVisualizationSummary('');
+            RenderVisualizationChart('');
             domElements.contentCardSection.hide();
 
             if (file && !file.name.toLowerCase().endsWith('.xls')) {                
                 common.showError('Please upload a .xls file!');
-
                 $(this).val('');
 
                 return;
@@ -204,10 +205,10 @@ function AIInsights() {
     }
 
     function RenderVisualizationSummary(visualizationSummary) {
-        if (visualizationSummary) {
-            const $ul = domElements.summarySection;
-            $ul.empty();
+        const $ul = domElements.summarySection;
+        $ul.empty();
 
+        if (visualizationSummary) {
             visualizationSummary.forEach(function (summary) {
                 const { content, isNumbered, isBulleted, numberValue } = NormalizeLine(summary);
                 const className = isNumbered ? 'numbered' : isBulleted ? 'bulleted' : '';
@@ -218,10 +219,10 @@ function AIInsights() {
     }
 
     function RenderVisualizationChart(visualizationChart) {
-        if (visualizationChart.length > 0) {
-            var $chartSection = domElements.chartSection;
-            $('#chart-section .card-body').remove();
+        var $chartSection = domElements.chartSection;
+        $('#chart-section .card-body').remove();
 
+        if (visualizationChart.length > 0) {
             visualizationChart.forEach(function (chart) {
                 var analysisItems = (chart.analysis || '')
                     .split('\n')
