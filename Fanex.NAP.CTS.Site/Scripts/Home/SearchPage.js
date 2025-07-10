@@ -99,7 +99,7 @@
                 return;
             }
 
-            if (file.name.endsWith('.xls')) {
+            if (/\.(xls|xlsx)$/i.test(file.name)) {
                 const dataTransfer = new DataTransfer();
 
                 errorMessage.addClass('hide').text('');
@@ -112,7 +112,7 @@
 
                 common.showSuccess('File uploaded successfully: ' + file.name, 2000);
             } else {
-                common.showError('Please upload a .xls file!');
+                common.showError('Please upload a .xls or .xlsx file!');
 
                 fileInput.val('');
                 uploadedFile.hide();

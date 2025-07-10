@@ -110,10 +110,9 @@ function AIInsights() {
             RenderStatistics('');
             domElements.contentCardSection.hide();
 
-            if (file && !file.name.toLowerCase().endsWith('.xls')) {                
-                common.showError('Please upload a .xls file!');
+            if (file && !/\.(xls|xlsx)$/i.test(file.name)) {
+                common.showError('Please upload a .xls or .xlsx file!');
                 $(this).val('');
-
                 return;
             }
 

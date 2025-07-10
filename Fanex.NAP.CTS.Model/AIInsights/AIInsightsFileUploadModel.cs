@@ -6,6 +6,6 @@
 
         public int MaxFileSizeBytes => 20 * 1024 * 1024; // 20 MB
 
-        public string[] AllowedExtensions => new[] { ".xls" };
+        public string[] AllowedExtensions => new[] { ".xls", ".xlsx" };
     }
 }

@@ -88,7 +88,10 @@
             string inputValue = form["txtInput"]?.Trim();
 
             bool hasText = !string.IsNullOrEmpty(inputValue) && inputValue.Length > 1 && inputValue.Length <= 50;
-            bool hasFile = uploadFile != null && uploadFile.ContentLength > 0 && uploadFile.FileName.EndsWith(".xls");
+            bool hasFile = uploadFile != null
+                           && uploadFile.ContentLength > 0
+                           && (uploadFile.FileName.EndsWith(".xls", StringComparison.OrdinalIgnoreCase)
+                               || uploadFile.FileName.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase));
 
             if (hasFile && !hasText)
             {
