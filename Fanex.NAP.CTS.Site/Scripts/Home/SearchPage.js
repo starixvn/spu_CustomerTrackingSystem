@@ -85,7 +85,7 @@
 
     function handleFiles(files) {
         if (files.length > 0) {
-            const maxSize = 20 * 1024 * 1024; // 20MB in bytes
+            const maxSize = 100 * 1024 * 1024; // 100MB in bytes
             const file = files[0];
 
             if (file.size > maxSize) {

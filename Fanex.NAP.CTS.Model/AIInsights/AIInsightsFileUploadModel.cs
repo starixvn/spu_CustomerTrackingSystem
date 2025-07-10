@@ -4,7 +4,7 @@
     {
         public string TempFolder => "~/TempFiles";
 
-        public int MaxFileSizeBytes => 20 * 1024 * 1024; // 20 MB
+        public int MaxFileSizeBytes => 100 * 1024 * 1024; // 100 MB
 
         public string[] AllowedExtensions => new[] { ".xls", ".xlsx" };
     }
