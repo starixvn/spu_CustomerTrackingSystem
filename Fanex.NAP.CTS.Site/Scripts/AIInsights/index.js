@@ -14,7 +14,8 @@ function AIInsights() {
         sendButton: $('#sendButton'),
         viewOptions: $('input[name="view"]'),
         summarySection: $('#summary-section ul'),
-        chartSection: $('#chart-section')
+        chartSection: $('#chart-section'),
+        contentCardSection: $('.content-card-section')
     }    
 
     const ViewMode = {
@@ -104,11 +105,14 @@ function AIInsights() {
         domElements.fileInput.on('change', function (e) {
             const file = e.target.files[0];
 
-            if (file && !file.name.toLowerCase().endsWith('.xls')) {                
-                common.showError('Please upload a .xls file!');
+            RenderVisualizationSummary('');
+            RenderVisualizationChart('');
+            RenderStatistics('');
+            domElements.contentCardSection.hide();
 
+            if (file && !/\.(xls|xlsx)$/i.test(file.name)) {
+                common.showError('Please upload a .xls or .xlsx file!');
                 $(this).val('');
-
                 return;
             }
 
@@ -148,12 +152,11 @@ function AIInsights() {
                     error: function (errMsg) {
                         common.closeLoading();
                         domElements.btnGenerate.prop('disabled', false);
-                        console.log(errMsg);
                     }
                 });
 
             } else {
-                if (domElements.fileNameLabel.tex.trim() != NoFileUpload) {
+                if (domElements.fileNameLabel.text().trim() != NoFileUpload) {
                     domElements.fileNameLabel.text(NoFileUpload);
                     UpdateTitle();
                 }               
@@ -186,10 +189,9 @@ function AIInsights() {
                     
                     RenderStatistics(response.statistics_html);                    
 
+                    domElements.contentCardSection.show();
                 } else {
                     common.showError('Sorry Analyze File failed: ' + response.ErrorMessage);
-
-                    console.log(response.ErrorMessage);
                 }
             },
             complete: function () {
@@ -198,16 +200,15 @@ function AIInsights() {
             error: function (errMsg) {  
                 common.closeLoading();
                 domElements.btnGenerate.prop('disabled', false);
-                console.log(errMsg);
             }
         });
     }
 
     function RenderVisualizationSummary(visualizationSummary) {
-        if (visualizationSummary) {
-            const $ul = domElements.summarySection;
-            $ul.empty();
+        const $ul = domElements.summarySection;
+        $ul.empty();
 
+        if (visualizationSummary) {
             visualizationSummary.forEach(function (summary) {
                 const { content, isNumbered, isBulleted, numberValue } = NormalizeLine(summary);
                 const className = isNumbered ? 'numbered' : isBulleted ? 'bulleted' : '';
@@ -218,10 +219,10 @@ function AIInsights() {
     }
 
     function RenderVisualizationChart(visualizationChart) {
-        if (visualizationChart.length > 0) {
-            var $chartSection = domElements.chartSection;
-            $('#chart-section .card-body').remove();
+        var $chartSection = domElements.chartSection;
+        $('#chart-section .card-body').remove();
 
+        if (visualizationChart.length > 0) {
             visualizationChart.forEach(function (chart) {
                 var analysisItems = (chart.analysis || '')
                     .split('\n')
@@ -316,8 +317,9 @@ function AIInsights() {
     }
 
     function RenderStatistics(statisticsHtml) {
+        domElements.divStatistics.html(statisticsHtml);            
+
         if (statisticsHtml) {           
-            domElements.divStatistics.html(statisticsHtml);            
             AdjustStatsItemsLayout(); 
 
             $('#divStatistics .js-plotly-plot').each(function () {

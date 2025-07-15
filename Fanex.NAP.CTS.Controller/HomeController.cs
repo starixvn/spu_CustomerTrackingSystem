@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Controller
+namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;
@@ -17,7 +17,6 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using System.IO;
     using System;
-    using Fanex.NAP.CTS.Core.Extentions;
 
     [NapSuperAuth]
     public class HomeController : BaseController
@@ -34,7 +33,7 @@
         [HttpGet]
         public void test()
         {
-            LogExtension.LogInfo($"CTS test site");
+            LogService.Info($"CTS test site");
         }       
 
         public ActionResult Index()
@@ -89,7 +88,10 @@
             string inputValue = form["txtInput"]?.Trim();
 
             bool hasText = !string.IsNullOrEmpty(inputValue) && inputValue.Length > 1 && inputValue.Length <= 50;
-            bool hasFile = uploadFile != null && uploadFile.ContentLength > 0 && uploadFile.FileName.EndsWith(".xls");
+            bool hasFile = uploadFile != null
+                           && uploadFile.ContentLength > 0
+                           && (uploadFile.FileName.EndsWith(".xls", StringComparison.OrdinalIgnoreCase)
+                               || uploadFile.FileName.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase));
 
             if (hasFile && !hasText)
             {
