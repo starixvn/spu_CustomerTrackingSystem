@@ -24,149 +24,149 @@
             logInputDataService = new LogInputDataService();
         }
 
-        /// <summary>
-        /// Add Licencee VIP
-        /// </summary>
-        [HttpPost]
-        [Route("api/cts/AddLicVIP")]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.AddLicVIP_API)]
-        public IHttpActionResult AddLicVIP([FromBody] LicenseeVIPBAInputModel parameters)
-        {
-            try
-            {
-                logInputDataService.LogInputData(new LogInputViewModel { LicenseeVIPBAModel = new LicenseeVIPBALogDataModel { Data = parameters, FromSystem = parameters.IsFromExternal ? FromSystem.External : FromSystem.Internal } }, FunctionId.AddLicVIP_API);
+        ///// <summary>
+        ///// Add Licencee VIP
+        ///// </summary>
+        //[HttpPost]
+        //[Route("api/cts/AddLicVIP")]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.AddLicVIP_API)]
+        //public IHttpActionResult AddLicVIP([FromBody] LicenseeVIPBAInputModel parameters)
+        //{
+        //    try
+        //    {
+        //        logInputDataService.LogInputData(new LogInputViewModel { LicenseeVIPBAModel = new LicenseeVIPBALogDataModel { Data = parameters, FromSystem = parameters.IsFromExternal ? FromSystem.External : FromSystem.Internal } }, FunctionId.AddLicVIP_API);
 
-                if (!licenseeLAPCustomerClassificationService.CheckValid(parameters))
-                {
-                    LogService.Error($"CTS API - AddLicVIP - Invalid input parameter from LAP: {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC");
+        //        if (!licenseeLAPCustomerClassificationService.CheckValid(parameters))
+        //        {
+        //            LogService.Error($"CTS API - AddLicVIP - Invalid input parameter from LAP: {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC");
 
-                    return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(new { parameters.CustIDs, parameters.CreatedBy })}");
-                }
+        //            return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(new { parameters.CustIDs, parameters.CreatedBy })}");
+        //        }
 
-                licenseeLAPCustomerClassificationService.InsertLicVIP(parameters);
-            }
-            catch (Exception ex)
-            {
-                var logMessage = new LogMessage($"CTS API - AddLicVIP")
-                                       .AddMessage(ex.Message)
-                                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
-                                       .AddMessage($"Data {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC").ToString();
+        //        licenseeLAPCustomerClassificationService.InsertLicVIP(parameters);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var logMessage = new LogMessage($"CTS API - AddLicVIP")
+        //                               .AddMessage(ex.Message)
+        //                               .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
+        //                               .AddMessage($"Data {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC").ToString();
 
-                LogService.Error(logMessage);
+        //        LogService.Error(logMessage);
 
-                return InternalServerError(ex);
-            }
+        //        return InternalServerError(ex);
+        //    }
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
 
-        /// <summary>
-        /// Remove Licencee VIP
-        /// </summary>
-        [HttpPost]
-        [Route("api/cts/RemoveLicVIP")]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.RemoveLicVIP_API)]
-        public IHttpActionResult RemoveLicVIP([FromBody] LicenseeVIPBAInputModel parameters)
-        {
-            try
-            {
-                logInputDataService.LogInputData(new LogInputViewModel { LicenseeVIPBAModel = new LicenseeVIPBALogDataModel { Data = parameters, FromSystem = FromSystem.External } }, FunctionId.RemoveLicVIP_API);
+        ///// <summary>
+        ///// Remove Licencee VIP
+        ///// </summary>
+        //[HttpPost]
+        //[Route("api/cts/RemoveLicVIP")]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.RemoveLicVIP_API)]
+        //public IHttpActionResult RemoveLicVIP([FromBody] LicenseeVIPBAInputModel parameters)
+        //{
+        //    try
+        //    {
+        //        logInputDataService.LogInputData(new LogInputViewModel { LicenseeVIPBAModel = new LicenseeVIPBALogDataModel { Data = parameters, FromSystem = FromSystem.External } }, FunctionId.RemoveLicVIP_API);
 
-                if (!licenseeLAPCustomerClassificationService.CheckValid(parameters))
-                {
-                    LogService.Error($"CTS API - RemoveLicVIP - Invalid input parameter from LAP: {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC");
+        //        if (!licenseeLAPCustomerClassificationService.CheckValid(parameters))
+        //        {
+        //            LogService.Error($"CTS API - RemoveLicVIP - Invalid input parameter from LAP: {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC");
 
-                    return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(new { parameters.CustIDs, parameters.CreatedBy })}");
-                }
+        //            return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(new { parameters.CustIDs, parameters.CreatedBy })}");
+        //        }
 
-                licenseeLAPCustomerClassificationService.RemoveLicVIP(parameters);
-            }
-            catch (Exception ex)
-            {
-                var logMessage = new LogMessage($"CTS API - RemoveLicVIP")
-                                       .AddMessage(ex.Message)
-                                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
-                                       .AddMessage($"Data {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC").ToString();
+        //        licenseeLAPCustomerClassificationService.RemoveLicVIP(parameters);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var logMessage = new LogMessage($"CTS API - RemoveLicVIP")
+        //                               .AddMessage(ex.Message)
+        //                               .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
+        //                               .AddMessage($"Data {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC").ToString();
 
-                LogService.Error(logMessage);
+        //        LogService.Error(logMessage);
 
-                return InternalServerError(ex);
-            }
+        //        return InternalServerError(ex);
+        //    }
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
 
-        /// <summary>
-        /// Add Licencee BA
-        /// </summary>
-        [HttpPost]
-        [Route("api/cts/AddLicBA")]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.AddLicVIP_API)]
-        public IHttpActionResult AddLicBA([FromBody] LicenseeVIPBAInputModel parameters)
-        {
-            try
-            {
-                logInputDataService.LogInputData(new LogInputViewModel { LicenseeVIPBAModel = new LicenseeVIPBALogDataModel { Data = parameters, FromSystem = parameters.IsFromExternal ? FromSystem.External : FromSystem.Internal } }, FunctionId.AddLicBA_API);
+        ///// <summary>
+        ///// Add Licencee BA
+        ///// </summary>
+        //[HttpPost]
+        //[Route("api/cts/AddLicBA")]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.AddLicVIP_API)]
+        //public IHttpActionResult AddLicBA([FromBody] LicenseeVIPBAInputModel parameters)
+        //{
+        //    try
+        //    {
+        //        logInputDataService.LogInputData(new LogInputViewModel { LicenseeVIPBAModel = new LicenseeVIPBALogDataModel { Data = parameters, FromSystem = parameters.IsFromExternal ? FromSystem.External : FromSystem.Internal } }, FunctionId.AddLicBA_API);
 
-                if (!licenseeLAPCustomerClassificationService.CheckValid(parameters))
-                {
-                    LogService.Error($"CTS API - AddLicBA - Invalid input parameter from LAP: {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC");
+        //        if (!licenseeLAPCustomerClassificationService.CheckValid(parameters))
+        //        {
+        //            LogService.Error($"CTS API - AddLicBA - Invalid input parameter from LAP: {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC");
 
-                    return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(new { parameters.CustIDs, parameters.CreatedBy })}");
-                }
+        //            return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(new { parameters.CustIDs, parameters.CreatedBy })}");
+        //        }
 
-                licenseeLAPCustomerClassificationService.InsertLicBA(parameters);
-            }
-            catch (Exception ex)
-            {
-                var logMessage = new LogMessage($"CTS API - AddLicBA")
-                                       .AddMessage(ex.Message)
-                                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
-                                       .AddMessage($"Data {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC").ToString();
+        //        licenseeLAPCustomerClassificationService.InsertLicBA(parameters);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var logMessage = new LogMessage($"CTS API - AddLicBA")
+        //                               .AddMessage(ex.Message)
+        //                               .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
+        //                               .AddMessage($"Data {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC").ToString();
 
-                LogService.Error(logMessage);
+        //        LogService.Error(logMessage);
 
-                return InternalServerError(ex);
-            }
+        //        return InternalServerError(ex);
+        //    }
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
 
-        /// <summary>
-        /// Remove Licencee BA
-        /// </summary>
-        [HttpPost]
-        [Route("api/cts/RemoveLicBA")]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.RemoveLicBAP_API)]
-        public IHttpActionResult RemoveLicBA([FromBody] LicenseeVIPBAInputModel parameters)
-        {
-            try
-            {
-                logInputDataService.LogInputData(new LogInputViewModel { LicenseeVIPBAModel = new LicenseeVIPBALogDataModel { Data = parameters, FromSystem = FromSystem.External } }, FunctionId.RemoveLicBA_API);
+        ///// <summary>
+        ///// Remove Licencee BA
+        ///// </summary>
+        //[HttpPost]
+        //[Route("api/cts/RemoveLicBA")]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.RemoveLicBAP_API)]
+        //public IHttpActionResult RemoveLicBA([FromBody] LicenseeVIPBAInputModel parameters)
+        //{
+        //    try
+        //    {
+        //        logInputDataService.LogInputData(new LogInputViewModel { LicenseeVIPBAModel = new LicenseeVIPBALogDataModel { Data = parameters, FromSystem = FromSystem.External } }, FunctionId.RemoveLicBA_API);
 
-                if (!licenseeLAPCustomerClassificationService.CheckValid(parameters))
-                {
-                    LogService.Error($"CTS API - RemoveLicBA - Invalid input parameter from LAP: {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC");
+        //        if (!licenseeLAPCustomerClassificationService.CheckValid(parameters))
+        //        {
+        //            LogService.Error($"CTS API - RemoveLicBA - Invalid input parameter from LAP: {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC");
 
-                    return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(new { parameters.CustIDs, parameters.CreatedBy })}");
-                }
+        //            return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(new { parameters.CustIDs, parameters.CreatedBy })}");
+        //        }
 
-                licenseeLAPCustomerClassificationService.RemoveLicBA(parameters);
-            }
-            catch (Exception ex)
-            {
-                var logMessage = new LogMessage($"CTS API - RemoveLicBA")
-                                       .AddMessage(ex.Message)
-                                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
-                                       .AddMessage($"Data {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC").ToString();
+        //        licenseeLAPCustomerClassificationService.RemoveLicBA(parameters);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var logMessage = new LogMessage($"CTS API - RemoveLicBA")
+        //                               .AddMessage(ex.Message)
+        //                               .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
+        //                               .AddMessage($"Data {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC").ToString();
 
-                LogService.Error(logMessage);
+        //        LogService.Error(logMessage);
 
-                return InternalServerError(ex);
-            }
+        //        return InternalServerError(ex);
+        //    }
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
        
     }
 }

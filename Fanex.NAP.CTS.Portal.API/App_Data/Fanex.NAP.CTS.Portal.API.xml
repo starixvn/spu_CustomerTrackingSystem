@@ -486,26 +486,6 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.LicenseeVIPBAController.AddLicVIP(Fanex.NAP.CTS.Model.API.LicenseeVIPBAInputModel)">
-            <summary>
-            Add Licencee VIP
-            </summary>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.LicenseeVIPBAController.RemoveLicVIP(Fanex.NAP.CTS.Model.API.LicenseeVIPBAInputModel)">
-            <summary>
-            Remove Licencee VIP
-            </summary>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.LicenseeVIPBAController.AddLicBA(Fanex.NAP.CTS.Model.API.LicenseeVIPBAInputModel)">
-            <summary>
-            Add Licencee BA
-            </summary>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.LicenseeVIPBAController.RemoveLicBA(Fanex.NAP.CTS.Model.API.LicenseeVIPBAInputModel)">
-            <summary>
-            Remove Licencee BA
-            </summary>
-        </member>
         <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.CtsController">
             <summary>
             CtsController
@@ -516,63 +496,6 @@
             Using for external site (TW, ExtAcc site...)
             </summary>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetAssociationForExtAcc(System.Int32)">
-            <summary>
-            Get Association data from MySQL
-            </summary>
-            <param name="custId"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetCustomerClassification(System.String)">
-            <summary>
-            Get classification of customer
-            </summary>
-            <param name="custIdList"></param>
-            <returns>Customer classification in XML format</returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetCustomerClassificationByCategoryIDs(System.String)">
-            <summary>
-            Get classification of customer by Category's IDs
-            </summary>
-            <param name="categoryIDList"></param>
-            <returns>Customer classification in XML format</returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.CheckCustomerNotExisted(System.String,System.DateTime,System.DateTime)">
-            <summary>
-            Get class of customer
-            </summary>
-            <param name="custIdList"></param>
-            <param name="fromDate"></param>
-            <param name="toDate"></param>
-            <returns>Customer class in XML format</returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetCustomerClassCategory">
-            <summary>
-            Get customer class's categories, class name
-            </summary>
-            <returns>A list of customer class's categories in JSON, API for LAP's website and TW BI</returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetSubscriberInfo(System.String)">
-            <summary>
-            Get Subscriber info By Subscriber name
-            </summary>
-            <param name="subscriberName"></param>
-            <returns>Subscriber Info</returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetAssociationByCustId(System.Int64)">
-            <summary>
-            Provide API to get association (Device, IP, AI)
-            Integration team: NAP
-            </summary>
-            <param name="custId"></param>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.CheckAssociationByCustId(System.Int64)">
-            <summary>
-            Provide API to check association (Device, IP, Betting Pattern)
-            Integration team: Alpha
-            </summary>
-            <param name="custId"></param>
-        </member>
         <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.GraphController">
             <summary>
             Graph Controller - Using for CTS site
@@ -582,20 +505,6 @@
             <summary>
             Constructor
             </summary>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetFlaggedEvidenceForLevel01(System.String)">
-            <summary>
-            API Get GetFlaggedEvidenceForLevel01 For Taiwan
-            </summary>
-            <param name="custIdList"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetFlaggedEvidenceForLevel2(System.String)">
-            <summary>
-            API Get GetFlaggedEvidenceForLevel2 For Taiwan
-            </summary>
-            <param name="custIdList"></param>
-            <returns></returns>
         </member>
         <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.HomeController">
             <summary>

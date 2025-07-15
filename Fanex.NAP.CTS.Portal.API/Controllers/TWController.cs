@@ -25,37 +25,37 @@
             tWInitialSmartService = new TWInitialSmartService();
         }
 
-        [HttpPost]
-        [Route("api/TW/AddCustomerEarlyBlock")]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.AddCustomerInitialSmarts)]
-        public IHttpActionResult TWAddCustomerInitialSmarts([FromBody] List<InitialSmartCustInfoModel> custInfos)
-        {
-            try
-            {
-                var dbExistedCusts = tWInitialSmartService.AddCustTWInitialSmarts(custInfos);
+        //[HttpPost]
+        //[Route("api/TW/AddCustomerEarlyBlock")]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.AddCustomerInitialSmarts)]
+        //public IHttpActionResult TWAddCustomerInitialSmarts([FromBody] List<InitialSmartCustInfoModel> custInfos)
+        //{
+        //    try
+        //    {
+        //        var dbExistedCusts = tWInitialSmartService.AddCustTWInitialSmarts(custInfos);
 
-                if (dbExistedCusts != null && dbExistedCusts.Any())
-                {
-                    var logMessage = new LogMessage($"CTS API - TW AddCustomerInitialSmarts cust have existed")
-                                      .AddMessage($"Custs existed in DB: {JsonConvert.SerializeObject(dbExistedCusts)}")
-                                      .AddMessage($"Data {JsonConvert.SerializeObject(custInfos)} - DateTime {DateTime.UtcNow} UTC").ToString();
+        //        if (dbExistedCusts != null && dbExistedCusts.Any())
+        //        {
+        //            var logMessage = new LogMessage($"CTS API - TW AddCustomerInitialSmarts cust have existed")
+        //                              .AddMessage($"Custs existed in DB: {JsonConvert.SerializeObject(dbExistedCusts)}")
+        //                              .AddMessage($"Data {JsonConvert.SerializeObject(custInfos)} - DateTime {DateTime.UtcNow} UTC").ToString();
 
-                    LogService.Error(logMessage);
-                }               
-            }
-            catch (Exception ex)
-            {
-                var logMessage = new LogMessage($"CTS API - TW AddCustomerInitialSmarts exception")
-                                       .AddMessage(ex.Message)
-                                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
-                                       .AddMessage($"Data {JsonConvert.SerializeObject(custInfos)} - DateTime {DateTime.UtcNow} UTC").ToString();
+        //            LogService.Error(logMessage);
+        //        }               
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var logMessage = new LogMessage($"CTS API - TW AddCustomerInitialSmarts exception")
+        //                               .AddMessage(ex.Message)
+        //                               .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
+        //                               .AddMessage($"Data {JsonConvert.SerializeObject(custInfos)} - DateTime {DateTime.UtcNow} UTC").ToString();
 
-                LogService.Error(logMessage);
+        //        LogService.Error(logMessage);
 
-                return BadRequest($"Add Customers Initial Smart failed.");
-            }
+        //        return BadRequest($"Add Customers Initial Smart failed.");
+        //    }
 
-            return Ok("Success");
-        }
+        //    return Ok("Success");
+        //}
     }
 }

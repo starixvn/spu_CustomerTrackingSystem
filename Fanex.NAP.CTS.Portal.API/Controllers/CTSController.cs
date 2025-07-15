@@ -58,143 +58,112 @@
             _commonService = new CommonService();
         }
 
-        [HttpGet]
-        public IHttpActionResult HealthCheck()
-        {
-            try
-            {
-                _commonService.CheckConnection();
-
-                return Ok("ok");
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("Health Check API" + ex.Message);
-            }
-
-            return InternalServerError();
-        }
-
-        /// <summary>
-        /// Get Association data from MySQL
-        /// </summary>
-        /// <param name="custId"></param>
-        /// <returns></returns>
-        [AcceptVerbs("GetAssociationForExtAcc")]
-        [HttpGet]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationForExtAccAPI)]
-        public string GetAssociationForExtAcc(int custId)
-        {
-            string xmlString = string.Empty;
-            try
-            {
-                var result = _associationService.GetAssociationForExtAcc(custId);
-
-                if (result != null)
-                {
-                    var associationList = result.Select(a => new AssociationForExtAcc
-                    {
-                        CustId = a.CustId == null ? 0 : a.CustId.Value,
-                        CustSubId = a.CustSubId,
-                        AssociationDate = a.AssociationDate.ToString()
-                    });
-
-                    xmlString = XmlHelper.ToXmlString(associationList);
-                }
-
-                return xmlString;
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("GetDirectAssociationByDevice failed: " + ex.Message + ex.StackTrace);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Get classification of customer
-        /// </summary>
-        /// <param name="custIdList"></param>
-        /// <returns>Customer classification in XML format</returns>
-        [HttpGet]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetCustomerClassificationAPI)]
-        public string GetCustomerClassification(string custIdList)
-        {
-            var result = string.Empty;
-            try
-            {
-                var parentIDs = new List<int> 
-                {   
-                    MEMBER_PARENTID_VVIP,
-                    MEMBER_PARENTID_PA,
-                    MEMBER_PARENTID_POTENTIALPA,
-                    MEMBER_PARENTID_NORMAL,
-                    AGENCY_PARENTID_VVIP,
-                    AGENCY_PARENTID_PA,
-                    AGENCY_PARENTID_NORMAL
-                };
-
-                var custClassifications = _accountService.GetCustomerClassificationForAPI(custIdList, string.Join(",", parentIDs));
-
-                result = custClassifications.Select(c => new CustomerClassification()
-                {
-                    CustID = c.CustID,
-                    ParentCategoryName = c.ParentCategoryName,
-                    CategoryName = c.CategoryName
-                }).ToXmlString();
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("GetCustomerClassification failed - Data: " + custIdList
-                    + "\nException" + ex.Message + ex.StackTrace);
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Get classification of customer by Category's IDs
-        /// </summary>
-        /// <param name="categoryIDList"></param>
-        /// <returns>Customer classification in XML format</returns>
-        [HttpGet]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetCustomerClassificationByCategoryIDsAPI)]
-        public string GetCustomerClassificationByCategoryIDs(string categoryIDList)
-        {
-            try
-            {
-                var custClassifications = _accountService.GetCustomerClassificationByCategory(categoryIDList);
-                return custClassifications.Any()
-                    ? custClassifications.Select(c => new CustomerClassification()
-                    {
-                        CustID = c.CustID,
-                        ParentCategoryName = "",
-                        CategoryName = c.CategoryName
-                    }).ToXmlString()
-                    : string.Empty;
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("GetCustomerClassificationByCategoryIDs failed: " + ex.Message + ex.StackTrace);
-            }
-
-            return string.Empty;
-        }
-
-        /// <summary>
-        /// Get VVIP Customers
-        /// </summary>
-        /// <returns>Customer classification in XML format</returns>
         //[HttpGet]
-        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetVVIPCustomerAPI)]
-        //public string GetVVIPCustomer()
+        //public IHttpActionResult HealthCheck()
         //{
         //    try
         //    {
-        //        var cateIDs = new List<int> { MEMBER_CATEID_VVIP, AGENCY_CATEID_VVIP };
+        //        _commonService.CheckConnection();
 
-        //        var custClassifications = _accountService.GetCustomerClassificationByCategory(string.Join(",", cateIDs));
+        //        return Ok("ok");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogService.Error("Health Check API" + ex.Message);
+        //    }
 
+        //    return InternalServerError();
+        //}
+
+        ///// <summary>
+        ///// Get Association data from MySQL
+        ///// </summary>
+        ///// <param name="custId"></param>
+        ///// <returns></returns>
+        //[AcceptVerbs("GetAssociationForExtAcc")]
+        //[HttpGet]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationForExtAccAPI)]
+        //public string GetAssociationForExtAcc(int custId)
+        //{
+        //    string xmlString = string.Empty;
+        //    try
+        //    {
+        //        var result = _associationService.GetAssociationForExtAcc(custId);
+
+        //        if (result != null)
+        //        {
+        //            var associationList = result.Select(a => new AssociationForExtAcc
+        //            {
+        //                CustId = a.CustId == null ? 0 : a.CustId.Value,
+        //                CustSubId = a.CustSubId,
+        //                AssociationDate = a.AssociationDate.ToString()
+        //            });
+
+        //            xmlString = XmlHelper.ToXmlString(associationList);
+        //        }
+
+        //        return xmlString;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogService.Error("GetDirectAssociationByDevice failed: " + ex.Message + ex.StackTrace);
+        //        throw;
+        //    }
+        //}
+
+        ///// <summary>
+        ///// Get classification of customer
+        ///// </summary>
+        ///// <param name="custIdList"></param>
+        ///// <returns>Customer classification in XML format</returns>
+        //[HttpGet]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetCustomerClassificationAPI)]
+        //public string GetCustomerClassification(string custIdList)
+        //{
+        //    var result = string.Empty;
+        //    try
+        //    {
+        //        var parentIDs = new List<int> 
+        //        {   
+        //            MEMBER_PARENTID_VVIP,
+        //            MEMBER_PARENTID_PA,
+        //            MEMBER_PARENTID_POTENTIALPA,
+        //            MEMBER_PARENTID_NORMAL,
+        //            AGENCY_PARENTID_VVIP,
+        //            AGENCY_PARENTID_PA,
+        //            AGENCY_PARENTID_NORMAL
+        //        };
+
+        //        var custClassifications = _accountService.GetCustomerClassificationForAPI(custIdList, string.Join(",", parentIDs));
+
+        //        result = custClassifications.Select(c => new CustomerClassification()
+        //        {
+        //            CustID = c.CustID,
+        //            ParentCategoryName = c.ParentCategoryName,
+        //            CategoryName = c.CategoryName
+        //        }).ToXmlString();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogService.Error("GetCustomerClassification failed - Data: " + custIdList
+        //            + "\nException" + ex.Message + ex.StackTrace);
+        //    }
+
+        //    return result;
+        //}
+
+        ///// <summary>
+        ///// Get classification of customer by Category's IDs
+        ///// </summary>
+        ///// <param name="categoryIDList"></param>
+        ///// <returns>Customer classification in XML format</returns>
+        //[HttpGet]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetCustomerClassificationByCategoryIDsAPI)]
+        //public string GetCustomerClassificationByCategoryIDs(string categoryIDList)
+        //{
+        //    try
+        //    {
+        //        var custClassifications = _accountService.GetCustomerClassificationByCategory(categoryIDList);
         //        return custClassifications.Any()
         //            ? custClassifications.Select(c => new CustomerClassification()
         //            {
@@ -212,225 +181,256 @@
         //    return string.Empty;
         //}
 
-        /// <summary>
-        /// Get class of customer
-        /// </summary>
-        /// <param name="custIdList"></param>
-        /// <param name="fromDate"></param>
-        /// <param name="toDate"></param>
-        /// <returns>Customer class in XML format</returns>
-        [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.CheckCustomerNotExistedAPI)]
-        public IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIdList, DateTime fromDate, DateTime toDate)
-        {
-            try
-            {
-                return _accountService.CheckCustomerNotExisted(custIdList, fromDate, toDate);
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("CheckCustomerNotExisted failed: " + ex.Message + ex.StackTrace);
-            }
+        ///// <summary>
+        ///// Get VVIP Customers
+        ///// </summary>
+        ///// <returns>Customer classification in XML format</returns>
+        ////[HttpGet]
+        ////[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetVVIPCustomerAPI)]
+        ////public string GetVVIPCustomer()
+        ////{
+        ////    try
+        ////    {
+        ////        var cateIDs = new List<int> { MEMBER_CATEID_VVIP, AGENCY_CATEID_VVIP };
 
-            return null;
-        }
+        ////        var custClassifications = _accountService.GetCustomerClassificationByCategory(string.Join(",", cateIDs));
 
-        /// <summary>
-        /// Get customer class's categories, class name
-        /// </summary>
-        /// <returns>A list of customer class's categories in JSON, API for LAP's website and TW BI</returns>
-        [HttpGet]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetCustomerClassCategoryAPI)]
-        public JsonResult<IEnumerable<CategoryCustomerClassModel>> GetCustomerClassCategory()
-        {
-            try
-            {
-                var customerClassCategories = _categoryService.GetCustomerClassCategory();
+        ////        return custClassifications.Any()
+        ////            ? custClassifications.Select(c => new CustomerClassification()
+        ////            {
+        ////                CustID = c.CustID,
+        ////                ParentCategoryName = "",
+        ////                CategoryName = c.CategoryName
+        ////            }).ToXmlString()
+        ////            : string.Empty;
+        ////    }
+        ////    catch (Exception ex)
+        ////    {
+        ////        LogService.Error("GetCustomerClassificationByCategoryIDs failed: " + ex.Message + ex.StackTrace);
+        ////    }
 
-                return Json(customerClassCategories);
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("Get Customer Class's Categories exception: " + ex.Message);
-                return Json(Enumerable.Empty<CategoryCustomerClassModel>());
-            }
-        }
+        ////    return string.Empty;
+        ////}
 
-        [HttpGet]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetCustomerClassCategoryByCustID)]
-        public IHttpActionResult GetCustomerClassCategoryByCustID(long custid)
-        {
-            try
-            {
-                var customerCategories = _categoryService.GetCustomerClassCategoryByCustID(custid);
+        ///// <summary>
+        ///// Get class of customer
+        ///// </summary>
+        ///// <param name="custIdList"></param>
+        ///// <param name="fromDate"></param>
+        ///// <param name="toDate"></param>
+        ///// <returns>Customer class in XML format</returns>
+        //[HttpPost]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.CheckCustomerNotExistedAPI)]
+        //public IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIdList, DateTime fromDate, DateTime toDate)
+        //{
+        //    try
+        //    {
+        //        return _accountService.CheckCustomerNotExisted(custIdList, fromDate, toDate);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogService.Error("CheckCustomerNotExisted failed: " + ex.Message + ex.StackTrace);
+        //    }
 
-                var responseModel = customerCategories?.Select(n => new CustomerClassCategoryViewModel
-                {
-                    categoryid = n.CategoryID,
-                    CC = n.CustomerClass,
-                    date = n.CreatedDate?.ToString("yyyy-MM-ddTHH:mm:ss.ffff")
-                });
+        //    return null;
+        //}
 
-                return Result(responseModel);
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("Get Customer Class's Categories by CustID exception: " + ex.Message);
+        ///// <summary>
+        ///// Get customer class's categories, class name
+        ///// </summary>
+        ///// <returns>A list of customer class's categories in JSON, API for LAP's website and TW BI</returns>
+        //[HttpGet]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetCustomerClassCategoryAPI)]
+        //public JsonResult<IEnumerable<CategoryCustomerClassModel>> GetCustomerClassCategory()
+        //{
+        //    try
+        //    {
+        //        var customerClassCategories = _categoryService.GetCustomerClassCategory();
 
-                return Result(Enumerable.Empty<CustomerClassCategoryViewModel>(), ex.Message);
-            }
-        }
+        //        return Json(customerClassCategories);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogService.Error("Get Customer Class's Categories exception: " + ex.Message);
+        //        return Json(Enumerable.Empty<CategoryCustomerClassModel>());
+        //    }
+        //}
+
+        //[HttpGet]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetCustomerClassCategoryByCustID)]
+        //public IHttpActionResult GetCustomerClassCategoryByCustID(long custid)
+        //{
+        //    try
+        //    {
+        //        var customerCategories = _categoryService.GetCustomerClassCategoryByCustID(custid);
+
+        //        var responseModel = customerCategories?.Select(n => new CustomerClassCategoryViewModel
+        //        {
+        //            categoryid = n.CategoryID,
+        //            CC = n.CustomerClass,
+        //            date = n.CreatedDate?.ToString("yyyy-MM-ddTHH:mm:ss.ffff")
+        //        });
+
+        //        return Result(responseModel);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogService.Error("Get Customer Class's Categories by CustID exception: " + ex.Message);
+
+        //        return Result(Enumerable.Empty<CustomerClassCategoryViewModel>(), ex.Message);
+        //    }
+        //}
 
 
-        /// <summary>
-        /// Get Subscriber info By Subscriber name
-        /// </summary>
-        /// <param name="subscriberName"></param>
-        /// <returns>Subscriber Info</returns>
-        [HttpGet]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetSubscriberInfoAPI)]
-        public JsonResult<SubscriberInfo> GetSubscriberInfo(string subscriberName)
-        {
-            try
-            {
-                var subscriber = _subscriberService.GetSubscriberBySubscriberName(subscriberName);
+        ///// <summary>
+        ///// Get Subscriber info By Subscriber name
+        ///// </summary>
+        ///// <param name="subscriberName"></param>
+        ///// <returns>Subscriber Info</returns>
+        //[HttpGet]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetSubscriberInfoAPI)]
+        //public JsonResult<SubscriberInfo> GetSubscriberInfo(string subscriberName)
+        //{
+        //    try
+        //    {
+        //        var subscriber = _subscriberService.GetSubscriberBySubscriberName(subscriberName);
 
-                if (subscriber != null && subscriber.DCSStatus)
-                {
-                    return Json(subscriber);
-                }
-                else
-                {
-                    LogService.Error($"{subscriberName} is not integrated on CTS.");
-                }
+        //        if (subscriber != null && subscriber.DCSStatus)
+        //        {
+        //            return Json(subscriber);
+        //        }
+        //        else
+        //        {
+        //            LogService.Error($"{subscriberName} is not integrated on CTS.");
+        //        }
 
-                return Json(new SubscriberInfo());
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("Get Subscriber info exception: " + ex.Message);
-                return Json(new SubscriberInfo());
-            }
-        }
+        //        return Json(new SubscriberInfo());
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogService.Error("Get Subscriber info exception: " + ex.Message);
+        //        return Json(new SubscriberInfo());
+        //    }
+        //}
 
-        /// <summary>
-        /// Provide API to get association (Device, IP, AI)
-        /// Integration team: NAP
-        /// </summary>
-        /// <param name="custId"></param>
-        [HttpGet]
-        [Route("api/cts/Association/GetByCustId")]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationPerTypeAPI)]
-        public IEnumerable<DetectAssociationByTypeModel> GetAssociationByCustId(long custId)
-        {
-            try
-            {
-                if (custId >= 0)
-                {
-                    return _ctsAssociationApiService.DetectAssociationByCustId(custId);
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("API - GetAssociationByCustId throws exception: " + ex.Message);
-            }
+        ///// <summary>
+        ///// Provide API to get association (Device, IP, AI)
+        ///// Integration team: NAP
+        ///// </summary>
+        ///// <param name="custId"></param>
+        //[HttpGet]
+        //[Route("api/cts/Association/GetByCustId")]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationPerTypeAPI)]
+        //public IEnumerable<DetectAssociationByTypeModel> GetAssociationByCustId(long custId)
+        //{
+        //    try
+        //    {
+        //        if (custId >= 0)
+        //        {
+        //            return _ctsAssociationApiService.DetectAssociationByCustId(custId);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogService.Error("API - GetAssociationByCustId throws exception: " + ex.Message);
+        //    }
 
-            return Enumerable.Empty<DetectAssociationByTypeModel>();
-        }
+        //    return Enumerable.Empty<DetectAssociationByTypeModel>();
+        //}
 
-        /// <summary>
-        /// Provide API to check association (Device, IP, Betting Pattern)
-        /// Integration team: Alpha
-        /// </summary>
-        /// <param name="custId"></param>
-        [HttpGet]
-        [Route("api/cts/Association/CheckByCustId")]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.CheckAssociationAPI)]
-        public JsonResult<CheckAssociationByCustIdModel> CheckAssociationByCustId(long custId)
-        {
-            var result = new CheckAssociationByCustIdModel();
+        ///// <summary>
+        ///// Provide API to check association (Device, IP, Betting Pattern)
+        ///// Integration team: Alpha
+        ///// </summary>
+        ///// <param name="custId"></param>
+        //[HttpGet]
+        //[Route("api/cts/Association/CheckByCustId")]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.CheckAssociationAPI)]
+        //public JsonResult<CheckAssociationByCustIdModel> CheckAssociationByCustId(long custId)
+        //{
+        //    var result = new CheckAssociationByCustIdModel();
 
-            try
-            {
-                if (custId >= 0)
-                {
-                    var ctscustid = _accountService.GetCustInfoByCustID(custId.ToString());
+        //    try
+        //    {
+        //        if (custId >= 0)
+        //        {
+        //            var ctscustid = _accountService.GetCustInfoByCustID(custId.ToString());
 
-                    if (ctscustid != null && ctscustid.Any())
-                    {
-                        var data = _accountService.GetCustomerInfoAssociationAccount(ctscustid.FirstOrDefault().CTSCustID);
+        //            if (ctscustid != null && ctscustid.Any())
+        //            {
+        //                var data = _accountService.GetCustomerInfoAssociationAccount(ctscustid.FirstOrDefault().CTSCustID);
 
-                        if (data != null)
-                        {
-                            result.IsAssociated = data.Total > 0;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("API - CheckAssociationByCustId throws exception: " + ex.Message);
-                result.ErrMessage = "CTS-API throws exception";
-                result.Status = 500;
-            }
+        //                if (data != null)
+        //                {
+        //                    result.IsAssociated = data.Total > 0;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogService.Error("API - CheckAssociationByCustId throws exception: " + ex.Message);
+        //        result.ErrMessage = "CTS-API throws exception";
+        //        result.Status = 500;
+        //    }
 
-            return Json(result);
-        }
+        //    return Json(result);
+        //}
 
-        [HttpGet]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetProblemCaseAPI)]
-        public JsonResult<List<ProblemCaseModel>> GetProblemCase()
-        {
-            try
-            {
-                var problemCases = _problemCaseMonitorService.GetProlemCase(12, true);
+        //[HttpGet]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetProblemCaseAPI)]
+        //public JsonResult<List<ProblemCaseModel>> GetProblemCase()
+        //{
+        //    try
+        //    {
+        //        var problemCases = _problemCaseMonitorService.GetProlemCase(12, true);
 
-                return Json(problemCases.ToList());
-            }
-            catch (Exception ex)
-            {
-                var logMessage = new LogMessage(ex.Message)
-                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+        //        return Json(problemCases.ToList());
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var logMessage = new LogMessage(ex.Message)
+        //            .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+        //            .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
-                LogService.Error(logMessage);
+        //        LogService.Error(logMessage);
 
-                return Json(new List<ProblemCaseModel>());
-            }
-        }
+        //        return Json(new List<ProblemCaseModel>());
+        //    }
+        //}
 
-        [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.ForceLicSubCC)]
-        [CheckValidInputParameterFilter]
-        public IHttpActionResult ForceLicSubCC(ForceTWLicSubCCModel model)
-        {
-            try
-            {
-                var data = _twSpecialLicSubService.InsertTWSpecialLicSub(model);
+        //[HttpPost]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.ForceLicSubCC)]
+        //[CheckValidInputParameterFilter]
+        //public IHttpActionResult ForceLicSubCC(ForceTWLicSubCCModel model)
+        //{
+        //    try
+        //    {
+        //        var data = _twSpecialLicSubService.InsertTWSpecialLicSub(model);
 
-                var result = new ForceTWLicSubCCViewModel
-                {
-                    responseDateTime = data.InsertedTime
-                };
+        //        var result = new ForceTWLicSubCCViewModel
+        //        {
+        //            responseDateTime = data.InsertedTime
+        //        };
 
-                return Json(result);
-            }
-            catch (Exception ex)
-            {
-                var logMessage = new LogMessage(ex.Message)
-                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
-                    .ToString();
+        //        return Json(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var logMessage = new LogMessage(ex.Message)
+        //            .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+        //            .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
+        //            .ToString();
 
-                LogService.Error(logMessage);
+        //        LogService.Error(logMessage);
 
-                var errorResult = new ForceTWLicSubCCViewModel
-                {
-                    httpStatusCode = (int)System.Net.HttpStatusCode.InternalServerError
-                };
+        //        var errorResult = new ForceTWLicSubCCViewModel
+        //        {
+        //            httpStatusCode = (int)System.Net.HttpStatusCode.InternalServerError
+        //        };
 
-                return Content(System.Net.HttpStatusCode.InternalServerError, errorResult);
-            }
-        }
+        //        return Content(System.Net.HttpStatusCode.InternalServerError, errorResult);
+        //    }
+        //}
     }
 }
