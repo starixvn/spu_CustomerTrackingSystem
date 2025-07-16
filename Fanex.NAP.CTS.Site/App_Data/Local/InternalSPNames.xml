@@ -191,7 +191,7 @@
 	<Function name="RescanCustomerClassification">
 		<Setting Key="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" SpName="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" DbName="CTSMain.CTS_Archive.ctsWebAdmin" />
 
-		<Setting Key="CTS_DC_CustClassification_GetCCAndDangerLevel" SpName="CTS_DC_CustClassification_GetCCAndDangerLevel" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustClassification_GetCCAndDangerLevel" SpName="CTS_DC_CustClassification_GetCCAndDangerLevel_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 	</Function>
 
 	<Function name="AssociatedGroupMonitor">
