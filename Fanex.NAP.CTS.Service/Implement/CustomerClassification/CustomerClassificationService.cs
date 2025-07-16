@@ -1,9 +1,7 @@
 namespace Fanex.NAP.CTS.Service
 {
-    using Fanex.Data.Repository;
-    using Fanex.Logging;
-    using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
     using Fanex.NAP.CTS.Criteria.SyncCustomerToMainDb;
@@ -14,16 +12,17 @@ namespace Fanex.NAP.CTS.Service
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Fanex.NAP.CTS.Core.Service;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class CustomerClassificationService : ICustomerClassificationService
     {
-        private readonly IDynamicRepository repository;
+        private readonly ICriteriaService repository;
         private readonly IAntiFraudCenterService _antiFraudCenterService;
 
         public CustomerClassificationService()
         {
-            repository = new DynamicRepository();
+            repository = new CriteriaService();
             _antiFraudCenterService = new AntiFraudCenterService();
         }
 
@@ -154,7 +153,7 @@ namespace Fanex.NAP.CTS.Service
 
                     if (result.ErrorCode == 200)
                     {
-                        LogService.Error($"CTS - PushDataToExternalService - exception not existing CustIDs in mainDB, error msg: {result.ErrorMsg}");
+                        LogExtension.LogError($"CTS - PushDataToExternalService - exception not existing CustIDs in mainDB, error msg: {result.ErrorMsg}");
                     }
 
                     if (result.ErrorCode == 200 || result.ErrorCode == 0)
@@ -164,7 +163,7 @@ namespace Fanex.NAP.CTS.Service
 
                     if (retryTime == 0)
                     {
-                        LogService.Error($"CTS - PushDataToExternalService - exception from MainDB with error code: {result.ErrorCode}, error msg: {result.ErrorMsg} with listCust: {JsonConvert.SerializeObject(customerClassifications)}");
+                        LogExtension.LogError($"CTS - PushDataToExternalService - exception from MainDB with error code: {result.ErrorCode}, error msg: {result.ErrorMsg} with listCust: {JsonConvert.SerializeObject(customerClassifications)}");
 
                         return false;
                     }
@@ -177,7 +176,7 @@ namespace Fanex.NAP.CTS.Service
                     {
                         var jsonDataForLog = JsonConvert.SerializeObject(customerClassifications);
 
-                        LogService.Error($"PushDataToExternalService - PushCustomerClassificationToMain exception {ex.Message} with listCust: {jsonDataForLog}", ex);
+                        LogExtension.LogError($"PushDataToExternalService - PushCustomerClassificationToMain exception {ex.Message} with listCust: {jsonDataForLog}", ex);
 
                         return false;
                     }
@@ -204,7 +203,7 @@ namespace Fanex.NAP.CTS.Service
 
                     if (result.ErrorCode != 0 && retryTime == 0)
                     {
-                        LogService.Error($"CTS - UpdateDangerLevelToMainDB throws exception {result.ErrorMsg} with listCust: {JsonConvert.SerializeObject(dangerLevels)}");
+                        LogExtension.LogError($"CTS - UpdateDangerLevelToMainDB throws exception {result.ErrorMsg} with listCust: {JsonConvert.SerializeObject(dangerLevels)}");
 
                         return false;
                     }
@@ -221,7 +220,7 @@ namespace Fanex.NAP.CTS.Service
                 {
                     if (retryTime == 0)
                     {
-                        LogService.Error($"CTS - UpdateDangerLevelToMainDB throws exception {ex.Message} with listCust: {JsonConvert.SerializeObject(dangerLevels)}");
+                        LogExtension.LogError($"CTS - UpdateDangerLevelToMainDB throws exception {ex.Message} with listCust: {JsonConvert.SerializeObject(dangerLevels)}");
 
                         return false;
                     }
