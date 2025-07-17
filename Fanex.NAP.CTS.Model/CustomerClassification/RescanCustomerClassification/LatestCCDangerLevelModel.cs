@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Model.CustomerClassification
+namespace Fanex.NAP.CTS.Model.CustomerClassification
 {
     public class LatestCCDangerLevelModel
     {
@@ -10,8 +10,8 @@
 
         public string CustomerClassName { get; set; }
 
-        public int? DangerLevel { get; set; }
-        
-        public int? DangerLevelType { get; set; }
+        public int? DangerLevel { get; set; } // ABI
+
+        public int? Danger1 { get; set; }  // Ori
     }
 }

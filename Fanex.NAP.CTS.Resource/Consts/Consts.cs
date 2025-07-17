@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Resource.Consts
+namespace Fanex.NAP.CTS.Resource.Consts
 {
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -622,6 +622,12 @@
         {
             (int) MatchMonitorSportType.Basketball,
             (int) MatchMonitorSportType.Cricket
+        };
+
+        public enum DangerType
+        {
+            Ori = 1,
+            ABI = 2
         };
     }
 }
