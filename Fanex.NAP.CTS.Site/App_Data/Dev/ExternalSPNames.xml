@@ -30,7 +30,7 @@
 	</Function>
 
 	<Function name="CustomerClassification">
-		<Setting Key="CTS_CustomerUpdDanger" SpName="CTS_CustomerUpdDanger_xtest" DbName="DBCUST.CustDB.wsv_nap" TimeOut="300" />
+		<Setting Key="CTS_CustomerUpdDanger" SpName="CTS_CustomerUpdDanger" DbName="DBCUST.CustDB.wsv_nap" TimeOut="300" />
 		<Setting Key="CTS_GeneralNormalClassification_RescanNormal_Preprocess" SpName="CTS_GeneralNormalClassification_RescanNormal_Preprocess" DbName="DBVR2.bodb_VR2Model.wsv_cts" />
 		<Setting Key="CTS_GeneralNormalClassificationAgency_RescanNormal_Preprocess" SpName="CTS_GeneralNormalClassificationAgency_RescanNormal_Preprocess" DbName="DBVR2.bodb_VR2Model.wsv_cts" />
 		<Setting Key="Acc_CustomerUpdateCustomerClassBySport" SpName="Acc_CustomerUpdateCustomerClassBySport" DbName="DBCUST.CustDB.wsv_nap" TimeOut="600" />
