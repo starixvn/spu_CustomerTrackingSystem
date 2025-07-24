@@ -246,7 +246,6 @@ function AIInsights() {
                         return `<li class="${className}" ${numberAttr}>${content}</li>`;
                     }).join('');
 
-
                 var $card = $(`
                     <div class="card-body">
                         <div class="chart-item">
@@ -255,7 +254,7 @@ function AIInsights() {
                             </div>
 
                             <div class="chart-image">
-                                <img src="data:image/png;base64,${chart.base64_image}" alt="${chart.name}" />
+                                ${chart.base64_image}
                             </div>
 
                             <div class="chart-content">
