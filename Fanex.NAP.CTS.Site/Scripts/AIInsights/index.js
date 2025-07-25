@@ -274,6 +274,10 @@ function AIInsights() {
 
                 $chartSection.append($card);
             });
+
+            $('.chart-image .js-plotly-plot').each(function () {
+                Plotly.Plots.resize(this);
+            });
         }
     }
 

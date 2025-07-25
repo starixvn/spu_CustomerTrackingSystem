@@ -251,28 +251,15 @@
                     display: flex;
                     justify-content: center;
                     min-height: 450px;
+                    width: 100%;
 
-                    img {
-                        display: block;
-                        max-width: 55%;
-                        height: auto;
-                        border-radius: 0.3rem;
+                    .plotly-graph-div {
+                        width: 100%;
+
+                        .plot-container {
+                            width: 100%;
+                        }
                     }
-                }
-
-                .chart-image img.aspect-wide {
-                    max-width: 55%;
-                    max-height: 260px;
-                }
-
-                .chart-image img.aspect-tall {
-                    max-width: 40%;
-                    max-height: 200px;
-                }
-
-                .chart-image img.aspect-square {
-                    max-width: 45%;
-                    max-height: 220px;
                 }
 
                 .chart-content {
