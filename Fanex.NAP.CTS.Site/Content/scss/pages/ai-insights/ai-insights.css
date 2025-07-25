@@ -648,6 +648,7 @@
 .content-card-section .content-card .card-body .chart-item .chart-image {
   display: flex;
   justify-content: center;
+  min-height: 450px;
 }
 .content-card-section .content-card .card-body .chart-item .chart-image img {
   display: block;
