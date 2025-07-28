@@ -10,7 +10,7 @@ namespace Fanex.NAP.CTS.Criteria.CustomerClassificationAgency.BaseCustomerClassi
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_CustClassificationAgency_Rescan_Get"; // new
+            return "CTS_DC_CustClassificationAgency_Rescan_Get";
         }
 
         public override bool IsValid()

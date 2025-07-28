@@ -33,19 +33,22 @@
                 var groupingCustRescans = custRescans.CustInfos.GroupBy(x => x.InputFlowID).Select(g => new { InputFlowID = g.Key, CustRescans = g.Select(x => x) });
 
                 foreach (var group in groupingCustRescans)
-                {
-                    if ((AgencyCCInputFlow)group.InputFlowID == AgencyCCInputFlow.RescanNormal)
+                {                    
+                    switch ((AgencyCCInputFlow)group.InputFlowID)
                     {
-                        var custIds = group.CustRescans.Select(x => x.CustID);
-                        PreNormalClassificationAgency(custIds, paras);
-
-                        custIdsToRescan.AddRange(custIds);
-                    }
-                    else
-                    {
-                        result = RescanProblemAccountAgency(group.CustRescans, paras, (AgencyCCInputFlow)group.InputFlowID);
-
-                        custIdsToRescan.AddRange(result.CustIds);
+                        case AgencyCCInputFlow.RescanNormal:
+                            var custIds = group.CustRescans.Select(x => x.CustID);
+                            PreNormalClassificationAgency(custIds, paras);
+                            custIdsToRescan.AddRange(custIds);
+                            break;
+                        case AgencyCCInputFlow.RecanConsiderable:
+                            result = RescanConsiderableDanger(group.CustRescans, paras, (AgencyCCInputFlow)group.InputFlowID);
+                            custIdsToRescan.AddRange(result.CustIds);
+                            break;                       
+                        default:
+                            result = RescanProblemAccountAgency(group.CustRescans, paras, (AgencyCCInputFlow)group.InputFlowID);
+                            custIdsToRescan.AddRange(result.CustIds);
+                            break;
                     }
                 }
             }
@@ -98,9 +101,9 @@
             _repository.Execute(criteria);
         }
 
-        private RescanResultAgencyModel RescanProblemAccountAgency(IEnumerable<RescanCustomerClassificationAgencyModel> custNormals, RescanCustClassificationAgencyModel paras, AgencyCCInputFlow ccInputFlow)
+        private RescanResultAgencyModel RescanProblemAccountAgency(IEnumerable<RescanCustomerClassificationAgencyModel> custProblems, RescanCustClassificationAgencyModel paras, AgencyCCInputFlow ccInputFlow)
         {
-            var resultCustRescans = base.RescanCustomerClassificationAgency(custNormals, ccInputFlow, paras.IsToQueue);
+            var resultCustRescans = base.RescanCustomerClassificationAgency(custProblems, ccInputFlow, paras.IsToQueue);
 
             PushDataToExternalPackge(resultCustRescans, paras);
 
@@ -109,6 +112,11 @@
                 CustIds = resultCustRescans.ToList(),
                 IsSuccess = true
             };
+        }
+
+        private RescanResultAgencyModel RescanConsiderableDanger(IEnumerable<RescanCustomerClassificationAgencyModel> custConsiderable, RescanCustClassificationAgencyModel paras, AgencyCCInputFlow ccInputFlow)
+        {
+            return RescanProblemAccountAgency(custConsiderable, paras, ccInputFlow);
         }
 
         private bool PushDataToExternalPackge(IEnumerable<long> custIdsToSyncCC, RescanCustClassificationAgencyModel parameters)
