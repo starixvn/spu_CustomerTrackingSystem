@@ -8,6 +8,8 @@
     var subscriberSourceID = $("#hdSubscriberSourceID").val();
     var isHostPermission = $("#hdIsHostPermission").attr("IsHostPermission");
     var isBettingStatisticPermission = $("#hdIsBettingStatisticPermission").attr("IsBettingStatisticPermission");
+    var isAccountInfoPermission = $("#hdIsAccountInfoPermission").attr("IsAccountInfoPermission");
+    var isAccountDetailTabPermission = $("#hdIsAccountDetailTabPermission").attr("IsAccountDetailTabPermission");
     var isViewIPTransactionPermission = $("#hdIsViewIPTransactionPermission").attr("IsViewIPTransactionPermission");
     var currentUserId = $("#hdCurrentUserId").val();
     var custSubId = $("#hdCustSubId").val();
@@ -94,7 +96,7 @@
                 exceptions.Initial(ctsCustId, username, subscriberId, isHostPermission);
             },
             error: function (errMsg) {
-                console.log(errMsg);
+            console.log(errMsg);
             }
         });
     }
@@ -111,7 +113,7 @@
                 customerCategory.Initial(custId, ctsCustId, subscriberId, username, isHostPermission, custSubId);
 
                 customerCategory.ReloadStatusRobotUser(custId, roleID);
-
+                                    
                 GetCustProfileDates();
 
                 GetCustProfileLoginInfo();
@@ -344,8 +346,8 @@
     };    
 
     function Initial() {        
-        LoadCustomerCategory();                 
-                                  
+        LoadCustomerCategory();
+
         $("#tabs-account-detail").tabs();       
     }
 
@@ -383,8 +385,7 @@
     }
 
     function TrackingEvidenceFuction() {
-        if (currentTabIndex != 2 && domElements.evidenceTab.attr("aria-selected")) 
-        {
+        if (currentTabIndex != 2 && domElements.evidenceTab.attr("aria-selected")) {
             TrackingFunction(2);
             currentTabIndex = 2;
         }
@@ -419,7 +420,6 @@
     }
  
     function TrackingFunction(functionId) {
-
         var functionName = null;
 
         switch (functionId) {
@@ -448,7 +448,6 @@
                     functionName = "TrackingRobotBetting";
                     break;
                 }
-
         }
 
         if (functionName != null) {
@@ -458,7 +457,42 @@
         }
     }
 
-    $(document).ready(function () {                        
+    function DisplaySection() {
+        const isAccountInfo = isAccountInfoPermission === "True";
+        const isStatistic = isBettingStatisticPermission === "True";
+        const isAccountDetailTab = isAccountDetailTabPermission === "True";
+
+        if (isAccountInfo) {
+            $(".wrapper-content").removeClass("hide");
+            $("#divHeaderInfo").css("visibility", "visible");
+            $("#spanContentInfoLoading").hide();
+        }
+
+        if (isStatistic) {
+            $("#wrapper-statistic").removeClass("hide");
+        }
+
+        if (isAccountDetailTab) {
+            $(".content-card").removeClass("hide");
+        }
+
+        if (!isAccountInfo) {
+            $("#wrapper-content .icon-loading").hide();
+            $("#spanContentInfoLoading").hide();
+            $("#divHeaderInfo").hide();
+        }
+
+        if (!isStatistic) {
+            $("#wrapper-statistic .icon-loading").hide();
+        }
+        if (!isAccountDetailTab) {
+            $(".content-card .icon-loading").hide();
+            $(".content-card img[src*='ajax-loader.gif']").hide();
+        }
+    }
+
+    $(document).ready(function () {   
+        DisplaySection();
         DisplayStatistic();          
 
         Initial();    
@@ -471,4 +505,4 @@
     });
 }
 
-$(AccountDetail);
+$(AccountDetail);  

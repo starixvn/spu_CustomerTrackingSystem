@@ -85,8 +85,6 @@ public static class FSFunctionKeys
 
     public const string NotificationSettings = "NotificationSettings";
 
-    public const string BettingStatistics = "BettingStatistics";
-
     public const string OverwriteEvidences = "OverwriteEvidences";
 
     public const string SpecialCustomerClass = "SpecialCustomerClass";
@@ -110,4 +108,10 @@ public static class FSFunctionKeys
     public const string AssociatedGroupMonitor = "AssociatedGroupMonitor";
 
     public const string RobotReport = "RobotReport";
+
+    public const string AccountInfo = "AccountInfo";
+
+    public const string BettingStatistics = "BettingStatistics";
+
+    public const string AccountDetailTab = "AccountDetailTab";
 }

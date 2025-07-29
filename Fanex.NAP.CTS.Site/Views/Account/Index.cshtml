@@ -48,146 +48,144 @@
         </div>       
     </div>
 
-    <div class="wrapper-content">
-        <div class="tag-info">
-            <div class="wrapper-tag-info">
-                <span class="tag-text-left">Login Name: </span>
-                <span class="tag-text-right">@(Model.UserName2 != null ? Model.UserName2 : Model.UserName)</span>
-            </div>
-            <div class="wrapper-tag-info">
-                <span class="tag-text-left">Account Status: </span>
-                <span class="tag-text-right">@Model.StatusName</span>
-            </div>
-            <div class="wrapper-tag-info">
-                <span class="tag-text-left">Subscriber: </span>
-                <span class="username tag-text-right">@Model.Subscriber</span>
-            </div>
-            <div class="wrapper-tag-info">
-                <span class="tag-text-left">Site: </span>
-                <span class="username tag-text-right">@Model.SiteName</span>
-            </div>
-            <div class="wrapper-tag-info">
-                <span class="tag-text-left">Level: </span>
-                <span class="username tag-text-right">@Model.Role.Name</span>
-            </div>
-            @if (Model.Role.Id == 1)
-            {
-                <div class="wrapper-tag-info margin-top-0">
-                    <span class="tag-text-left" title="Dangerous Score for Members without Tickets only">
-                        Dangerous Score<sup style="vertical-align: super; font-size: smaller;">i</sup>:
-                    </span>
-                    <span class="tag-text-right">@Model.DangerousScore</span>
-                </div>
-            }
+	<div class="wrapper-content hide">
+		<div class="tag-info">
+			<div class="wrapper-tag-info">
+				<span class="tag-text-left">Login Name: </span>
+				<span class="tag-text-right">@(Model.UserName2 != null ? Model.UserName2 : Model.UserName)</span>
+			</div>
+			<div class="wrapper-tag-info">
+				<span class="tag-text-left">Account Status: </span>
+				<span class="tag-text-right">@Model.StatusName</span>
+			</div>
+			<div class="wrapper-tag-info">
+				<span class="tag-text-left">Subscriber: </span>
+				<span class="username tag-text-right">@Model.Subscriber</span>
+			</div>
+			<div class="wrapper-tag-info">
+				<span class="tag-text-left">Site: </span>
+				<span class="username tag-text-right">@Model.SiteName</span>
+			</div>
+			<div class="wrapper-tag-info">
+				<span class="tag-text-left">Level: </span>
+				<span class="username tag-text-right">@Model.Role.Name</span>
+			</div>
 
-        </div>
+			@if (Model.Role.Id == 1)
+			{
+				<div class="wrapper-tag-info margin-top-0">
+					<span class="tag-text-left" title="Dangerous Score for Members without Tickets only">
+						Dangerous Score<sup style="vertical-align: super; font-size: smaller;">i</sup>:
+					</span>
+					<span class="tag-text-right">@Model.DangerousScore</span>
+				</div>
+			}
+		</div>
 
-        <div class="account-info">
-            <!-- Association & Evidence -->
-            <div class="info-item association">
-                <div class="info-title">Associated Accounts</div>
-                <div class="info-block">
-                    <div class="info-text left">
-                        <span>By Betting Pattern:</span>
-                        <span>By Manually:</span>
-                        <span>By Device:</span>
-                        <span>By IP:</span>
-                    </div>
-                    <div class="info-text right">
-                        <span id="spanAssAccByBettingPattern"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        <span id="spanAssAccByManually"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        <span id="spanAssAccByDevice"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        <span id="spanAssAccByIP"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                    </div>
-                </div>
-            </div>
+		<div class="account-info">
+			<!-- Association & Evidence -->
+			<div class="info-item association">
+				<div class="info-title">Associated Accounts</div>
+				<div class="info-block">
+					<div class="info-text left">
+						<span>By Betting Pattern:</span>
+						<span>By Manually:</span>
+						<span>By Device:</span>
+						<span>By IP:</span>
+					</div>
+					<div class="info-text right">
+						<span id="spanAssAccByBettingPattern"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+						<span id="spanAssAccByManually"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+						<span id="spanAssAccByDevice"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+						<span id="spanAssAccByIP"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+					</div>
+				</div>
+			</div>
 
-            <!-- Classification -->
-            <div class="info-item classify">
-                <div class="info-title">Classification</div>
-                <div class="info-block">
-                    <div class="info-text left">
-                        <span>Class:</span>
-                        <span>Lic VIP:</span>
-                        <span>Lic BA:</span>
-                        <span id="spanLblFlagEvidence">Flag Evidence:</span>
-                        <span id="spanLblAffectedEvidence">Affected Evidence:</span>
-                    </div>
-                    <div class="info-text right">
-                        <span id="spanClass"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        <span>@Model.IsLicenseeVIP</span>
-                        <span>@Model.IsLicenseeBA</span>
-                        <span id="spanFlagEvidence"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        <span id="spanAffectedEvidence"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                    </div>
-                </div>
-            </div>
+			<!-- Classification -->
+			<div class="info-item classify">
+				<div class="info-title">Classification</div>
+				<div class="info-block">
+					<div class="info-text left">
+						<span>Class:</span>
+						<span>Lic VIP:</span>
+						<span>Lic BA:</span>
+						<span id="spanLblFlagEvidence">Flag Evidence:</span>
+						<span id="spanLblAffectedEvidence">Affected Evidence:</span>
+					</div>
+					<div class="info-text right">
+						<span id="spanClass"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+						<span>@Model.IsLicenseeVIP</span>
+						<span>@Model.IsLicenseeBA</span>
+						<span id="spanFlagEvidence"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+						<span id="spanAffectedEvidence"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+					</div>
+				</div>
+			</div>
 
-            <!-- Dangerous Setting -->
-            <div class="info-item dangerous">
-                <div class="info-title">Dangerous Setting</div>
-                <div class="info-block">
-                    <div class="info-text left">
-                        <span>ABI / Ori:</span>
-                        <span>Basketball:</span>
-                        <span>E-Sport:</span>
-                        <span>OtherSports:</span>
-                        <span>Saba Sc. / Bkb.:</span>
-                    </div>
-                    <div class="info-text right">
-                        <span id="spanDangerousOriginalABI">@Model.DangerousABI / @Model.DangerousOriginal</span>
-                        <span id="spanDangerousBasketball">@Model.DangerousBasketball</span>
-                        <span id="spanDangerousESports">@Model.DangerousESports</span>
-                        <span id="spanDangerouseOtherSports">@Model.DangerousOtherSports</span>
-                        <span id="spanDangerousSabaScBkb">@Model.DangerousSabaSc / @Model.DangerousSabaBkb</span>
-                    </div>
-                </div>
-            </div>
+			<!-- Dangerous Setting -->
+			<div class="info-item dangerous">
+				<div class="info-title">Dangerous Setting</div>
+				<div class="info-block">
+					<div class="info-text left">
+						<span>ABI / Ori:</span>
+						<span>Basketball:</span>
+						<span>E-Sport:</span>
+						<span>OtherSports:</span>
+						<span>Saba Sc. / Bkb.:</span>
+					</div>
+					<div class="info-text right">
+						<span id="spanDangerousOriginalABI">@Model.DangerousABI / @Model.DangerousOriginal</span>
+						<span id="spanDangerousBasketball">@Model.DangerousBasketball</span>
+						<span id="spanDangerousESports">@Model.DangerousESports</span>
+						<span id="spanDangerouseOtherSports">@Model.DangerousOtherSports</span>
+						<span id="spanDangerousSabaScBkb">@Model.DangerousSabaSc / @Model.DangerousSabaBkb</span>
+					</div>
+				</div>
+			</div>
 
-            <!-- Login Information (Last 90 days) -->
-            <div class="info-item login-information">
-                <div class="info-title">Login Transactions (Last 90 days)</div>
-                <div class="info-block">
-                    <div class="info-text left">
-                        <span>Bot:</span>
-                        <span>Invalid Browser Info:</span>
-                        <span>Desktop / Mobile:</span>
-                        <span>IP / Device:</span>
-                        <span>Total Login:</span>
-                    </div>
-                    <div class="info-text right">
-                        <span id="spanBot"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        <span id="spanInvalidBrowserInfo"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        <span id="spanDesktopMobileUsage"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        <span id="spanIPDevice"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>                     
-                        <span id="spanTotalLogin"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                    </div>
-                </div>
-            </div>
+			<!-- Login Information (Last 90 days) -->
+			<div class="info-item login-information">
+				<div class="info-title">Login Transactions (Last 90 days)</div>
+				<div class="info-block">
+					<div class="info-text left">
+						<span>Bot:</span>
+						<span>Invalid Browser Info:</span>
+						<span>Desktop / Mobile:</span>
+						<span>IP / Device:</span>
+						<span>Total Login:</span>
+					</div>
+					<div class="info-text right">
+						<span id="spanBot"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+						<span id="spanInvalidBrowserInfo"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+						<span id="spanDesktopMobileUsage"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+						<span id="spanIPDevice"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+						<span id="spanTotalLogin"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+					</div>
+				</div>
+			</div>
 
+			<!-- Dates -->
+			<div class="info-item dates">
+				<div class="info-title">Dates</div>
+				<div class="info-block">
+					<div class="info-text left">
+						<span id="spanLblNextCategoryScanDate">Next Category Scan:</span>
+						<span id="spanLblLastTicketDate">Last Ticket:</span>
+						<span id="spanLblLastLoginDate">Last Login:</span>
+						<span id="spanLblCreatedDate">Created:</span>
+					</div>
+					<div class="info-text right">
+						<span id="spanNextCategoryScanDate"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+						<span id="spanLastTicketDate"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+						<span id="spanLastLoginDate"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+						<span id="spanCreatedDate"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-
-            <!-- Dates -->
-            <div class="info-item dates">
-                <div class="info-title">Dates</div>
-                <div class="info-block">
-                    <div class="info-text left">
-                        <span id="spanLblNextCategoryScanDate">Next Category Scan:</span>
-                        <span id="spanLblLastTicketDate">Last Ticket:</span>
-                        <span id="spanLblLastLoginDate">Last Login:</span>
-                        <span id="spanLblCreatedDate">Created:</span>
-                    </div>
-                    <div class="info-text right">                     
-                        <span id="spanNextCategoryScanDate"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        <span id="spanLastTicketDate"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        <span id="spanLastLoginDate"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        <span id="spanCreatedDate"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
     <div class="wrapper-statistic hide" id="wrapper-statistic">
         <div class="statistic-title" id="statistic-title" ref="statistic-detail">
             <i class="icon icon-chevron-right"></i>
@@ -215,21 +213,21 @@
     </div>
 </div>
 
-<div class="content-card">
+<div class="content-card hide">
     <div class="status" id="account-detail-header-remove">
         <span class="icon icon-account_detail"></span>
         <span class="info"> Account Detail</span>
     </div>
     <div id="account-detail-container" class="report-content">
         <div id="tabs-account-detail" class="tabs-account-detail">
-            <ul class="fixed-tabs">
-                <li id="associated_account-tab"><a href="#tabs-1">Associated Accounts</a></li>
-                <li id="evidence-tab"><a href="#tabs-2" >Chains to Evidence and Exceptions</a></li>
-                <li id="customer-class-tab"><a href="#tabs-3">Customer Classification</a></li>
-                <li id="transaction-history-tab"><a href="#tabs-4">Transaction History</a></li>
-                @*<li id="robot-classification-tab"><a href="#tabs-5">Robot Classification</a></li>*@
-                <li id="robot-betting-tab"><a href="#tabs-6">Robot Betting</a></li>
-            </ul>
+	        <ul class="fixed-tabs">
+			        <li id="associated_account-tab"><a href="#tabs-1">Associated Accounts</a></li>
+			        <li id="evidence-tab"><a href="#tabs-2">Chains to Evidence and Exceptions</a></li>
+			        <li id="customer-class-tab"><a href="#tabs-3">Customer Classification</a></li>
+			        <li id="transaction-history-tab"><a href="#tabs-4">Transaction History</a></li>
+					@*<li id="robot-classification-tab"><a href="#tabs-5">Robot Classification</a></li>*@
+			        <li id="robot-betting-tab"><a href="#tabs-6">Robot Betting</a></li>
+	        </ul>
             <div id="tabs-1">
                 <div id="associated_account" class="report-cont">
                     <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
@@ -265,22 +263,25 @@
 </div>
 
 <div class="hide">
-    <input id="hdCTSCustId" type="hidden" value="@Model.CTSCustId" />
-    <input id="hdCustId" type="hidden" value="@Model.CustId" />
-    <input id="hdCustSubId" type="hidden" value="@Model.CustSubId" />
-    <input id="hdUsername" type="hidden" value="@Model.UserName" />
-    <input id="hdSubscriberId" type="hidden" value="@Model.SubscriberId" />
-    <input id="hdSubscriberSourceID" type="hidden" value="@Model.SubscriberSourceID" />
-    <input id="hdSubscriber" type="hidden" value="@Model.Subscriber" />
-    <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.IsHostPermission.ToString()" />
-    <input id="hdCurrentUserId" type="hidden" value="@Model.CurrentUserId" />
-    <input id="hdIsBettingStatisticPermission" type="hidden" IsBettingStatisticPermission="@Model.IsBettingStatisticPermission.ToString()" />
-    <input id="hdIsViewIPTransactionPermission" type="hidden" IsViewIPTransactionPermission="@Model.IsViewIPTransactionPermission.ToString()" />
-    <input id="hdRoleID" type="hidden" value="@Model.Role.Id" />
-    <input id="hdIsLicensee" type="hidden" value="@Model.IsLicensee.ToString().ToUpper()" />
-    <input id="hdIsInternal" type="hidden" value="@Model.IsInternal.ToString().ToUpper()" />
-    <input id="hdIsRobotUser" type="hidden" value="@Model.IsRobotUser.ToString().ToUpper()" />
+	<input id="hdCTSCustId" type="hidden" value="@Model.CTSCustId" />
+	<input id="hdCustId" type="hidden" value="@Model.CustId" />
+	<input id="hdCustSubId" type="hidden" value="@Model.CustSubId" />
+	<input id="hdUsername" type="hidden" value="@Model.UserName" />
+	<input id="hdSubscriberId" type="hidden" value="@Model.SubscriberId" />
+	<input id="hdSubscriberSourceID" type="hidden" value="@Model.SubscriberSourceID" />
+	<input id="hdSubscriber" type="hidden" value="@Model.Subscriber" />
+	<input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.IsHostPermission.ToString()" />
+	<input id="hdCurrentUserId" type="hidden" value="@Model.CurrentUserId" />
+	<input id="hdIsBettingStatisticPermission" type="hidden" IsBettingStatisticPermission="@Model.IsBettingStatisticPermission.ToString()" />
+	<input id="hdIsAccountInfoPermission" type="hidden" IsAccountInfoPermission="@Model.IsAccountInfoPermission.ToString()" />
+	<input id="hdIsAccountDetailTabPermission" type="hidden" IsAccountDetailTabPermission="@Model.IsAccountDetailTabPermission.ToString()" />
+	<input id="hdIsViewIPTransactionPermission" type="hidden" IsViewIPTransactionPermission="@Model.IsViewIPTransactionPermission.ToString()" />
+	<input id="hdRoleID" type="hidden" value="@Model.Role.Id" />
+	<input id="hdIsLicensee" type="hidden" value="@Model.IsLicensee.ToString().ToUpper()" />
+	<input id="hdIsInternal" type="hidden" value="@Model.IsInternal.ToString().ToUpper()" />
+	<input id="hdIsRobotUser" type="hidden" value="@Model.IsRobotUser.ToString().ToUpper()" />
 </div>
+
 @section scripts{
     @Scripts.Render("~/statistic-scripts"
     , "~/account-detail-scripts"

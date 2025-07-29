@@ -45,7 +45,6 @@
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
-    [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
@@ -87,6 +86,7 @@
             _customerCategoryAgencyService = new CustomerCategoryAgencyService();
         }
 
+        #region Account Info
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRpt)]
         public ActionResult Index(long Id)
         {
@@ -98,11 +98,16 @@
 
                 if (customerInfoFromCTS != null)
                 {
+                    var hasAccountDetailTabHostPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountDetailTab, NAP.Core.Business.Constant.Policy.Host);
+                    var hasAccountInfoPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountInfo, NAP.Core.Business.Constant.Policy.Read);
+
                     var customerGeneralStatusViewModel = new CustomerGeneralStatusViewModel()
                     {
                         CTSCustId = Id,
-                        IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountDetail, NAP.Core.Business.Constant.Policy.Host),
+                        IsHostPermission = hasAccountDetailTabHostPermission || hasAccountInfoPermission,
+                        IsAccountInfoPermission = hasAccountInfoPermission,
                         IsBettingStatisticPermission = CheckBettingStatisticPermission(userService, customerInfoFromCTS.RoleID),
+                        IsAccountDetailTabPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountDetailTab, NAP.Core.Business.Constant.Policy.Read),
                         IsViewIPTransactionPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.ViewIP, NAP.Core.Business.Constant.Policy.Read),
                         CurrentUserId = CurrentSession.UserId
                     };
@@ -166,6 +171,7 @@
         }
 
         [HttpPost]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetStatusRobotClassification(int custID, ROLE_CUSTOMER roleID)
         {
             var result = _robotClassificationService.GetStatusRobotClassification(custID, roleID);
@@ -174,6 +180,7 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetCustomerEvidenceByCTSCustId(long ctsCustId)
         {
             var evidences = _accountService.GetCustomerEvidenceByCTSCustId(ctsCustId);
@@ -191,6 +198,7 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetCustomerFlagInfo(long ctsCustId)
         {
             var result = _accountService.GetCustomerFlagInfo(ctsCustId);
@@ -199,6 +207,7 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetCustomerProfileFraudInfo(long custId)
         {
             var result = _accountService.GetCustomerProfileFraudInfo(custId);
@@ -214,6 +223,7 @@
         }
 
         [HttpPost]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetLastestCustomerClassification(long custId)
         {
             var customerClassification = string.Empty;
@@ -233,9 +243,8 @@
             return Json(new { customerClassification = customerClassification }, JsonRequestBehavior.AllowGet);
         }
 
-        #region Customer Profile
-
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetCustProfileAssociationAccount(long ctsCustId)
         {
             var data = _accountService.GetCustomerInfoAssociationAccount(ctsCustId);
@@ -257,6 +266,7 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetCustProfileClassification(long ctsCustId, long custId)
         {
             var custProfileEvidence = new CustomerInfoClassificationViewModel();
@@ -313,6 +323,7 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetCustProfileLoginInfo(long ctsCustId)
         {
             var fromDate = DateTime.Now.AddDays(-90);
@@ -342,6 +353,7 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetCustProfileDates(long ctsCustId, ROLE_CUSTOMER roleID)
         {
             var data = _accountService.GetCustProfileDates(ctsCustId, roleID);
@@ -362,10 +374,209 @@
             return Json(new CustomerInfoDateViewModel(), JsonRequestBehavior.AllowGet);
         }
 
-        #endregion Customer Profile
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileGetCustomerCategoryBySportRpt)]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        public ActionResult GetCustomerCategoryBySport(long ctsCustID)
+        {
+            var custs = Enumerable.Empty<GetCustomerCategoryBySportViewModel>();
+
+            var data = _accountService.GetCustomerCategoryBySport(ctsCustID);
+
+            if (data != null && data.Any())
+            {
+                custs = data.Select(x => new GetCustomerCategoryBySportViewModel(x)).OrderBy(x => CustomerCategorySportOrder.TryGetValue((CustomerCategorySportType)x.SportID, out var order) ? order : 999);
+            }
+
+            return Json(new { data = custs }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileGetCustomerCategoryHistoryBySportRpt)]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        public ActionResult GetCustomerCategoryHistoryBySport(long ctsCustID, int sportID)
+        {
+            var custs = Enumerable.Empty<GetCustomerCategoryHistoryBySportViewModel>();
+
+            var data = _accountService.GetCustomerCategoryHistoryBySport(ctsCustID, sportID);
+
+            if (data != null && data.Any())
+            {
+                custs = data.Select(x => new GetCustomerCategoryHistoryBySportViewModel(x));
+            }
+
+            return Json(new { data = custs }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+        #region Betting Statistic
+        public ActionResult GetPerformanceBySport(long custId, int getTop)
+        {
+            var totalSportBettingStatistic = new SportBettingStatisticViewModel();
+            var bestSportBettingStatistic = new SportBettingStatisticViewModel();
+            var pieChartSportStatisticSessions = new List<SportStatisticPieChartViewModel>();
+
+            var dataBySport = _accountService.GetPerformanceBySport(custId, getTop)?.OrderBy(c => c.Ranking);
+
+            if (dataBySport != null && dataBySport.Any())
+            {
+                try
+                {
+                    var tasks = new Task[]
+                    {
+                        Task.Run(() =>
+                        {
+                            totalSportBettingStatistic.TurnOver = dataBySport.Sum(c => c.TurnOver);
+                            totalSportBettingStatistic.WinLoss = dataBySport.Sum(c => c.WinLoss);
+                            totalSportBettingStatistic.BetCount = dataBySport.Sum(c => c.BetCount);
+                        }),
+                        Task.Run(() =>
+                        {
+                            var tempBestSport = dataBySport.FirstOrDefault(c => c.Ranking == dataBySport.Min(x => x.Ranking));
+                            bestSportBettingStatistic.SportID = tempBestSport.SportID;
+                            bestSportBettingStatistic.SportName = tempBestSport.SportName;
+                            bestSportBettingStatistic.TurnOver = tempBestSport.TurnOver;
+                            bestSportBettingStatistic.WinLoss = tempBestSport.WinLoss;
+                            bestSportBettingStatistic.BetCount = tempBestSport.BetCount;
+                        }),
+                        Task.Run(() =>
+                        {
+                             CalculatePieChartTurnOverPercentage(dataBySport, pieChartSportStatisticSessions);
+                        })
+                    };
+
+                    Task.WhenAll(tasks).Wait();
+                }
+                catch (Exception ex)
+                {
+                    ex.LogError("CTS - Profile Page Get Performance By Sport");
+                }
+            }
+
+            return Json(new
+            {
+                totalSportBettingStatistic,
+                bestSportBettingStatistic,
+                pieChartSportStatisticSessions
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetPerformanceByBettype(long custId, int getTop)
+        {
+            var result = _accountService.GetPerformanceByBettype(custId, getTop)?.OrderBy(c => c.Ranking);
+            var liveIndicatorList = new List<LiveIndicatorViewModel>();
+            var betTypeCategories = new List<string>();
+
+            CalculateLiveIndicatorPercentage(result, liveIndicatorList, betTypeCategories);
+
+            return Json(new
+            {
+                betTypeCategories,
+                liveIndicatorList
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetPerformanceDaily(long custId)
+        {
+            var result = _accountService.GetPerformanceDaily(custId).OrderBy(c => c.RptDate);
+            var turnOverAreaData = new List<decimal>();
+            var winLossAreaDate = new List<decimal>();
+            var days = new List<string>();
+
+            if (result != null && result.Any())
+            {
+                result.ToList().ForEach(c =>
+                {
+                    days.Add(c.RptDate.ToString("MM - dd"));
+                    turnOverAreaData.Add(Math.Round(c.Turnover));
+                    winLossAreaDate.Add(Math.Round(c.Winloss));
+                });
+            }
+
+            return Json(new
+            {
+                turnOverAreaData,
+                winLossAreaDate,
+                days
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private void CalculatePieChartTurnOverPercentage(IEnumerable<PerformanceBySportModel> result, List<SportStatisticPieChartViewModel> pieChartSportStatisticSessions)
+        {
+            result.ToList().ForEach(c =>
+            {
+                if ((c.SportID == -99 && c.BetCount != 0) || c.SportID != -99)
+                {
+                    pieChartSportStatisticSessions.Add(new SportStatisticPieChartViewModel
+                    {
+                        name = c.SportName,
+                        selected = true,
+                        y = c.TurnOver,
+                        turnOver = Math.Round(c.TurnOver)
+                    });
+                }
+            });
+        }
+
+        private void CalculateLiveIndicatorPercentage(IEnumerable<PerformanceByBettypeModel> result, List<LiveIndicatorViewModel> liveIndicatorList, List<string> betTypeCategories)
+        {
+            if (result == null || !result.Any())
+            {
+                return;
+            }
+
+            decimal maxTurnOverOfBetType = Math.Round((result.GroupBy(c => new { c.BettypeId })
+                                              .Select(x => new { BettypeId = x.Key, TotalTurnOver = x.Sum(w => w.Turnover) }))
+                                              .Max(c => c.TotalTurnOver));
+
+            liveIndicatorList.Add(new LiveIndicatorViewModel { name = "None", data = new List<decimal>() });
+            liveIndicatorList.Add(new LiveIndicatorViewModel { name = "Live", data = new List<decimal>() });
+            liveIndicatorList.Add(new LiveIndicatorViewModel { name = "Non-Live", data = new List<decimal>() });
+
+            result.GroupBy(c => c.Ranking).ToList().ForEach(c =>
+            {
+                decimal live = (c.FirstOrDefault(x => x.LiveIndicator == true)?.Turnover).GetValueOrDefault();
+                decimal nonelive = (c.FirstOrDefault(x => x.LiveIndicator == false)?.Turnover).GetValueOrDefault();
+
+                liveIndicatorList.ElementAt(1).data.Add(Math.Round(live));
+                liveIndicatorList.ElementAt(2).data.Add(Math.Round(nonelive));
+                liveIndicatorList.ElementAt(0).data.Add(maxTurnOverOfBetType - nonelive - live);
+                betTypeCategories.Add(c.FirstOrDefault().BettypeName);
+            });
+
+            int numberOfBettype = result.GroupBy(c => c.Ranking).Count();
+            if (numberOfBettype < 4)
+            {
+                int loop = 4 - numberOfBettype;
+                for (int i = 0; i < loop; i++)
+                {
+                    liveIndicatorList.ElementAt(0).data.Add(maxTurnOverOfBetType);
+                    liveIndicatorList.ElementAt(1).data.Add(0);
+                    liveIndicatorList.ElementAt(2).data.Add(0);
+                    betTypeCategories.Add("-");
+                }
+            }
+        }
+
+        private bool CheckBettingStatisticPermission(IUserService userService, int roleID)
+        {
+            if (roleID == Consts.AGENT_ROLE || roleID == Consts.MASTER_ROLE || roleID == Consts.SUPER_ROLE)
+            {
+                return false;
+            }
+
+            bool temp = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.BettingStatistics, NAP.Core.Business.Constant.Policy.Read);
+
+            if (!temp) return false;
+
+            return temp = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.BettingStatistics, NAP.Core.Business.Constant.Policy.Read);
+        }
+
+        #endregion Betting Statistic
+
+        #region Account Detail Tab
 
         #region Associated By Account
-
         public ActionResult AssociatedByAccount(string username)
         {
             var getAssociationStatus = _accountService.GetCustomerStaticStatus(3, true);
@@ -396,6 +607,7 @@
         }
 
         [HttpGet]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetAllCategories()
         {
             var categoryList = new List<CategoryGroupViewModel>();
@@ -424,6 +636,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountRpt, "isSkipTracking")]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetAssociatedByAccount(AssociatedFilterModel model, bool? isSkipTracking)
         {
             var totalItem = 0;
@@ -521,6 +734,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountViewOnGraph)]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetDirectAssociationGraph(AssociatedFilterModel model, string displayName)
         {
             var graphCustomer = new GraphCustomerItemViewModel();
@@ -561,7 +775,7 @@
         }
 
         [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList)
         {
             var viewModel = new ValidateManualAssociationMultipleViewModel();
@@ -586,7 +800,7 @@
         }
 
         [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountInsert)]
         public ActionResult InsertManualAssociationMultiple(int fromSubscriberId, long fromCTSCustId, string toUserNameList, string remark)
         {
@@ -643,7 +857,7 @@
         }
 
         [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountLinkedUnlinked)]
         public ActionResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, bool isLinked)
         {
@@ -667,6 +881,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetMatchesAssociationByAI(long custID1, long custID2, string groupIDs, string originGroupIDs)
         {
             var data = new MatchesAssociationByAIViewModel(originGroupIDs);
@@ -722,6 +937,7 @@
         }
 
         [HttpPost]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetMatchesAssociationDetailByAI(MatchesAssociationDetailViewModel para)
         {
             var data = new List<MatchesDetailInfoViewModel>();
@@ -790,6 +1006,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetCoupleInformationsByAI(long custID1, long custID2)
         {
             var data = new CoupleDetailParameterViewModel();
@@ -836,6 +1053,7 @@
         }
 
         [HttpPost]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetStakeIPPatternDetailByAI(CoupleDetailParameterModel para)
         {
             var data = new List<StakeIpPatternDetailViewModel>();
@@ -955,7 +1173,6 @@
             return result;
         }
 
-
         private IEnumerable<StakeIpPatternDetailViewModel> GetAI5g3sStakeAssDetail<T>(StakeIpPatternDetailModel stakeIpPatternDetail, T coupleFraudDetail, bool isCustId1) where T : FraudDetailModel
         {
             var custId = isCustId1 ? stakeIpPatternDetail.CustId1 : stakeIpPatternDetail.CustId2;
@@ -1044,6 +1261,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetAssociationByOTGB(long custID1, long custID2)
         {
             var data = new AssociationOTGBViewModel();
@@ -1061,6 +1279,7 @@
         }
 
         [HttpPost]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetAssociationDetailByOTGB(long custID1, long custID2, AccountAssociationByOTGB fraudType)
         {
             var data = Enumerable.Empty<AssByOTGBDetailViewModel>();
@@ -1125,7 +1344,8 @@
                     });
 
                     groupId++;
-                };
+                }
+                ;
             }
 
             return result;
@@ -1133,6 +1353,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetAssByIPType(long custID1, long custID2)
         {
             var data = _accountService.GetAssociationByIPType(custID1, custID2).ToList();
@@ -1142,6 +1363,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetIPMatchBettype(long custId1, long custId2)
         {
             var data = new AssociationByIPInfoViewModel();
@@ -1207,6 +1429,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetIPTicketStake(long custID1, long custID2)
         {
             var result = Enumerable.Empty<AssByIPTicketStakeViewModel>();
@@ -1254,18 +1477,17 @@
 
             return assList.OrderByDescending(x => x.MaxEventDateInGroup);
         }
-
         #endregion Associated By Account
 
         #region Chain To Evidence
-
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult ChainToEvidence()
         {
             return PartialView("ChainToEvidence/ChainToEvidence");
         }
 
         [HttpGet]
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult GetEvidenceList()
         {
             var result = _accountService.GetEvidenceList();
@@ -1280,6 +1502,7 @@
         }
 
         [HttpPost]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetAccountEvidence(Int64 ctsCustId)
         {
             var result = new AccountEvidenceViewModel();
@@ -1321,6 +1544,7 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetExceptions(Int64 ctsCustId)
         {
             var result = new List<AccountExceptionsViewModel>();
@@ -1346,7 +1570,7 @@
         }
 
         [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidenceInsertExceptions)]
         public ActionResult AddException(UpdateAccountExceptionModel model)
         {
@@ -1377,7 +1601,7 @@
         }
 
         [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidenceRemoveExceptions)]
         public ActionResult RemoveException(UpdateAccountExceptionModel model)
         {
@@ -1424,7 +1648,7 @@
         }
 
         [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidenceRemoveAffEvidence)]
         public ActionResult RetractAffectedEvidence(RemoveEvidenceModel model)
         {
@@ -1446,7 +1670,7 @@
         }
 
         [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult RestoreAffectedEvidence(RemoveEvidenceModel model)
         {
             model.UserId = CurrentSession.UserId;
@@ -1469,6 +1693,7 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetAffectedEvidenceListBetweenCusts(Int64 fromCTSCustId, Int64 toCTSCustId)
         {
             var result = new List<AffectedEvidenceListBetweenCustsViewModel>();
@@ -1487,7 +1712,6 @@
         #endregion Chain To Evidence
 
         #region Transaciton History
-
         public ActionResult TransactionHistory()
         {
             return PartialView("TransactionHistory/TransactionHistory");
@@ -1543,7 +1767,6 @@
         #endregion Transaciton History
 
         #region Customer Category
-
         public ActionResult CustomerCategory()
         {
             return PartialView("CustomerCategory/CustomerCategory");
@@ -1556,33 +1779,42 @@
         }
 
         [HttpPost]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetCustomerClassification(long ctsCustID, ROLE_CUSTOMER roleID)
         {
             var isVVip = false;
             var isProblemAccount = false;
-            var isMultiplePA = false;          
+            var isMultiplePA = false;
+            var isExcludedTagAssPA = false;
             var categoryList = new List<GetCustomerCategoryViewModel>();
             var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
             var usnBackGroundColor = EnumExtensions.GetStringSlow(CategoryColorType.Default);
 
-            var classification = _accountService.GetCustomerClassification(ctsCustID, roleID, out bool isExcludedTagAssPA);
+            IUserService userService = new UserService();
+            var hasAccountInfoPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountInfo, NAP.Core.Business.Constant.Policy.Read);
+            var hasAccountDetailTabPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountDetailTab, NAP.Core.Business.Constant.Policy.Read);
 
-            if (classification != null && classification.Any())
+            if (hasAccountInfoPermission || hasAccountDetailTabPermission)
             {
-                categoryList = classification.Select(x => new GetCustomerCategoryViewModel(x)).ToList();
+                var classification = _accountService.GetCustomerClassification(ctsCustID, roleID, out isExcludedTagAssPA);
 
-                isVVip = categoryList.Any(x => x.IsVVIP);
-                isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
-                isMultiplePA = categoryList.Any(x => x.IsMultiplePA);
-                int minPriority = classification.Min(c => c.CategoryPriority);
-                usnBackGroundColor = EnumExtensions.GetStringSlow((CategoryColorType)classification.FirstOrDefault(x => x.CategoryPriority == minPriority).ColorTypeID);
-            }
+                if (classification != null && classification.Any())
+                {
+                    categoryList = classification.Select(x => new GetCustomerCategoryViewModel(x)).ToList();
 
-            var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustID, roleID);
+                    isVVip = categoryList.Any(x => x.IsVVIP);
+                    isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
+                    isMultiplePA = categoryList.Any(x => x.IsMultiplePA);
+                    int minPriority = classification.Min(c => c.CategoryPriority);
+                    usnBackGroundColor = EnumExtensions.GetStringSlow((CategoryColorType)classification.FirstOrDefault(x => x.CategoryPriority == minPriority).ColorTypeID);
+                }
 
-            if (classificationHistory != null && classificationHistory.Any())
-            {
-                classificationHistoryList = classificationHistory.Select(x => new CustomerClassificationHistoryViewModel(x)).ToList();
+                var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustID, roleID);
+
+                if (classificationHistory != null && classificationHistory.Any())
+                {
+                    classificationHistoryList = classificationHistory.Select(x => new CustomerClassificationHistoryViewModel(x)).ToList();
+                }
             }
 
             return Json(new
@@ -1597,7 +1829,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationNormalCategory)]
         [HttpPost]
         public ActionResult ChangeExcludedTagAssPA(int custId, long ctsCustId, int subscriberId, bool isExcludedTagAssPA, bool isProblemAccount, int custSubId, int roleID)
@@ -1637,7 +1869,6 @@
             }
         }
 
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult MarkCustomerCategory(long ctsCustID, ROLE_CUSTOMER roleID, string userName, bool isRobotUser)
         {
             var problemAccounts = _pamService.GetProblemAccountCategories(ViewCategoryQueryType.ProfilePage_PA);
@@ -1651,18 +1882,17 @@
                 IsRobotUser = isRobotUser,
                 ProblemAccountList = problemAccounts
             };
-           
+
             var classifications = _accountService.GetCustomerClassification(ctsCustID, roleID, out bool isExcludedTagAssPA);
 
             if (classifications != null && classifications.Any())
             {
-                result.CategoryList = classifications.Select(x => new GetCustomerCategoryViewModel(x));              
+                result.CategoryList = classifications.Select(x => new GetCustomerCategoryViewModel(x));
             }
 
             return PartialView("CustomerCategory/MarkCustomerCategory", result);
         }
 
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]
         public ActionResult SaveMarkVVIP(SaveMarkCustomerCategoryViewModel model)
         {
@@ -1707,7 +1937,7 @@
         private bool MarkDirectVVIP(CustomerCategoryModel categoryModel)
         {
             try
-            {                
+            {
                 var latestClassifications = MarkVVIP(categoryModel);
 
                 if (latestClassifications.Any())
@@ -1721,7 +1951,7 @@
                     {
                         _antiFraudCenterService.DeleteAFCAccounts(latestClassifications.Select(x => x.CustId), FromFlow.CTSWEB);
                     });
-                }   
+                }
             }
             catch (Exception ex)
             {
@@ -1758,7 +1988,6 @@
             }
         }
 
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]
         public ActionResult SaveMarkCustomerCategory(SaveMarkCustomerCategoryViewModel model)
         {
@@ -1789,9 +2018,8 @@
                 errorCode = result.ErrorCode,
                 errorMessage = result.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
-        }       
+        }
 
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
         public ActionResult UnmarkCustomerCategory(int roleID, string userName, bool isVVIP, bool isLicensee)
         {
@@ -1806,7 +2034,6 @@
             return PartialView("CustomerCategory/UnmarkCustomerCategory", model);
         }
 
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
         public ActionResult SaveUnmarkVVIP(CustomerCategoryModel model)
         {
@@ -1820,7 +2047,7 @@
 
                 return Json(new
                 {
-                    errorCode = !string.IsNullOrEmpty(result.ErrorMsg) ? - 1: 0,
+                    errorCode = !string.IsNullOrEmpty(result.ErrorMsg) ? -1 : 0,
                     errorMessage = result.ErrorMsg
                 }, JsonRequestBehavior.AllowGet);
             }
@@ -1880,7 +2107,6 @@
             return resultUmmark.ErrorMessage;
         }
 
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
         public ActionResult SaveUnmarkCustomerCategory(SaveUnmarkCustomerCategoryViewModel model)
         {
@@ -1955,44 +2181,7 @@
 
         #endregion Customer Category
 
-        #region Customer Category By Sport
-
-        [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileGetCustomerCategoryBySportRpt)]
-        public ActionResult GetCustomerCategoryBySport(long ctsCustID)
-        {
-            var custs = Enumerable.Empty<GetCustomerCategoryBySportViewModel>();
-
-            var data = _accountService.GetCustomerCategoryBySport(ctsCustID);
-
-            if (data != null && data.Any())
-            {
-                custs = data.Select(x => new GetCustomerCategoryBySportViewModel(x)).OrderBy(x => CustomerCategorySportOrder.TryGetValue((CustomerCategorySportType)x.SportID, out var order) ? order : 999);
-            }
-
-            return Json(new { data = custs }, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileGetCustomerCategoryHistoryBySportRpt)]
-        public ActionResult GetCustomerCategoryHistoryBySport(long ctsCustID, int sportID)
-        {
-            var custs = Enumerable.Empty<GetCustomerCategoryHistoryBySportViewModel>();
-
-            var data = _accountService.GetCustomerCategoryHistoryBySport(ctsCustID, sportID);
-
-            if (data != null && data.Any())
-            {
-                custs = data.Select(x => new GetCustomerCategoryHistoryBySportViewModel(x));
-            }
-
-            return Json(new { data = custs }, JsonRequestBehavior.AllowGet);
-        }
-
-        #endregion Customer Category By Sport
-
         #region Robot Betting
-
         public ActionResult RobotBetting()
         {
             return PartialView("RobotBetting/RobotBetting");
@@ -2005,12 +2194,13 @@
         }
 
         [HttpPost]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetRobotBetting(long custID)
         {
             var rbData = _robotBettingService.GetRobotBetting(custID);
 
             var rbBetting = new RobotBettingViewModel(rbData);
-           
+
             return Json(new
             {
                 data = rbBetting,
@@ -2019,10 +2209,11 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.GetRobotAILPDetail)]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetRobotAILPDetail(long custID, int rangeType)
         {
             var rbAiLpData = _robotBettingService.GetRobotAiLpDetail(custID, rangeType);
-           
+
             var rbAILPDetail = rbAiLpData.Select(x => new RobotAiLpDetailViewModel(x));
 
             return Json(new
@@ -2032,6 +2223,7 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetRobotBettingTicketDetail(long custID, int robotTypeOrigin, int? robotTypeDisplay, int? clusterId, string createdTime)
         {
             var result = Enumerable.Empty<RobotBettingDetailViewModel>();
@@ -2079,6 +2271,7 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetRobotBettingReasonDetail(long custID, int robotTypeOrigin)
         {
             var inputParas = new RobotBettingSceDetailParaModel { CustId = custID, RobotTypeOrigin = robotTypeOrigin, QueryType = RobotDetectionQueryType.RobotReasonDetail };
@@ -2107,6 +2300,7 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetRobotRDMatch(RobotPeriodRangeType rangeType, long custID)
         {
             var rdMatches = Enumerable.Empty<RobotRDMatchViewModel>();
@@ -2139,6 +2333,7 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetRobotRDTicketDetail(RobotPeriodRangeType rangeType, long custID, long matchID)
         {
             var rdTickets = Enumerable.Empty<RobotRDTicketViewModel>();
@@ -2171,177 +2366,7 @@
 
             return Json(new { data = rdTickets }, JsonRequestBehavior.AllowGet);
         }
-
         #endregion Robot Betting
-
-        #region Betting Statistic
-
-        [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
-        public ActionResult GetPerformanceBySport(long custId, int getTop)
-        {
-            var totalSportBettingStatistic = new SportBettingStatisticViewModel();
-            var bestSportBettingStatistic = new SportBettingStatisticViewModel();
-            var pieChartSportStatisticSessions = new List<SportStatisticPieChartViewModel>();
-
-            var dataBySport = _accountService.GetPerformanceBySport(custId, getTop)?.OrderBy(c => c.Ranking);
-
-            if (dataBySport != null && dataBySport.Any())
-            {
-                try
-                {
-                    var tasks = new Task[]
-                    {
-                        Task.Run(() =>
-                        {
-                            totalSportBettingStatistic.TurnOver = dataBySport.Sum(c => c.TurnOver);
-                            totalSportBettingStatistic.WinLoss = dataBySport.Sum(c => c.WinLoss);
-                            totalSportBettingStatistic.BetCount = dataBySport.Sum(c => c.BetCount);
-                        }),
-                        Task.Run(() =>
-                        {
-                            var tempBestSport = dataBySport.FirstOrDefault(c => c.Ranking == dataBySport.Min(x => x.Ranking));
-                            bestSportBettingStatistic.SportID = tempBestSport.SportID;
-                            bestSportBettingStatistic.SportName = tempBestSport.SportName;
-                            bestSportBettingStatistic.TurnOver = tempBestSport.TurnOver;
-                            bestSportBettingStatistic.WinLoss = tempBestSport.WinLoss;
-                            bestSportBettingStatistic.BetCount = tempBestSport.BetCount;
-                        }),
-                        Task.Run(() =>
-                        {
-                             CalculatePieChartTurnOverPercentage(dataBySport, pieChartSportStatisticSessions);
-                        })
-                    };
-
-                    Task.WhenAll(tasks).Wait();
-                }
-                catch (Exception ex)
-                {
-                    ex.LogError("CTS - Profile Page Get Performance By Sport");
-                }
-            }
-
-            return Json(new
-            {
-                totalSportBettingStatistic,
-                bestSportBettingStatistic,
-                pieChartSportStatisticSessions
-            }, JsonRequestBehavior.AllowGet);
-        }
-
-        [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
-        public ActionResult GetPerformanceByBettype(long custId, int getTop)
-        {
-            var result = _accountService.GetPerformanceByBettype(custId, getTop)?.OrderBy(c => c.Ranking);
-            var liveIndicatorList = new List<LiveIndicatorViewModel>();
-            var betTypeCategories = new List<string>();
-
-            CalculateLiveIndicatorPercentage(result, liveIndicatorList, betTypeCategories);
-
-            return Json(new
-            {
-                betTypeCategories,
-                liveIndicatorList
-            }, JsonRequestBehavior.AllowGet);
-        }
-
-        [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
-        public ActionResult GetPerformanceDaily(long custId)
-        {
-            var result = _accountService.GetPerformanceDaily(custId).OrderBy(c => c.RptDate);
-            var turnOverAreaData = new List<decimal>();
-            var winLossAreaDate = new List<decimal>();
-            var days = new List<string>();
-
-            if (result != null && result.Any())
-            {
-                result.ToList().ForEach(c =>
-                {
-                    days.Add(c.RptDate.ToString("MM - dd"));
-                    turnOverAreaData.Add(Math.Round(c.Turnover));
-                    winLossAreaDate.Add(Math.Round(c.Winloss));
-                });
-            }
-
-            return Json(new
-            {
-                turnOverAreaData,
-                winLossAreaDate,
-                days
-            }, JsonRequestBehavior.AllowGet);
-        }
-
-        private void CalculatePieChartTurnOverPercentage(IEnumerable<PerformanceBySportModel> result, List<SportStatisticPieChartViewModel> pieChartSportStatisticSessions)
-        {
-            result.ToList().ForEach(c =>
-            {
-                if ((c.SportID == -99 && c.BetCount != 0) || c.SportID != -99)
-                {
-                    pieChartSportStatisticSessions.Add(new SportStatisticPieChartViewModel
-                    {
-                        name = c.SportName,
-                        selected = true,
-                        y = c.TurnOver,
-                        turnOver = Math.Round(c.TurnOver)
-                    });
-                }
-            });
-        }
-
-        private void CalculateLiveIndicatorPercentage(IEnumerable<PerformanceByBettypeModel> result, List<LiveIndicatorViewModel> liveIndicatorList, List<string> betTypeCategories)
-        {
-            if (result == null || !result.Any())
-            {
-                return;
-            }
-
-            decimal maxTurnOverOfBetType = Math.Round((result.GroupBy(c => new { c.BettypeId })
-                                              .Select(x => new { BettypeId = x.Key, TotalTurnOver = x.Sum(w => w.Turnover) }))
-                                              .Max(c => c.TotalTurnOver));
-
-            liveIndicatorList.Add(new LiveIndicatorViewModel { name = "None", data = new List<decimal>() });
-            liveIndicatorList.Add(new LiveIndicatorViewModel { name = "Live", data = new List<decimal>() });
-            liveIndicatorList.Add(new LiveIndicatorViewModel { name = "Non-Live", data = new List<decimal>() });
-
-            result.GroupBy(c => c.Ranking).ToList().ForEach(c =>
-            {
-                decimal live = (c.FirstOrDefault(x => x.LiveIndicator == true)?.Turnover).GetValueOrDefault();
-                decimal nonelive = (c.FirstOrDefault(x => x.LiveIndicator == false)?.Turnover).GetValueOrDefault();
-
-                liveIndicatorList.ElementAt(1).data.Add(Math.Round(live));
-                liveIndicatorList.ElementAt(2).data.Add(Math.Round(nonelive));
-                liveIndicatorList.ElementAt(0).data.Add(maxTurnOverOfBetType - nonelive - live);
-                betTypeCategories.Add(c.FirstOrDefault().BettypeName);
-            });
-
-            int numberOfBettype = result.GroupBy(c => c.Ranking).Count();
-            if (numberOfBettype < 4)
-            {
-                int loop = 4 - numberOfBettype;
-                for (int i = 0; i < loop; i++)
-                {
-                    liveIndicatorList.ElementAt(0).data.Add(maxTurnOverOfBetType);
-                    liveIndicatorList.ElementAt(1).data.Add(0);
-                    liveIndicatorList.ElementAt(2).data.Add(0);
-                    betTypeCategories.Add("-");
-                }
-            }
-        }
-
-        private bool CheckBettingStatisticPermission(IUserService userService, int roleID)
-        {
-            if (roleID == Consts.AGENT_ROLE || roleID == Consts.MASTER_ROLE || roleID == Consts.SUPER_ROLE)
-            {
-                return false;
-            }
-
-            bool temp = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountDetail, NAP.Core.Business.Constant.Policy.Read);
-
-            if (!temp) return false;
-
-            return temp = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.BettingStatistics, NAP.Core.Business.Constant.Policy.Read);
-        }
-
-        #endregion Betting Statistic
-
+        #endregion
     }
 }
