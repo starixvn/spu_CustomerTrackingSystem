@@ -117,6 +117,14 @@ function AIInsights() {
             }
 
             if (file) {
+                const maxSize = 100 * 1024 * 1024; // 100MB in bytes
+                
+                if (file.size > maxSize) {
+                    common.showError('Exceeds the allowed limit of ' + maxSize + " MB");
+                    fileInput.val('');
+                    return;
+                }
+
                 const formData = new FormData();
                 let fileName = file.name;
                 domElements.fileNameLabel.text(fileName);
@@ -294,7 +302,7 @@ function AIInsights() {
             };
         }
 
-        const bulletMatch = trimmed.match(/^[-–•]\s*(.*)$/);
+        const bulletMatch = trimmed.match(/^[-â€“â€¢]\s*(.*)$/);
         if (bulletMatch) {
             return {
                 content: bulletMatch[1].trim(),
@@ -303,7 +311,7 @@ function AIInsights() {
             };
         }
 
-        const weirdBulletMatch = trimmed.match(/^[-–•]\.?\s*(.*)$/);
+        const weirdBulletMatch = trimmed.match(/^[-â€“â€¢]\.?\s*(.*)$/);
         if (weirdBulletMatch) {
             return {
                 content: weirdBulletMatch[1].trim(),
