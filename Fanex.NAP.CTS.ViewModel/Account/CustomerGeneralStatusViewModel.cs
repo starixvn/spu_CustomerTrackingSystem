@@ -69,6 +69,8 @@
 
         public bool IsViewIPTransactionPermission { get; set; }
 
+        public bool IsShowPlusIcon { get; set; }
+
         public int CurrentUserId { get; set; }
 
         public bool IsLicensee { get; set; }

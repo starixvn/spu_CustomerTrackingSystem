@@ -98,17 +98,21 @@
 
                 if (customerInfoFromCTS != null)
                 {
+                    var hasAccountInfoReadPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountInfo, NAP.Core.Business.Constant.Policy.Read);
+                    var hasAccountInfoHostPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountInfo, NAP.Core.Business.Constant.Policy.Host);
+                    var hasAccountDetailTabReadPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountDetailTab, NAP.Core.Business.Constant.Policy.Read);
                     var hasAccountDetailTabHostPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountDetailTab, NAP.Core.Business.Constant.Policy.Host);
-                    var hasAccountInfoPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountInfo, NAP.Core.Business.Constant.Policy.Read);
+                    var hasViewIPTransactionPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.ViewIP, NAP.Core.Business.Constant.Policy.Read);
 
                     var customerGeneralStatusViewModel = new CustomerGeneralStatusViewModel()
                     {
                         CTSCustId = Id,
-                        IsHostPermission = hasAccountDetailTabHostPermission || hasAccountInfoPermission,
-                        IsAccountInfoPermission = hasAccountInfoPermission,
+                        IsHostPermission = hasAccountDetailTabHostPermission,
+                        IsAccountInfoPermission = hasAccountInfoReadPermission,
                         IsBettingStatisticPermission = CheckBettingStatisticPermission(userService, customerInfoFromCTS.RoleID),
-                        IsAccountDetailTabPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountDetailTab, NAP.Core.Business.Constant.Policy.Read),
-                        IsViewIPTransactionPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.ViewIP, NAP.Core.Business.Constant.Policy.Read),
+                        IsAccountDetailTabPermission = hasAccountDetailTabReadPermission,
+                        IsViewIPTransactionPermission = hasViewIPTransactionPermission,
+                        IsShowPlusIcon = hasAccountInfoHostPermission,
                         CurrentUserId = CurrentSession.UserId
                     };
 
@@ -800,8 +804,8 @@
         }
 
         [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountInsert)]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult InsertManualAssociationMultiple(int fromSubscriberId, long fromCTSCustId, string toUserNameList, string remark)
         {
             var resultInsert = new InsertManualAssociationMultipleViewModel { ErrorCode = -1 };
@@ -857,8 +861,8 @@
         }
 
         [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountLinkedUnlinked)]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, bool isLinked)
         {
             if (fromSubscriberId <= 0 || fromCTSCustId <= 0 || toSubscriberId <= 0 || toCTSCustId <= 0)
