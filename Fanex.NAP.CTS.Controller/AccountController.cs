@@ -90,30 +90,39 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRpt)]
         public ActionResult Index(long Id)
         {
+            IUserService userService = new UserService();
+
+            var userId = CurrentSession.UserId;
+            var siteId = NapSettings.Settings.SiteId;
+
+            var hasAccountInfoPermission = userService.IsHavingPermission(userId, siteId, FSFunctionKeys.AccountInfo, NAP.Core.Business.Constant.Policy.Read);
+            var hasBettingStatisticsPermission = userService.IsHavingPermission(userId, siteId, FSFunctionKeys.BettingStatistics, NAP.Core.Business.Constant.Policy.Read);
+            var hasAccountDetailTabPermission = userService.IsHavingPermission(userId, siteId, FSFunctionKeys.AccountDetailTab, NAP.Core.Business.Constant.Policy.Read);
+            var hasAccountInfoHostPermission = userService.IsHavingPermission(userId, siteId, FSFunctionKeys.AccountInfo, NAP.Core.Business.Constant.Policy.Host);
+            var hasAccountDetailTabHostPermission = userService.IsHavingPermission(userId, siteId, FSFunctionKeys.AccountDetailTab, NAP.Core.Business.Constant.Policy.Host);
+            var hasViewIPTransactionPermission = userService.IsHavingPermission(userId, siteId, FSFunctionKeys.ViewIP, NAP.Core.Business.Constant.Policy.Read);
+
+            if (!hasAccountInfoPermission && !hasBettingStatisticsPermission && !hasAccountDetailTabPermission )
+            {
+                return Redirect("~/Errors/403");
+            }
+
             if (Id > 0)
             {
-                IUserService userService = new UserService();
-
                 var customerInfoFromCTS = _accountService.GetCustomerInfoByCTSCustId(Id);
 
                 if (customerInfoFromCTS != null)
                 {
-                    var hasAccountInfoReadPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountInfo, NAP.Core.Business.Constant.Policy.Read);
-                    var hasAccountInfoHostPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountInfo, NAP.Core.Business.Constant.Policy.Host);
-                    var hasAccountDetailTabReadPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountDetailTab, NAP.Core.Business.Constant.Policy.Read);
-                    var hasAccountDetailTabHostPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountDetailTab, NAP.Core.Business.Constant.Policy.Host);
-                    var hasViewIPTransactionPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.ViewIP, NAP.Core.Business.Constant.Policy.Read);
-
                     var customerGeneralStatusViewModel = new CustomerGeneralStatusViewModel()
                     {
                         CTSCustId = Id,
                         IsHostPermission = hasAccountDetailTabHostPermission,
-                        IsAccountInfoPermission = hasAccountInfoReadPermission,
+                        IsAccountInfoPermission = hasAccountInfoPermission, 
                         IsBettingStatisticPermission = CheckBettingStatisticPermission(userService, customerInfoFromCTS.RoleID),
-                        IsAccountDetailTabPermission = hasAccountDetailTabReadPermission,
+                        IsAccountDetailTabPermission = hasAccountDetailTabPermission, 
                         IsViewIPTransactionPermission = hasViewIPTransactionPermission,
                         IsShowPlusIcon = hasAccountInfoHostPermission,
-                        CurrentUserId = CurrentSession.UserId
+                        CurrentUserId = userId
                     };
 
                     customerGeneralStatusViewModel.BindingGeneralDataFromCTS(customerInfoFromCTS);
@@ -568,12 +577,8 @@
             {
                 return false;
             }
-
-            bool temp = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.BettingStatistics, NAP.Core.Business.Constant.Policy.Read);
-
-            if (!temp) return false;
-
-            return temp = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.BettingStatistics, NAP.Core.Business.Constant.Policy.Read);
+            
+            return userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.BettingStatistics, NAP.Core.Business.Constant.Policy.Read);
         }
 
         #endregion Betting Statistic
@@ -1057,7 +1062,6 @@
         }
 
         [HttpPost]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetStakeIPPatternDetailByAI(CoupleDetailParameterModel para)
         {
             var data = new List<StakeIpPatternDetailViewModel>();
@@ -1783,9 +1787,9 @@
         }
 
         [HttpPost]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetCustomerClassification(long ctsCustID, ROLE_CUSTOMER roleID)
         {
+            IUserService userService = new UserService();
             var isVVip = false;
             var isProblemAccount = false;
             var isMultiplePA = false;
@@ -1793,10 +1797,10 @@
             var categoryList = new List<GetCustomerCategoryViewModel>();
             var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
             var usnBackGroundColor = EnumExtensions.GetStringSlow(CategoryColorType.Default);
-
-            IUserService userService = new UserService();
-            var hasAccountInfoPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountInfo, NAP.Core.Business.Constant.Policy.Read);
-            var hasAccountDetailTabPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountDetailTab, NAP.Core.Business.Constant.Policy.Read);
+            var userId = CurrentSession.UserId;
+            var siteId = NapSettings.Settings.SiteId;
+            var hasAccountInfoPermission = userService.IsHavingPermission(userId, siteId, FSFunctionKeys.AccountInfo, NAP.Core.Business.Constant.Policy.Read);
+            var hasAccountDetailTabPermission = userService.IsHavingPermission(userId, siteId, FSFunctionKeys.AccountDetailTab, NAP.Core.Business.Constant.Policy.Read);
 
             if (hasAccountInfoPermission || hasAccountDetailTabPermission)
             {
@@ -1833,7 +1837,6 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationNormalCategory)]
         [HttpPost]
         public ActionResult ChangeExcludedTagAssPA(int custId, long ctsCustId, int subscriberId, bool isExcludedTagAssPA, bool isProblemAccount, int custSubId, int roleID)
@@ -2198,7 +2201,6 @@
         }
 
         [HttpPost]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetRobotBetting(long custID)
         {
             var rbData = _robotBettingService.GetRobotBetting(custID);
