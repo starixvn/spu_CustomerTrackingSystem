@@ -1189,10 +1189,16 @@
     <None Include="WebConfigs\Web.AppSettings.KLSIMPLE.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="WebConfigs\Web.AppSettings.LOCAL_99.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="WebConfigs\Web.ConnectionString.KLPROD.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="WebConfigs\Web.ConnectionString.KLSIMPLE.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="WebConfigs\Web.ConnectionString.LOCAL_99.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="WebConfigs\Web.KLPROD.config">
@@ -1205,6 +1211,9 @@
     <Content Include="Views\Shared\_ChatbotPartial.cshtml" />
     <Content Include="Views\AIInsights\Index.cshtml" />
     <Content Include="Views\Shared\_ChatbotPartial.cshtml" />
+    <None Include="WebConfigs\Web.LOCAL_99.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />
