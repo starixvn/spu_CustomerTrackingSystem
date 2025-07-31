@@ -58,6 +58,10 @@
     };
 
     function LoadAssociationByAccount() {
+        const isAccountDetailTab = isAccountDetailTabPermission === "True";
+
+        if (!isAccountDetailTab) return;
+
         $.ajax(common.modifyRelativeUrl('Account/AssociatedByAccount'), {
             type: 'POST',            
             async: true,
@@ -83,6 +87,10 @@
     }
 
     function LoadChainToEvidence() {
+        const isAccountDetailTab = isAccountDetailTabPermission === "True";
+
+        if (!isAccountDetailTab) return;
+
         $.ajax(common.modifyRelativeUrl('Account/ChainToEvidence'), {
             type: 'POST',
             success: function (response) {
@@ -102,6 +110,11 @@
     }
 
     function LoadCustomerCategory() {
+        const isAccountInfo = isAccountInfoPermission === "True";
+        const isAccountDetailTab = isAccountDetailTabPermission === "True";
+
+        if (!isAccountInfo && !isAccountDetailTab) return;
+
         $.ajax(common.modifyRelativeUrl('Account/CustomerCategory'), {
             type: 'POST',            
             async: true,
@@ -163,6 +176,10 @@
     }
 
     function LoadRobotBetting() {
+        const isAccountDetailTab = isAccountDetailTabPermission === "True";
+
+        if (!isAccountDetailTab) return;
+
         $.ajax(common.modifyRelativeUrl('Account/RobotBetting'), {
             type: 'POST',
             success: function (response) {

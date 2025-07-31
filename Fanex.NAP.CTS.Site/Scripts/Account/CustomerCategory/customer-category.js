@@ -11,6 +11,7 @@
     let navsTabs = $('.nav-controls li a');
     let isHostPermission;
     let isShowPlusIcon;
+    let isAccountDetailTabPermission = $("#hdIsAccountDetailTabPermission").attr("IsAccountDetailTabPermission");
     let cacheData = {
         isVVip: false,
         isExcludedTagAssPA: false,
@@ -21,6 +22,10 @@
     let dataTableCustomerCategoryBySport;
 
     function CustomerSettingVerticalTabs(ctsCustId) {
+        const isAccountDetailTab = isAccountDetailTabPermission === "True";
+
+        if (!isAccountDetailTab) return;
+
         navsTabs.click(function (e) {
             let $this = $(this);
             let sportID = $this.attr('data-sport-id');
