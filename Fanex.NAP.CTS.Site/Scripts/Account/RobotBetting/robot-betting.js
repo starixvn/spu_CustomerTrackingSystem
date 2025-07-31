@@ -713,6 +713,10 @@ function robot_betting() {
                 robotRDTable.addClass('hide');
             },
             success: function (response) {
+                if (!response.data) {
+                    return;
+                }
+
                 if (response.data.FirstRobotDate != '' && response.data.LastRobotDate != '') {
                     firstRobotDate.text("First Robot Date: " + response.data.FirstRobotDate);
                     lastRobotDate.text("Last Robot Date: " + response.data.LastRobotDate);

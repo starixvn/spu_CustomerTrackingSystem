@@ -184,7 +184,7 @@
         }
 
         [HttpPost]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetStatusRobotClassification(int custID, ROLE_CUSTOMER roleID)
         {
             var result = _robotClassificationService.GetStatusRobotClassification(custID, roleID);
@@ -236,10 +236,19 @@
         }
 
         [HttpPost]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetLastestCustomerClassification(long custId)
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
             var customerClassification = string.Empty;
+
+            if (!hasPermission)
+            {
+                return Json(new
+                {
+                    customerClassification = string.Empty
+                }, JsonRequestBehavior.AllowGet);
+            }
 
             var result = _customerClassificationService.GetLatestCCAndDangerLevel(new List<long>() { custId });
 
@@ -389,7 +398,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileGetCustomerCategoryBySportRpt)]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetCustomerCategoryBySport(long ctsCustID)
         {
             var custs = Enumerable.Empty<GetCustomerCategoryBySportViewModel>();
@@ -406,7 +415,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileGetCustomerCategoryHistoryBySportRpt)]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetCustomerCategoryHistoryBySport(long ctsCustID, int sportID)
         {
             var custs = Enumerable.Empty<GetCustomerCategoryHistoryBySportViewModel>();
@@ -588,6 +597,12 @@
         #region Associated By Account
         public ActionResult AssociatedByAccount(string username)
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
+
+            if (!hasPermission)
+                return new EmptyResult();
+
             var getAssociationStatus = _accountService.GetCustomerStaticStatus(3, true);
 
             getAssociationStatus.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemNameDisplay = "All" });
@@ -616,28 +631,32 @@
         }
 
         [HttpGet]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetAllCategories()
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
             var categoryList = new List<CategoryGroupViewModel>();
+
+            if (!hasPermission) 
+                return Json(categoryList, JsonRequestBehavior.AllowGet);
 
             var data = _accountService.GetAllCategory();
 
             if (data != null && data.Any())
             {
                 categoryList = data
-                       .GroupBy(g => new { g.CategoryGroup })
-                       .Select(x => new { Group = x.Key, CategoryList = x.ToList() })
-                       .Select(x => new CategoryGroupViewModel
-                       {
-                           CategoryGroupName = x.Group.CategoryGroup,
-                           CategoryList = x.CategoryList.Select(y => new CategoryViewModel
-                           {
-                               CategoryIDs = y.CategoryIDs,
-                               CategoryName = y.CategoryName,
-                               RoleGroup = y.RoleGroup
-                           }).OrderBy(y => y.CategoryName)
-                       }).ToList();
+                    .GroupBy(g => new { g.CategoryGroup })
+                    .Select(x => new { Group = x.Key, CategoryList = x.ToList() })
+                    .Select(x => new CategoryGroupViewModel
+                    {
+                        CategoryGroupName = x.Group.CategoryGroup,
+                        CategoryList = x.CategoryList.Select(y => new CategoryViewModel
+                        {
+                            CategoryIDs = y.CategoryIDs,
+                            CategoryName = y.CategoryName,
+                            RoleGroup = y.RoleGroup
+                        }).OrderBy(y => y.CategoryName)
+                    }).ToList();
             }
 
             return Json(categoryList, JsonRequestBehavior.AllowGet);
@@ -645,16 +664,22 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountRpt, "isSkipTracking")]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetAssociatedByAccount(AssociatedFilterModel model, bool? isSkipTracking)
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
             var totalItem = 0;
-
             var result = new List<CustomerAssociationByAccountDetailViewModel>();
 
-            if (model.CTSCustId == 0)
+            if (!hasPermission || model.CTSCustId == 0)
             {
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(new
+                {
+                    draw = model.draw,
+                    recordsTotal = 0,
+                    recordsFiltered = 0,
+                    data = result
+                }, JsonRequestBehavior.AllowGet);
             }
 
             var graphAssociationPage = _accountService.GetAssociatedAccount(model);
@@ -662,12 +687,13 @@
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
             {
                 totalItem = graphAssociationPage.TotalItems;
-
                 var customerAssociation = graphAssociationPage.AssociationList;
-
                 var ctsCustIdList = customerAssociation.Select(x => new { CTSCustId = x.CTSCustID, SubscriberId = x.SubscriberID });
 
-                customerAssociation = GetCustClassification(string.Join(",", customerAssociation.Select(c => c.CustId).Distinct()), customerAssociation.ToList());
+                customerAssociation = GetCustClassification(
+                    string.Join(",", customerAssociation.Select(c => c.CustId).Distinct()),
+                    customerAssociation.ToList()
+                );
 
                 var flaggedAffectedTagList = _accountService.GetDirectAssociatedAccountTagFlagged(JsonConvert.SerializeObject(ctsCustIdList));
 
@@ -675,7 +701,8 @@
                 {
                     var newX = new CustomerAssociationByAccountDetailViewModel(x);
 
-                    var flaggedAffected = flaggedAffectedTagList.FirstOrDefault(y => y.SubscriberID.Equals(newX.SubscriberId) && y.CTSCustID.Equals(newX.CTSCustId));
+                    var flaggedAffected = flaggedAffectedTagList
+                        .FirstOrDefault(y => y.SubscriberID == newX.SubscriberId && y.CTSCustID == newX.CTSCustId);
 
                     if (flaggedAffected != null)
                     {
@@ -890,10 +917,16 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetMatchesAssociationByAI(long custID1, long custID2, string groupIDs, string originGroupIDs)
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
             var data = new MatchesAssociationByAIViewModel(originGroupIDs);
+
+            if (!hasPermission)
+            {
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
 
             try
             {
@@ -946,17 +979,19 @@
         }
 
         [HttpPost]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetMatchesAssociationDetailByAI(MatchesAssociationDetailViewModel para)
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
             var data = new List<MatchesDetailInfoViewModel>();
+
+            if (!hasPermission || para == null)
+            {
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+
             try
             {
-                if (para == null)
-                {
-                    return Json(data, JsonRequestBehavior.AllowGet);
-                }
-
                 var groupBettingAssociation = _accountService.GetGBAssociationFromAI(para.CustID1, para.CustID2, para.OrginGroupIDs);
 
                 if (groupBettingAssociation.ErrorCode == 0 && groupBettingAssociation.MatchesInfo.Any())
@@ -1015,10 +1050,16 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetCoupleInformationsByAI(long custID1, long custID2)
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
             var data = new CoupleDetailParameterViewModel();
+
+            if (!hasPermission)
+            {
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
 
             try
             {
@@ -1064,15 +1105,17 @@
         [HttpPost]
         public ActionResult GetStakeIPPatternDetailByAI(CoupleDetailParameterModel para)
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
             var data = new List<StakeIpPatternDetailViewModel>();
+
+            if (!hasPermission || para == null)
+            {
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
 
             try
             {
-                if (para == null)
-                {
-                    return Json(data, JsonRequestBehavior.AllowGet);
-                }
-
                 StakeIpPatternDetailModel patternDetail = new StakeIpPatternDetailModel()
                 {
                     CustId1 = para.CustID1,
@@ -1269,10 +1312,20 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetAssociationByOTGB(long custID1, long custID2)
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
             var data = new AssociationOTGBViewModel();
+
+            if (!hasPermission)
+            {
+                return Json(new
+                {
+                    errorCode = -1,
+                    errorMessage = "Permission denied",
+                }, JsonRequestBehavior.AllowGet);
+            }
 
             try
             {
@@ -1287,10 +1340,20 @@
         }
 
         [HttpPost]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetAssociationDetailByOTGB(long custID1, long custID2, AccountAssociationByOTGB fraudType)
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
             var data = Enumerable.Empty<AssByOTGBDetailViewModel>();
+
+            if (!hasPermission)
+            {
+                return Json(new
+                {
+                    errorCode = -1,
+                    errorMessage = "Permission denied",
+                }, JsonRequestBehavior.AllowGet);
+            }
 
             try
             {
@@ -1299,7 +1362,6 @@
                 if (association != null && association.AssociationOTGBRoun1.Any())
                 {
                     var tranInfo = association.AssociationOTGBRoun1.Distinct();
-
                     var ticketDetails = _accountService.GetAIAssociationTicketDetails(JsonConvert.SerializeObject(tranInfo), 1000, 50);
 
                     data = ProcessTicketDetailOTGB(ticketDetails, fraudType);
@@ -1361,9 +1423,20 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetAssByIPType(long custID1, long custID2)
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
+
+            if (!hasPermission)
+            {
+                return Json(new
+                {
+                    errorCode = -1,
+                    errorMessage = "Permission denied",
+                }, JsonRequestBehavior.AllowGet);
+            }
+
             var data = _accountService.GetAssociationByIPType(custID1, custID2).ToList();
 
             return Json(data, JsonRequestBehavior.AllowGet);
@@ -1371,12 +1444,20 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetIPMatchBettype(long custId1, long custId2)
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
+
             var data = new AssociationByIPInfoViewModel();
             var para1 = custId1;
             var para2 = custId2;
+
+            if (!hasPermission)
+            {
+                data.ErrorMessage = "Permission denied.";
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
 
             if (custId1 > custId2)
             {
@@ -1437,10 +1518,22 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetIPTicketStake(long custID1, long custID2)
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
+
             var result = Enumerable.Empty<AssByIPTicketStakeViewModel>();
+
+            if (!hasPermission)
+            {
+                return Json(new
+                {
+                    result = Enumerable.Empty<AssByIPTicketStakeViewModel>(),
+                    errorCode = -1,
+                    errorMessage = "Permission denied"
+                }, JsonRequestBehavior.AllowGet);
+            }
 
             var data = _accountService.GetAssociationBy5GIPDetail(custID1, custID2);
 
@@ -1488,9 +1581,14 @@
         #endregion Associated By Account
 
         #region Chain To Evidence
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult ChainToEvidence()
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
+
+            if (!hasPermission)
+                return new EmptyResult();
+
             return PartialView("ChainToEvidence/ChainToEvidence");
         }
 
@@ -1498,6 +1596,12 @@
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult GetEvidenceList()
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
+
+            if (!hasPermission)
+                return new EmptyResult();
+
             var result = _accountService.GetEvidenceList();
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -1510,10 +1614,14 @@
         }
 
         [HttpPost]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetAccountEvidence(Int64 ctsCustId)
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
             var result = new AccountEvidenceViewModel();
+
+            if (!hasPermission) return Json(result, JsonRequestBehavior.AllowGet);
+
             var evidenceCodeList = _accountService.GetEvidenceList().Select(x => x.EvidenceCode);
             var evidenceCodes = string.Join(",", evidenceCodeList);
 
@@ -1678,10 +1786,21 @@
         }
 
         [HttpPost]
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult RestoreAffectedEvidence(RemoveEvidenceModel model)
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
+
             model.UserId = CurrentSession.UserId;
+
+            if (!hasPermission)
+            {
+                return Json(new
+                {
+                    result = -1, 
+                    errorMessage = "Permission denied"
+                }, JsonRequestBehavior.AllowGet);
+            }
 
             var result = _accountService.RestoreAffectedEvidence(model);
 
@@ -1722,6 +1841,12 @@
         #region Transaciton History
         public ActionResult TransactionHistory()
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
+
+            if (!hasPermission)
+                return new EmptyResult();
+
             return PartialView("TransactionHistory/TransactionHistory");
         }
 
@@ -1777,6 +1902,12 @@
         #region Customer Category
         public ActionResult CustomerCategory()
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
+
+            if (!hasPermission) 
+                return new EmptyResult();
+
             return PartialView("CustomerCategory/CustomerCategory");
         }
 
@@ -1797,32 +1928,38 @@
             var categoryList = new List<GetCustomerCategoryViewModel>();
             var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
             var usnBackGroundColor = EnumExtensions.GetStringSlow(CategoryColorType.Default);
-            var userId = CurrentSession.UserId;
-            var siteId = NapSettings.Settings.SiteId;
-            var hasAccountInfoPermission = userService.IsHavingPermission(userId, siteId, FSFunctionKeys.AccountInfo, NAP.Core.Business.Constant.Policy.Read);
-            var hasAccountDetailTabPermission = userService.IsHavingPermission(userId, siteId, FSFunctionKeys.AccountDetailTab, NAP.Core.Business.Constant.Policy.Read);
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
 
-            if (hasAccountInfoPermission || hasAccountDetailTabPermission)
+            if (!hasPermission)
+                return Json(new
+                {
+                    isExcludedTagAssPA,
+                    isVVip,
+                    isProblemAccount,
+                    isMultiplePA,
+                    categoryList,
+                    usnBackGroundColor,
+                    data = classificationHistoryList,
+                }, JsonRequestBehavior.AllowGet);
+
+            var classification = _accountService.GetCustomerClassification(ctsCustID, roleID, out isExcludedTagAssPA);
+
+            if (classification != null && classification.Any())
             {
-                var classification = _accountService.GetCustomerClassification(ctsCustID, roleID, out isExcludedTagAssPA);
+                categoryList = classification.Select(x => new GetCustomerCategoryViewModel(x)).ToList();
 
-                if (classification != null && classification.Any())
-                {
-                    categoryList = classification.Select(x => new GetCustomerCategoryViewModel(x)).ToList();
+                isVVip = categoryList.Any(x => x.IsVVIP);
+                isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
+                isMultiplePA = categoryList.Any(x => x.IsMultiplePA);
+                int minPriority = classification.Min(c => c.CategoryPriority);
+                usnBackGroundColor = EnumExtensions.GetStringSlow((CategoryColorType)classification.FirstOrDefault(x => x.CategoryPriority == minPriority).ColorTypeID);
+            }
 
-                    isVVip = categoryList.Any(x => x.IsVVIP);
-                    isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
-                    isMultiplePA = categoryList.Any(x => x.IsMultiplePA);
-                    int minPriority = classification.Min(c => c.CategoryPriority);
-                    usnBackGroundColor = EnumExtensions.GetStringSlow((CategoryColorType)classification.FirstOrDefault(x => x.CategoryPriority == minPriority).ColorTypeID);
-                }
+            var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustID, roleID);
 
-                var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustID, roleID);
-
-                if (classificationHistory != null && classificationHistory.Any())
-                {
-                    classificationHistoryList = classificationHistory.Select(x => new CustomerClassificationHistoryViewModel(x)).ToList();
-                }
+            if (classificationHistory != null && classificationHistory.Any())
+            {
+                classificationHistoryList = classificationHistory.Select(x => new CustomerClassificationHistoryViewModel(x)).ToList();
             }
 
             return Json(new
@@ -1903,7 +2040,16 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]
         public ActionResult SaveMarkVVIP(SaveMarkCustomerCategoryViewModel model)
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
             var result = new DBResult();
+
+            if (!hasPermission)
+                return Json(new
+                {
+                    errorCode = result.ErrorCode,
+                    errorMessage = result.ErrorMsg
+                }, JsonRequestBehavior.AllowGet);
 
             var categoryModel = new CustomerCategoryModel
             {
@@ -1998,6 +2144,17 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]
         public ActionResult SaveMarkCustomerCategory(SaveMarkCustomerCategoryViewModel model)
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
+            var result = new DBResult();
+
+            if (!hasPermission)
+                return Json(new
+                {
+                    errorCode = result.ErrorCode,
+                    errorMessage = result.ErrorMsg
+                }, JsonRequestBehavior.AllowGet);
+
             var pas = new List<InsertProblemAccountModel>()
             {
                 new InsertProblemAccountModel
@@ -2016,7 +2173,7 @@
                 }
             };
 
-            var result = model.RoleID == ROLE_CUSTOMER.MEMBER
+            result = model.RoleID == ROLE_CUSTOMER.MEMBER
                 ? _problemAccountClassificationService.InsertProblemAccountPackage(pas, CCInputFlow.InsertPACategory, "ProfileAddProblemAccount", FromFlow.CTSWEB, !model.IsRobot)
                 : _problemAccountClassificationAgencyService.InsertProblemAccountAgencyPackage(pas, AgencyCCInputFlow.InsertPACategory, "ProfileAddProblemAccount", FromFlow.CTSWEB, !model.IsRobot);
 
@@ -2046,15 +2203,21 @@
         {
             try
             {
+                IUserService userService = new UserService();
+                var hasPermission = HasAccountInfoAndDetailPermission(userService);
                 var result = new DBResult();
-                model.CreatedBy = CurrentSession.UserId;
-                model.ActionType = ActionTypeQueueCustCategory.Remove;
 
-                result.ErrorMsg = model.RoleId == ROLE_CUSTOMER.MEMBER ? UnmarkAndRescanVVIP(model) : UnmarkAndRescanVVIPAgency(model);
+                if (hasPermission)
+                {
+                    model.CreatedBy = CurrentSession.UserId;
+                    model.ActionType = ActionTypeQueueCustCategory.Remove;
+
+                    result.ErrorMsg = model.RoleId == ROLE_CUSTOMER.MEMBER ? UnmarkAndRescanVVIP(model) : UnmarkAndRescanVVIPAgency(model);
+                }
 
                 return Json(new
                 {
-                    errorCode = !string.IsNullOrEmpty(result.ErrorMsg) ? -1 : 0,
+                    errorCode = hasPermission ? (string.IsNullOrEmpty(result.ErrorMsg) ? 0 : -1) : -1,
                     errorMessage = result.ErrorMsg
                 }, JsonRequestBehavior.AllowGet);
             }
@@ -2117,11 +2280,18 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
         public ActionResult SaveUnmarkCustomerCategory(SaveUnmarkCustomerCategoryViewModel model)
         {
-            var messageResult = model.RoleID == (int)ROLE_CUSTOMER.MEMBER ? UnmarkAndRescanProblemAccount(model) : UnmarkAndRescanProblemAccountAgency(model);
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
+            string messageResult = null;
+
+            if (hasPermission)
+            {
+                messageResult = model.RoleID == (int)ROLE_CUSTOMER.MEMBER ? UnmarkAndRescanProblemAccount(model) : UnmarkAndRescanProblemAccountAgency(model);
+            }
 
             return Json(new
             {
-                errorCode = string.IsNullOrEmpty(messageResult) ? 0 : -1,
+                errorCode = hasPermission ? (string.IsNullOrEmpty(messageResult) ? 0 : -1) : -1,
                 errorMessage = messageResult
             }, JsonRequestBehavior.AllowGet);
         }
@@ -2191,6 +2361,12 @@
         #region Robot Betting
         public ActionResult RobotBetting()
         {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
+
+            if (!hasPermission)
+                return new EmptyResult();
+
             return PartialView("RobotBetting/RobotBetting");
         }
 
@@ -2203,13 +2379,27 @@
         [HttpPost]
         public ActionResult GetRobotBetting(long custID)
         {
-            var rbData = _robotBettingService.GetRobotBetting(custID);
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
 
+            if (!hasPermission)
+            {
+                return Json(new
+                {
+                    data = (RobotBettingViewModel)null,
+                    errorCode = -1,
+                    errorMessage = "Permission denied"
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            var rbData = _robotBettingService.GetRobotBetting(custID);
             var rbBetting = new RobotBettingViewModel(rbData);
 
             return Json(new
             {
                 data = rbBetting,
+                errorCode = 0,
+                errorMessage = string.Empty
             }, JsonRequestBehavior.AllowGet);
         }
 
@@ -2373,6 +2563,15 @@
             return Json(new { data = rdTickets }, JsonRequestBehavior.AllowGet);
         }
         #endregion Robot Betting
+
+        private bool HasAccountInfoAndDetailPermission(IUserService userService)
+        {
+            var userId = CurrentSession.UserId;
+            var siteId = NapSettings.Settings.SiteId;
+
+            return userService.IsHavingPermission(userId, siteId, FSFunctionKeys.AccountInfo, NAP.Core.Business.Constant.Policy.Read)
+                   || userService.IsHavingPermission(userId, siteId, FSFunctionKeys.AccountDetailTab, NAP.Core.Business.Constant.Policy.Read);
+        }
         #endregion
     }
 }
