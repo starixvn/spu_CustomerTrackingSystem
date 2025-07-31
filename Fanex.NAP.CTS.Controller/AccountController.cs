@@ -595,14 +595,9 @@
         #region Account Detail Tab
 
         #region Associated By Account
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult AssociatedByAccount(string username)
         {
-            IUserService userService = new UserService();
-            var hasPermission = HasAccountInfoAndDetailPermission(userService);
-
-            if (!hasPermission)
-                return new EmptyResult();
-
             var getAssociationStatus = _accountService.GetCustomerStaticStatus(3, true);
 
             getAssociationStatus.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemNameDisplay = "All" });
@@ -1581,14 +1576,10 @@
         #endregion Associated By Account
 
         #region Chain To Evidence
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult ChainToEvidence()
         {
-            IUserService userService = new UserService();
-            var hasPermission = HasAccountInfoAndDetailPermission(userService);
-
-            if (!hasPermission)
-                return new EmptyResult();
-
+           
             return PartialView("ChainToEvidence/ChainToEvidence");
         }
 
@@ -1839,14 +1830,9 @@
         #endregion Chain To Evidence
 
         #region Transaciton History
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult TransactionHistory()
         {
-            IUserService userService = new UserService();
-            var hasPermission = HasAccountInfoAndDetailPermission(userService);
-
-            if (!hasPermission)
-                return new EmptyResult();
-
             return PartialView("TransactionHistory/TransactionHistory");
         }
 
@@ -1900,12 +1886,13 @@
         #endregion Transaciton History
 
         #region Customer Category
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult CustomerCategory()
         {
             IUserService userService = new UserService();
             var hasPermission = HasAccountInfoAndDetailPermission(userService);
 
-            if (!hasPermission) 
+            if (!hasPermission)
                 return new EmptyResult();
 
             return PartialView("CustomerCategory/CustomerCategory");
@@ -2012,6 +1999,7 @@
                 return Json(new { errorCode = -1, errorMessage = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+
 
         public ActionResult MarkCustomerCategory(long ctsCustID, ROLE_CUSTOMER roleID, string userName, bool isRobotUser)
         {
@@ -2359,14 +2347,9 @@
         #endregion Customer Category
 
         #region Robot Betting
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult RobotBetting()
         {
-            IUserService userService = new UserService();
-            var hasPermission = HasAccountInfoAndDetailPermission(userService);
-
-            if (!hasPermission)
-                return new EmptyResult();
-
             return PartialView("RobotBetting/RobotBetting");
         }
 
