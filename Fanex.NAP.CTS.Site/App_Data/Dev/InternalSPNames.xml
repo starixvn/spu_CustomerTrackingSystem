@@ -105,7 +105,7 @@
 		<Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove_xtest" DbName="CTSMain_DEV.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_CustClassificationAgency_Remove" SpName="CTS_DC_CustClassificationAgency_Remove_xtest" DbName="CTSMain_DEV.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_CustClassification_Rescan_Get" SpName="CTS_DC_CustClassification_Rescan_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustClassificationAgency_Rescan_Get" SpName="CTS_DC_CustClassificationAgency_Rescan_Get_xtest" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustClassificationAgency_Rescan_Get" SpName="CTS_DC_CustClassificationAgency_Rescan_Get_xtest" DbName="CTSMain_DEV.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_CustClassificationAgency_ViewHistory" SpName="CTS_DC_CustClassificationAgency_ViewHistory_xtest" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" Timeout="600" />
 		<Setting Key="CTS_DC_CustClassificationAgency_Get" SpName="CTS_DC_CustClassificationAgency_Get_xtest" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustClassificationAgency_Insert" SpName="CTS_DC_CustClassificationAgency_Insert_xtest" DbName="CTSMain_DEV.CTS_DataCenter.ctsWebAdmin" />
