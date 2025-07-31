@@ -183,7 +183,6 @@
             return RedirectToAction("Index", "Home");
         }
 
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult CustomerCategory()
         {
             IUserService userService = new UserService();

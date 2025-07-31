@@ -21,7 +21,7 @@
     let dataTable;
     let dataTableCustomerCategoryBySport;
 
-    function CustomerSettingVerticalTabs(ctsCustId) {
+    this.CustomerSettingVerticalTabs = function (ctsCustId) {
         const isAccountDetailTab = isAccountDetailTabPermission === "True";
 
         if (!isAccountDetailTab) return;
@@ -715,7 +715,6 @@
         dataTable = RenderGrid();
 
         LoadGrid(ctsCustId);
-        CustomerSettingVerticalTabs(ctsCustId);
 
         btnDisplayCustomerCategoryBySport.click(function () { DisplayCustomerCategoryBySport(ctsCustId); });
     };
