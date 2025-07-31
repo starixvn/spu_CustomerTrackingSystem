@@ -60,85 +60,84 @@
     function LoadAssociationByAccount() {
         const isAccountDetailTab = isAccountDetailTabPermission === "True";
 
-        if (!isAccountDetailTab) return;
+        if (isAccountDetailTab) {
+            $.ajax(common.modifyRelativeUrl('Account/AssociatedByAccount'), {
+                type: 'POST',
+                async: true,
+                data: {
+                    username: username
+                },
+                success: function (response) {
+                    domElements.tabAssociatedAccount.html(response);
+                },
+                complete: function () {
+                    var associationByAccount = new account_by_account();
+                    associationByAccount.Initial(ctsCustId, username, subscriberId, subscriber, isHostPermission);
 
-        $.ajax(common.modifyRelativeUrl('Account/AssociatedByAccount'), {
-            type: 'POST',            
-            async: true,
-            data: {
-                username: username
-            },
-            success: function (response) {
-                domElements.tabAssociatedAccount.html(response);
-            },
-            complete: function () {
-                var associationByAccount = new account_by_account();
-                associationByAccount.Initial(ctsCustId, username, subscriberId, subscriber, isHostPermission);
-
-                LoadChainToEvidence();                
-                LoadTransactionHistory();
-                //LoadLastestRobotClassification();
-                LoadRobotBetting();
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
+                    LoadChainToEvidence();
+                    LoadTransactionHistory();
+                    //LoadLastestRobotClassification();
+                    LoadRobotBetting();
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
     }
 
     function LoadChainToEvidence() {
         const isAccountDetailTab = isAccountDetailTabPermission === "True";
 
-        if (!isAccountDetailTab) return;
+        if (isAccountDetailTab) {
+            $.ajax(common.modifyRelativeUrl('Account/ChainToEvidence'), {
+                type: 'POST',
+                success: function (response) {
+                    domElements.tabChainEvidence.html(response);
+                },
+                complete: function () {
+                    var accountEvidence = new account_evidence();
+                    accountEvidence.Initial(ctsCustId, username, subscriberId, subscriber, custId, isHostPermission);
 
-        $.ajax(common.modifyRelativeUrl('Account/ChainToEvidence'), {
-            type: 'POST',
-            success: function (response) {
-                domElements.tabChainEvidence.html(response);
-            },
-            complete: function () {
-                var accountEvidence = new account_evidence();
-                accountEvidence.Initial(ctsCustId, username, subscriberId, subscriber, custId, isHostPermission);
-
-                var exceptions = new account_exceptions();
-                exceptions.Initial(ctsCustId, username, subscriberId, isHostPermission);
-            },
-            error: function (errMsg) {
-            console.log(errMsg);
-            }
-        });
+                    var exceptions = new account_exceptions();
+                    exceptions.Initial(ctsCustId, username, subscriberId, isHostPermission);
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
     }
 
     function LoadCustomerCategory() {
         const isAccountInfo = isAccountInfoPermission === "True";
         const isAccountDetailTab = isAccountDetailTabPermission === "True";
 
-        if (!isAccountInfo && !isAccountDetailTab) return;
+        if (isAccountInfo || isAccountDetailTab) {
+            $.ajax(common.modifyRelativeUrl('Account/CustomerCategory'), {
+                type: 'POST',
+                async: true,
+                success: function (response) {
+                    domElements.tabCustomerCategory.html(response);
+                },
+                complete: function () {
+                    var customerCategory = new customer_category();
+                    customerCategory.Initial(custId, ctsCustId, subscriberId, username, isHostPermission, custSubId);
+                    customerCategory.ReloadStatusRobotUser(custId, roleID);
 
-        $.ajax(common.modifyRelativeUrl('Account/CustomerCategory'), {
-            type: 'POST',            
-            async: true,
-            success: function (response) {
-                domElements.tabCustomerCategory.html(response);
-            },
-            complete: function () {
-                var customerCategory = new customer_category();
-                customerCategory.Initial(custId, ctsCustId, subscriberId, username, isHostPermission, custSubId);
+                    GetCustProfileDates();
 
-                customerCategory.ReloadStatusRobotUser(custId, roleID);
-                                    
-                GetCustProfileDates();
+                    GetCustProfileLoginInfo();
 
-                GetCustProfileLoginInfo();
+                    GetCustProfileClassification();
 
-                GetCustProfileClassification();
-
-                GetCustProfileAssociationAccount();
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
+                    GetCustProfileAssociationAccount();
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
     }
 
     //function LoadLastestRobotClassification() {
@@ -178,21 +177,21 @@
     function LoadRobotBetting() {
         const isAccountDetailTab = isAccountDetailTabPermission === "True";
 
-        if (!isAccountDetailTab) return;
-
-        $.ajax(common.modifyRelativeUrl('Account/RobotBetting'), {
-            type: 'POST',
-            success: function (response) {
-                domElements.tabRobotBetting.html(response);
-            },
-            complete: function () {
-                var robotBetting = new robot_betting();
-                robotBetting.Initial(custId);
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
+        if (isAccountDetailTab) {
+            $.ajax(common.modifyRelativeUrl('Account/RobotBetting'), {
+                type: 'POST',
+                success: function (response) {
+                    domElements.tabRobotBetting.html(response);
+                },
+                complete: function () {
+                    var robotBetting = new robot_betting();
+                    robotBetting.Initial(custId);
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
     }      
 
     function GetCustProfileAssociationAccount() {

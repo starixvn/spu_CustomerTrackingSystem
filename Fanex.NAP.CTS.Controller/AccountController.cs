@@ -183,6 +183,18 @@
             return RedirectToAction("Index", "Home");
         }
 
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        public ActionResult CustomerCategory()
+        {
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
+
+            if (!hasPermission)
+                return new EmptyResult();
+
+            return PartialView("CustomerCategory/CustomerCategory");
+        }
+
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetStatusRobotClassification(int custID, ROLE_CUSTOMER roleID)
@@ -1576,10 +1588,15 @@
         #endregion Associated By Account
 
         #region Chain To Evidence
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult ChainToEvidence()
         {
-           
+            IUserService userService = new UserService();
+            var hasPermission = HasAccountInfoAndDetailPermission(userService);
+
+            if (!hasPermission)
+                return new EmptyResult();
+
             return PartialView("ChainToEvidence/ChainToEvidence");
         }
 
@@ -1886,18 +1903,6 @@
         #endregion Transaciton History
 
         #region Customer Category
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
-        public ActionResult CustomerCategory()
-        {
-            IUserService userService = new UserService();
-            var hasPermission = HasAccountInfoAndDetailPermission(userService);
-
-            if (!hasPermission)
-                return new EmptyResult();
-
-            return PartialView("CustomerCategory/CustomerCategory");
-        }
-
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassification)]
         public ActionResult TrackingCustomerCategory()
         {
