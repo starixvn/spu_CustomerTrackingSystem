@@ -124,13 +124,13 @@
                     var customerCategory = new customer_category();
 
                     customerCategory.Initial(custId, ctsCustId, subscriberId, username, isHostPermission, custSubId);
-                    customerCategory.ReloadStatusRobotUser(custId, roleID);
+                    GetCustProfileDates();
 
                     if (isAccountInfo) {
-                        GetCustProfileDates();
-                        GetCustProfileAssociationAccount();
                         GetCustProfileLoginInfo();
                         GetCustProfileClassification();
+                        GetCustProfileAssociationAccount();
+                        customerCategory.ReloadStatusRobotUser(custId, roleID);
                     }
 
                     if (isAccountDetailTab) {
@@ -290,6 +290,9 @@
     }
 
     function GetCustProfileDates() {
+        const isAccountInfo = isAccountInfoPermission === "True";
+        const isAccountDetailTab = isAccountDetailTabPermission === "True";
+
         $.ajax(common.modifyRelativeUrl('Account/GetCustProfileDates'), {
             type: 'POST',  
             traditional: true,
@@ -299,20 +302,24 @@
                 roleID: roleID
             },
             success: function (response) {
-                if (response !== null) {
-                    domElements.spanNextCategoryScanDate.html(response.NextCategoryScanString);
-                    domElements.spanLastTicketDate.html(response.LastTicketString);
-                    domElements.spanLastLoginDate.html(response.LastLoginString);
-                    domElements.spanCreatedDate.html(response.CreatedString);
+                if (isAccountInfo) {
+                    if (response !== null) {
+                        domElements.spanNextCategoryScanDate.html(response.NextCategoryScanString);
+                        domElements.spanLastTicketDate.html(response.LastTicketString);
+                        domElements.spanLastLoginDate.html(response.LastLoginString);
+                        domElements.spanCreatedDate.html(response.CreatedString);
 
-                    domElements.spanLblNextCategoryScanDate.css("height", domElements.spanNextCategoryScanDate.css("height"));
-                    domElements.spanLblLastTicketDate.css("height", domElements.spanLastTicketDate.css("height"));
-                    domElements.spanLblLastLoginDate.css("height", domElements.spanLastLoginDate.css("height"));
-                    domElements.spanLblCreatedDate.css("height", domElements.spanCreatedDate.css("height"));
+                        domElements.spanLblNextCategoryScanDate.css("height", domElements.spanNextCategoryScanDate.css("height"));
+                        domElements.spanLblLastTicketDate.css("height", domElements.spanLastTicketDate.css("height"));
+                        domElements.spanLblLastLoginDate.css("height", domElements.spanLastLoginDate.css("height"));
+                        domElements.spanLblCreatedDate.css("height", domElements.spanCreatedDate.css("height"));
+                    }
                 }
             },     
             complete: function () {
-                LoadAssociationByAccount();
+                if (isAccountDetailTab) {
+                    LoadAssociationByAccount();
+                }
             },
             error: function (errMsg) {
                 console.log(errMsg);
