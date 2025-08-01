@@ -408,8 +408,8 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileGetCustomerCategoryBySportRpt)]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileGetCustomerCategoryBySportRpt)]
         public ActionResult GetCustomerCategoryBySport(long ctsCustID)
         {
             var custs = Enumerable.Empty<GetCustomerCategoryBySportViewModel>();
@@ -425,8 +425,8 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileGetCustomerCategoryHistoryBySportRpt)]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileGetCustomerCategoryHistoryBySportRpt)]
         public ActionResult GetCustomerCategoryHistoryBySport(long ctsCustID, int sportID)
         {
             var custs = Enumerable.Empty<GetCustomerCategoryHistoryBySportViewModel>();
@@ -778,8 +778,8 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountViewOnGraph)]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountViewOnGraph)]
         public ActionResult GetDirectAssociationGraph(AssociatedFilterModel model, string displayName)
         {
             var graphCustomer = new GraphCustomerItemViewModel();
@@ -845,8 +845,8 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountInsert)]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountInsert)]
         public ActionResult InsertManualAssociationMultiple(int fromSubscriberId, long fromCTSCustId, string toUserNameList, string remark)
         {
             var resultInsert = new InsertManualAssociationMultipleViewModel { ErrorCode = -1 };
@@ -902,8 +902,8 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountLinkedUnlinked)]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountLinkedUnlinked)]
         public ActionResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, bool isLinked)
         {
             if (fromSubscriberId <= 0 || fromCTSCustId <= 0 || toSubscriberId <= 0 || toCTSCustId <= 0)
@@ -1861,8 +1861,8 @@
             return null;
         }
 
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileTransactionHistory, "isSkipTracking")]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileTransactionHistory, "isSkipTracking")]
         public ActionResult GetTransactionHistory(DataTableAjaxPostModel model, bool? IsSkipTracking)
         {
             IUserService userService = new UserService();
@@ -1969,8 +1969,8 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationNormalCategory)]
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationNormalCategory)]
         public ActionResult ChangeExcludedTagAssPA(int custId, long ctsCustId, int subscriberId, bool isExcludedTagAssPA, bool isProblemAccount, int custSubId, int roleID)
         {
             if (roleID > (int)RoleGroupType.Member)
@@ -2395,8 +2395,8 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.GetRobotAILPDetail)]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.GetRobotAILPDetail)]
         public ActionResult GetRobotAILPDetail(long custID, int rangeType)
         {
             var rbAiLpData = _robotBettingService.GetRobotAiLpDetail(custID, rangeType);

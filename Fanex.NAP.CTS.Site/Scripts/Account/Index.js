@@ -58,7 +58,7 @@
     };
 
     function LoadAssociationByAccount() {
-        const isAccountDetailTab = isAccountDetailTabPermission === "True";
+        var isAccountDetailTab = isAccountDetailTabPermission === "True";
 
         if (isAccountDetailTab) {
             $.ajax(common.modifyRelativeUrl('Account/AssociatedByAccount'), {
@@ -87,7 +87,7 @@
     }
 
     function LoadChainToEvidence() {
-        const isAccountDetailTab = isAccountDetailTabPermission === "True";
+        var isAccountDetailTab = isAccountDetailTabPermission === "True";
 
         if (isAccountDetailTab) {
             $.ajax(common.modifyRelativeUrl('Account/ChainToEvidence'), {
@@ -110,8 +110,8 @@
     }
 
     function LoadCustomerCategory() {
-        const isAccountInfo = isAccountInfoPermission === "True";
-        const isAccountDetailTab = isAccountDetailTabPermission === "True";
+        var isAccountInfo = isAccountInfoPermission === "True";
+        var isAccountDetailTab = isAccountDetailTabPermission === "True";
 
         if (isAccountInfo || isAccountDetailTab) {
             $.ajax(common.modifyRelativeUrl('Account/CustomerCategory'), {
@@ -179,7 +179,7 @@
     }
 
     function LoadRobotBetting() {
-        const isAccountDetailTab = isAccountDetailTabPermission === "True";
+        var isAccountDetailTab = isAccountDetailTabPermission === "True";
 
         if (isAccountDetailTab) {
             $.ajax(common.modifyRelativeUrl('Account/RobotBetting'), {
@@ -290,8 +290,8 @@
     }
 
     function GetCustProfileDates() {
-        const isAccountInfo = isAccountInfoPermission === "True";
-        const isAccountDetailTab = isAccountDetailTabPermission === "True";
+        var isAccountInfo = isAccountInfoPermission === "True";
+        var isAccountDetailTab = isAccountDetailTabPermission === "True";
 
         $.ajax(common.modifyRelativeUrl('Account/GetCustProfileDates'), {
             type: 'POST',  
@@ -485,9 +485,9 @@
     }
 
     function DisplaySection() {
-        const isAccountInfo = isAccountInfoPermission === "True";
-        const isStatistic = isBettingStatisticPermission === "True";
-        const isAccountDetailTab = isAccountDetailTabPermission === "True";
+        var isAccountInfo = isAccountInfoPermission === "True";
+        var isStatistic = isBettingStatisticPermission === "True";
+        var isAccountDetailTab = isAccountDetailTabPermission === "True";
 
         if (isAccountInfo) {
             $(".wrapper-content").removeClass("hide");
