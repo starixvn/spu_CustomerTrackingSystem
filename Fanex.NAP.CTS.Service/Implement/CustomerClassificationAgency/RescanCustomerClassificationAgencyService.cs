@@ -116,7 +116,15 @@
 
         private RescanResultAgencyModel RescanConsiderableDanger(IEnumerable<RescanCustomerClassificationAgencyModel> custConsiderable, RescanCustClassificationAgencyModel paras, AgencyCCInputFlow ccInputFlow)
         {
-            return RescanProblemAccountAgency(custConsiderable, paras, ccInputFlow);
+            var resultCustRescans = base.RescanCustomerClassificationAgency(custConsiderable, ccInputFlow, false);
+
+            PushDataToExternalPackge(resultCustRescans, paras);
+
+            return new RescanResultAgencyModel()
+            {
+                CustIds = resultCustRescans.ToList(),
+                IsSuccess = true
+            };
         }
 
         private bool PushDataToExternalPackge(IEnumerable<long> custIdsToSyncCC, RescanCustClassificationAgencyModel parameters)
