@@ -126,10 +126,12 @@
                     customerCategory.Initial(custId, ctsCustId, subscriberId, username, isHostPermission, custSubId);
                     customerCategory.ReloadStatusRobotUser(custId, roleID);
 
-                    GetCustProfileDates();
-                    GetCustProfileAssociationAccount();
-                    GetCustProfileLoginInfo();
-                    GetCustProfileClassification();
+                    if (isAccountInfo) {
+                        GetCustProfileDates();
+                        GetCustProfileAssociationAccount();
+                        GetCustProfileLoginInfo();
+                        GetCustProfileClassification();
+                    }
 
                     if (isAccountDetailTab) {
                         customerCategory.CustomerSettingVerticalTabs(ctsCustId);
