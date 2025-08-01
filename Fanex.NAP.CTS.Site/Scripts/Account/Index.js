@@ -124,15 +124,19 @@
                     var customerCategory = new customer_category();
 
                     customerCategory.Initial(custId, ctsCustId, subscriberId, username, isHostPermission, custSubId);
-                    customerCategory.CustomerSettingVerticalTabs(ctsCustId);
 
                     GetCustProfileDates();
                     GetCustProfileAssociationAccount();
-                    GetCustProfileLoginInfo();
-                    GetCustProfileClassification();
 
                     if (isAccountInfo) {
                         customerCategory.ReloadStatusRobotUser(custId, roleID);
+                    }
+
+                    if (isAccountDetailTab) {
+                        GetCustProfileLoginInfo();
+                        GetCustProfileClassification();
+
+                        customerCategory.CustomerSettingVerticalTabs(ctsCustId);
                     }
                 },
                 error: function (errMsg) {

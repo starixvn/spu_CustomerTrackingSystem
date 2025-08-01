@@ -443,6 +443,7 @@
         #endregion
 
         #region Betting Statistic
+        [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetPerformanceBySport(long custId, int getTop)
         {
             var totalSportBettingStatistic = new SportBettingStatisticViewModel();
@@ -494,6 +495,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
+        [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetPerformanceByBettype(long custId, int getTop)
         {
             var result = _accountService.GetPerformanceByBettype(custId, getTop)?.OrderBy(c => c.Ranking);
@@ -509,6 +511,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
+        [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetPerformanceDaily(long custId)
         {
             var result = _accountService.GetPerformanceDaily(custId).OrderBy(c => c.RptDate);
@@ -1859,6 +1862,7 @@
         }
 
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileTransactionHistory, "isSkipTracking")]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetailTab, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetTransactionHistory(DataTableAjaxPostModel model, bool? IsSkipTracking)
         {
             IUserService userService = new UserService();
