@@ -10,6 +10,8 @@
     let tblCustomerCategoryBySport = $('#tblCustomerCategoryBySport');
     let navsTabs = $('.nav-controls li a');
     let isHostPermission;
+    let isShowPlusIcon;
+    let isAccountDetailTabPermission = $("#hdIsAccountDetailTabPermission").attr("IsAccountDetailTabPermission");
     let cacheData = {
         isVVip: false,
         isExcludedTagAssPA: false,
@@ -19,7 +21,11 @@
     let dataTable;
     let dataTableCustomerCategoryBySport;
 
-    function CustomerSettingVerticalTabs(ctsCustId) {
+    this.CustomerSettingVerticalTabs = function (ctsCustId) {
+        const isAccountDetailTab = isAccountDetailTabPermission === "True";
+
+        if (!isAccountDetailTab) return;
+
         navsTabs.click(function (e) {
             let $this = $(this);
             let sportID = $this.attr('data-sport-id');
@@ -317,7 +323,7 @@
     }
  
     function BuildButtonProfileInsertPA(html) {
-        if (isHostPermission) {
+        if (isShowPlusIcon) {
             html += "<div class='btn-add-pa' id='btnProfileInsertPA' title='Mark Category'></div>";
         }
                 
@@ -669,13 +675,20 @@
 
     function DisableButton(hostPermission) {
         isHostPermission = hostPermission === "True";
+        isShowPlusIcon = $("#hdIsShowPlusIcon").attr("IsShowPlusIcon") === "True";
 
         if (!isHostPermission || $("#hdRoleID").val() > 1) {
             cbbCategorySetting.prop('disabled', true);                 
         }
+
         btnMarkCategory.prop('disabled', true);
         btnUnmarkCategory.prop('disabled', true);
-        $("#btnProfileInsertPA").prop('disabled', true);        
+
+        if (!isShowPlusIcon) {
+            $("#btnProfileInsertPA").prop('disabled', true);
+        } else {
+            $("#btnProfileInsertPA").prop('disabled', false);
+        }       
     }
 
     this.Initial = function (custId, ctsCustId, subscriberId, username, hostPermission, custSubId) {
@@ -702,7 +715,6 @@
         dataTable = RenderGrid();
 
         LoadGrid(ctsCustId);
-        CustomerSettingVerticalTabs(ctsCustId);
 
         btnDisplayCustomerCategoryBySport.click(function () { DisplayCustomerCategoryBySport(ctsCustId); });
     };
