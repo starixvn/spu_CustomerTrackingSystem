@@ -491,8 +491,6 @@
 
         if (isAccountInfo) {
             $(".wrapper-content").removeClass("hide");
-            $("#divHeaderInfo").css("visibility", "visible");
-            $("#spanContentInfoLoading").hide();
         }
 
         if (isStatistic) {
