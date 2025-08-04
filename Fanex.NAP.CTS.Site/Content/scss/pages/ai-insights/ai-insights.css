@@ -458,7 +458,7 @@
   width: calc(100% - 20vw);
 }
 .ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image {
-  width: 100%;
+  width: 100% !important;
 }
 .ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image > * {
   width: 70% !important;

@@ -18,7 +18,9 @@
                 return new AIInsightsAnalyzeResponseModel();
             }
 
-            var timeout = int.TryParse(ConfigurationManager.AppSettings["ChatbotRequestTimeout"], out var parsed) ? parsed : 300;
+            var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIAnalyzeRequestTimeout"];
+
+            var timeout = int.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 300;
 
             var result = ApiHelper.Post<AIInsightsAnalyzeResponseModel>(url, param, timeout);
 

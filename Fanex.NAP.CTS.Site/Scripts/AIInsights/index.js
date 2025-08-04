@@ -87,6 +87,27 @@ function AIInsights() {
             if (!isOpen) {
                 setTimeout(ScrollToBottomChat, 100);
             }
+
+            setTimeout(function () {
+                $('#divVisualization .js-plotly-plot').each(function () {
+                    Plotly.Plots.resize(this);
+                });
+            }, 300);
+            //setTimeout(function () {
+            //    $('#divVisualization .js-plotly-plot').each(function () {
+            //        const plotEl = this;
+            //        let count = 0;
+
+            //        function resizeLoop() {
+            //            Plotly.Plots.resize(plotEl);
+            //            count++;
+            //            if (count < 5) requestAnimationFrame(resizeLoop);
+            //        }
+
+            //        resizeLoop();
+            //    });
+            //}, 300);
+
         }
     }
   
@@ -281,10 +302,6 @@ function AIInsights() {
                 `);
 
                 $chartSection.append($card);
-            });
-
-            $('.chart-image .js-plotly-plot').each(function () {
-                Plotly.Plots.resize(this);
             });
         }
     }
