@@ -121,26 +121,35 @@
                     domElements.tabCustomerCategory.html(response);
                 },
                 complete: function () {
-                    var customerCategory = new customer_category();
-
-                    customerCategory.Initial(custId, ctsCustId, subscriberId, username, isHostPermission, custSubId);
-                    GetCustProfileDates();
-
-                    if (isAccountInfo) {
-                        GetCustProfileLoginInfo();
-                        GetCustProfileClassification();
-                        GetCustProfileAssociationAccount();
-                        customerCategory.ReloadStatusRobotUser(custId, roleID);
-                    }
-
-                    if (isAccountDetailTab) {
-                        customerCategory.CustomerSettingVerticalTabs(ctsCustId);
-                    }
+                    RenderCustomerCategory(isAccountInfo, isAccountDetailTab);
+                    RenderCustomerProfile(isAccountInfo);
                 },
                 error: function (errMsg) {
                     console.log(errMsg);
                 }
             });
+        }
+    }
+
+    function RenderCustomerCategory(isAccountInfo, isAccountDetailTab) {
+        var customerCategory = new customer_category();
+        customerCategory.Initial(custId, ctsCustId, subscriberId, username, isHostPermission, custSubId);
+        if (isAccountInfo) {
+            customerCategory.ReloadStatusRobotUser(custId, roleID);
+        }
+
+        if (isAccountDetailTab) {
+            customerCategory.CustomerSettingVerticalTabs(ctsCustId);
+        }
+    }
+
+    function RenderCustomerProfile(isAccountInfo) {
+        GetCustProfileDates();
+
+        if (isAccountInfo) {
+            GetCustProfileLoginInfo();
+            GetCustProfileClassification();
+            GetCustProfileAssociationAccount();
         }
     }
 
