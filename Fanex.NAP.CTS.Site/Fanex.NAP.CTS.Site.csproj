@@ -1179,27 +1179,18 @@
     <None Include="WebConfigs\Web.AppSettings.KLPROD.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-<<<<<<< HEAD
-    <None Include="WebConfigs\Web.AppSettings.KLSIMPLE.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="WebConfigs\Web.AppSettings.LOCAL_99.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="WebConfigs\Web.ConnectionString.KLPROD.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="WebConfigs\Web.ConnectionString.KLSIMPLE.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="WebConfigs\Web.ConnectionString.LOCAL_99.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-=======
     <None Include="WebConfigs\Web.ConnectionString.KLPROD.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
->>>>>>> 233534-SeparatePermissionsOnAccountProfile
     <None Include="WebConfigs\Web.KLPROD.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
