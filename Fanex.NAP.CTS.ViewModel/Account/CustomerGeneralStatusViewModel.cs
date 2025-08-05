@@ -63,7 +63,13 @@
 
         public bool IsBettingStatisticPermission { get; set; }
 
+        public bool IsAccountInfoPermission { get; set; } 
+
+        public bool IsAccountDetailTabPermission { get; set; } 
+
         public bool IsViewIPTransactionPermission { get; set; }
+
+        public bool IsShowPlusIcon { get; set; }
 
         public int CurrentUserId { get; set; }
 

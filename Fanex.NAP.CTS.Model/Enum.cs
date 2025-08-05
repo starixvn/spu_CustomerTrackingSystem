@@ -325,14 +325,18 @@ namespace Fanex.NAP.CTS.Model
         [Description("InsertPACategory")]
         InsertPACategory = 1005,      
         [Description("Normal")]
-        Normal = 1009,
-        //[Description("RescanPACategory")]
-        //RescanPACategory = 1115,
+        Normal = 1009,      
         [Description("RemovePACategory")]
         RemovePACategory = 1225,
         [Description("RescanNormal")]
         RescanNormal = 1009,
         [Description("RemoveVVIP")]
         RemoveVVIP = 1221,
+        [Description("InsertConderable")]
+        InsertConderable = 1020,
+        [Description("RecanConsiderable")]
+        RecanConsiderable = 1120,
+        [Description("RemoveConderable")]
+        RemoveConderable = 1220
     }
 }

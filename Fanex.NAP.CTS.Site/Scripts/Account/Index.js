@@ -8,6 +8,8 @@
     var subscriberSourceID = $("#hdSubscriberSourceID").val();
     var isHostPermission = $("#hdIsHostPermission").attr("IsHostPermission");
     var isBettingStatisticPermission = $("#hdIsBettingStatisticPermission").attr("IsBettingStatisticPermission");
+    var isAccountInfoPermission = $("#hdIsAccountInfoPermission").attr("IsAccountInfoPermission");
+    var isAccountDetailTabPermission = $("#hdIsAccountDetailTabPermission").attr("IsAccountDetailTabPermission");
     var isViewIPTransactionPermission = $("#hdIsViewIPTransactionPermission").attr("IsViewIPTransactionPermission");
     var currentUserId = $("#hdCurrentUserId").val();
     var custSubId = $("#hdCustSubId").val();
@@ -56,74 +58,99 @@
     };
 
     function LoadAssociationByAccount() {
-        $.ajax(common.modifyRelativeUrl('Account/AssociatedByAccount'), {
-            type: 'POST',            
-            async: true,
-            data: {
-                username: username
-            },
-            success: function (response) {
-                domElements.tabAssociatedAccount.html(response);
-            },
-            complete: function () {
-                var associationByAccount = new account_by_account();
-                associationByAccount.Initial(ctsCustId, username, subscriberId, subscriber, isHostPermission);
+        var isAccountDetailTab = isAccountDetailTabPermission === "True";
 
-                LoadChainToEvidence();                
-                LoadTransactionHistory();
-                //LoadLastestRobotClassification();
-                LoadRobotBetting();
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
+        if (isAccountDetailTab) {
+            $.ajax(common.modifyRelativeUrl('Account/AssociatedByAccount'), {
+                type: 'POST',
+                async: true,
+                data: {
+                    username: username
+                },
+                success: function (response) {
+                    domElements.tabAssociatedAccount.html(response);
+                },
+                complete: function () {
+                    var associationByAccount = new account_by_account();
+                    associationByAccount.Initial(ctsCustId, username, subscriberId, subscriber, isHostPermission);
+
+                    LoadChainToEvidence();
+                    LoadTransactionHistory();
+                    //LoadLastestRobotClassification();
+                    LoadRobotBetting();
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
     }
 
     function LoadChainToEvidence() {
-        $.ajax(common.modifyRelativeUrl('Account/ChainToEvidence'), {
-            type: 'POST',
-            success: function (response) {
-                domElements.tabChainEvidence.html(response);
-            },
-            complete: function () {
-                var accountEvidence = new account_evidence();
-                accountEvidence.Initial(ctsCustId, username, subscriberId, subscriber, custId, isHostPermission);
+        var isAccountDetailTab = isAccountDetailTabPermission === "True";
 
-                var exceptions = new account_exceptions();
-                exceptions.Initial(ctsCustId, username, subscriberId, isHostPermission);
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
+        if (isAccountDetailTab) {
+            $.ajax(common.modifyRelativeUrl('Account/ChainToEvidence'), {
+                type: 'POST',
+                success: function (response) {
+                    domElements.tabChainEvidence.html(response);
+                },
+                complete: function () {
+                    var accountEvidence = new account_evidence();
+                    accountEvidence.Initial(ctsCustId, username, subscriberId, subscriber, custId, isHostPermission);
+
+                    var exceptions = new account_exceptions();
+                    exceptions.Initial(ctsCustId, username, subscriberId, isHostPermission);
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
     }
 
     function LoadCustomerCategory() {
-        $.ajax(common.modifyRelativeUrl('Account/CustomerCategory'), {
-            type: 'POST',            
-            async: true,
-            success: function (response) {
-                domElements.tabCustomerCategory.html(response);
-            },
-            complete: function () {
-                var customerCategory = new customer_category();
-                customerCategory.Initial(custId, ctsCustId, subscriberId, username, isHostPermission, custSubId);
+        var isAccountInfo = isAccountInfoPermission === "True";
+        var isAccountDetailTab = isAccountDetailTabPermission === "True";
 
-                customerCategory.ReloadStatusRobotUser(custId, roleID);
+        if (isAccountInfo || isAccountDetailTab) {
+            $.ajax(common.modifyRelativeUrl('Account/CustomerCategory'), {
+                type: 'POST',
+                async: true,
+                success: function (response) {
+                    domElements.tabCustomerCategory.html(response);
+                },
+                complete: function () {
+                    RenderCustomerCategory(isAccountInfo, isAccountDetailTab);
+                    RenderCustomerProfile(isAccountInfo);
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
+    }
 
-                GetCustProfileDates();
+    function RenderCustomerCategory(isAccountInfo, isAccountDetailTab) {
+        var customerCategory = new customer_category();
+        customerCategory.Initial(custId, ctsCustId, subscriberId, username, isHostPermission, custSubId);
+        if (isAccountInfo) {
+            customerCategory.ReloadStatusRobotUser(custId, roleID);
+        }
 
-                GetCustProfileLoginInfo();
+        if (isAccountDetailTab) {
+            customerCategory.CustomerSettingVerticalTabs(ctsCustId);
+        }
+    }
 
-                GetCustProfileClassification();
+    function RenderCustomerProfile(isAccountInfo) {
+        GetCustProfileDates();
 
-                GetCustProfileAssociationAccount();
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
+        if (isAccountInfo) {
+            GetCustProfileLoginInfo();
+            GetCustProfileClassification();
+            GetCustProfileAssociationAccount();
+        }
     }
 
     //function LoadLastestRobotClassification() {
@@ -161,19 +188,23 @@
     }
 
     function LoadRobotBetting() {
-        $.ajax(common.modifyRelativeUrl('Account/RobotBetting'), {
-            type: 'POST',
-            success: function (response) {
-                domElements.tabRobotBetting.html(response);
-            },
-            complete: function () {
-                var robotBetting = new robot_betting();
-                robotBetting.Initial(custId);
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
+        var isAccountDetailTab = isAccountDetailTabPermission === "True";
+
+        if (isAccountDetailTab) {
+            $.ajax(common.modifyRelativeUrl('Account/RobotBetting'), {
+                type: 'POST',
+                success: function (response) {
+                    domElements.tabRobotBetting.html(response);
+                },
+                complete: function () {
+                    var robotBetting = new robot_betting();
+                    robotBetting.Initial(custId);
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
     }      
 
     function GetCustProfileAssociationAccount() {
@@ -268,6 +299,9 @@
     }
 
     function GetCustProfileDates() {
+        var isAccountInfo = isAccountInfoPermission === "True";
+        var isAccountDetailTab = isAccountDetailTabPermission === "True";
+
         $.ajax(common.modifyRelativeUrl('Account/GetCustProfileDates'), {
             type: 'POST',  
             traditional: true,
@@ -277,20 +311,24 @@
                 roleID: roleID
             },
             success: function (response) {
-                if (response !== null) {
-                    domElements.spanNextCategoryScanDate.html(response.NextCategoryScanString);
-                    domElements.spanLastTicketDate.html(response.LastTicketString);
-                    domElements.spanLastLoginDate.html(response.LastLoginString);
-                    domElements.spanCreatedDate.html(response.CreatedString);
+                if (isAccountInfo) {
+                    if (response !== null) {
+                        domElements.spanNextCategoryScanDate.html(response.NextCategoryScanString);
+                        domElements.spanLastTicketDate.html(response.LastTicketString);
+                        domElements.spanLastLoginDate.html(response.LastLoginString);
+                        domElements.spanCreatedDate.html(response.CreatedString);
 
-                    domElements.spanLblNextCategoryScanDate.css("height", domElements.spanNextCategoryScanDate.css("height"));
-                    domElements.spanLblLastTicketDate.css("height", domElements.spanLastTicketDate.css("height"));
-                    domElements.spanLblLastLoginDate.css("height", domElements.spanLastLoginDate.css("height"));
-                    domElements.spanLblCreatedDate.css("height", domElements.spanCreatedDate.css("height"));
+                        domElements.spanLblNextCategoryScanDate.css("height", domElements.spanNextCategoryScanDate.css("height"));
+                        domElements.spanLblLastTicketDate.css("height", domElements.spanLastTicketDate.css("height"));
+                        domElements.spanLblLastLoginDate.css("height", domElements.spanLastLoginDate.css("height"));
+                        domElements.spanLblCreatedDate.css("height", domElements.spanCreatedDate.css("height"));
+                    }
                 }
             },     
             complete: function () {
-                LoadAssociationByAccount();
+                if (isAccountDetailTab) {
+                    LoadAssociationByAccount();
+                }
             },
             error: function (errMsg) {
                 console.log(errMsg);
@@ -344,8 +382,8 @@
     };    
 
     function Initial() {        
-        LoadCustomerCategory();                 
-                                  
+        LoadCustomerCategory();
+
         $("#tabs-account-detail").tabs();       
     }
 
@@ -383,8 +421,7 @@
     }
 
     function TrackingEvidenceFuction() {
-        if (currentTabIndex != 2 && domElements.evidenceTab.attr("aria-selected")) 
-        {
+        if (currentTabIndex != 2 && domElements.evidenceTab.attr("aria-selected")) {
             TrackingFunction(2);
             currentTabIndex = 2;
         }
@@ -419,7 +456,6 @@
     }
  
     function TrackingFunction(functionId) {
-
         var functionName = null;
 
         switch (functionId) {
@@ -448,7 +484,6 @@
                     functionName = "TrackingRobotBetting";
                     break;
                 }
-
         }
 
         if (functionName != null) {
@@ -458,7 +493,40 @@
         }
     }
 
-    $(document).ready(function () {                        
+    function DisplaySection() {
+        var isAccountInfo = isAccountInfoPermission === "True";
+        var isStatistic = isBettingStatisticPermission === "True";
+        var isAccountDetailTab = isAccountDetailTabPermission === "True";
+
+        if (isAccountInfo) {
+            $(".wrapper-content").removeClass("hide");
+        }
+
+        if (isStatistic) {
+            $("#wrapper-statistic").removeClass("hide");
+        }
+
+        if (isAccountDetailTab) {
+            $(".content-card").removeClass("hide");
+        }
+
+        if (!isAccountInfo) {
+            $("#wrapper-content .icon-loading").hide();
+            $("#spanContentInfoLoading").hide();
+            $("#divHeaderInfo").hide();
+        }
+
+        if (!isStatistic) {
+            $("#wrapper-statistic .icon-loading").hide();
+        }
+        if (!isAccountDetailTab) {
+            $(".content-card .icon-loading").hide();
+            $(".content-card img[src*='ajax-loader.gif']").hide();
+        }
+    }
+
+    $(document).ready(function () {   
+        DisplaySection();
         DisplayStatistic();          
 
         Initial();    
@@ -471,4 +539,4 @@
     });
 }
 
-$(AccountDetail);
+$(AccountDetail);  

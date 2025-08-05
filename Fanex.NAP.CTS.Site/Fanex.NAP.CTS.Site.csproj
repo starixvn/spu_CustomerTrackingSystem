@@ -430,13 +430,6 @@
     <Content Include="App_Data\KLDR\InternalSPNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\PRO\InternalSPNames.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="App_Data\PRO\ExternalSPNames.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="App_Data\SIT\ExternalSPNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1186,25 +1179,23 @@
     <None Include="WebConfigs\Web.AppSettings.KLPROD.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="WebConfigs\Web.AppSettings.KLSIMPLE.config">
+    <None Include="WebConfigs\Web.AppSettings.LOCAL_99.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="WebConfigs\Web.ConnectionString.KLPROD.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="WebConfigs\Web.ConnectionString.KLSIMPLE.config">
+    <None Include="WebConfigs\Web.ConnectionString.LOCAL_99.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="WebConfigs\Web.KLPROD.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="WebConfigs\Web.KLSIMPLE.config">
+    <Content Include="Views\AIInsights\Index.cshtml" />
+    <Content Include="Views\Shared\_ChatbotPartial.cshtml" />
+    <None Include="WebConfigs\Web.LOCAL_99.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="Views\AIInsights\Index.cshtml" />
-    <Content Include="Views\Shared\_ChatbotPartial.cshtml" />
-    <Content Include="Views\AIInsights\Index.cshtml" />
-    <Content Include="Views\Shared\_ChatbotPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />
@@ -1879,16 +1870,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Views\Shared\_Menu.cshtml" />
-    <Content Include="WebConfigs\Web.AppSettings.PRO.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="WebConfigs\Web.AppSettings.UAT.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="WebConfigs\Web.ConnectionString.LOCAL.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="WebConfigs\Web.ConnectionString.PRO.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="WebConfigs\Web.ConnectionString.UAT.config">
@@ -1897,10 +1882,6 @@
     </Content>
     <Content Include="WebConfigs\Web.LOCAL.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="WebConfigs\Web.PRO.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
     </Content>
     <Content Include="WebConfigs\Web.UAT.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
