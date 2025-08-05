@@ -171,10 +171,11 @@ namespace Fanex.NAP.CTS.Controller
             }
             else
             {
-                using (var ms = new MemoryStream())
+                using (var binaryReader = new BinaryReader(uploadFile.InputStream))
                 {
-                    uploadFile.InputStream.CopyTo(ms);                   
-                    Session["UploadedFileToBase64String"] = Convert.ToBase64String(ms.ToArray());
+                    var fileBytes = binaryReader.ReadBytes(uploadFile.ContentLength);
+                    var base64 = Convert.ToBase64String(fileBytes);
+                    Session["UploadedFileToBase64String"] = base64;
                 }
             }
 
