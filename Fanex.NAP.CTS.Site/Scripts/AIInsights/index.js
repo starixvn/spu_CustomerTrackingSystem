@@ -138,10 +138,11 @@ function AIInsights() {
             }
 
             if (file) {
-                const maxSize = 100 * 1024 * 1024; // 100MB in bytes
+                const maxMBSize = 50;
+                const maxSize = maxMBSize * 1024 * 1024; // 50MB in bytes
                 
                 if (file.size > maxSize) {
-                    common.showError('Exceeds the allowed limit of ' + maxSize + " MB");
+                    common.showError('Exceeds the allowed limit of ' + maxMBSize + " MB");
                     fileInput.val('');
                     return;
                 }

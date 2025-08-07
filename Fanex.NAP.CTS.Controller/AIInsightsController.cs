@@ -162,7 +162,7 @@ namespace Fanex.NAP.CTS.Controller
                 return Json(new
                 {
                     success = false,
-                    message = $"Exceeds the allowed limit of {_aiInsightsFileUploadModel.MaxFileSizeBytes} MB."
+                    message = $"Exceeds the allowed limit of {_aiInsightsFileUploadModel.MaxFileSizeBytes / (1024 * 1024)} MB."
                 }, JsonRequestBehavior.AllowGet);               
             }
 
