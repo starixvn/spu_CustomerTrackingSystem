@@ -22,7 +22,7 @@
 
             var timeout = int.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 300;
 
-            var result = ApiHelper.Post<AIInsightsAnalyzeResponseModel>(url, param, timeout);
+            var result = ApiHelper.PostWithOutMemoryParseJson<AIInsightsAnalyzeResponseModel>(url, param, timeout);
 
             Task.WhenAll(result);
 
@@ -40,7 +40,7 @@
 
             var timeout = int.TryParse(chatbotRequestTimeout, out var parsed) ? parsed : 300;
 
-            var result = ApiHelper.Post<AIInsightsChatbotResponseModel>(url, request, timeout);
+            var result = ApiHelper.PostWithOutMemoryParseJson<AIInsightsChatbotResponseModel>(url, request, timeout);
 
             Task.WhenAll(result);
 
