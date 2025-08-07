@@ -171,7 +171,7 @@ namespace Fanex.NAP.CTS.Controller
             }
             else
             {
-                Session["UploadedFileToBase64String"] = uploadFile.FileBaseToBase64String();
+                Session["UploadedFileToBase64String"] = uploadFile.FileBaseToBase64StringChunked();
             }
 
             var fileName = Path.GetFileName(uploadFile.FileName);

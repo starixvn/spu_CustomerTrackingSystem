@@ -3,10 +3,13 @@
     using MailDelivery.Client;
     using Newtonsoft.Json;
     using System;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
+    using System.Reflection;
     using System.Text;
+    using System.Text.Json;
     using System.Threading.Tasks;
     using System.Web.Script.Serialization;
 
@@ -76,19 +79,11 @@
         {
             using (var web = new HttpClient())
             {
-                var serializer = new JavaScriptSerializer();
-                serializer.MaxJsonLength = Int32.MaxValue;
-                var content = serializer.Serialize(param);
-
-                var buffer = Encoding.UTF8.GetBytes(content);
-
-                var byteContent = new ByteArrayContent(buffer);
-
-                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                var content = CreateStreamContent(param);
 
                 web.Timeout = TimeSpan.FromSeconds(timeOutbySeconds);
 
-                var response = await web.PostAsync(url, byteContent).ConfigureAwait(false);
+                var response = await web.PostAsync(url, content).ConfigureAwait(false);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -99,6 +94,39 @@
 
                 return JsonConvert.DeserializeObject<TResult>(result);
             }
+        }
+
+        public static StreamContent CreateStreamContent(object model)
+        {
+            var stream = new MemoryStream();
+            using (var writer = new Utf8JsonWriter(stream))
+            {
+                writer.WriteStartObject();
+
+                var props = model.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+                foreach (var prop in props)
+                {
+                    var value = prop.GetValue(model);
+                    switch (value)
+                    {
+                        case string str:
+                            writer.WriteString(prop.Name, str);
+                            break;
+                        case int i:
+                            writer.WriteNumber(prop.Name, i);
+                            break;
+                    }
+                }
+
+                writer.WriteEndObject();
+            }
+
+            stream.Position = 0;
+            var content = new StreamContent(stream);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            return content;
         }
 
         public static async Task<TResult> PostWithProxy<TResult>(string url, object param)

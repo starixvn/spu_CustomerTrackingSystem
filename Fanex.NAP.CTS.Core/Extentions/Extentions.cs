@@ -109,15 +109,30 @@
         public static string CleanSpecialCharactor(this string input) =>
             string.IsNullOrEmpty(input) ? "" : input.Replace("\r\n", string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty).Replace("__", "_").Trim();
 
-        public static string FileBaseToBase64String(this HttpPostedFileBase fileBase)
+        public static string FileBaseToBase64StringChunked(this HttpPostedFileBase fileBase)
         {
-            using (var binaryReader = new BinaryReader(fileBase.InputStream))
-            {
-                var fileBytes = binaryReader.ReadBytes(fileBase.ContentLength);
-                var base64 = Convert.ToBase64String(fileBytes);
+            var sb = new StringBuilder();
+            const int chunkSize = 3 * 1024; // 3KB chunks (divisible by 3 for proper Base64 encoding)
+            var buffer = new byte[chunkSize];
+            int bytesRead;
 
-                return base64;
+            while ((bytesRead = fileBase.InputStream.Read(buffer, 0, buffer.Length)) > 0)
+            {
+                // Convert chunk to Base64
+                if (bytesRead == chunkSize)
+                {
+                    sb.Append(Convert.ToBase64String(buffer));
+                }
+                else
+                {
+                    // Handle last chunk which may be smaller
+                    var lastChunk = new byte[bytesRead];
+                    Array.Copy(buffer, lastChunk, bytesRead);
+                    sb.Append(Convert.ToBase64String(lastChunk));
+                }
             }
+
+            return sb.ToString();
         }
     }
 }
