@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Core.Helpers.Api
 {
+    using Fanex.Common.Extensions;
     using MailDelivery.Client;
     using Newtonsoft.Json;
     using System;
@@ -148,33 +149,28 @@
             return content;
         }
 
-        private static void WriteEscapedJsonStringFromStringBuilder(StreamWriter writer, StringBuilder sb)
+        private static void WriteEscapedJsonStringFromStringBuilder(StreamWriter writer, StringBuilder sb, int bufferSize = 3 * 1024) // chunk 3MB
         {
+            char[] buffer = new char[bufferSize];
+
             writer.Write('"');
 
-            for (int i = 0; i < sb.Length; i++)
+            int totalLength = sb.Length;
+            for (int offset = 0; offset < totalLength; offset += bufferSize)
             {
-                char c = sb[i];
-                switch (c)
-                {
-                    case '"': writer.Write("\\\""); break;
-                    case '\\': writer.Write("\\\\"); break;
-                    case '\b': writer.Write("\\b"); break;
-                    case '\f': writer.Write("\\f"); break;
-                    case '\n': writer.Write("\\n"); break;
-                    case '\r': writer.Write("\\r"); break;
-                    case '\t': writer.Write("\\t"); break;
-                    default:
-                        if (char.IsControl(c))
-                        {
-                            writer.Write($"\\u{((int)c):x4}");
-                        }
-                        else
-                        {
-                            writer.Write(c);
-                        }
-                        break;
-                }
+                int length = Math.Min(bufferSize, totalLength - offset);
+                sb.CopyTo(offset, buffer, 0, length);
+
+                var text = new string(buffer)
+                             .Replace("\"", "\\\"")
+                             .Replace("\\", "\\\\")
+                             .Replace("\b", "\\b")
+                             .Replace("\f", "\\f")
+                             .Replace("\n", "\\n")
+                             .Replace("\r", "\\r")
+                             .Replace("\t", "\\t");
+
+                writer.Write(text);
             }
 
             writer.Write('"');
@@ -183,29 +179,16 @@
         private static void WriteEscapedJsonString(StreamWriter writer, string value)
         {
             writer.Write('"');
-            foreach (var c in value)
-            {
-                switch (c)
-                {
-                    case '"': writer.Write("\\\""); break;
-                    case '\\': writer.Write("\\\\"); break;
-                    case '\b': writer.Write("\\b"); break;
-                    case '\f': writer.Write("\\f"); break;
-                    case '\n': writer.Write("\\n"); break;
-                    case '\r': writer.Write("\\r"); break;
-                    case '\t': writer.Write("\\t"); break;
-                    default:
-                        if (char.IsControl(c))
-                        {
-                            writer.Write($"\\u{((int)c):x4}");
-                        }
-                        else
-                        {
-                            writer.Write(c);
-                        }
-                        break;
-                }
-            }
+            var text = value
+                             .Replace("\"", "\\\"")
+                             .Replace("\\", "\\\\")
+                             .Replace("\b", "\\b")
+                             .Replace("\f", "\\f")
+                             .Replace("\n", "\\n")
+                             .Replace("\r", "\\r")
+                             .Replace("\t", "\\t");
+
+            writer.Write(text);
             writer.Write('"');
         }
 
