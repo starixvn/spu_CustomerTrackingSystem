@@ -109,7 +109,7 @@
         public static string CleanSpecialCharactor(this string input) =>
             string.IsNullOrEmpty(input) ? "" : input.Replace("\r\n", string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty).Replace("__", "_").Trim();
 
-        public static string FileBaseToBase64StringChunked(this HttpPostedFileBase fileBase)
+        public static StringBuilder FileBaseToBase64StringChunked(this HttpPostedFileBase fileBase)
         {
             var sb = new StringBuilder();
             const int chunkSize = 3 * 1024; // 3KB chunks (divisible by 3 for proper Base64 encoding)
@@ -132,7 +132,7 @@
                 }
             }
 
-            return sb.ToString();
+            return sb;
         }
     }
 }

@@ -9,6 +9,7 @@ namespace Fanex.NAP.CTS.Controller
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Text;
     using System.Web;
     using System.Web.Mvc;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -44,10 +45,10 @@ namespace Fanex.NAP.CTS.Controller
             {
                 var fileName = Session["UploadedFileName"] as string;
                 var fileContentBase64 = ConfigSettings.AIInsightsStoreFile
-                        ? GetFileContent(fileName)
-                        : Session["UploadedFileToBase64String"] as string;
+                        ? new StringBuilder(GetFileContent(fileName))
+                        : Session["UploadedFileToBase64String"] as StringBuilder;
 
-                if (fileName == null || string.IsNullOrEmpty(fileContentBase64))
+                if (fileName == null || fileContentBase64 == null || fileContentBase64.Length <= 0)
                 {
                     ViewBag.Message = "No file uploaded.";
 
@@ -91,8 +92,8 @@ namespace Fanex.NAP.CTS.Controller
                 request.session_id = CurrentSession.SessionId;
                 request.file_name = Session["UploadedFileName"] as string;
                 request.file_content = ConfigSettings.AIInsightsStoreFile
-                        ? GetFileContent(request.file_name)
-                        : Session["UploadedFileToBase64String"] as string;
+                        ? new StringBuilder(GetFileContent(request.file_name))
+                        : Session["UploadedFileToBase64String"] as StringBuilder;
 
                 response = _aIInsightsService.AskChatbot(request, ConfigSettings.AIInsightsChatBotUrl);
 

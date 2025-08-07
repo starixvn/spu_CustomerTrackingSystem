@@ -9,9 +9,7 @@
     using System.Net.Http.Headers;
     using System.Reflection;
     using System.Text;
-    using System.Text.Json;
     using System.Threading.Tasks;
-    using System.Web.Script.Serialization;
 
     public static class ApiHelper
     {
@@ -99,27 +97,48 @@
         public static StreamContent CreateStreamContent(object model)
         {
             var stream = new MemoryStream();
-            using (var writer = new Utf8JsonWriter(stream))
+            using (var writer = new StreamWriter(stream, Encoding.UTF8, 1024, leaveOpen: true))
             {
-                writer.WriteStartObject();
+                writer.Write("{");
 
                 var props = model.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                bool first = true;
 
                 foreach (var prop in props)
                 {
                     var value = prop.GetValue(model);
+                    if (value == null)
+                    {
+                        continue;
+                    }
+
+                    if (!first)
+                    {
+                        writer.Write(",");
+                    }
+                    first = false;
+
+                    writer.Write($"\"{prop.Name}\":");
+
                     switch (value)
                     {
                         case string str:
-                            writer.WriteString(prop.Name, str);
+                            WriteEscapedJsonString(writer, str);
                             break;
                         case int i:
-                            writer.WriteNumber(prop.Name, i);
+                            writer.Write(i.ToString());
+                            break;
+                        case StringBuilder sb:
+                            WriteEscapedJsonStringFromStringBuilder(writer, sb);
+                            break;
+                        default:
+                            writer.Write($"\"{value.ToString()}\""); // fallback
                             break;
                     }
                 }
 
-                writer.WriteEndObject();
+                writer.Write("}");
+                writer.Flush();
             }
 
             stream.Position = 0;
@@ -127,6 +146,67 @@
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             return content;
+        }
+
+        private static void WriteEscapedJsonStringFromStringBuilder(StreamWriter writer, StringBuilder sb)
+        {
+            writer.Write('"');
+
+            for (int i = 0; i < sb.Length; i++)
+            {
+                char c = sb[i];
+                switch (c)
+                {
+                    case '"': writer.Write("\\\""); break;
+                    case '\\': writer.Write("\\\\"); break;
+                    case '\b': writer.Write("\\b"); break;
+                    case '\f': writer.Write("\\f"); break;
+                    case '\n': writer.Write("\\n"); break;
+                    case '\r': writer.Write("\\r"); break;
+                    case '\t': writer.Write("\\t"); break;
+                    default:
+                        if (char.IsControl(c))
+                        {
+                            writer.Write($"\\u{((int)c):x4}");
+                        }
+                        else
+                        {
+                            writer.Write(c);
+                        }
+                        break;
+                }
+            }
+
+            writer.Write('"');
+        }
+
+        private static void WriteEscapedJsonString(StreamWriter writer, string value)
+        {
+            writer.Write('"');
+            foreach (var c in value)
+            {
+                switch (c)
+                {
+                    case '"': writer.Write("\\\""); break;
+                    case '\\': writer.Write("\\\\"); break;
+                    case '\b': writer.Write("\\b"); break;
+                    case '\f': writer.Write("\\f"); break;
+                    case '\n': writer.Write("\\n"); break;
+                    case '\r': writer.Write("\\r"); break;
+                    case '\t': writer.Write("\\t"); break;
+                    default:
+                        if (char.IsControl(c))
+                        {
+                            writer.Write($"\\u{((int)c):x4}");
+                        }
+                        else
+                        {
+                            writer.Write(c);
+                        }
+                        break;
+                }
+            }
+            writer.Write('"');
         }
 
         public static async Task<TResult> PostWithProxy<TResult>(string url, object param)
