@@ -136,7 +136,7 @@
                 ViewBag.ReasonGroup = para?.ReasonGroup ?? string.Empty;
                 ViewBag.MarketName = para?.MarketName ?? string.Empty;
                 ViewBag.BetChoice = para?.BetChoice;
-                ViewBag.IsDisableScoreFilter = IsDisableScoreFilter(para.SportType);
+                ViewBag.IsDisableScoreFilter = ConditionExcludeScoreForMM.Contains(para.SportType);
                 ViewBag.SportType = para?.SportType ?? 0;
                 ViewBag.SportName = bettypes.FirstOrDefault(x => x.SportType == para?.SportType)?.SportName;
                 ViewBag.KOTime = para?.KOTime;

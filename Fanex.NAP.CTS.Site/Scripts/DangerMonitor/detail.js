@@ -19,6 +19,15 @@ const IndexFilterSelected = {
     AGr: 7
 }
 
+const SportTypeConst = {
+    Basketball: "2",
+    Tennis: "5",
+    Volleyball: "6",
+    Badminton: "9",
+    ESports: "43",
+    Cricket: "50"
+}
+
 function ConvertNumberToThousandsString(x) {
     return x ? x.toLocaleString() : 0;
 }
@@ -52,6 +61,7 @@ function DangerousSettingDetail() {
         mapYY: $('#hdMapYY').val(),
         cbbMarket: $('#cbbMarket'),
         cbbBetType: $('#cbbBetType'),
+        cbbGame: $('#cbbGame'),
         cbbMapX: $('#cbbMapX'),
         cbbMapYY: $('#cbbMapYY'),
         divMapX: $('#divMapX'),
@@ -351,6 +361,32 @@ function DangerousSettingDetail() {
             placeholder: '',
             label: ''
         });
+    }
+
+    function SetupValueDefaultGameOrSetFilter() {
+        if (domElements.sportType == SportTypeConst.Volleyball ||
+            domElements.sportType == SportTypeConst.Tennis
+        ) {
+            domElements.cbbGame.multiselect().empty();
+
+            let selected = null;
+
+            if (domElements.betIDToString) {
+                selected = domElements.betIDToString % 10;
+            } else if (domElements.cbbGame.val()) {
+                selected = parseInt(domElements.cbbGame.val()[0]);
+            }
+
+            defaultGameSet = selected;
+
+            for (let i = 1; i <= 5; i++) {
+                domElements.cbbGame.append(
+                    `<option value='${i}' ${selected == i ? "selected" : ""}>${i}</option>`
+                );
+            }
+
+            domElements.cbbGame.multiselect("refresh");
+        }
     }
 
     function SetupFilter(element, data) {
@@ -2678,6 +2714,10 @@ function DangerousSettingDetail() {
         domElements.cbbMapYY.select2();
         domElements.inputTranstimeFrom.val('');
         domElements.inputTranstimeTo.val('');
+
+        let gameLabel = (domElements.sportType == SportTypeConst.Volleyball || domElements.sportType == SportTypeConst.Tennis) ? "Set" : "Game";
+
+        SetupMultiselectFilter(domElements.cbbGame, gameLabel);
         SetupMultiselect(domElements.cbbMatchScore, "Score");
         SetupMultiselectFilter(domElements.cbbCC, "CC");
         SetupMultiselectFilter(domElements.cbbDanger, "Danger");
@@ -2689,6 +2729,8 @@ function DangerousSettingDetail() {
         domElements.inputCustAmountRM.val('');
         domElements.iconClearUsnAmt.addClass("hide");
         SetupMultiselect(domElements.cbbTicketsStatus, "Status");
+
+        SetupValueDefaultGameOrSetFilter();
 
         SetupDoubleDataTable();
         SetupSingleTable();

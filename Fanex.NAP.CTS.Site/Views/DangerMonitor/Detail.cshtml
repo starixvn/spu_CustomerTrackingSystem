@@ -57,6 +57,16 @@
                             </select>
                         </div>
 
+                        <div class="first-row-info">
+                            @*<label class="text">Game</label>*@
+                            <select class="control width-select" id="cbbGame" multiple="multiple">
+                                @for (int i = 1; i < 4; i++)
+                                {
+                                    <option value="@i" selected>@i</option>
+                                }
+                            </select>
+                        </div>
+
                         <div class="first-row-info" style="width:80px" id="divMapX">
                             <select class="control info-select" id="cbbMapX" name="state">
                                 @for (int i = 1; i < 10; i++)
@@ -77,13 +87,13 @@
 
                         <!-- <div class="first-row-line"></div>
 
-                        <div class="first-row-info">
-                            <label class="text info-text">Tickets Type</label>
-                            <select class="control info-select" id="cbbTypeOfTickets">
-                                <option value="2">Suspicious</option>
-                                <option value="3">All</option>
-                            </select>
-                        </div> -->
+    <div class="first-row-info">
+        <label class="text info-text">Tickets Type</label>
+        <select class="control info-select" id="cbbTypeOfTickets">
+            <option value="2">Suspicious</option>
+            <option value="3">All</option>
+        </select>
+    </div> -->
 
                         <div class="first-row-line"></div>
 
@@ -100,9 +110,9 @@
                         <div class="first-row-info">
                             <label class="text info-text">Transtime</label>
                             <div class="control info-input">
-                                <input class="transtime-input" placeholder="dd/mm/yy hh:mm:ss" id="inputTranstimeFrom"/>
+                                <input class="transtime-input" placeholder="dd/mm/yy hh:mm:ss" id="inputTranstimeFrom" />
                                 <label>-</label>
-                                <input class="transtime-input" placeholder="dd/mm/yy hh:mm:ss" id="inputTranstimeTo"/>
+                                <input class="transtime-input" placeholder="dd/mm/yy hh:mm:ss" id="inputTranstimeTo" />
                                 <span class="transtime-icon icon-clear icon-icon-clear" id="iconTranstimeClear"></span>
                                 <span class="icon-icon-transtime-submit transtime-icon transtime-icon-submit" id="iconTranstimeSubmit"><span class="path1"></span><span class="path2"></span></span>
                             </div>
