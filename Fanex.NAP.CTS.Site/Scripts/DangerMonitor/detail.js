@@ -180,9 +180,13 @@ function DangerousSettingDetail() {
 
     //#region Initial Grid
     function InitialDetailGird(element) {
+        let isColumnVisible =
+            domElements.sportType == SportTypeConst.Badminton ||
+            domElements.sportType == SportTypeConst.Volleyball ||
+            domElements.sportType == SportTypeConst.Tennis;
+
         element.DataTable({
-            serverSide: false,
-            // dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
+            serverSide: false,          
             dom: '',
             pagingType: "full_numbers",
             language: {
@@ -214,23 +218,22 @@ function DangerousSettingDetail() {
                     }
                 },
                 { targets: [1], width: "17%" },
-                { targets: [2], width: "4%" },
-                // { targets: [3], width: "4%" },
+                { targets: [2], width: "4%" },               
                 { targets: [3], width: "10%", className: "text-center col-dgr" },
-                { targets: [4], width: "5%" },
-                { targets: [5], width: "5%", className: "text-center col-betid" },
-                { targets: [6], width: "5%" },
-                { targets: [7], width: "5%", className: "text-right col-amt" },
-                { targets: [8], width: "4%" },
-                { targets: [9], width: "5%", className: "text-center col-score" },
-                { targets: [10], width: "13%", className: "text-center col-transtime" },
-                { targets: [11], width: "3%" },
-                { targets: [12], width: "5%" },
-                { targets: [13], width: "5%", className: "text-center" },
-                { targets: [14], width: "7%", className: "text-center col-reason" },
-                // { targets: [15], width: "3%" },
-                { targets: [15], visible: false },
-                { targets: [16], visible: false }
+                { targets: [4], width: "5%", className: "text-center col-game", visible: isColumnVisible }, // Game or Set
+                { targets: [5], width: "5%" },
+                { targets: [6], width: "5%", className: "text-center col-betid" },
+                { targets: [7], width: "5%" },
+                { targets: [8], width: "5%", className: "text-right col-amt" },
+                { targets: [9], width: "4%" },
+                { targets: [10], width: "5%", className: "text-center col-score" },
+                { targets: [11], width: "13%", className: "text-center col-transtime" },
+                { targets: [12], width: "3%" },
+                { targets: [13], width: "5%" },
+                { targets: [14], width: "5%", className: "text-center" },
+                { targets: [15], width: "7%", className: "text-center col-reason" },              
+                { targets: [16], visible: false },
+                { targets: [17], visible: false }
             ],
             columns: [
                 {
@@ -248,9 +251,13 @@ function DangerousSettingDetail() {
                         return `<a class='click-view-name ${classColRed}' href=${url}>${obj.Username}</a>`;
                     }
                 },
-                { data: obj => obj.CustomerClassToString },
-                // { data: obj => RenderBotIcon(obj.RobotType, obj.IsRobot) },
+                { data: obj => obj.CustomerClassToString },               
                 { data: obj => obj.DangerToString },
+                {
+                    data: obj => () => {
+                        return obj.BetIDFromDB > 0 ? obj.BetIDFromDB % 10 : "-"
+                    }
+                },
                 { data: obj => obj.Odds },
                 {
                     data: obj => {
@@ -760,6 +767,14 @@ function DangerousSettingDetail() {
     }
 
     function SetupDoubleDataTable() {
+        let sportLabelMap = {
+            [SportTypeConst.Tennis]: 'Set',
+            [SportTypeConst.Volleyball]: 'Set',
+            [SportTypeConst.Badminton]: 'Game',
+        };
+
+        let gameOrSetText = sportLabelMap[domElements.sportType] || 'Game';
+
         $("#tbrMMHomeTeam").html(`
                                 <table id="tblMMHomeTeam" class="table table-striped table-monitor-detail">
                                 <thead>
@@ -768,6 +783,7 @@ function DangerousSettingDetail() {
                                         <th>Username</th>
                                         <th>CC</th>
                                         <th>Dgr</th>
+                                        <th>${gameOrSetText}</th>
                                         <th>Odds</th>
                                         <th>
                                             <div class="type-outer">
@@ -809,6 +825,7 @@ function DangerousSettingDetail() {
                                         <th>Username</th>
                                         <th>CC</th>
                                         <th>Dgr</th>
+                                        <th>${gameOrSetText}</th>
                                         <th>Odds</th>
                                         <th>
                                             <div class="type-outer">
@@ -2549,6 +2566,21 @@ function DangerousSettingDetail() {
         }
     }
 
+    function ToggleGameX() {
+        let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
+
+        if ((domElements.sportType == SportTypeConst.Badminton || domElements.sportType == SportTypeConst.Volleyball || domElements.sportType == SportTypeConst.Tennis)
+            && betidpattern && betidpattern.includes('X')) {
+            domElements.cbbGame.parent().show();
+            domElements.cbbMapX.parent().hide();
+            domElements.cbbMapYY.parent().hide();
+        } else {
+            domElements.cbbGame.parent().hide();
+            domElements.cbbMapX.parent().show();
+            domElements.cbbMapYY.parent().show();
+        }
+    }
+
     //#endregion Event Toggle
 
     //#region TranstimeFilter
@@ -2746,6 +2778,7 @@ function DangerousSettingDetail() {
         }
 
         ToggleMapXYY(false);
+        ToggleGameX();
 
         domElements.cbbMarket.val(domElements.liveIndicator);
 
@@ -2756,6 +2789,7 @@ function DangerousSettingDetail() {
         domElements.cbbBetType.change(function () {
             ResetTranstime();
             ToggleMapXYY(true);
+            ToggleGameX();
 
             OnchangeFilter();
         });
@@ -2763,6 +2797,17 @@ function DangerousSettingDetail() {
             OnchangeFilter();
         });
         domElements.cbbMapYY.change(function () {
+            OnchangeFilter();
+        });
+        domElements.cbbGame.change(function () {
+            let pattern = GetAttributeBetTypeSelected('data-betidpattern'); // eg: '80X'
+            let selected = domElements.cbbGame.val(); // eg: [1]
+
+            if (pattern && selected && selected.length > 0) {
+                let gameValue = selected[0];
+                domElements.betIDToString = pattern.replace('X', gameValue);
+            }
+
             OnchangeFilter();
         });
         domElements.cbbMatchScore.change(function () { ScoreOnChange(); });

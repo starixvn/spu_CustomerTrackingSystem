@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 

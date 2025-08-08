@@ -14,7 +14,7 @@
 		<Setting Key="CTS_DC_Common_ValidateUsername" SpName="CTS_DC_Common_ValidateUsername" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_Common_GetSites" SpName="CTS_DC_Common_GetSites" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_Common_CustomerClass_Get" SpName="CTS_DC_Common_CustomerClass_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_Common_BettypeSetting_Get" SpName="CTS_DC_Common_BettypeSetting_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_Common_BettypeSetting_Get" SpName="CTS_DC_Common_BettypeSetting_Get_xtest" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_Common_GetStaticList" SpName="CTS_DC_Common_GetStaticList" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
 	</Function>
 

@@ -150,7 +150,7 @@
         private IEnumerable<GetDangerMonitorItemViewModel> MappingDangerMonitorWithSportBettype(IEnumerable<DangerMMTicketInfoModel> dangerMonitors)
         {
             var sportBettypes = GetBettypesFromCache();
-
+          
             return dangerMonitors.Join(sportBettypes,
                                         item => $"{item.SportType}_{item.Bettype}_{item.BetID}",
                                         sportBettype => $"{sportBettype.SportType}_{sportBettype.BetTypeID}_{sportBettype.BetID}",
@@ -189,7 +189,7 @@
                 LeagueGroupList = filter.LeagueGroupList,
                 TotalAmount = filter.TotalAmount,
                 UserAmount = filter.UserAmount
-            };
+            };           
 
             var result = _repository.Fetch<DangerMMTicketInfoEntity>(criteria);
 
