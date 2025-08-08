@@ -205,6 +205,7 @@ function AIInsights() {
         $.ajax(common.modifyRelativeUrl('AIInsights/AnalyzeFile'), {
             type: 'POST',       
             beforeSend: function () {       
+                SkipReCheckin();
                 common.showLoading();                
                 domElements.btnGenerate.prop('disabled', true);
             },
@@ -226,10 +227,12 @@ function AIInsights() {
             },
             complete: function () {
                 common.closeLoading();
+                EnableReCheckin();
             },
             error: function (errMsg) {  
                 common.closeLoading();
                 domElements.btnGenerate.prop('disabled', false);
+                EnableReCheckin();
             }
         });
     }
@@ -446,6 +449,9 @@ function AIInsights() {
             data: {
                 question: message
             },
+            beforeSend: function () {       
+                SkipReCheckin();
+            },
             success: function (response) {
                 stopLoading();
                 $loadingMessage.remove(); 
@@ -464,6 +470,9 @@ function AIInsights() {
 
                 RenderVisualizationChart(response.chart_infos);
             },
+            complete: function () {
+                EnableReCheckin();
+            },
             error: function (xhr, status, error) {
                 stopLoading();
                 $loadingMessage.remove(); 
@@ -476,6 +485,7 @@ function AIInsights() {
                 `);
                 $chatMessages.append($errorMessage);
                 ScrollToBottomChat();
+                EnableReCheckin();
             }
         });
     }

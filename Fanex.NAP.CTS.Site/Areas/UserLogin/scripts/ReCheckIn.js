@@ -1,7 +1,20 @@
 /*exported ReCheckin*/
 "use strict";
+var isSkipReCheckin = false;
+
+function SkipReCheckin() {
+    isSkipReCheckin = true;
+}
+
+function EnableReCheckin() {
+    isSkipReCheckin = false;
+}
 
 function ReCheckin() {
+    if (isSkipReCheckin) {
+        return;
+    }
+
     var urlRecheck = common.modifyRelativeUrl("UserLogin/Login/ReCheckLogin");
     var urlLogout = common.modifyRelativeUrl("UserLogin/Login/LogOut");
 
