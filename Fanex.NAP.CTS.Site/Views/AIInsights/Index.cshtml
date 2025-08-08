@@ -20,7 +20,7 @@
                         @using (Html.BeginForm("UploadFile", "AIInsights", FormMethod.Post, new { enctype = "multipart/form-data", id = "fileUploadForm" }))
                         {
                             <div class="file-wrapper">
-                                <label>File</label>
+                                <label class="file-title">File</label>
 
                                 <div class="file-name-container">
                                     <span id="file-name-label" class="file-name-label" title="">@((ViewBag.FileName ?? "No file uploaded"))</span>

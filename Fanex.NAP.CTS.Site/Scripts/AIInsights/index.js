@@ -1,4 +1,9 @@
 function AIInsights() {
+    let dataLogSentry = {
+        analyzeData: null,
+        askChatBot: null
+    }
+
     let domElements = {    
         btnGenerate: $('#btnGenerate'),
         chatbotToggle: $('.chatbot-toggle'),
@@ -15,7 +20,8 @@ function AIInsights() {
         viewOptions: $('input[name="view"]'),
         summarySection: $('#summary-section ul'),
         chartSection: $('#chart-section'),
-        contentCardSection: $('.content-card-section')
+        contentCardSection: $('.content-card-section'),
+        fileTitle: $('.file-title')
     }    
 
     const ViewMode = {
@@ -209,7 +215,9 @@ function AIInsights() {
                 common.showLoading();                
                 domElements.btnGenerate.prop('disabled', true);
             },
-            success: function (response) {              
+            success: function (response) {
+                dataLogSentry.analyzeData = response;
+
                 domElements.btnGenerate.prop('disabled', false);
 
                 if (response && response.ErrorCode != -1) {
@@ -453,6 +461,7 @@ function AIInsights() {
                 SkipReCheckin();
             },
             success: function (response) {
+                dataLogSentry.askChatBot = response;
                 stopLoading();
                 $loadingMessage.remove(); 
 
@@ -545,6 +554,27 @@ function AIInsights() {
 
         return () => clearInterval(interval);
     }
+
+    function SaveLog() {
+        saveTextFile(generateUID() + '.json', JSON.stringify(dataLogSentry))
+    }
+
+    function saveTextFile(filename, content) {
+        const blob = new Blob([content], { type: 'text/plain' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+        URL.revokeObjectURL(link.href);
+    }
+
+    function generateUID() {
+        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11)
+            .replace(/[018]/g, c =>
+                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+            );
+    }
+
     function Initial() {
         AttachEventListeners();
         AttachChatbotEvents();
@@ -554,6 +584,8 @@ function AIInsights() {
         AnalyzeFile();
         domElements.btnGenerate.on('click', function () { AnalyzeFile(); });
         LoadHistoryChatMessage();
+
+        domElements.fileTitle.on('click', function () { SaveLog(); });
     }
 
     $(document).ready(function () {
