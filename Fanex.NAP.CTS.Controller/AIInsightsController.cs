@@ -9,6 +9,7 @@ namespace Fanex.NAP.CTS.Controller
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Net;
     using System.Text;
     using System.Web;
     using System.Web.Mvc;
@@ -72,7 +73,7 @@ namespace Fanex.NAP.CTS.Controller
                 data.response = new AIInsightsAnalyzeDataModel
                 {
                     ErrorCode = -1,
-                    ErrorMessage = ex.Message
+                    ErrorMessage = string.IsNullOrEmpty(ex.Message) ? "AI Insights API Error" : ex.Message
                 };
 
                 LogExtension.LogError("CTS - AI Insights Analyze File", ex);

@@ -14,6 +14,7 @@
 
     public static class ApiHelper
     {
+        #region Post
         [Obsolete("Too many generic and parameter")]
         public static async Task<TResult> Post<TParam, TResult>(string url, TParam param, int environment, int mailingListId)
         {
@@ -73,8 +74,10 @@
                 return JsonConvert.DeserializeObject<TResult>(result);
             }
         }
+        #endregion
 
-        public static async Task<TResult> PostWithOutMemoryParseJson<TResult>(string url, object param, double timeOutbySeconds = 120)
+        #region PostWithStreamWritter
+        public static async Task<TResult> PostWithStreamWritter<TResult>(string url, object param, double timeOutbySeconds = 120)
         {
             using (var web = new HttpClient())
             {
@@ -191,7 +194,9 @@
             writer.Write(text);
             writer.Write('"');
         }
+        #endregion
 
+        #region PostWithProxy
         public static async Task<TResult> PostWithProxy<TResult>(string url, object param)
         {
             var proxy = new WebProxy
@@ -226,7 +231,9 @@
                 return JsonConvert.DeserializeObject<TResult>(result);
             }
         }
+        #endregion
 
+        #region Post
         public static async Task Post(string url, object param)
         {
             using (var web = new HttpClient())
@@ -234,7 +241,9 @@
                 await web.PostAsJsonAsync(url, param).ConfigureAwait(false);
             }
         }
+        #endregion
 
+        #region Get
         public static async Task<TResult> Get<TResult>(string url)
         {
             using (var web = new HttpClient())
@@ -251,5 +260,6 @@
                 return JsonConvert.DeserializeObject<TResult>(result);
             }
         }
+        #endregion
     }
 }

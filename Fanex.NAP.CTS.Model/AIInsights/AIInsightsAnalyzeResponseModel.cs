@@ -1,13 +1,13 @@
 ﻿namespace Fanex.NAP.CTS.Model.AIInsights
-{   
-    public class AIInsightsAnalyzeResponseModel
+{
+    public class AIInsightsAnalyzeResponseModel : AIInsightResponseModel
     {
         public AIInsightsAnalyzeResponseModel()
         {
             response = new AIInsightsAnalyzeDataModel();
         }
 
-        public AIInsightsAnalyzeDataModel response { get; set; }      
+        public AIInsightsAnalyzeDataModel response { get; set; }
 
     }
 }

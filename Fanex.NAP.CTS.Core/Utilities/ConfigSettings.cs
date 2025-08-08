@@ -208,5 +208,25 @@
                 return rs == "1";
             }
         }
+
+        public static int AIAnalyzeRequestTimeout
+        {
+            get
+            {
+                var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIAnalyzeRequestTimeout"];
+                var timeout = int.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 300;
+                return timeout;
+            }
+        }
+
+        public static int ChatbotRequestTimeout
+        {
+            get
+            {
+                var chatbotRequestTimeout = ConfigurationManager.AppSettings["ChatbotRequestTimeout"];
+                var timeout = int.TryParse(chatbotRequestTimeout, out var parsed) ? parsed : 300;
+                return timeout;
+            }
+        }
     }
 }
