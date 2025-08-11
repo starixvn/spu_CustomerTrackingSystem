@@ -629,5 +629,12 @@ namespace Fanex.NAP.CTS.Resource.Consts
             Ori = 1,
             ABI = 2
         };
+
+        public static List<int> ConditionUseSetExportExcel = new List<int>
+        {
+            (int) MatchMonitorSportType.Badminton,
+            (int) MatchMonitorSportType.Volleyball,
+            (int) MatchMonitorSportType.Tennis
+        };        
     }
 }

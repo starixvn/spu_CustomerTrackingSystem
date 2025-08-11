@@ -34,6 +34,8 @@
 
         private const string MMDetailDoubleGridTemplate = "~/App_Data/Excel Template/DangerMonitor/DoubleGridTemplate.xlsx";
         private const string MMDetailSingleGridTemplate = "~/App_Data/Excel Template/DangerMonitor/SingleGridTemplate.xlsx";
+        private const string MMDetailBadmintonDoubleGridTemplate = "~/App_Data/Excel Template/DangerMonitor/BadmintonDoubleGridTemplate.xlsx";
+        private const string MMDetailVolleyballDoubleGridTemplate = "~/App_Data/Excel Template/DangerMonitor/VolleyballDoubleGridTemplate.xlsx";
 
         public override string BaseControllerName { get => Consts.MenuItemMonitor; }
 
@@ -280,12 +282,13 @@
 
             var matchInfo = serializer.Deserialize<ExExlMatchInfoViewModel>(from["match"]);
             var isDisplaySingleGrid = from["isDisplaySingleGrid"];
+            int.TryParse(from["sportType"], out int sportType);
 
             if (!string.IsNullOrEmpty(isDisplaySingleGrid) && isDisplaySingleGrid.ToLower() == "true")
             {
                 var items = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["items"]);
-
-                var templatePath = Server.MapPath(MMDetailSingleGridTemplate);
+              
+                var templatePath = GetExcelTemplatePath(true, sportType);
 
                 var fileName = string.Format("DangerMM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr);
 
@@ -297,11 +300,12 @@
             {
                 var homeMItems = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["homes"]);
                 var awayMItems = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["aways"]);
-                var templatePath = Server.MapPath(MMDetailDoubleGridTemplate);
+                
+                var templatePath = GetExcelTemplatePath(false, sportType);
 
                 var fileName = string.Format("DangerMM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr);
 
-                var excelFile = _dangerMonitorService.ExportExcelMMDetailDG(homeMItems, awayMItems, fileName, templatePath);
+                var excelFile = _dangerMonitorService.ExportExcelMMDetailDG(homeMItems, awayMItems, fileName, templatePath, sportType);
 
                 return File(excelFile, "application/vnd.ms-excel", fileName);
             }
@@ -387,6 +391,26 @@
             }
 
             return result;
+        }
+        
+        private string GetExcelTemplatePath(bool isDisplaySingleGrid, int sportType)
+        {
+            var templatePath = string.Empty;
+
+            switch (isDisplaySingleGrid)
+            {
+                case true:
+                    templatePath = MMDetailSingleGridTemplate; break;
+                case false when (sportType == (int)MatchMonitorSportType.Badminton):
+                    templatePath = MMDetailBadmintonDoubleGridTemplate; break;
+                case false when (sportType == (int)MatchMonitorSportType.Volleyball):
+                case false when (sportType == (int)MatchMonitorSportType.Tennis):
+                    templatePath = MMDetailVolleyballDoubleGridTemplate; break;
+                case false:
+                    templatePath = MMDetailDoubleGridTemplate; break;
+            }
+
+            return Server.MapPath(templatePath);
         }
         #endregion
     }

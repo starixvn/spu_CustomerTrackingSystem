@@ -1046,10 +1046,31 @@ function DangerousSettingDetail() {
         return $("option:selected", domElements.cbbBetType).attr(attribute);
     }
 
+    //function GetBetIDSelected() {
+    //    let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
+
+    //    if (domElements.sportType != 2 && betidpattern.includes('X')) {
+    //        let betIDString = "80" + domElements.cbbMapX.val();
+
+    //        if (betidpattern.includes('YY')) {
+    //            betIDString += ("0" + domElements.cbbMapYY.val()).slice(-2);
+    //        }
+    //        return betIDString;
+
+    //    } else if (domElements.sportType == 2) {
+    //        return $("option:selected", domElements.cbbBetType).attr('data-betid');
+    //    } else if ((domElements.sportType == SportTypeConst.Badminton || domElements.sportType == SportTypeConst.Volleyball || domElements.sportType == SportTypeConst.Tennis) && betidpattern.includes('X') && domElements.cbbGame.val()) {
+    //        return domElements.cbbGame.val().map(it => betidpattern.replace('X', it)).toString();
+    //    }
+    //    else {
+    //        return domElements.betIDToString;
+    //    }
+    //}
+
     function GetBetIDSelected() {
         let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
 
-        if (domElements.sportType != 2 && betidpattern.includes('X')) {
+        if (![SportTypeConst.Basketball, SportTypeConst.Badminton, SportTypeConst.Volleyball, SportTypeConst.Tennis].includes(domElements.sportType) && betidpattern.includes('X')) {
             let betIDString = "80" + domElements.cbbMapX.val();
 
             if (betidpattern.includes('YY')) {
@@ -1057,11 +1078,13 @@ function DangerousSettingDetail() {
             }
             return betIDString;
 
-        } else if (domElements.sportType == 2) {
+        } else if (domElements.sportType == SportTypeConst.Basketball) {
             return $("option:selected", domElements.cbbBetType).attr('data-betid');
-        } else {
-            return domElements.betIDToString;
+        } else if ((domElements.sportType == SportTypeConst.Badminton || domElements.sportType == SportTypeConst.Volleyball || domElements.sportType == SportTypeConst.Tennis) && betidpattern.includes('X') && domElements.cbbGame.val()) {
+            return domElements.cbbGame.val().map(it => betidpattern.replace('X', it)).toString();
         }
+
+        return 0; //default
     }
 
     function IsFilterSuspicious(params) {
@@ -1894,6 +1917,7 @@ function DangerousSettingDetail() {
     function ExportToExcel() {
         if (IsValidExportExcel()) {
             let mmDetails = {
+                sportType: domElements.sportType,
                 isDisplaySingleGrid: isDisplaySingleGrid,
                 matchInfo: GetDataMatchInfo(),
                 homeMItems: isDisplaySingleGrid ? null : GetDataSelectedInGrid(domElements.tblMMHomeTeam.DataTable()),
@@ -1903,6 +1927,7 @@ function DangerousSettingDetail() {
             let url = common.modifyRelativeUrl('DangerMonitor/ExportToExcelMMDetail');
 
             $('body').append('<form action="' + url + '" method="post" target="output_frame" id="postToIframe"></form>');
+            $('#postToIframe').append('<input type="hidden" asp-for="sportTypef" name=sportType value="' + mmDetails.sportType + '">');
             $('#postToIframe').append('<input type="hidden" asp-for="isDisplaySingleGridf" name=isDisplaySingleGrid value="' + mmDetails.isDisplaySingleGrid + '" />');
             $('#postToIframe').append('<input type="hidden" asp-for="matchf" name=match value="' + mmDetails.matchInfo + '" />');
             $('#postToIframe').append('<input type="hidden" asp-for="homef" name=homes value="[' + mmDetails.homeMItems + ']" />');
@@ -1971,6 +1996,7 @@ function DangerousSettingDetail() {
                     datas += `,&quot;CustomerClass&quot;:&quot;${data.CustomerClass}&quot;`;
                     datas += `,&quot;IsRobot&quot;:&quot;${data.IsRobot}&quot;`;
                     datas += `,&quot;DangerToString&quot;:&quot;${data.DangerToString}&quot;`;
+                    datas += `,&quot;BetIDFromDB&quot;:&quot;${data.BetIDFromDB}&quot;`;
                     datas += `,&quot;Odds&quot;:&quot;${data.Odds}&quot;`;
                     datas += `,&quot;BetID&quot;:&quot;${data.BetID}&quot;`;
                     datas += `,&quot;BetTeam&quot;:&quot;${data.BetTeam}&quot;`;
