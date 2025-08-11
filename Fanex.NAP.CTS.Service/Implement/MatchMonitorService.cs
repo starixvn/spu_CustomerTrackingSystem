@@ -663,6 +663,17 @@
             }
         }
 
+        private static readonly HashSet<int> SportsWithBetIdPattern = new HashSet<int>
+        {
+            (int)MatchMonitorSportType.Badminton,
+            (int)MatchMonitorSportType.Volleyball,
+            (int)MatchMonitorSportType.Tennis,
+            (int)MatchMonitorSportType.Cricket
+        };
+
+        private static bool IsSportWithBetIdPattern(int sportType) =>
+            SportsWithBetIdPattern.Contains(sportType);
+
         public byte[] ExportExcelMMDetailDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems
             , string fileName, string templatePath, bool isViewParlay, int sportType)
         {
@@ -675,7 +686,7 @@
                     FillRowDataParlayDG(homeMItems, awayMItems, ref writer);
                     writer.SyncColumnsWidth(37);
                     break;
-                case false when(sportType == (int)MatchMonitorSportType.Badminton || sportType == (int)MatchMonitorSportType.Volleyball || sportType == (int)MatchMonitorSportType.Tennis):
+                case false when IsSportWithBetIdPattern(sportType):
                     FillRowDataBadmintonDG(homeMItems, awayMItems, ref writer);
                     writer.SyncColumnsWidth(39);
                     break;
@@ -1343,38 +1354,40 @@
             };
         }
 
-        private string CreateBetTypeInfoJson(MMDetailInfoViewModel para, bool isSupportGetFilter)
-        {
-            if (para.Sport == (int)MatchMonitorSportType.Cricket)
-            {
-                return JsonConvert.SerializeObject(new List<MatchBetTypeSettingModel>()
-                {
-                    new  MatchBetTypeSettingModel
-                    {
-                        SportTypeID = para.Sport,
-                        BetTypeID = para.BetTypeID,
-                        BetChoiceType = para.BetChoiceType,
-                        BetChoiceHome = para.BetChoiceHome,
-                        BetChoiceAway = para.BetChoiceAway,
-                        BetID = null,
-                        BetChoiceHomeFullName = isSupportGetFilter ? null : para.BetChoiceHomeFullName,
-                        BetChoiceAwayFullName = isSupportGetFilter ? null : para.BetChoiceAwayFullName
-                    }});
-            }
+        private static bool IsCricketBetTypeWithoutBetIdPattern(MMDetailInfoViewModel para) =>
+            Consts.IsCricketBetTypeWithoutBetIdPattern(para.Sport, para.BetTypeID);
 
-            var betTypeInfos = para.BetID?.Split(',').Select(x => new MatchBetTypeSettingModel
+        private MatchBetTypeSettingModel CreateBetTypeSettingModel(MMDetailInfoViewModel para, long? betId, bool isSupportGetFilter)
+        {
+            return new MatchBetTypeSettingModel
             {
                 SportTypeID = para.Sport,
                 BetTypeID = para.BetTypeID,
                 BetChoiceType = para.BetChoiceType,
                 BetChoiceHome = para.BetChoiceHome,
                 BetChoiceAway = para.BetChoiceAway,
-                BetID = long.Parse(x),
+                BetID = betId,
                 BetChoiceHomeFullName = isSupportGetFilter ? null : para.BetChoiceHomeFullName,
                 BetChoiceAwayFullName = isSupportGetFilter ? null : para.BetChoiceAwayFullName
-            }).ToList();
+            };
+        }
 
-            return betTypeInfos != null ? JsonConvert.SerializeObject(betTypeInfos) : "[]";
+        private string CreateBetTypeInfoJson(MMDetailInfoViewModel para, bool isSupportGetFilter)
+        {
+            if (IsCricketBetTypeWithoutBetIdPattern(para))
+            {
+                return JsonConvert.SerializeObject(new[]
+                {
+                    CreateBetTypeSettingModel(para, null, isSupportGetFilter)
+                });
+            }
+
+            var betTypeSettings = para.BetID?
+                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(idStr => CreateBetTypeSettingModel(para, long.Parse(idStr.Trim()), isSupportGetFilter))
+                .ToList();
+
+            return JsonConvert.SerializeObject(betTypeSettings ?? Enumerable.Empty<MatchBetTypeSettingModel>());
         }
         #endregion
 

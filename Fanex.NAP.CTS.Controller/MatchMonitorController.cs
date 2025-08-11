@@ -437,7 +437,11 @@
                 ViewBag.BetTypeID = para?.BetTypeID;
                 ViewBag.BettypeName = para?.BettypeName ?? string.Empty;
                 ViewBag.BetIDToString = para?.BetID.ToString();
-                ViewBag.BetTypeSettings = GetBetTypeSettingsWithSupportSuspicious(para.SportType.ToString(), false, false, para.SportType != (int)MatchMonitorSportType.Volleyball && para.SportType != (int)MatchMonitorSportType.Tennis);
+                ViewBag.BetTypeSettings = GetBetTypeSettingsWithSupportSuspicious(
+                    para.SportType.ToString(),
+                    false,
+                    false,
+                    IsShowDetailsXForSport(para.SportType));
                 ViewBag.MapX = para?.MX;
                 ViewBag.MapYY = para?.MY;
                 ViewBag.HomeName = para?.HomeName.ToUpper() ?? string.Empty;
@@ -655,6 +659,40 @@
             allFilterResult.IsDisplaySingleGrid = para.BetChoiceType == 1;
 
             return allFilterResult;
+        }
+
+        [HttpPost]
+        public ActionResult GetBetTypeGameValues(int sportType, int betTypeId, string betIdPattern)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(betIdPattern) || !betIdPattern.Contains("X"))
+                    return Json(new { data = Enumerable.Empty<int>() }, JsonRequestBehavior.AllowGet);
+
+                List<int> values = new List<int>();
+
+                if (sportType == (int)MatchMonitorSportType.Cricket)
+                {
+                    values = GetCricketBetTypeXValues(betTypeId);
+                    if (values == null || values.Count == 0)
+                        values = Enumerable.Range(1, 50).ToList();
+                }
+                else if (sportType == (int)MatchMonitorSportType.Tennis ||
+                         sportType == (int)MatchMonitorSportType.Volleyball)
+                {
+                    values = Enumerable.Range(1, 5).ToList();
+                }
+                else
+                {
+                    values = new List<int>();
+                }
+
+                return Json(new { data = values }, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(new { data = Enumerable.Empty<int>() }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         #endregion Detail Filter
