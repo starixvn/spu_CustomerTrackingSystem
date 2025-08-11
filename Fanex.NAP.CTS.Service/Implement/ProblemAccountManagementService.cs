@@ -52,7 +52,7 @@
         {
             var criteria = new GetProblemAccountCategoryCriteria() { QueryType = (int)queryType };
 
-            return _repository.Fetch<ProblemAccountCategoryModel>(criteria);
+            return _repository.FetchWithLogFanexAPI<ProblemAccountCategoryModel>(criteria, nameof(GetProblemAccountCategories));
         }
 
         public int GetVvipCategoryID(ROLE_CUSTOMER roleID)

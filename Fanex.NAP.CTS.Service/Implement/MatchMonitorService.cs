@@ -53,7 +53,7 @@
                 Event = filter.Event
             };
 
-            return _repository.Fetch<MatchFromMainInfoModel>(criteria);
+            return _repository.FetchWithLogFanexAPI<MatchFromMainInfoModel>(criteria, nameof(GetMatchFromMainInfos));
         }
 
         public IEnumerable<GetMatchMonitorModel> GetMatchMonitor(MatchMonitorSearchViewModel filter, string matchInfoFromMainJson)
@@ -70,7 +70,7 @@
                 MatchInfosJson = matchInfoFromMainJson
             };
 
-            var result = _repository.Fetch<GetMatchMonitorEntity>(criteria);
+            var result = _repository.FetchWithLogFanexAPI<GetMatchMonitorEntity>(criteria, nameof(GetMatchMonitor));
 
             return result?.Select(x => new GetMatchMonitorModel(x)) ?? Enumerable.Empty<GetMatchMonitorModel>();
         }
@@ -82,7 +82,7 @@
                 FraudTickets = JsonConvert.SerializeObject(mmModels)
             };
 
-            var result = _repository.Fetch<MMFraudTicketsSummaryEntity>(criteria);
+            var result = _repository.FetchWithLogFanexAPI<MMFraudTicketsSummaryEntity>(criteria, nameof(GetMMFraudTicketsSummary));
 
             return result?.Select(x => new MMFraudTicketsSummaryViewModel(x)) ?? Enumerable.Empty<MMFraudTicketsSummaryViewModel>();
         }
@@ -117,7 +117,7 @@
 
 
             (var custs, var matchDetails, var verifiedTrans) =
-                _repository.Fetch<MMDetailCustModel, MatchMonitorDetailModel, MatchMonitorDetailVerifyTransResultModel>(criteria);
+                _repository.FetchWithLogFanexAPI<MMDetailCustModel, MatchMonitorDetailModel, MatchMonitorDetailVerifyTransResultModel>(criteria, nameof(GetMatchMonitorDetail));
 
             return new MMDetailResultModel
             {
@@ -145,7 +145,7 @@
                 CustIDs = custIDs
             };
 
-            return _repository.Fetch<CustInfoModel>(criteria);
+            return _repository.FetchWithLogFanexAPI<CustInfoModel>(criteria, nameof(GetCustInfoByCustID));
         }
 
         public IEnumerable<BetTypeSettingModel> GetBetTypeSettings(BetTypeSettingParaModel infos)
@@ -603,7 +603,7 @@
                 TransList = transList
             };
 
-            return _repository.Fetch<MMDetailMergeGroupModel>(criteria);
+            return _repository.FetchWithLogFanexAPI<MMDetailMergeGroupModel>(criteria, nameof(GetMMDetailMergeGroup));
         }
 
         public IEnumerable<RobotStatusModel> GetRobotStatus(string transJson)
@@ -1256,7 +1256,7 @@
                 FraudTickets = JsonConvert.SerializeObject(mmModels)
             };
 
-            var result = _repository.Fetch<MMFraudTicketsSummaryEntity>(criteria);
+            var result = _repository.FetchWithLogFanexAPI<MMFraudTicketsSummaryEntity>(criteria, nameof(GetMMParlayFraudTicketsSummary));
 
             return result?.Select(x => new MMFraudTicketsSummaryViewModel(x)) ?? Enumerable.Empty<MMFraudTicketsSummaryViewModel>();
         }
@@ -1272,7 +1272,7 @@
             };
 
             (var custs, var matchDetails, var verifiedTrans) =
-                _repository.Fetch<MMDetailCustModel, MatchMonitorDetailModel, MatchMonitorDetailVerifyTransResultModel>(criteria);
+                _repository.FetchWithLogFanexAPI<MMDetailCustModel, MatchMonitorDetailModel, MatchMonitorDetailVerifyTransResultModel>(criteria, nameof(GetMatchMonitorParlayDetail));
 
             return new MMDetailResultModel
             {
@@ -1332,7 +1332,7 @@
                 criteria.ListMGroup = filter.MGroupList == null ? null : string.Join(",", filter.MGroupList).Replace('-', '0');
             }
 
-            var data = _repository.Fetch<TicketDetailEntity>(criteria);
+            var data = _repository.FetchWithLogFanexAPI<TicketDetailEntity>(criteria, nameof(GetSingleTicketDetail));
 
             return new TicketDetailViewModel
             {
@@ -1431,7 +1431,7 @@
                 criteria.ListMGroup = filter.MGroupList == null ? null : string.Join(",", filter.MGroupList).Replace('-', '0');
             }
 
-            var data = _repository.Fetch<TicketDetailEntity>(criteria);
+            var data = _repository.FetchWithLogFanexAPI<TicketDetailEntity>(criteria, nameof(GetParlayTicketDetail));
 
             return new TicketDetailViewModel
             {

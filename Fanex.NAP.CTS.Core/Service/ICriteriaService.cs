@@ -17,5 +17,14 @@
         (IEnumerable<TFirst> firstResultSet, IEnumerable<TSecond> secondResultSet, IEnumerable<TThird> thirdResultSet) Fetch<TFirst, TSecond, TThird>(ICriteria criteria);
 
         DBResult UpdateData(CommandBase criteria, string prefix);
+
+
+        #region LogFanexAPI
+        IEnumerable<T> FetchWithLogFanexAPI<T>(ICriteria criteria, string serviceName);
+
+        (IEnumerable<TFirst> firstResultSet, IEnumerable<TSecond> secondResultSet) FetchWithLogFanexAPI<TFirst, TSecond>(ICriteria criteria, string serviceName);
+
+        (IEnumerable<TFirst> firstResultSet, IEnumerable<TSecond> secondResultSet, IEnumerable<TThird> thirdResultSet) FetchWithLogFanexAPI<TFirst, TSecond, TThird>(ICriteria criteria, string serviceName);
+        #endregion
     }
 }

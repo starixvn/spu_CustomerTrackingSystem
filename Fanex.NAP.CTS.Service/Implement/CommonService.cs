@@ -64,7 +64,7 @@
 
             try
             {
-                return _repository.Fetch<ValidateUserNameModel>(criteria);
+                return _repository.FetchWithLogFanexAPI<ValidateUserNameModel>(criteria, nameof(ValidateUsernames));
             }
             catch (Exception ex)
             {
@@ -109,7 +109,7 @@
             var groupCCList = Enumerable.Empty<CCGroupModel>();
             var criteria = new GetCommonCustomerClassCriteria();
 
-            var data = _repository.Fetch<CommonCustomerClassModel>(criteria);
+            var data = _repository.FetchWithLogFanexAPI<CommonCustomerClassModel>(criteria, nameof(GetStaticLists));
 
             if (data != null && data.Any())
             {
@@ -147,7 +147,7 @@
                 IsStatusActive = isStatusActive
             };
 
-            var result = _repository.Fetch<StaticListEntity>(criteria);
+            var result = _repository.FetchWithLogFanexAPI<StaticListEntity>(criteria, nameof(GetStaticLists));
 
             return result?.Select(x => new StaticListModel(x)) ?? Enumerable.Empty<StaticListModel>();
         }
@@ -165,7 +165,7 @@
                 Status = infos.Status
             };
 
-            return _repository.Fetch<BetTypeSettingModel>(criteria);
+            return _repository.FetchWithLogFanexAPI<BetTypeSettingModel>(criteria, nameof(GetStaticLists));
         }
 
         public IEnumerable<SportBettypeViewModel> GetMainSportBettype(SportBettypeModel model)

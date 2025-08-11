@@ -58,6 +58,8 @@
 
         public static string AIInsightsChatBotUrl => GetConfigStringByName("AIInsightsChatBotUrl");
 
+        public static string LogDurationFanexAPIUrl => GetConfigStringByName("LogDurationFanexAPIUrl");
+
         public static int ImportEvidenceChunkSize
         {
             get
