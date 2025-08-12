@@ -74,12 +74,10 @@
 
         public static async Task<TResult> PostWithProxy<TResult>(string url, object param)
         {
-            //var proxy = new WebProxy
-            //{
-            //    Address = new Uri($"iusqd.gamora.prod:8801")
-            //};
-
-            var proxy = new WebProxy(ConfigSettings.Proxy);
+            var proxy = new WebProxy
+            {
+                Address = new Uri($"iusqd.gamora.prod:8801")
+            };
 
             var httpClientHandler = new HttpClientHandler
             {

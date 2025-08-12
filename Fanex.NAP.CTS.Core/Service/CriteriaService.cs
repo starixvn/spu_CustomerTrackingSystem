@@ -68,14 +68,14 @@
                 (IEnumerable<TFirst> firstResultSet, IEnumerable<TSecond> secondResultSet, IEnumerable<TThird> thirdResultSet) =
                 Fetch<TFirst, TSecond, TThird>(criteria);
                 var endTime = (DateTime.Now - startTime).TotalMilliseconds;
-                RunTaskLogDurationFanexAPI(HttpContext.Current.Request.RequestContext.RouteData, GetRequestId(), true, serviceName, (long)endTime);
+                RunTaskLogDurationFanexAPI(true, serviceName, (long)endTime);
 
                 return (firstResultSet, secondResultSet, thirdResultSet);
             }
             catch (Exception ex)
             {
                 var endTime = (DateTime.Now - startTime).TotalMilliseconds;
-                RunTaskLogDurationFanexAPI(HttpContext.Current.Request.RequestContext.RouteData, GetRequestId(), false, serviceName, (long)endTime);
+                RunTaskLogDurationFanexAPI(false, serviceName, (long)endTime);
 
                 throw ex;
             }
@@ -88,14 +88,14 @@
             {
                 (IEnumerable<TFirst> firstResultSet, IEnumerable<TSecond> secondResultSet) = Fetch<TFirst, TSecond>(criteria);
                 var endTime = (DateTime.Now - startTime).TotalMilliseconds;
-                RunTaskLogDurationFanexAPI(HttpContext.Current.Request.RequestContext.RouteData, GetRequestId(), true, serviceName, (long)endTime);
+                RunTaskLogDurationFanexAPI(true, serviceName, (long)endTime);
 
                 return (firstResultSet, secondResultSet);
             }
             catch (Exception ex)
             {
                 var endTime = (DateTime.Now - startTime).TotalMilliseconds;
-                RunTaskLogDurationFanexAPI(HttpContext.Current.Request.RequestContext.RouteData, GetRequestId(), false, serviceName, (long)endTime);
+                RunTaskLogDurationFanexAPI(false, serviceName, (long)endTime);
 
                 throw ex;
             }
@@ -108,14 +108,14 @@
             {
                 var result = Fetch<T>(criteria);
                 var endTime = (DateTime.Now - startTime).TotalMilliseconds;
-                RunTaskLogDurationFanexAPI(HttpContext.Current.Request.RequestContext.RouteData, GetRequestId(), true, serviceName, (long)endTime);
+                RunTaskLogDurationFanexAPI(true, serviceName, (long)endTime);
 
                 return result;
             }
             catch (Exception ex)
             {
                 var endTime = (DateTime.Now - startTime).TotalMilliseconds;
-                RunTaskLogDurationFanexAPI(HttpContext.Current.Request.RequestContext.RouteData, GetRequestId(), false, serviceName, (long)endTime);
+                RunTaskLogDurationFanexAPI(false, serviceName, (long)endTime);
 
                 throw ex;
             }
@@ -129,10 +129,13 @@
             return string.Format($"{controller}.{action}");
         }
 
-        private void RunTaskLogDurationFanexAPI(RouteData routeData, string requestId, bool isSuccess, string serviceName, long endTime)
+        private void RunTaskLogDurationFanexAPI(bool isSuccess, string serviceName, long endTime)
         {
-            _ = Task.Run(() =>
+            if (ConfigSettings.IsWriteLogInfo)
             {
+                var routeData = HttpContext.Current.Request.RequestContext.RouteData;
+                var requestId = GetRequestId();
+
                 try
                 {
                     var functionName = GetCallerControllerAndAction(routeData);
@@ -146,12 +149,11 @@
                         isSuccess = isSuccess
                     };
 
-                    var result = ConfigSettings.EnvironmentId > 1 ?
-                        ApiHelper.PostWithProxy<bool>(ConfigSettings.LogDurationFanexAPIUrl, parameters) :
-                        ApiHelper.Post<bool>(ConfigSettings.LogDurationFanexAPIUrl, parameters);
+                    var response = ApiHelper.Post<bool>(ConfigSettings.LogDurationFanexAPIUrl, parameters);
 
-                    var response = result.Result;
-                    if (!response)
+                    Task.WhenAll(response);
+
+                    if (!response.Result)
                     {
                         throw new Exception(JsonConvert.SerializeObject(parameters));
                     }
@@ -160,7 +162,7 @@
                 {
                     LogExtension.LogError("Log Duration FanexAPI failed: ", ex);
                 }
-            });
+            }
         }
 
         private const string Key = "RequestUniqueId";
