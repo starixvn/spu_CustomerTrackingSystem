@@ -146,7 +146,9 @@
                         isSuccess = isSuccess
                     };
 
-                    var result = ApiHelper.Post<bool>(ConfigSettings.LogDurationFanexAPIUrl, parameters);
+                    var result = ConfigSettings.EnvironmentId > 1 ?
+                        ApiHelper.PostWithProxy<bool>(ConfigSettings.LogDurationFanexAPIUrl, parameters) :
+                        ApiHelper.Post<bool>(ConfigSettings.LogDurationFanexAPIUrl, parameters);
 
                     var response = result.Result;
                     if (!response)

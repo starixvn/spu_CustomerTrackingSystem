@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Core.Helpers.Api
 {
+    using Fanex.NAP.CTS.Core.Utilities;
     using MailDelivery.Client;
     using Newtonsoft.Json;
     using System;
@@ -73,10 +74,12 @@
 
         public static async Task<TResult> PostWithProxy<TResult>(string url, object param)
         {
-            var proxy = new WebProxy
-            {
-                Address = new Uri($"http://10.3.252.100:8801")
-            };
+            //var proxy = new WebProxy
+            //{
+            //    Address = new Uri($"iusqd.gamora.prod:8801")
+            //};
+
+            var proxy = new WebProxy(ConfigSettings.Proxy);
 
             var httpClientHandler = new HttpClientHandler
             {

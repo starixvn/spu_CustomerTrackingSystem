@@ -1,5 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.Core.Utilities
-{    
+{
     using System.Configuration;
 
     public static class ConfigSettings
@@ -22,7 +22,7 @@
         {
             return ConfigurationManager.AppSettings[name];
         }
-  
+
         public static string StoredProcedurePath => GetConfigStringByName("StoredProcedurePath");
 
         public static string UpdateCategories => GetConfigStringByName("CTS_UpdateCategories");
@@ -41,7 +41,7 @@
 
         public static string MarkPAURL => GetConfigStringByName("MMDetail_MarkPAURL");
 
-        public static bool AIInsightsStoreFile 
+        public static bool AIInsightsStoreFile
         {
             get
             {
@@ -108,8 +108,21 @@
             }
         }
 
+        public static int EnvironmentId
+        {
+            get
+            {
+                var environment = 1;
+                var id = GetConfigStringByName("Environment");
+                int.TryParse(id, out environment);
+                return environment == 0 ? 1 : environment;
+            }
+        }
+
+        public static string Proxy => GetConfigStringByName("Proxy");
+
         public static string VoidRequestToTVSURL => GetConfigStringByName("VoidRequestToTVS-URL");
-        
+
         public static int VoidRequestToTVSSubIssueTypeId
         {
             get
@@ -122,7 +135,7 @@
                 return subIssueTypeId == 0 ? 27 : subIssueTypeId;
             }
         }
-            
+
         public static int VoidRequestToTVSActionId
         {
             get
