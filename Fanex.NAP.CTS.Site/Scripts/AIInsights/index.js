@@ -4,7 +4,7 @@ function AIInsights() {
         askChatBot: null
     }
 
-    let domElements = {    
+    let domElements = {
         btnGenerate: $('#btnGenerate'),
         chatbotToggle: $('.chatbot-toggle'),
         closeChatbot: $('.close-chatbot'),
@@ -22,7 +22,7 @@ function AIInsights() {
         chartSection: $('#chart-section'),
         contentCardSection: $('.content-card-section'),
         fileTitle: $('.file-title')
-    }    
+    }
 
     const ViewMode = {
         VISUALIZATION: "visualization",
@@ -55,14 +55,14 @@ function AIInsights() {
         return $wrapper;
     }
 
-    function ToggleSections(viewMode) {        
+    function ToggleSections(viewMode) {
         switch (viewMode) {
-            case ViewMode.VISUALIZATION:               
+            case ViewMode.VISUALIZATION:
                 domElements.divVisualization.removeClass('hidden');
                 domElements.divStatistics.addClass('hidden');
 
                 break;
-            case ViewMode.STATISTICS:             
+            case ViewMode.STATISTICS:
                 domElements.divVisualization.addClass('hidden');
                 domElements.divStatistics.removeClass('hidden');
                 $('#divStatistics .js-plotly-plot').each(function () {
@@ -74,7 +74,7 @@ function AIInsights() {
                 domElements.divStatistics.addClass('hidden');
         }
     }
-  
+
     function AttachEventListeners() {
         domElements.viewOptions.on('change', function () {
             ToggleSections($(this).val());
@@ -95,9 +95,7 @@ function AIInsights() {
             }
 
             setTimeout(function () {
-                $('#divVisualization .js-plotly-plot').each(function () {
-                    Plotly.Plots.resize(this);
-                });
+                ResizePlotlyCharts();
             }, 300);
             //setTimeout(function () {
             //    $('#divVisualization .js-plotly-plot').each(function () {
@@ -116,7 +114,13 @@ function AIInsights() {
 
         }
     }
-  
+
+    function ResizePlotlyCharts() {
+        $('#divVisualization .js-plotly-plot').each(function () {
+            Plotly.Plots.resize(this);
+        });
+    }
+
     function UpdateTitle() {
         let currentText = domElements.fileNameLabel.text();
         domElements.fileNameLabel.attr('title', currentText || NoFileUpload);
@@ -146,7 +150,7 @@ function AIInsights() {
             if (file) {
                 const maxMBSize = 50;
                 const maxSize = maxMBSize * 1024 * 1024; // 50MB in bytes
-                
+
                 if (file.size > maxSize) {
                     common.showError('Exceeds the allowed limit of ' + maxMBSize + " MB");
                     fileInput.val('');
@@ -156,14 +160,14 @@ function AIInsights() {
                 const formData = new FormData();
                 let fileName = file.name;
                 domElements.fileNameLabel.text(fileName);
-               
-                formData.append("uploadFile", file);    
+
+                formData.append("uploadFile", file);
 
                 $.ajax(common.modifyRelativeUrl('AIInsights/UploadFile'), {
                     type: 'POST',
                     data: formData,
-                    processData: false, 
-                    contentType: false, 
+                    processData: false,
+                    contentType: false,
                     beforeSend: function () {
                         common.showLoading();
                         domElements.btnGenerate.prop('disabled', true);
@@ -179,7 +183,7 @@ function AIInsights() {
                             domElements.fileNameLabel.text(fileName);
                             common.showSuccess('File uploaded successfully: ' + fileName, 2000);
                         }
-                        
+
                         UpdateTitle();
                     },
                     complete: function () {
@@ -195,12 +199,12 @@ function AIInsights() {
                 if (domElements.fileNameLabel.text().trim() != NoFileUpload) {
                     domElements.fileNameLabel.text(NoFileUpload);
                     UpdateTitle();
-                }               
+                }
             }
         });
     }
 
-    function AnalyzeFile() { 
+    function AnalyzeFile() {
 
         let fileName = domElements.fileNameLabel.text().trim();
 
@@ -209,10 +213,10 @@ function AIInsights() {
         }
 
         $.ajax(common.modifyRelativeUrl('AIInsights/AnalyzeFile'), {
-            type: 'POST',       
-            beforeSend: function () {       
+            type: 'POST',
+            beforeSend: function () {
                 SkipReCheckin();
-                common.showLoading();                
+                common.showLoading();
                 domElements.btnGenerate.prop('disabled', true);
             },
             success: function (response) {
@@ -225,8 +229,8 @@ function AIInsights() {
                         RenderVisualizationSummary(response.visualization_response.summary_list);
                         RenderVisualizationChart(response.visualization_response.chart_infos);
                     }
-                    
-                    RenderStatistics(response.statistics_html);                    
+
+                    RenderStatistics(response.statistics_html);
 
                     domElements.contentCardSection.show();
                 } else {
@@ -236,8 +240,9 @@ function AIInsights() {
             complete: function () {
                 common.closeLoading();
                 EnableReCheckin();
+                ResizePlotlyCharts();
             },
-            error: function (errMsg) {  
+            error: function (errMsg) {
                 common.closeLoading();
                 domElements.btnGenerate.prop('disabled', false);
                 EnableReCheckin();
@@ -281,7 +286,7 @@ function AIInsights() {
                     .filter(s => s.trim() !== '')
                     .map(s => {
                         const { content, isNumbered, isBulleted, numberValue } = NormalizeLine(s);
-                        let className = isNumbered ? 'numbered' : isBulleted ? 'bulleted' : 'bulleted'; 
+                        let className = isNumbered ? 'numbered' : isBulleted ? 'bulleted' : 'bulleted';
                         const numberAttr = isNumbered ? `data-number="${numberValue}"` : '';
 
                         return `<li class="${className}" ${numberAttr}>${content}</li>`;
@@ -357,17 +362,17 @@ function AIInsights() {
     }
 
     function RenderStatistics(statisticsHtml) {
-        domElements.divStatistics.html(statisticsHtml);            
+        domElements.divStatistics.html(statisticsHtml);
 
-        if (statisticsHtml) {           
-            AdjustStatsItemsLayout(); 
+        if (statisticsHtml) {
+            AdjustStatsItemsLayout();
 
             $('#divStatistics .js-plotly-plot').each(function () {
                 Plotly.Plots.resize(this);
             });
         }
-    }        
-   
+    }
+
     function AdjustStatsItemsLayout() {
         const $items = $('.column-statistics-section .stats-item');
         const total = $items.length;
@@ -390,17 +395,17 @@ function AIInsights() {
         $.ajax(common.modifyRelativeUrl('AIInsights/LoadHistoryChatMessage'), {
             type: 'POST',
             beforeSend: function () { },
-            success: function (response) {                
+            success: function (response) {
                 if (response) {
                     let $chatMessages = domElements.chatMessages;
-                    $.each(response, function (index, item) {                       
+                    $.each(response, function (index, item) {
                         let $message = item.Sender == 'u' ?
                             $(`
                                 <div class="message user-message">
                                     <div class="icon-placeholder"></div>
                                     <div class="message-text">${item.Message}</div>
                                 </div>
-                            `) : 
+                            `) :
                             $(`
                                 <div class="message bot-message">
                                     <div class="icon-wrapper bot-icon"><i class="fas fa-robot"></i></div>
@@ -409,13 +414,13 @@ function AIInsights() {
                             `);
 
                         $chatMessages.append($message);
-                    });          
+                    });
 
                     ScrollToBottomChat();
                 }
             },
             complete: function () { },
-            error: function (errMsg) {               
+            error: function (errMsg) {
                 console.log(errMsg);
             }
         });
@@ -423,7 +428,7 @@ function AIInsights() {
 
     function SendChatMessage() {
         let $chatMessages = domElements.chatMessages;
-        let message = domElements.chatInput.val().trim();        
+        let message = domElements.chatInput.val().trim();
 
         if (!message) return;
 
@@ -450,20 +455,20 @@ function AIInsights() {
         $chatMessages.append($loadingMessage);
         ScrollToBottomChat();
 
-        const stopLoading = StartDotLoading($loadingDots);       
+        const stopLoading = StartDotLoading($loadingDots);
 
         $.ajax(common.modifyRelativeUrl('AIInsights/AskChatbot'), {
-            type: 'POST',           
+            type: 'POST',
             data: {
                 question: message
             },
-            beforeSend: function () {       
+            beforeSend: function () {
                 SkipReCheckin();
             },
             success: function (response) {
                 dataLogSentry.askChatBot = response;
                 stopLoading();
-                $loadingMessage.remove(); 
+                $loadingMessage.remove();
 
                 const answer = response?.answer || 'No response from bot.';
 
@@ -484,7 +489,7 @@ function AIInsights() {
             },
             error: function (xhr, status, error) {
                 stopLoading();
-                $loadingMessage.remove(); 
+                $loadingMessage.remove();
 
                 const $errorMessage = $(`
                     <div class="message bot-message">
@@ -513,7 +518,7 @@ function AIInsights() {
             let textarea = domElements.chatInput[0];
             if (!textarea) return;
 
-            textarea.style.height = 'auto'; 
+            textarea.style.height = 'auto';
             const maxHeight = window.innerHeight / 3;
 
             if (textarea.scrollHeight > maxHeight) {
@@ -580,7 +585,7 @@ function AIInsights() {
         AttachChatbotEvents();
         ToggleSections(ViewMode.VISUALIZATION);
         domElements.chatbotToggle.on('click', function () { ToggleChatbot(); });
-        domElements.closeChatbot.on('click', function () { ToggleChatbot(); });      
+        domElements.closeChatbot.on('click', function () { ToggleChatbot(); });
         AnalyzeFile();
         domElements.btnGenerate.on('click', function () { AnalyzeFile(); });
         LoadHistoryChatMessage();
