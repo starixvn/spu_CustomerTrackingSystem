@@ -40,6 +40,8 @@
         private const string MMParlayDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/ParlayDoubleGridTemplate.xlsx";
         private const string MMParlaySingleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/ParlaySingleGridTemplate.xlsx";
         private const string MMDetailVolleyballDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/VolleyballDoubleGridTemplate.xlsx";
+        private const string MMDetailCricketDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/CricketDoubleGridTemplate.xlsx";
+
 
         private readonly IMatchMonitorService _matchMonitorService;
         private readonly IAssociationDetectionService _associationDetectionService;
@@ -1566,17 +1568,24 @@
             {
                 case true:
                     return Server.MapPath(MMDetailSingleGridTemplate);
+
                 case false when (isViewParlay):
                     return Server.MapPath(MMParlayDoubleGridTemplate);
+
                 case false when (sportType == (int)MatchMonitorSportType.Badminton):
                     return Server.MapPath(MMDetailBadmintonDoubleGridTemplate);
+
                 case false when (
                     sportType == (int)MatchMonitorSportType.Volleyball ||
-                    sportType == (int)MatchMonitorSportType.Tennis ||
-                    sportType == (int)MatchMonitorSportType.Cricket):
+                    sportType == (int)MatchMonitorSportType.Tennis):
                     return Server.MapPath(MMDetailVolleyballDoubleGridTemplate);
+
+                case false when (sportType == (int)MatchMonitorSportType.Cricket):
+                    return Server.MapPath(MMDetailCricketDoubleGridTemplate);
+
                 case false when (sportType != (int)MatchMonitorSportType.Badminton):
                     return Server.MapPath(MMDetailDoubleGridTemplate);
+
                 default:
                     return string.Empty;
             }
