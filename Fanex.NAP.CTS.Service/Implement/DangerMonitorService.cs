@@ -548,48 +548,20 @@
         #endregion
 
         #region private method
-        private TicketDetailViewModel GetFraudMMDetailForCache_Backup(MMDetailInfoViewModel filter)
+        private TicketDetailViewModel GetFraudMMDetailForCache(MMDetailInfoViewModel filter)
         {            
             var fraudMMDetailResult = new TicketDetailViewModel() { TicketType = filter.TicketType };
-            var viewModeName = Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketFraud);
-            //var key = para.BuildCacheKey("TicketFraud", Region, UserID, viewModeName);
+            var viewModeName = Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketFraud);       
 
             try
-            {
-                #region Delete
-                //fraudMMDetailResult = _memoryCacheService.GetValue<TicketDetailViewModel>(key);
-
-                //if (fraudMMDetailResult == null)
-                //{
-                //    para.TypeOfTickets = MMViewModeFromUI.TicketFraud;
-
-                //    var matchDetailInfo = para.BetID != null ? _matchMonitorService.GetMatchMonitorDetail(para) : new MMDetailResultModel();
-
-                //    if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
-                //    {
-                //        var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
-
-                //        fraudMMDetailResult = _matchMonitorService.GetTicketDetailFraud(matchDetailInfo, para);
-
-                //        fraudMMDetailResult.MatchDetailInfo = matchDetailInfo;                        
-
-                //        fraudMMDetailResult.AGroupReasonMerged = _matchMonitorService.MergeFraudReasonAGroup(fraudMMDetailResult, reasons);
-
-                //        _memoryCacheService.PushValue(key, fraudMMDetailResult);
-                //    }
-                //}
-                #endregion
-
+            {                
                 var matchDetailInfo = new MMDetailResultModel();
-                var fraudTicketDetails = new List<TicketDetailModel>();
-
-                filter.TypeOfTickets = MMViewModeFromUI.TicketFraud;
-
-                var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
+                var fraudTicketDetails = new List<TicketDetailModel>();                
 
                 filter.BetID?.Split(',').ToList().ForEach((betID) =>
                 {
                     var para = filter.Clone();
+                    para.TypeOfTickets = MMViewModeFromUI.TicketFraud;
                     para.BetID = betID;
                     
                     var matchDetailForCache = _matchMonitorService.GetMatchMonitorDetailForCache(para, Region, UserID, viewModeName);
@@ -619,7 +591,7 @@
             return fraudMMDetailResult;
         }
 
-        private TicketDetailViewModel GetFraudMMDetailForCache(MMDetailInfoViewModel filter)
+        private TicketDetailViewModel GetFraudMMDetailForCache_Backup(MMDetailInfoViewModel filter)
         {
             var para = filter.Clone();
             var fraudMMDetailResult = new TicketDetailViewModel();
@@ -874,11 +846,11 @@
             var removeKeyFraud = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketFraud));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyFraud);
 
-            para.BetID?.Split(',').ToList().ForEach(betId =>
-            {
-                var removeKey = para.BuildCacheKeyByBetID(string.Empty, Region, UserID, betId, Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketFraud));
-                _memoryCacheService.RemoveKeyContainsValue(removeKey);
-            });
+            //para.BetID?.Split(',').ToList().ForEach(betId =>
+            //{
+            //    var removeKey = para.BuildCacheKeyByBetID(string.Empty, Region, UserID, betId, Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketFraud));
+            //    _memoryCacheService.RemoveKeyContainsValue(removeKey);
+            //});
 
             var removeKeyAll = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketAll));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyAll);
@@ -1020,25 +992,57 @@
 
             var mainBetTypes = _commonService.GetMainSportBettype(filter);
 
-            return mainBetTypes
-                .GroupJoin(betTypes, main => main.BettypeId, cts => cts.BetTypeID, (main, ctsGroup) => new { main, ctsGroup })
-                .SelectMany(item =>
-                    item.ctsGroup.Select(group => new DangerMonitorSporTypeBetTypeViewModel
+            var sportBetTypes1 = betTypes.Where(x => x.SportTypeID > 0);
+
+            var sportBetTypes2 = betTypes.Where(x => x.SportTypeID == 0);
+
+            var result1 = mainBetTypes
+                .Join(
+                    sportBetTypes1,
+                        main => new { BetTypeID = main.BettypeId, SportTypeID = main.SporttypeId },
+                        bt => new { bt.BetTypeID, bt.SportTypeID },
+                    (main, bt) => new DangerMonitorSporTypeBetTypeViewModel
                     {
-                        SportGroup = item.main.SportGroup,
-                        SportNameDisplay = item.main.SportNameDisplay,
-                        LeagueGroupID = item.main.LeagueGroupID,
-                        SportType = item.main.SporttypeId,
-                        SportName = item.main.SportName,
-                        BetTypeID = group.BetTypeID,
-                        BetTypeName = group.BetTypeNameDisplay,
-                        BetID = _commonService.GetBetID(group.BetIDPattern, group.NameDetailsX),
-                        BetChoiceType = group.BetChoiceType,
-                        BetChoiceHome = group.BetChoiceHome,
-                        BetChoiceAway = group.BetChoiceAway,
-                        SportOrder = group.SportOrder,
-                        BetIDPattern = group.BetIDPattern
-                    }));
+                        SportGroup = main.SportGroup,
+                        SportNameDisplay = main.SportNameDisplay,
+                        LeagueGroupID = main.LeagueGroupID,
+                        SportType = main.SporttypeId,
+                        SportName = main.SportName,
+                        BetTypeID = bt.BetTypeID,
+                        BetTypeName = bt.BetTypeNameDisplay,
+                        BetID = _commonService.GetBetID(bt.BetIDPattern, bt.NameDetailsX),
+                        BetChoiceType = bt.BetChoiceType,
+                        BetChoiceHome = bt.BetChoiceHome,
+                        BetChoiceAway = bt.BetChoiceAway,
+                        SportOrder = bt.SportOrder,
+                        BetIDPattern = bt.BetIDPattern
+                    }
+                );
+
+            var result2 = mainBetTypes
+                .Join(
+                    sportBetTypes2,
+                        main => new { BetTypeID = main.BettypeId },
+                        bt => new { bt.BetTypeID },
+                    (main, bt) => new DangerMonitorSporTypeBetTypeViewModel
+                    {
+                        SportGroup = main.SportGroup,
+                        SportNameDisplay = main.SportNameDisplay,
+                        LeagueGroupID = main.LeagueGroupID,
+                        SportType = main.SporttypeId,
+                        SportName = main.SportName,
+                        BetTypeID = bt.BetTypeID,
+                        BetTypeName = bt.BetTypeNameDisplay,
+                        BetID = _commonService.GetBetID(bt.BetIDPattern, bt.NameDetailsX),
+                        BetChoiceType = bt.BetChoiceType,
+                        BetChoiceHome = bt.BetChoiceHome,
+                        BetChoiceAway = bt.BetChoiceAway,
+                        SportOrder = bt.SportOrder,
+                        BetIDPattern = bt.BetIDPattern
+                    }
+                );
+
+            return (result2.Union(result1)).OrderBy(x=>x.BettypeOrder);
         }
         #endregion
     }

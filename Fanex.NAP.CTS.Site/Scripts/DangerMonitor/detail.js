@@ -370,19 +370,19 @@ function DangerousSettingDetail() {
         ) {
             domElements.cbbGame.multiselect().empty();
 
-            let selected = null;
+            //let selected = null;
 
-            if (domElements.betIDToString) {
-                selected = domElements.betIDToString % 10;
-            } else if (domElements.cbbGame.val()) {
-                selected = parseInt(domElements.cbbGame.val()[0]);
-            }
+            //if (domElements.betIDToString) {
+            //    selected = domElements.betIDToString % 10;
+            //} else if (domElements.cbbGame.val()) {
+            //    selected = parseInt(domElements.cbbGame.val()[0]);
+            //}
 
-            defaultGameSet = selected;
+            //defaultGameSet = selected;
 
             for (let i = 1; i <= 5; i++) {
-                domElements.cbbGame.append(
-                    `<option value='${i}' ${selected == i ? "selected" : ""}>${i}</option>`
+                domElements.cbbGame.append(        
+                    `<option value='${i}' selected>${i}</option>`
                 );
             }
 
