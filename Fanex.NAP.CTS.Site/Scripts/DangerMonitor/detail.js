@@ -221,7 +221,7 @@ function DangerousSettingDetail() {
                 { targets: [2], width: "4%" },               
                 { targets: [3], width: "10%", className: "text-center col-dgr" },
                 { targets: [4], width: "5%", className: "text-center col-game", visible: isColumnVisible }, // Game or Set
-                { targets: [5], width: "5%" },
+                { targets: [5], width: "5%", className: "text-center" },
                 { targets: [6], width: "5%", className: "text-center col-betid" },
                 { targets: [7], width: "5%" },
                 { targets: [8], width: "5%", className: "text-right col-amt" },
@@ -305,13 +305,7 @@ function DangerousSettingDetail() {
                             return reasonList.replace(",", ", ");
                         return "-";
                     }
-                },
-                // {
-                //     data: obj => () => {
-                //         if (obj.PICVerified) return "<span class='icon-Check'></span>";
-                //         return "-";
-                //     }
-                // },
+                },               
                 { data: obj => obj.TransIdToString },
                 { data: obj => obj.ADetectGroupID }
             ],
@@ -1044,47 +1038,38 @@ function DangerousSettingDetail() {
 
     function GetAttributeBetTypeSelected(attribute) {
         return $("option:selected", domElements.cbbBetType).attr(attribute);
-    }
+    }     
 
-    //function GetBetIDSelected() {
-    //    let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
+    function GetBetIDSelected() {        
+        let betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
+        let sportType = domElements.sportType;
 
-    //    if (domElements.sportType != 2 && betidpattern.includes('X')) {
-    //        let betIDString = "80" + domElements.cbbMapX.val();
+        let isRacketSport = [
+            SportTypeConst.Badminton,
+            SportTypeConst.Volleyball,
+            SportTypeConst.Tennis
+        ].includes(sportType);
 
-    //        if (betidpattern.includes('YY')) {
-    //            betIDString += ("0" + domElements.cbbMapYY.val()).slice(-2);
-    //        }
-    //        return betIDString;
+        if (!isRacketSport && sportType !== SportTypeConst.Basketball && betIdPattern.includes('X')) {
+            let betID = `80${domElements.cbbMapX.val()}`;
 
-    //    } else if (domElements.sportType == 2) {
-    //        return $("option:selected", domElements.cbbBetType).attr('data-betid');
-    //    } else if ((domElements.sportType == SportTypeConst.Badminton || domElements.sportType == SportTypeConst.Volleyball || domElements.sportType == SportTypeConst.Tennis) && betidpattern.includes('X') && domElements.cbbGame.val()) {
-    //        return domElements.cbbGame.val().map(it => betidpattern.replace('X', it)).toString();
-    //    }
-    //    else {
-    //        return domElements.betIDToString;
-    //    }
-    //}
-
-    function GetBetIDSelected() {
-        let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
-
-        if (![SportTypeConst.Basketball, SportTypeConst.Badminton, SportTypeConst.Volleyball, SportTypeConst.Tennis].includes(domElements.sportType) && betidpattern.includes('X')) {
-            let betIDString = "80" + domElements.cbbMapX.val();
-
-            if (betidpattern.includes('YY')) {
-                betIDString += ("0" + domElements.cbbMapYY.val()).slice(-2);
+            if (betIdPattern.includes('YY')) {
+                betID += `0${domElements.cbbMapYY.val()}`.slice(-2);
             }
-            return betIDString;
-
-        } else if (domElements.sportType == SportTypeConst.Basketball) {
-            return $("option:selected", domElements.cbbBetType).attr('data-betid');
-        } else if ((domElements.sportType == SportTypeConst.Badminton || domElements.sportType == SportTypeConst.Volleyball || domElements.sportType == SportTypeConst.Tennis) && betidpattern.includes('X') && domElements.cbbGame.val()) {
-            return domElements.cbbGame.val().map(it => betidpattern.replace('X', it)).toString();
+            return betID;
         }
 
-        return 0; //default
+        if (sportType === SportTypeConst.Basketball) {
+            return $("option:selected", domElements.cbbBetType).attr('data-betid');
+        }
+     
+        if (isRacketSport && betIdPattern.includes('X') && domElements.cbbGame.val()) {
+            return domElements.cbbGame.val()
+                .map(game => betIdPattern.replace('X', game))
+                .toString();
+        }
+
+        return 0;
     }
 
     function IsFilterSuspicious(params) {
@@ -1469,49 +1454,6 @@ function DangerousSettingDetail() {
             xhr.abort();
         }
     }
-
-    // function GetMatchMonitorTotalTicket(
-    //     data = null,
-    //     lastScannedSequenceID = lastMark.maxSequenceId,
-    //     lastTransDate = lastMark.maxTransDate) {
-    //     if (GetDataCondition(lastScannedSequenceID, lastTransDate, data.TypeOfTickets)) {
-    //         data.LastScannedSequenceID = lastScannedSequenceID;
-    //         data.LastTransDate = lastTransDate == new Date() ? null : lastTransDate;
-    //         currentType = data.TypeOfTickets;
-
-    //         $.ajax(common.modifyRelativeUrl('DangerMonitor/GetMatchMonitorTotalTicket'), {
-    //             async: false,
-    //             type: 'POST',
-    //             tryCount: 0,
-    //             retryLimit: 3,
-    //             dataType: 'json',
-    //             contentType: 'application/json; charset=utf-8',
-    //             data: JSON.stringify(data),
-    //             success: function (response) {
-    //                 if (response?.recordsTotal >= 0) {
-    //                     recordsTotalGlobal = response?.recordsTotal;
-    //                     if ($('option', domElements.cbbMGroup).length > 1) {
-    //                         domElements.breadcrumbTotalTickets.html(`Total Tickets: -/-`);
-    //                     } else {
-    //                         RefreshBreadcrumbTotalTickets(0, recordsTotalGlobal);
-    //                     }
-    //                 }
-    //             },
-    //             error: function (xhr, textStatus, error) {
-    //                 if (textStatus == 'timeout') {
-    //                     this.tryCount++;
-    //                     if (this.tryCount <= this.retryLimit) {
-    //                         //try again
-    //                         $.ajax(this);
-    //                         return;
-    //                     }
-    //                 }
-
-    //                 console.log(error);
-    //             }
-    //         });
-    //     }
-    // }
 
     function GetMatchMonitorDetail(
         data = null,
@@ -2485,18 +2427,7 @@ function DangerousSettingDetail() {
     function RemoveFilterLoading() {
         domElements.divFilterMonitor.removeClass('loading-background');
         domElements.divFilterLoading.css('display', 'none');
-    }
-
-    function RemoveAllFilterError() {
-        domElements.cbbMatchScore.parent().find('button').removeClass('border-error');
-        domElements.cbbDanger.parent().find('button').removeClass('border-error');
-        domElements.cbbCurrency.parent().find('button').removeClass('border-error');
-        domElements.cbbReason.parent().find('button').removeClass('border-error');
-        domElements.cbbAGroup.parent().find('button').removeClass('border-error');
-        domElements.cbbMGroup.parent().find('button').removeClass('border-error');
-        domElements.cbbHDPBetTeam.parent().find('button').removeClass('border-error');
-        domElements.cbbTicketsStatus.parent().find('button').removeClass('border-error');
-    }
+    }  
 
     function ResetDefault(isResetAmountRM) {
         cacheMGroup.isActive = false;

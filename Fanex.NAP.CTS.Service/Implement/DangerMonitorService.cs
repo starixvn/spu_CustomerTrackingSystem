@@ -548,6 +548,77 @@
         #endregion
 
         #region private method
+        private TicketDetailViewModel GetFraudMMDetailForCache_Backup(MMDetailInfoViewModel filter)
+        {            
+            var fraudMMDetailResult = new TicketDetailViewModel() { TicketType = filter.TicketType };
+            var viewModeName = Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketFraud);
+            //var key = para.BuildCacheKey("TicketFraud", Region, UserID, viewModeName);
+
+            try
+            {
+                #region Delete
+                //fraudMMDetailResult = _memoryCacheService.GetValue<TicketDetailViewModel>(key);
+
+                //if (fraudMMDetailResult == null)
+                //{
+                //    para.TypeOfTickets = MMViewModeFromUI.TicketFraud;
+
+                //    var matchDetailInfo = para.BetID != null ? _matchMonitorService.GetMatchMonitorDetail(para) : new MMDetailResultModel();
+
+                //    if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
+                //    {
+                //        var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
+
+                //        fraudMMDetailResult = _matchMonitorService.GetTicketDetailFraud(matchDetailInfo, para);
+
+                //        fraudMMDetailResult.MatchDetailInfo = matchDetailInfo;                        
+
+                //        fraudMMDetailResult.AGroupReasonMerged = _matchMonitorService.MergeFraudReasonAGroup(fraudMMDetailResult, reasons);
+
+                //        _memoryCacheService.PushValue(key, fraudMMDetailResult);
+                //    }
+                //}
+                #endregion
+
+                var matchDetailInfo = new MMDetailResultModel();
+                var fraudTicketDetails = new List<TicketDetailModel>();
+
+                filter.TypeOfTickets = MMViewModeFromUI.TicketFraud;
+
+                var reasons = _commonService.GetStaticLists((int)StaticListID.Reason, true);
+
+                filter.BetID?.Split(',').ToList().ForEach((betID) =>
+                {
+                    var para = filter.Clone();
+                    para.BetID = betID;
+                    
+                    var matchDetailForCache = _matchMonitorService.GetMatchMonitorDetailForCache(para, Region, UserID, viewModeName);
+
+                    var ticketDetails = _matchMonitorService.GetSingleTicketDetailForCache(matchDetailForCache, para, Region, UserID, viewModeName);
+
+                    matchDetailInfo.Custs.AddRange(matchDetailForCache.Custs);
+                    matchDetailInfo.MatchDetails.AddRange(matchDetailForCache.MatchDetails);
+                    matchDetailInfo.VerifiedTrans.AddRange(matchDetailForCache.VerifiedTrans);
+
+                    fraudTicketDetails.AddRange(ticketDetails.TicketDetails);                    
+                });
+
+                fraudMMDetailResult = new TicketDetailViewModel() { TicketType = filter.TicketType };
+                var ticketDetailModel = new TicketDetailViewModel() { TicketDetails = fraudTicketDetails };
+
+                fraudMMDetailResult = _matchMonitorService.BuildSingleTicketDetailFraudMergeGroup(matchDetailInfo, filter, ticketDetailModel);
+
+            }
+            catch (Exception ex)
+            {
+                ex.LogError($"{Region} Get Fraud MM Detail For Cache Error: " + ex.Message + ex.StackTrace + "\n"
+                   + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                   + ex.InnerException.StackTrace);
+            }
+
+            return fraudMMDetailResult;
+        }
+
         private TicketDetailViewModel GetFraudMMDetailForCache(MMDetailInfoViewModel filter)
         {
             var para = filter.Clone();
@@ -802,6 +873,12 @@
 
             var removeKeyFraud = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketFraud));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyFraud);
+
+            para.BetID?.Split(',').ToList().ForEach(betId =>
+            {
+                var removeKey = para.BuildCacheKeyByBetID(string.Empty, Region, UserID, betId, Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketFraud));
+                _memoryCacheService.RemoveKeyContainsValue(removeKey);
+            });
 
             var removeKeyAll = para.BuildCacheKey(string.Empty, Region, UserID, Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketAll));
             _memoryCacheService.RemoveKeyContainsValue(removeKeyAll);

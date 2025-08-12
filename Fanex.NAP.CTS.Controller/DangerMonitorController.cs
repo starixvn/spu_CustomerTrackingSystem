@@ -131,14 +131,14 @@
                 ViewBag.BetIDToString = para?.BetID.ToString();
                 ViewBag.BetTypeSettings = bettypes?.Where(x => x.SportType == para.SportType);
                 ViewBag.MapX = para?.MX;
-                ViewBag.MapYY = para?.MY;
+                ViewBag.MapYY = para?.MY;              
                 ViewBag.HomeName = para?.HomeName.ToUpper() ?? string.Empty;
                 ViewBag.AwayName = para?.AwayName.ToUpper() ?? string.Empty;
-                ViewBag.MatchName = ViewBag.HomeName + "_" + ViewBag.AwayName;
+                ViewBag.MatchName = ViewBag.HomeName ?? string.Empty + "_" + ViewBag.AwayName ?? string.Empty;                
                 ViewBag.LiveIndicator = para?.LiveIndicator ?? true;
                 ViewBag.Reason = para?.Reason;
-                ViewBag.ReasonName = para?.ReasonName ?? string.Empty;
-                ViewBag.LeagueName = para?.LeagueName.ToUpper() ?? string.Empty;
+                ViewBag.ReasonName = para?.ReasonName ?? string.Empty;                
+                ViewBag.LeagueName = para?.LeagueName.ToUpper() ?? string.Empty;                                
                 ViewBag.ReasonGroup = para?.ReasonGroup ?? string.Empty;
                 ViewBag.MarketName = para?.MarketName ?? string.Empty;
                 ViewBag.BetChoice = para?.BetChoice;
