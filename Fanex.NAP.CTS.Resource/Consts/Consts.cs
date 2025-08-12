@@ -639,7 +639,13 @@ namespace Fanex.NAP.CTS.Resource.Consts
             ABI = 2
         };
 
-        // Sports that do not expand Details X in BetType (keep BetTypeName with 'X')
+        public static readonly HashSet<int> CricketRunsXBetTypeIds = new HashSet<int> { 9608, 9607 };
+        public static readonly HashSet<int> CricketRuns1XBetTypeIds = new HashSet<int> { 9411, 9410 };
+        public static readonly HashSet<int> CricketWicketXBetTypeIds = new HashSet<int> { 9429, 9428 };
+
+        public static readonly int[] CricketRuns1XValues = new[] { 5, 6, 10, 12, 15, 20, 25, 30, 35, 40, 45 };
+
+        // Sports that do not expand Details X in BetType filter - MM Detail (keep BetTypeName with 'X')
         public static readonly HashSet<int> SportsDisableDetailsX = new HashSet<int>
         {
             (int) MatchMonitorSportType.Volleyball,
@@ -647,16 +653,8 @@ namespace Fanex.NAP.CTS.Resource.Consts
             (int) MatchMonitorSportType.Cricket
         };
 
-        public static bool IsShowDetailsXForSport(int sportType)
-        {
-            return !SportsDisableDetailsX.Contains(sportType);
-        }
-
-        public static readonly HashSet<int> CricketRunsXBetTypeIds = new HashSet<int> { 9608, 9607 };
-        public static readonly HashSet<int> CricketRuns1XBetTypeIds = new HashSet<int> { 9411, 9410 };
-        public static readonly HashSet<int> CricketWicketXBetTypeIds = new HashSet<int> { 9429, 9428 };
-
-        public static readonly int[] CricketRuns1XValues = new[] { 5, 6, 10, 12, 15, 20, 25, 30, 35, 40, 45 };
+        public static bool IsShowDetailsXForSport(int sportType) =>
+            !SportsDisableDetailsX.Contains(sportType);
 
         public static List<int> GetCricketBetTypeXValues(int betTypeId)
         {
@@ -677,9 +675,18 @@ namespace Fanex.NAP.CTS.Resource.Consts
             (int)MatchMonitorBetType.AwayInnsRuns
         };
 
-        public static bool IsCricketBetTypeWithoutBetIdPattern(int sportType, int betTypeId)
+        public static bool IsCricketBetTypeWithoutBetIdPattern(int sportType, int betTypeId) =>
+            sportType == (int)MatchMonitorSportType.Cricket && CricketBetTypesWithoutBetIdPattern.Contains(betTypeId);
+
+        public static readonly HashSet<int> SportsWithBetIdPattern = new HashSet<int>
         {
-            return sportType == (int)MatchMonitorSportType.Cricket && CricketBetTypesWithoutBetIdPattern.Contains(betTypeId);
-        }
+            (int)MatchMonitorSportType.Badminton,
+            (int)MatchMonitorSportType.Volleyball,
+            (int)MatchMonitorSportType.Tennis,
+            (int)MatchMonitorSportType.Cricket
+        };
+
+        public static bool IsSportWithBetIdPattern(int sportType) =>
+            SportsWithBetIdPattern.Contains(sportType);
     }
 }

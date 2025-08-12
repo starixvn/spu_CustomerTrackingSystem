@@ -40,13 +40,20 @@ const SportsUseBettypeX = new Set([
     SportTypeConst.Cricket
 ]);
 
-const SportsUseMapX = new Set([
+const SportsWithoutMapX = new Set([
     SportTypeConst.Basketball,
     SportTypeConst.Badminton,
     SportTypeConst.Volleyball,
     SportTypeConst.Tennis,
     SportTypeConst.Cricket
 ]);
+
+const BetTypeUnitLabel = {
+    [SportTypeConst.Volleyball]: "Set",
+    [SportTypeConst.Tennis]: "Set",
+    [SportTypeConst.Badminton]: "Game",
+    [SportTypeConst.Cricket]: "Run/Wicket"
+};
 
 function ConvertNumberToThousandsString(x) {
     return x ? x.toLocaleString() : 0;
@@ -195,14 +202,10 @@ function MatchMonitorDetail() {
 
     //#region Initial Grid
     function InitialDetailGird(element) {
-        const isColumnVisible =
-            domElements.sportType === SportTypeConst.Badminton ||
-            domElements.sportType === SportTypeConst.Volleyball ||
-            domElements.sportType === SportTypeConst.Tennis;
+        let isColumnVisible = SportsUseBettypeX.has(domElements.sportType);
 
         element.DataTable({
             serverSide: false,
-            // dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             dom: '',
             pagingType: "full_numbers",
             language: {
@@ -241,7 +244,7 @@ function MatchMonitorDetail() {
                 { targets: [2], width: "4%", className: "text-center col-customerclass" }, // CC
                 { targets: [3], width: "4%", className: "text-center col-bot" }, // Bot
                 { targets: [4], width: "10%", className: "text-center col-dgr" }, // Dgr
-                { targets: [5], width: "5%", className: "text-center col-game", visible: isColumnVisible }, // Game or Set
+                { targets: [5], width: "5%", className: "text-center col-game", visible: isColumnVisible }, // Game / Set / Run/Wicket
                 { targets: [6], width: "5%", className: "text-center col-odds" }, // Odds
                 { targets: [7], width: "5%", className: "text-center col-myodds" }, // MY.Odds
                 { targets: [8], width: "5%", className: "text-left col-betid" }, // BetID
@@ -485,17 +488,15 @@ function MatchMonitorDetail() {
         });
     }
 
-    let defaultGameSet = null;
 
     function SetupValueDefaultGameOrSetFilter() {
-        var betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
-        var hasXToken = betIdPattern && /X+/.test(betIdPattern);
+        let betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
+        let hasXToken = betIdPattern && /X+/.test(betIdPattern);
 
         domElements.cbbGame.multiselect().empty();
 
         if (!hasXToken) {
             domElements.cbbGame.prop('disabled', true).multiselect('refresh');
-            defaultGameSet = null;
             return;
         }
 
@@ -508,7 +509,7 @@ function MatchMonitorDetail() {
                 betIdPattern: betIdPattern
             },
             success: function (response) {
-                var values = response?.data || [];
+                const values = response?.data || [];
 
                 if (!values.length) {
                     domElements.cbbGame.prop('disabled', true).multiselect('refresh');
@@ -518,29 +519,27 @@ function MatchMonitorDetail() {
                 domElements.cbbGame.prop('disabled', false);
                 domElements.cbbGame.multiselect('enable');
 
-                var xToken = (betIdPattern.match(/X+/) || [])[0];
-
-                var betTypeText = $("option:selected", domElements.cbbBetType).text() || "";
-
-                var matchedNumbers = (betTypeText.match(/\d+/g) || [])
+                let xToken = (betIdPattern.match(/X+/) || [])[0];
+                let betTypeText = $("option:selected", domElements.cbbBetType).text() || "";
+                let matchedNumbers = (betTypeText.match(/\d+/g) || [])
                     .map(num => parseInt(num, 10))
                     .filter(num => values.includes(num));
 
                 if (!matchedNumbers.length && domElements.betIDToString && xToken) {
-                    var betIds = domElements.betIDToString.toString().split(',').map(s => s.trim()).filter(Boolean);
+                    let betIds = domElements.betIDToString.toString().split(',').map(s => s.trim()).filter(Boolean);
+
                     betIds.forEach(function (id) {
-                        var suffix = id.slice(-xToken.length);
+                        let suffix = id.slice(-xToken.length);
                         if (/^\d+$/.test(suffix)) {
-                            var n = parseInt(suffix, 10);
+                            let n = parseInt(suffix, 10);
                             if (values.includes(n)) matchedNumbers.push(n);
                         }
                     });
+
                     matchedNumbers = Array.from(new Set(matchedNumbers));
                 }
 
-                defaultGameSet = matchedNumbers.length ? matchedNumbers : null;
-
-                var optionsHtml = values
+                let optionsHtml = values
                     .map(v => `<option value='${v}' ${matchedNumbers.includes(v) ? "selected" : ""}>${v}</option>`)
                     .join('');
 
@@ -965,13 +964,7 @@ function MatchMonitorDetail() {
     }
 
     function SetupDoubleDataTable() {
-        const sportLabelMap = {
-            [SportTypeConst.Tennis]: 'Set',
-            [SportTypeConst.Volleyball]: 'Set',
-            [SportTypeConst.Badminton]: 'Game',
-        };
-
-        const gameOrSetText = sportLabelMap[domElements.sportType] || 'Game';
+        let betTypeUnitLabel = BetTypeUnitLabel[domElements.sportType] || 'Set';
 
         $("#tbrMMHomeTeam").html(`
                                 <table id="tblMMHomeTeam" class="table table-striped table-monitor-detail">
@@ -982,7 +975,7 @@ function MatchMonitorDetail() {
                                         <th>CC</th>
                                         <th>Bot</th>
                                         <th>Dgr</th>
-                                        <th>${gameOrSetText}</th>
+                                        <th>${betTypeUnitLabel}</th>
                                         <th>Odds</th>
                                         <th>MY.Odds</th>
                                         <th>
@@ -1027,7 +1020,7 @@ function MatchMonitorDetail() {
                                         <th>CC</th>
                                         <th>Bot</th>
                                         <th>Dgr</th>
-                                        <th>${gameOrSetText}</th>
+                                        <th>${betTypeUnitLabel}</th>
                                         <th>Odds</th>
                                         <th>MY.Odds</th>
                                         <th>
@@ -1255,13 +1248,13 @@ function MatchMonitorDetail() {
     }
 
     function GetBetIDSelected() {
-        var betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
-        var selectedSport = domElements.sportType;
-        var selectedGames = domElements.cbbGame.val();
-        var betIdPatternHasX = betIdPattern.includes('X');
-        var tokenX = (betIdPattern.match(/X+/) || ['X'])[0];
+        let betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
+        let selectedSport = domElements.sportType;
+        let selectedGames = domElements.cbbGame.val();
+        let betIdPatternHasX = betIdPattern.includes('X');
+        let tokenX = (betIdPattern.match(/X+/) || ['X'])[0];
        
-        if (!SportsUseMapX.has(selectedSport) && betIdPatternHasX) {
+        if (!SportsWithoutMapX.has(selectedSport) && betIdPatternHasX) {
             let betIDString = "80" + domElements.cbbMapX.val();
 
             if (betIdPattern.includes('YY')) {
@@ -1281,7 +1274,7 @@ function MatchMonitorDetail() {
         ) {
             return selectedGames.val()
                 .map(x => {
-                    var padded = x.toString().padStart(tokenX.length, '0');
+                    let padded = x.toString().padStart(tokenX.length, '0');
                     return betIdPattern.replace(tokenX, padded);
                 })
                 .toString();
@@ -3168,13 +3161,11 @@ function MatchMonitorDetail() {
     }
 
     function ToggleGameX(isBetTypeChange) {
-        let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
+        let betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
+        let selectedSport = domElements.sportType;
 
-        if ((domElements.sportType == SportTypeConst.Badminton ||
-            domElements.sportType == SportTypeConst.Volleyball ||
-            domElements.sportType == SportTypeConst.Tennis ||
-            domElements.sportType == SportTypeConst.Cricket)
-            && betidpattern && betidpattern.includes('X')) {
+        if (SportsUseBettypeX.has(selectedSport)
+            && betIdPattern && betIdPattern.includes('X')) {
             domElements.cbbGame.parent().show();
             domElements.cbbMapX.parent().hide();
             domElements.cbbMapYY.parent().hide();
@@ -3533,11 +3524,10 @@ function MatchMonitorDetail() {
     //#endregion Ticket Voiding
 
     function Initial() {
-        const gameLabel = (domElements.sportType == SportTypeConst.Volleyball ||
-            domElements.sportType == SportTypeConst.Tennis) ? "Set" :
-            (domElements.sportType == SportTypeConst.Cricket) ? "Run/Wicket" : "Game";
+        let selectedSport = domElements.sportType;
+        let betTypeUnitLabel = BetTypeUnitLabel[selectedSport] || 'Set';
 
-        SetupMultiselectFilter(domElements.cbbGame, gameLabel);
+        SetupMultiselectFilter(domElements.cbbGame, betTypeUnitLabel);
         SetupMultiselectFilter(domElements.cbbCC, "CC");
         SetupMultiselectFilter(domElements.cbbDanger, "Danger");
         SetupMultiselectFilter(domElements.cbbCurrency, "Currency");
@@ -3556,7 +3546,7 @@ function MatchMonitorDetail() {
         domElements.inputTranstimeTo.val('');
         SetupValueDefaultGameOrSetFilter();
 
-        if (domElements.mapX != "0" && domElements.sportType != SportTypeConst.Basketball) {
+        if (domElements.mapX != "0" && selectedSport != SportTypeConst.Basketball) {
             domElements.cbbMapX.val(domElements.mapX).trigger('change');
             domElements.cbbBetType.val(`${domElements.betTypeID}_0`).trigger('change');
         } else {
@@ -3575,6 +3565,7 @@ function MatchMonitorDetail() {
             ResetTranstime();
             OnchangeFilter();
         });
+
         domElements.cbbBetType.change(function () {
             ResetTranstime();
             ToggleMapXYY(true);
@@ -3582,23 +3573,25 @@ function MatchMonitorDetail() {
 
             OnchangeFilter();
         });
+
         domElements.cbbMapX.change(function () {
             OnchangeFilter();
         });
+
         domElements.cbbMapYY.change(function () {
             OnchangeFilter();
         });
 
         domElements.cbbGame.change(function () {
-            const pattern = GetAttributeBetTypeSelected('data-betidpattern'); // '80X' | '80XX' | '8XXX'
-            const selected = domElements.cbbGame.val(); 
+            let pattern = GetAttributeBetTypeSelected('data-betidpattern'); // '80X' | '80XX' | '8XXX'
+            let selected = domElements.cbbGame.val(); 
 
             if (pattern && selected && selected.length > 0) {
-                const token = (pattern.match(/X+/) || [])[0];
+                let token = (pattern.match(/X+/) || [])[0];
 
                 if (token) {
-                    const betIds = selected.map(v => {
-                        const padded = v.toString().padStart(token.length, '0');
+                    let betIds = selected.map(v => {
+                        let padded = v.toString().padStart(token.length, '0');
                         return pattern.replace(token, padded);
                     });
                     domElements.betIDToString = betIds.join(',');

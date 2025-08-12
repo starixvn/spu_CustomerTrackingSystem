@@ -1570,7 +1570,10 @@
                     return Server.MapPath(MMParlayDoubleGridTemplate);
                 case false when (sportType == (int)MatchMonitorSportType.Badminton):
                     return Server.MapPath(MMDetailBadmintonDoubleGridTemplate);
-                case false when (sportType == (int)MatchMonitorSportType.Volleyball || sportType == (int)MatchMonitorSportType.Tennis):
+                case false when (
+                    sportType == (int)MatchMonitorSportType.Volleyball ||
+                    sportType == (int)MatchMonitorSportType.Tennis ||
+                    sportType == (int)MatchMonitorSportType.Cricket):
                     return Server.MapPath(MMDetailVolleyballDoubleGridTemplate);
                 case false when (sportType != (int)MatchMonitorSportType.Badminton):
                     return Server.MapPath(MMDetailDoubleGridTemplate);

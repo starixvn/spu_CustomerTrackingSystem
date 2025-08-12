@@ -663,17 +663,6 @@
             }
         }
 
-        private static readonly HashSet<int> SportsWithBetIdPattern = new HashSet<int>
-        {
-            (int)MatchMonitorSportType.Badminton,
-            (int)MatchMonitorSportType.Volleyball,
-            (int)MatchMonitorSportType.Tennis,
-            (int)MatchMonitorSportType.Cricket
-        };
-
-        private static bool IsSportWithBetIdPattern(int sportType) =>
-            SportsWithBetIdPattern.Contains(sportType);
-
         public byte[] ExportExcelMMDetailDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems
             , string fileName, string templatePath, bool isViewParlay, int sportType)
         {
