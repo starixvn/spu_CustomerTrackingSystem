@@ -1272,7 +1272,7 @@ function MatchMonitorDetail() {
             selectedGames &&
             selectedGames.length > 0
         ) {
-            return selectedGames.val()
+            return selectedGames
                 .map(x => {
                     let padded = x.toString().padStart(tokenX.length, '0');
                     return betIdPattern.replace(tokenX, padded);

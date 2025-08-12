@@ -131,7 +131,30 @@
 
             if (!string.IsNullOrEmpty(betIDPattern) && !string.IsNullOrEmpty(nameDetailsX))
             {
-                var strBetID = betIDPattern.ToUpper().Replace("X", nameDetailsX);
+                var strBetID = betIDPattern.ToUpper();
+                var xCount = strBetID.Count(c => c == 'X');
+                
+                if (xCount > 0)
+                {
+                    var valueString = nameDetailsX.ToString();
+                    
+                    if (valueString.Length < xCount)
+                    {
+                        valueString = valueString.PadLeft(xCount, '0');
+                    }
+                    else if (valueString.Length > xCount)
+                    {
+                        valueString = valueString.Substring(valueString.Length - xCount);
+                    }
+                    
+                    var valueIndex = 0;
+                    for (var i = 0; i < strBetID.Length && valueIndex < valueString.Length; i++)
+                    {
+                        if (strBetID[i] != 'X') continue;
+                        strBetID = strBetID.Substring(0, i) + valueString[valueIndex] + strBetID.Substring(i + 1);
+                        valueIndex++;
+                    }
+                }
 
                 int.TryParse(strBetID, out betID);
             }
