@@ -1648,6 +1648,8 @@ function MatchMonitorDetail() {
 
                 GetMatchMonitorTotalTicket(params, lastScannedSequenceID);
 
+                GetFilterMatchMonitorDetail();
+
                 GetMatchMonitorDetail(params, lastScannedSequenceID, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
 
                 if (recordsTotalGlobal == 0) {
@@ -2608,6 +2610,8 @@ function MatchMonitorDetail() {
         cacheFilterDependOn.MGrList = [];
 
         FetchFilterMatchMonitorDetail();
+        
+        setTimeout(() => FetchMatchMonitorDetail(currentType), 100);
 
         domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
 
