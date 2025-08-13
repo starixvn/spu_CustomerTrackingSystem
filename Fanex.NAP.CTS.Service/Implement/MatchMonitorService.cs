@@ -690,6 +690,9 @@
             return writer.ToBytes();
         }
 
+        public static bool IsSportWithBetIdPattern(int sportType) =>
+            SportsWithBetIdPattern.Contains(sportType);
+
         private void FillRowDataDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems,
             IEnumerable<ExExcelTicketInfoViewModel> awayMItems,
             ref ExcelTemplateWriter writer)
@@ -1343,10 +1346,13 @@
             };
         }
 
-        private static bool IsCricketBetTypeWithoutBetIdPattern(MMDetailInfoViewModel para) =>
-            Consts.IsCricketBetTypeWithoutBetIdPattern(para.Sport, para.BetTypeID);
+        private static bool IsCricketBetTypeWithoutBetIdPattern(int sportType, int betTypeId) =>
+            sportType == (int)MatchMonitorSportType.Cricket && CricketBetTypesWithoutBetIdPattern.Contains(betTypeId);
 
-        private MatchBetTypeSettingModel CreateBetTypeSettingModel(MMDetailInfoViewModel para, long? betId, bool isSupportGetFilter)
+        private static bool IsCricketBetTypeWithoutBetIdPattern(MMDetailInfoViewModel para) =>
+            IsCricketBetTypeWithoutBetIdPattern(para.Sport, para.BetTypeID);
+
+        private static MatchBetTypeSettingModel CreateBetTypeSettingModel(MMDetailInfoViewModel para, long? betId, bool isSupportGetFilter)
         {
             return new MatchBetTypeSettingModel
             {
@@ -1361,7 +1367,7 @@
             };
         }
 
-        private string CreateBetTypeInfoJson(MMDetailInfoViewModel para, bool isSupportGetFilter)
+        private static string CreateBetTypeInfoJson(MMDetailInfoViewModel para, bool isSupportGetFilter)
         {
             if (IsCricketBetTypeWithoutBetIdPattern(para))
             {

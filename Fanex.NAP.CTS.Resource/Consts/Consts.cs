@@ -2,7 +2,7 @@ namespace Fanex.NAP.CTS.Resource.Consts
 {
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Linq;
+    //using System.Linq;
 
     public static class Consts
     {
@@ -659,31 +659,13 @@ namespace Fanex.NAP.CTS.Resource.Consts
             (int) MatchMonitorSportType.Tennis,
             (int) MatchMonitorSportType.Cricket
         };
-
-        public static bool IsShowDetailsXForSport(int sportType) =>
-            !SportsDisableDetailsX.Contains(sportType);
-
-        public static List<int> GetCricketBetTypeXValues(int betTypeId)
-        {
-            if (CricketRunsXBetTypeIds.Contains(betTypeId))
-                return Enumerable.Range(1, 50).ToList();
-            if (CricketRuns1XBetTypeIds.Contains(betTypeId))
-                return CricketRuns1XValues.ToList();
-            if (CricketWicketXBetTypeIds.Contains(betTypeId))
-                return Enumerable.Range(1, 10).ToList();
-
-            return new List<int>();
-        }
-
+      
         public static readonly HashSet<int> CricketBetTypesWithoutBetIdPattern = new HashSet<int>
         {
             (int)MatchMonitorBetType.MatchWinner,
             (int)MatchMonitorBetType.HomeInnsRuns,
             (int)MatchMonitorBetType.AwayInnsRuns
         };
-
-        public static bool IsCricketBetTypeWithoutBetIdPattern(int sportType, int betTypeId) =>
-            sportType == (int)MatchMonitorSportType.Cricket && CricketBetTypesWithoutBetIdPattern.Contains(betTypeId);
 
         public static readonly HashSet<int> SportsWithBetIdPattern = new HashSet<int>
         {
@@ -692,8 +674,5 @@ namespace Fanex.NAP.CTS.Resource.Consts
             (int)MatchMonitorSportType.Tennis,
             (int)MatchMonitorSportType.Cricket
         };
-
-        public static bool IsSportWithBetIdPattern(int sportType) =>
-            SportsWithBetIdPattern.Contains(sportType);
     }
 }

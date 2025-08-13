@@ -697,6 +697,21 @@
             }
         }
 
+        private static List<int> GetCricketBetTypeXValues(int betTypeId)
+        {
+            if (CricketRunsXBetTypeIds.Contains(betTypeId))
+                return Enumerable.Range(1, 50).ToList();
+            if (CricketRuns1XBetTypeIds.Contains(betTypeId))
+                return CricketRuns1XValues.ToList();
+            if (CricketWicketXBetTypeIds.Contains(betTypeId))
+                return Enumerable.Range(1, 10).ToList();
+
+            return new List<int>();
+        }
+
+        public static bool IsShowDetailsXForSport(int sportType) =>
+            !SportsDisableDetailsX.Contains(sportType);
+
         #endregion Detail Filter
 
         #region Detail Total Tickets
