@@ -33,6 +33,11 @@
             LogService.Error(ConfigSettings.EnvironmentName + " " + message, ex);
         }
 
+        public static void LogErrorInternal(this string message, Exception ex)
+        {
+            LogService.Error($"INTERNAL {ConfigSettings.EnvironmentName}: " + message, "production-internal", ex);
+        }
+
         public static void LogError(this string message)
         {
             LogService.Error(ConfigSettings.EnvironmentName + " " + message);

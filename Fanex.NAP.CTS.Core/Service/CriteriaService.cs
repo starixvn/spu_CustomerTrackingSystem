@@ -131,13 +131,13 @@
 
         private void RunTaskLogDurationFanexAPI(bool isSuccess, string serviceName, long endTime)
         {
-            if (ConfigSettings.IsWriteLogInfo)
-            {
-                var routeData = HttpContext.Current.Request.RequestContext.RouteData;
-                var requestId = GetRequestId();
+            var routeData = HttpContext.Current?.Request?.RequestContext?.RouteData;
 
+            if (ConfigSettings.IsWriteLogInfo && routeData != null)
+            {
                 try
                 {
+                    var requestId = GetRequestId();
                     var functionName = GetCallerControllerAndAction(routeData);
 
                     var parameters = new
@@ -160,7 +160,7 @@
                 }
                 catch (Exception ex)
                 {
-                    LogExtension.LogError("Log Duration FanexAPI failed: ", ex);
+                    LogExtension.LogErrorInternal("Log Duration FanexAPI failed", ex);
                 }
             }
         }
