@@ -501,6 +501,7 @@ function MatchMonitorDetail() {
         }
 
         $.ajax(common.modifyRelativeUrl('MatchMonitor/GetBetTypeGameValues'), {
+            async: false,
             type: 'POST',
             dataType: 'json',
             data: {
@@ -1648,8 +1649,6 @@ function MatchMonitorDetail() {
 
                 GetMatchMonitorTotalTicket(params, lastScannedSequenceID);
 
-                GetFilterMatchMonitorDetail();
-
                 GetMatchMonitorDetail(params, lastScannedSequenceID, typeOfTickets == MatchMonitorDetailViewType.TicketAll ? posClickGlobal : 0);
 
                 if (recordsTotalGlobal == 0) {
@@ -2611,8 +2610,6 @@ function MatchMonitorDetail() {
 
         FetchFilterMatchMonitorDetail();
         
-        setTimeout(() => FetchMatchMonitorDetail(currentType), 100);
-
         domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
 
         domElements.btnReasonFeedback.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
@@ -3548,7 +3545,6 @@ function MatchMonitorDetail() {
         domElements.iconClearUsnAmt.addClass("hide");
         domElements.inputTranstimeFrom.val('');
         domElements.inputTranstimeTo.val('');
-        SetupValueDefaultGameOrSetFilter();
 
         if (domElements.mapX != "0" && selectedSport != SportTypeConst.Basketball) {
             domElements.cbbMapX.val(domElements.mapX).trigger('change');
