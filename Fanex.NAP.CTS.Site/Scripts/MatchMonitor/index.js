@@ -201,7 +201,6 @@
         }
 
         // Exception case for Bettype MapX, MapXY then BetID = null
-
         result.BettypeID = item.BettypeID;
 
         return result;

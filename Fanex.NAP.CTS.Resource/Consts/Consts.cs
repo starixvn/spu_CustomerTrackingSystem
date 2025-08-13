@@ -2,6 +2,7 @@ namespace Fanex.NAP.CTS.Resource.Consts
 {
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Linq;
 
     public static class Consts
     {
@@ -106,17 +107,22 @@ namespace Fanex.NAP.CTS.Resource.Consts
         public const string MatchMonitorBetType_Quarter2Moneyline = "Quarter 2 Moneyline";
         public const string MatchMonitorBetType_Quarter3Moneyline = "Quarter 3 Moneyline";
         public const string MatchMonitorBetType_Quarter4Moneyline = "Quarter 4 Moneyline";
+
         public const string ProblemAccountManagement_DuplicatedUserName = "Duplicated Username";
         public const string ProblemAccountManagement_SiteLicensee = "Licensee";
         public const string ProblemAccountManagement_SiteCredit = "Credit";
         public const string ProblemAccountManagement_CategoryPA = "Problem Account Category";
+
         public const string MarkPA_AssociatedGroup = "Associated Group";
+
         public const string ReasonDetectNone = "None";
         public const string ReasonDetectBySystem = "Detect By System";
         public const string ReasonDetectBySystemParlay_Display = "Detect By System(Parlay)";
         public const string ReasonDetectBySystemParlay = "Detect By System Parlay";
         public const string ReasonDetectByAI = "Detect By AI";
+
         public const string DangerousScoreRemark = "Detection Date: {0} - Dangerous Score: {1}%";
+
         public const string TWInitialGBMissSport = "Soccer/Basketball";
         public const string TWInitialSmartRemark = "Detection Date: {0} - Probability Threshold: {1}";
         public const string TWTWInitialGBRemark = "Detection Date: {0} - GB Bet Count: {1} - Sport: {2}";
@@ -189,7 +195,10 @@ namespace Fanex.NAP.CTS.Resource.Consts
             FirstCorrectScore = 414,
             QuarterXHDP = 609,
             QuarterXOU = 610,
-            QuarterXMoneyline = 612
+            QuarterXMoneyline = 612,
+            MatchWinner = 501,
+            HomeInnsRuns = 9404,
+            AwayInnsRuns = 9405
         }
 
         public enum MatchMonitorBetId
@@ -636,5 +645,55 @@ namespace Fanex.NAP.CTS.Resource.Consts
             (int) MatchMonitorSportType.Volleyball,
             (int) MatchMonitorSportType.Tennis
         };        
+
+        public static readonly HashSet<int> CricketRunsXBetTypeIds = new HashSet<int> { 9608, 9607 };
+        public static readonly HashSet<int> CricketRuns1XBetTypeIds = new HashSet<int> { 9411, 9410 };
+        public static readonly HashSet<int> CricketWicketXBetTypeIds = new HashSet<int> { 9429, 9428 };
+
+        public static readonly int[] CricketRuns1XValues = new[] { 5, 6, 10, 12, 15, 20, 25, 30, 35, 40, 45 };
+
+        // Sports that do not expand Details X in BetType filter - MM Detail (keep BetTypeName with 'X')
+        public static readonly HashSet<int> SportsDisableDetailsX = new HashSet<int>
+        {
+            (int) MatchMonitorSportType.Volleyball,
+            (int) MatchMonitorSportType.Tennis,
+            (int) MatchMonitorSportType.Cricket
+        };
+
+        public static bool IsShowDetailsXForSport(int sportType) =>
+            !SportsDisableDetailsX.Contains(sportType);
+
+        public static List<int> GetCricketBetTypeXValues(int betTypeId)
+        {
+            if (CricketRunsXBetTypeIds.Contains(betTypeId))
+                return Enumerable.Range(1, 50).ToList();
+            if (CricketRuns1XBetTypeIds.Contains(betTypeId))
+                return CricketRuns1XValues.ToList();
+            if (CricketWicketXBetTypeIds.Contains(betTypeId))
+                return Enumerable.Range(1, 10).ToList();
+
+            return new List<int>();
+        }
+
+        public static readonly HashSet<int> CricketBetTypesWithoutBetIdPattern = new HashSet<int>
+        {
+            (int)MatchMonitorBetType.MatchWinner,
+            (int)MatchMonitorBetType.HomeInnsRuns,
+            (int)MatchMonitorBetType.AwayInnsRuns
+        };
+
+        public static bool IsCricketBetTypeWithoutBetIdPattern(int sportType, int betTypeId) =>
+            sportType == (int)MatchMonitorSportType.Cricket && CricketBetTypesWithoutBetIdPattern.Contains(betTypeId);
+
+        public static readonly HashSet<int> SportsWithBetIdPattern = new HashSet<int>
+        {
+            (int)MatchMonitorSportType.Badminton,
+            (int)MatchMonitorSportType.Volleyball,
+            (int)MatchMonitorSportType.Tennis,
+            (int)MatchMonitorSportType.Cricket
+        };
+
+        public static bool IsSportWithBetIdPattern(int sportType) =>
+            SportsWithBetIdPattern.Contains(sportType);
     }
 }
