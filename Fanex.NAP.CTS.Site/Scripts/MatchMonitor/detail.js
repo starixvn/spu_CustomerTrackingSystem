@@ -203,6 +203,8 @@ function MatchMonitorDetail() {
     //#region Initial Grid
     function InitialDetailGird(element) {
         let isColumnVisible = SportsUseBettypeX.has(domElements.sportType);
+        let currentBetIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
+        let currentSportType = domElements.sportType;
 
         element.DataTable({
             serverSide: false,
@@ -282,7 +284,25 @@ function MatchMonitorDetail() {
                 { data: obj => obj.DangerToString },
                 {
                     data: obj => () => {
-                        return obj.BetIDFromDB > 0 ? obj.BetIDFromDB % 10 : "-"
+                        if (obj.BetIDFromDB > 0) {
+                            let betIdPattern = currentBetIdPattern;
+                            let selectedSport = currentSportType;
+                            
+                            if (SportsUseBettypeX.has(selectedSport) && betIdPattern && betIdPattern.includes('X')) {
+                                let tokenX = (betIdPattern.match(/X+/) || ['X'])[0];
+                                let betIdString = obj.BetIDFromDB.toString();
+                                
+                                if (betIdString.length >= tokenX.length) {
+                                    let suffix = betIdString.slice(-tokenX.length);
+                                    if (/^\d+$/.test(suffix)) {
+                                        return parseInt(suffix).toString();
+                                    }
+                                }
+                            }
+                            
+                            return obj.BetIDFromDB % 10;
+                        }
+                        return "-";
                     }
                 },
                 { data: obj => RenderOdds(obj) },
