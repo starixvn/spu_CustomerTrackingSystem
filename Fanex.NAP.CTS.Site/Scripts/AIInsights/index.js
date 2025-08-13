@@ -325,7 +325,7 @@ function AIInsights() {
 
     function NormalizeLine(line) {
         const trimmed = line.trim();
-        const numberMatch = trimmed.match(/^(\d+)\.\s*(.*)$/);
+        const numberMatch = trimmed.match(/^(\d+)\.(?!\d)\s*(.*)$/);
 
         if (numberMatch) {
             return {

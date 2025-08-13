@@ -6,10 +6,10 @@ namespace Fanex.NAP.CTS.Controller
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AIInsights;
     using Fanex.NAP.CTS.Service;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Net;
     using System.Text;
     using System.Web;
     using System.Web.Mvc;
@@ -65,7 +65,7 @@ namespace Fanex.NAP.CTS.Controller
                     session_id = CurrentSession.SessionId,
                     language = "en"
                 };
-               
+
                 data = _aIInsightsService.Analyze(request, ConfigSettings.AIInsightsAnalyzeUrl);
             }
             catch (Exception ex)
