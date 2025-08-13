@@ -488,7 +488,6 @@ function MatchMonitorDetail() {
         });
     }
 
-
     function SetupValueDefaultGameOrSetFilter() {
         let betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
         let hasXToken = betIdPattern && /X+/.test(betIdPattern);
@@ -1254,7 +1253,7 @@ function MatchMonitorDetail() {
         let selectedGames = domElements.cbbGame.val();
         let betIdPatternHasX = betIdPattern.includes('X');
         let tokenX = (betIdPattern.match(/X+/) || ['X'])[0];
-       
+
         if (!SportsWithoutMapX.has(selectedSport) && betIdPatternHasX) {
             let betIDString = "80" + domElements.cbbMapX.val();
 
@@ -2609,7 +2608,7 @@ function MatchMonitorDetail() {
         cacheFilterDependOn.MGrList = [];
 
         FetchFilterMatchMonitorDetail();
-        
+
         domElements.btnVerifyAndClose.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
 
         domElements.btnReasonFeedback.prop('disabled', currentType == MatchMonitorDetailViewType.TicketAll);
@@ -3584,7 +3583,7 @@ function MatchMonitorDetail() {
 
         domElements.cbbGame.change(function () {
             let pattern = GetAttributeBetTypeSelected('data-betidpattern'); // '80X' | '80XX' | '8XXX'
-            let selected = domElements.cbbGame.val(); 
+            let selected = domElements.cbbGame.val();
 
             if (pattern && selected && selected.length > 0) {
                 let token = (pattern.match(/X+/) || [])[0];
