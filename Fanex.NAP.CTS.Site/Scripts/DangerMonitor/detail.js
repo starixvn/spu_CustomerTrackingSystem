@@ -210,28 +210,27 @@ function DangerousSettingDetail() {
             scrollX: false,
             autoWidth: false,
             columnDefs: [
-                { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 4, 6, 8, 11, 12, 13, 14, 15], className: "text-center" },
+                { targets: "_all", defaultContent: "-" },               
                 {
                     targets: [0], width: "3%", render: function (data, type, full, meta) {
                         return '<label><input type="checkbox" class="col-checkbox" name="chkbx" /></label>';
                     }
                 },
-                { targets: [1], width: "17%" },
-                { targets: [2], width: "4%" },               
-                { targets: [3], width: "10%", className: "text-center col-dgr" },
+                { targets: [1], width: "17%", className: "text-center" }, // Username
+                { targets: [2], width: "4%", className: "text-center" }, // CC
+                { targets: [3], width: "10%", className: "text-center col-dgr" }, //Dgr
                 { targets: [4], width: "5%", className: "text-center col-game", visible: isColumnVisible }, // Game or Set
-                { targets: [5], width: "5%", className: "text-center" },
-                { targets: [6], width: "5%", className: "text-center col-betid" },
-                { targets: [7], width: "5%" },
-                { targets: [8], width: "5%", className: "text-right col-amt" },
-                { targets: [9], width: "4%" },
-                { targets: [10], width: "5%", className: "text-center col-score" },
-                { targets: [11], width: "13%", className: "text-center col-transtime" },
-                { targets: [12], width: "3%" },
-                { targets: [13], width: "5%" },
-                { targets: [14], width: "5%", className: "text-center" },
-                { targets: [15], width: "7%", className: "text-center col-reason" },              
+                { targets: [5], width: "5%", className: "text-center" }, // Odds
+                { targets: [6], width: "5%", className: "text-left col-betid" }, // BetID
+                { targets: [7], width: "5%", className: "text-center" }, // Cur
+                { targets: [8], width: "5%", className: "text-right col-amt" }, // Amt
+                { targets: [9], width: "4%", className: "text-center" }, // HDP
+                { targets: [10], width: "5%", className: "text-center col-score" }, // Score
+                { targets: [11], width: "13%", className: "text-center col-transtime" }, // Transtime
+                { targets: [12], width: "3%", className: "text-center" }, // B.f.
+                { targets: [13], width: "5%", className: "text-center" }, // A.Gr.
+                { targets: [14], width: "5%", className: "text-center" }, // M.Gr.
+                { targets: [15], width: "7%", className: "text-center col-reason" }, // Reason
                 { targets: [16], visible: false },
                 { targets: [17], visible: false }
             ],
@@ -369,17 +368,7 @@ function DangerousSettingDetail() {
             domElements.sportType == SportTypeConst.Tennis
         ) {
             domElements.cbbGame.multiselect().empty();
-
-            //let selected = null;
-
-            //if (domElements.betIDToString) {
-            //    selected = domElements.betIDToString % 10;
-            //} else if (domElements.cbbGame.val()) {
-            //    selected = parseInt(domElements.cbbGame.val()[0]);
-            //}
-
-            //defaultGameSet = selected;
-
+         
             for (let i = 1; i <= 5; i++) {
                 domElements.cbbGame.append(        
                     `<option value='${i}' selected>${i}</option>`
