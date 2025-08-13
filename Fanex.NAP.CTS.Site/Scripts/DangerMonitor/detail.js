@@ -212,7 +212,7 @@ function DangerousSettingDetail() {
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },               
                 {
-                    targets: [0], width: "3%", render: function (data, type, full, meta) {
+                    targets: [0], width: "3%", className: "text-center", render: function (data, type, full, meta) {
                         return '<label><input type="checkbox" class="col-checkbox" name="chkbx" /></label>';
                     }
                 },

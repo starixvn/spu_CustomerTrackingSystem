@@ -126,8 +126,8 @@
                 ViewBag.ReasonGroups = this.GetReasonGroups(true);
                 ViewBag.EventDateToString = para?.EventDateToString;
                 ViewBag.MatchID = para?.MatchID;
-                ViewBag.BetTypeID = para?.BetTypeID;
-                ViewBag.BettypeName = bettypes.FirstOrDefault(x => x.BetTypeID == para?.BetTypeID)?.BetTypeName;
+                ViewBag.BetTypeID = para?.BetTypeID; 
+                ViewBag.BettypeName = bettypes.FirstOrDefault(x => x.BetTypeID == para?.BetTypeID && x.BetID == para?.BetID)?.BetTypeName;
                 ViewBag.BetIDToString = para?.BetID.ToString();
                 ViewBag.BetTypeSettings = bettypes?.Where(x => x.SportType == para.SportType);
                 ViewBag.MapX = para?.MX;
