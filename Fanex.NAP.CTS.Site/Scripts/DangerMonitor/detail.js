@@ -890,6 +890,14 @@ function DangerousSettingDetail() {
     }
 
     function SetupSingleTable() {
+        let sportLabelMap = {
+            [SportTypeConst.Tennis]: 'Set',
+            [SportTypeConst.Volleyball]: 'Set',
+            [SportTypeConst.Badminton]: 'Game',
+        };
+
+        let gameOrSetText = sportLabelMap[domElements.sportType] || 'Game';
+
         $('#tbrMMSG').html(`
                                 <table id="tblMMSG" class="table table-striped table-monitor-detail">
                                 <thead>
@@ -898,6 +906,7 @@ function DangerousSettingDetail() {
                                         <th>Username</th>
                                         <th>CC</th>
                                         <th>Dgr</th>
+                                        <th>${gameOrSetText}</th>
                                         <th>Odds</th>
                                         <th>
                                             <div class="type-outer">
