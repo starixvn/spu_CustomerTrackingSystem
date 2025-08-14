@@ -288,6 +288,11 @@ function MatchMonitorDetail() {
                             let betIdPattern = currentBetIdPattern;
                             let selectedSport = currentSportType;
                             
+                            let currentBetTypeID = GetBetTypeSelected();
+                            if (currentBetTypeID == "501") {
+                                return "-";
+                            }
+                            
                             if (SportsUseBettypeX.has(selectedSport) && betIdPattern && betIdPattern.includes('X')) {
                                 let tokenX = (betIdPattern.match(/X+/) || ['X'])[0];
                                 let betIdString = obj.BetIDFromDB.toString();
