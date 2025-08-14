@@ -686,7 +686,7 @@
                 }
                 else
                 {
-                    values = new List<int>();
+                    values = Enumerable.Range(1, 3).ToList();
                 }
 
                 return Json(new { data = values }, JsonRequestBehavior.AllowGet);

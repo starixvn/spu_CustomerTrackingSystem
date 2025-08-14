@@ -513,6 +513,69 @@ function MatchMonitorDetail() {
         });
     }
 
+    //function SetupValueDefaultGameOrSetFilter_old() {
+    //    let betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
+    //    let hasXToken = betIdPattern && /X+/.test(betIdPattern);
+
+    //    domElements.cbbGame.multiselect().empty();
+
+    //    if (!hasXToken) {
+    //        domElements.cbbGame.prop('disabled', true).multiselect('refresh');
+    //        return;
+    //    }
+
+    //    $.ajax(common.modifyRelativeUrl('MatchMonitor/GetBetTypeGameValues'), {
+    //        async: false,
+    //        type: 'POST',
+    //        dataType: 'json',
+    //        data: {
+    //            sportType: domElements.sportType,
+    //            betTypeId: GetBetTypeSelected(),
+    //            betIdPattern: betIdPattern
+    //        },
+    //        success: function (response) {
+    //            const values = response?.data || [];
+
+    //            if (!values.length) return DisableCbbGame();
+
+    //            EnableCbbGame();
+
+    //            let xToken = (betIdPattern.match(/X+/) || [])[0];
+    //            let betTypeText = $("option:selected", domElements.cbbBetType).text() || "";
+
+    //            let matchedNumbers = (betTypeText.match(/\d+/g) || [])
+    //                .map(num => parseInt(num, 10))
+    //                .filter(num => values.includes(num));
+
+    //            if (domElements.sportType == SportTypeConst.Badminton && !matchedNumbers.length) {
+    //                matchedNumbers = values;
+    //            }
+
+    //            if (!matchedNumbers.length && domElements.betIDToString && xToken) {
+    //                let betIds = domElements.betIDToString.toString().split(',').map(s => s.trim()).filter(Boolean);
+
+    //                betIds.forEach(function (id) {
+    //                    let suffix = id.slice(-xToken.length);
+    //                    if (/^\d+$/.test(suffix)) {
+    //                        let n = parseInt(suffix, 10);
+    //                        if (values.includes(n)) matchedNumbers.push(n);
+    //                    }
+    //                });
+
+    //                matchedNumbers = Array.from(new Set(matchedNumbers));
+    //            }
+
+    //            RenderCbbGameOptions(values, matchedNumbers);
+
+    //            domElements.cbbGame.html(optionsHtml);
+    //            domElements.cbbGame.multiselect('refresh');
+    //        },
+    //        error: function () {
+    //            DisableCbbGame();
+    //        }
+    //    });
+    //}
+
     function SetupValueDefaultGameOrSetFilter() {
         let betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
         let hasXToken = betIdPattern && /X+/.test(betIdPattern);
@@ -520,7 +583,7 @@ function MatchMonitorDetail() {
         domElements.cbbGame.multiselect().empty();
 
         if (!hasXToken) {
-            domElements.cbbGame.prop('disabled', true).multiselect('refresh');
+            DisableCbbGame();
             return;
         }
 
@@ -535,46 +598,60 @@ function MatchMonitorDetail() {
             },
             success: function (response) {
                 const values = response?.data || [];
+                if (!values.length) return DisableCbbGame();
 
-                if (!values.length) {
-                    domElements.cbbGame.prop('disabled', true).multiselect('refresh');
-                    return;
-                }
+                EnableCbbGame();
 
-                domElements.cbbGame.prop('disabled', false);
-                domElements.cbbGame.multiselect('enable');
-
-                let xToken = (betIdPattern.match(/X+/) || [])[0];
-                let betTypeText = $("option:selected", domElements.cbbBetType).text() || "";
-                let matchedNumbers = (betTypeText.match(/\d+/g) || [])
-                    .map(num => parseInt(num, 10))
-                    .filter(num => values.includes(num));
-
-                if (!matchedNumbers.length && domElements.betIDToString && xToken) {
-                    let betIds = domElements.betIDToString.toString().split(',').map(s => s.trim()).filter(Boolean);
-
-                    betIds.forEach(function (id) {
-                        let suffix = id.slice(-xToken.length);
-                        if (/^\d+$/.test(suffix)) {
-                            let n = parseInt(suffix, 10);
-                            if (values.includes(n)) matchedNumbers.push(n);
-                        }
-                    });
-
-                    matchedNumbers = Array.from(new Set(matchedNumbers));
-                }
-
-                let optionsHtml = values
-                    .map(v => `<option value='${v}' ${matchedNumbers.includes(v) ? "selected" : ""}>${v}</option>`)
-                    .join('');
-
-                domElements.cbbGame.html(optionsHtml);
-                domElements.cbbGame.multiselect('refresh');
+                let selectedValues = GetGameNumbers(values, betIdPattern);
+                RenderCbbGameOptions(values, selectedValues);
             },
-            error: function () {
-                domElements.cbbGame.prop('disabled', true).multiselect('refresh');
-            }
+            error: DisableCbbGame
         });
+    }
+
+    function GetGameNumbers(values, betIdPattern) {
+        let betTypeText = $("option:selected", domElements.cbbBetType).text() || "";
+        let numbers = (betTypeText.match(/\d+/g) || [])
+            .map(num => parseInt(num, 10))
+            .filter(num => values.includes(num));
+
+        if (numbers.length > 0) return numbers;
+
+        if (domElements.sportType == SportTypeConst.Badminton) {
+            return values;
+        }
+
+        if (domElements.betIDToString) {
+            let xToken = (betIdPattern.match(/X+/) || [])[0];
+            let betIds = domElements.betIDToString.toString().split(',').map(s => s.trim()).filter(Boolean);
+
+            numbers = betIds
+                .map(id => {
+                    let suffix = id.slice(-xToken.length);
+                    return /^\d+$/.test(suffix) ? parseInt(suffix, 10) : null;
+                })
+                .filter(num => num && values.includes(num));
+
+            return Array.from(new Set(numbers));
+        }
+
+        return [];
+    }
+
+    function RenderCbbGameOptions(allValues, selectedValues) {
+        let optionsHtml = allValues
+            .map(v => `<option value="${v}" ${selectedValues.includes(v) ? "selected" : ""}>${v}</option>`)
+            .join('');
+
+        domElements.cbbGame.html(optionsHtml).multiselect('refresh');
+    }
+
+    function DisableCbbGame() {
+        domElements.cbbGame.prop('disabled', true).multiselect('refresh');
+    }
+
+    function EnableCbbGame() {
+        domElements.cbbGame.prop('disabled', false).multiselect('enable');
     }
 
     function SetupMultiselectGroup(ccb, selectName, menuWidth = 260, menuHeight = 280) {
