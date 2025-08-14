@@ -461,8 +461,9 @@
   width: 100% !important;
 }
 .ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image > * {
-  width: 70% !important;
-  max-width: 70% !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
 }
 .ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image img {
   width: 100% !important;
@@ -471,6 +472,7 @@
 }
 .ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image div, .ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image svg, .ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image canvas {
   max-width: 100% !important;
+  margin: 0 auto !important;
 }
 .ai-insights .ai-insights-container .form-filter-section {
   position: sticky;
@@ -659,12 +661,14 @@
 .content-card-section .content-card .card-body .chart-item .chart-image {
   display: flex;
   justify-content: center;
+  align-items: center;
   min-height: 450px;
   width: 100%;
 }
 .content-card-section .content-card .card-body .chart-item .chart-image > * {
-  width: 70% !important;
-  max-width: 70% !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
 }
 .content-card-section .content-card .card-body .chart-item .chart-image img {
   width: 100% !important;
@@ -673,6 +677,7 @@
 }
 .content-card-section .content-card .card-body .chart-item .chart-image div, .content-card-section .content-card .card-body .chart-item .chart-image svg, .content-card-section .content-card .card-body .chart-item .chart-image canvas {
   max-width: 100% !important;
+  margin: 0 auto !important;
 }
 .content-card-section .content-card .card-body .chart-item .chart-content {
   font-size: 14px;
