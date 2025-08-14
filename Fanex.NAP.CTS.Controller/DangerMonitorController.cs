@@ -134,7 +134,7 @@
                 ViewBag.MapYY = para?.MY;              
                 ViewBag.HomeName = para?.HomeName.ToUpper() ?? string.Empty;
                 ViewBag.AwayName = para?.AwayName.ToUpper() ?? string.Empty;
-                ViewBag.MatchName = ViewBag.HomeName ?? string.Empty + "_" + ViewBag.AwayName ?? string.Empty;                
+                ViewBag.MatchName = ViewBag.HomeName + "_" + ViewBag.AwayName;                
                 ViewBag.LiveIndicator = para?.LiveIndicator ?? true;
                 ViewBag.Reason = para?.Reason;
                 ViewBag.ReasonName = para?.ReasonName ?? string.Empty;                

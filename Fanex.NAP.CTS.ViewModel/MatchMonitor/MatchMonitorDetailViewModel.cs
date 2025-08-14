@@ -79,7 +79,7 @@
         {
             get
             {
-                return Market == 1 ? "Live" : "Non Live";
+                return Market == 1 ? "Live" : "Non-Live";
             }
         }
         

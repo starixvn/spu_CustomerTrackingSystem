@@ -2045,7 +2045,18 @@ function DangerousSettingDetail() {
         let txtMarket = $("option:selected", domElements.cbbMarket).text();
         domElements.spanMarketInfo.text(`${txtMarket}`);
 
-        let txtBetType = $("option:selected", domElements.cbbBetType).text();
+        let txtBetType = $("option:selected", domElements.cbbBetType).text();     
+
+        if (txtBetType.includes('X')) {
+            let selectedSets = domElements.cbbGame.val();
+
+            if (selectedSets && selectedSets.length === 1) {
+                txtBetType = txtBetType.replace('X', selectedSets[0]);
+            } else {
+                txtBetType = txtBetType.replace('X', 'X');
+            }
+        }
+
         domElements.spanSportBetTypeInfo.text(`${domElements.sportName} - ${txtBetType} -`);
 
         cacheFilterDependOn.MGrList = [];
