@@ -59,7 +59,7 @@
 
                 if (result == null)
                 {
-                    result = GetSportBettypes();
+                    result = GetSportBettypes();             
 
                     _memoryCacheService.PushValue(cacheKey, result);
                 }
@@ -974,7 +974,8 @@
                         BetChoiceHome = bt.BetChoiceHome,
                         BetChoiceAway = bt.BetChoiceAway,
                         SportOrder = bt.SportOrder,
-                        BetIDPattern = bt.BetIDPattern
+                        BetIDPattern = bt.BetIDPattern,
+                        BettypeOrder = bt.BettypeOrder
                     }
                 );
 
@@ -997,7 +998,8 @@
                         BetChoiceHome = bt.BetChoiceHome,
                         BetChoiceAway = bt.BetChoiceAway,
                         SportOrder = bt.SportOrder,
-                        BetIDPattern = bt.BetIDPattern
+                        BetIDPattern = bt.BetIDPattern,
+                        BettypeOrder = bt.BettypeOrder
                     }
                 );
 
