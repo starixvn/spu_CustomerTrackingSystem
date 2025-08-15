@@ -671,22 +671,22 @@
                 if (string.IsNullOrEmpty(betIdPattern) || !betIdPattern.Contains("X"))
                     return Json(new { data = Enumerable.Empty<int>() }, JsonRequestBehavior.AllowGet);
 
-                List<int> values = new List<int>();
+                List<int> values;
 
-                if (sportType == (int)MatchMonitorSportType.Cricket)
+                switch (sportType)
                 {
-                    values = GetCricketBetTypeXValues(betTypeId);
-                    if (values == null || values.Count == 0)
-                        values = Enumerable.Range(1, 50).ToList();
-                }
-                else if (sportType == (int)MatchMonitorSportType.Tennis ||
-                         sportType == (int)MatchMonitorSportType.Volleyball)
-                {
-                    values = Enumerable.Range(1, 5).ToList();
-                }
-                else
-                {
-                    values = Enumerable.Range(1, 3).ToList();
+                    case (int)MatchMonitorSportType.Cricket:
+                        values = GetCricketBetTypeXValues(betTypeId);
+                        break;
+
+                    case (int)MatchMonitorSportType.Tennis:
+                    case (int)MatchMonitorSportType.Volleyball:
+                        values = Enumerable.Range(1, 5).ToList();
+                        break;
+
+                    default:
+                        values = Enumerable.Range(1, 3).ToList();
+                        break;
                 }
 
                 return Json(new { data = values }, JsonRequestBehavior.AllowGet);
