@@ -831,7 +831,7 @@
                     itemA.CustomerClass == -1 ? "-" : itemA.CustomerClass.ToString(),
                     (itemA.IsRobot ? "x" : "-"),
                     itemA.DangerToString,
-                    (itemA.Game == 0 ? "-" : itemA.Game.ToString()),
+                    (itemA.Game == 0 ? "-" : itemA.Game.ToString()),        
                     itemA.Odds,
                     itemA.MalayOdds,
                     itemA.BetID.ToString(),

@@ -201,30 +201,32 @@ function MatchMonitorDetail() {
     //#endregion Variables
 
     //#region Initial Grid
-    
+
+    function SetGameValue(obj) {
+        obj.Game = CalculateGameValue(obj);
+    }
+
     function CalculateGameValue(obj) {
         if (obj.BetIDFromDB > 0) {
             let betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
             let selectedSport = domElements.sportType;
             let currentBetTypeID = GetBetTypeSelected();
 
-            if (currentBetTypeID == "501") {
-                return "-";
-            }
+            if (currentBetTypeID == "501") 
+                return null;
 
             if (SportsUseBettypeX.has(selectedSport) && betIdPattern?.includes("X")) {
                 let betIdString = obj.BetIDFromDB.toString();
                 let match = betIdString.match(/^80(\d+)$/);
 
-                if (match) {
-                    return match[1]; 
-                }
+                if (match) 
+                    return Number(match[1]);
             }
 
             return obj.BetIDFromDB.toString();
         }
 
-        return "-";
+        return Number(obj.BetIDFromDB);;
     }
     
     function InitialDetailGird(element) {
@@ -308,7 +310,8 @@ function MatchMonitorDetail() {
                 { data: obj => obj.DangerToString },
                 {
                     data: obj => () => {
-                        return CalculateGameValue(obj);
+                        SetGameValue(obj);
+                        return obj.Game > 0 ? obj.Game : "-";
                     }
                 },
                 { data: obj => RenderOdds(obj) },
@@ -2472,8 +2475,7 @@ function MatchMonitorDetail() {
                     datas += `,&quot;CustomerClass&quot;:&quot;${data.CustomerClass}&quot;`;
                     datas += `,&quot;IsRobot&quot;:&quot;${data.IsRobot}&quot;`;
                     datas += `,&quot;DangerToString&quot;:&quot;${data.DangerToString}&quot;`;
-                    datas += `,&quot;BetIDFromDB&quot;:&quot;${data.BetIDFromDB}&quot;`;
-                    datas += `,&quot;Game&quot;:&quot;${CalculateGameValue(data)}&quot;`;
+                    datas += `,&quot;Game&quot;:&quot;${data.Game}&quot;`;
                     datas += `,&quot;Odds&quot;:&quot;${data.Odds}&quot;`;
                     datas += `,&quot;MalayOdds&quot;:&quot;${data.MalayOdds ?? "-"}&quot;`;
                     datas += `,&quot;BetID&quot;:&quot;${data.BetID}&quot;`;

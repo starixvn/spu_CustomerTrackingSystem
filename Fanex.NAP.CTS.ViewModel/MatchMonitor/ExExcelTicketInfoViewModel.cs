@@ -23,7 +23,11 @@
 
         public int BetIDFromDB { get; set; }
 
-        public int Game { get { return this.BetIDFromDB % 10; } }
+        public virtual int Game
+        {
+            get => this.BetIDFromDB % 10;
+            set => Game = value;
+        }
 
         public decimal Odds { get; set; }
 
@@ -42,7 +46,7 @@
         public string Choice { get; set; }
 
         public string Score { get; set; }
-   
+
         public string TransTimeToString { get; set; }
 
         public string BetFrom { get; set; }

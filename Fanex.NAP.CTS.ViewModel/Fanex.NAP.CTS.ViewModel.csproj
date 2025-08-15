@@ -183,6 +183,7 @@
     <Compile Include="MatchMonitor\DetectGroup\DetectGroupAssociationItemViewModel.cs" />
     <Compile Include="MatchMonitor\DetectGroup\MGrItemViewModel.cs" />
     <Compile Include="MatchMonitor\DetectGroup\MGrListViewModel.cs" />
+    <Compile Include="MatchMonitor\ExExcelTicketInfoMMViewModel.cs" />
     <Compile Include="MatchMonitor\ExExcelTicketInfoViewModel.cs" />
     <Compile Include="MatchMonitor\ExExlMatchInfoViewModel.cs" />
     <Compile Include="MatchMonitor\FilterDependOn\CashoutStatusViewModel.cs" />

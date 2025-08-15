@@ -1434,7 +1434,7 @@
 
             if (!string.IsNullOrEmpty(isDisplaySingleGrid) && isDisplaySingleGrid.ToLower() == "true")
             {
-                var items = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["items"]);
+                var items = serializer.Deserialize<List<ExExcelTicketInfoMMViewModel>>(from["items"]);
 
                 //var templatePath = Server.MapPath(MMDetailSingleGridTemplate);
                 var templatePath = GetExcelTemplatePath(isViewParlay, true, sportType);
@@ -1447,9 +1447,9 @@
             }
             else
             {
-                var homeMItems = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["homes"]);
+                var homeMItems = serializer.Deserialize<List<ExExcelTicketInfoMMViewModel>>(from["homes"]);
 
-                var awayMItems = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["aways"]);
+                var awayMItems = serializer.Deserialize<List<ExExcelTicketInfoMMViewModel>>(from["aways"]);
 
                 //var templatePath = isViewParlay ? Server.MapPath(MMParlayDoubleGridTemplate) : Server.MapPath(MMDetailDoubleGridTemplate);
                 var templatePath = GetExcelTemplatePath(isViewParlay, false, sportType);
