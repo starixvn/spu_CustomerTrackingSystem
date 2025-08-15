@@ -2449,7 +2449,6 @@ function MatchMonitorDetail() {
                     datas += `,&quot;CustomerClass&quot;:&quot;${data.CustomerClass}&quot;`;
                     datas += `,&quot;IsRobot&quot;:&quot;${data.IsRobot}&quot;`;
                     datas += `,&quot;DangerToString&quot;:&quot;${data.DangerToString}&quot;`;
-                    datas += `,&quot;Game&quot;:&quot;${cacheBetIDGame[data.BetIDFromDB]}&quot;`;
                     datas += `,&quot;Odds&quot;:&quot;${data.Odds}&quot;`;
                     datas += `,&quot;MalayOdds&quot;:&quot;${data.MalayOdds ?? "-"}&quot;`;
                     datas += `,&quot;BetID&quot;:&quot;${data.BetID}&quot;`;
@@ -2466,6 +2465,11 @@ function MatchMonitorDetail() {
                     datas += `,&quot;PICVerified&quot;:&quot;${data.PICVerified}&quot;`;
 
                     datas += `,&quot;ParlayTickets&quot;:[${GetExportParlayTicket(data.ParlayTickets)}]`;
+
+                    if (cacheBetIDGame[data.BetIDFromDB])
+                    {
+                        datas += `,&quot;Game&quot;:&quot;${cacheBetIDGame[data.BetIDFromDB]}&quot;`;
+                    }
 
                     datas += `},`;
                 }
