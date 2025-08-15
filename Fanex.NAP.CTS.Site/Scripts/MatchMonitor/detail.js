@@ -201,6 +201,34 @@ function MatchMonitorDetail() {
     //#endregion Variables
 
     //#region Initial Grid
+    
+    function CalculateGameValue(obj) {
+        if (obj.BetIDFromDB > 0) {
+            let betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
+            let selectedSport = domElements.sportType;
+            
+            let currentBetTypeID = GetBetTypeSelected();
+            if (currentBetTypeID == "501") {
+                return "-";
+            }
+            
+            if (SportsUseBettypeX.has(selectedSport) && betIdPattern && betIdPattern.includes('X')) {
+                let tokenX = (betIdPattern.match(/X+/) || ['X'])[0];
+                let betIdString = obj.BetIDFromDB.toString();
+                
+                if (betIdString.length >= tokenX.length) {
+                    let suffix = betIdString.slice(-tokenX.length);
+                    if (/^\d+$/.test(suffix)) {
+                        return parseInt(suffix).toString();
+                    }
+                }
+            }
+            
+            return obj.BetIDFromDB % 10;
+        }
+        return "-";
+    }
+    
     function InitialDetailGird(element) {
         let isColumnVisible = SportsUseBettypeX.has(domElements.sportType);
         let currentBetIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
@@ -284,30 +312,7 @@ function MatchMonitorDetail() {
                 { data: obj => obj.DangerToString },
                 {
                     data: obj => () => {
-                        if (obj.BetIDFromDB > 0) {
-                            let betIdPattern = currentBetIdPattern;
-                            let selectedSport = currentSportType;
-                            
-                            let currentBetTypeID = GetBetTypeSelected();
-                            if (currentBetTypeID == "501") {
-                                return "-";
-                            }
-                            
-                            if (SportsUseBettypeX.has(selectedSport) && betIdPattern && betIdPattern.includes('X')) {
-                                let tokenX = (betIdPattern.match(/X+/) || ['X'])[0];
-                                let betIdString = obj.BetIDFromDB.toString();
-                                
-                                if (betIdString.length >= tokenX.length) {
-                                    let suffix = betIdString.slice(-tokenX.length);
-                                    if (/^\d+$/.test(suffix)) {
-                                        return parseInt(suffix).toString();
-                                    }
-                                }
-                            }
-                            
-                            return obj.BetIDFromDB % 10;
-                        }
-                        return "-";
+                        return CalculateGameValue(obj);
                     }
                 },
                 { data: obj => RenderOdds(obj) },
@@ -2472,6 +2477,7 @@ function MatchMonitorDetail() {
                     datas += `,&quot;IsRobot&quot;:&quot;${data.IsRobot}&quot;`;
                     datas += `,&quot;DangerToString&quot;:&quot;${data.DangerToString}&quot;`;
                     datas += `,&quot;BetIDFromDB&quot;:&quot;${data.BetIDFromDB}&quot;`;
+                    datas += `,&quot;Game&quot;:&quot;${CalculateGameValue(data)}&quot;`;
                     datas += `,&quot;Odds&quot;:&quot;${data.Odds}&quot;`;
                     datas += `,&quot;MalayOdds&quot;:&quot;${data.MalayOdds ?? "-"}&quot;`;
                     datas += `,&quot;BetID&quot;:&quot;${data.BetID}&quot;`;
