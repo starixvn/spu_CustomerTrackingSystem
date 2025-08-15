@@ -19,15 +19,17 @@
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.DetectGroup;
+    using Fanex.NAP.CTS.ViewModel.MatchMonitor.MarkPA;
     using Newtonsoft.Json;
+    using Sprache;
     using System;
+    using System.Text.RegularExpressions;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Mvc;
     using System.Web.Script.Serialization;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
-    using Fanex.NAP.CTS.ViewModel.MatchMonitor.MarkPA;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -666,35 +668,35 @@
         [HttpPost]
         public ActionResult GetBetTypeGameValues(int sportType, int betTypeId, string betIdPattern)
         {
-            try
+            var result = new Dictionary<string, int>();
+            if (string.IsNullOrEmpty(betIdPattern) || !betIdPattern.Contains("X"))
+                return Json(new { data = result }, JsonRequestBehavior.AllowGet);
+
+            List<int> values = new List<int>();
+
+            switch (sportType)
             {
-                if (string.IsNullOrEmpty(betIdPattern) || !betIdPattern.Contains("X"))
-                    return Json(new { data = Enumerable.Empty<int>() }, JsonRequestBehavior.AllowGet);
-
-                List<int> values;
-
-                switch (sportType)
-                {
-                    case (int)MatchMonitorSportType.Cricket:
+                case ((int)MatchMonitorSportType.Cricket):
+                    {
                         values = GetCricketBetTypeXValues(betTypeId);
                         break;
-
-                    case (int)MatchMonitorSportType.Tennis:
-                    case (int)MatchMonitorSportType.Volleyball:
+                    }
+                case ((int)MatchMonitorSportType.Tennis):
+                case ((int)MatchMonitorSportType.Volleyball):
+                    {
                         values = Enumerable.Range(1, 5).ToList();
                         break;
-
-                    default:
+                    }
+                case ((int)MatchMonitorSportType.Badminton):
+                    {
                         values = Enumerable.Range(1, 3).ToList();
                         break;
-                }
+                    }
+            }
 
-                return Json(new { data = values }, JsonRequestBehavior.AllowGet);
-            }
-            catch
-            {
-                return Json(new { data = Enumerable.Empty<int>() }, JsonRequestBehavior.AllowGet);
-            }
+            result = values.ToDictionary(x => Regex.Replace(betIdPattern, @"X+", m => x.ToString("D" + m.Length)), x => x);
+
+            return Json(new { data = result }, JsonRequestBehavior.AllowGet);
         }
 
         private static List<int> GetCricketBetTypeXValues(int betTypeId)
