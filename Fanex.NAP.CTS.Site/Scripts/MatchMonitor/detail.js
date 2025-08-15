@@ -2108,7 +2108,7 @@ function MatchMonitorDetail() {
 
     function VerifyTransMatchMonitorDetail() {
         let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
-        if (domElements.sportType == SportTypeConst.Badminton && betidpattern.includes("X")) {
+        if (SportsUseBettypeX.has(domElements.sportType) && betidpattern.includes("X")) {
             common.postMultipleAPI(GetDataForMultiBetID())
                 .done(function (...responses) {
                     window.close();
