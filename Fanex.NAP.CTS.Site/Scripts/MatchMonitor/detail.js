@@ -513,69 +513,6 @@ function MatchMonitorDetail() {
         });
     }
 
-    //function SetupValueDefaultGameOrSetFilter_old() {
-    //    let betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
-    //    let hasXToken = betIdPattern && /X+/.test(betIdPattern);
-
-    //    domElements.cbbGame.multiselect().empty();
-
-    //    if (!hasXToken) {
-    //        domElements.cbbGame.prop('disabled', true).multiselect('refresh');
-    //        return;
-    //    }
-
-    //    $.ajax(common.modifyRelativeUrl('MatchMonitor/GetBetTypeGameValues'), {
-    //        async: false,
-    //        type: 'POST',
-    //        dataType: 'json',
-    //        data: {
-    //            sportType: domElements.sportType,
-    //            betTypeId: GetBetTypeSelected(),
-    //            betIdPattern: betIdPattern
-    //        },
-    //        success: function (response) {
-    //            const values = response?.data || [];
-
-    //            if (!values.length) return DisableCbbGame();
-
-    //            EnableCbbGame();
-
-    //            let xToken = (betIdPattern.match(/X+/) || [])[0];
-    //            let betTypeText = $("option:selected", domElements.cbbBetType).text() || "";
-
-    //            let matchedNumbers = (betTypeText.match(/\d+/g) || [])
-    //                .map(num => parseInt(num, 10))
-    //                .filter(num => values.includes(num));
-
-    //            if (domElements.sportType == SportTypeConst.Badminton && !matchedNumbers.length) {
-    //                matchedNumbers = values;
-    //            }
-
-    //            if (!matchedNumbers.length && domElements.betIDToString && xToken) {
-    //                let betIds = domElements.betIDToString.toString().split(',').map(s => s.trim()).filter(Boolean);
-
-    //                betIds.forEach(function (id) {
-    //                    let suffix = id.slice(-xToken.length);
-    //                    if (/^\d+$/.test(suffix)) {
-    //                        let n = parseInt(suffix, 10);
-    //                        if (values.includes(n)) matchedNumbers.push(n);
-    //                    }
-    //                });
-
-    //                matchedNumbers = Array.from(new Set(matchedNumbers));
-    //            }
-
-    //            RenderCbbGameOptions(values, matchedNumbers);
-
-    //            domElements.cbbGame.html(optionsHtml);
-    //            domElements.cbbGame.multiselect('refresh');
-    //        },
-    //        error: function () {
-    //            DisableCbbGame();
-    //        }
-    //    });
-    //}
-
     function SetupValueDefaultGameOrSetFilter() {
         let betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
         let hasXToken = betIdPattern && /X+/.test(betIdPattern);
@@ -610,32 +547,49 @@ function MatchMonitorDetail() {
     }
 
     function GetGameNumbers(values, betIdPattern) {
-        let betTypeText = $("option:selected", domElements.cbbBetType).text() || "";
-        let numbers = (betTypeText.match(/\d+/g) || [])
-            .map(num => parseInt(num, 10))
-            .filter(num => values.includes(num));
-
-        if (numbers.length > 0) return numbers;
-
-        if (domElements.sportType == SportTypeConst.Badminton) {
+        if (domElements.sportType === SportTypeConst.Badminton) {
             return values;
         }
 
-        if (domElements.betIDToString) {
-            let xToken = (betIdPattern.match(/X+/) || [])[0];
-            let betIds = domElements.betIDToString.toString().split(',').map(s => s.trim()).filter(Boolean);
-
-            numbers = betIds
-                .map(id => {
-                    let suffix = id.slice(-xToken.length);
-                    return /^\d+$/.test(suffix) ? parseInt(suffix, 10) : null;
-                })
-                .filter(num => num && values.includes(num));
-
-            return Array.from(new Set(numbers));
-        }
+        numbers = ParseNumbersFromBetIDs(values, betIdPattern);
+        if (numbers.length) return numbers;
 
         return [];
+    }
+
+    function ParseNumbersFromBetIDs(validValues, betIdPattern) {
+        if (!domElements.betIDToString) return [];
+
+        let xToken = (betIdPattern.match(/X+/) || [])[0];
+        if (!xToken) return [];
+
+        return Array.from(
+            new Set(
+                domElements.betIDToString
+                    .toString()
+                    .split(',')
+                    .map(s => s.trim())
+                    .map(id => {
+                        let suffix = id.slice(-xToken.length);
+                        return /^\d+$/.test(suffix) ? parseInt(suffix, 10) : null;
+                    })
+                    .filter(n => n && validValues.includes(n))
+            )
+        );
+    }
+
+    function GetSelectedGames() {
+        return domElements.cbbGame.val() || [];
+    }
+
+    function HasSelectedGames() {
+        let selected = GetSelectedGames();
+        return selected && selected.length > 0;
+    }
+
+    function GetFirstSelectedGame() {
+        let selected = GetSelectedGames();
+        return selected && selected.length === 1 ? selected[0] : null;
     }
 
     function RenderCbbGameOptions(allValues, selectedValues) {
@@ -1352,7 +1306,6 @@ function MatchMonitorDetail() {
     function GetBetIDSelected() {
         let betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
         let selectedSport = domElements.sportType;
-        let selectedGames = domElements.cbbGame.val();
         let betIdPatternHasX = betIdPattern.includes('X');
         let tokenX = (betIdPattern.match(/X+/) || ['X'])[0];
 
@@ -1371,10 +1324,9 @@ function MatchMonitorDetail() {
         } else if (
             SportsUseBettypeX.has(selectedSport) &&
             betIdPatternHasX &&
-            selectedGames &&
-            selectedGames.length > 0
+            HasSelectedGames()
         ) {
-            return selectedGames
+            return GetSelectedGames()
                 .map(x => {
                     let padded = x.toString().padStart(tokenX.length, '0');
                     return betIdPattern.replace(tokenX, padded);
@@ -2671,10 +2623,10 @@ function MatchMonitorDetail() {
 
 
         if (betText.includes('X')) {
-            let selectedSets = domElements.cbbGame.val();
+            let firstGame = GetFirstSelectedGame();
 
-            if (selectedSets && selectedSets.length === 1) {
-                betText = betText.replace('X', selectedSets[0]);
+            if (firstGame) {
+                betText = betText.replace('X', firstGame);
             } else {
                 betText = betText.replace('X', 'X');
             }
@@ -3685,9 +3637,9 @@ function MatchMonitorDetail() {
 
         domElements.cbbGame.change(function () {
             let pattern = GetAttributeBetTypeSelected('data-betidpattern'); // '80X' | '80XX' | '8XXX'
-            let selected = domElements.cbbGame.val();
+            let selected = GetSelectedGames();
 
-            if (pattern && selected && selected.length > 0) {
+            if (pattern && HasSelectedGames()) {
                 let token = (pattern.match(/X+/) || [])[0];
 
                 if (token) {
