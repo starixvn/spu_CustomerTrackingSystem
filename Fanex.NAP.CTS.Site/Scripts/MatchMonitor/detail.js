@@ -206,33 +206,29 @@ function MatchMonitorDetail() {
         if (obj.BetIDFromDB > 0) {
             let betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
             let selectedSport = domElements.sportType;
-            
             let currentBetTypeID = GetBetTypeSelected();
+
             if (currentBetTypeID == "501") {
                 return "-";
             }
-            
-            if (SportsUseBettypeX.has(selectedSport) && betIdPattern && betIdPattern.includes('X')) {
-                let tokenX = (betIdPattern.match(/X+/) || ['X'])[0];
+
+            if (SportsUseBettypeX.has(selectedSport) && betIdPattern?.includes("X")) {
                 let betIdString = obj.BetIDFromDB.toString();
-                
-                if (betIdString.length >= tokenX.length) {
-                    let suffix = betIdString.slice(-tokenX.length);
-                    if (/^\d+$/.test(suffix)) {
-                        return parseInt(suffix).toString();
-                    }
+                let match = betIdString.match(/^80(\d+)$/);
+
+                if (match) {
+                    return match[1]; 
                 }
             }
-            
-            return obj.BetIDFromDB % 10;
+
+            return obj.BetIDFromDB.toString();
         }
+
         return "-";
     }
     
     function InitialDetailGird(element) {
         let isColumnVisible = SportsUseBettypeX.has(domElements.sportType);
-        let currentBetIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
-        let currentSportType = domElements.sportType;
 
         element.DataTable({
             serverSide: false,
@@ -565,9 +561,6 @@ function MatchMonitorDetail() {
     function ParseNumbersFromBetIDs(validValues, betIdPattern) {
         if (!domElements.betIDToString) return [];
 
-        let xToken = (betIdPattern.match(/X+/) || [])[0];
-        if (!xToken) return [];
-
         return Array.from(
             new Set(
                 domElements.betIDToString
@@ -575,8 +568,11 @@ function MatchMonitorDetail() {
                     .split(',')
                     .map(s => s.trim())
                     .map(id => {
-                        let suffix = id.slice(-xToken.length);
-                        return /^\d+$/.test(suffix) ? parseInt(suffix, 10) : null;
+                        if (id.startsWith('80')) {
+                            let suffix = id.substring(2); 
+                            return /^\d+$/.test(suffix) ? parseInt(suffix, 10) : null;
+                        }
+                        return null;
                     })
                     .filter(n => n && validValues.includes(n))
             )
