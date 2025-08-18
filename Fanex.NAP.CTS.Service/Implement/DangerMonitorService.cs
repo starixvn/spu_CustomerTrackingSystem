@@ -950,60 +950,44 @@
             };
 
             var mainBetTypes = _commonService.GetMainSportBettype(filter);
-
-            var sportBetTypes1 = betTypes.Where(x => x.SportTypeID > 0);
-
-            var sportBetTypes2 = betTypes.Where(x => x.SportTypeID == 0);
+            DangerMonitorSporTypeBetTypeViewModel Project(
+                    dynamic main,
+                    dynamic bt
+                ) => new DangerMonitorSporTypeBetTypeViewModel
+                {
+                    SportGroup = main.SportGroup,
+                    SportNameDisplay = main.SportNameDisplay,
+                    LeagueGroupID = main.LeagueGroupID,
+                    SportType = main.SporttypeId,
+                    SportName = main.SportName,
+                    BetTypeID = bt.BetTypeID,
+                    BetTypeName = bt.BetTypeNameDisplay,
+                    BetID = _commonService.GetBetID(bt.BetIDPattern, bt.NameDetailsX),
+                    BetChoiceType = bt.BetChoiceType,
+                    BetChoiceHome = bt.BetChoiceHome,
+                    BetChoiceAway = bt.BetChoiceAway,
+                    SportOrder = bt.SportOrder,
+                    BetIDPattern = bt.BetIDPattern,
+                    BettypeOrder = bt.BettypeOrder
+                };
 
             var result1 = mainBetTypes
-                .Join(
-                    sportBetTypes1,
-                        main => new { BetTypeID = main.BettypeId, SportTypeID = main.SporttypeId },
-                        bt => new { bt.BetTypeID, bt.SportTypeID },
-                    (main, bt) => new DangerMonitorSporTypeBetTypeViewModel
-                    {
-                        SportGroup = main.SportGroup,
-                        SportNameDisplay = main.SportNameDisplay,
-                        LeagueGroupID = main.LeagueGroupID,
-                        SportType = main.SporttypeId,
-                        SportName = main.SportName,
-                        BetTypeID = bt.BetTypeID,
-                        BetTypeName = bt.BetTypeNameDisplay,
-                        BetID = _commonService.GetBetID(bt.BetIDPattern, bt.NameDetailsX),
-                        BetChoiceType = bt.BetChoiceType,
-                        BetChoiceHome = bt.BetChoiceHome,
-                        BetChoiceAway = bt.BetChoiceAway,
-                        SportOrder = bt.SportOrder,
-                        BetIDPattern = bt.BetIDPattern,
-                        BettypeOrder = bt.BettypeOrder
-                    }
-                );
+               .Join(
+                   betTypes.Where(x => x.SportTypeID == 0),
+                   main => main.BettypeId,
+                   bt => bt.BetTypeID,
+                   (main, bt) => Project(main, bt)
+               );
 
             var result2 = mainBetTypes
                 .Join(
-                    sportBetTypes2,
-                        main => new { BetTypeID = main.BettypeId },
-                        bt => new { bt.BetTypeID },
-                    (main, bt) => new DangerMonitorSporTypeBetTypeViewModel
-                    {
-                        SportGroup = main.SportGroup,
-                        SportNameDisplay = main.SportNameDisplay,
-                        LeagueGroupID = main.LeagueGroupID,
-                        SportType = main.SporttypeId,
-                        SportName = main.SportName,
-                        BetTypeID = bt.BetTypeID,
-                        BetTypeName = bt.BetTypeNameDisplay,
-                        BetID = _commonService.GetBetID(bt.BetIDPattern, bt.NameDetailsX),
-                        BetChoiceType = bt.BetChoiceType,
-                        BetChoiceHome = bt.BetChoiceHome,
-                        BetChoiceAway = bt.BetChoiceAway,
-                        SportOrder = bt.SportOrder,
-                        BetIDPattern = bt.BetIDPattern,
-                        BettypeOrder = bt.BettypeOrder
-                    }
+                    betTypes.Where(x => x.SportTypeID > 0),
+                    main => new { main.BettypeId, main.SporttypeId },
+                    bt => new { BettypeId = bt.BetTypeID, SporttypeId = bt.SportTypeID },
+                    (main, bt) => Project(main, bt)
                 );
-
-            return (result2.Union(result1)).OrderBy(x=>x.BettypeOrder);
+           
+            return result1.Union(result2);            
         }
         #endregion
     }
