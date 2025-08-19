@@ -19,15 +19,17 @@
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.DetectGroup;
+    using Fanex.NAP.CTS.ViewModel.MatchMonitor.MarkPA;
     using Newtonsoft.Json;
+    using Sprache;
     using System;
+    using System.Text.RegularExpressions;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Mvc;
     using System.Web.Script.Serialization;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
-    using Fanex.NAP.CTS.ViewModel.MatchMonitor.MarkPA;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -40,6 +42,8 @@
         private const string MMParlayDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/ParlayDoubleGridTemplate.xlsx";
         private const string MMParlaySingleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/ParlaySingleGridTemplate.xlsx";
         private const string MMDetailVolleyballDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/VolleyballDoubleGridTemplate.xlsx";
+        private const string MMDetailCricketDoubleGridTemplate = "~/App_Data/Excel Template/MatchMonitor/CricketDoubleGridTemplate.xlsx";
+
 
         private readonly IMatchMonitorService _matchMonitorService;
         private readonly IAssociationDetectionService _associationDetectionService;
@@ -437,7 +441,11 @@
                 ViewBag.BetTypeID = para?.BetTypeID;
                 ViewBag.BettypeName = para?.BettypeName ?? string.Empty;
                 ViewBag.BetIDToString = para?.BetID.ToString();
-                ViewBag.BetTypeSettings = GetBetTypeSettingsWithSupportSuspicious(para.SportType.ToString(), false, false, para.SportType != (int)MatchMonitorSportType.Volleyball && para.SportType != (int)MatchMonitorSportType.Tennis);
+                ViewBag.BetTypeSettings = GetBetTypeSettingsWithSupportSuspicious(
+                    para.SportType.ToString(),
+                    false,
+                    false,
+                    IsShowDetailsXForSport(para.SportType));
                 ViewBag.MapX = para?.MX;
                 ViewBag.MapYY = para?.MY;
                 ViewBag.HomeName = para?.HomeName.ToUpper() ?? string.Empty;
@@ -656,6 +664,55 @@
 
             return allFilterResult;
         }
+
+        [HttpPost]
+        public ActionResult GetBetTypeGameValues(int sportType, int betTypeId, string betIdPattern)
+        {
+            var result = new Dictionary<string, int>();
+            if (string.IsNullOrEmpty(betIdPattern) || !betIdPattern.Contains("X"))
+                return Json(new { data = result }, JsonRequestBehavior.AllowGet);
+
+            List<int> values = new List<int>();
+
+            switch (sportType)
+            {
+                case ((int)MatchMonitorSportType.Cricket):
+                    {
+                        values = GetCricketBetTypeXValues(betTypeId);
+                        break;
+                    }
+                case ((int)MatchMonitorSportType.Tennis):
+                case ((int)MatchMonitorSportType.Volleyball):
+                    {
+                        values = Enumerable.Range(1, 5).ToList();
+                        break;
+                    }
+                case ((int)MatchMonitorSportType.Badminton):
+                    {
+                        values = Enumerable.Range(1, 3).ToList();
+                        break;
+                    }
+            }
+
+            result = values.ToDictionary(x => Regex.Replace(betIdPattern, @"X+", m => x.ToString("D" + m.Length)), x => x);
+
+            return Json(new { data = result }, JsonRequestBehavior.AllowGet);
+        }
+
+        private static List<int> GetCricketBetTypeXValues(int betTypeId)
+        {
+            if (CricketRunsXBetTypeIds.Contains(betTypeId))
+                return Enumerable.Range(1, 50).ToList();
+            if (CricketRuns1XBetTypeIds.Contains(betTypeId))
+                return CricketRuns1XValues.ToList();
+            if (CricketWicketXBetTypeIds.Contains(betTypeId))
+                return Enumerable.Range(1, 10).ToList();
+
+            return new List<int>();
+        }
+
+        public static bool IsShowDetailsXForSport(int sportType) =>
+            !SportsDisableDetailsX.Contains(sportType);
 
         #endregion Detail Filter
 
@@ -1379,7 +1436,7 @@
 
             if (!string.IsNullOrEmpty(isDisplaySingleGrid) && isDisplaySingleGrid.ToLower() == "true")
             {
-                var items = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["items"]);
+                var items = serializer.Deserialize<List<ExExcelTicketInfoMMViewModel>>(from["items"]);
 
                 //var templatePath = Server.MapPath(MMDetailSingleGridTemplate);
                 var templatePath = GetExcelTemplatePath(isViewParlay, true, sportType);
@@ -1392,9 +1449,9 @@
             }
             else
             {
-                var homeMItems = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["homes"]);
+                var homeMItems = serializer.Deserialize<List<ExExcelTicketInfoMMViewModel>>(from["homes"]);
 
-                var awayMItems = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["aways"]);
+                var awayMItems = serializer.Deserialize<List<ExExcelTicketInfoMMViewModel>>(from["aways"]);
 
                 //var templatePath = isViewParlay ? Server.MapPath(MMParlayDoubleGridTemplate) : Server.MapPath(MMDetailDoubleGridTemplate);
                 var templatePath = GetExcelTemplatePath(isViewParlay, false, sportType);
@@ -1528,14 +1585,24 @@
             {
                 case true:
                     return Server.MapPath(MMDetailSingleGridTemplate);
+
                 case false when (isViewParlay):
                     return Server.MapPath(MMParlayDoubleGridTemplate);
+
                 case false when (sportType == (int)MatchMonitorSportType.Badminton):
                     return Server.MapPath(MMDetailBadmintonDoubleGridTemplate);
-                case false when (sportType == (int)MatchMonitorSportType.Volleyball || sportType == (int)MatchMonitorSportType.Tennis):
+
+                case false when (
+                    sportType == (int)MatchMonitorSportType.Volleyball ||
+                    sportType == (int)MatchMonitorSportType.Tennis):
                     return Server.MapPath(MMDetailVolleyballDoubleGridTemplate);
+
+                case false when (sportType == (int)MatchMonitorSportType.Cricket):
+                    return Server.MapPath(MMDetailCricketDoubleGridTemplate);
+
                 case false when (sportType != (int)MatchMonitorSportType.Badminton):
                     return Server.MapPath(MMDetailDoubleGridTemplate);
+
                 default:
                     return string.Empty;
             }

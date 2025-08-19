@@ -34,6 +34,8 @@
 
         private const string MMDetailDoubleGridTemplate = "~/App_Data/Excel Template/DangerMonitor/DoubleGridTemplate.xlsx";
         private const string MMDetailSingleGridTemplate = "~/App_Data/Excel Template/DangerMonitor/SingleGridTemplate.xlsx";
+        private const string MMDetailBadmintonDoubleGridTemplate = "~/App_Data/Excel Template/DangerMonitor/BadmintonDoubleGridTemplate.xlsx";
+        private const string MMDetailVolleyballDoubleGridTemplate = "~/App_Data/Excel Template/DangerMonitor/VolleyballDoubleGridTemplate.xlsx";
 
         public override string BaseControllerName { get => Consts.MenuItemMonitor; }
 
@@ -95,7 +97,11 @@
             {
                 data = _dangerMonitorService.GetDangerMonitor(filter);
 
-                data.Items = data.Items.OrderBy(x => x.MatchSection).ThenByDescending(x => x.EventDate).ThenByDescending(x => x.MatchID).ThenBy(x => x.BettypeID).ThenBy(x => x.BetID);
+                data.Items = data.Items.OrderBy(x => x.MatchSection)
+                    .ThenByDescending(x => x.EventDate)
+                    .ThenByDescending(x => x.MatchID)
+                    .ThenBy(x => x.BettypeID)
+                    .ThenBy(x => x.BetID);
             }
 
             return Json(new
@@ -120,23 +126,23 @@
                 ViewBag.ReasonGroups = this.GetReasonGroups(true);
                 ViewBag.EventDateToString = para?.EventDateToString;
                 ViewBag.MatchID = para?.MatchID;
-                ViewBag.BetTypeID = para?.BetTypeID;
-                ViewBag.BettypeName = bettypes.FirstOrDefault(x => x.BetTypeID == para?.BetTypeID)?.BetTypeName;
+                ViewBag.BetTypeID = para?.BetTypeID; 
+                ViewBag.BettypeName = bettypes.FirstOrDefault(x => x.BetTypeID == para?.BetTypeID && x.BetID == para?.BetID)?.BetTypeName;
                 ViewBag.BetIDToString = para?.BetID.ToString();
                 ViewBag.BetTypeSettings = bettypes?.Where(x => x.SportType == para.SportType);
                 ViewBag.MapX = para?.MX;
-                ViewBag.MapYY = para?.MY;
+                ViewBag.MapYY = para?.MY;              
                 ViewBag.HomeName = para?.HomeName.ToUpper() ?? string.Empty;
                 ViewBag.AwayName = para?.AwayName.ToUpper() ?? string.Empty;
-                ViewBag.MatchName = ViewBag.HomeName + "_" + ViewBag.AwayName;
+                ViewBag.MatchName = ViewBag.HomeName + "_" + ViewBag.AwayName;                
                 ViewBag.LiveIndicator = para?.LiveIndicator ?? true;
                 ViewBag.Reason = para?.Reason;
-                ViewBag.ReasonName = para?.ReasonName ?? string.Empty;
-                ViewBag.LeagueName = para?.LeagueName.ToUpper() ?? string.Empty;
+                ViewBag.ReasonName = para?.ReasonName ?? string.Empty;                
+                ViewBag.LeagueName = para?.LeagueName.ToUpper() ?? string.Empty;                                
                 ViewBag.ReasonGroup = para?.ReasonGroup ?? string.Empty;
                 ViewBag.MarketName = para?.MarketName ?? string.Empty;
                 ViewBag.BetChoice = para?.BetChoice;
-                ViewBag.IsDisableScoreFilter = IsDisableScoreFilter(para.SportType);
+                ViewBag.IsDisableScoreFilter = ConditionExcludeScoreForMM.Contains(para.SportType);
                 ViewBag.SportType = para?.SportType ?? 0;
                 ViewBag.SportName = bettypes.FirstOrDefault(x => x.SportType == para?.SportType)?.SportName;
                 ViewBag.KOTime = para?.KOTime;
@@ -276,12 +282,13 @@
 
             var matchInfo = serializer.Deserialize<ExExlMatchInfoViewModel>(from["match"]);
             var isDisplaySingleGrid = from["isDisplaySingleGrid"];
+            int.TryParse(from["sportType"], out int sportType);
 
             if (!string.IsNullOrEmpty(isDisplaySingleGrid) && isDisplaySingleGrid.ToLower() == "true")
             {
                 var items = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["items"]);
-
-                var templatePath = Server.MapPath(MMDetailSingleGridTemplate);
+              
+                var templatePath = GetExcelTemplatePath(true, sportType);
 
                 var fileName = string.Format("DangerMM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr);
 
@@ -293,11 +300,12 @@
             {
                 var homeMItems = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["homes"]);
                 var awayMItems = serializer.Deserialize<List<ExExcelTicketInfoViewModel>>(from["aways"]);
-                var templatePath = Server.MapPath(MMDetailDoubleGridTemplate);
+                
+                var templatePath = GetExcelTemplatePath(false, sportType);
 
                 var fileName = string.Format("DangerMM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr);
 
-                var excelFile = _dangerMonitorService.ExportExcelMMDetailDG(homeMItems, awayMItems, fileName, templatePath);
+                var excelFile = _dangerMonitorService.ExportExcelMMDetailDG(homeMItems, awayMItems, fileName, templatePath, sportType);
 
                 return File(excelFile, "application/vnd.ms-excel", fileName);
             }
@@ -383,6 +391,26 @@
             }
 
             return result;
+        }
+        
+        private string GetExcelTemplatePath(bool isDisplaySingleGrid, int sportType)
+        {
+            var templatePath = string.Empty;
+
+            switch (isDisplaySingleGrid)
+            {
+                case true:
+                    templatePath = MMDetailSingleGridTemplate; break;
+                case false when (sportType == (int)MatchMonitorSportType.Badminton):
+                    templatePath = MMDetailBadmintonDoubleGridTemplate; break;
+                case false when (sportType == (int)MatchMonitorSportType.Volleyball):
+                case false when (sportType == (int)MatchMonitorSportType.Tennis):
+                    templatePath = MMDetailVolleyballDoubleGridTemplate; break;
+                case false:
+                    templatePath = MMDetailDoubleGridTemplate; break;
+            }
+
+            return Server.MapPath(templatePath);
         }
         #endregion
     }
