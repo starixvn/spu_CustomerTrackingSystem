@@ -209,6 +209,20 @@
             }
         }
 
+        #region IsUsingFanexAPIDirect
+        public static bool IsUsingFanexAPIDirect
+        {
+            get
+            {
+                var rs = ConfigurationManager.AppSettings["IsUsingFanexAPIDirect"];
+
+                return rs == "1";
+            }
+        }
+
+        public static string GetMatchFromMainInfoUrl => GetConfigStringByName("GetMatchFromMainInfoUrl");
+        #endregion
+
         public static int AIAnalyzeRequestTimeout
         {
             get

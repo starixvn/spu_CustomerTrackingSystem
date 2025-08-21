@@ -23,6 +23,7 @@
     using Fanex.NAP.CTS.Core.Service;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using Fanex.NAP.CTS.Model.MatchMonitor.Entities;
+    using Fanex.NAP.CTS.Core.Utilities;
 
     public class MatchMonitorService : IMatchMonitorService
     {
@@ -53,7 +54,11 @@
                 Event = filter.Event
             };
 
-            return _repository.Fetch<MatchFromMainInfoModel>(criteria);
+            var result = ConfigSettings.IsUsingFanexAPIDirect ?
+                            ApiHelper.Post<IEnumerable<MatchFromMainInfoModel>>(ConfigSettings.GetMatchFromMainInfoUrl, criteria).Result :
+                            _repository.Fetch<MatchFromMainInfoModel>(criteria);
+
+            return result;
         }
 
         public IEnumerable<GetMatchMonitorModel> GetMatchMonitor(MatchMonitorSearchViewModel filter, string matchInfoFromMainJson)
@@ -831,7 +836,7 @@
                     itemA.CustomerClass == -1 ? "-" : itemA.CustomerClass.ToString(),
                     (itemA.IsRobot ? "x" : "-"),
                     itemA.DangerToString,
-                    (itemA.Game == 0 ? "-" : itemA.Game.ToString()),        
+                    (itemA.Game == 0 ? "-" : itemA.Game.ToString()),
                     itemA.Odds,
                     itemA.MalayOdds,
                     itemA.BetID.ToString(),
