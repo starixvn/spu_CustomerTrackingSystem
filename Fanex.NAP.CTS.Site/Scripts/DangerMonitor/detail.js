@@ -28,6 +28,28 @@ const SportTypeConst = {
     Cricket: "50"
 }
 
+const SportsUseBettypeX = new Set([
+    SportTypeConst.Badminton,
+    SportTypeConst.Volleyball,
+    SportTypeConst.Tennis,
+    SportTypeConst.Cricket
+]);
+
+const SportsWithoutMapX = new Set([
+    SportTypeConst.Basketball,
+    SportTypeConst.Badminton,
+    SportTypeConst.Volleyball,
+    SportTypeConst.Tennis,
+    SportTypeConst.Cricket
+]);
+
+const BetTypeUnitLabel = {
+    [SportTypeConst.Volleyball]: "Set",
+    [SportTypeConst.Tennis]: "Set",
+    [SportTypeConst.Badminton]: "Game",
+    [SportTypeConst.Cricket]: "Run/Wicket"
+};
+
 function ConvertNumberToThousandsString(x) {
     return x ? x.toLocaleString() : 0;
 }
@@ -363,20 +385,57 @@ function DangerousSettingDetail() {
         });
     }
 
-    function SetupValueDefaultGameOrSetFilter() {
-        if (domElements.sportType == SportTypeConst.Volleyball ||
-            domElements.sportType == SportTypeConst.Tennis
-        ) {
-            domElements.cbbGame.multiselect().empty();
-         
-            for (let i = 1; i <= 5; i++) {
-                domElements.cbbGame.append(        
-                    `<option value='${i}' selected>${i}</option>`
-                );
-            }
+    function SetupValueDefaultGameOrSetFilter() {       
+        let betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
 
-            domElements.cbbGame.multiselect("refresh");
+        let hasXToken = betIdPattern && /X+/.test(betIdPattern);
+
+        domElements.cbbGame.multiselect().empty();
+
+        if (!hasXToken) {
+            DisableCbbGame();
+            return;
         }
+
+        $.ajax(common.modifyRelativeUrl('MatchMonitor/GetBetTypeGameValues'), {
+            async: false,
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                sportType: domElements.sportType,
+                betTypeId: GetBetTypeSelected(),
+                betIdPattern: betIdPattern
+            },
+            success: function (response) {                  
+                EnableCbbGame();
+             
+                domElements.cbbGame.multiselect().empty();
+                $.each(response?.data, function (key, value) {
+                    domElements.cbbGame.append(
+                        `<option value='${key}' selected>${value}</option>`
+                    );
+                });
+                domElements.cbbGame.multiselect('refresh');               
+            },
+            error: DisableCbbGame
+        });
+    }   
+
+    function GetSelectedGames() {
+        return domElements.cbbGame.val() || [];
+    }
+
+    function HasSelectedGames() {
+        let selected = GetSelectedGames();
+        return selected && selected.length > 0;
+    }
+
+    function DisableCbbGame() {
+        domElements.cbbGame.prop('disabled', true).multiselect('refresh');
+    }
+
+    function EnableCbbGame() {
+        domElements.cbbGame.prop('disabled', false).multiselect('enable');
     }
 
     function SetupFilter(element, data) {
@@ -1040,34 +1099,36 @@ function DangerousSettingDetail() {
 
     function GetBetIDSelected() {        
         let betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
-        let sportType = domElements.sportType;
+        let selectedSport = domElements.sportType;
+        let betIdPatternHasX = betIdPattern.includes('X');
+        let tokenX = (betIdPattern.match(/X+/) || ['X'])[0];
 
-        let isRacketSport = [
-            SportTypeConst.Badminton,
-            SportTypeConst.Volleyball,
-            SportTypeConst.Tennis
-        ].includes(sportType);
-
-        if (!isRacketSport && sportType !== SportTypeConst.Basketball && betIdPattern.includes('X')) {
-            let betID = `80${domElements.cbbMapX.val()}`;
+        if (!SportsWithoutMapX.has(selectedSport) && betIdPatternHasX) {
+            let betIDString = "80" + domElements.cbbMapX.val();
 
             if (betIdPattern.includes('YY')) {
-                betID += `0${domElements.cbbMapYY.val()}`.slice(-2);
+                betIDString += ("0" + domElements.cbbMapYY.val()).slice(-2);
             }
-            return betID;
-        }
 
-        if (sportType === SportTypeConst.Basketball) {
+            return betIDString;
+
+        } else if (selectedSport === SportTypeConst.Basketball) {
             return $("option:selected", domElements.cbbBetType).attr('data-betid');
-        }
-     
-        if (isRacketSport && betIdPattern.includes('X') && domElements.cbbGame.val()) {
-            return domElements.cbbGame.val()
-                .map(game => betIdPattern.replace('X', game))
+
+        } else if (
+            SportsUseBettypeX.has(selectedSport) &&
+            betIdPatternHasX &&
+            HasSelectedGames()
+        ) {
+            return GetSelectedGames()
+                .map(x => {
+                    let padded = x.toString().padStart(tokenX.length, '0');
+                    return betIdPattern.replace(tokenX, padded);
+                })
                 .toString();
         }
 
-        return 0;
+        return 0; //default
     }
 
     function IsFilterSuspicious(params) {
@@ -2533,18 +2594,20 @@ function DangerousSettingDetail() {
     }
 
     function ToggleGameX() {
-        let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
+        let betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
 
-        if ((domElements.sportType == SportTypeConst.Badminton || domElements.sportType == SportTypeConst.Volleyball || domElements.sportType == SportTypeConst.Tennis)
-            && betidpattern && betidpattern.includes('X')) {
+        if (SportsUseBettypeX.has(domElements.sportType)
+            && betIdPattern && betIdPattern.includes('X')) {
             domElements.cbbGame.parent().show();
             domElements.cbbMapX.parent().hide();
             domElements.cbbMapYY.parent().hide();
+
+            SetupValueDefaultGameOrSetFilter();
         } else {
             domElements.cbbGame.parent().hide();
             domElements.cbbMapX.parent().show();
             domElements.cbbMapYY.parent().show();
-        }
+        }      
     }
 
     //#endregion Event Toggle

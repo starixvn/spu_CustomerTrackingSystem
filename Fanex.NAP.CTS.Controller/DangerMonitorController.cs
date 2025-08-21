@@ -166,13 +166,7 @@
             }
 
             return View();
-        }
-
-        private bool IsDisableScoreFilter(int sportType)
-        {
-            return sportType == (int)MatchMonitorSportType.Basketball
-                || sportType == (int)MatchMonitorSportType.Cricket;
-        }
+        }     
 
         [HttpPost]
         public ActionResult Detail(DangerMonitorDetailViewModel para, string username)
