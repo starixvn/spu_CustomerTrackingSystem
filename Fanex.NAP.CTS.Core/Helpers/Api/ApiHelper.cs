@@ -197,6 +197,34 @@
         #endregion
 
         #region PostWithProxy
+        public static async Task<TResult> PostWithApiKey<TResult>(string url, object param, string apiKey, double timeOutbySeconds = 120)
+        {
+            using (var web = new HttpClient())
+            {
+                var content = JsonConvert.SerializeObject(param);
+
+                var buffer = Encoding.UTF8.GetBytes(content);
+
+                var byteContent = new ByteArrayContent(buffer);
+
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                byteContent.Headers.Add("X-API-KEY", apiKey);
+
+                web.Timeout = TimeSpan.FromSeconds(timeOutbySeconds);
+
+                var response = await web.PostAsync(url, byteContent).ConfigureAwait(false);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+                }
+
+                var result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                return JsonConvert.DeserializeObject<TResult>(result);
+            }
+        }
+
         public static async Task<TResult> PostWithProxy<TResult>(string url, object param)
         {
             var proxy = new WebProxy

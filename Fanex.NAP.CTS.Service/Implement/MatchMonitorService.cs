@@ -55,7 +55,10 @@
             };
 
             var result = ConfigSettings.IsUsingFanexAPIDirect ?
-                            ApiHelper.Post<IEnumerable<MatchFromMainInfoModel>>(ConfigSettings.GetMatchFromMainInfoUrl, criteria).Result :
+                            ApiHelper.PostWithApiKey<IEnumerable<MatchFromMainInfoModel>>(
+                                ConfigSettings.GetMatchFromMainInfoUrl, 
+                                criteria,
+                                ConfigSettings.ApiKeyFanexAPIDirect).Result :
                             _repository.Fetch<MatchFromMainInfoModel>(criteria);
 
             return result;
