@@ -47,7 +47,7 @@ const BetTypeUnitLabel = {
     [SportTypeConst.Volleyball]: "Set",
     [SportTypeConst.Tennis]: "Set",
     [SportTypeConst.Badminton]: "Game",
-    [SportTypeConst.Cricket]: "Run/Wicket"
+    [SportTypeConst.Cricket]: "R/W"
 };
 
 function ConvertNumberToThousandsString(x) {
@@ -184,6 +184,7 @@ function DangerousSettingDetail() {
         Danger4: $('#hdDanger4').val(),
         Danger5: $('#hdDanger5').val()
     }
+    let cacheBetIDGame = {};
 
     let posClickGlobal = 0;
     let xhr;
@@ -202,10 +203,7 @@ function DangerousSettingDetail() {
 
     //#region Initial Grid
     function InitialDetailGird(element) {
-        let isColumnVisible =
-            domElements.sportType == SportTypeConst.Badminton ||
-            domElements.sportType == SportTypeConst.Volleyball ||
-            domElements.sportType == SportTypeConst.Tennis;
+        let isColumnVisible = SportsUseBettypeX.has(domElements.sportType);
 
         element.DataTable({
             serverSide: false,          
@@ -241,7 +239,7 @@ function DangerousSettingDetail() {
                 { targets: [1], width: "17%", className: "text-center" }, // Username
                 { targets: [2], width: "4%", className: "text-center" }, // CC
                 { targets: [3], width: "10%", className: "text-center col-dgr" }, //Dgr
-                { targets: [4], width: "5%", className: "text-center col-game", visible: isColumnVisible }, // Game or Set
+                { targets: [4], width: "5%", className: "text-center col-game", visible: isColumnVisible }, // Game or Set or R/W
                 { targets: [5], width: "5%", className: "text-center" }, // Odds
                 { targets: [6], width: "5%", className: "text-left col-betid" }, // BetID
                 { targets: [7], width: "5%", className: "text-center" }, // Cur
@@ -276,7 +274,7 @@ function DangerousSettingDetail() {
                 { data: obj => obj.DangerToString },
                 {
                     data: obj => () => {
-                        return obj.BetIDFromDB > 0 ? obj.BetIDFromDB % 10 : "-"
+                        return cacheBetIDGame[obj.BetIDFromDB] > 0 ? cacheBetIDGame[obj.BetIDFromDB] : "-";
                     }
                 },
                 { data: obj => obj.Odds },
@@ -406,18 +404,22 @@ function DangerousSettingDetail() {
                 betTypeId: GetBetTypeSelected(),
                 betIdPattern: betIdPattern
             },
-            success: function (response) {                  
+            success: function (response) {       
+                cacheBetIDGame = response?.data;
+
                 EnableCbbGame();
              
                 domElements.cbbGame.multiselect().empty();
                 $.each(response?.data, function (key, value) {
                     domElements.cbbGame.append(
-                        `<option value='${key}' selected>${value}</option>`
+                        `<option value='${value}' selected>${value}</option>`
                     );
                 });
                 domElements.cbbGame.multiselect('refresh');               
             },
-            error: DisableCbbGame
+            function(xhr, textStatus, error) {               
+                console.log(error);
+            }
         });
     }   
 
@@ -809,13 +811,7 @@ function DangerousSettingDetail() {
     }
 
     function SetupDoubleDataTable() {
-        let sportLabelMap = {
-            [SportTypeConst.Tennis]: 'Set',
-            [SportTypeConst.Volleyball]: 'Set',
-            [SportTypeConst.Badminton]: 'Game',
-        };
-
-        let gameOrSetText = sportLabelMap[domElements.sportType] || 'Game';
+        let betTypeUnitLabel = BetTypeUnitLabel[domElements.sportType] || 'Set';
 
         $("#tbrMMHomeTeam").html(`
                                 <table id="tblMMHomeTeam" class="table table-striped table-monitor-detail">
@@ -825,7 +821,7 @@ function DangerousSettingDetail() {
                                         <th>Username</th>
                                         <th>CC</th>
                                         <th>Dgr</th>
-                                        <th>${gameOrSetText}</th>
+                                        <th>${betTypeUnitLabel}</th>
                                         <th>Odds</th>
                                         <th>
                                             <div class="type-outer">
@@ -867,7 +863,7 @@ function DangerousSettingDetail() {
                                         <th>Username</th>
                                         <th>CC</th>
                                         <th>Dgr</th>
-                                        <th>${gameOrSetText}</th>
+                                        <th>${betTypeUnitLabel}</th>
                                         <th>Odds</th>
                                         <th>
                                             <div class="type-outer">
@@ -1997,7 +1993,7 @@ function DangerousSettingDetail() {
                     datas += `,&quot;CustomerClass&quot;:&quot;${data.CustomerClass}&quot;`;
                     datas += `,&quot;IsRobot&quot;:&quot;${data.IsRobot}&quot;`;
                     datas += `,&quot;DangerToString&quot;:&quot;${data.DangerToString}&quot;`;
-                    datas += `,&quot;BetIDFromDB&quot;:&quot;${data.BetIDFromDB}&quot;`;
+                 /*   datas += `,&quot;BetIDFromDB&quot;:&quot;${data.BetIDFromDB}&quot;`;*/
                     datas += `,&quot;Odds&quot;:&quot;${data.Odds}&quot;`;
                     datas += `,&quot;BetID&quot;:&quot;${data.BetID}&quot;`;
                     datas += `,&quot;BetTeam&quot;:&quot;${data.BetTeam}&quot;`;
@@ -2010,7 +2006,11 @@ function DangerousSettingDetail() {
                     datas += `,&quot;ADetectGroup&quot;:&quot;${data.ADetectGroup}&quot;`;
                     datas += `,&quot;MDetectGroup&quot;:&quot;${data.MDetectGroup}&quot;`;
                     datas += `,&quot;ReasonList&quot;:&quot;${data.ReasonList}&quot;`;
-                    datas += `,&quot;PICVerified&quot;:&quot;${data.PICVerified}&quot;},`;
+                    datas += `,&quot;PICVerified&quot;:&quot;${data.PICVerified}&quot;`;
+                    if (cacheBetIDGame[data.BetIDFromDB]) {
+                        datas += `,&quot;Game&quot;:&quot;${cacheBetIDGame[data.BetIDFromDB]}&quot;`;
+                    }
+                    datas += `},`;
                 }
             }
         });
