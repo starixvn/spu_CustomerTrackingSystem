@@ -212,11 +212,13 @@
                     matchMonitors = MergeMatchMonitorWithMMStaticAndTicketsSummary(matchFromCTSInfos, dicSumTickets, dicSumParlayTickets);
                 }
             }
+            catch (ArgumentException ex)
+            {
+                ex.LogError($"{Region} Get Match Monitor Error: ");
+            }
             catch (Exception ex)
             {
-                ex.LogError($"{Region} Get Match Monitor Error: " + ex.Message + ex.StackTrace + "\n"
-                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                     + ex.InnerException.StackTrace);
+                ex.LogError($"{Region} Get Match Monitor Error: ");
             }
 
             return Json(new
@@ -472,6 +474,10 @@
                                                                             FSFunctionKeys.MatchMonitor,
                                                                             NAP.Core.Business.Constant.Policy.Host);
             }
+            catch (ArgumentException ex)
+            {
+                ex.LogError($"{Region} Match Monitor Detail Error: ");
+            }
             catch (Exception ex)
             {
                 ex.LogError($"{Region} Match Monitor Detail Error: ");
@@ -504,11 +510,13 @@
                     }
                 }
             }
+            catch (ArgumentException ex)
+            {
+                ex.LogError($"{Region} Get Match Monitor Filter Error: ");
+            }
             catch (Exception ex)
             {
-                ex.LogError($"{Region} Get Match Monitor Filter Error: " + ex.Message + ex.StackTrace + "\n"
-                   + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                   + ex.InnerException.StackTrace);
+                ex.LogError($"{Region} Get Match Monitor Filter Error: ");
             }
 
             return Json(new
@@ -650,11 +658,15 @@
                     }
                 }
             }
+            catch (ArgumentException ex)
+            {
+                ex.LogError($"{Region} Get All MM Filter Error: ");
+
+                throw;
+            }
             catch (Exception ex)
             {
-                ex.LogError($"{Region} Get All MM Filter Error: " + ex.Message + ex.StackTrace + "\n"
-                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                     + ex.InnerException.StackTrace);
+                ex.LogError($"{Region} Get All MM Filter Error: ");
 
                 throw;
             }
@@ -733,6 +745,10 @@
 
                 recordsTotal = _matchMonitorService.GetTotalTicketDetail(info, filter, 0, transJson);
             }
+            catch (ArgumentException ex)
+            {
+                ex.LogError($"{Region} Get Match Monitor Total Ticket Error: " + ex.Message + ex.StackTrace + "\n");
+            }
             catch (Exception ex)
             {
                 ex.LogError($"{Region} Get Match Monitor Total Ticket Error: " + ex.Message + ex.StackTrace + "\n");
@@ -795,6 +811,10 @@
                             break;
                         }
                 }
+            }
+            catch (ArgumentException ex)
+            {
+                ex.LogError($"{Region} Get Match Monitor Detail Error: " + ex.Message + ex.StackTrace);
             }
             catch (Exception ex)
             {
@@ -860,6 +880,10 @@
                 }
 
                 return mdResult;
+            }
+            catch (ArgumentException ex)
+            {
+                ex.LogError($"{Region} Get All Match Monitor Detail Error: " + ex.Message + ex.StackTrace);
             }
             catch (Exception ex)
             {
@@ -957,6 +981,10 @@
                             break;
                         }
                 }
+            }
+            catch (ArgumentException ex)
+            {
+                ex.LogError($"{Region} Get Fraud MM Detail For Cache Error: " + ex.Message + ex.StackTrace);
             }
             catch (Exception ex)
             {
@@ -1105,11 +1133,18 @@
                     _matchMonitorService.VerifyTransMatchMonitorDetail(para);
                 }
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 ex.LogError($"{Region} Verify Trans MM Detail Error: " + ex.Message + ex.StackTrace + "\n"
                   + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                   + ex.InnerException.StackTrace);
+
+                result.ErrorCode = -1;
+                result.ErrorMsg = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                ex.LogError($"{Region} Verify Trans MM Detail Error: ");
 
                 result.ErrorCode = -1;
                 result.ErrorMsg = ex.Message;
@@ -1259,7 +1294,7 @@
                     result.Message = updateResult.msg;
                 }
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 LogExtension.LogError($"Match Monitor Detail - Update hold key status - Exception: "
                                  + ex.Message
@@ -1268,6 +1303,11 @@
                                  + $"DataInput: {JsonConvert.SerializeObject(paramter) + "\n"}"
                                  + ex?.InnerException?.Source
                                  + ex?.InnerException?.StackTrace);
+            }
+            catch (Exception ex)
+            {
+                ex.LogError($"Match Monitor Detail - Update hold key status - Exception: "
+                                 + $"DataInput: {JsonConvert.SerializeObject(paramter) + "\n"}");
             }
 
             return Json(new
@@ -1314,7 +1354,7 @@
                     }
                 }
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 LogExtension.LogError($"Match Monitor Detail - Get hold key status - Exception: "
                   + ex.Message
@@ -1323,6 +1363,11 @@
                   + $"DataInput: {JsonConvert.SerializeObject(matchId) + "\n"}"
                   + ex?.InnerException?.Source
                   + ex?.InnerException?.StackTrace);
+            }
+            catch (Exception ex)
+            {
+                ex.LogError($"Match Monitor Detail - Get hold key status - Exception: "
+                  + $"DataInput: {JsonConvert.SerializeObject(matchId) + "\n"}");
             }
 
             return result;
@@ -1357,7 +1402,7 @@
                     }
                 }
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 LogExtension.LogError($"Match Monitor Detail - Redirect to Ticket Voiding - Exception: "
                                  + ex.Message
@@ -1366,6 +1411,11 @@
                                  + $"DataInput: {JsonConvert.SerializeObject(tranIds) + "\n"}"
                                  + ex?.InnerException?.Source
                                  + ex?.InnerException?.StackTrace);
+            }
+            catch (Exception ex)
+            {
+                ex.LogError($"Match Monitor Detail - Redirect to Ticket Voiding - Exception: "
+                                 + $"DataInput: {JsonConvert.SerializeObject(tranIds) + "\n"}");
             }
 
             return Json(new
@@ -1400,15 +1450,20 @@
                     }
                 }
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 LogExtension.LogError($"Match Monitor Detail - Redirect to Mark PA - Exception: "
-                                 + ex.Message
-                                 + ex.StackTrace + "\n"
-                                 + ex?.InnerException?.Message + "\n"
-                                 + $"DataInput: {usernames + "\n"}"
-                                 + ex?.InnerException?.Source
-                                 + ex?.InnerException?.StackTrace);
+                                + ex.Message
+                                + ex.StackTrace + "\n"
+                                + ex?.InnerException?.Message + "\n"
+                                + $"DataInput: {usernames + "\n"}"
+                                + ex?.InnerException?.Source
+                                + ex?.InnerException?.StackTrace);
+            }
+            catch (Exception ex)
+            {
+                ex.LogError($"Match Monitor Detail - Redirect to Mark PA - Exception: "
+                                 + $"DataInput: {usernames + "\n"}");
             }
 
             return Json(new
