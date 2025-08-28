@@ -78,7 +78,12 @@
                 MatchInfosJson = matchInfoFromMainJson
             };
 
-            var result = _repository.Fetch<GetMatchMonitorEntity>(criteria);
+            var result = ConfigSettings.IsUsingFanexAPIDirect ?
+                            ApiHelper.PostWithApiKey<IEnumerable<GetMatchMonitorEntity>>(
+                                ConfigSettings.GetMatchMonitorUrl,
+                                criteria,
+                                ConfigSettings.ApiKeyFanexAPIDirect).Result :
+                            _repository.Fetch<GetMatchMonitorEntity>(criteria);
 
             return result?.Select(x => new GetMatchMonitorModel(x)) ?? Enumerable.Empty<GetMatchMonitorModel>();
         }
@@ -90,7 +95,12 @@
                 FraudTickets = JsonConvert.SerializeObject(mmModels)
             };
 
-            var result = _repository.Fetch<MMFraudTicketsSummaryEntity>(criteria);
+            var result = ConfigSettings.IsUsingFanexAPIDirect ?
+                            ApiHelper.PostWithApiKey<IEnumerable<MMFraudTicketsSummaryEntity>>(
+                                ConfigSettings.GetMMFraudTicketsSummaryUrl,
+                                criteria,
+                                ConfigSettings.ApiKeyFanexAPIDirect).Result :
+                            _repository.Fetch<MMFraudTicketsSummaryEntity>(criteria);
 
             return result?.Select(x => new MMFraudTicketsSummaryViewModel(x)) ?? Enumerable.Empty<MMFraudTicketsSummaryViewModel>();
         }

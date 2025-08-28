@@ -223,6 +223,10 @@
         public static string ApiKeyFanexAPIDirect => GetConfigStringByName("ApiKeyFanexAPIDirect");
 
         public static string GetMatchFromMainInfoUrl => GetConfigStringByName("GetMatchFromMainInfoUrl");
+
+        public static string GetMatchMonitorUrl => GetConfigStringByName("GetMatchMonitorUrl");
+
+        public static string GetMMFraudTicketsSummaryUrl => GetConfigStringByName("GetMMFraudTicketsSummaryUrl");
         #endregion
 
         public static int AIAnalyzeRequestTimeout
