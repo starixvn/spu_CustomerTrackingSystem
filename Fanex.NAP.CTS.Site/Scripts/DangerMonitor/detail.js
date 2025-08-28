@@ -250,7 +250,7 @@ function DangerousSettingDetail() {
                 { targets: [12], width: "3%", className: "text-center" }, // B.f.
                 { targets: [13], width: "5%", className: "text-center" }, // A.Gr.
                 { targets: [14], width: "5%", className: "text-center" }, // M.Gr.
-                { targets: [15], width: "7%", className: "text-center col-reason" }, // Reason
+                { targets: [15], width: "6%", className: "text-center col-reason" }, // Reason
                 { targets: [16], visible: false },
                 { targets: [17], visible: false }
             ],
@@ -945,13 +945,7 @@ function DangerousSettingDetail() {
     }
 
     function SetupSingleTable() {
-        let sportLabelMap = {
-            [SportTypeConst.Tennis]: 'Set',
-            [SportTypeConst.Volleyball]: 'Set',
-            [SportTypeConst.Badminton]: 'Game',
-        };
-
-        let gameOrSetText = sportLabelMap[domElements.sportType] || 'Game';
+        let betTypeUnitLabel = BetTypeUnitLabel[domElements.sportType] || 'Set';
 
         $('#tbrMMSG').html(`
                                 <table id="tblMMSG" class="table table-striped table-monitor-detail">
@@ -961,7 +955,7 @@ function DangerousSettingDetail() {
                                         <th>Username</th>
                                         <th>CC</th>
                                         <th>Dgr</th>
-                                        <th>${gameOrSetText}</th>
+                                        <th>${betTypeUnitLabel}</th>
                                         <th>Odds</th>
                                         <th>
                                             <div class="type-outer">
@@ -1992,8 +1986,7 @@ function DangerousSettingDetail() {
                     datas += `,&quot;Username&quot;:&quot;${data.Username}&quot;`;
                     datas += `,&quot;CustomerClass&quot;:&quot;${data.CustomerClass}&quot;`;
                     datas += `,&quot;IsRobot&quot;:&quot;${data.IsRobot}&quot;`;
-                    datas += `,&quot;DangerToString&quot;:&quot;${data.DangerToString}&quot;`;
-                 /*   datas += `,&quot;BetIDFromDB&quot;:&quot;${data.BetIDFromDB}&quot;`;*/
+                    datas += `,&quot;DangerToString&quot;:&quot;${data.DangerToString}&quot;`;                 
                     datas += `,&quot;Odds&quot;:&quot;${data.Odds}&quot;`;
                     datas += `,&quot;BetID&quot;:&quot;${data.BetID}&quot;`;
                     datas += `,&quot;BetTeam&quot;:&quot;${data.BetTeam}&quot;`;
