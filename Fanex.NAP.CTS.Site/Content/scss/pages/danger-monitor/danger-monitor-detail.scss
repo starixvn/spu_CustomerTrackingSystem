@@ -598,12 +598,13 @@
                                         font-weight: 300;
                                         border-right: none;
                                         font-size: 13px;
+                                        white-space: nowrap;
 
                                         .type-outer {
                                             display: -webkit-box;
                                             display: -ms-flexbox;
                                             display: flex;
-                                            position: relative;
+                                            position: relative;                                         
 
                                             .col-title {
                                                 -webkit-box-flex: 1;
