@@ -37,6 +37,7 @@
         private const string MMDetailBadmintonDoubleGridTemplate = "~/App_Data/Excel Template/DangerMonitor/BadmintonDoubleGridTemplate.xlsx";
         private const string MMDetailVolleyballDoubleGridTemplate = "~/App_Data/Excel Template/DangerMonitor/VolleyballDoubleGridTemplate.xlsx";
         private const string MMDetailCricketDoubleGridTemplate = "~/App_Data/Excel Template/DangerMonitor/CricketDoubleGridTemplate.xlsx";
+        private const string MMDetailCricketSingleGridTemplate = "~/App_Data/Excel Template/DangerMonitor/CricketSingleGridTemplate.xlsx";
 
         public override string BaseControllerName { get => Consts.MenuItemMonitor; }
 
@@ -287,7 +288,7 @@
 
                 var fileName = string.Format("DangerMM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr);
 
-                var excelFile = _dangerMonitorService.ExportExcelMMDetailSG(items, fileName, templatePath);
+                var excelFile = _dangerMonitorService.ExportExcelMMDetailSG(items, fileName, templatePath, sportType);
 
                 return File(excelFile, "application/vnd.ms-excel", fileName);
             }
@@ -394,6 +395,8 @@
 
             switch (isDisplaySingleGrid)
             {
+                case true when (sportType == (int)MatchMonitorSportType.Cricket):
+                    templatePath = MMDetailCricketSingleGridTemplate; break;
                 case true:
                     templatePath = MMDetailSingleGridTemplate; break;
                 case false when (sportType == (int)MatchMonitorSportType.Badminton):

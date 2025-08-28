@@ -18,7 +18,7 @@
 
         GetDangerMonitorResultViewModel GetDangerMonitor(DangerMonitorSearchModel filter);
 
-        byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath);
+        byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath, int sportType);
 
         byte[] ExportExcelMMDetailDG(IEnumerable<ExExcelTicketInfoViewModel> homeMItems, IEnumerable<ExExcelTicketInfoViewModel> awayMItems
             , string fileName, string templatePath, int sportType);

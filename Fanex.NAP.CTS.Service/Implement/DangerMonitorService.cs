@@ -120,14 +120,21 @@
             };
         }
 
-        public byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath)
+        public byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath, int sportType)
         {
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Sheet1");
             writer.CopyRows(0, 1);
 
-            FillRowDataSG(items, ref writer);
-
-            writer.SyncColumnsWidth(14);
+            if (sportType == (int)MatchMonitorSportType.Cricket)
+            {
+                FillRowDataCricketSG(items, ref writer);
+                writer.SyncColumnsWidth(15);
+            }
+            else
+            {
+                FillRowDataSG(items, ref writer);
+                writer.SyncColumnsWidth(14);
+            }
 
             return writer.ToBytes();
         }
@@ -216,6 +223,37 @@
                     item.Username,
                     item.CustomerClass == -1 ? "-" : item.CustomerClass.ToString(),
                     item.DangerToString,
+                    item.Odds,
+                    item.BetID.ToString(),
+                    item.Currency,
+                    (item.Amount % 1 == 0 ? item.Amount.ToString(Consts.FormatDecimalToString_Thousands) : item.Amount.ToString()),
+                    item.BetTeam,
+                    item.Score,
+                    item.TransTimeToString,
+                    item.BetFrom,
+                    item.ADetectGroup,
+                    item.MDetectGroup,
+                    item.ReasonList,
+                };
+
+                writer.WriteRow(1, obj);
+            }
+        }
+
+        private void FillRowDataCricketSG(IEnumerable<ExExcelTicketInfoViewModel> items, ref ExcelTemplateWriter writer)
+        {
+            var arrItems = items != null ? items.ToArray() : new ExExcelTicketInfoViewModel[0];
+            var lengthItems = arrItems.Length;
+
+            for (int i = 0; i < lengthItems; i++)
+            {
+                var item = arrItems[i];
+                var obj = new object[] {
+                    item.SubscriberType,
+                    item.Username,
+                    item.CustomerClass == -1 ? "-" : item.CustomerClass.ToString(),
+                    item.DangerToString,
+                     (item.Game == 0 ? "-" : item.Game.ToString()),
                     item.Odds,
                     item.BetID.ToString(),
                     item.Currency,
