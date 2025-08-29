@@ -174,7 +174,7 @@
                     }
                 }
 
-                return 0;
+                return HDP1;
             }
         }
 
