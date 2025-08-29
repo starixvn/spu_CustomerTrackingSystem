@@ -1,10 +1,12 @@
 ﻿namespace Fanex.NAP.CTS.Model.AIInsights
 {
+    using System.Text;
+
     public class AIInsightsAnalyzeRequestModel
     {
         public string file_name { get; set; }
 
-        public string file_content { get; set; }
+        public StringBuilder file_content { get; set; }
 
         public int mode_type { get; set; }
 

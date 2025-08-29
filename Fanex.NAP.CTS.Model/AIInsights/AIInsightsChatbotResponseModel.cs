@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Model.AIInsights
 {
-    public class AIInsightsChatbotResponseModel
+    public class AIInsightsChatbotResponseModel : AIInsightResponseModel
     {
-        public AIInsightsChatbotDataModel response { get; set; }       
+        public AIInsightsChatbotDataModel response { get; set; }
     }
 }

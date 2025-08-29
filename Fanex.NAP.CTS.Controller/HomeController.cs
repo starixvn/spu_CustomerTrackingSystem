@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Controller
+namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;
@@ -34,7 +34,7 @@
         [HttpGet]
         public void test()
         {
-            LogExtension.LogInfo($"CTS test site");
+            LogService.Info($"CTS test site");
         }       
 
         public ActionResult Index()
@@ -89,7 +89,10 @@
             string inputValue = form["txtInput"]?.Trim();
 
             bool hasText = !string.IsNullOrEmpty(inputValue) && inputValue.Length > 1 && inputValue.Length <= 50;
-            bool hasFile = uploadFile != null && uploadFile.ContentLength > 0 && uploadFile.FileName.EndsWith(".xls");
+            bool hasFile = uploadFile != null
+                           && uploadFile.ContentLength > 0
+                           && (uploadFile.FileName.EndsWith(".xls", StringComparison.OrdinalIgnoreCase)
+                               || uploadFile.FileName.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase));
 
             if (hasFile && !hasText)
             {
@@ -99,14 +102,11 @@
                 }
                 else
                 {
-                    using (var ms = new MemoryStream())
-                    {
-                        uploadFile.InputStream.CopyTo(ms);
-                        Session["UploadedFileName"] = uploadFile.FileName;
-                        Session["UploadedFileToBase64String"] = Convert.ToBase64String(ms.ToArray());
-                    }
+                    Session["UploadedFileToBase64String"] = uploadFile.FileBaseToBase64StringChunked();
                 }
 
+                var fileName = Path.GetFileName(uploadFile.FileName);
+                Session["UploadedFileName"] = fileName;
                 TempData["HasFile"] = true;
 
                 return RedirectToAction("Index", "AIInsights");

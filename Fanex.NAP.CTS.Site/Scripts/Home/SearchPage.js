@@ -1,4 +1,4 @@
-﻿function SearchPage() {
+function SearchPage() {
     var common = new UICommon();
     var input = $('#txtInput');
     var iconSearch = $('.search-icon');
@@ -85,11 +85,12 @@
 
     function handleFiles(files) {
         if (files.length > 0) {
-            const maxSize = 20 * 1024 * 1024; // 20MB in bytes
+            const maxMBSize = 50;
+            const maxSize = maxMBSize * 1024 * 1024; // 50MB in bytes
             const file = files[0];
 
             if (file.size > maxSize) {
-                common.showError('Exceeds the allowed limit of ' + maxSize + " MB");
+                common.showError('Exceeds the allowed limit of ' + maxMBSize + " MB");
 
                 fileInput.val('');
                 uploadedFile.hide();
@@ -99,7 +100,7 @@
                 return;
             }
 
-            if (file.name.endsWith('.xls')) {
+            if (/\.(xls|xlsx)$/i.test(file.name)) {
                 const dataTransfer = new DataTransfer();
 
                 errorMessage.addClass('hide').text('');
@@ -112,7 +113,7 @@
 
                 common.showSuccess('File uploaded successfully: ' + file.name, 2000);
             } else {
-                common.showError('Please upload a .xls file!');
+                common.showError('Please upload a .xls or .xlsx file!');
 
                 fileInput.val('');
                 uploadedFile.hide();

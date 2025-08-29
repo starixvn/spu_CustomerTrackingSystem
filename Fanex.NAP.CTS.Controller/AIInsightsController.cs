@@ -1,23 +1,23 @@
-﻿namespace Fanex.NAP.CTS.Controller
+namespace Fanex.NAP.CTS.Controller
 {
-    using System;
-    using System.IO;
-    using System.Web;
-    using System.Web.Mvc;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging;
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AIInsights;
     using Fanex.NAP.CTS.Service;
-    using static Fanex.NAP.CTS.Resource.Consts.Consts;
-    using Fanex.NAP.CTS.Model;
+    using Newtonsoft.Json;
+    using System;
     using System.Collections.Generic;
-    using Fanex.NAP.CTS.Core.Extentions;
+    using System.IO;
+    using System.Text;
+    using System.Web;
+    using System.Web.Mvc;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
     public class AIInsightsController : BaseController
-    {
+    {       
         private readonly IAIInsightsService _aIInsightsService;
         private AIInsightsFileUploadModel _aiInsightsFileUploadModel;
         private const string ChatSessionKey = "ChatHistory";
@@ -40,16 +40,16 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AIInsightsAnalyzeFile)]
         public ActionResult AnalyzeFile()
         {
-            var data = new AIInsightsAnalyzeResponseModel();
+            var data = new AIInsightsAnalyzeResponseModel();          
 
             try
             {
                 var fileName = Session["UploadedFileName"] as string;
                 var fileContentBase64 = ConfigSettings.AIInsightsStoreFile
-                        ? GetFileContent(fileName)
-                        : Session["UploadedFileToBase64String"] as string;
+                        ? new StringBuilder(GetFileContent(fileName))
+                        : Session["UploadedFileToBase64String"] as StringBuilder;
 
-                if (fileName == null || string.IsNullOrEmpty(fileContentBase64))
+                if (fileName == null || fileContentBase64 == null || fileContentBase64.Length <= 0)
                 {
                     ViewBag.Message = "No file uploaded.";
 
@@ -73,10 +73,10 @@
                 data.response = new AIInsightsAnalyzeDataModel
                 {
                     ErrorCode = -1,
-                    ErrorMessage = ex.Message
+                    ErrorMessage = string.IsNullOrEmpty(ex.Message) ? "AI Insights API Error" : ex.Message
                 };
 
-                ex.LogError();
+                LogExtension.LogError("CTS - AI Insights Analyze File", ex);
             }
 
             return Json(data.response, JsonRequestBehavior.AllowGet);
@@ -91,14 +91,18 @@
             try
             {
                 request.session_id = CurrentSession.SessionId;
+                request.file_name = Session["UploadedFileName"] as string;
+                request.file_content = ConfigSettings.AIInsightsStoreFile
+                        ? new StringBuilder(GetFileContent(request.file_name))
+                        : Session["UploadedFileToBase64String"] as StringBuilder;
 
                 response = _aIInsightsService.AskChatbot(request, ConfigSettings.AIInsightsChatBotUrl);
 
                 SendMessage(request.question, response.response.answer);
             }
             catch (Exception ex)
-            {
-                ex.LogError();
+            {                
+                LogExtension.LogError("CTS - AI Insights AskChatbot", ex);         
             }
 
             return Json(response.response, JsonRequestBehavior.AllowGet);
@@ -115,17 +119,17 @@
             }
             catch (Exception ex)
             {
-                ex.LogError();
+                LogExtension.LogError("CTS - AI Insights Load History Chat Message", ex);
             }
 
             return Json(chatHistory, JsonRequestBehavior.AllowGet);
         }
 
         private void SendMessage(string userMessage, string botMessage)
-        {
-            SaveMessage("u", userMessage);
+        {           
+            SaveMessage("u", userMessage);          
 
-            SaveMessage("b", botMessage);
+            SaveMessage("b", botMessage);                       
         }
 
         private void SaveMessage(string sender, string message)
@@ -140,13 +144,13 @@
             });
 
             Session[ChatSessionKey] = chatHistory;
-        }
+        }        
 
         [HttpPost]
         public ActionResult UploadFile(HttpPostedFileBase uploadFile)
-        {
+        {            
             if (uploadFile == null || uploadFile.ContentLength == 0)
-            {
+            {                
                 return Json(new
                 {
                     success = false,
@@ -159,8 +163,8 @@
                 return Json(new
                 {
                     success = false,
-                    message = $"Exceeds the allowed limit of {_aiInsightsFileUploadModel.MaxFileSizeBytes} MB."
-                }, JsonRequestBehavior.AllowGet);
+                    message = $"Exceeds the allowed limit of {_aiInsightsFileUploadModel.MaxFileSizeBytes / (1024 * 1024)} MB."
+                }, JsonRequestBehavior.AllowGet);               
             }
 
             if (ConfigSettings.AIInsightsStoreFile)
@@ -169,11 +173,7 @@
             }
             else
             {
-                using (var ms = new MemoryStream())
-                {
-                    uploadFile.InputStream.CopyTo(ms);
-                    Session["UploadedFileToBase64String"] = Convert.ToBase64String(ms.ToArray());
-                }
+                Session["UploadedFileToBase64String"] = uploadFile.FileBaseToBase64StringChunked();
             }
 
             var fileName = Path.GetFileName(uploadFile.FileName);
@@ -190,7 +190,7 @@
         }
 
         private string GetFileContent(string fileName)
-        {
+        {           
             var fullPath = GetAnalysisFilePath(fileName);
             var fileBytes = GetUploadedFileBytes(fullPath);
 

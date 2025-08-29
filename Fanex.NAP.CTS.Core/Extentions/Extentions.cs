@@ -2,13 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Globalization;
+    using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Reflection.Emit;
     using System.Security.Cryptography;
     using System.Text;
+    using System.Web;
 
     public static class Extentions
     {
@@ -107,5 +108,31 @@
 
         public static string CleanSpecialCharactor(this string input) =>
             string.IsNullOrEmpty(input) ? "" : input.Replace("\r\n", string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty).Replace("__", "_").Trim();
+
+        public static StringBuilder FileBaseToBase64StringChunked(this HttpPostedFileBase fileBase)
+        {
+            var sb = new StringBuilder();
+            const int chunkSize = 3 * 1024; // 3KB chunks (divisible by 3 for proper Base64 encoding)
+            var buffer = new byte[chunkSize];
+            int bytesRead;
+
+            while ((bytesRead = fileBase.InputStream.Read(buffer, 0, buffer.Length)) > 0)
+            {
+                // Convert chunk to Base64
+                if (bytesRead == chunkSize)
+                {
+                    sb.Append(Convert.ToBase64String(buffer));
+                }
+                else
+                {
+                    // Handle last chunk which may be smaller
+                    var lastChunk = new byte[bytesRead];
+                    Array.Copy(buffer, lastChunk, bytesRead);
+                    sb.Append(Convert.ToBase64String(lastChunk));
+                }
+            }
+
+            return sb;
+        }
     }
 }

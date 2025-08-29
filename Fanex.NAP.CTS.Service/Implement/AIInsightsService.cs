@@ -1,16 +1,14 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Core.Helpers.Api;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.AIInsights;
     using System.Configuration;
+    using System.Net;
     using System.Threading.Tasks;
 
     public class AIInsightsService : IAIInsightsService
     {
-        public AIInsightsService()
-        {
-        }
-
         public AIInsightsAnalyzeResponseModel Analyze(AIInsightsAnalyzeRequestModel param, string url)
         {
             if (string.IsNullOrEmpty(url))
@@ -18,13 +16,14 @@
                 return new AIInsightsAnalyzeResponseModel();
             }
 
-            var timeout = int.TryParse(ConfigurationManager.AppSettings["ChatbotRequestTimeout"], out var parsed) ? parsed : 300;
+            var response = ApiHelper.PostWithStreamWritter<AIInsightsAnalyzeResponseModel>(url, param, ConfigSettings.AIAnalyzeRequestTimeout);
 
-            var result = ApiHelper.Post<AIInsightsAnalyzeResponseModel>(url, param, timeout);
+            Task.WhenAll(response);
 
-            Task.WhenAll(result);
+            var result = response.Result;
+            ValidateResponse(result);
 
-            return result.Result;
+            return result;
         }
 
         public AIInsightsChatbotResponseModel AskChatbot(AIInsightsChatbotRequestModel request, string url)
@@ -34,15 +33,22 @@
                 return new AIInsightsChatbotResponseModel();
             }
 
-            var chatbotRequestTimeout = ConfigurationManager.AppSettings["ChatbotRequestTimeout"];
+            var response = ApiHelper.PostWithStreamWritter<AIInsightsChatbotResponseModel>(url, request, ConfigSettings.ChatbotRequestTimeout);
 
-            var timeout = int.TryParse(chatbotRequestTimeout, out var parsed) ? parsed : 300;
+            Task.WhenAll(response);
 
-            var result = ApiHelper.Post<AIInsightsChatbotResponseModel>(url, request, timeout);
+            var result = response.Result;
+            ValidateResponse(result);
 
-            Task.WhenAll(result);
+            return result;
+        }
 
-            return result.Result;
+        private void ValidateResponse(AIInsightResponseModel response)
+        {
+            if (response != null && response.status_code > 299)
+            {
+                throw new HttpListenerException(response.status_code, response.error);
+            }
         }
     }
 }

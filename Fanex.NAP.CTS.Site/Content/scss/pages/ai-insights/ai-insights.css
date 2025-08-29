@@ -457,9 +457,22 @@
 .ai-insights .ai-insights-container .ai-insights-content.chatbot-open {
   width: calc(100% - 20vw);
 }
+.ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image {
+  width: 100% !important;
+}
+.ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image > * {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+}
 .ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image img {
-  max-width: 68% !important;
-  height: auto;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+}
+.ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image div, .ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image svg, .ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image canvas {
+  max-width: 100% !important;
+  margin: 0 auto !important;
 }
 .ai-insights .ai-insights-container .form-filter-section {
   position: sticky;
@@ -648,24 +661,23 @@
 .content-card-section .content-card .card-body .chart-item .chart-image {
   display: flex;
   justify-content: center;
+  align-items: center;
+  min-height: 450px;
+  width: 100%;
+}
+.content-card-section .content-card .card-body .chart-item .chart-image > * {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
 }
 .content-card-section .content-card .card-body .chart-item .chart-image img {
-  display: block;
-  max-width: 55%;
-  height: auto;
-  border-radius: 0.3rem;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
 }
-.content-card-section .content-card .card-body .chart-item .chart-image img.aspect-wide {
-  max-width: 55%;
-  max-height: 260px;
-}
-.content-card-section .content-card .card-body .chart-item .chart-image img.aspect-tall {
-  max-width: 40%;
-  max-height: 200px;
-}
-.content-card-section .content-card .card-body .chart-item .chart-image img.aspect-square {
-  max-width: 45%;
-  max-height: 220px;
+.content-card-section .content-card .card-body .chart-item .chart-image div, .content-card-section .content-card .card-body .chart-item .chart-image svg, .content-card-section .content-card .card-body .chart-item .chart-image canvas {
+  max-width: 100% !important;
+  margin: 0 auto !important;
 }
 .content-card-section .content-card .card-body .chart-item .chart-content {
   font-size: 14px;

@@ -31,9 +31,23 @@
                 width: calc(100% - (100vw / 5));
 
                 .chart-image {
+                    width: 100% !important;
+
+                    > * {
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        margin: 0 auto !important;
+                    }
+
                     img {
-                        max-width: 68% !important;
-                        height: auto;
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        height: 100% !important;
+                    }
+
+                    div, svg, canvas {
+                        max-width: 100% !important;
+                        margin: 0 auto !important;
                     }
                 }
             }
@@ -250,28 +264,26 @@
                 .chart-image {
                     display: flex;
                     justify-content: center;
+                    align-items: center;
+                    min-height: 450px;
+                    width: 100%;
+
+                    > * {
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        margin: 0 auto !important;
+                    }
 
                     img {
-                        display: block;
-                        max-width: 55%;
-                        height: auto;
-                        border-radius: 0.3rem;
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        height: 100% !important;
                     }
-                }
 
-                .chart-image img.aspect-wide {
-                    max-width: 55%;
-                    max-height: 260px;
-                }
-
-                .chart-image img.aspect-tall {
-                    max-width: 40%;
-                    max-height: 200px;
-                }
-
-                .chart-image img.aspect-square {
-                    max-width: 45%;
-                    max-height: 220px;
+                    div, svg, canvas {
+                        max-width: 100% !important;
+                        margin: 0 auto !important;
+                    }
                 }
 
                 .chart-content {
@@ -512,3 +524,4 @@
         flex: 1 1 100%;
     }
 }
+
