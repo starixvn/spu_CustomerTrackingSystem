@@ -227,6 +227,8 @@
         public static string GetMatchMonitorUrl => GetConfigStringByName("GetMatchMonitorUrl");
 
         public static string GetMMFraudTicketsSummaryUrl => GetConfigStringByName("GetMMFraudTicketsSummaryUrl");
+
+        public static string GetMMParlayFraudTicketsSummaryUrl => GetConfigStringByName("GetMMParlayFraudTicketsSummaryUrl");
         #endregion
 
         public static int AIAnalyzeRequestTimeout

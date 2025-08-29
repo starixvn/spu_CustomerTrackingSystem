@@ -1277,7 +1277,12 @@
                 FraudTickets = JsonConvert.SerializeObject(mmModels)
             };
 
-            var result = _repository.Fetch<MMFraudTicketsSummaryEntity>(criteria);
+            var result = ConfigSettings.IsUsingFanexAPIDirect ?
+                            ApiHelper.PostWithApiKey<IEnumerable<MMFraudTicketsSummaryEntity>>(
+                                ConfigSettings.GetMMParlayFraudTicketsSummaryUrl,
+                                criteria,
+                                ConfigSettings.ApiKeyFanexAPIDirect).Result :
+                            _repository.Fetch<MMFraudTicketsSummaryEntity>(criteria);
 
             return result?.Select(x => new MMFraudTicketsSummaryViewModel(x)) ?? Enumerable.Empty<MMFraudTicketsSummaryViewModel>();
         }
