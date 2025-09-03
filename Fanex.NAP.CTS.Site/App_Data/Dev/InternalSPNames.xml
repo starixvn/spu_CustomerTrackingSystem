@@ -14,7 +14,7 @@
 		<Setting Key="CTS_DC_Common_ValidateUsername" SpName="CTS_DC_Common_ValidateUsername" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_Common_GetSites" SpName="CTS_DC_Common_GetSites" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_Common_CustomerClass_Get" SpName="CTS_DC_Common_CustomerClass_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_Common_BettypeSetting_Get" SpName="CTS_DC_Common_BettypeSetting_Get_xtest" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_Common_BettypeSetting_Get" SpName="CTS_DC_Common_BettypeSetting_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_Common_GetStaticList" SpName="CTS_DC_Common_GetStaticList" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
 	</Function>
 
@@ -135,7 +135,7 @@
 	</Function>
 
 	<Function name="MatchMonitor">
-		<Setting Key="CTS_DC_MatchMonitor_Get" SpName="CTS_DC_MatchMonitor_Get_xtest" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_MatchMonitor_Get" SpName="CTS_DC_MatchMonitor_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_MatchMonitor_Details_Verify" SpName="CTS_DC_MatchMonitor_Details_Verify" DbName="CTSMain_DEV.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_MatchMonitor_Details_Get" SpName="CTS_DC_MatchMonitor_Details_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustInfo_GetByCustID" SpName="CTS_DC_CustInfo_GetByCustID" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
