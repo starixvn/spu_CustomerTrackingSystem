@@ -209,6 +209,28 @@
             }
         }
 
+        #region IsUsingFanexAPIDirect
+        public static bool IsUsingFanexAPIDirect
+        {
+            get
+            {
+                var rs = ConfigurationManager.AppSettings["IsUsingFanexAPIDirect"];
+
+                return rs == "1";
+            }
+        }
+
+        public static string ApiKeyFanexAPIDirect => GetConfigStringByName("ApiKeyFanexAPIDirect");
+
+        public static string GetMatchFromMainInfoUrl => GetConfigStringByName("GetMatchFromMainInfoUrl");
+
+        public static string GetMatchMonitorUrl => GetConfigStringByName("GetMatchMonitorUrl");
+
+        public static string GetMMFraudTicketsSummaryUrl => GetConfigStringByName("GetMMFraudTicketsSummaryUrl");
+
+        public static string GetMMParlayFraudTicketsSummaryUrl => GetConfigStringByName("GetMMParlayFraudTicketsSummaryUrl");
+        #endregion
+
         public static int AIAnalyzeRequestTimeout
         {
             get

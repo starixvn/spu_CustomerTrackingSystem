@@ -23,6 +23,7 @@
     using Fanex.NAP.CTS.Core.Service;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using Fanex.NAP.CTS.Model.MatchMonitor.Entities;
+    using Fanex.NAP.CTS.Core.Utilities;
 
     public class MatchMonitorService : IMatchMonitorService
     {
@@ -53,7 +54,14 @@
                 Event = filter.Event
             };
 
-            return _repository.Fetch<MatchFromMainInfoModel>(criteria);
+            var result = ConfigSettings.IsUsingFanexAPIDirect ?
+                            ApiHelper.PostWithApiKey<IEnumerable<MatchFromMainInfoModel>>(
+                                ConfigSettings.GetMatchFromMainInfoUrl, 
+                                criteria,
+                                ConfigSettings.ApiKeyFanexAPIDirect).Result :
+                            _repository.Fetch<MatchFromMainInfoModel>(criteria);
+
+            return result;
         }
 
         public IEnumerable<GetMatchMonitorModel> GetMatchMonitor(MatchMonitorSearchViewModel filter, string matchInfoFromMainJson)
@@ -70,7 +78,12 @@
                 MatchInfosJson = matchInfoFromMainJson
             };
 
-            var result = _repository.Fetch<GetMatchMonitorEntity>(criteria);
+            var result = ConfigSettings.IsUsingFanexAPIDirect ?
+                            ApiHelper.PostWithApiKey<IEnumerable<GetMatchMonitorEntity>>(
+                                ConfigSettings.GetMatchMonitorUrl,
+                                criteria,
+                                ConfigSettings.ApiKeyFanexAPIDirect).Result :
+                            _repository.Fetch<GetMatchMonitorEntity>(criteria);
 
             return result?.Select(x => new GetMatchMonitorModel(x)) ?? Enumerable.Empty<GetMatchMonitorModel>();
         }
@@ -82,7 +95,12 @@
                 FraudTickets = JsonConvert.SerializeObject(mmModels)
             };
 
-            var result = _repository.Fetch<MMFraudTicketsSummaryEntity>(criteria);
+            var result = ConfigSettings.IsUsingFanexAPIDirect ?
+                            ApiHelper.PostWithApiKey<IEnumerable<MMFraudTicketsSummaryEntity>>(
+                                ConfigSettings.GetMMFraudTicketsSummaryUrl,
+                                criteria,
+                                ConfigSettings.ApiKeyFanexAPIDirect).Result :
+                            _repository.Fetch<MMFraudTicketsSummaryEntity>(criteria);
 
             return result?.Select(x => new MMFraudTicketsSummaryViewModel(x)) ?? Enumerable.Empty<MMFraudTicketsSummaryViewModel>();
         }
@@ -831,7 +849,7 @@
                     itemA.CustomerClass == -1 ? "-" : itemA.CustomerClass.ToString(),
                     (itemA.IsRobot ? "x" : "-"),
                     itemA.DangerToString,
-                    (itemA.Game == 0 ? "-" : itemA.Game.ToString()),        
+                    (itemA.Game == 0 ? "-" : itemA.Game.ToString()),
                     itemA.Odds,
                     itemA.MalayOdds,
                     itemA.BetID.ToString(),
@@ -1259,7 +1277,12 @@
                 FraudTickets = JsonConvert.SerializeObject(mmModels)
             };
 
-            var result = _repository.Fetch<MMFraudTicketsSummaryEntity>(criteria);
+            var result = ConfigSettings.IsUsingFanexAPIDirect ?
+                            ApiHelper.PostWithApiKey<IEnumerable<MMFraudTicketsSummaryEntity>>(
+                                ConfigSettings.GetMMParlayFraudTicketsSummaryUrl,
+                                criteria,
+                                ConfigSettings.ApiKeyFanexAPIDirect).Result :
+                            _repository.Fetch<MMFraudTicketsSummaryEntity>(criteria);
 
             return result?.Select(x => new MMFraudTicketsSummaryViewModel(x)) ?? Enumerable.Empty<MMFraudTicketsSummaryViewModel>();
         }

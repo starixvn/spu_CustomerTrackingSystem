@@ -643,7 +643,8 @@ namespace Fanex.NAP.CTS.Resource.Consts
         {
             (int) MatchMonitorSportType.Badminton,
             (int) MatchMonitorSportType.Volleyball,
-            (int) MatchMonitorSportType.Tennis
+            (int) MatchMonitorSportType.Tennis,
+            (int) MatchMonitorSportType.Cricket
         };        
 
         public static readonly HashSet<int> CricketRunsXBetTypeIds = new HashSet<int> { 9608, 9607 };

@@ -28,6 +28,28 @@ const SportTypeConst = {
     Cricket: "50"
 }
 
+const SportsUseBettypeX = new Set([
+    SportTypeConst.Badminton,
+    SportTypeConst.Volleyball,
+    SportTypeConst.Tennis,
+    SportTypeConst.Cricket
+]);
+
+const SportsWithoutMapX = new Set([
+    SportTypeConst.Basketball,
+    SportTypeConst.Badminton,
+    SportTypeConst.Volleyball,
+    SportTypeConst.Tennis,
+    SportTypeConst.Cricket
+]);
+
+const BetTypeUnitLabel = {
+    [SportTypeConst.Volleyball]: "Set",
+    [SportTypeConst.Tennis]: "Set",
+    [SportTypeConst.Badminton]: "Game",
+    [SportTypeConst.Cricket]: "R/W"
+};
+
 function ConvertNumberToThousandsString(x) {
     return x ? x.toLocaleString() : 0;
 }
@@ -162,6 +184,7 @@ function DangerousSettingDetail() {
         Danger4: $('#hdDanger4').val(),
         Danger5: $('#hdDanger5').val()
     }
+    let cacheBetIDGame = {};
 
     let posClickGlobal = 0;
     let xhr;
@@ -180,10 +203,7 @@ function DangerousSettingDetail() {
 
     //#region Initial Grid
     function InitialDetailGird(element) {
-        let isColumnVisible =
-            domElements.sportType == SportTypeConst.Badminton ||
-            domElements.sportType == SportTypeConst.Volleyball ||
-            domElements.sportType == SportTypeConst.Tennis;
+        let isColumnVisible = SportsUseBettypeX.has(domElements.sportType);
 
         element.DataTable({
             serverSide: false,          
@@ -219,7 +239,7 @@ function DangerousSettingDetail() {
                 { targets: [1], width: "17%", className: "text-center" }, // Username
                 { targets: [2], width: "4%", className: "text-center" }, // CC
                 { targets: [3], width: "10%", className: "text-center col-dgr" }, //Dgr
-                { targets: [4], width: "5%", className: "text-center col-game", visible: isColumnVisible }, // Game or Set
+                { targets: [4], width: "5%", className: "text-center col-game", visible: isColumnVisible }, // Game or Set or R/W
                 { targets: [5], width: "5%", className: "text-center" }, // Odds
                 { targets: [6], width: "5%", className: "text-left col-betid" }, // BetID
                 { targets: [7], width: "5%", className: "text-center" }, // Cur
@@ -230,7 +250,7 @@ function DangerousSettingDetail() {
                 { targets: [12], width: "3%", className: "text-center" }, // B.f.
                 { targets: [13], width: "5%", className: "text-center" }, // A.Gr.
                 { targets: [14], width: "5%", className: "text-center" }, // M.Gr.
-                { targets: [15], width: "7%", className: "text-center col-reason" }, // Reason
+                { targets: [15], width: "6%", className: "text-center col-reason" }, // Reason
                 { targets: [16], visible: false },
                 { targets: [17], visible: false }
             ],
@@ -254,7 +274,7 @@ function DangerousSettingDetail() {
                 { data: obj => obj.DangerToString },
                 {
                     data: obj => () => {
-                        return obj.BetIDFromDB > 0 ? obj.BetIDFromDB % 10 : "-"
+                        return cacheBetIDGame[obj.BetIDFromDB] > 0 ? cacheBetIDGame[obj.BetIDFromDB] : "-";
                     }
                 },
                 { data: obj => obj.Odds },
@@ -363,20 +383,61 @@ function DangerousSettingDetail() {
         });
     }
 
-    function SetupValueDefaultGameOrSetFilter() {
-        if (domElements.sportType == SportTypeConst.Volleyball ||
-            domElements.sportType == SportTypeConst.Tennis
-        ) {
-            domElements.cbbGame.multiselect().empty();
-         
-            for (let i = 1; i <= 5; i++) {
-                domElements.cbbGame.append(        
-                    `<option value='${i}' selected>${i}</option>`
-                );
-            }
+    function SetupValueDefaultGameOrSetFilter() {       
+        let betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
 
-            domElements.cbbGame.multiselect("refresh");
+        let hasXToken = betIdPattern && /X+/.test(betIdPattern);
+
+        domElements.cbbGame.multiselect().empty();
+
+        if (!hasXToken) {
+            DisableCbbGame();
+            return;
         }
+
+        $.ajax(common.modifyRelativeUrl('MatchMonitor/GetBetTypeGameValues'), {
+            async: false,
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                sportType: domElements.sportType,
+                betTypeId: GetBetTypeSelected(),
+                betIdPattern: betIdPattern
+            },
+            success: function (response) {       
+                cacheBetIDGame = response?.data;
+
+                EnableCbbGame();
+             
+                domElements.cbbGame.multiselect().empty();
+                $.each(response?.data, function (key, value) {
+                    domElements.cbbGame.append(
+                        `<option value='${value}' selected>${value}</option>`
+                    );
+                });
+                domElements.cbbGame.multiselect('refresh');               
+            },
+            function(xhr, textStatus, error) {               
+                console.log(error);
+            }
+        });
+    }   
+
+    function GetSelectedGames() {
+        return domElements.cbbGame.val() || [];
+    }
+
+    function HasSelectedGames() {
+        let selected = GetSelectedGames();
+        return selected && selected.length > 0;
+    }
+
+    function DisableCbbGame() {
+        domElements.cbbGame.prop('disabled', true).multiselect('refresh');
+    }
+
+    function EnableCbbGame() {
+        domElements.cbbGame.prop('disabled', false).multiselect('enable');
     }
 
     function SetupFilter(element, data) {
@@ -750,13 +811,7 @@ function DangerousSettingDetail() {
     }
 
     function SetupDoubleDataTable() {
-        let sportLabelMap = {
-            [SportTypeConst.Tennis]: 'Set',
-            [SportTypeConst.Volleyball]: 'Set',
-            [SportTypeConst.Badminton]: 'Game',
-        };
-
-        let gameOrSetText = sportLabelMap[domElements.sportType] || 'Game';
+        let betTypeUnitLabel = BetTypeUnitLabel[domElements.sportType] || 'Set';
 
         $("#tbrMMHomeTeam").html(`
                                 <table id="tblMMHomeTeam" class="table table-striped table-monitor-detail">
@@ -766,7 +821,7 @@ function DangerousSettingDetail() {
                                         <th>Username</th>
                                         <th>CC</th>
                                         <th>Dgr</th>
-                                        <th>${gameOrSetText}</th>
+                                        <th>${betTypeUnitLabel}</th>
                                         <th>Odds</th>
                                         <th>
                                             <div class="type-outer">
@@ -808,7 +863,7 @@ function DangerousSettingDetail() {
                                         <th>Username</th>
                                         <th>CC</th>
                                         <th>Dgr</th>
-                                        <th>${gameOrSetText}</th>
+                                        <th>${betTypeUnitLabel}</th>
                                         <th>Odds</th>
                                         <th>
                                             <div class="type-outer">
@@ -890,13 +945,7 @@ function DangerousSettingDetail() {
     }
 
     function SetupSingleTable() {
-        let sportLabelMap = {
-            [SportTypeConst.Tennis]: 'Set',
-            [SportTypeConst.Volleyball]: 'Set',
-            [SportTypeConst.Badminton]: 'Game',
-        };
-
-        let gameOrSetText = sportLabelMap[domElements.sportType] || 'Game';
+        let betTypeUnitLabel = BetTypeUnitLabel[domElements.sportType] || 'Set';
 
         $('#tbrMMSG').html(`
                                 <table id="tblMMSG" class="table table-striped table-monitor-detail">
@@ -906,7 +955,7 @@ function DangerousSettingDetail() {
                                         <th>Username</th>
                                         <th>CC</th>
                                         <th>Dgr</th>
-                                        <th>${gameOrSetText}</th>
+                                        <th>${betTypeUnitLabel}</th>
                                         <th>Odds</th>
                                         <th>
                                             <div class="type-outer">
@@ -1040,34 +1089,36 @@ function DangerousSettingDetail() {
 
     function GetBetIDSelected() {        
         let betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
-        let sportType = domElements.sportType;
+        let selectedSport = domElements.sportType;
+        let betIdPatternHasX = betIdPattern.includes('X');
+        let tokenX = (betIdPattern.match(/X+/) || ['X'])[0];
 
-        let isRacketSport = [
-            SportTypeConst.Badminton,
-            SportTypeConst.Volleyball,
-            SportTypeConst.Tennis
-        ].includes(sportType);
-
-        if (!isRacketSport && sportType !== SportTypeConst.Basketball && betIdPattern.includes('X')) {
-            let betID = `80${domElements.cbbMapX.val()}`;
+        if (!SportsWithoutMapX.has(selectedSport) && betIdPatternHasX) {
+            let betIDString = "80" + domElements.cbbMapX.val();
 
             if (betIdPattern.includes('YY')) {
-                betID += `0${domElements.cbbMapYY.val()}`.slice(-2);
+                betIDString += ("0" + domElements.cbbMapYY.val()).slice(-2);
             }
-            return betID;
-        }
 
-        if (sportType === SportTypeConst.Basketball) {
+            return betIDString;
+
+        } else if (selectedSport === SportTypeConst.Basketball) {
             return $("option:selected", domElements.cbbBetType).attr('data-betid');
-        }
-     
-        if (isRacketSport && betIdPattern.includes('X') && domElements.cbbGame.val()) {
-            return domElements.cbbGame.val()
-                .map(game => betIdPattern.replace('X', game))
+
+        } else if (
+            SportsUseBettypeX.has(selectedSport) &&
+            betIdPatternHasX &&
+            HasSelectedGames()
+        ) {
+            return GetSelectedGames()
+                .map(x => {
+                    let padded = x.toString().padStart(tokenX.length, '0');
+                    return betIdPattern.replace(tokenX, padded);
+                })
                 .toString();
         }
 
-        return 0;
+        return 0; //default
     }
 
     function IsFilterSuspicious(params) {
@@ -1935,8 +1986,7 @@ function DangerousSettingDetail() {
                     datas += `,&quot;Username&quot;:&quot;${data.Username}&quot;`;
                     datas += `,&quot;CustomerClass&quot;:&quot;${data.CustomerClass}&quot;`;
                     datas += `,&quot;IsRobot&quot;:&quot;${data.IsRobot}&quot;`;
-                    datas += `,&quot;DangerToString&quot;:&quot;${data.DangerToString}&quot;`;
-                    datas += `,&quot;BetIDFromDB&quot;:&quot;${data.BetIDFromDB}&quot;`;
+                    datas += `,&quot;DangerToString&quot;:&quot;${data.DangerToString}&quot;`;                 
                     datas += `,&quot;Odds&quot;:&quot;${data.Odds}&quot;`;
                     datas += `,&quot;BetID&quot;:&quot;${data.BetID}&quot;`;
                     datas += `,&quot;BetTeam&quot;:&quot;${data.BetTeam}&quot;`;
@@ -1949,7 +1999,11 @@ function DangerousSettingDetail() {
                     datas += `,&quot;ADetectGroup&quot;:&quot;${data.ADetectGroup}&quot;`;
                     datas += `,&quot;MDetectGroup&quot;:&quot;${data.MDetectGroup}&quot;`;
                     datas += `,&quot;ReasonList&quot;:&quot;${data.ReasonList}&quot;`;
-                    datas += `,&quot;PICVerified&quot;:&quot;${data.PICVerified}&quot;},`;
+                    datas += `,&quot;PICVerified&quot;:&quot;${data.PICVerified}&quot;`;
+                    if (cacheBetIDGame[data.BetIDFromDB]) {
+                        datas += `,&quot;Game&quot;:&quot;${cacheBetIDGame[data.BetIDFromDB]}&quot;`;
+                    }
+                    datas += `},`;
                 }
             }
         });
@@ -2533,18 +2587,20 @@ function DangerousSettingDetail() {
     }
 
     function ToggleGameX() {
-        let betidpattern = GetAttributeBetTypeSelected('data-betidpattern');
+        let betIdPattern = GetAttributeBetTypeSelected('data-betidpattern');
 
-        if ((domElements.sportType == SportTypeConst.Badminton || domElements.sportType == SportTypeConst.Volleyball || domElements.sportType == SportTypeConst.Tennis)
-            && betidpattern && betidpattern.includes('X')) {
+        if (SportsUseBettypeX.has(domElements.sportType)
+            && betIdPattern && betIdPattern.includes('X')) {
             domElements.cbbGame.parent().show();
             domElements.cbbMapX.parent().hide();
             domElements.cbbMapYY.parent().hide();
+
+            SetupValueDefaultGameOrSetFilter();
         } else {
             domElements.cbbGame.parent().hide();
             domElements.cbbMapX.parent().show();
             domElements.cbbMapYY.parent().show();
-        }
+        }      
     }
 
     //#endregion Event Toggle
