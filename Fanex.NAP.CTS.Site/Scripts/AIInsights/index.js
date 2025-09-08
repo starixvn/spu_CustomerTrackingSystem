@@ -133,9 +133,7 @@ function AIInsights() {
             domElements.fileInput.on('change', function (e) {
                 const file = e.target.files[0];
 
-                RenderVisualizationSummary('');
-                RenderVisualizationChart('');
-                RenderStatistics('');
+                ResetDefault();
                 domElements.contentCardSection.hide();
 
                 if (!file) {
@@ -215,6 +213,8 @@ function AIInsights() {
             return;
         }
 
+        ResetDefault();
+
         SkipReCheckin();
         common.showLoading();
         domElements.summarySection.addClass('loading');
@@ -222,13 +222,13 @@ function AIInsights() {
         domElements.btnGenerate.prop('disabled', true);
 
         AnalyzeSummary()
-        .always(function () {
-            AnalyzeCharts()
-                .always(function () {
-                    domElements.btnGenerate.prop('disabled', false);
-                    EnableReCheckin();
-                });
-        });
+            .always(function () {
+                AnalyzeCharts()
+                    .always(function () {
+                        domElements.btnGenerate.prop('disabled', false);
+                        EnableReCheckin();
+                    });
+            });
     }
 
     function AnalyzeSummary() {
@@ -647,6 +647,12 @@ function AIInsights() {
                 }
             }
         });
+    }
+
+    function ResetDefault() {
+        RenderVisualizationSummary('');
+        RenderVisualizationChart('');
+        RenderStatistics('');
     }
 
     function Initial() {
