@@ -29,10 +29,11 @@ function SearchPage() {
         errorMessage.addClass('hide').text('');
         hasDraggedFile = false;
         iconSearch.attr('src', $('#searchIcon').data('default'));
+        AppendTabIdSubmitForm();
 
         input.focus(function () {
             searchBox.addClass("has-shadow");
-        }).focusout(function () {            
+        }).focusout(function () {
             searchBox.removeClass("has-shadow");
         });
 
@@ -75,13 +76,13 @@ function SearchPage() {
 
         removeFile.on('click', function () {
             uploadedFile.hide();
-            fileInput.val(''); 
+            fileInput.val('');
             hasDraggedFile = false;
             errorMessage.addClass('hide').text('');
 
             iconSearch.attr('src', $('#searchIcon').data('default'));
         });
-    }    
+    }
 
     function handleFiles(files) {
         if (files.length > 0) {
@@ -94,7 +95,7 @@ function SearchPage() {
 
                 fileInput.val('');
                 uploadedFile.hide();
-                hasDraggedFile = false;                
+                hasDraggedFile = false;
                 iconSearch.attr('src', $('#searchIcon').data('default'));
 
                 return;
@@ -107,7 +108,7 @@ function SearchPage() {
                 fileNameSpan.text(file.name).attr('title', file.name);
                 uploadedFile.show();
                 dataTransfer.items.add(file);
-                fileInput[0].files = dataTransfer.files; 
+                fileInput[0].files = dataTransfer.files;
                 hasDraggedFile = true;
                 iconSearch.attr('src', $('#searchIcon').data('enabled'));
 
@@ -126,7 +127,7 @@ function SearchPage() {
     function SearchActive() {
         const text = input.val().trim();
         const hasText = text.length >= 2;
-        const hasFile = fileInput[0].files.length > 0 || hasDraggedFile; 
+        const hasFile = fileInput[0].files.length > 0 || hasDraggedFile;
 
         if (!hasText && !hasFile) {
             errorMessage.show();
@@ -139,8 +140,18 @@ function SearchPage() {
         }
     }
 
+    function AppendTabIdSubmitForm() {
+       frmSearch.on('submit', function(e) {
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'TabId',
+                value: common.getTabId()
+            }).appendTo(this);
+        });
+    }
+
     $(document).ready(function () {
-        Initial();        
+        Initial();
     });
 }
 

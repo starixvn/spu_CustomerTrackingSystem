@@ -38,6 +38,7 @@
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Security" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,7 +49,8 @@
   <ItemGroup>
     <Compile Include="ExcelConfig\Utilities.cs" />
     <Compile Include="Implement\AccountService.cs" />
-    <Compile Include="Implement\AIInsightsService.cs" />
+    <Compile Include="Implement\AIInsights\AIInsightsApiForwarderService.cs" />
+    <Compile Include="Implement\AIInsights\AIInsightsService.cs" />
     <Compile Include="Implement\AssociatedGroupMonitorService.cs" />
     <Compile Include="Implement\AssociationDetectionService.cs" />
     <Compile Include="Implement\AssociationReportService.cs" />
@@ -85,6 +87,7 @@
     <Compile Include="Implement\TransactionReportService.cs" />
     <Compile Include="Implement\TransactionService.cs" />
     <Compile Include="Implement\CTSUserService.cs" />
+    <Compile Include="Interface\AIInsights\IAIInsightsService.cs" />
     <Compile Include="Interface\CustomerClassificationAgency\ICustomerCategoryAgencyService.cs" />
     <Compile Include="Interface\CustomerClassificationAgency\IProblemAccountClassificationAgencyService.cs" />
     <Compile Include="Interface\CustomerClassificationAgency\IRescanCustomerClassificationAgencyService.cs" />
@@ -94,7 +97,7 @@
     <Compile Include="Interface\CustomerClassification\IProblemAccountClassificationService.cs" />
     <Compile Include="Interface\CustomerClassification\IRescanCustomerClassificationBySportService.cs" />
     <Compile Include="Interface\IAccountService.cs" />
-    <Compile Include="Interface\IAIInsightsService.cs" />
+    <Compile Include="Interface\AIInsights\IAIInsightsApiForwarderService.cs" />
     <Compile Include="Interface\IAssociationReportService.cs" />
     <Compile Include="Interface\ICustomerCategoryService.cs" />
     <Compile Include="Interface\ICustomerEvidenceService.cs" />

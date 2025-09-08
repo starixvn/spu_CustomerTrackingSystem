@@ -2,110 +2,101 @@ namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.Extentions;
-    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AIInsights;
-    using Fanex.NAP.CTS.Service;
-    using Newtonsoft.Json;
+    using Fanex.NAP.CTS.Model.AIInsights.Api;
+    using Fanex.NAP.CTS.Service.Implement.AIInsights;
+    using Fanex.NAP.CTS.Service.Interface.AIInsights;
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Text;
     using System.Web;
     using System.Web.Mvc;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
     public class AIInsightsController : BaseController
-    {       
+    {
         private readonly IAIInsightsService _aIInsightsService;
-        private AIInsightsFileUploadModel _aiInsightsFileUploadModel;
         private const string ChatSessionKey = "ChatHistory";
+        private string TabId => Request?.Headers["X-Tab-Id"]?.ToString();
 
 
         public AIInsightsController()
         {
             _aIInsightsService = new AIInsightsService();
-            _aiInsightsFileUploadModel = new AIInsightsFileUploadModel();
         }
 
         public ActionResult Index()
         {
-            ViewBag.FileName = Session["UploadedFileName"] as string;
-
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult GetFileName()
+        {
+            var fileUploadResponse = GetUploadFileResponse();
+            var fileName = fileUploadResponse?.file_name ?? string.Empty;
+
+            return Json(fileName, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AIInsightsAnalyzeFile)]
-        public ActionResult AnalyzeFile()
+        public ActionResult AnalyzeSummary()
         {
-            var data = new AIInsightsAnalyzeResponseModel();          
+            var data = new AIInsightsAnalyzeSummaryDataModel();
 
             try
             {
-                var fileName = Session["UploadedFileName"] as string;
-                var fileContentBase64 = ConfigSettings.AIInsightsStoreFile
-                        ? new StringBuilder(GetFileContent(fileName))
-                        : Session["UploadedFileToBase64String"] as StringBuilder;
-
-                if (fileName == null || fileContentBase64 == null || fileContentBase64.Length <= 0)
-                {
-                    ViewBag.Message = "No file uploaded.";
-
-                    return View();
-                }
-
-                var request = new AIInsightsAnalyzeRequestModel
-                {
-                    file_name = fileName,
-                    file_content = fileContentBase64,
-                    mode_type = 2,
-                    changing_column_definition = "",
-                    session_id = CurrentSession.SessionId,
-                    language = "en"
-                };
-
-                data = _aIInsightsService.Analyze(request, ConfigSettings.AIInsightsAnalyzeUrl);
+                var fileResponse = GetUploadFileResponse();
+                data = _aIInsightsService.AnalyzeSummary(fileResponse);
             }
             catch (Exception ex)
             {
-                data.response = new AIInsightsAnalyzeDataModel
-                {
-                    ErrorCode = -1,
-                    ErrorMessage = string.IsNullOrEmpty(ex.Message) ? "AI Insights API Error" : ex.Message
-                };
-
-                LogExtension.LogError("CTS - AI Insights Analyze File", ex);
+                LogExtension.LogError("CTS - AI Insights AnalyzeSummary", ex);
             }
 
-            return Json(data.response, JsonRequestBehavior.AllowGet);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult AnalyzeCharts()
+        {
+            var data = new AIInsightsAnalyzeChartsDataModel();
+
+            try
+            {
+                var fileResponse = GetUploadFileResponse();
+                data = _aIInsightsService.AnalyzeCharts(fileResponse);
+            }
+            catch (Exception ex)
+            {
+                LogExtension.LogError("CTS - AI Insights AnalyzeCharts", ex);
+            }
+
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AIInsightsAskChatBot)]
-        public ActionResult AskChatbot(AIInsightsChatbotRequestModel request)
+        public ActionResult AskChatbot(string question)
         {
-            var response = new AIInsightsChatbotResponseModel();
+            var response = new AIInsightsChatbotDataModel();
 
             try
             {
-                request.session_id = CurrentSession.SessionId;
-                request.file_name = Session["UploadedFileName"] as string;
-                request.file_content = ConfigSettings.AIInsightsStoreFile
-                        ? new StringBuilder(GetFileContent(request.file_name))
-                        : Session["UploadedFileToBase64String"] as StringBuilder;
+                var fileResponse = GetUploadFileResponse();
+                response = _aIInsightsService.AskChatbot(fileResponse, question);
 
-                response = _aIInsightsService.AskChatbot(request, ConfigSettings.AIInsightsChatBotUrl);
-
-                SendMessage(request.question, response.response.answer);
+                SendMessage(question, response.answer);
             }
             catch (Exception ex)
-            {                
-                LogExtension.LogError("CTS - AI Insights AskChatbot", ex);         
+            {
+                LogExtension.LogError("CTS - AI Insights AskChatbot", ex);
             }
 
-            return Json(response.response, JsonRequestBehavior.AllowGet);
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -115,7 +106,7 @@ namespace Fanex.NAP.CTS.Controller
 
             try
             {
-                chatHistory = Session[ChatSessionKey] as List<ChatMessageModel> ?? new List<ChatMessageModel>();
+                chatHistory = Session[$"{ChatSessionKey}_{TabId}"] as List<ChatMessageModel> ?? new List<ChatMessageModel>();
             }
             catch (Exception ex)
             {
@@ -126,15 +117,15 @@ namespace Fanex.NAP.CTS.Controller
         }
 
         private void SendMessage(string userMessage, string botMessage)
-        {           
-            SaveMessage("u", userMessage);          
+        {
+            SaveMessage("u", userMessage);
 
-            SaveMessage("b", botMessage);                       
+            SaveMessage("b", botMessage);
         }
 
         private void SaveMessage(string sender, string message)
         {
-            var chatHistory = Session[ChatSessionKey] as List<ChatMessageModel> ?? new List<ChatMessageModel>();
+            var chatHistory = Session[$"{ChatSessionKey}_{TabId}"] as List<ChatMessageModel> ?? new List<ChatMessageModel>();
 
             chatHistory.Add(new ChatMessageModel
             {
@@ -143,80 +134,49 @@ namespace Fanex.NAP.CTS.Controller
                 Timestamp = DateTime.Now
             });
 
-            Session[ChatSessionKey] = chatHistory;
-        }        
+            Session[$"{ChatSessionKey}_{TabId}"] = chatHistory;
+        }
 
         [HttpPost]
         public ActionResult UploadFile(HttpPostedFileBase uploadFile)
-        {            
-            if (uploadFile == null || uploadFile.ContentLength == 0)
-            {                
+        {
+            try
+            {
+                var result = _aIInsightsService.UploadFile(uploadFile, CurrentSession.UserId.ToString());
+
+                Session[$"UploadFile{TabId}"] = result?.response;
+
                 return Json(new
                 {
-                    success = false,
-                    message = $"Content cannot be empty."
+                    success = true,
+                    message = result
                 }, JsonRequestBehavior.AllowGet);
             }
-
-            if (uploadFile.ContentLength > _aiInsightsFileUploadModel.MaxFileSizeBytes)
+            catch (InvalidDataException invalidDataException)
             {
                 return Json(new
                 {
                     success = false,
-                    message = $"Exceeds the allowed limit of {_aiInsightsFileUploadModel.MaxFileSizeBytes / (1024 * 1024)} MB."
-                }, JsonRequestBehavior.AllowGet);               
+                    message = invalidDataException.Message
+                }, JsonRequestBehavior.AllowGet);
             }
-
-            if (ConfigSettings.AIInsightsStoreFile)
+            catch (Exception ex)
             {
-                base.SaveUploadedFile(uploadFile);
+                LogExtension.LogError("CTS - AI Insights Upload File", ex);
+
+                return Json(new
+                {
+                    success = false,
+                    message = "CTS - AI Insights Upload File"
+                }, JsonRequestBehavior.AllowGet);
             }
-            else
-            {
-                Session["UploadedFileToBase64String"] = uploadFile.FileBaseToBase64StringChunked();
-            }
-
-            var fileName = Path.GetFileName(uploadFile.FileName);
-
-            Session["UploadedFileName"] = fileName;
-
-            ViewBag.FileName = fileName;
-
-            return Json(new
-            {
-                success = true,
-                message = fileName
-            }, JsonRequestBehavior.AllowGet);
         }
 
-        private string GetFileContent(string fileName)
-        {           
-            var fullPath = GetAnalysisFilePath(fileName);
-            var fileBytes = GetUploadedFileBytes(fullPath);
-
-            return Convert.ToBase64String(fileBytes);
-        }
-
-        private string GetAnalysisFilePath(string fileName)
+        private AIInsightsFileUploadDataModel GetUploadFileResponse()
         {
-            var userSubFolder = Path.Combine(_aiInsightsFileUploadModel.TempFolder, CurrentSession.UserId.ToString());
+            var fileResponse = Session[$"UploadFile{TabId}"] as AIInsightsFileUploadDataModel;
 
-            var fullPath = Server.MapPath(Path.Combine(userSubFolder, fileName));
-
-            return fullPath;
+            return fileResponse;
         }
-
-        private byte[] GetUploadedFileBytes(string fullPath)
-        {
-            byte[] fileBytes;
-            using (FileStream fs = new FileStream(fullPath, FileMode.Open, FileAccess.Read))
-            {
-                fileBytes = new byte[fs.Length];
-                fs.Read(fileBytes, 0, fileBytes.Length);
-            }
-
-            return fileBytes;
-        }
-
     }
 }

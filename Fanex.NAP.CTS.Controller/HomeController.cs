@@ -14,34 +14,36 @@ namespace Fanex.NAP.CTS.Controller
     using System.Web.Mvc;
     using Fanex.Logging;
     using System.Web;
-    using Fanex.NAP.CTS.Core.Utilities;
     using System.IO;
-    using System;
-    using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Service.Interface.AIInsights;
+    using Fanex.NAP.CTS.Service.Implement.AIInsights;
+    using Fanex.NAP.CTS.Model.AIInsights;
 
     [NapSuperAuth]
     public class HomeController : BaseController
     {
         private readonly IAccountService accountService;
         private readonly IUserService userService;
+        private readonly IAIInsightsService aIInsightsService;
 
         public HomeController()
         {
             accountService = new AccountService();
             userService = new UserService();
+            aIInsightsService = new AIInsightsService();
         }
 
         [HttpGet]
         public void test()
         {
             LogService.Info($"CTS test site");
-        }       
+        }
 
         public ActionResult Index()
         {
             ViewBag.UserId = CurrentSession.UserId;
             ViewBag.OnUserId = CurrentSession.OnUserId;
-            ViewBag.IsAssociationPermission = userService.IsHavingPermission(CurrentSession.UserId, 
+            ViewBag.IsAssociationPermission = userService.IsHavingPermission(CurrentSession.UserId,
                             NapSettings.Settings.SiteId,
                             FSFunctionKeys.AssociatedAccountMonitor,
                             NAP.Core.Business.Constant.Policy.Read);
@@ -84,30 +86,19 @@ namespace Fanex.NAP.CTS.Controller
         }
 
         [HttpPost]
-        public ActionResult Search(FormCollection form, HttpPostedFileBase uploadFile)
+        public ActionResult Search(FormCollection form, HttpPostedFileBase uploadFile, string tabId)
         {
             string inputValue = form["txtInput"]?.Trim();
 
             bool hasText = !string.IsNullOrEmpty(inputValue) && inputValue.Length > 1 && inputValue.Length <= 50;
-            bool hasFile = uploadFile != null
-                           && uploadFile.ContentLength > 0
-                           && (uploadFile.FileName.EndsWith(".xls", StringComparison.OrdinalIgnoreCase)
-                               || uploadFile.FileName.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase));
+            var hasFile = uploadFile?.ContentLength > 0 &&
+                            Consts.AIInsightFileSupportExtensions.Contains(Path.GetExtension(uploadFile.FileName).ToLower());
 
             if (hasFile && !hasText)
             {
-                if (ConfigSettings.AIInsightsStoreFile)
-                {
-                    base.SaveUploadedFile(uploadFile);
-                }
-                else
-                {
-                    Session["UploadedFileToBase64String"] = uploadFile.FileBaseToBase64StringChunked();
-                }
+                var result = aIInsightsService.UploadFile(uploadFile, CurrentSession.UserId.ToString());
 
-                var fileName = Path.GetFileName(uploadFile.FileName);
-                Session["UploadedFileName"] = fileName;
-                TempData["HasFile"] = true;
+                Session[$"UploadFile{tabId}"] = result?.response;
 
                 return RedirectToAction("Index", "AIInsights");
             }
@@ -125,14 +116,14 @@ namespace Fanex.NAP.CTS.Controller
             }
 
             return View(new SearchResultViewModel { SearchResults = null, InputValue = inputValue });
-        }              
+        }
 
         private string ValidateUserName(string inputUserName)
         {
             var words = inputUserName.Split(new char[] { '$', '@', '-', '(', ')' });
             var result = new StringBuilder();
 
-            if(words.Length == 1)
+            if (words.Length == 1)
             {
                 result.Append($"{words[0]}*");
             }
@@ -152,9 +143,9 @@ namespace Fanex.NAP.CTS.Controller
                         }
                     }
                 }
-            }            
+            }
 
-            return  "\'" + result.ToString() + "\'";
+            return "\'" + result.ToString() + "\'";
         }
 
         public ActionResult UpdateMenuSettingForLoginPartialPage()

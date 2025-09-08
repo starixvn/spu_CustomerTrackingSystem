@@ -675,5 +675,11 @@ namespace Fanex.NAP.CTS.Resource.Consts
             (int)MatchMonitorSportType.Tennis,
             (int)MatchMonitorSportType.Cricket
         };
+
+        public static readonly HashSet<string> AIInsightFileSupportExtensions = new HashSet<string>
+        {
+            ".xls",
+            ".xlsx"
+        };
     }
 }

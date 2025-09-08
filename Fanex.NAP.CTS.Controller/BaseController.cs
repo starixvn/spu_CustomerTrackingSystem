@@ -7,15 +7,10 @@
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Context;
     using Fanex.NAP.Core.Web.Session;
-    using Fanex.NAP.CTS.Core.ExportExcel;
     using Fanex.NAP.CTS.Resource.Consts;
-    using NPOI.SS.UserModel;
-    using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Web;
     using System.Web.Mvc;
-    using Fanex.NAP.CTS.Model.AIInsights;
 
     public class BaseController : Controller
     {
@@ -129,90 +124,5 @@
         {
             return Json(new { data });
         }
-
-        protected static byte[] RenderExcelFile(string template, Action<IWorkbook> render)
-        {
-            var wb = ExcelUtilities.GetWorkbook(template);
-
-            render(wb);
-
-            return wb.ToBytes();
-        }
-
-        protected static byte[] RenderExcelFile<TLegend, TData, TSummary>(string template, FSExcelConfig<TLegend, TData, TSummary> config, TLegend legend, IEnumerable<TData> data, TSummary summary)
-        {
-            return ExcelUtilities.GetWorkbook(template)
-                .RenderSheet(config, legend, data, summary)
-                .ToBytes();
-        }
-
-        protected void SaveUploadedFile(HttpPostedFileBase uploadFile)
-        {
-            var aiInsightsFileUploadModel = new AIInsightsFileUploadModel();
-
-            CleanupOldTempFiles(aiInsightsFileUploadModel, TimeSpan.FromHours(1));
-
-            var fileName = Path.GetFileName(uploadFile.FileName);
-
-            SaveUploadedFile(uploadFile, fileName, aiInsightsFileUploadModel);
-
-            Session["UploadedFileName"] = fileName;
-          
-            ViewBag.FileName = fileName;
-        }
-
-        protected void SaveUploadedFile(HttpPostedFileBase uploadFile, string fileName, AIInsightsFileUploadModel aiInsightsFileUploadModel)
-        {
-            var userID = CurrentSession.UserId.ToString();
-
-            var userSubFolder = Path.Combine(aiInsightsFileUploadModel.TempFolder, userID);
-
-            var serverUserFolderPath = Server.MapPath(userSubFolder);
-
-            Directory.CreateDirectory(serverUserFolderPath);
-           
-            var fullPath = Path.Combine(serverUserFolderPath, fileName);          
-
-            uploadFile.SaveAs(fullPath);
-
-            Session["UploadTime"] = DateTime.Now;
-
-            Session["UploadedFileName"] = fileName;
-        }
-
-        protected void CleanupOldTempFiles(AIInsightsFileUploadModel aiInsightsFileUploadModel, TimeSpan maxAge)
-        {
-            var userID = CurrentSession.UserId.ToString();
-
-            var userSubFolder = Path.Combine(aiInsightsFileUploadModel.TempFolder, userID);
-
-            var folderPath = Server.MapPath(userSubFolder);           
-
-            if (!Directory.Exists(folderPath)) 
-                return;
-
-            var files = Directory.GetFiles(folderPath);
-
-            foreach (var file in files)
-            {
-                try
-                {
-                    if (!System.IO.File.Exists(file))
-                        continue;
-
-                    var creationTime = System.IO.File.GetCreationTime(file);
-
-                    if (DateTime.Now - creationTime > maxAge)
-                    {
-                        System.IO.File.Delete(file);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ex.LogError();
-                }
-            }
-        }
-
     }
 }
