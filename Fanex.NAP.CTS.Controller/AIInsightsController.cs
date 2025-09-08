@@ -5,7 +5,10 @@ namespace Fanex.NAP.CTS.Controller
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AIInsights;
     using Fanex.NAP.CTS.Model.AIInsights.Api;
+    using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Implement.AIInsights;
+    using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Interface.AIInsights;
     using System;
     using System.Collections.Generic;
@@ -18,13 +21,15 @@ namespace Fanex.NAP.CTS.Controller
     public class AIInsightsController : BaseController
     {
         private readonly IAIInsightsService _aIInsightsService;
-        private const string ChatSessionKey = "ChatHistory";
+        private readonly IMemoryCacheService _memoryCacheService;
+        private string UserId => CurrentSession?.UserId.ToString();
         private string TabId => Request?.Headers["X-Tab-Id"]?.ToString();
 
 
         public AIInsightsController()
         {
             _aIInsightsService = new AIInsightsService();
+            _memoryCacheService = new MemoryCacheService();
         }
 
         public ActionResult Index()
@@ -106,7 +111,7 @@ namespace Fanex.NAP.CTS.Controller
 
             try
             {
-                chatHistory = Session[$"{ChatSessionKey}_{TabId}"] as List<ChatMessageModel> ?? new List<ChatMessageModel>();
+                chatHistory = _memoryCacheService.GetValue<List<ChatMessageModel>>(string.Format(Consts.AIInsightsChatHistoryKey, UserId, TabId)) ?? new List<ChatMessageModel>();
             }
             catch (Exception ex)
             {
@@ -125,7 +130,7 @@ namespace Fanex.NAP.CTS.Controller
 
         private void SaveMessage(string sender, string message)
         {
-            var chatHistory = Session[$"{ChatSessionKey}_{TabId}"] as List<ChatMessageModel> ?? new List<ChatMessageModel>();
+            var chatHistory = _memoryCacheService.GetValue<List<ChatMessageModel>>(string.Format(Consts.AIInsightsChatHistoryKey, UserId, TabId));
 
             chatHistory.Add(new ChatMessageModel
             {
@@ -134,7 +139,7 @@ namespace Fanex.NAP.CTS.Controller
                 Timestamp = DateTime.Now
             });
 
-            Session[$"{ChatSessionKey}_{TabId}"] = chatHistory;
+            _memoryCacheService.PushValueBySlidingTime(string.Format(Consts.AIInsightsChatHistoryKey, UserId, TabId), chatHistory, 1);
         }
 
         [HttpPost]
@@ -142,9 +147,8 @@ namespace Fanex.NAP.CTS.Controller
         {
             try
             {
-                var result = _aIInsightsService.UploadFile(uploadFile, CurrentSession.UserId.ToString());
-
-                Session[$"UploadFile{TabId}"] = result?.response;
+                var result = _aIInsightsService.UploadFile(uploadFile, UserId);
+                _memoryCacheService.PushValueBySlidingTime(string.Format(Consts.AIInsightsUploadFileKey, UserId, TabId), result?.response, 1);
 
                 return Json(new
                 {
@@ -174,7 +178,7 @@ namespace Fanex.NAP.CTS.Controller
 
         private AIInsightsFileUploadDataModel GetUploadFileResponse()
         {
-            var fileResponse = Session[$"UploadFile{TabId}"] as AIInsightsFileUploadDataModel;
+            var fileResponse = _memoryCacheService.GetValue<AIInsightsFileUploadDataModel>(string.Format(Consts.AIInsightsUploadFileKey, UserId, TabId));
 
             return fileResponse;
         }

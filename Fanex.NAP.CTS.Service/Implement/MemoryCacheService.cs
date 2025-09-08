@@ -57,6 +57,28 @@
             return result;
         }
 
+        public bool PushValueBySlidingTime<T>(string key, T value, int hours = 1) where T : class
+        {
+            var result = false;
+
+            try
+            {
+                if (value != null)
+                {
+                    result = _memoryCache.Add(key, JsonConvert.SerializeObject(value), new CacheItemPolicy
+                    {
+                        SlidingExpiration = TimeSpan.FromHours(hours)
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                LogExtension.LogError(ex, $"Memory Cache Error {nameof(PushValue)}");
+            }
+
+            return result;
+        }
+
         public async Task<bool> PushValueAsync<T>(string key, T value, int hours = 1) where T : class
         {
             return await Task.Run(() =>

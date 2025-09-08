@@ -127,6 +127,9 @@ namespace Fanex.NAP.CTS.Resource.Consts
         public const string TWInitialSmartRemark = "Detection Date: {0} - Probability Threshold: {1}";
         public const string TWTWInitialGBRemark = "Detection Date: {0} - GB Bet Count: {1} - Sport: {2}";
 
+        public const string AIInsightsUploadFileKey = "AIInsights_UploadFile_{0}_{1}";
+        public const string AIInsightsChatHistoryKey = "AIInsights_ChatHistory_{0}_{1}";
+
         public const int MEMBER_PARENTID_VVIP = 1000;
         public const int MEMBER_PARENTID_PA = 20000;
         public const int MEMBER_PARENTID_POTENTIALPA = 30000;

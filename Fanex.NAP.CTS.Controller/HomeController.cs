@@ -17,7 +17,8 @@ namespace Fanex.NAP.CTS.Controller
     using System.IO;
     using Fanex.NAP.CTS.Service.Interface.AIInsights;
     using Fanex.NAP.CTS.Service.Implement.AIInsights;
-    using Fanex.NAP.CTS.Model.AIInsights;
+    using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.Service.Implement;
 
     [NapSuperAuth]
     public class HomeController : BaseController
@@ -25,12 +26,14 @@ namespace Fanex.NAP.CTS.Controller
         private readonly IAccountService accountService;
         private readonly IUserService userService;
         private readonly IAIInsightsService aIInsightsService;
+        private readonly IMemoryCacheService memoryCacheService;
 
         public HomeController()
         {
             accountService = new AccountService();
             userService = new UserService();
             aIInsightsService = new AIInsightsService();
+            memoryCacheService = new MemoryCacheService();
         }
 
         [HttpGet]
@@ -96,9 +99,10 @@ namespace Fanex.NAP.CTS.Controller
 
             if (hasFile && !hasText)
             {
-                var result = aIInsightsService.UploadFile(uploadFile, CurrentSession.UserId.ToString());
+                var userId = CurrentSession.UserId.ToString();
 
-                Session[$"UploadFile{tabId}"] = result?.response;
+                var result = aIInsightsService.UploadFile(uploadFile, userId);
+                memoryCacheService.PushValueBySlidingTime(string.Format(Consts.AIInsightsUploadFileKey, userId, tabId), result?.response, 1);
 
                 return RedirectToAction("Index", "AIInsights");
             }
