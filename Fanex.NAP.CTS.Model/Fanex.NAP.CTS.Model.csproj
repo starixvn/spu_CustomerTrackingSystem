@@ -341,6 +341,7 @@
     <Compile Include="CustomerClassification\InsertNormalAccountCustInfoModel.cs" />
     <Compile Include="CustomerClassification\LogErrorDataModel.cs" />
     <Compile Include="CustomerClassification\PotentialPA\TWInitialSmartPAModel.cs" />
+    <Compile Include="CustomerClassification\ProblemAccount\PADailyScanFromQueueModel.cs" />
     <Compile Include="CustomerClassification\PushDataToExternal\CustomerClassificationUpdateBySportToMainDBModel.cs" />
     <Compile Include="CustomerClassification\PushDataToExternal\GetCustomerClassificationBySportModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\PotentialPACustInfoModel.cs" />
