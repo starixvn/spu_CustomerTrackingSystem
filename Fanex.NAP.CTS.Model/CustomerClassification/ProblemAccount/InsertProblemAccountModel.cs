@@ -1,8 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.CustomerClassification
 {
-    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using System;
-    using System.Configuration;
 
     public class InsertProblemAccountModel : CustomerClassificationModel
     {
@@ -13,53 +11,6 @@
             IsFromTW = false;           
         }
 
-        public InsertProblemAccountModel(RescanPADangerousModel rescanPADangerous)
-        {
-            this.CustID = rescanPADangerous.CustID;
-            this.CTSCustID = rescanPADangerous.CTSCustID;
-            this.RoleID = rescanPADangerous.RoleID;
-            this.SubscriberID = rescanPADangerous.SubscriberID;
-            this.CategoryID = rescanPADangerous.CategoryID;            
-            this.IsLicensee = rescanPADangerous.IsLicensee;
-            this.IsFromAI = true;
-            this.IsMarkedDirectly = null;
-            this.IsFromCTS = false;
-            this.IsFromTVS = false;
-            this.IsFromTW = false;
-            this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);            
-        }
-
-        public InsertProblemAccountModel(GetInitialTWGroupBettingModel twGBCust, PotentialPACustInfoModel ctsCust)
-        {
-            this.CustID = twGBCust.CustID;
-            this.CTSCustID = ctsCust.CTSCustID;
-            this.RoleID = ctsCust.RoleID;
-            this.SubscriberID = ctsCust.SubscriberID;
-            this.CategoryID = ctsCust.CategoryID;            
-            this.IsLicensee = ctsCust.IsLicensee;
-            this.IsFromAI = false;
-            this.IsMarkedDirectly = null;
-            this.IsFromCTS = false;
-            this.IsFromTVS = false;
-            this.IsFromTW = true;
-            this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);         
-        }
-
-        public InsertProblemAccountModel(TWInitialSmartPAModel tWInitialSmartCust)
-        {
-            this.CustID = tWInitialSmartCust.CustID;
-            this.CTSCustID = tWInitialSmartCust.CTSCustID;
-            this.RoleID = tWInitialSmartCust.RoleID;
-            this.SubscriberID = tWInitialSmartCust.SubscriberID;
-            this.CategoryID = tWInitialSmartCust.CategoryID;
-            this.IsLicensee = tWInitialSmartCust.IsLicensee;
-            this.IsFromAI = false;
-            this.IsMarkedDirectly = null;
-            this.IsFromCTS = false;
-            this.IsFromTVS = false;
-            this.IsFromTW = true;
-            this.CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);            
-        }
 
         public InsertProblemAccountModel(RescanCustomerClassificationModel data)
         {
@@ -72,6 +23,7 @@
             IsParlay = data.IsParlay;
             IssueTypeID = data.IssueTypeID;
             SportType = data.SportType;
+            DWSportType = data.DWSportType;
             RoleID = data.RoleID;
             SubscriberID = data.SubscriberID;
             IsLicensee = data.IsLicensee;
@@ -118,6 +70,8 @@
         public bool? IsParlay { get; set; }
 
         public int? SportType { get; set; }
+
+        public int DWSportType { get; set; }
 
         public int? IssueTypeID { get; set; }
 

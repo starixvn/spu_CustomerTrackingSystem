@@ -1,10 +1,14 @@
 ﻿namespace Fanex.NAP.CTS.Model.CustomerClassification
 {
+    using Newtonsoft.Json;
     using System;
 
     public class ProblemAccountLosingClassificationModel
     {
         public Int64 CustId { get; set; }
+
+        [JsonProperty("DWSportType")]
+        public int SportGroup { get; set; }
 
         public int WinlossStatus { get; set; }
 
