@@ -116,7 +116,7 @@
             {
                 var criteria = new ProblemAccountLosingClassificationGetCriteria()
                 {
-                    ListCustIds = JsonConvert.SerializeObject(custInfos),
+                    CustJson = JsonConvert.SerializeObject(custInfos),
                     FunctionId = (int)funcId
                 };
 
