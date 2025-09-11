@@ -96,7 +96,8 @@
                                    {
                                        CustID = c.CustID,
                                        DWSportType = c.DWSportType
-                                   });
+                                   })
+                               .Distinct(x => new { x.CustID, x.DWSportType });
 
             var paLosing = GetProblemAccountLosingClassification(custInfos, funcId);
 
