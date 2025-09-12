@@ -15,7 +15,7 @@
                 return new AIInsightsAnalyzeChartsResponseModel();
             }
 
-            var response = await ApiHelper.Post<AIInsightsAnalyzeChartsResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout);
+            var response = await ApiWithHttpClientRotatorHelper.Post<AIInsightsAnalyzeChartsResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout);
 
             return response;
         }
@@ -27,7 +27,7 @@
                 return new AIInsightsAnalyzeSummaryResponseModel();
             }
 
-            var response = await ApiHelper.Post<AIInsightsAnalyzeSummaryResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout);
+            var response = await ApiWithHttpClientRotatorHelper.Post<AIInsightsAnalyzeSummaryResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout);
 
             return response;
         }
@@ -39,7 +39,7 @@
                 return new AIInsightsChatbotResponseModel();
             }
 
-            var response = await ApiHelper.Post<AIInsightsChatbotResponseModel>(url, request, ConfigSettings.ChatbotRequestTimeout);
+            var response = await ApiWithHttpClientRotatorHelper.Post<AIInsightsChatbotResponseModel>(url, request, ConfigSettings.ChatbotRequestTimeout);
 
             return response;
         }
@@ -51,7 +51,7 @@
                 return new AIInsightsFileUploadResponseModel();
             }
 
-            var response = await ApiHelper.PostWithStreamWritter<AIInsightsFileUploadResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout);
+            var response = await ApiWithHttpClientRotatorHelper.PostWithStreamWritter<AIInsightsFileUploadResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout);
 
             return response;
         }
