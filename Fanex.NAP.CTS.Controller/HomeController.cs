@@ -6,35 +6,20 @@ namespace Fanex.NAP.CTS.Controller
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Resource.Consts;
-    using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.ViewModel.Home;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Text;
     using System.Web.Mvc;
     using Fanex.Logging;
-    using System.Web;
-    using System.IO;
-    using Fanex.NAP.CTS.Service.Interface.AIInsights;
-    using Fanex.NAP.CTS.Service.Implement.AIInsights;
-    using Fanex.NAP.CTS.Service.Interface;
-    using Fanex.NAP.CTS.Service.Implement;
-    using System.Threading.Tasks;
 
     [NapSuperAuth]
     public class HomeController : BaseController
     {
-        private readonly IAccountService accountService;
         private readonly IUserService userService;
-        private readonly IAIInsightsService aIInsightsService;
-        private readonly IMemoryCacheService memoryCacheService;
 
         public HomeController()
         {
-            accountService = new AccountService();
             userService = new UserService();
-            aIInsightsService = new AIInsightsService();
-            memoryCacheService = new MemoryCacheService();
         }
 
         [HttpGet]
@@ -87,40 +72,6 @@ namespace Fanex.NAP.CTS.Controller
         public ActionResult Search()
         {
             return View(new SearchResultViewModel { SearchResults = new List<SearchResultModel>(), InputValue = string.Empty });
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> Search(FormCollection form, HttpPostedFileBase uploadFile, string tabId)
-        {
-            string inputValue = form["txtInput"]?.Trim();
-
-            bool hasText = !string.IsNullOrEmpty(inputValue) && inputValue.Length > 1 && inputValue.Length <= 50;
-            var hasFile = uploadFile?.ContentLength > 0 &&
-                            Consts.AIInsightFileSupportExtensions.Contains(Path.GetExtension(uploadFile.FileName).ToLower());
-
-            if (hasFile && !hasText)
-            {
-                var userId = CurrentSession.UserId.ToString();
-
-                var result = await aIInsightsService.UploadFile(uploadFile, userId);
-                memoryCacheService.PushValueBySlidingTime(string.Format(Consts.AIInsightsUploadFileKey, userId, tabId), result?.response, 1);
-
-                return RedirectToAction("Index", "AIInsights");
-            }
-
-            if (hasText)
-            {
-                var result = accountService.SearchAccounts(inputValue);
-
-                if (result.Count == 1)
-                {
-                    return RedirectToAction("Index", "Account", new { Id = result.First().CTSCustId });
-                }
-
-                return View(new SearchResultViewModel { SearchResults = result, InputValue = inputValue });
-            }
-
-            return View(new SearchResultViewModel { SearchResults = null, InputValue = inputValue });
         }
 
         private string ValidateUserName(string inputUserName)

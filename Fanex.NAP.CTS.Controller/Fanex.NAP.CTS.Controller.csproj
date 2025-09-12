@@ -211,6 +211,7 @@
     <Compile Include="ManageSubscriberController.cs" />
     <Compile Include="NotificationSettingController.cs" />
     <Compile Include="RobotReportController.cs" />
+    <Compile Include="SearchController.cs" />
     <Compile Include="SpecialCustomerClassController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportsController.cs" />
