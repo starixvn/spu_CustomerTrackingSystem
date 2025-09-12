@@ -17,6 +17,7 @@ namespace Fanex.NAP.CTS.Controller
     using System.Web.Mvc;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
+    [SessionState(System.Web.SessionState.SessionStateBehavior.ReadOnly)]
     [NapSuperAuth]
     public class AIInsightsController : BaseController
     {
