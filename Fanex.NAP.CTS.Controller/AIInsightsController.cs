@@ -13,6 +13,7 @@ namespace Fanex.NAP.CTS.Controller
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Threading.Tasks;
     using System.Web;
     using System.Web.Mvc;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -49,14 +50,14 @@ namespace Fanex.NAP.CTS.Controller
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AIInsightsAnalyzeFile)]
-        public ActionResult AnalyzeSummary()
+        public async Task<ActionResult> AnalyzeSummary()
         {
             var data = new AIInsightsAnalyzeSummaryDataModel();
 
             try
             {
                 var fileResponse = GetUploadFileResponse();
-                data = _aIInsightsService.AnalyzeSummary(fileResponse);
+                data = await _aIInsightsService.AnalyzeSummary(fileResponse);
             }
             catch (Exception ex)
             {
@@ -67,14 +68,14 @@ namespace Fanex.NAP.CTS.Controller
         }
 
         [HttpPost]
-        public ActionResult AnalyzeCharts()
+        public async Task<ActionResult> AnalyzeCharts()
         {
             var data = new AIInsightsAnalyzeChartsDataModel();
 
             try
             {
                 var fileResponse = GetUploadFileResponse();
-                data = _aIInsightsService.AnalyzeCharts(fileResponse);
+                data = await _aIInsightsService.AnalyzeCharts(fileResponse);
             }
             catch (Exception ex)
             {
@@ -86,14 +87,14 @@ namespace Fanex.NAP.CTS.Controller
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AIInsightsAskChatBot)]
-        public ActionResult AskChatbot(string question)
+        public async Task<ActionResult> AskChatbot(string question)
         {
             var response = new AIInsightsChatbotDataModel();
 
             try
             {
                 var fileResponse = GetUploadFileResponse();
-                response = _aIInsightsService.AskChatbot(fileResponse, question);
+                response = await _aIInsightsService.AskChatbot(fileResponse, question);
 
                 SendMessage(question, response.answer);
             }
@@ -144,11 +145,11 @@ namespace Fanex.NAP.CTS.Controller
         }
 
         [HttpPost]
-        public ActionResult UploadFile(HttpPostedFileBase uploadFile)
+        public async Task<ActionResult> UploadFile(HttpPostedFileBase uploadFile)
         {
             try
             {
-                var result = _aIInsightsService.UploadFile(uploadFile, UserId);
+                var result = await _aIInsightsService.UploadFile(uploadFile, UserId);
                 _memoryCacheService.PushValueBySlidingTime(string.Format(Consts.AIInsightsUploadFileKey, UserId, TabId), result?.response, 1);
 
                 return Json(new

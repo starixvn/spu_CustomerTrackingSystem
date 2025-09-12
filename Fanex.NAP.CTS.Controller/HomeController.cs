@@ -19,6 +19,7 @@ namespace Fanex.NAP.CTS.Controller
     using Fanex.NAP.CTS.Service.Implement.AIInsights;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Implement;
+    using System.Threading.Tasks;
 
     [NapSuperAuth]
     public class HomeController : BaseController
@@ -89,7 +90,7 @@ namespace Fanex.NAP.CTS.Controller
         }
 
         [HttpPost]
-        public ActionResult Search(FormCollection form, HttpPostedFileBase uploadFile, string tabId)
+        public async Task<ActionResult> Search(FormCollection form, HttpPostedFileBase uploadFile, string tabId)
         {
             string inputValue = form["txtInput"]?.Trim();
 
@@ -101,7 +102,7 @@ namespace Fanex.NAP.CTS.Controller
             {
                 var userId = CurrentSession.UserId.ToString();
 
-                var result = aIInsightsService.UploadFile(uploadFile, userId);
+                var result = await aIInsightsService.UploadFile(uploadFile, userId);
                 memoryCacheService.PushValueBySlidingTime(string.Format(Consts.AIInsightsUploadFileKey, userId, tabId), result?.response, 1);
 
                 return RedirectToAction("Index", "AIInsights");

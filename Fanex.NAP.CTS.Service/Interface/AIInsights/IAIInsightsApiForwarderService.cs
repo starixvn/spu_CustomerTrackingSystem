@@ -2,15 +2,16 @@
 {
     using Fanex.NAP.CTS.Model.AIInsights;
     using Fanex.NAP.CTS.Model.AIInsights.Api;
+    using System.Threading.Tasks;
 
     public interface IAIInsightsApiForwarderService
     {
-        AIInsightsFileUploadResponseModel UploadFile(AIInsightsFileUploadRequestModel request, string url);
+        Task<AIInsightsFileUploadResponseModel> UploadFile(AIInsightsFileUploadRequestModel request, string url);
 
-        AIInsightsAnalyzeSummaryResponseModel AnalyzeSummary(AIInsightsAnalyzeRequestModel request, string url);
+        Task<AIInsightsAnalyzeSummaryResponseModel> AnalyzeSummary(AIInsightsAnalyzeRequestModel request, string url);
 
-        AIInsightsAnalyzeChartsResponseModel AnalyzeCharts(AIInsightsAnalyzeRequestModel request, string url);
+        Task<AIInsightsAnalyzeChartsResponseModel> AnalyzeCharts(AIInsightsAnalyzeRequestModel request, string url);
 
-        AIInsightsChatbotResponseModel AskChatbot(AIInsightsChatbotRequestModel request, string url);
+        Task<AIInsightsChatbotResponseModel> AskChatbot(AIInsightsChatbotRequestModel request, string url);
     }
 }

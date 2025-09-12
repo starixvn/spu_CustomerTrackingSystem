@@ -8,60 +8,52 @@
 
     public class AIInsightsApiForwarderService : IAIInsightsApiForwarderService
     {
-        public AIInsightsAnalyzeChartsResponseModel AnalyzeCharts(AIInsightsAnalyzeRequestModel request, string url)
+        public async Task<AIInsightsAnalyzeChartsResponseModel> AnalyzeCharts(AIInsightsAnalyzeRequestModel request, string url)
         {
             if (string.IsNullOrEmpty(url))
             {
                 return new AIInsightsAnalyzeChartsResponseModel();
             }
 
-            var response = ApiHelper.Post<AIInsightsAnalyzeChartsResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout);
+            var response = await ApiHelper.Post<AIInsightsAnalyzeChartsResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout);
 
-            Task.WhenAll(response);
-
-            return response.Result;
+            return response;
         }
 
-        public AIInsightsAnalyzeSummaryResponseModel AnalyzeSummary(AIInsightsAnalyzeRequestModel request, string url)
+        public async Task<AIInsightsAnalyzeSummaryResponseModel> AnalyzeSummary(AIInsightsAnalyzeRequestModel request, string url)
         {
             if (string.IsNullOrEmpty(url))
             {
                 return new AIInsightsAnalyzeSummaryResponseModel();
             }
 
-            var response = ApiHelper.Post<AIInsightsAnalyzeSummaryResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout);
+            var response = await ApiHelper.Post<AIInsightsAnalyzeSummaryResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout);
 
-            Task.WhenAll(response);
-
-            return response.Result;
+            return response;
         }
 
-        public AIInsightsChatbotResponseModel AskChatbot(AIInsightsChatbotRequestModel request, string url)
+        public async Task<AIInsightsChatbotResponseModel> AskChatbot(AIInsightsChatbotRequestModel request, string url)
         {
             if (string.IsNullOrEmpty(url))
             {
                 return new AIInsightsChatbotResponseModel();
             }
 
-            var response = ApiHelper.Post<AIInsightsChatbotResponseModel>(url, request, ConfigSettings.ChatbotRequestTimeout);
+            var response = await ApiHelper.Post<AIInsightsChatbotResponseModel>(url, request, ConfigSettings.ChatbotRequestTimeout);
 
-            Task.WhenAll(response);
-
-            return response.Result;
+            return response;
         }
 
-        public AIInsightsFileUploadResponseModel UploadFile(AIInsightsFileUploadRequestModel request, string url)
+        public async Task<AIInsightsFileUploadResponseModel> UploadFile(AIInsightsFileUploadRequestModel request, string url)
         {
             if (string.IsNullOrEmpty(url))
             {
                 return new AIInsightsFileUploadResponseModel();
             }
 
-            var response = ApiHelper.PostWithStreamWritter<AIInsightsFileUploadResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout);
+            var response = await ApiHelper.PostWithStreamWritter<AIInsightsFileUploadResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout);
 
-            Task.WhenAll(response);
-
-            return response.Result;
+            return response;
         }
     }
 }

@@ -2,6 +2,7 @@
 {
     using System.IO;
     using System.Net;
+    using System.Threading.Tasks;
     using System.Web;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
@@ -21,20 +22,20 @@
             _aiInsightsFileUploadModel = new AIInsightsFileUploadModel();
         }
 
-        public AIInsightsAnalyzeChartsDataModel AnalyzeCharts(AIInsightsFileUploadDataModel model)
+        public async Task<AIInsightsAnalyzeChartsDataModel> AnalyzeCharts(AIInsightsFileUploadDataModel model)
         {
             var request = new AIInsightsAnalyzeRequestModel
             {
                 cache_key = model?.cache_key,
             };
 
-            var result = _apiForwarderService.AnalyzeCharts(request, ConfigSettings.AIInsightsAnalyzeChartsUrl);
+            var result = await _apiForwarderService.AnalyzeCharts(request, ConfigSettings.AIInsightsAnalyzeChartsUrl);
 
             ValidateResponse(result);
             return result.response;
         }
 
-        public AIInsightsAnalyzeSummaryDataModel AnalyzeSummary(AIInsightsFileUploadDataModel model)
+        public async Task<AIInsightsAnalyzeSummaryDataModel> AnalyzeSummary(AIInsightsFileUploadDataModel model)
         {
             var request = new AIInsightsAnalyzeRequestModel
             {
@@ -42,13 +43,13 @@
             };
 
 
-            var result = _apiForwarderService.AnalyzeSummary(request, ConfigSettings.AIInsightsAnalyzeSummaryUrl);
+            var result = await _apiForwarderService.AnalyzeSummary(request, ConfigSettings.AIInsightsAnalyzeSummaryUrl);
 
             ValidateResponse(result);
             return result.response;
         }
 
-        public AIInsightsChatbotDataModel AskChatbot(AIInsightsFileUploadDataModel model, string question)
+        public async Task<AIInsightsChatbotDataModel> AskChatbot(AIInsightsFileUploadDataModel model, string question)
         {
             var request = new AIInsightsChatbotRequestModel
             {
@@ -56,13 +57,13 @@
                 question = question
             };
 
-            var result = _apiForwarderService.AskChatbot(request, ConfigSettings.AIInsightsChatBotUrl);
+            var result = await _apiForwarderService.AskChatbot(request, ConfigSettings.AIInsightsChatBotUrl);
 
             ValidateResponse(result);
             return result.response;
         }
 
-        public AIInsightsFileUploadResponseModel UploadFile(HttpPostedFileBase uploadFile, string session_id)
+        public async Task<AIInsightsFileUploadResponseModel> UploadFile(HttpPostedFileBase uploadFile, string session_id)
         {
             if (uploadFile == null || uploadFile.ContentLength == 0)
             {
@@ -81,7 +82,7 @@
                 session_id = session_id
             };
 
-            var result = _apiForwarderService.UploadFile(request, ConfigSettings.AIInsightsUploadUrl);
+            var result = await _apiForwarderService.UploadFile(request, ConfigSettings.AIInsightsUploadUrl);
 
             ValidateResponse(result);
             return result;
