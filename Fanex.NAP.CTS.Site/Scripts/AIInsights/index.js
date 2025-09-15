@@ -197,12 +197,27 @@ function AIInsights() {
             },
             complete: function () {
                 common.closeLoading();
+
+                CleanUploadedFileInput(file);
             },
             error: function (errMsg) {
                 common.closeLoading();
                 domElements.btnGenerate.prop('disabled', false);
             }
         });
+    }
+
+    function CleanUploadedFileInput(file) {
+        // ✅ Clear memory after upload
+        file = null; // remove reference
+
+        if (domElements.fileInput && domElements.fileInput[0]) {
+            domElements.fileInput[0].value = ""; // native reset
+        }
+
+        if (domElements.fileInput) {
+            domElements.fileInput.val(""); // reset <input type="file">
+        }
     }
 
     function AnalyzeFile() {
