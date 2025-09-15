@@ -132,7 +132,10 @@ namespace Fanex.NAP.CTS.Controller
 
         private void SaveMessage(string sender, string message)
         {
-            var chatHistory = _memoryCacheService.GetValue<List<ChatMessageModel>>(string.Format(Consts.AIInsightsChatHistoryKey, UserId, TabId));
+            var chatHistory =
+                _memoryCacheService
+                    .GetValue<List<ChatMessageModel>>(string.Format(Consts.AIInsightsChatHistoryKey, UserId, TabId)) ??
+                    new List<ChatMessageModel>();
 
             chatHistory.Add(new ChatMessageModel
             {
