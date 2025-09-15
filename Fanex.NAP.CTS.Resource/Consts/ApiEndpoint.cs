@@ -5,5 +5,13 @@
         public const string DetectAssociationByUserNames = "AssociationDetection/DetectAssociationByUserNames";
 
         public const string DetectGroupAssWithOptions = "MatchMonitor/DetectGroupAssWithOptions";
+
+        public const string GetMatchFromMainInfo = "MatchMonitor/GetMatchFromMainInfo";
+
+        public const string GetMatchMonitor = "MatchMonitor/GetMatchMonitor";
+
+        public const string GetMMFraudTicketsSummary = "MatchMonitor/GetMMFraudTicketsSummary";
+
+        public const string GetMMParlayFraudTicketsSummary = "MatchMonitor/GetMMParlayFraudTicketsSummary";
     }
 }

@@ -56,7 +56,7 @@
 
             var result = ConfigSettings.IsUsingFanexAPIDirect ?
                             ApiHelper.PostWithApiKey<IEnumerable<MatchFromMainInfoModel>>(
-                                ConfigSettings.GetMatchFromMainInfoUrl, 
+                                ConfigSettings.GetCtsApiEndPoint(ApiEndpoint.GetMatchFromMainInfo), 
                                 criteria,
                                 ConfigSettings.ApiKeyFanexAPIDirect).Result :
                             _repository.Fetch<MatchFromMainInfoModel>(criteria);
@@ -80,7 +80,7 @@
 
             var result = ConfigSettings.IsUsingFanexAPIDirect ?
                             ApiHelper.PostWithApiKey<IEnumerable<GetMatchMonitorEntity>>(
-                                ConfigSettings.GetMatchMonitorUrl,
+                                ConfigSettings.GetCtsApiEndPoint(ApiEndpoint.GetMatchMonitor),
                                 criteria,
                                 ConfigSettings.ApiKeyFanexAPIDirect).Result :
                             _repository.Fetch<GetMatchMonitorEntity>(criteria);
@@ -97,7 +97,7 @@
 
             var result = ConfigSettings.IsUsingFanexAPIDirect ?
                             ApiHelper.PostWithApiKey<IEnumerable<MMFraudTicketsSummaryEntity>>(
-                                ConfigSettings.GetMMFraudTicketsSummaryUrl,
+                                ConfigSettings.GetCtsApiEndPoint(ApiEndpoint.GetMMFraudTicketsSummary),
                                 criteria,
                                 ConfigSettings.ApiKeyFanexAPIDirect).Result :
                             _repository.Fetch<MMFraudTicketsSummaryEntity>(criteria);
@@ -1279,7 +1279,7 @@
 
             var result = ConfigSettings.IsUsingFanexAPIDirect ?
                             ApiHelper.PostWithApiKey<IEnumerable<MMFraudTicketsSummaryEntity>>(
-                                ConfigSettings.GetMMParlayFraudTicketsSummaryUrl,
+                                ConfigSettings.GetCtsApiEndPoint(ApiEndpoint.GetMMParlayFraudTicketsSummary),
                                 criteria,
                                 ConfigSettings.ApiKeyFanexAPIDirect).Result :
                             _repository.Fetch<MMFraudTicketsSummaryEntity>(criteria);
