@@ -22,7 +22,12 @@
         {
             return ConfigurationManager.AppSettings[name];
         }
-  
+
+        public static string GetCtsApiEndPoint(string endPoint)
+        {
+            return ApiDirectBaseAddress + endPoint;
+        }
+
         public static string StoredProcedurePath => GetConfigStringByName("StoredProcedurePath");
 
         public static string UpdateCategories => GetConfigStringByName("CTS_UpdateCategories");
@@ -228,6 +233,8 @@
         }
 
         public static string ApiKeyFanexAPIDirect => GetConfigStringByName("ApiKeyFanexAPIDirect");
+
+        public static string ApiDirectBaseAddress => GetConfigStringByName("ApiDirectBaseAddress");
 
         public static string GetMatchFromMainInfoUrl => GetConfigStringByName("GetMatchFromMainInfoUrl");
 

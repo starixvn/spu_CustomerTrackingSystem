@@ -1,12 +1,13 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.Common.Extensions;
-    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core;
+    using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Common;
@@ -15,17 +16,17 @@
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
-    using Fanex.NAP.CTS.ViewModel.Common;
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
+    using Fanex.NAP.CTS.ViewModel.Common;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.DetectGroup;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.MarkPA;
     using Newtonsoft.Json;
     using Sprache;
     using System;
-    using System.Text.RegularExpressions;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using System.Web.Mvc;
     using System.Web.Script.Serialization;
@@ -1087,8 +1088,25 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailManualDetectRpt)]
         public ActionResult DetectGroupAssWithOptions(DetectGroupAssFilterViewModel model)
         {
-            var result = new DetectGroupAssociationListViewModel();
+            var result = ConfigSettings.IsUsingFanexAPIDirect
+                ? ApiHelper.PostWithApiKey<DetectGroupAssociationListViewModel>(
+                                               ConfigSettings.GetCtsApiEndPoint(ApiEndpoint.DetectGroupAssWithOptions),
+                                               model,
+                                               ConfigSettings.ApiKeyFanexAPIDirect).Result
+                : DetectGroupAssociation(model);
 
+            var mGrList = new MGrListViewModel();
+            mGrList.BuildMGrList(result.ItemList, model.RawCustIDs);
+
+            return Json(new
+            {
+                data = result,
+                mGrList = mGrList
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private DetectGroupAssociationListViewModel DetectGroupAssociation(DetectGroupAssFilterViewModel model)
+        {            
             var orgUserList = _associationDetectionService.ValidateUserName(model.RawUserNames);
 
             var data = _associationDetectionService.DetectAssociation(new DetectAssociationByUserNamesViewModel
@@ -1102,16 +1120,10 @@
                 Is3MatchesLast7Days = model.IsOpt3MatchesLast7Days
             }, orgUserList, false).Select(x => new DetectGroupAssociationItemViewModel(x));
 
-            result.ItemList = this.RearrangeAssGroup(data, true);
-
-            var mGrList = new MGrListViewModel();
-            mGrList.BuildMGrList(result.ItemList, model.RawCustIDs);
-
-            return Json(new
+            return new DetectGroupAssociationListViewModel()
             {
-                data = result,
-                mGrList = mGrList
-            }, JsonRequestBehavior.AllowGet);
+                ItemList = this.RearrangeAssGroup(data, true)
+            };          
         }
 
         #endregion Association Detect

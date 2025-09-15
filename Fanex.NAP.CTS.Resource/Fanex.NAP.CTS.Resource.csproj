@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Consts\ApiEndpoint.cs" />
     <Compile Include="Consts\Consts.cs" />
     <Compile Include="Consts\ConstsResources.cs" />
     <Compile Include="Error.Designer.cs">
