@@ -1947,7 +1947,7 @@
                 isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
                 isMultiplePA = categoryList.Any(x => x.IsMultiplePA);
                 int minPriority = classification.Min(c => c.CategoryPriority);
-                usnBackGroundColor = EnumExtensions.GetStringSlow((CategoryColorType)classification.FirstOrDefault(x => x.CategoryPriority == minPriority).ColorTypeID);
+                usnBackGroundColor = EnumExtensions.GetStringSlow((CategoryColorType)classification.OrderByDescending(x => x.LastModifiedDate).FirstOrDefault(x => x.CategoryPriority == minPriority).ColorTypeID);
             }
 
             var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustID, roleID);

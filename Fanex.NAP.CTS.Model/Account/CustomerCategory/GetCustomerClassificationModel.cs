@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Model.Account
 {
+    using System;
+
     public class GetCustomerClassificationModel
     {
         public int CategoryID { get; set; }       
@@ -25,5 +27,7 @@
         public bool IsMultiplePA { get; set; }
 
         public int CategoryPriority { get; set; }
+
+        public DateTime? LastModifiedDate { get; set; }
     }
 }
