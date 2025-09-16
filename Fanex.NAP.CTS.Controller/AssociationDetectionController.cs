@@ -180,7 +180,7 @@
             var result = new DetectAssociationViewModel();
 
             if (!string.IsNullOrWhiteSpace(model.UserNames))
-            {
+            {               
                 var orgUserList = _associationDetectionService.ValidateUserName(model.UserNames);
 
                 var assMergeGroup = _associationDetectionService.DetectAssociation(model, orgUserList, true);
@@ -446,8 +446,13 @@
             {
                 var templatePath = Server.MapPath(AssociationDetectionTemplate);
 
-                var data = PrepareDataExportDetectAssociation(model);
-
+                var data = ConfigSettings.IsUsingFanexAPIDirect
+                               ? ApiHelper.PostWithApiKey<DetectAssociationViewModel>(
+                                              ConfigSettings.GetCtsApiEndPoint(ApiEndpoint.PrepareDataExportDetectAssociation),
+                                              model,
+                                              ConfigSettings.ApiKeyFanexAPIDirect).Result
+                               : PrepareDataExportDetectAssociation(model);
+              
                 excelFile = _associationDetectionService.ExportToExcelAssociationDetect(data.ExportItemList, fileName, templatePath);
 
                 return File(excelFile, "application/vnd.ms-excel", fileName);

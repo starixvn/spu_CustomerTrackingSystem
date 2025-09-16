@@ -4,6 +4,8 @@
     {
         public const string DetectAssociationByUserNames = "AssociationDetection/DetectAssociationByUserNames";
 
+        public const string PrepareDataExportDetectAssociation = "AssociationDetection/PrepareDataExportDetectAssociation";
+
         public const string DetectGroupAssWithOptions = "MatchMonitor/DetectGroupAssWithOptions";
 
         public const string GetMatchFromMainInfo = "MatchMonitor/GetMatchFromMainInfo";
