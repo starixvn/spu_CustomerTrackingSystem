@@ -58,7 +58,7 @@
 	</Function>
 
 	<Function Name="DailyProblemClassification">
-		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily_xtest" DbName="DBVR2.bodb_VR2Model.wsv_cts" TimeOut="1200" />
+		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily" DbName="DBVR2.bodb_VR2Model.wsv_cts" TimeOut="1200" />
     <Setting Key="CTS_ProblemAccountsClassificationAgency_Daily" SpName="CTS_ProblemAccountsClassificationAgency_Daily" DbName="DBVR2.bodb_VR2Model.wsv_cts" />
 	</Function>
 
