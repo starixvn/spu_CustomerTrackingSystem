@@ -2,6 +2,7 @@ namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AIInsights;
     using Fanex.NAP.CTS.Model.AIInsights.Api;
@@ -10,6 +11,7 @@ namespace Fanex.NAP.CTS.Controller
     using Fanex.NAP.CTS.Service.Implement.AIInsights;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Interface.AIInsights;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -184,6 +186,11 @@ namespace Fanex.NAP.CTS.Controller
         private AIInsightsFileUploadDataModel GetUploadFileResponse()
         {
             var fileResponse = _memoryCacheService.GetValue<AIInsightsFileUploadDataModel>(string.Format(Consts.AIInsightsUploadFileKey, UserId, TabId));
+
+            if (ConfigSettings.IsWriteLogInfoAIInsight)
+            {
+                LogExtension.LogInfo($"GetUploadFileResponse {string.Format(Consts.AIInsightsUploadFileKey, UserId, TabId)}: {JsonConvert.SerializeObject(fileResponse ?? new AIInsightsFileUploadDataModel())}");
+            }
 
             return fileResponse;
         }
