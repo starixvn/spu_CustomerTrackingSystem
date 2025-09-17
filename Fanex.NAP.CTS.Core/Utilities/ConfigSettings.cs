@@ -49,6 +49,8 @@
 
         public static string AIInsightsChatBotUrl => GetConfigStringByName("AIInsightsChatBotUrl");
 
+        public static string RedisConnection => GetConfigStringByName("RedisConnection");
+
         public static bool IsWriteLogInfoAIInsight
         {
             get

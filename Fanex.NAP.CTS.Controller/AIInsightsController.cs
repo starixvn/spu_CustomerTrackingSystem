@@ -33,7 +33,7 @@ namespace Fanex.NAP.CTS.Controller
         public AIInsightsController()
         {
             _aIInsightsService = new AIInsightsService();
-            _memoryCacheService = new MemoryCacheService();
+            _memoryCacheService = new RedisCacheService();
         }
 
         public ActionResult Index()
@@ -146,7 +146,7 @@ namespace Fanex.NAP.CTS.Controller
                 Timestamp = DateTime.Now
             });
 
-            _memoryCacheService.PushValueBySlidingTime(string.Format(Consts.AIInsightsChatHistoryKey, UserId, TabId), chatHistory, 1);
+            _memoryCacheService.PushValueBySlidingTime(string.Format(Consts.AIInsightsChatHistoryKey, UserId, TabId), chatHistory, 3);
         }
 
         [HttpPost]
@@ -155,7 +155,7 @@ namespace Fanex.NAP.CTS.Controller
             try
             {
                 var result = await _aIInsightsService.UploadFile(uploadFile, UserId);
-                _memoryCacheService.PushValueBySlidingTime(string.Format(Consts.AIInsightsUploadFileKey, UserId, TabId), result?.response, 1);
+                _memoryCacheService.PushValueBySlidingTime(string.Format(Consts.AIInsightsUploadFileKey, UserId, TabId), result?.response, 3);
 
                 return Json(new
                 {

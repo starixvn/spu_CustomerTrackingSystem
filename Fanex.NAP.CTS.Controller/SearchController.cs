@@ -26,7 +26,7 @@
         {
             _accountService = new AccountService();
             _aIInsightsService = new AIInsightsService();
-            _memoryCacheService = new MemoryCacheService();
+            _memoryCacheService = new RedisCacheService();
         }
         [HttpPost]
         public async Task<ActionResult> Index(FormCollection form, HttpPostedFileBase uploadFile, string tabId)
@@ -42,7 +42,7 @@
                 var userId = CurrentSession.UserId.ToString();
 
                 var result = await _aIInsightsService.UploadFile(uploadFile, userId);
-                _memoryCacheService.PushValueBySlidingTime(string.Format(Consts.AIInsightsUploadFileKey, userId, tabId), result?.response, 1);
+                _memoryCacheService.PushValueBySlidingTime(string.Format(Consts.AIInsightsUploadFileKey, userId, tabId), result?.response, 3);
 
                 return RedirectToAction("Index", "AIInsights");
             }
