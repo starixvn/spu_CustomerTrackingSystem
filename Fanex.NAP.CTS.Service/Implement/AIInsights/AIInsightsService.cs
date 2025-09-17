@@ -10,6 +10,7 @@
     using Fanex.NAP.CTS.Model.AIInsights.Api;
     using Fanex.NAP.CTS.Service.AIInsights;
     using Fanex.NAP.CTS.Service.Interface.AIInsights;
+    using Newtonsoft.Json;
 
     public class AIInsightsService : IAIInsightsService
     {
@@ -29,9 +30,14 @@
                 cache_key = model?.cache_key,
             };
 
+            WriteLog($"Request: {nameof(AnalyzeCharts)}", request);
+
             var result = await _apiForwarderService.AnalyzeCharts(request, ConfigSettings.AIInsightsAnalyzeChartsUrl);
 
+            WriteLog($"Response: {nameof(AnalyzeCharts)}", result);
+
             ValidateResponse(result);
+
             return result.response;
         }
 
@@ -42,8 +48,11 @@
                 cache_key = model?.cache_key,
             };
 
+            WriteLog($"Request: {nameof(AnalyzeSummary)}", request);
 
             var result = await _apiForwarderService.AnalyzeSummary(request, ConfigSettings.AIInsightsAnalyzeSummaryUrl);
+
+            WriteLog($"Response: {nameof(AnalyzeSummary)}", result);
 
             ValidateResponse(result);
             return result.response;
@@ -57,7 +66,11 @@
                 question = question
             };
 
+            WriteLog($"Request: {nameof(AskChatbot)}", request);
+
             var result = await _apiForwarderService.AskChatbot(request, ConfigSettings.AIInsightsChatBotUrl);
+
+            WriteLog($"Response: {nameof(AskChatbot)}", result);
 
             ValidateResponse(result);
             return result.response;
@@ -82,7 +95,11 @@
                 session_id = session_id
             };
 
+            WriteLog($"Request: {nameof(UploadFile)}", $"{request.session_id}_{request.file_name}");
+
             var result = await _apiForwarderService.UploadFile(request, ConfigSettings.AIInsightsUploadUrl);
+
+            WriteLog($"Response: {nameof(UploadFile)}", result);
 
             ValidateResponse(result);
             return result;
@@ -93,6 +110,15 @@
             if (response != null && response.status_code > 299)
             {
                 throw new HttpListenerException(response.status_code, response.error);
+            }
+        }
+
+        private void WriteLog(string functionName, object data)
+        {
+            if (ConfigSettings.IsWriteLogInfoAIInsight)
+            {
+                var jsonData = data != null ? JsonConvert.SerializeObject(data) : "null";
+                LogExtension.LogInfo($"CTS - AI Insights {functionName}: {jsonData}");
             }
         }
     }

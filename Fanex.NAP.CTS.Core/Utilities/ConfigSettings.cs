@@ -49,6 +49,20 @@
 
         public static string AIInsightsChatBotUrl => GetConfigStringByName("AIInsightsChatBotUrl");
 
+        public static bool IsWriteLogInfoAIInsight
+        {
+            get
+            {
+                var isWriteLog = false;
+
+                var configWriteLog = ConfigurationManager.AppSettings["IsWriteLogInfoAIInsight"];
+
+                bool.TryParse(configWriteLog, out isWriteLog);
+
+                return isWriteLog;
+            }
+        }
+
         public static int ImportEvidenceChunkSize
         {
             get
