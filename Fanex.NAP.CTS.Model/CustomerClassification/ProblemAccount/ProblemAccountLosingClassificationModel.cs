@@ -6,6 +6,8 @@
     {
         public Int64 CustId { get; set; }
 
+        public int SportGroup { get; set; }
+
         public int WinlossStatus { get; set; }
 
         public decimal TurnoverRM { get; set; }

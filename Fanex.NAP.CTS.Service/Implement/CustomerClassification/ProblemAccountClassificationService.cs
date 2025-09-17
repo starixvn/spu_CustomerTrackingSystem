@@ -45,17 +45,17 @@
             try
             {
                 if (problemAccounts.Any())
-                {                  
+                {
                     var insertPaResult = InsertProblemAccounts(problemAccounts, ccInputFlow, FunctionId.InsertPAM, isToQueue);
 
                     if (insertPaResult.CustInfos != null && insertPaResult.CustInfos.Any())
                     {
-                        InsertPALogics(insertPaResult.CustInfos);                       
+                        InsertPALogics(insertPaResult.CustInfos);
 
                         _ccService.PushDataToExternalPackge(insertPaResult.CustInfos.Select(x => x.CustID), new PushDataToExternalModel
                         {
                             RoleGroup = RoleGroupType.Member,
-                            ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,                          
+                            ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                             IsUpdateDangerToMainDB = true,
                             IsSyncAFC = ConfigSettings.IsSyncAFCData
                         }, fromFlow);
@@ -73,7 +73,7 @@
 
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
-    
+
         private ResultInsertCustomerClassificationModel InsertProblemAccounts(IEnumerable<InsertProblemAccountModel> problemAccounts, CCInputFlow ccInputFlow, FunctionId funcId, bool isToQueue)
         {
             var paClassification = CombinePAWithLosingPerformace(problemAccounts, funcId);
@@ -90,20 +90,34 @@
 
         private IEnumerable<InsertProblemAccountModel> CombinePAWithLosingPerformace(IEnumerable<InsertProblemAccountModel> problemAccounts, FunctionId funcId)
         {
-            var custIds = problemAccounts.Select(c => c.CustID)?.Distinct();
+            var custInfos = problemAccounts
+                               .Select(c =>
+                                   new PADailyScanFromQueueModel
+                                   {
+                                       CustID = c.CustID,
+                                       DWSportType = c.DWSportType
+                                   })
+                               .Distinct(x => new { x.CustID, x.DWSportType });
 
-            var paLosing = GetProblemAccountLosingClassification(custIds, funcId);
+            var paLosing = GetProblemAccountLosingClassification(custInfos, funcId);
 
             return MergeProblemAccountClassification(problemAccounts, paLosing);
-        }       
+        }
 
         public IEnumerable<ProblemAccountLosingClassificationModel> GetProblemAccountLosingClassification(IEnumerable<long> custIds, FunctionId funcId)
         {
-            if (custIds != null && custIds.Any())
+            var custInfos = custIds?.Select(x => new PADailyScanFromQueueModel { CustID = x });
+
+            return GetProblemAccountLosingClassification(custInfos, funcId);
+        }
+
+        public IEnumerable<ProblemAccountLosingClassificationModel> GetProblemAccountLosingClassification(IEnumerable<PADailyScanFromQueueModel> custInfos, FunctionId funcId)
+        {
+            if (custInfos.IsNotNullOrEmpty())
             {
                 var criteria = new ProblemAccountLosingClassificationGetCriteria()
                 {
-                    ListCustIds = string.Join(",", custIds.Distinct()),
+                    CustJson = JsonConvert.SerializeObject(custInfos),
                     FunctionId = (int)funcId
                 };
 
@@ -111,7 +125,7 @@
             }
 
             return Enumerable.Empty<ProblemAccountLosingClassificationModel>();
-        }             
+        }
 
         public ResultRemoveCustomerClassificationModel UnmarkProblemAccount(IEnumerable<UnmarkProblemAccountModel> paUnmark, bool isFromQueue)
         {
@@ -158,8 +172,8 @@
             if (problemAccounts != null && problemAccounts.Any())
             {
                 return problemAccounts.GroupJoin(probAccountLosing ?? Enumerable.Empty<ProblemAccountLosingClassificationModel>(),
-                                            pa => pa.CustID,
-                                            pl => pl.CustId,
+                                            pa => $"{pa.CustID}_{pa.DWSportType}",
+                                            pl => $"{pl.CustId}_{pl.SportGroup}",
                                             (pa, pl) => new { pa, pl })
                                             .SelectMany(
                                                  group => group.pl.DefaultIfEmpty(),
@@ -169,7 +183,7 @@
                                                      CTSCustID = group.pa.CTSCustID,
                                                      RoleID = group.pa.RoleID,
                                                      SubscriberID = group.pa.SubscriberID,
-                                                     CategoryID = group.pa.CategoryID,                                                    
+                                                     CategoryID = group.pa.CategoryID,
                                                      IsLicensee = group.pa.IsLicensee,
                                                      CreatedBy = group.pa.CreatedBy,
                                                      LastModifiedDate = group.pa.LastModifiedDate,
@@ -182,10 +196,11 @@
                                                      IsFromTVS = group.pa.IsFromTVS,
                                                      RobotCounter = group.pa.RobotCounter,
                                                      TVSRequestID = group.pa.TVSRequestID,
-                                                     IsFromTW = group.pa.IsFromTW,                                                   
+                                                     IsFromTW = group.pa.IsFromTW,
                                                      TVSReasonID = group.pa.TVSReasonID,
                                                      IsParlay = group.pa.IsParlay,
                                                      SportType = group.pa.SportType,
+                                                     DWSportType = group.pa.DWSportType,
                                                      IssueTypeID = group.pa.IssueTypeID,
 
                                                      BetCount = temp?.BetCount,
@@ -198,7 +213,7 @@
             }
 
             return Enumerable.Empty<InsertProblemAccountModel>();
-        }      
+        }
 
         public void UpdateBetLimitOfFlaggedCustomer(IEnumerable<long> custId)
         {
@@ -235,7 +250,7 @@
 
             _repository.Execute(criteria);
         }
-      
+
         #endregion Private Methods
 
     }

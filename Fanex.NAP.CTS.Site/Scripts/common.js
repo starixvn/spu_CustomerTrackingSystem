@@ -332,6 +332,14 @@
         return host + config.contextPath + url;
     }
 
+    this.getTabId = function () {
+        if (!sessionStorage.getItem("TabId")) {
+            sessionStorage.setItem("TabId", "TabId" + Date.now().toString());
+        }
+
+        return sessionStorage.getItem("TabId");
+    }
+
     this.postMultipleAPI = function (requests) {
         // Convert each request object into an AJAX Promise
         var ajaxCalls = requests.map(req => 

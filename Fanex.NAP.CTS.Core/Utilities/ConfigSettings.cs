@@ -41,22 +41,29 @@
 
         public static string MarkPAURL => GetConfigStringByName("MMDetail_MarkPAURL");
 
-        public static bool AIInsightsStoreFile 
+        public static string AIInsightsUploadUrl => GetConfigStringByName("AIInsightsUploadUrl");
+
+        public static string AIInsightsAnalyzeSummaryUrl => GetConfigStringByName("AIInsightsAnalyzeSummaryUrl");
+
+        public static string AIInsightsAnalyzeChartsUrl => GetConfigStringByName("AIInsightsAnalyzeChartsUrl");
+
+        public static string AIInsightsChatBotUrl => GetConfigStringByName("AIInsightsChatBotUrl");
+
+        public static string RedisConnection => GetConfigStringByName("RedisConnection");
+
+        public static bool IsWriteLogInfoAIInsight
         {
             get
             {
-                var isStoreFile = false;
-                var storeFile = GetConfigStringByName("AIInsightsStoreFile");
+                var isWriteLog = false;
 
-                bool.TryParse(storeFile, out isStoreFile);
+                var configWriteLog = ConfigurationManager.AppSettings["IsWriteLogInfoAIInsight"];
 
-                return isStoreFile;
+                bool.TryParse(configWriteLog, out isWriteLog);
+
+                return isWriteLog;
             }
         }
-
-        public static string AIInsightsAnalyzeUrl => GetConfigStringByName("AIInsightsAnalyzeUrl");
-
-        public static string AIInsightsChatBotUrl => GetConfigStringByName("AIInsightsChatBotUrl");
 
         public static int ImportEvidenceChunkSize
         {

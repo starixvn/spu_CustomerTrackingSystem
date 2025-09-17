@@ -1,6 +1,7 @@
 function AIInsights() {
     let dataLogSentry = {
-        analyzeData: null,
+        analyzeSummary: null,
+        analyzeCharts: null,
         askChatBot: null
     }
 
@@ -79,6 +80,16 @@ function AIInsights() {
         domElements.viewOptions.on('change', function () {
             ToggleSections($(this).val());
         });
+
+        AttachFileUploadEvents();
+        AttachChatbotEvents();
+
+        ToggleSections(ViewMode.VISUALIZATION);
+
+        domElements.chatbotToggle.on('click', function () { ToggleChatbot(); });
+        domElements.closeChatbot.on('click', function () { ToggleChatbot(); });
+        domElements.btnGenerate.on('click', function () { AnalyzeFile(); });
+        domElements.fileTitle.on('click', function () { SaveLog(); });
     }
 
     function ToggleChatbot() {
@@ -97,21 +108,6 @@ function AIInsights() {
             setTimeout(function () {
                 ResizePlotlyCharts();
             }, 300);
-            //setTimeout(function () {
-            //    $('#divVisualization .js-plotly-plot').each(function () {
-            //        const plotEl = this;
-            //        let count = 0;
-
-            //        function resizeLoop() {
-            //            Plotly.Plots.resize(plotEl);
-            //            count++;
-            //            if (count < 5) requestAnimationFrame(resizeLoop);
-            //        }
-
-            //        resizeLoop();
-            //    });
-            //}, 300);
-
         }
     }
 
@@ -126,28 +122,32 @@ function AIInsights() {
         domElements.fileNameLabel.attr('title', currentText || NoFileUpload);
     }
 
-    if (domElements.fileInput.length && domElements.fileNameLabel.length) {
-        let initialFileName = domElements.fileNameLabel.text() || NoFileUpload;
+    function AttachFileUploadEvents() {
+        if (domElements.fileInput.length && domElements.fileNameLabel.length) {
+            let initialFileName = domElements.fileNameLabel.text() || NoFileUpload;
 
-        domElements.fileNameLabel.text(initialFileName);
+            domElements.fileNameLabel.text(initialFileName);
 
-        UpdateTitle();
+            UpdateTitle();
 
-        domElements.fileInput.on('change', function (e) {
-            const file = e.target.files[0];
+            domElements.fileInput.on('change', function (e) {
+                const file = e.target.files[0];
 
-            RenderVisualizationSummary('');
-            RenderVisualizationChart('');
-            RenderStatistics('');
-            domElements.contentCardSection.hide();
+                ResetDefault();
+                domElements.contentCardSection.hide();
 
-            if (file && !/\.(xls|xlsx)$/i.test(file.name)) {
-                common.showError('Please upload a .xls or .xlsx file!');
-                $(this).val('');
-                return;
-            }
+                if (!file) {
+                    domElements.fileNameLabel.text(NoFileUpload);
+                    UpdateTitle();
+                    return;
+                }
 
-            if (file) {
+                if (!/\.(xls|xlsx)$/i.test(file.name)) {
+                    common.showError('Please upload a .xls or .xlsx file!');
+                    $(this).val('');
+                    return;
+                }
+
                 const maxMBSize = 50;
                 const maxSize = maxMBSize * 1024 * 1024; // 50MB in bytes
 
@@ -157,51 +157,67 @@ function AIInsights() {
                     return;
                 }
 
-                const formData = new FormData();
-                let fileName = file.name;
-                domElements.fileNameLabel.text(fileName);
+                UploadFile(file);
+            });
+        }
+    }
 
-                formData.append("uploadFile", file);
+    function UploadFile(file) {
+        const formData = new FormData();
+        let fileName = file.name;
+        domElements.fileNameLabel.text(fileName);
 
-                $.ajax(common.modifyRelativeUrl('AIInsights/UploadFile'), {
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    beforeSend: function () {
-                        common.showLoading();
-                        domElements.btnGenerate.prop('disabled', true);
-                    },
-                    success: function (response) {
-                        if (response.success == false) {
-                            domElements.fileNameLabel.text(NoFileUpload);
+        formData.append("uploadFile", file);
 
-                            common.showError("Upload failed " + response.message);
-
-                        } else {
-                            domElements.btnGenerate.prop('disabled', false);
-                            domElements.fileNameLabel.text(fileName);
-                            common.showSuccess('File uploaded successfully: ' + fileName, 2000);
-                        }
-
-                        UpdateTitle();
-                    },
-                    complete: function () {
-                        common.closeLoading();
-                    },
-                    error: function (errMsg) {
-                        common.closeLoading();
-                        domElements.btnGenerate.prop('disabled', false);
-                    }
-                });
-
-            } else {
-                if (domElements.fileNameLabel.text().trim() != NoFileUpload) {
+        $.ajax(common.modifyRelativeUrl('AIInsights/UploadFile'), {
+            type: 'POST',
+            headers: {
+                "X-Tab-Id": common.getTabId()
+            },
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend: function () {
+                common.showLoading();
+                domElements.btnGenerate.prop('disabled', true);
+            },
+            success: function (response) {
+                if (response.success == false) {
                     domElements.fileNameLabel.text(NoFileUpload);
-                    UpdateTitle();
+
+                    common.showError("Upload failed " + response.message);
+
+                } else {
+                    domElements.btnGenerate.prop('disabled', false);
+                    domElements.fileNameLabel.text(fileName);
+                    common.showSuccess('File uploaded successfully: ' + fileName, 2000);
                 }
+
+                UpdateTitle();
+            },
+            complete: function () {
+                common.closeLoading();
+
+                CleanUploadedFileInput(file);
+            },
+            error: function (errMsg) {
+                common.closeLoading();
+                domElements.btnGenerate.prop('disabled', false);
             }
         });
+    }
+
+    function CleanUploadedFileInput(file) {
+        // ✅ Clear memory after upload
+        file = null; // remove reference
+
+        if (domElements.fileInput && domElements.fileInput[0]) {
+            domElements.fileInput[0].value = ""; // native reset
+        }
+
+        if (domElements.fileInput) {
+            domElements.fileInput.val(""); // reset <input type="file">
+        }
     }
 
     function AnalyzeFile() {
@@ -212,39 +228,86 @@ function AIInsights() {
             return;
         }
 
-        $.ajax(common.modifyRelativeUrl('AIInsights/AnalyzeFile'), {
+        ResetDefault();
+
+        SkipReCheckin();
+        common.showLoading();
+        domElements.summarySection.addClass('loading');
+        domElements.chartSection.addClass('loading');
+        domElements.btnGenerate.prop('disabled', true);
+
+        AnalyzeSummary()
+            .always(function () {
+                AnalyzeCharts()
+                    .always(function () {
+                        domElements.btnGenerate.prop('disabled', false);
+                        EnableReCheckin();
+                    });
+            });
+    }
+
+    function AnalyzeSummary() {
+        return $.ajax(common.modifyRelativeUrl('AIInsights/AnalyzeSummary'), {
             type: 'POST',
-            beforeSend: function () {
-                SkipReCheckin();
-                common.showLoading();
-                domElements.btnGenerate.prop('disabled', true);
+            headers: {
+                "X-Tab-Id": common.getTabId()
             },
             success: function (response) {
-                dataLogSentry.analyzeData = response;
-
-                domElements.btnGenerate.prop('disabled', false);
+                dataLogSentry.analyzeSummary = response;
 
                 if (response && response.ErrorCode != -1) {
-                    if (response.visualization_response) {
-                        RenderVisualizationSummary(response.visualization_response.summary_list);
-                        RenderVisualizationChart(response.visualization_response.chart_infos);
+                    if (response.summary) {
+                        RenderVisualizationSummary(response.summary);
                     }
 
                     RenderStatistics(response.statistics_html);
 
                     domElements.contentCardSection.show();
                 } else {
-                    common.showError('Sorry Analyze File failed: ' + response.ErrorMessage);
+                    common.showError('Sorry Analyze Summary failed: ' + response.ErrorMessage);
                 }
             },
             complete: function () {
                 common.closeLoading();
-                EnableReCheckin();
+                domElements.summarySection.removeClass('loading');
                 ResizePlotlyCharts();
             },
             error: function (errMsg) {
                 common.closeLoading();
+                domElements.summarySection.removeClass('loading');
                 domElements.btnGenerate.prop('disabled', false);
+                EnableReCheckin();
+            }
+        });
+    }
+
+    function AnalyzeCharts() {
+        return $.ajax(common.modifyRelativeUrl('AIInsights/AnalyzeCharts'), {
+            type: 'POST',
+            headers: {
+                "X-Tab-Id": common.getTabId()
+            },
+            success: function (response) {
+                dataLogSentry.analyzeCharts = response;
+
+                if (response && response.ErrorCode != -1) {
+                    if (response.visualization_response) {
+                        RenderVisualizationChart(response.visualization_response.chart_infos);
+                    }
+
+                    domElements.contentCardSection.show();
+                } else {
+                    common.showError('Sorry Analyze Charts failed: ' + response.ErrorMessage);
+                }
+            },
+            complete: function () {
+                common.closeLoading();
+                domElements.chartSection.removeClass('loading');
+                ResizePlotlyCharts();
+            },
+            error: function (errMsg) {
+                common.closeLoading();
+                domElements.chartSection.removeClass('loading');
                 EnableReCheckin();
             }
         });
@@ -394,6 +457,9 @@ function AIInsights() {
     function LoadHistoryChatMessage() {
         $.ajax(common.modifyRelativeUrl('AIInsights/LoadHistoryChatMessage'), {
             type: 'POST',
+            headers: {
+                "X-Tab-Id": common.getTabId()
+            },
             beforeSend: function () { },
             success: function (response) {
                 if (response) {
@@ -459,6 +525,9 @@ function AIInsights() {
 
         $.ajax(common.modifyRelativeUrl('AIInsights/AskChatbot'), {
             type: 'POST',
+            headers: {
+                "X-Tab-Id": common.getTabId()
+            },
             data: {
                 question: message
             },
@@ -580,17 +649,32 @@ function AIInsights() {
             );
     }
 
+    function UpdateFileNameFromServer() {
+        $.ajax(common.modifyRelativeUrl('AIInsights/GetFileName'), {
+            type: 'GET',
+            async: false,
+            headers: {
+                "X-Tab-Id": common.getTabId()
+            },
+            success: function (response) {
+                if (response) {
+                    domElements.fileNameLabel.text(response);
+                }
+            }
+        });
+    }
+
+    function ResetDefault() {
+        RenderVisualizationSummary('');
+        RenderVisualizationChart('');
+        RenderStatistics('');
+    }
+
     function Initial() {
         AttachEventListeners();
-        AttachChatbotEvents();
-        ToggleSections(ViewMode.VISUALIZATION);
-        domElements.chatbotToggle.on('click', function () { ToggleChatbot(); });
-        domElements.closeChatbot.on('click', function () { ToggleChatbot(); });
+        UpdateFileNameFromServer();
         AnalyzeFile();
-        domElements.btnGenerate.on('click', function () { AnalyzeFile(); });
         LoadHistoryChatMessage();
-
-        domElements.fileTitle.on('click', function () { SaveLog(); });
     }
 
     $(document).ready(function () {

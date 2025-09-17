@@ -430,6 +430,14 @@
   height: 30px;
 }
 
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 .ai-insights {
   font-family: "Lato", Tahoma, sans-serif !important;
 }
@@ -470,7 +478,9 @@
   max-width: 100% !important;
   height: 100% !important;
 }
-.ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image div, .ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image svg, .ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image canvas {
+.ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image div,
+.ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image svg,
+.ai-insights .ai-insights-container .ai-insights-content.chatbot-open .chart-image canvas {
   max-width: 100% !important;
   margin: 0 auto !important;
 }
@@ -675,7 +685,9 @@
   max-width: 100% !important;
   height: 100% !important;
 }
-.content-card-section .content-card .card-body .chart-item .chart-image div, .content-card-section .content-card .card-body .chart-item .chart-image svg, .content-card-section .content-card .card-body .chart-item .chart-image canvas {
+.content-card-section .content-card .card-body .chart-item .chart-image div,
+.content-card-section .content-card .card-body .chart-item .chart-image svg,
+.content-card-section .content-card .card-body .chart-item .chart-image canvas {
   max-width: 100% !important;
   margin: 0 auto !important;
 }
@@ -817,6 +829,25 @@
 }
 .content-card-section .content-card .overview-info .info-item .value:before {
   content: attr(data-value);
+}
+.content-card-section .loading {
+  position: relative;
+}
+.content-card-section .loading:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 15%;
+  border-radius: 50%;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 0.25rem solid rgba(57, 110, 248, 0.2);
+  border-top-color: rgb(57, 110, 248);
+  -webkit-animation: spin 1s infinite linear;
+  animation: spin 1s infinite linear;
+}
+.content-card-section .loading tr {
+  opacity: 0.3;
 }
 
 .column-statistics-section {

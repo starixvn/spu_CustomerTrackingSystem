@@ -2,6 +2,16 @@
 @import "../../abstracts/mixins";
 @import "../../components/popup";
 
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 .ai-insights {
     font-family: 'Lato', Tahoma, sans-serif !important;
 
@@ -33,7 +43,7 @@
                 .chart-image {
                     width: 100% !important;
 
-                    > * {
+                    >* {
                         width: 100% !important;
                         max-width: 100% !important;
                         margin: 0 auto !important;
@@ -45,7 +55,9 @@
                         height: 100% !important;
                     }
 
-                    div, svg, canvas {
+                    div,
+                    svg,
+                    canvas {
                         max-width: 100% !important;
                         margin: 0 auto !important;
                     }
@@ -79,7 +91,7 @@
                     flex-wrap: nowrap;
                     height: 3rem;
 
-                    > * {
+                    >* {
                         flex: 1 1 0;
                         max-width: 100%;
                     }
@@ -268,7 +280,7 @@
                     min-height: 450px;
                     width: 100%;
 
-                    > * {
+                    >* {
                         width: 100% !important;
                         max-width: 100% !important;
                         margin: 0 auto !important;
@@ -280,7 +292,9 @@
                         height: 100% !important;
                     }
 
-                    div, svg, canvas {
+                    div,
+                    svg,
+                    canvas {
                         max-width: 100% !important;
                         margin: 0 auto !important;
                     }
@@ -454,6 +468,28 @@
             }
         }
     }
+
+    .loading {
+        position: relative;
+
+        &:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 15%;
+            border-radius: 50%;
+            width: 2.4rem;
+            height: 2.4rem;
+            border: 0.25rem solid rgba(57, 110, 248, 0.2);
+            border-top-color: rgba(57, 110, 248, 1);
+            -webkit-animation: spin 1s infinite linear;
+            animation: spin 1s infinite linear;
+        }
+
+        tr {
+            opacity: .3;
+        }
+    }
 }
 
 .column-statistics-section {
@@ -490,8 +526,8 @@
 .spinner {
     width: 40px;
     height: 40px;
-    border: 4px solid rgba(0,0,0,0.1);
-    border-top: 4px solid #3498db; 
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #3498db;
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
@@ -524,4 +560,3 @@
         flex: 1 1 100%;
     }
 }
-
