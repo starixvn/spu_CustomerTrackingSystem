@@ -235,7 +235,16 @@
         public static string ApiKeyFanexAPIDirect => GetConfigStringByName("ApiKeyFanexAPIDirect");
 
         public static string ApiDirectBaseAddress => GetConfigStringByName("ApiDirectBaseAddress");
-      
+
+        public static int AssociationDetectionTimeout 
+        {
+            get
+            {              
+                int.TryParse(ConfigurationManager.AppSettings["AssociationDetectionTimeout"], out var timeout);
+
+                return timeout > 0 ? timeout : 120;
+            }
+        }
         #endregion
 
         public static int AIAnalyzeRequestTimeout

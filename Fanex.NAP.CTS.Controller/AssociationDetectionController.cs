@@ -97,7 +97,7 @@
                                 ? ApiHelper.PostWithApiKey<DetectAssociationViewModel>(
                                                ConfigSettings.GetCtsApiEndPoint(ApiEndpoint.DetectAssociationByUserNames),
                                                model,
-                                               ConfigSettings.ApiKeyFanexAPIDirect).Result
+                                               ConfigSettings.ApiKeyFanexAPIDirect, ConfigSettings.AssociationDetectionTimeout).Result
                                 : DetectAssociation(model);
                   
                 }
@@ -450,7 +450,7 @@
                                ? ApiHelper.PostWithApiKey<DetectAssociationViewModel>(
                                               ConfigSettings.GetCtsApiEndPoint(ApiEndpoint.PrepareDataExportDetectAssociation),
                                               model,
-                                              ConfigSettings.ApiKeyFanexAPIDirect).Result
+                                              ConfigSettings.ApiKeyFanexAPIDirect, ConfigSettings.AssociationDetectionTimeout).Result
                                : PrepareDataExportDetectAssociation(model);
               
                 excelFile = _associationDetectionService.ExportToExcelAssociationDetect(data.ExportItemList, fileName, templatePath);

@@ -325,14 +325,9 @@
         private string GetAssociationCustByIP(IEnumerable<SharedIPInfoModel> ass)
         {
             var assCustBySharedIP = ass.Select(x => new AssociationCustByIPViewModel
-            {
-                F1 = x.FromCustID,
-                O = x.FromCTSCustID,
-                X = x.FromUserName,
-                T1 = x.ToCustID,
-                D = x.ToCTSCustID,
-                Y = x.ToUserName,
-                IP = x.IP
+            {               
+                O = x.FromCTSCustID,               
+                D = x.ToCTSCustID              
             });
 
             return ObjectHelper.SerializeObj(assCustBySharedIP);
@@ -362,13 +357,9 @@
         private string GetAssociationCustByMatch(IEnumerable<SharedIPMatchesInfoModel> ass)
         {
             var assCustBySharedIP = ass.Select(x => new AssociationCustModel
-            {
-                FromCustID = x.FromCustID,
-                FromCTSCustID = x.FromCTSCustID,
-                FromUserName = x.FromUserName,
-                ToCustID = x.ToCustID,
-                ToCTSCustID = x.ToCTSCustID,
-                ToUserName = x.ToUserName
+            {               
+                FromCTSCustID = x.FromCTSCustID,              
+                ToCTSCustID = x.ToCTSCustID                
             });
 
             return JsonConvert.SerializeObject(assCustBySharedIP);
