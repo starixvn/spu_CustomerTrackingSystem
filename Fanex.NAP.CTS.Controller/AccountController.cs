@@ -373,10 +373,11 @@
                     InvalidBrowser = data.InvalidBrowser,
                     InvalidBrowserPercentage = data.InvalidBrowserPercentage.ToString("0.00"),
                     DesktopUsage = data.DesktopUsage,
-                    MobileUsage = data.MobileUsage,
+                    MBWebUsage = data.MBWebUsage,
+                    MBAppUsage = data.MBAppUsage,
                     IPCount = data.IP,
                     DeviceCount = data.Device,
-                    LoginCount = data.Login,
+                    LoginCount = data.Login
                 };
 
                 return Json(custProfileLoginStats, JsonRequestBehavior.AllowGet);

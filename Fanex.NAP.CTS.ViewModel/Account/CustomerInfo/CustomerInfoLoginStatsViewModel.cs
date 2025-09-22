@@ -12,7 +12,9 @@
 
         public int? DesktopUsage { get; set; }
 
-        public int? MobileUsage { get; set; }
+        public int? MBWebUsage { get; set; }
+
+        public int? MBAppUsage { get; set; }
 
         public int? IPCount { get; set; }
 
