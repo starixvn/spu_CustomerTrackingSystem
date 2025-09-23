@@ -95,7 +95,7 @@
 
 	<Function Name="CustomerClassification">
 		<Setting Key="CTS_DC_CustClassification_Get" SpName="CTS_DC_CustClassification_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustClassification_ViewHistory" SpName="CTS_DC_CustClassification_ViewHistory" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustClassification_ViewHistory" SpName="CTS_DC_CustClassification_ViewHistory_xpre" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
 
 		<Setting Key="CTS_DC_CustClassification_LogInputData" SpName="CTS_DC_CustClassification_LogInputData" DbName="CTSMain_DEV.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_CustClassification_Queue_Insert" SpName="CTS_DC_CustClassification_Queue_Insert" DbName="CTSMain_DEV.CTS_DataCenter.ctsWebAdmin" />
@@ -104,7 +104,7 @@
 		<Setting Key="CTS_DC_CustClassification_Insert" SpName="CTS_DC_CustClassification_Insert" DbName="CTSMain_DEV.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove" DbName="CTSMain_DEV.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_CustClassificationAgency_Remove" SpName="CTS_DC_CustClassificationAgency_Remove" DbName="CTSMain_DEV.CTS_DataCenter.ctsWebAdmin" />
-		<Setting Key="CTS_DC_CustClassification_Rescan_Get" SpName="CTS_DC_CustClassification_Rescan_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustClassification_Rescan_Get" SpName="CTS_DC_CustClassification_Rescan_Get_xpre" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustClassificationAgency_Rescan_Get" SpName="CTS_DC_CustClassificationAgency_Rescan_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_CustClassificationAgency_ViewHistory" SpName="CTS_DC_CustClassificationAgency_ViewHistory" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" Timeout="600" />
 		<Setting Key="CTS_DC_CustClassificationAgency_Get" SpName="CTS_DC_CustClassificationAgency_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
