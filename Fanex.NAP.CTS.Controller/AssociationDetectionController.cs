@@ -1,10 +1,13 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
-    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Helpers.Api;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.Common;
+    using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
@@ -85,9 +88,19 @@
         public ActionResult DetectAssociationByUserNames(DetectAssociationByUserNamesViewModel model)
         {
             var result = new DetectAssociationViewModel();
+
             try
             {
-                result = DetectAssociation(model);
+                if (!string.IsNullOrWhiteSpace(model.UserNames))
+                {                    
+                    result = ConfigSettings.IsUsingFanexAPIDirect 
+                                ? ApiHelper.PostWithApiKey<DetectAssociationViewModel>(
+                                               ConfigSettings.GetCtsApiEndPoint(ApiEndpoint.DetectAssociationByUserNames),
+                                               model,
+                                               ConfigSettings.ApiKeyFanexAPIDirect, ConfigSettings.AssociationDetectionTimeout).Result
+                                : DetectAssociation(model);
+                  
+                }
             }
             catch (Exception ex)
             {
@@ -146,21 +159,18 @@
         {
             var result = new DetectAssociationViewModel();
 
-            if (!string.IsNullOrWhiteSpace(model.UserNames))
+            var orgUserList = _associationDetectionService.ValidateUserName(model.UserNames);
+
+            var assMergeGroup = _associationDetectionService.DetectAssociation(model, orgUserList, true);
+
+            var assMergeGroupHasGroupID = assMergeGroup?.Where(x => x.GroupID.HasValue);
+
+            var assRearrangeGroup = RearrangeAssGroup(assMergeGroupHasGroupID);
+
+            result.ItemList = assRearrangeGroup.Select(x =>
             {
-                var orgUserList = _associationDetectionService.ValidateUserName(model.UserNames);
-
-                var assMergeGroup = _associationDetectionService.DetectAssociation(model, orgUserList, true);
-
-                var assMergeGroupHasGroupID = assMergeGroup?.Where(x => x.GroupID.HasValue);
-
-                var assRearrangeGroup = RearrangeAssGroup(assMergeGroupHasGroupID);
-
-                result.ItemList = assRearrangeGroup.Select(x =>
-                {
-                    return new DetectAssociationItemViewModel(x);
-                });
-            }
+                return new DetectAssociationItemViewModel(x);
+            });
 
             return result;
         }
@@ -170,7 +180,7 @@
             var result = new DetectAssociationViewModel();
 
             if (!string.IsNullOrWhiteSpace(model.UserNames))
-            {
+            {               
                 var orgUserList = _associationDetectionService.ValidateUserName(model.UserNames);
 
                 var assMergeGroup = _associationDetectionService.DetectAssociation(model, orgUserList, true);
@@ -436,8 +446,13 @@
             {
                 var templatePath = Server.MapPath(AssociationDetectionTemplate);
 
-                var data = PrepareDataExportDetectAssociation(model);
-
+                var data = ConfigSettings.IsUsingFanexAPIDirect
+                               ? ApiHelper.PostWithApiKey<DetectAssociationViewModel>(
+                                              ConfigSettings.GetCtsApiEndPoint(ApiEndpoint.PrepareDataExportDetectAssociation),
+                                              model,
+                                              ConfigSettings.ApiKeyFanexAPIDirect, ConfigSettings.AssociationDetectionTimeout).Result
+                               : PrepareDataExportDetectAssociation(model);
+              
                 excelFile = _associationDetectionService.ExportToExcelAssociationDetect(data.ExportItemList, fileName, templatePath);
 
                 return File(excelFile, "application/vnd.ms-excel", fileName);

@@ -22,7 +22,12 @@
         {
             return ConfigurationManager.AppSettings[name];
         }
-  
+
+        public static string GetCtsApiEndPoint(string endPoint)
+        {
+            return ApiDirectBaseAddress + endPoint;
+        }
+
         public static string StoredProcedurePath => GetConfigStringByName("StoredProcedurePath");
 
         public static string UpdateCategories => GetConfigStringByName("CTS_UpdateCategories");
@@ -229,13 +234,17 @@
 
         public static string ApiKeyFanexAPIDirect => GetConfigStringByName("ApiKeyFanexAPIDirect");
 
-        public static string GetMatchFromMainInfoUrl => GetConfigStringByName("GetMatchFromMainInfoUrl");
+        public static string ApiDirectBaseAddress => GetConfigStringByName("ApiDirectBaseAddress");
 
-        public static string GetMatchMonitorUrl => GetConfigStringByName("GetMatchMonitorUrl");
+        public static int AssociationDetectionTimeout 
+        {
+            get
+            {              
+                int.TryParse(ConfigurationManager.AppSettings["AssociationDetectionTimeout"], out var timeout);
 
-        public static string GetMMFraudTicketsSummaryUrl => GetConfigStringByName("GetMMFraudTicketsSummaryUrl");
-
-        public static string GetMMParlayFraudTicketsSummaryUrl => GetConfigStringByName("GetMMParlayFraudTicketsSummaryUrl");
+                return timeout > 0 ? timeout : 120;
+            }
+        }
         #endregion
 
         public static int AIAnalyzeRequestTimeout
