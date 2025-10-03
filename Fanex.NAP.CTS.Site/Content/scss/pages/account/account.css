@@ -1141,10 +1141,16 @@
 .content-info .header-info.border-green {
   border-bottom: 2px solid #2BC769;
 }
+.content-info .header-info.border-green-line {
+  border-bottom: 2px solid #2BC769;
+}
 .content-info .header-info.border-gray {
   border-bottom: 2px solid #C0C0C0;
 }
 .content-info .header-info.border-yellow {
+  border-bottom: 2px solid #FDB703;
+}
+.content-info .header-info.border-yellow-line {
   border-bottom: 2px solid #FDB703;
 }
 .content-info .header-info.border-yellow-light {
