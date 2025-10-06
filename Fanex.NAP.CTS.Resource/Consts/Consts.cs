@@ -661,7 +661,8 @@ namespace Fanex.NAP.CTS.Resource.Consts
         {
             (int) MatchMonitorSportType.Volleyball,
             (int) MatchMonitorSportType.Tennis,
-            (int) MatchMonitorSportType.Cricket
+            (int) MatchMonitorSportType.Cricket,
+            (int) MatchMonitorSportType.Badminton
         };
       
         public static readonly HashSet<int> CricketBetTypesWithoutBetIdPattern = new HashSet<int>
