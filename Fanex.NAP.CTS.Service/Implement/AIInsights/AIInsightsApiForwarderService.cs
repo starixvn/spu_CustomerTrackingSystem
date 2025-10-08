@@ -16,7 +16,7 @@
                 return new AIInsightsAnalyzeChartsResponseModel();
             }
 
-            var response = await ApiWithHttpClientRotatorHelper.Post<AIInsightsAnalyzeChartsResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout);
+            var response = await ApiWithHttpClientRotatorHelper.Post<AIInsightsAnalyzeChartsResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout, cancellationToken);
 
             return response;
         }

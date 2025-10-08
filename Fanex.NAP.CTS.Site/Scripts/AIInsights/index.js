@@ -347,7 +347,7 @@ function AIInsights() {
         }
 
         evtSource = new EventSource(
-            common.modifyRelativeUrl(`AIInsights/StreamAnalyzeCharts?tabId=${common.getTabId()}&t=${Date.now()}`)
+            common.modifyRelativeUrl(`AIInsights/StreamAnalyzeCharts?tabId=${common.getTabId()}`)
         );
 
         evtSource.onopen = () => console.log("✅ Connected");
