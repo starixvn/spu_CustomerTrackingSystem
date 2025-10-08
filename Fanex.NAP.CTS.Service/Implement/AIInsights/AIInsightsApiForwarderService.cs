@@ -4,11 +4,12 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.AIInsights;
     using Fanex.NAP.CTS.Model.AIInsights.Api;
+    using System.Threading;
     using System.Threading.Tasks;
 
     public class AIInsightsApiForwarderService : IAIInsightsApiForwarderService
     {
-        public async Task<AIInsightsAnalyzeChartsResponseModel> AnalyzeCharts(AIInsightsAnalyzeRequestModel request, string url)
+        public async Task<AIInsightsAnalyzeChartsResponseModel> AnalyzeCharts(AIInsightsAnalyzeRequestModel request, string url, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(url))
             {

@@ -13,29 +13,39 @@
     public static class ApiWithHttpClientRotatorHelper
     {
         #region Post
-        public static async Task<TResult> Post<TResult>(string url, object param, double timeOutbySeconds = 120)
+        public static async Task<TResult> Post<TResult>(string url, object param, double timeOutbySeconds = 120, CancellationToken cancellationToken = default)
         {
             var web = HttpClientRotator.GetClient();
 
-            using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(timeOutbySeconds)))
+            using (var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(timeOutbySeconds)))
+            using (var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(timeoutCts.Token, cancellationToken))
             {
                 var content = JsonConvert.SerializeObject(param);
-
                 var buffer = Encoding.UTF8.GetBytes(content);
-
                 var byteContent = new ByteArrayContent(buffer);
-
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                var response = await web.PostAsync(url, byteContent, cts.Token);
+                HttpResponseMessage response;
+                try
+                {
+                    response = await web.PostAsync(url, byteContent, linkedCts.Token);
+                }
+                catch (OperationCanceledException) when (timeoutCts.IsCancellationRequested)
+                {
+                    throw new TimeoutException($"Request to {url} timed out after {timeOutbySeconds} seconds.");
+                }
+                catch (OperationCanceledException)
+                {
+                    throw new TaskCanceledException($"Request to {url} was canceled by caller.");
+                }
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new Exception(await response.Content.ReadAsStringAsync());
+                    var error = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"API error ({response.StatusCode}): {error}");
                 }
 
                 var result = await response.Content.ReadAsStringAsync();
-
                 return JsonConvert.DeserializeObject<TResult>(result);
             }
         }

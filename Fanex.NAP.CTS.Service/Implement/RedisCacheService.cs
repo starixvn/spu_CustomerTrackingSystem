@@ -39,7 +39,7 @@
             return null;
         }
 
-        public bool PushValueBySlidingTime<T>(string key, T value, int hours = 1) where T : class
+        public bool PushValue<T>(string key, T value, int hours = 1) where T : class
         {
             try
             {
@@ -49,10 +49,15 @@
             }
             catch (Exception ex)
             {
-                LogExtension.LogError(ex, $"Redis Cache Error {nameof(GetValue)}");
+                LogExtension.LogError(ex, $"Redis Cache Error {nameof(PushValue)}");
             }
 
             return false;
+        }
+
+        public bool PushValueBySlidingTime<T>(string key, T value, int hours = 1) where T : class
+        {
+            throw new NotSupportedException("Redis does not support sliding expiration natively.");
         }
 
         public object GetValueByKey(string key)
@@ -64,26 +69,10 @@
             }
             catch (Exception ex)
             {
-                LogExtension.LogError(ex, $"Redis Cache Error {nameof(GetValue)}");
+                LogExtension.LogError(ex, $"Redis Cache Error {nameof(GetValueByKey)}");
             }
 
             return null;
-        }
-
-        public bool PushValue<T>(string key, T value, int hours = 1) where T : class
-        {
-            try
-            {
-                if (value == null) return false;
-                var json = JsonConvert.SerializeObject(value);
-                return Database.StringSet(key, json, TimeSpan.FromHours(hours));
-            }
-            catch (Exception ex)
-            {
-                LogExtension.LogError(ex, $"Redis Cache Error {nameof(GetValue)}");
-            }
-
-            return false;
         }
 
         public async Task<bool> PushValueAsync<T>(string key, T value, int hours = 1) where T : class
@@ -96,7 +85,7 @@
             }
             catch (Exception ex)
             {
-                LogExtension.LogError(ex, $"Redis Cache Error {nameof(GetValue)}");
+                LogExtension.LogError(ex, $"Redis Cache Error {nameof(PushValueAsync)}");
             }
 
             return false;
@@ -110,7 +99,7 @@
             }
             catch (Exception ex)
             {
-                LogExtension.LogError(ex, $"Redis Cache Error {nameof(GetValue)}");
+                LogExtension.LogError(ex, $"Redis Cache Error {nameof(RemoveValueAsync)}");
             }
 
             return false;
@@ -130,7 +119,7 @@
             }
             catch (Exception ex)
             {
-                LogExtension.LogError(ex, $"Redis Cache Error {nameof(GetValue)}");
+                LogExtension.LogError(ex, $"Redis Cache Error {nameof(RemoveKeyContainsValue)}");
             }
         }
 
