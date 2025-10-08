@@ -13,40 +13,54 @@
     public static class ApiWithHttpClientRotatorHelper
     {
         #region Post
-        public static async Task<TResult> Post<TResult>(string url, object param, double timeOutbySeconds = 120, CancellationToken cancellationToken = default)
+        public static async Task<TResult> Post<TResult>(string url, object param, double timeOutbySeconds = 120, CancellationToken? cancellationToken = null)
         {
-            var web = HttpClientRotator.GetClient();
+            var client = HttpClientRotator.GetClient();
 
             using (var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(timeOutbySeconds)))
-            using (var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(timeoutCts.Token, cancellationToken))
+            using (var linkedCts = cancellationToken.HasValue ?
+                        CancellationTokenSource.CreateLinkedTokenSource(timeoutCts.Token, cancellationToken.Value) :
+                        timeoutCts)
             {
-                var content = JsonConvert.SerializeObject(param);
-                var buffer = Encoding.UTF8.GetBytes(content);
-                var byteContent = new ByteArrayContent(buffer);
-                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                var json = JsonConvert.SerializeObject(param);
+                using (var content = new StringContent(json, Encoding.UTF8, "application/json"))
+                {
+                    try
+                    {
+                        var response = await client.PostAsync(url, content, linkedCts.Token).ConfigureAwait(false);
 
-                HttpResponseMessage response;
-                try
-                {
-                    response = await web.PostAsync(url, byteContent, linkedCts.Token);
-                }
-                catch (OperationCanceledException) when (timeoutCts.IsCancellationRequested)
-                {
-                    throw new TimeoutException($"Request to {url} timed out after {timeOutbySeconds} seconds.");
-                }
-                catch (OperationCanceledException)
-                {
-                    throw new TaskCanceledException($"Request to {url} was canceled by caller.");
-                }
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            var error = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new HttpRequestException($"API error ({(int)response.StatusCode} {response.ReasonPhrase}): {error}");
+                        }
 
-                if (!response.IsSuccessStatusCode)
-                {
-                    var error = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"API error ({response.StatusCode}): {error}");
-                }
+                        var resultString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                var result = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<TResult>(result);
+                        try
+                        {
+                            return JsonConvert.DeserializeObject<TResult>(resultString);
+                        }
+                        catch (JsonException ex)
+                        {
+                            throw new InvalidOperationException($"Failed to deserialize response from {url}. Content: {resultString}", ex);
+                        }
+                    }
+                    catch (OperationCanceledException ex)
+                    {
+                        if (timeoutCts.IsCancellationRequested)
+                        {
+                            throw new TimeoutException($"Request to {url} timed out after {timeOutbySeconds} seconds.", ex);
+                        }
+
+                        if (cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested)
+                        {
+                            throw new TaskCanceledException($"Request to {url} was canceled by caller.", ex);
+                        }
+
+                        throw; // Re-throw unknown cancellation
+                    }
+                }
             }
         }
         #endregion
