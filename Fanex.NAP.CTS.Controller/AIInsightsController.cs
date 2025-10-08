@@ -11,12 +11,10 @@
     using Fanex.NAP.CTS.Service.Implement.AIInsights;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Interface.AIInsights;
-    using Fanex.NAP.CTS.ViewModel.AIInsights;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Web;
@@ -30,12 +28,6 @@
         #region Constants and Configuration
 
         private const int CACHE_EXPIRATION_HOURS = 3;
-        private const int KEEP_ALIVE_INTERVAL_SECONDS = 15;
-        private const int CHART_PROCESSING_DELAY_MS = 500;
-        private const int ANALYSIS_COMPLETION_DELAY_MS = 1000;
-        private const string CONTENT_TYPE_EVENT_STREAM = "text/event-stream";
-        private const string CACHE_CONTROL_NO_CACHE = "no-cache";
-        private const string KEEP_ALIVE_MESSAGE = "event: keepalive\ndata: ping\n\n";
 
         #endregion
 
@@ -178,20 +170,21 @@
         {
             try
             {
-                ConfigureServerSentEvents(tabId);
+                if (string.IsNullOrWhiteSpace(tabId))
+                {
+                    throw new ArgumentException("Tab ID is required.", nameof(tabId));
+                }
 
-                var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+                Request?.Headers.Add("X-Tab-Id", tabId);
 
                 var fileResponse = GetUploadFileResponse();
 
-                var analyzeTask = AnalysisChartsAsync(fileResponse, cts.Token);
-                var keepAliveTask = MaintainConnectionAsync(cts.Token);
-
-                await Task.WhenAny(analyzeTask, keepAliveTask);
-
-                cts.Cancel();
-                try { await Task.WhenAll(analyzeTask, keepAliveTask); }
-                catch (OperationCanceledException) { Response.Close(); }
+                if (fileResponse == null)
+                {
+                    throw new InvalidOperationException("No file found. Please upload a file first.");
+                }
+                
+                await _aiInsightsService.AnalyzeChartsSseStream(fileResponse, HttpContext, cancellationToken);
 
             }
             catch (Exception ex)
@@ -256,160 +249,6 @@
         private string GetUploadFileCacheKey()
         {
             return string.Format(Consts.AIInsightsUploadFileKey, UserId, TabId);
-        }
-
-        #endregion
-
-        #region Server-Sent Events
-
-        private void ConfigureServerSentEvents(string tabId)
-        {
-            var response = HttpContext.Response;
-
-            Request?.Headers.Add("X-Tab-Id", tabId);
-            HttpContext.Server.ScriptTimeout = int.MaxValue;
-            response.ContentType = CONTENT_TYPE_EVENT_STREAM;
-            response.CacheControl = CACHE_CONTROL_NO_CACHE;
-            response.BufferOutput = false;
-            response.Buffer = false;
-            response.Charset = string.Empty;
-        }
-
-        private async Task MaintainConnectionAsync(CancellationToken cts)
-        {
-            while (HttpContext.Response.IsClientConnected && !cts.IsCancellationRequested)
-            {
-                try
-                {
-                    await SendKeepAliveAsync(cts);
-                    await Task.Delay(TimeSpan.FromSeconds(KEEP_ALIVE_INTERVAL_SECONDS), cts);
-                }
-                catch (TaskCanceledException)
-                {
-                    // Task was cancelled - exit the loop
-                    break;
-                }
-            }
-        }
-
-        private async Task SendKeepAliveAsync(CancellationToken cancellationToken)
-        {
-            await PushEventAsync(KEEP_ALIVE_MESSAGE, cancellationToken);
-        }
-
-        private async Task PushEventAsync<T>(T data, CancellationToken token)
-        {
-            token.ThrowIfCancellationRequested();
-
-            if ((HttpContext.Response == null || !HttpContext.Response.IsClientConnected))
-                return;
-
-            try
-            {
-                string json = JsonConvert.SerializeObject(data);
-                string message = $"data: {json}\n\n";
-
-                byte[] buffer = Encoding.UTF8.GetBytes(message);
-                await HttpContext.Response.OutputStream.WriteAsync(buffer, 0, buffer.Length, token);
-                await HttpContext.Response.OutputStream.FlushAsync(token);
-            }
-            catch (HttpException ex) when (ex.ErrorCode == -2147023419 || ex.Message.Contains("The remote host closed the connection"))
-            {
-                // Client disconnected - this is normal behavior, don't log as error
-                // Error code -2147023419 (0x800704CD) indicates client disconnected
-            }
-            catch (ObjectDisposedException)
-            {
-                // Response object was disposed (client disconnected) - normal behavior
-            }
-            catch (InvalidOperationException ex) when (ex.Message.Contains("disconnected") || ex.Message.Contains("closed"))
-            {
-                // Client connection was closed - normal behavior
-            }
-            catch (Exception ex)
-            {
-                // Only log actual errors, not normal disconnections
-                LogExtension.LogError($"CTS - AI Insights PushEvent for tabId: {TabId}", ex);
-            }
-        }
-
-        #endregion
-
-        #region Analysis Processing
-
-        private async Task AnalysisChartsAsync(AIInsightsFileUploadDataModel fileResponse, CancellationToken cancellationToken)
-        {
-            try
-            {
-                await ProcessAnalyzeChartsAsync(fileResponse, cancellationToken);
-            }
-            catch (OperationCanceledException)
-            {
-                // cancellation requested - normal behavior
-            }
-            catch (Exception ex)
-            {
-                LogExtension.LogError("CTS - AI Insights ProcessAnalysis", ex);
-                await PushEventAsync(new AIInsightEventSourceViewModel(AIInsightEventName.Error, AIInsightEventStatus.Failed), cancellationToken);
-            }
-        }
-
-        private async Task ProcessAnalyzeChartsAsync(AIInsightsFileUploadDataModel fileResponse, CancellationToken cancellationToken)
-        {
-            await PushEventAsync(new AIInsightEventSourceViewModel(AIInsightEventName.AnalyzeCharts, AIInsightEventStatus.Started), cancellationToken);
-
-            var dataCharts = await AnalyzeChartsAsync(fileResponse, cancellationToken);
-
-            if (dataCharts?.status_code != -1 && dataCharts?.response?.visualization_response?.chart_infos != null)
-            {
-                await ProcessChartsSequentially(dataCharts.response.visualization_response.chart_infos, cancellationToken);
-                await PushEventAsync(new AIInsightEventSourceViewModel(AIInsightEventName.AnalyzeCharts, AIInsightEventStatus.Completed), cancellationToken);
-            }
-            else
-            {
-                await PushEventAsync(new AIInsightEventSourceViewModel(AIInsightEventName.AnalyzeCharts, AIInsightEventStatus.Failed), cancellationToken);
-                throw new InvalidOperationException("Analyze Charts failed");
-            }
-        }
-
-        private async Task ProcessChartsSequentially(IEnumerable<dynamic> chartInfos, CancellationToken cancellationToken)
-        {
-            foreach (var chart in chartInfos)
-            {
-                await Task.Delay(CHART_PROCESSING_DELAY_MS, cancellationToken);
-                await PushEventAsync(new AIInsightEventSourceViewModel(AIInsightEventName.AnalyzeCharts, AIInsightEventStatus.Processing, chart), cancellationToken);
-            }
-        }
-
-        private async Task<AIInsightsAnalyzeSummaryResponseModel> AnalyzeSummaryAsync(AIInsightsFileUploadDataModel fileResponse)
-        {
-            try
-            {
-                return await _aiInsightsService.AnalyzeSummary(fileResponse);
-            }
-            catch (Exception ex)
-            {
-                LogExtension.LogError("CTS - AI Insights AnalyzeSummary", ex);
-                return new AIInsightsAnalyzeSummaryResponseModel { status_code = -1 };
-            }
-        }
-
-        private async Task<AIInsightsAnalyzeChartsResponseModel> AnalyzeChartsAsync(AIInsightsFileUploadDataModel fileResponse, CancellationToken cancellationToken)
-        {
-            try
-            {
-                return await _aiInsightsService.AnalyzeCharts(fileResponse, cancellationToken);
-            }
-            catch (TaskCanceledException)
-            {
-                //  indicates cancellation by calller
-            }
-            catch (Exception ex)
-            {
-                LogExtension.LogError("CTS - AI Insights AnalyzeCharts", ex);
-            }
-
-            return new AIInsightsAnalyzeChartsResponseModel { status_code = -1 };
         }
 
         #endregion

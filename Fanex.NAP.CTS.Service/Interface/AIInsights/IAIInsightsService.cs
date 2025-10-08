@@ -12,7 +12,7 @@
 
         Task<AIInsightsAnalyzeSummaryResponseModel> AnalyzeSummary(AIInsightsFileUploadDataModel model);
 
-        Task<AIInsightsAnalyzeChartsResponseModel> AnalyzeCharts(AIInsightsFileUploadDataModel model, CancellationToken cancellationToken);
+        Task AnalyzeChartsSseStream(AIInsightsFileUploadDataModel model, HttpContextBase httpContext, CancellationToken cancellationToken);
 
         Task<AIInsightsChatbotDataModel> AskChatbot(AIInsightsFileUploadDataModel model, string question);
     }
