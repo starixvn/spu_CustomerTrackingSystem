@@ -293,11 +293,11 @@
             await PushEventAsync(KEEP_ALIVE_MESSAGE);
         }
 
-        private async Task PushEventAsync<T>(T data, CancellationToken token = default)
+        private async Task PushEventAsync<T>(T data, CancellationToken? token = null)
         {
-            if (token != null)
+            if (token.HasValue)
             {
-                token.ThrowIfCancellationRequested();
+                token.Value.ThrowIfCancellationRequested();
             }
 
             if ((HttpContext.Response == null || !HttpContext.Response.IsClientConnected))
