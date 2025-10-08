@@ -30,7 +30,7 @@
         #region Constants and Configuration
 
         private const int CACHE_EXPIRATION_HOURS = 3;
-        private const int KEEP_ALIVE_INTERVAL_SECONDS = 5;
+        private const int KEEP_ALIVE_INTERVAL_SECONDS = 15;
         private const int CHART_PROCESSING_DELAY_MS = 500;
         private const int ANALYSIS_COMPLETION_DELAY_MS = 1000;
         private const string CONTENT_TYPE_EVENT_STREAM = "text/event-stream";
