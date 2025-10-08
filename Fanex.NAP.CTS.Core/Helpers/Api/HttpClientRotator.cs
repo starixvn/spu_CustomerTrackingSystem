@@ -6,6 +6,14 @@
 
     public static class HttpClientRotator
     {
+        static HttpClientRotator()
+        {
+            // Global defaults
+            ServicePointManager.DefaultConnectionLimit = 500;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            ServicePointManager.Expect100Continue = false;
+        }
+
         private static readonly object _lock = new object();
         private static HttpClient _activeClient;
         private static HttpClient _standbyClient;
@@ -47,12 +55,6 @@
             {
                 Timeout = TimeSpan.FromHours(1.5) // 1.5 hours
             };
-
-            // Global defaults
-            ServicePointManager.DefaultConnectionLimit = 500;
-            ServicePointManager.SecurityProtocol =
-                SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13; // if available
-            ServicePointManager.Expect100Continue = false;
 
             return client;
         }

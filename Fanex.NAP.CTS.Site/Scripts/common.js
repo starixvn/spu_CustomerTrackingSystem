@@ -98,13 +98,13 @@
             $('body').append('<iframe  name="output_frame" width="0" height="0" class="display-none"></iframe>');
             $('#postToIframe').submit().remove();
         }
-    };   
+    };
 
-    this.downloadFileExcel = function (url, parameters) {        
+    this.downloadFileExcel = function (url, parameters) {
         $this.showLoading();
         let request = new XMLHttpRequest();
         request.open('POST', url, true);
-        request.setRequestHeader('Content-type', 'application/json');              
+        request.setRequestHeader('Content-type', 'application/json');
         request.responseType = 'blob';
         request.timeout = 600000;
         request.addEventListener("timeout", function (e) {
@@ -146,9 +146,9 @@
             }
 
             $this.closeLoading();
-        }       
+        }
 
-        request.send(JSON.stringify(parameters)); 
+        request.send(JSON.stringify(parameters));
     }
 
     this.getFormattedDate = function () {
@@ -334,15 +334,22 @@
 
     this.getTabId = function () {
         if (!sessionStorage.getItem("TabId")) {
-            sessionStorage.setItem("TabId", "TabId" + Date.now().toString());
+            sessionStorage.setItem("TabId", "TabId" + this.getUID().toString());
         }
 
         return sessionStorage.getItem("TabId");
     }
 
+    this.getUID = function () {
+        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11)
+            .replace(/[018]/g, c =>
+                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+            );
+    }
+
     this.postMultipleAPI = function (requests) {
         // Convert each request object into an AJAX Promise
-        var ajaxCalls = requests.map(req => 
+        var ajaxCalls = requests.map(req =>
             $.ajax({
                 url: req.url,
                 type: "POST",
@@ -350,7 +357,7 @@
                 contentType: "application/json"
             })
         );
-    
+
         // Use $.when() to handle multiple requests
         return $.when(...ajaxCalls);
     }
@@ -432,13 +439,13 @@
 
     this.language = () => Object.assign({}, language);
 
-    this.renderCategoryColor = function (cell, row) {      
+    this.renderCategoryColor = function (cell, row) {
         $(cell).addClass('td-bg-' + row.CategoryColorDesc);
 
         $(cell).prop('title', row.CategoryNames);
-    } 
+    }
 
-    this.renderCategoryName = function (categoryNames) {      
+    this.renderCategoryName = function (categoryNames) {
         return categoryNames;
     };
 

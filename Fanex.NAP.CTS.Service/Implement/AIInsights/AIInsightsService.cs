@@ -2,6 +2,7 @@
 {
     using System.IO;
     using System.Net;
+    using System.Threading;
     using System.Threading.Tasks;
     using System.Web;
     using Fanex.NAP.CTS.Core.Extentions;
@@ -23,7 +24,7 @@
             _aiInsightsFileUploadModel = new AIInsightsFileUploadModel();
         }
 
-        public async Task<AIInsightsAnalyzeChartsDataModel> AnalyzeCharts(AIInsightsFileUploadDataModel model)
+        public async Task<AIInsightsAnalyzeChartsResponseModel> AnalyzeCharts(AIInsightsFileUploadDataModel model, CancellationToken cancellationToken)
         {
             var request = new AIInsightsAnalyzeRequestModel
             {
@@ -32,16 +33,16 @@
 
             WriteLog($"Request: {nameof(AnalyzeCharts)}", request);
 
-            var result = await _apiForwarderService.AnalyzeCharts(request, ConfigSettings.AIInsightsAnalyzeChartsUrl);
+            var result = await _apiForwarderService.AnalyzeCharts(request, ConfigSettings.AIInsightsAnalyzeChartsUrl, cancellationToken);
 
             WriteLog($"Response: {nameof(AnalyzeCharts)}", result);
 
             ValidateResponse(result);
 
-            return result.response;
+            return result;
         }
 
-        public async Task<AIInsightsAnalyzeSummaryDataModel> AnalyzeSummary(AIInsightsFileUploadDataModel model)
+        public async Task<AIInsightsAnalyzeSummaryResponseModel> AnalyzeSummary(AIInsightsFileUploadDataModel model)
         {
             var request = new AIInsightsAnalyzeRequestModel
             {
@@ -55,7 +56,7 @@
             WriteLog($"Response: {nameof(AnalyzeSummary)}", result);
 
             ValidateResponse(result);
-            return result.response;
+            return result;
         }
 
         public async Task<AIInsightsChatbotDataModel> AskChatbot(AIInsightsFileUploadDataModel model, string question)

@@ -42,7 +42,7 @@
                 var userId = CurrentSession.UserId.ToString();
 
                 var result = await _aIInsightsService.UploadFile(uploadFile, userId);
-                _memoryCacheService.PushValueBySlidingTime(string.Format(Consts.AIInsightsUploadFileKey, userId, tabId), result?.response, 3);
+                await _memoryCacheService.PushValueAsync(string.Format(Consts.AIInsightsUploadFileKey, userId, tabId), result?.response, 3);
 
                 return RedirectToAction("Index", "AIInsights");
             }

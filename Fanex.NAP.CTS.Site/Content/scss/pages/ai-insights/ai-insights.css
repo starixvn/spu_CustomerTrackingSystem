@@ -836,7 +836,7 @@
 .content-card-section .loading:after {
   content: "";
   position: absolute;
-  left: 50%;
+  right: 1%;
   top: 15%;
   border-radius: 50%;
   width: 2.4rem;
