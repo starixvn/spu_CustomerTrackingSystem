@@ -172,21 +172,27 @@
         }
 
         [HttpGet]
+        [AsyncTimeout(1800000)] // timeout 30 mintues
+
         public async Task StreamAnalyzeCharts(string tabId, CancellationToken cancellationToken)
         {
             try
             {
-                Request?.Headers.Add("X-Tab-Id", tabId);
-                ConfigureServerSentEvents();
+                ConfigureServerSentEvents(tabId);
+
+                var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+
                 var fileResponse = GetUploadFileResponse();
 
-                using (var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken))
-                {
-                    var maintainTask = MaintainConnectionAsync(cts);
-                    var analysisTask = AnalysisChartsAsync(fileResponse, cts.Token);
+                var analyzeTask = AnalysisChartsAsync(fileResponse, cts.Token);
+                var keepAliveTask = MaintainConnectionAsync(cts.Token);
 
-                    await Task.WhenAny(analysisTask, maintainTask);
-                }
+                await Task.WhenAny(analyzeTask, keepAliveTask);
+
+                cts.Cancel();
+                try { await Task.WhenAll(analyzeTask, keepAliveTask); }
+                catch (OperationCanceledException) { Response.Close(); }
+
             }
             catch (Exception ex)
             {
@@ -256,23 +262,27 @@
 
         #region Server-Sent Events
 
-        private void ConfigureServerSentEvents()
+        private void ConfigureServerSentEvents(string tabId)
         {
             var response = HttpContext.Response;
 
+            Request?.Headers.Add("X-Tab-Id", tabId);
+            HttpContext.Server.ScriptTimeout = int.MaxValue;
             response.ContentType = CONTENT_TYPE_EVENT_STREAM;
             response.CacheControl = CACHE_CONTROL_NO_CACHE;
             response.BufferOutput = false;
+            response.Buffer = false;
+            response.Charset = string.Empty;
         }
 
-        private async Task MaintainConnectionAsync(CancellationTokenSource cts)
+        private async Task MaintainConnectionAsync(CancellationToken cts)
         {
             while (HttpContext.Response.IsClientConnected && !cts.IsCancellationRequested)
             {
                 try
                 {
-                    await SendKeepAliveAsync();
-                    await Task.Delay(TimeSpan.FromSeconds(KEEP_ALIVE_INTERVAL_SECONDS));
+                    await SendKeepAliveAsync(cts);
+                    await Task.Delay(TimeSpan.FromSeconds(KEEP_ALIVE_INTERVAL_SECONDS), cts);
                 }
                 catch (TaskCanceledException)
                 {
@@ -280,25 +290,16 @@
                     break;
                 }
             }
-
-            if (!HttpContext.Response.IsClientConnected)
-            {
-                // SSE connection closed by client.
-                cts.Cancel();
-            }
         }
 
-        private async Task SendKeepAliveAsync()
+        private async Task SendKeepAliveAsync(CancellationToken cancellationToken)
         {
-            await PushEventAsync(KEEP_ALIVE_MESSAGE);
+            await PushEventAsync(KEEP_ALIVE_MESSAGE, cancellationToken);
         }
 
-        private async Task PushEventAsync<T>(T data, CancellationToken? token = null)
+        private async Task PushEventAsync<T>(T data, CancellationToken token)
         {
-            if (token.HasValue)
-            {
-                token.Value.ThrowIfCancellationRequested();
-            }
+            token.ThrowIfCancellationRequested();
 
             if ((HttpContext.Response == null || !HttpContext.Response.IsClientConnected))
                 return;
@@ -309,8 +310,8 @@
                 string message = $"data: {json}\n\n";
 
                 byte[] buffer = Encoding.UTF8.GetBytes(message);
-                await HttpContext.Response.OutputStream.WriteAsync(buffer, 0, buffer.Length);
-                await HttpContext.Response.OutputStream.FlushAsync();
+                await HttpContext.Response.OutputStream.WriteAsync(buffer, 0, buffer.Length, token);
+                await HttpContext.Response.OutputStream.FlushAsync(token);
             }
             catch (HttpException ex) when (ex.ErrorCode == -2147023419 || ex.Message.Contains("The remote host closed the connection"))
             {
@@ -349,7 +350,7 @@
             catch (Exception ex)
             {
                 LogExtension.LogError("CTS - AI Insights ProcessAnalysis", ex);
-                await PushEventAsync(new AIInsightEventSourceViewModel(AIInsightEventName.Error, AIInsightEventStatus.Failed));
+                await PushEventAsync(new AIInsightEventSourceViewModel(AIInsightEventName.Error, AIInsightEventStatus.Failed), cancellationToken);
             }
         }
 
@@ -375,7 +376,7 @@
         {
             foreach (var chart in chartInfos)
             {
-                await Task.Delay(CHART_PROCESSING_DELAY_MS);
+                await Task.Delay(CHART_PROCESSING_DELAY_MS, cancellationToken);
                 await PushEventAsync(new AIInsightEventSourceViewModel(AIInsightEventName.AnalyzeCharts, AIInsightEventStatus.Processing, chart), cancellationToken);
             }
         }
