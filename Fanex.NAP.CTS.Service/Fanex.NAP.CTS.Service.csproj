@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Delegate\SseDelegate.cs" />
     <Compile Include="ExcelConfig\Utilities.cs" />
     <Compile Include="Implement\AccountService.cs" />
     <Compile Include="Implement\AIInsights\AIInsightsApiForwarderService.cs" />
@@ -84,6 +85,8 @@
     <Compile Include="Implement\RobotReport\RobotReportService.cs" />
     <Compile Include="Implement\SpecialCustomerClassService.cs" />
     <Compile Include="Implement\NotificationService.cs" />
+    <Compile Include="Implement\SseStream\SseListenerService.cs" />
+    <Compile Include="Implement\SseStream\SseSenderService.cs" />
     <Compile Include="Implement\SseStream\SseStreamManagerService.cs" />
     <Compile Include="Implement\TransactionReportService.cs" />
     <Compile Include="Implement\TransactionService.cs" />
@@ -123,6 +126,8 @@
     <Compile Include="Interface\ITransactionReportService.cs" />
     <Compile Include="Interface\ITransactionService.cs" />
     <Compile Include="Interface\ICTSUserService.cs" />
+    <Compile Include="Interface\SseStream\ISseListenerService.cs" />
+    <Compile Include="Interface\SseStream\ISseSenderService.cs" />
     <Compile Include="Interface\SseStream\ISseStreamManagerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
