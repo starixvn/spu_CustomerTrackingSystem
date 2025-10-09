@@ -1,17 +1,22 @@
 ﻿namespace Fanex.NAP.CTS.Service.Interface.SseStream
 {
+    using System;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Web;
+    using static Fanex.NAP.CTS.Service.Delegate.SseDelegate;
 
     public interface ISseStreamManagerService
     {
-        Task PushEventAsync<T>(T data, CancellationToken cancellationToken);
+        Task SenderAsync(
+            HttpContextBase httpContext,
+            CancellationToken cancellationToken,
+            Func<PushEventDelegate, Task[]> taskFactories);
 
-        ISseStreamManagerService Start(HttpContextBase httpContextBase);
-
-        Task<ISseStreamManagerService> Process(Task[] tasks, CancellationToken cancellationToken);
-
-        Task<ISseStreamManagerService> Complete(CancellationTokenSource cancellationTokenSource);
+        Task ListenerAsync(
+            string url,
+            Action<string> onMessage,
+            int timeOutbySeconds = 120,
+            CancellationToken? cancellationToken = null);
     }
 }

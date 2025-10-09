@@ -11,12 +11,13 @@
     using Fanex.NAP.CTS.ViewModel.AIInsights;
     using Newtonsoft.Json;
     using System;
-    using System.Collections.Generic;
+    using System.Collections.Concurrent;
     using System.IO;
     using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Web;
+    using static Fanex.NAP.CTS.Service.Delegate.SseDelegate;
 
     public class AIInsightsService : IAIInsightsService
     {
@@ -24,8 +25,6 @@
         private readonly IAIInsightsApiForwarderService _apiForwarderService;
         private readonly ISseStreamManagerService _sseStreamManagerService;
         private AIInsightsFileUploadModel _aiInsightsFileUploadModel;
-
-        private const int CHART_PROCESSING_DELAY_MS = 500; // Delay between processing each chart in milliseconds
         #endregion
 
         #region constructor
@@ -43,98 +42,80 @@
         {
             var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
-            // Initialize SSE stream
-            _sseStreamManagerService.Start(httpContext);
+            var messageQueue = new BlockingCollection<string>();
 
-            // Process charts analysis
-            var analyzeChartsTask = ProcessAnalyzeChartsAsync(model, linkedCts.Token);
-            await _sseStreamManagerService.Process(new[] { analyzeChartsTask }, linkedCts.Token);
+            var listenerTask = Task.Run(async () => await _sseStreamManagerService.ListenerAsync(
+                ConfigSettings.AIInsightsAnalyzeChartsUrl,
+                onMessage: msg => { messageQueue.TryAdd(msg, 100, linkedCts.Token); },
+                timeOutbySeconds: 1800,
+                linkedCts.Token));
 
-            // Complete SSE stream
-            await _sseStreamManagerService.Complete(linkedCts);
+            var senderTask = Task.Run(async () => await _sseStreamManagerService.SenderAsync(
+                httpContext,
+                linkedCts.Token,
+                (pushMsgDelegate) => new Task[] { ProcessAnalyzeChartsAsync(messageQueue, pushMsgDelegate, linkedCts.Token) }));
+
+            await Task.WhenAny(listenerTask, senderTask);
+            linkedCts.Cancel();
         }
 
-        private async Task ProcessAnalyzeChartsAsync(AIInsightsFileUploadDataModel model, CancellationToken cancellationToken)
+        private async Task ProcessAnalyzeChartsAsync(BlockingCollection<string> msgQueue, PushEventDelegate pushMsgDelegate, CancellationToken cancellationToken)
         {
             try
             {
-                await SendAnalysisEventAsync(AIInsightEventName.AnalyzeCharts, AIInsightEventStatus.Started, cancellationToken);
-
-                var analysisResult = await AnalyzeChartsAsync(model, cancellationToken);
-
-                if (IsAnalysisSuccessful(analysisResult))
+                foreach (var msg in msgQueue.GetConsumingEnumerable(cancellationToken))
                 {
-                    await ProcessChartsSequentially(analysisResult.response.visualization_response.chart_infos, cancellationToken);
-
-                    await SendAnalysisEventAsync(AIInsightEventName.AnalyzeCharts, AIInsightEventStatus.Completed, cancellationToken);
-                }
-                else
-                {
-                    await SendAnalysisEventAsync(AIInsightEventName.AnalyzeCharts, AIInsightEventStatus.Failed, cancellationToken);
-                    throw new InvalidOperationException($"Chart analysis failed: {analysisResult?.error}");
+                    await SendChartProcessingEventAsync(msg, pushMsgDelegate);
                 }
             }
             catch (OperationCanceledException)
             {
                 // Normal cancellation - no logging needed
             }
+            catch (ArgumentException arg)
+            {
+                LogExtension.LogError("CTS - AI Insights AnalyzeChartsAsync", arg);
+                await pushMsgDelegate(new AIInsightEventSourceViewModel(AIInsightEventName.Error, AIInsightEventStatus.Failed));
+            }
             catch (Exception ex)
             {
                 LogExtension.LogError("CTS - AI Insights AnalyzeChartsAsync", ex);
-                await SendErrorEventAsync(cancellationToken);
+                await pushMsgDelegate(new AIInsightEventSourceViewModel(AIInsightEventName.Error, AIInsightEventStatus.Failed));
             }
         }
 
-        private bool IsAnalysisSuccessful(AIInsightsAnalyzeChartsResponseModel result)
+        private async Task SendChartProcessingEventAsync(string chart, PushEventDelegate pushMsgDelegate)
         {
-            return result?.status_code != -1
-                && result?.response?.visualization_response?.chart_infos != null;
-        }
+            if (chart.Contains("ping")) return;
 
-        private async Task ProcessChartsSequentially(IEnumerable<dynamic> chartInfos, CancellationToken cancellationToken)
-        {
-            foreach (var chart in chartInfos)
+            var model = JsonConvert.DeserializeObject<AIInsightEventSourceViewModel>(chart);
+
+            if (model.EventName == AIInsightEventName.AnalyzeCharts.ToString())
             {
-                await Task.Delay(CHART_PROCESSING_DELAY_MS, cancellationToken);
-
-                await SendChartProcessingEventAsync(chart, cancellationToken);
+                switch (model.EventStatus)
+                {
+                    case nameof(AIInsightEventStatus.Processing):
+                        {
+                            await pushMsgDelegate(
+                                new AIInsightEventSourceViewModel(
+                                    AIInsightEventName.AnalyzeCharts,
+                                    AIInsightEventStatus.Processing,
+                                    model.Data));
+                            break;
+                        }
+                    default:
+                        {
+                            if (Enum.TryParse(model.EventStatus, out AIInsightEventStatus eventStatus))
+                            {
+                                await pushMsgDelegate(
+                                    new AIInsightEventSourceViewModel(
+                                        AIInsightEventName.AnalyzeCharts,
+                                        eventStatus));
+                            }
+                            break;
+                        }
+                }
             }
-        }
-
-        private async Task<AIInsightsAnalyzeChartsResponseModel> AnalyzeChartsAsync(AIInsightsFileUploadDataModel model, CancellationToken cancellationToken)
-        {
-            var request = new AIInsightsAnalyzeRequestModel
-            {
-                cache_key = model.cache_key
-            };
-
-            WriteLog($"Request: {nameof(AnalyzeChartsSseStream)}", request);
-
-            var result = await _apiForwarderService.AnalyzeCharts(request, ConfigSettings.AIInsightsAnalyzeChartsUrl, cancellationToken);
-
-            WriteLog($"Response: {nameof(AnalyzeChartsSseStream)}", result);
-
-            ValidateResponse(result);
-
-            return result;
-        }
-
-        private async Task SendAnalysisEventAsync(AIInsightEventName eventName, AIInsightEventStatus status, CancellationToken cancellationToken)
-        {
-            var eventData = new AIInsightEventSourceViewModel(eventName, status);
-            await _sseStreamManagerService.PushEventAsync(eventData, cancellationToken);
-        }
-
-        private async Task SendChartProcessingEventAsync(dynamic chart, CancellationToken cancellationToken)
-        {
-            var eventData = new AIInsightEventSourceViewModel(AIInsightEventName.AnalyzeCharts, AIInsightEventStatus.Processing, chart);
-            await _sseStreamManagerService.PushEventAsync(eventData, cancellationToken);
-        }
-
-        private async Task SendErrorEventAsync(CancellationToken cancellationToken)
-        {
-            var eventData = new AIInsightEventSourceViewModel(AIInsightEventName.Error, AIInsightEventStatus.Failed);
-            await _sseStreamManagerService.PushEventAsync(eventData, cancellationToken);
         }
         #endregion
 

@@ -2,6 +2,8 @@
 {
     public class AIInsightEventSourceViewModel
     {
+        public AIInsightEventSourceViewModel() { }
+
         public AIInsightEventSourceViewModel(AIInsightEventName eventName, AIInsightEventStatus eventStatus, object data)
         {
             EventName = eventName.ToString();

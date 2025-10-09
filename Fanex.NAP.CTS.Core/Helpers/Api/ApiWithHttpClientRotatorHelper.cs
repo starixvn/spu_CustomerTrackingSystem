@@ -13,7 +13,7 @@
     public static class ApiWithHttpClientRotatorHelper
     {
         #region Post
-        public static async Task<TResult> Post<TResult>(string url, object param, double timeOutbySeconds = 120, CancellationToken? cancellationToken = null)
+        public static async Task<TResult> PostAsync<TResult>(string url, object param, double timeOutbySeconds = 120, CancellationToken? cancellationToken = null)
         {
             var client = HttpClientRotator.GetClient();
 
@@ -25,7 +25,7 @@
                 var json = JsonConvert.SerializeObject(param);
                 using (var content = new StringContent(json, Encoding.UTF8, "application/json"))
                 {
-                    try
+                    return await HandleExceptionWhileExecutingAsync(async () =>
                     {
                         var response = await client.PostAsync(url, content, linkedCts.Token).ConfigureAwait(false);
 
@@ -45,28 +45,14 @@
                         {
                             throw new InvalidOperationException($"Failed to deserialize response from {url}. Content: {resultString}", ex);
                         }
-                    }
-                    catch (OperationCanceledException ex)
-                    {
-                        if (timeoutCts.IsCancellationRequested)
-                        {
-                            throw new TimeoutException($"Request to {url} timed out after {timeOutbySeconds} seconds.", ex);
-                        }
-
-                        if (cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested)
-                        {
-                            throw new TaskCanceledException($"Request to {url} was canceled by caller.", ex);
-                        }
-
-                        throw; // Re-throw unknown cancellation
-                    }
+                    }, url, timeOutbySeconds, linkedCts.Token);
                 }
             }
         }
         #endregion
 
         #region PostWithStreamWritter
-        public static async Task<TResult> PostWithStreamWritter<TResult>(string url, object param, double timeOutbySeconds = 120)
+        public static async Task<TResult> PostWithStreamWritterAsync<TResult>(string url, object param, double timeOutbySeconds = 120)
         {
             var web = HttpClientRotator.GetClient();
 
@@ -182,6 +168,110 @@
 
             writer.Write(text);
             writer.Write('"');
+        }
+        #endregion
+
+        #region Get Server Sent Event
+        public static async Task GetServerSentEventAsync(
+            string url,
+            Action<string> onMessage,
+            int timeOutbySeconds = 120,
+            CancellationToken? cancellationToken = null)
+        {
+
+            var client = HttpClientRotator.GetClient();
+
+            using (var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(timeOutbySeconds)))
+            using (var linkedCts = cancellationToken.HasValue ?
+                        CancellationTokenSource.CreateLinkedTokenSource(timeoutCts.Token, cancellationToken.Value) :
+                        timeoutCts)
+            using (var request = new HttpRequestMessage(HttpMethod.Get, url))
+            {
+                await HandleExceptionWhileExecutingAsync(async () =>
+                {
+                    request.Headers.Accept.ParseAdd("text/event-stream");
+
+                    var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, linkedCts.Token);
+                    response.EnsureSuccessStatusCode();
+
+                    var stream = await response.Content.ReadAsStreamAsync();
+                    var reader = new StreamReader(stream);
+                    linkedCts.Token.Register(() =>
+                    {
+                        try
+                        {
+                            stream.Close();
+                            response.Dispose();
+                        }
+                        catch { }
+                    });
+
+                    string line;
+                    string dataBuffer = "";
+
+                    while (!reader.EndOfStream && !linkedCts.IsCancellationRequested)
+                    {
+                        if (stream.CanRead == false) break;
+
+                        line = await reader.ReadLineAsync();
+
+                        if (string.IsNullOrWhiteSpace(line))
+                        {
+                            if (!string.IsNullOrEmpty(dataBuffer))
+                            {
+                                onMessage?.Invoke(dataBuffer.Trim());
+                                dataBuffer = "";
+                            }
+                            continue;
+                        }
+
+                        if (line.StartsWith("data:", StringComparison.OrdinalIgnoreCase))
+                        {
+                            dataBuffer += line.Substring(5).Trim() + "\n";
+                        }
+                    }
+
+                    return Task.CompletedTask;
+                }, url, timeOutbySeconds, linkedCts.Token);
+            }
+        }
+        #endregion
+
+        #region private method
+        private static async Task<T> HandleExceptionWhileExecutingAsync<T>(Func<Task<T>> func, string url, double timeOutbySeconds, CancellationToken cancellationToken)
+        {
+            try
+            {
+                return await func();
+            }
+            catch (IOException ex)
+            {
+                if (IsCancellationRequestedToken(cancellationToken))
+                {
+                    throw new TaskCanceledException($"Request to {url} was canceled by caller.", ex);
+                }
+
+                throw ex; // Re-throw unknown cancellation
+            }
+            catch (OperationCanceledException ex)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    throw new TimeoutException($"Request to {url} timed out after {timeOutbySeconds} seconds.", ex);
+                }
+
+                if (IsCancellationRequestedToken(cancellationToken))
+                {
+                    throw new TaskCanceledException($"Request to {url} was canceled by caller.", ex);
+                }
+
+                throw ex; // Re-throw unknown cancellation
+            }
+        }
+
+        private static bool IsCancellationRequestedToken(CancellationToken? cancellationToken)
+        {
+            return cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested;
         }
         #endregion
     }
