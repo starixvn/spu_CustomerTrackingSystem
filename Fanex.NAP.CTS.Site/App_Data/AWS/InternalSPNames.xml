@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions>
-	<Function name="SubscriberAssignment">
-		<Setting Key="FPS_AD_InsertSubscriberByUser" SpName="FPS_AD_InsertSubscriberByUser" DbName="CTSMain.CTS_Admin.ctsWebAdmin" />
+	<Function name="SubscriberAssignment">		
 		<Setting Key="CTS_AD_Subscriber_GetAll" SpName="CTS_AD_Subscriber_GetAll" DbName="CTSMain.CTS_Admin.ctsWebAdmin" />
 	</Function>
 

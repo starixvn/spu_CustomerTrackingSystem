@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions>
-	<Function name="SubscriberAssignment">
-		<Setting Key="FPS_AD_InsertSubscriberByUser" SpName="FPS_AD_InsertSubscriberByUser" DbName="CTSMain.CTS_Admin.ctsWebAdmin" />
+	<Function name="SubscriberAssignment">		
 		<Setting Key="CTS_AD_Subscriber_GetAll" SpName="CTS_AD_Subscriber_GetAll" DbName="CTSMain.CTS_Admin.ctsWebAdmin" />
 	</Function>
 
@@ -94,13 +93,9 @@
 
 	<Function Name="CustomerClassification">
 		<Setting Key="CTS_DC_CustClassification_Get" SpName="CTS_DC_CustClassification_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustClassification_ViewHistory" SpName="CTS_DC_CustClassification_ViewHistory" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="600" />
-
-		<Setting Key="CTS_DC_CustEvidence_GetByCustIDs" SpName="CTS_DC_CustEvidence_GetByCustIDs" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-
+		<Setting Key="CTS_DC_CustClassification_ViewHistory" SpName="CTS_DC_CustClassification_ViewHistory" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="600" />		
 		<Setting Key="CTS_DC_CustClassification_LogInputData" SpName="CTS_DC_CustClassification_LogInputData" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
-		<Setting Key="CTS_DC_CustClassification_Queue_Insert" SpName="CTS_DC_CustClassification_Queue_Insert" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
-		<Setting Key="CTS_DC_CustClassification_ProblemAccount_InsertByCategory" SpName="CTS_DC_CustClassification_ProblemAccount_InsertByCategory" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_CustClassification_Queue_Insert" SpName="CTS_DC_CustClassification_Queue_Insert" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />		
 		<Setting Key="CTS_DC_CustClassification_BySport_GetCC" SpName="CTS_DC_CustClassification_BySport_GetCC" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustClassification_Insert" SpName="CTS_DC_CustClassification_Insert" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" Timeout="600" />
 		<Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" Timeout="600" />

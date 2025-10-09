@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Functions>
-	<Function name="SubscriberAssignment">
-		<Setting Key="FPS_AD_InsertSubscriberByUser" SpName="FPS_AD_InsertSubscriberByUser" DbName="CTSMain_DEV.CTS_Admin.ctsWebAdmin" />
+	<Function name="SubscriberAssignment">		
 		<Setting Key="CTS_AD_Subscriber_GetAll" SpName="CTS_AD_Subscriber_GetAll" DbName="CTSMain_DEV.CTS_Admin.ctsWebAdmin" />
 	</Function>
 
@@ -98,8 +97,7 @@
 		<Setting Key="CTS_DC_CustClassification_ViewHistory" SpName="CTS_DC_CustClassification_ViewHistory" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
 
 		<Setting Key="CTS_DC_CustClassification_LogInputData" SpName="CTS_DC_CustClassification_LogInputData" DbName="CTSMain_DEV.CTS_DataCenter.ctsWebAdmin" />
-		<Setting Key="CTS_DC_CustClassification_Queue_Insert" SpName="CTS_DC_CustClassification_Queue_Insert" DbName="CTSMain_DEV.CTS_DataCenter.ctsWebAdmin" />
-		<Setting Key="CTS_DC_CustClassification_ProblemAccount_InsertByCategory" SpName="CTS_DC_CustClassification_ProblemAccount_InsertByCategory" DbName="CTSMain_DEV.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_CustClassification_Queue_Insert" SpName="CTS_DC_CustClassification_Queue_Insert" DbName="CTSMain_DEV.CTS_DataCenter.ctsWebAdmin" />		
 		<Setting Key="CTS_DC_CustClassification_BySport_GetCC" SpName="CTS_DC_CustClassification_BySport_GetCC" DbName="CTSMain_DEV.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustClassification_Insert" SpName="CTS_DC_CustClassification_Insert" DbName="CTSMain_DEV.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove" DbName="CTSMain_DEV.CTS_DataCenter.ctsWebAdmin" />
