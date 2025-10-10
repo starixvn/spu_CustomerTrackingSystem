@@ -185,9 +185,13 @@
                 await _aiInsightsService.AnalyzeChartsSseStream(fileResponse, HttpContext, cancellationToken);
 
             }
+            catch (AggregateException agr)
+            {
+                LogExtension.LogError("CTS - AI Insights StreamAnalyzeCharts Inner Failed", agr);
+            }
             catch (Exception ex)
             {
-                LogExtension.LogError("CTS - AI Insights StreamAnalyzeCharts", ex);
+                LogExtension.LogError("CTS - AI Insights StreamAnalyzeCharts Failed", ex);
             }
         }
         #endregion

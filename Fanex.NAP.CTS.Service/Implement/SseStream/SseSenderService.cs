@@ -52,12 +52,16 @@
                 await PushEventAsync(data, cancellationTokenSource.Token).ConfigureAwait(false);
             };
 
-            _keepAliveTask = Task.Run(async () => await MaintainConnectionAsync(cancellationTokenSource));
+            _keepAliveTask =
+                Task.Run(
+                    async () =>
+                        await MaintainConnectionAsync(cancellationTokenSource).ConfigureAwait(false)
+                    , cancellationTokenSource.Token);
 
             var tasks = taskFactories(pushDelegate);
             _processingTask = Task.WhenAll(tasks);
 
-            await Task.WhenAny(_keepAliveTask, _processingTask);
+            await Task.WhenAny(_keepAliveTask, _processingTask).ConfigureAwait(false);
             cancellationTokenSource.Cancel();
 
             return this;
@@ -67,7 +71,7 @@
         {
             try
             {
-                await Task.WhenAll(_keepAliveTask, _processingTask);
+                await Task.WhenAll(_keepAliveTask, _processingTask).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -94,7 +98,7 @@
 
             try
             {
-                await SendEventToClientAsync(data, cancellationToken);
+                await SendEventToClientAsync(data, cancellationToken).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -132,8 +136,8 @@
             {
                 try
                 {
-                    await SendKeepAliveAsync(cancellationToken);
-                    await Task.Delay(TimeSpan.FromSeconds(KEEP_ALIVE_INTERVAL_SECONDS), cancellationToken);
+                    await SendKeepAliveAsync(cancellationToken).ConfigureAwait(false);
+                    await Task.Delay(TimeSpan.FromSeconds(KEEP_ALIVE_INTERVAL_SECONDS), cancellationToken).ConfigureAwait(false);
                 }
                 catch (OperationCanceledException)
                 {
@@ -155,7 +159,7 @@
 
         private async Task SendKeepAliveAsync(CancellationToken cancellationToken)
         {
-            await PushEventAsync(KEEP_ALIVE_MESSAGE, cancellationToken);
+            await PushEventAsync(KEEP_ALIVE_MESSAGE, cancellationToken).ConfigureAwait(false);
         }
 
         private async Task SendEventToClientAsync<T>(T data, CancellationToken cancellationToken)
@@ -164,8 +168,8 @@
             var message = $"data: {json}\n\n";
             var buffer = Encoding.UTF8.GetBytes(message);
 
-            await _httpContextStream.Response.OutputStream.WriteAsync(buffer, 0, buffer.Length, cancellationToken);
-            await _httpContextStream.Response.OutputStream.FlushAsync(cancellationToken);
+            await _httpContextStream.Response.OutputStream.WriteAsync(buffer, 0, buffer.Length, cancellationToken).ConfigureAwait(false);
+            await _httpContextStream.Response.OutputStream.FlushAsync(cancellationToken).ConfigureAwait(false);
         }
 
         private bool IsClientConnected()

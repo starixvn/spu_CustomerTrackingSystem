@@ -34,6 +34,13 @@
             _apiForwarderService = new AIInsightsApiForwarderService();
             _aiInsightsFileUploadModel = new AIInsightsFileUploadModel();
         }
+
+        public AIInsightsService(ISseStreamManagerService sseStreamManagerService, IAIInsightsApiForwarderService apiForwarderService)
+        {
+            _apiForwarderService = apiForwarderService ?? new AIInsightsApiForwarderService();
+            _sseStreamManagerService = sseStreamManagerService ?? new SseStreamManagerService();
+            _aiInsightsFileUploadModel = new AIInsightsFileUploadModel();
+        }
         #endregion
 
         #region analyze charts with sse stream
@@ -48,8 +55,8 @@
                 async () => await _sseStreamManagerService.ListenerAsync(
                     ConfigSettings.AIInsightsAnalyzeChartsUrl,
                     onMessage: msg => { messageQueue.TryAdd(msg, 100, linkedCts.Token); },
-                    timeOutbySeconds: ConfigSettings.AIAnalyzeRequestTimeout,
-                    linkedCts.Token)
+                    linkedCts.Token,
+                    timeOutbySeconds: ConfigSettings.AIAnalyzeRequestTimeout)
                 .ConfigureAwait(false),
                 linkedCts.Token);
 
@@ -63,6 +70,8 @@
                 linkedCts.Token);
 
             await Task.WhenAny(listenerTask, senderTask).ConfigureAwait(false);
+            messageQueue.CompleteAdding();
+
             linkedCts.Cancel();
         }
 
@@ -78,11 +87,6 @@
             catch (OperationCanceledException)
             {
                 // Normal cancellation - no logging needed
-            }
-            catch (ArgumentException arg)
-            {
-                LogExtension.LogError("CTS - AI Insights AnalyzeChartsAsync", arg);
-                await pushMsgDelegate(new AIInsightEventSourceViewModel(AIInsightEventName.Error, AIInsightEventStatus.Failed));
             }
             catch (Exception ex)
             {

@@ -194,7 +194,7 @@
                     var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, linkedCts.Token);
                     response.EnsureSuccessStatusCode();
 
-                    var stream = await response.Content.ReadAsStreamAsync();
+                    var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
                     var reader = new StreamReader(stream);
                     linkedCts.Token.Register(() =>
                     {
@@ -213,7 +213,7 @@
                     {
                         if (stream.CanRead == false) break;
 
-                        line = await reader.ReadLineAsync();
+                        line = await reader.ReadLineAsync().ConfigureAwait(false);
 
                         if (string.IsNullOrWhiteSpace(line))
                         {
@@ -232,7 +232,7 @@
                     }
 
                     return Task.CompletedTask;
-                }, url, timeOutbySeconds, linkedCts.Token);
+                }, url, timeOutbySeconds, linkedCts.Token).ConfigureAwait(false);
             }
         }
         #endregion
