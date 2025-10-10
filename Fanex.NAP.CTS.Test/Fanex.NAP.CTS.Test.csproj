@@ -128,16 +128,20 @@
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="VaultSharp, Version=1.17.5.1, Culture=neutral, PublicKeyToken=cb3d4aad92b0eded, processorArchitecture=MSIL">
       <HintPath>..\packages\VaultSharp.1.17.5.1\lib\net48\VaultSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AIInsightsServiceTest.cs" />
     <Compile Include="Services\CommonServiceTest.cs" />
     <Compile Include="Services\DangerMonitorServiceTest.cs" />
     <Compile Include="Services\MatchMonitorServiceTest.cs" />
     <Compile Include="Services\RobotReportServiceTest.cs" />
+    <Compile Include="Services\SseStream\SseSenderServiceTest.cs" />
+    <Compile Include="Services\SseStream\SseStreamManagerServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

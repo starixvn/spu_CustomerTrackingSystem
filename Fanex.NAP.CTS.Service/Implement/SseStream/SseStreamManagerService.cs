@@ -18,9 +18,17 @@
             _senderService = new SseSenderService();
         }
 
-        public async Task ListenerAsync(string url, Action<string> onMessage, int timeOutbySeconds = 120, CancellationToken? cancellationToken = null)
+        public SseStreamManagerService(ISseListenerService listener, ISseSenderService sender)
         {
-            await _listenerService.ListenerAsync(url, onMessage, timeOutbySeconds, cancellationToken);
+            _listenerService = listener ?? new SseListenerService();
+            _senderService = sender ?? new SseSenderService();
+        }
+
+        public async Task ListenerAsync(string url, Action<string> onMessage, CancellationToken cancellationToken, int timeOutbySeconds = 120)
+        {
+            await _listenerService
+                .ListenerAsync(url, onMessage, cancellationToken, timeOutbySeconds)
+                .ConfigureAwait(false);
         }
 
         public async Task SenderAsync(HttpContextBase httpContext, CancellationToken cancellationToken, Func<PushEventDelegate, Task[]> taskFactories)
@@ -29,9 +37,9 @@
 
             _senderService.Start(httpContext);
 
-            await _senderService.Process(taskFactories, linkedCts);
+            await _senderService.Process(taskFactories, linkedCts).ConfigureAwait(false);
 
-            await _senderService.Complete();
+            await _senderService.Complete().ConfigureAwait(false);
         }
     }
 }

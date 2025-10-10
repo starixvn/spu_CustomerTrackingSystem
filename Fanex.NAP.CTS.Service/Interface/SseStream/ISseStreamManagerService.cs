@@ -16,7 +16,7 @@
         Task ListenerAsync(
             string url,
             Action<string> onMessage,
-            int timeOutbySeconds = 120,
-            CancellationToken? cancellationToken = null);
+            CancellationToken cancellationToken,
+            int timeOutbySeconds = 120);
     }
 }

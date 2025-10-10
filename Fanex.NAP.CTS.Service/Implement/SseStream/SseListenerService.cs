@@ -14,10 +14,17 @@
         public async Task ListenerAsync(
             string url,
             Action<string> onMessage,
-            int timeOutbySeconds = 120,
-            CancellationToken? cancellationToken = null)
+            CancellationToken cancellationToken,
+            int timeOutbySeconds = 120)
         {
-            await ApiWithHttpClientRotatorHelper.GetServerSentEventAsync(url, onMessage, timeOutbySeconds, cancellationToken);
+            if (string.IsNullOrWhiteSpace(url))
+                throw new ArgumentException("url cannot be null or empty.", nameof(url));
+            if (onMessage == null)
+                throw new ArgumentNullException(nameof(onMessage));
+
+            await ApiWithHttpClientRotatorHelper
+                .GetServerSentEventAsync(url, onMessage, timeOutbySeconds, cancellationToken)
+                .ConfigureAwait(false);
         }
     }
 }
