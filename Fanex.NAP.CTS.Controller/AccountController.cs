@@ -229,23 +229,7 @@
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-
-        [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountInfo, Policy = NAP.Core.Business.Constant.Policy.Read)]
-        public ActionResult GetCustomerProfileFraudInfo(long custId)
-        {
-            var result = _accountService.GetCustomerProfileFraudInfo(custId);
-
-            var fraudCaseName = string.Empty;
-
-            if (result.FraudCaseList != null && result.FraudCaseList.Any())
-            {
-                fraudCaseName = string.Join(", ", result.FraudCaseList.Select(x => x.FraudCaseName));
-            }
-
-            return Json(new { suspiciouseCustomer = result.SuspiciouseCustomer, fraudCases = fraudCaseName }, JsonRequestBehavior.AllowGet);
-        }
-
+       
         [HttpPost]
         public ActionResult GetLastestCustomerClassification(long custId)
         {

@@ -46,14 +46,9 @@
 		<Setting Key="CTS_DC_CustEvidence_GetAffectedEvidences" SpName="CTS_DC_CustEvidence_GetAffectedEvidences" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustEvidence_RemoveAffected" SpName="CTS_DC_CustEvidence_RemoveAffected" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_CustEvidence_RestoreAffected" SpName="CTS_DC_CustEvidence_RestoreAffected" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
-		<Setting Key="CTS_DC_CustEvidence_GetFlaggedFromCustList" SpName="CTS_DC_CustEvidence_GetFlaggedFromCustList" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustEvidence_ValidateMultipleInput" SpName="CTS_DC_CustEvidence_ValidateMultipleInput" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="300" />
-		<Setting Key="CTS_DC_CustEvidence_InsertMultiple" SpName="CTS_DC_CustEvidence_InsertMultiple" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
-		<Setting Key="CTS_DC_CustEvidence_RemoveAllEvidenceByCTSCustIDs" SpName="CTS_DC_CustEvidence_RemoveAllEvidenceByCTSCustIDs" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_CustEvidence_GetFlaggedFromCustList" SpName="CTS_DC_CustEvidence_GetFlaggedFromCustList" DbName="CTSMain.CTS_DataCenter.ctsWeb" />					
 		<Setting Key="CTS_DC_CustEvidence_Get" SpName="CTS_DC_CustEvidence_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustEvidence_GetFlaggedStatus" SpName="CTS_DC_CustEvidence_GetFlaggedStatus" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustEvidenceFromFile_Insert" SpName="CTS_DC_CustEvidenceFromFile_Insert" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
-		<Setting Key="CTS_DC_CustEvidenceQueue_Insert" SpName="CTS_DC_CustEvidenceQueue_Insert" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_CustEvidence_GetFlaggedStatus" SpName="CTS_DC_CustEvidence_GetFlaggedStatus" DbName="CTSMain.CTS_DataCenter.ctsWeb" />				
 		<Setting Key="CTS_DC_CustEvidence_CheckCleanCust" SpName="CTS_DC_CustEvidence_CheckCleanCust" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 	</Function>
 

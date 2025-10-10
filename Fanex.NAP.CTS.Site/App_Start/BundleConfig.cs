@@ -59,9 +59,7 @@
 
             RegisterCustomerCategoryBundles(bundles);        
 
-            RegisterProblemAccountMonitorDetailBundles(bundles);
-
-            RegisterImportEvidencesBundles(bundles);
+            RegisterProblemAccountMonitorDetailBundles(bundles);      
 
             RegisterAssociatedAccountMonitorBundles(bundles);
 
@@ -231,19 +229,7 @@
                     "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
                     "~/Content/scss/MultipleSelect/jquery.multiselect.css",
                     "~/Content/scss/pages/problem-account-monitor/problem-account-monitor.css"));
-        }
-
-        private static void RegisterImportEvidencesBundles(BundleCollection bundles)
-        {
-            bundles.Add(new ScriptBundle("~/import-evidences-scripts").Include(
-               "~/Scripts/ImportEvidences/index.js",
-                "~/Scripts/tagify/jquery.tagify.min.js",
-                "~/Scripts/tagify/tagify.min.js"));
-
-            bundles.Add(new StyleBundle("~/import-evidences-styles").Include(
-                    "~/Content/scss/pages/import-evidences/import-evidences.css",
-                    "~/Content/scss/vendors/jquery-ui/base/tagify.css"));
-        }
+        }       
 
         private static void RegisterAssociationDetectionBundles(BundleCollection bundles)
         {

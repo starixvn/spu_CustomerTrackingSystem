@@ -1,13 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions>
-	<Function Name="MatchMonitor">
-		<Setting Key="FS_Rpt_MatchMonitor_Get"  SpName="FS_Rpt_MatchMonitor_Get" DbName="DBFS.bodb_FraudSensor.wsv_cts" />
-		<Setting Key="FS_League_Get" SpName="FS_League_Get" DbName="DBFS.bodb_FraudSensor.wsv_cts" />
-		<Setting Key="FS_Rpt_MatchMonitorVerification_Update" SpName="FS_Rpt_MatchMonitorVerification_Update" DbName="DBFS.bodb_FraudSensor.wsv_cts" />
-		<Setting Key="Age_SelBalanceUpDay" SpName="Age_SelBalanceUpDay" DbName="DBCTS.bodb02.wsv_nap" />
-		<Setting Key="FS_Rpt_MatchMonitorNotes_Update" SpName="FS_Rpt_MatchMonitorNotes_Update" DbName="DBFS.bodb_FraudSensor.wsv_cts" />
-	</Function>
-  
 	<Function name="Common">
 		<Setting Key="CTS_CustomerClass_GetByCustId" SpName="CTS_CustomerClass_GetByCustId" DbName="DBCTS.bodb02.wsv_cts" />	
 		<Setting Key="CTS_CustomerStatistics_GetPerformance_ByBettype" SpName="CTS_CustomerStatistics_GetPerformance_ByBettype" DbName="DBVR2.bodb_VR2Model.wsv_cts" />
@@ -15,8 +7,7 @@
 		<Setting Key="CTS_CustomerStatistics_GetPerformance_BySport" SpName="CTS_CustomerStatistics_GetPerformance_BySport" DbName="DBVR2.bodb_VR2Model.wsv_cts" />			
 		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged" DbName="DBCUST.CustDB.wsv_nap" />
 		<Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged" DbName="DBCUST.CustDB.wsv_nap" />
-		<Setting Key="Acc_CustomerUpdateCustomerClass" SpName="Acc_CustomerUpdateCustomerClass" DbName="DBCUST.CustDB.wsv_nap" TimeOut="300" />	
-		<Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get" DbName="DBFS.bodb_FraudSensor.wsv_cts" />		
+		<Setting Key="Acc_CustomerUpdateCustomerClass" SpName="Acc_CustomerUpdateCustomerClass" DbName="DBCUST.CustDB.wsv_nap" TimeOut="300" />			
 		<Setting Key="CTS_MatchInfo_Get" SpName="CTS_MatchInfo_Get" DbName="DBCTS.bodb02.wsv_cts" />
 		<Setting Key="CTS_SportBettype_Get" SpName="CTS_SportBettype_Get" DbName="DBCTS.bodb02.wsv_cts" />
 		<Setting Key="CTS_LeagueGroup_Get" SpName="CTS_LeagueGroup_Get" DbName="DBCTS.bodb02.wsv_cts" />

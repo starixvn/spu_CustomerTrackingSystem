@@ -6,8 +6,7 @@
 		<Setting Key="CTS_CustomerStatistics_GetPerformanceDaily" SpName="CTS_CustomerStatistics_GetPerformanceDaily" DbName="DBVR2.bodb_VR2Model.wsv_cts" />
 		<Setting Key="CTS_CustomerStatistics_GetPerformance_BySport" SpName="CTS_CustomerStatistics_GetPerformance_BySport" DbName="DBVR2.bodb_VR2Model.wsv_cts" />				
 		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged" DbName="DBCUST.CustDB.wsv_nap" TimeOut="300" />
-		<Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged" DbName="DBCUST.CustDB.wsv_nap" TimeOut="300" />		
-		<Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get" DbName="DBFS.bodb_FraudSensor.wsv_cts" />				
+		<Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged" DbName="DBCUST.CustDB.wsv_nap" TimeOut="300" />							
 		<Setting Key="CTS_MatchInfo_Get" SpName="CTS_MatchInfo_Get" DbName="DBCTS.bodb02.wsv_cts" />
 		<Setting Key="CTS_LeagueGroup_Get" SpName="CTS_LeagueGroup_Get" DbName="DBCTS.bodb02.wsv_cts" />
 		<Setting Key="CTS_ValidateUsername" SpName="CTS_ValidateUsername" DbName="DBCTS.bodb02.wsv_cts" />

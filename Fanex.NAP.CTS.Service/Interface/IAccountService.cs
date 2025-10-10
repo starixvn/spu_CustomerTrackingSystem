@@ -39,9 +39,7 @@
 
         List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(long ctsCustId);
 
-        List<CustomerStaticStatusModel> GetCustomerStaticStatus(int listId, bool status);
-
-        CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(long custId);        
+        List<CustomerStaticStatusModel> GetCustomerStaticStatus(int listId, bool status);      
 
         List<TagModel> GetDirectAssociatedAccountTagFlagged(string custIdsAssInfo);            
 

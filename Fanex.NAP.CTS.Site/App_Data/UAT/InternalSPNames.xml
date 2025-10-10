@@ -46,14 +46,9 @@
 		<Setting Key="CTS_DC_CustEvidence_GetAffectedEvidences" SpName="CTS_DC_CustEvidence_GetAffectedEvidences_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustEvidence_RemoveAffected" SpName="CTS_DC_CustEvidence_RemoveAffected_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_CustEvidence_RestoreAffected" SpName="CTS_DC_CustEvidence_RestoreAffected_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
-		<Setting Key="CTS_DC_CustEvidence_GetFlaggedFromCustList" SpName="CTS_DC_CustEvidence_GetFlaggedFromCustList_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustEvidence_ValidateMultipleInput" SpName="CTS_DC_CustEvidence_ValidateMultipleInput_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustEvidence_InsertMultiple" SpName="CTS_DC_CustEvidence_InsertMultiple_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
-		<Setting Key="CTS_DC_CustEvidence_RemoveAllEvidenceByCTSCustIDs" SpName="CTS_DC_CustEvidence_RemoveAllEvidenceByCTSCustIDs_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_CustEvidence_GetFlaggedFromCustList" SpName="CTS_DC_CustEvidence_GetFlaggedFromCustList_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />						
 		<Setting Key="CTS_DC_CustEvidence_Get" SpName="CTS_DC_CustEvidence_Get_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustEvidence_GetFlaggedStatus" SpName="CTS_DC_CustEvidence_GetFlaggedStatus_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustEvidenceFromFile_Insert" SpName="CTS_DC_CustEvidenceFromFile_Insert_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
-		<Setting Key="CTS_DC_CustEvidenceQueue_Insert" SpName="CTS_DC_CustEvidenceQueue_Insert_xtest" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
+		<Setting Key="CTS_DC_CustEvidence_GetFlaggedStatus" SpName="CTS_DC_CustEvidence_GetFlaggedStatus_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />				
 		<Setting Key="CTS_DC_CustEvidence_CheckCleanCust" SpName="CTS_DC_CustEvidence_CheckCleanCust_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 	</Function>
 

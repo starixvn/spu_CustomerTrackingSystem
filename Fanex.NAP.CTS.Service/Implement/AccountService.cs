@@ -150,17 +150,7 @@
 
             return _repository.Fetch<CustomerStaticStatusModel>(criteria)?.ToList() ?? new List<CustomerStaticStatusModel>();
         }
-
-        public CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(long custId)
-        {
-            var criteria = new CustomerProfileFraudInfoCriteria
-            {
-                CustId = custId
-            };
-
-            return _repository.Get<CustomerProfileFraudInfoModel>(criteria);
-        }
-
+       
         public List<TagModel> GetDirectAssociatedAccountTagFlagged(string custIdsAssInfo)
         {
             var criteria = new GetDirectAssociatedAccountTagFlaggedCriteria
