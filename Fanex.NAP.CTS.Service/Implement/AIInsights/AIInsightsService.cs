@@ -44,18 +44,25 @@
 
             var messageQueue = new BlockingCollection<string>();
 
-            var listenerTask = Task.Run(async () => await _sseStreamManagerService.ListenerAsync(
-                ConfigSettings.AIInsightsAnalyzeChartsUrl,
-                onMessage: msg => { messageQueue.TryAdd(msg, 100, linkedCts.Token); },
-                timeOutbySeconds: 1800,
-                linkedCts.Token));
+            var listenerTask = Task.Run(
+                async () => await _sseStreamManagerService.ListenerAsync(
+                    ConfigSettings.AIInsightsAnalyzeChartsUrl,
+                    onMessage: msg => { messageQueue.TryAdd(msg, 100, linkedCts.Token); },
+                    timeOutbySeconds: ConfigSettings.AIAnalyzeRequestTimeout,
+                    linkedCts.Token)
+                .ConfigureAwait(false),
+                linkedCts.Token);
 
-            var senderTask = Task.Run(async () => await _sseStreamManagerService.SenderAsync(
-                httpContext,
-                linkedCts.Token,
-                (pushMsgDelegate) => new Task[] { ProcessAnalyzeChartsAsync(messageQueue, pushMsgDelegate, linkedCts.Token) }));
+            var senderTask = Task.Run(
+                async () => await _sseStreamManagerService.SenderAsync(
+                    httpContext,
+                    linkedCts.Token,
+                    (pushMsgDelegate) =>
+                        new Task[] { ProcessAnalyzeChartsAsync(messageQueue, pushMsgDelegate, linkedCts.Token) })
+                .ConfigureAwait(false),
+                linkedCts.Token);
 
-            await Task.WhenAny(listenerTask, senderTask);
+            await Task.WhenAny(listenerTask, senderTask).ConfigureAwait(false);
             linkedCts.Cancel();
         }
 
@@ -65,7 +72,7 @@
             {
                 foreach (var msg in msgQueue.GetConsumingEnumerable(cancellationToken))
                 {
-                    await SendChartProcessingEventAsync(msg, pushMsgDelegate);
+                    await SendChartProcessingEventAsync(msg, pushMsgDelegate).ConfigureAwait(false);
                 }
             }
             catch (OperationCanceledException)

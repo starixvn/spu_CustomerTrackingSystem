@@ -49,7 +49,7 @@
 
             PushEventDelegate pushDelegate = async (data) =>
             {
-                await PushEventAsync(data, cancellationTokenSource.Token);
+                await PushEventAsync(data, cancellationTokenSource.Token).ConfigureAwait(false);
             };
 
             _keepAliveTask = Task.Run(async () => await MaintainConnectionAsync(cancellationTokenSource));

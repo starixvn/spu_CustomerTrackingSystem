@@ -63,7 +63,7 @@
         {
             try
             {
-                var fileUploadResponse = GetUploadFileResponse();
+                var fileUploadResponse = GetUploadFileResponse(TabId);
                 var fileName = fileUploadResponse?.file_name ?? string.Empty;
 
                 return Json(fileName, JsonRequestBehavior.AllowGet);
@@ -83,7 +83,7 @@
 
             try
             {
-                var fileResponse = GetUploadFileResponse();
+                var fileResponse = GetUploadFileResponse(TabId);
                 data = await _aiInsightsService.AnalyzeSummary(fileResponse);
             }
             catch (Exception ex)
@@ -107,7 +107,7 @@
 
             try
             {
-                var fileResponse = GetUploadFileResponse();
+                var fileResponse = GetUploadFileResponse(TabId);
                 response = await _aiInsightsService.AskChatbot(fileResponse, question);
 
                 await SaveChatMessageAsync(question, response.answer);
@@ -147,7 +147,7 @@
             try
             {
                 var result = await _aiInsightsService.UploadFile(uploadFile, UserId);
-                var cacheKey = GetUploadFileCacheKey();
+                var cacheKey = GetUploadFileCacheKey(TabId);
                 await _memoryCacheService.PushValueAsync(cacheKey, result?.response, CACHE_EXPIRATION_HOURS);
 
                 return CreateSuccessResponse(result);
@@ -175,9 +175,7 @@
                     throw new ArgumentException("Tab ID is required.", nameof(tabId));
                 }
 
-                Request?.Headers.Add("X-Tab-Id", tabId);
-
-                var fileResponse = GetUploadFileResponse();
+                var fileResponse = GetUploadFileResponse(tabId);
 
                 if (fileResponse == null)
                 {
@@ -233,9 +231,9 @@
 
         #region File Management
 
-        private AIInsightsFileUploadDataModel GetUploadFileResponse()
+        private AIInsightsFileUploadDataModel GetUploadFileResponse(string tabId)
         {
-            var cacheKey = GetUploadFileCacheKey();
+            var cacheKey = GetUploadFileCacheKey(tabId);
             var fileResponse = _memoryCacheService.GetValue<AIInsightsFileUploadDataModel>(cacheKey);
 
             if (ConfigSettings.IsWriteLogInfoAIInsight)
@@ -246,9 +244,9 @@
             return fileResponse;
         }
 
-        private string GetUploadFileCacheKey()
+        private string GetUploadFileCacheKey(string tabId)
         {
-            return string.Format(Consts.AIInsightsUploadFileKey, UserId, TabId);
+            return string.Format(Consts.AIInsightsUploadFileKey, UserId, tabId);
         }
 
         #endregion
