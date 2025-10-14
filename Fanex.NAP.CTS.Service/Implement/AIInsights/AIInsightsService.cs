@@ -54,7 +54,7 @@
             var listenerTask = Task.Run(
                 async () => await _sseStreamManagerService.ListenerAsync(
                     ConfigSettings.AIInsightsAnalyzeChartsUrl,
-                    onMessage: msg => { messageQueue.TryAdd(msg, 100, linkedCts.Token); },
+                    msg => { messageQueue.TryAdd(msg, 100, linkedCts.Token); },
                     linkedCts.Token,
                     timeOutbySeconds: ConfigSettings.AIAnalyzeRequestTimeout)
                 .ConfigureAwait(false),
