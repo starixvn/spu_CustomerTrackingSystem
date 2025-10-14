@@ -92,12 +92,11 @@
 
     function GetHostName(url) {
         if (url != null) {
-            var m = url.match(/^http:\/\/[^/]+/);
+            let m = url.match(/^https?:\/\/[^/]+/);
             return m ? m[0] : null;
         }
 
         return null;
-        // common.showError(errMsg);
     }
 
     function RenderIPInformation(obj) {

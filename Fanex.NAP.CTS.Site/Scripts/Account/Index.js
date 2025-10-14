@@ -266,7 +266,9 @@
                 if (response !== null) {
                     domElements.spanBot.html(FormatNumber(response.BotTrans, response.BotTransPercentage, 1));
                     domElements.spanInvalidBrowserInfo.html(FormatNumber(response.InvalidBrowser, response.InvalidBrowserPercentage, 1));
-                    domElements.spanDesktopMobileUsage.html(FormatNumber(response.DesktopUsage, response.MobileUsage, 2));
+                    domElements.spanDesktopMobileUsage.html(FormatNumber(response.DesktopUsage, response.MBWebUsage, 2)
+                        + " / "
+                        + FormatNumberUnit(response.MBAppUsage));
                     domElements.spanIPDevice.html(FormatNumber(response.IPCount, response.DeviceCount, 2));
                     domElements.spanTotalLogin.html(FormatNumber(response.LoginCount, null, 3));
                 }

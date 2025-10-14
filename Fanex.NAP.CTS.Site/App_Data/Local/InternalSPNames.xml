@@ -9,7 +9,7 @@
 	</Function>
 
 	<Function Name="Common">
-		<Setting Key="DCS_DC_Transaction_GetHistory" SpName="DCS_DC_Transaction_GetHistory" DbName="CTSMain.DCS_DataCenter.ctsWeb" />
+		<Setting Key="DCS_DC_Transaction_GetHistory" SpName="DCS_DC_Transaction_GetHistory_xtest" DbName="CTSMain.DCS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_Common_ValidateUsername" SpName="CTS_DC_Common_ValidateUsername" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_Common_GetSites" SpName="CTS_DC_Common_GetSites" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_Common_CustomerClass_Get" SpName="CTS_DC_Common_CustomerClass_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
@@ -76,7 +76,7 @@
 		<Setting Key="CTS_DC_RPT_AssociationDetection" SpName="CTS_DC_RPT_AssociationDetection" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_Association_Primary_GetCustEdge" SpName="CTS_DC_Association_Primary_GetCustEdge" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_Association_Agent_GetCustEdge" SpName="CTS_DC_Association_Agent_GetCustEdge" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_Association_DetectGroup" SpName="CTS_DC_Association_DetectGroup" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_Association_DetectGroup" SpName="CTS_DC_Association_DetectGroup_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_AssociationDetection_GetDetail" SpName="CTS_DC_AssociationDetection_GetDetail" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 	</Function>
 
@@ -122,7 +122,7 @@
 	</Function>
 
 	<Function name="LatestTransaction">
-		<Setting Key="DCS_DC_Transaction_GetLatest" SpName="DCS_DC_Transaction_GetLatest" DbName="CTSMain.DCS_DataCenter.ctsWeb" />
+		<Setting Key="DCS_DC_Transaction_GetLatest" SpName="DCS_DC_Transaction_GetLatest_xtest" DbName="CTSMain.DCS_DataCenter.ctsWeb" />
 	</Function>
 
 	<Function name="MatchMonitor">
@@ -164,9 +164,9 @@
 	<Function name="CustomerProfile">
 		<Setting Key="CTS_DC_CustInfo_Profile_GetAssociationAccount" SpName="CTS_DC_CustInfo_Profile_GetAssociationAccount" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustInfo_Profile_GetEvidence" SpName="CTS_DC_CustInfo_Profile_GetEvidence" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustInfo_Profile_GetLoginStats" SpName="CTS_DC_CustInfo_Profile_GetLoginStats" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustInfo_Profile_GetDate" SpName="CTS_DC_CustInfo_Profile_GetDate" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-		<Setting Key="CTS_DC_CustInfoAgency_Profile_GetDate" SpName="CTS_DC_CustInfoAgency_Profile_GetDate" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustInfo_Profile_GetLoginStats" SpName="CTS_DC_CustInfo_Profile_GetLoginStats_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustInfo_Profile_GetDate" SpName="CTS_DC_CustInfo_Profile_GetDate_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustInfoAgency_Profile_GetDate" SpName="CTS_DC_CustInfoAgency_Profile_GetDate_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 	</Function>
 
 	<Function name="MonitorCTSFunction">

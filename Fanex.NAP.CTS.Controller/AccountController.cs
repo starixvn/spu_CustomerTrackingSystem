@@ -357,10 +357,11 @@
                     InvalidBrowser = data.InvalidBrowser,
                     InvalidBrowserPercentage = data.InvalidBrowserPercentage.ToString("0.00"),
                     DesktopUsage = data.DesktopUsage,
-                    MobileUsage = data.MobileUsage,
+                    MBWebUsage = data.MBWebUsage,
+                    MBAppUsage = data.MBAppUsage,
                     IPCount = data.IP,
                     DeviceCount = data.Device,
-                    LoginCount = data.Login,
+                    LoginCount = data.Login
                 };
 
                 return Json(custProfileLoginStats, JsonRequestBehavior.AllowGet);
@@ -1930,8 +1931,10 @@
                 isVVip = categoryList.Any(x => x.IsVVIP);
                 isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
                 isMultiplePA = categoryList.Any(x => x.IsMultiplePA);
-                int minPriority = classification.Min(c => c.CategoryPriority);
-                usnBackGroundColor = EnumExtensions.GetStringSlow((CategoryColorType)classification.OrderByDescending(x => x.LastModifiedDate).FirstOrDefault(x => x.CategoryPriority == minPriority).ColorTypeID);
+                var minPriority = classification.Min(c => c.CategoryPriority);
+                usnBackGroundColor = EnumExtensions.GetStringSlow((CategoryColorType)classification
+                    .OrderByDescending(x => x.LastModifiedDate)
+                    .FirstOrDefault(x => x.CategoryPriority == minPriority).ColorTypeID);
             }
 
             var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustID, roleID);
