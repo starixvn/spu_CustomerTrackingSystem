@@ -685,13 +685,6 @@
       <DependentUpon>problem-account-management.css</DependentUpon>
     </Content>
     <Content Include="Content\scss\pages\problem-account-management\problem-account-management.scss" />
-    <None Include="Content\scss\pages\import-evidences\import-evidences.scss" />
-    <Content Include="Content\scss\pages\import-evidences\import-evidences.css">
-      <DependentUpon>import-evidences.scss</DependentUpon>
-    </Content>
-    <Content Include="Content\scss\pages\import-evidences\import-evidences.min.css">
-      <DependentUpon>import-evidences.css</DependentUpon>
-    </Content>
     <Content Include="Content\scss\pages\robot-report\robot-report.css">
       <DependentUpon>robot-report.scss</DependentUpon>
     </Content>
@@ -1127,7 +1120,6 @@
     <Content Include="Scripts\highcharts\full-screen.js" />
     <Content Include="Scripts\highcharts\highcharts.js" />
     <Content Include="Scripts\Home\SearchPage.js" />
-    <Content Include="Scripts\ImportEvidences\index.js" />
     <Content Include="Scripts\LatestTransaction\index.js" />
     <Content Include="Scripts\ManageSubscriber\index.js" />
     <Content Include="Scripts\MatchMonitor\detail.js" />
@@ -1154,7 +1146,6 @@
     <Content Include="Scripts\tagify\jquery.tagify.min.js" />
     <Content Include="Scripts\tagify\tagify.min.js" />
     <Content Include="Scripts\TransactionReport\index.js" />
-    <Content Include="Views\EvidenceManagement\Index.cshtml" />
     <Content Include="Views\AssociatedAccountMonitor\Index.cshtml" />
     <Content Include="Views\Account\BettingStatistic\TurnoverByBetType.cshtml" />
     <Content Include="Views\Account\BettingStatistic\TurnoverBySport.cshtml" />
