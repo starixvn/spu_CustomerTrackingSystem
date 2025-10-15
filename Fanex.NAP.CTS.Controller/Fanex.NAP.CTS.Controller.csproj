@@ -204,7 +204,6 @@
     <Compile Include="ErrorsController.cs" />
     <Compile Include="FSFunctionKeys.cs" />
     <Compile Include="HomeController.cs" />
-    <Compile Include="EvidenceManagementController.cs" />
     <Compile Include="ActionFilter\TrackingFunctionUsageFilterAttribute.cs" />
     <Compile Include="MatchMonitorController.cs" />
     <Compile Include="ProblemAccountManagementController.cs" />

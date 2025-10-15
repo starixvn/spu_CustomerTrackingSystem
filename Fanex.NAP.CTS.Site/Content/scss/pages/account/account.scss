@@ -370,11 +370,19 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             border-bottom: 2px solid $account-limited;
         }
 
+        &.border-green-line {
+            border-bottom: 2px solid $account-limited;
+        }
+
         &.border-gray {
             border-bottom: 2px solid #C0C0C0;
         }
 
         &.border-yellow {
+            border-bottom: 2px solid $account-high;
+        }
+
+        &.border-yellow-line {
             border-bottom: 2px solid $account-high;
         }
 
@@ -856,7 +864,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             .login-information {
                 .info-block {
                     display: grid;
-                    grid-template-columns: 134px repeat(1, 1fr);
+                    grid-template-columns: 180px repeat(1, 1fr);
                 }
 
                 .right {

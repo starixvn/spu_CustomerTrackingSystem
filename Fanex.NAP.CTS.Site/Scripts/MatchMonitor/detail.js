@@ -524,11 +524,7 @@ function MatchMonitorDetail() {
         });
     }
 
-    function GetGameNumbers(values, betIdPattern) {
-        if (domElements.sportType === SportTypeConst.Badminton) {
-            return values;
-        }
-
+    function GetGameNumbers(values, betIdPattern) {       
         numbers = ParseNumbersFromBetIDs(values, betIdPattern);
         if (numbers.length) return numbers;
 
@@ -2603,7 +2599,6 @@ function MatchMonitorDetail() {
 
         let betText = txtBetType;
 
-
         if (betText.includes('X')) {
             let firstGame = GetFirstSelectedGame();
 
@@ -2613,9 +2608,8 @@ function MatchMonitorDetail() {
                 betText = betText.replace('X', 'X');
             }
         }
+        
         domElements.spanSportBetTypeInfo.text(`${domElements.sportName} - ${betText} -`);
-
-
 
         currentType = Number(domElements.cbbTypeOfTickets.val());
 
@@ -3583,7 +3577,7 @@ function MatchMonitorDetail() {
 
         if (domElements.mapX != "0" && selectedSport != SportTypeConst.Basketball) {
             domElements.cbbMapX.val(domElements.mapX).trigger('change');
-            domElements.cbbBetType.val(`${domElements.betTypeID}_0`).trigger('change');
+            domElements.cbbBetType.val(`${domElements.betTypeID}_0`).trigger('change');            
         } else {
             domElements.cbbBetType.val(`${domElements.betTypeID}_${domElements.betIDToString}`).trigger('change');
         }
