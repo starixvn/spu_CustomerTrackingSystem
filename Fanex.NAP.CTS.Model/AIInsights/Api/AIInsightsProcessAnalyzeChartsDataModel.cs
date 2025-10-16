@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.AIInsights.Api
 {
-    public class AIInsightsAnalyzeChartsDataModel
+    public class AIInsightsProcessAnalyzeChartsDataModel
     {
         public VisualizationModel visualization_response { get; set; }
 

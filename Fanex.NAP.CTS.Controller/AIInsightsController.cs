@@ -163,26 +163,37 @@
             }
         }
 
+        [HttpPost]
+        public async Task<ActionResult> StartAnalyzeCharts()
+        {
+            object response = null;
+
+            try
+            {
+                var fileResponse = GetUploadFileResponse(TabId);
+                response = await _aiInsightsService.StartAnalyzeChartsAsync(fileResponse);
+            }
+            catch (Exception ex)
+            {
+                LogExtension.LogError("CTS - AI Insights StartAnalyzeCharts", ex);
+            }
+
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpGet]
         [AsyncTimeout(1800000)] // timeout 30 mintues
 
-        public async Task StreamAnalyzeCharts(string tabId, CancellationToken cancellationToken)
+        public async Task StreamAnalyzeCharts(string streamToken, CancellationToken cancellationToken)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(tabId))
+                if (string.IsNullOrWhiteSpace(streamToken))
                 {
-                    throw new ArgumentException("Tab ID is required.", nameof(tabId));
+                    throw new ArgumentException("StreamToken is required.", nameof(streamToken));
                 }
 
-                var fileResponse = GetUploadFileResponse(tabId);
-
-                if (fileResponse == null)
-                {
-                    throw new InvalidOperationException("No file found. Please upload a file first.");
-                }
-                
-                await _aiInsightsService.AnalyzeChartsSseStream(fileResponse, HttpContext, cancellationToken);
+                await _aiInsightsService.StreamAnalyzeChartsAsync(streamToken, HttpContext, cancellationToken);
 
             }
             catch (AggregateException agr)

@@ -62,6 +62,7 @@ function AIInsights() {
     };
 
     let $contentWrapper = EnsureContentWrapperExists();
+    let streamToken = null;
     let evtSource = null;
 
     // Initialization
@@ -283,8 +284,11 @@ function AIInsights() {
         SkipReCheckin();
 
         AnalyzeSummary()
-            .always(function () {
-                AnalyzeChartsSSEConnection();
+            .done(function () {
+                AnalyzeChartsGetSSEId()
+                    .done(function () {
+                        AnalyzeChartsSSEConnection();
+                    });
                 EnableReCheckin();
             });
     }
@@ -331,13 +335,16 @@ function AIInsights() {
         domElements.btnGenerate.prop('disabled', true);
     }
 
-    function HandleAnalysisComplete() {
-        common.closeLoading();
-        ResizePlotlyCharts(domElements.divVisualization);
-    }
-
-    function HandleAnalysisError() {
-        common.closeLoading();
+    function AnalyzeChartsGetSSEId() {
+        return $.ajax(common.modifyRelativeUrl('AIInsights/StartAnalyzeCharts'), {
+            type: 'POST',
+            headers: {
+                "X-Tab-Id": common.getTabId()
+            },
+            success: function (data) {
+                streamToken = data;
+            }
+        });
     }
 
     // Server-Sent Events AnalyzeCharts
@@ -347,10 +354,10 @@ function AIInsights() {
         }
 
         evtSource = new EventSource(
-            common.modifyRelativeUrl(`AIInsights/StreamAnalyzeCharts?tabId=${common.getTabId()}`)
+            common.modifyRelativeUrl(`AIInsights/StreamAnalyzeCharts?streamToken=${streamToken}`)
         );
 
-        evtSource.onopen = () => console.log("✅ Connected");
+        // evtSource.onopen = () => console.log("✅ Connected");
         evtSource.onerror = HandleEventSourceError;
         evtSource.onmessage = HandleEventSourceMessage;
     }
@@ -359,14 +366,16 @@ function AIInsights() {
         if (evtSource) {
             evtSource.close();
             evtSource = null;
-            console.log("✅ Connection closed");
+            domElements.headerChartSection.removeClass('loading');
+            domElements.btnGenerate.prop('disabled', false);
+            // console.log("✅ Connection closed");
         }
     }
 
     function HandleEventSourceMessage(e) {
         try {
             const response = JSON.parse(e.data);
-            console.log("Realtime data:", response);
+            // console.log("Realtime data:", response);
             ProcessEventResponse(response);
         } catch (error) {
             console.error("Error parsing SSE message:", error);
@@ -384,27 +393,29 @@ function AIInsights() {
     function HandleAnalyzeChartsEvent(response) {
         switch (response.EventStatus) {
             case AIInsightEventStatus.Started:
-                console.log("Analyze Charts started");
+                // console.log("Analyze Charts started");
                 $('#chart-section .card-body').remove();
                 break;
             case AIInsightEventStatus.Processing:
                 HandleChartsProcessing(response.Data);
                 break;
             case AIInsightEventStatus.Completed:
-                console.log("Analyze Charts completed");
+                // console.log("Analyze Charts completed");
                 domElements.headerChartSection.removeClass('loading');
                 domElements.btnGenerate.prop('disabled', false);
                 evtSource.close();
                 break;
             case AIInsightEventStatus.Failed:
-                common.showError('Sorry Analyze Charts failed: ');
+                // common.showError('Sorry Analyze Charts failed: ');
+                domElements.headerChartSection.removeClass('loading');
+                domElements.btnGenerate.prop('disabled', false);
                 evtSource.close();
                 break;
         }
     }
 
     function HandleChartsProcessing(chart) {
-        console.log("Analyze Charts processing");
+        // console.log("Analyze Charts processing");
         const $chartSection = domElements.chartSection;
         const $card = CreateChartCard(chart);
         $chartSection.append($card);

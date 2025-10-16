@@ -4,19 +4,18 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.AIInsights;
     using Fanex.NAP.CTS.Model.AIInsights.Api;
-    using System.Threading;
     using System.Threading.Tasks;
 
     public class AIInsightsApiForwarderService : IAIInsightsApiForwarderService
     {
-        public async Task<AIInsightsAnalyzeChartsResponseModel> AnalyzeCharts(AIInsightsAnalyzeRequestModel request, string url, CancellationToken cancellationToken)
+        public async Task<AIInsightsStartAnalyzeChartsResponseModel> StartAnalyzeChartsAsync(AIInsightsAnalyzeRequestModel request, string url)
         {
             if (string.IsNullOrEmpty(url))
             {
-                return new AIInsightsAnalyzeChartsResponseModel();
+                return new AIInsightsStartAnalyzeChartsResponseModel();
             }
 
-            var response = await ApiWithHttpClientRotatorHelper.PostAsync<AIInsightsAnalyzeChartsResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout, cancellationToken);
+            var response = await ApiWithHttpClientRotatorHelper.PostAsync<AIInsightsStartAnalyzeChartsResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout);
 
             return response;
         }
