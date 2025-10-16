@@ -189,7 +189,7 @@
             {
                 await HandleExceptionWhileExecutingAsync(async () =>
                 {
-                    request.Headers.Accept.ParseAdd("text/event-stream");
+                    request.Headers.Accept.ParseAdd("application/x-ndjson");
 
                     var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, linkedCts.Token);
                     response.EnsureSuccessStatusCode();
@@ -206,28 +206,33 @@
                         catch { }
                     });
 
-                    string line;
                     string dataBuffer = "";
 
-                    while (!reader.EndOfStream && !linkedCts.IsCancellationRequested)
+                    while (!linkedCts.Token.IsCancellationRequested)
                     {
-                        if (stream.CanRead == false) break;
+                        if (!stream.CanRead) break;
 
-                        line = await reader.ReadLineAsync().ConfigureAwait(false);
+                        var line = await reader.ReadLineAsync().ConfigureAwait(false);
+                        if (line == null) break;
 
                         if (string.IsNullOrWhiteSpace(line))
                         {
                             if (!string.IsNullOrEmpty(dataBuffer))
                             {
-                                onMessage?.Invoke(dataBuffer.Trim());
-                                dataBuffer = "";
+                                var message = dataBuffer.Trim();
+                                dataBuffer = string.Empty;
                             }
                             continue;
                         }
 
+                        // SSE event: "data: ..."
                         if (line.StartsWith("data:", StringComparison.OrdinalIgnoreCase))
                         {
                             dataBuffer += line.Substring(5).Trim() + "\n";
+                        }
+                        else if (line.StartsWith("{") || line.StartsWith("["))
+                        {
+                                onMessage?.Invoke(line.Trim());
                         }
                     }
 
@@ -266,6 +271,10 @@
                 }
 
                 throw ex; // Re-throw unknown cancellation
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 

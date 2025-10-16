@@ -52,6 +52,8 @@
 
         public static string AIInsightsAnalyzeChartsUrl => GetConfigStringByName("AIInsightsAnalyzeChartsUrl");
 
+        public static string AIInsightsAnalyzeChartsSseProcessUrl => GetConfigStringByName("AIInsightsAnalyzeChartsSseProcessUrl");
+
         public static string AIInsightsChatBotUrl => GetConfigStringByName("AIInsightsChatBotUrl");
 
         public static string RedisConnection => GetConfigStringByName("RedisConnection");

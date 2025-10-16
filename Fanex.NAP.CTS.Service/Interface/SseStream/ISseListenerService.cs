@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.CTS.Service.Interface.SseStream
+﻿namespace Fanex.NAP.CTS.Service.Interface.SseStream
 {
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public interface ISseListenerService
     {
         Task ListenerAsync(

@@ -43,9 +43,22 @@
         }
         #endregion
 
-        #region analyze charts with sse stream
+        #region analyze charts
+        public async Task<string> StartAnalyzeChartsAsync(AIInsightsFileUploadDataModel model)
+        {
+            var request = new AIInsightsAnalyzeRequestModel
+            {
+                cache_key = model?.cache_key,
+            };
 
-        public async Task AnalyzeChartsSseStream(AIInsightsFileUploadDataModel model, HttpContextBase httpContext, CancellationToken cancellationToken)
+            var result = await _apiForwarderService.StartAnalyzeChartsAsync(request, ConfigSettings.AIInsightsAnalyzeChartsUrl);
+
+            ValidateResponse(result);
+
+            return result?.response?.stream_token;
+        }
+
+        public async Task StreamAnalyzeChartsAsync(string streamToken, HttpContextBase httpContext, CancellationToken cancellationToken)
         {
             var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
@@ -53,7 +66,7 @@
 
             var listenerTask = Task.Run(
                 async () => await _sseStreamManagerService.ListenerAsync(
-                    ConfigSettings.AIInsightsAnalyzeChartsUrl,
+                    string.Format(ConfigSettings.AIInsightsAnalyzeChartsSseProcessUrl, streamToken),
                     msg => { messageQueue.TryAdd(msg, 100, linkedCts.Token); },
                     linkedCts.Token,
                     timeOutbySeconds: ConfigSettings.AIAnalyzeRequestTimeout)
@@ -97,35 +110,52 @@
 
         private async Task SendChartProcessingEventAsync(string chart, PushEventDelegate pushMsgDelegate)
         {
-            if (chart.Contains("ping")) return;
-
-            var model = JsonConvert.DeserializeObject<AIInsightEventSourceViewModel>(chart);
-
-            if (model.EventName == AIInsightEventName.AnalyzeCharts.ToString())
+            try
             {
-                switch (model.EventStatus)
+                var model = JsonConvert.DeserializeObject<AIInsightsProcessAnalyzeChartsResponseModel>(chart);
+
+                switch (model.type)
                 {
-                    case nameof(AIInsightEventStatus.Processing):
+                    case nameof(AIProcessChartType.chart_ready):
                         {
+                            var aiChartInfo = JsonConvert.DeserializeObject<AIInsightProcessAnalyzeChartsChartInfoModel>(model.chart_data);
+                            var chartInfo = new ChartInfoModel(aiChartInfo);
                             await pushMsgDelegate(
                                 new AIInsightEventSourceViewModel(
                                     AIInsightEventName.AnalyzeCharts,
                                     AIInsightEventStatus.Processing,
-                                    model.Data));
+                                    chartInfo));
                             break;
                         }
-                    default:
+                    case nameof(AIProcessChartType.ready):
                         {
-                            if (Enum.TryParse(model.EventStatus, out AIInsightEventStatus eventStatus))
-                            {
-                                await pushMsgDelegate(
+                            await pushMsgDelegate(
                                     new AIInsightEventSourceViewModel(
                                         AIInsightEventName.AnalyzeCharts,
-                                        eventStatus));
-                            }
+                                        AIInsightEventStatus.Started));
+                            break;
+                        }
+                    case nameof(AIProcessChartType.complete):
+                        {
+                            await pushMsgDelegate(
+                                    new AIInsightEventSourceViewModel(
+                                        AIInsightEventName.AnalyzeCharts,
+                                        AIInsightEventStatus.Completed));
+                            break;
+                        }
+                    case nameof(AIProcessChartType.connected):
+                    default:
+                        {
+                            await pushMsgDelegate(model.message);
                             break;
                         }
                 }
+            }
+            catch (Exception ex)
+            {
+                await pushMsgDelegate(chart);
+
+                throw ex;
             }
         }
         #endregion
