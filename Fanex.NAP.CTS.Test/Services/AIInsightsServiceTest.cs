@@ -36,7 +36,6 @@ namespace Fanex.NAP.CTS.Test.Services
         [TestMethod]
         public async Task AnalyzeChartsSseStream_WhenListenerCompletes_CancelsSenderAndReturns()
         {
-            var model = DummyUpload();
             var callerCts = new CancellationTokenSource();
 
             // Listener: publish one message then complete
@@ -62,7 +61,7 @@ namespace Fanex.NAP.CTS.Test.Services
                    });
                });
 
-            await _service.AnalyzeChartsSseStream(model, _httpContext, callerCts.Token);
+            await _service.StreamAnalyzeChartsAsync("stream_token", _httpContext, callerCts.Token);
 
             var finished = await Task.WhenAny(senderCancelled.Task, Task.Delay(2000));
             Assert.AreSame(senderCancelled.Task, finished, "Sender did not observe cancellation.");
@@ -71,7 +70,6 @@ namespace Fanex.NAP.CTS.Test.Services
         [TestMethod]
         public async Task AnalyzeChartsSseStream_WhenCallerTokenAlreadyCancelled_FinishesPromptly()
         {
-            var model = DummyUpload();
             var callerCts = new CancellationTokenSource();
             callerCts.Cancel();
 
@@ -81,7 +79,7 @@ namespace Fanex.NAP.CTS.Test.Services
             _sseStreamManagerService.Setup(x => x.SenderAsync(It.IsAny<HttpContextBase>(), It.IsAny<CancellationToken>(), It.IsAny<Func<PushEventDelegate, Task[]>>()))
                .Returns(Task.FromCanceled(new CancellationToken(true)));
 
-            var completed = Task.WhenAny(_service.AnalyzeChartsSseStream(model, _httpContext, callerCts.Token), Task.Delay(1000));
+            var completed = Task.WhenAny(_service.StreamAnalyzeChartsAsync("stream_token", _httpContext, callerCts.Token), Task.Delay(1000));
             Assert.AreSame(await completed, await completed, "Method did not complete in time when token was already cancelled.");
         }
 
@@ -120,7 +118,7 @@ namespace Fanex.NAP.CTS.Test.Services
                    });
                });
 
-            await _service.AnalyzeChartsSseStream(model, _httpContext, callerCts.Token);
+            await _service.StreamAnalyzeChartsAsync("stream_token", _httpContext, callerCts.Token);
         }
     }
 }
