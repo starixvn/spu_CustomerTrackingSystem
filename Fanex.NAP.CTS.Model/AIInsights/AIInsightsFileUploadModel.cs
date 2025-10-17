@@ -4,7 +4,7 @@ namespace Fanex.NAP.CTS.Model.AIInsights
     {
         public string TempFolder => "~/TempFiles";
 
-        public int MaxFileSizeBytes => 50 * 1024 * 1024; // 50MB
+        public int MaxFileSizeBytes => 200 * 1024 * 1024; // 50MB
 
         public string[] AllowedExtensions => new[] { ".xls", ".xlsx" };
     }

@@ -211,10 +211,11 @@
                 throw new InvalidDataException($"Exceeds the allowed limit of {_aiInsightsFileUploadModel.MaxFileSizeBytes / (1024 * 1024)} MB.");
             }
 
+            var fileBase64 = await Task.Run(() => uploadFile.ConvertExcelToCsvBase64Optimized());
             var request = new AIInsightsFileUploadRequestModel
             {
-                file_base64image = uploadFile.FileBaseToBase64StringChunked(),
-                file_name = Path.GetFileName(uploadFile.FileName),
+                file_base64image = fileBase64,
+                file_name = Path.GetFileNameWithoutExtension(uploadFile.FileName) + ".csv",
                 session_id = session_id
             };
 
@@ -225,6 +226,9 @@
             WriteLog($"Response: {nameof(UploadFile)}", result);
 
             ValidateResponse(result);
+
+            result.response.file_name = Path.GetFileName(uploadFile.FileName);
+
             return result;
         }
 
