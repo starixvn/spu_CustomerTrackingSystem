@@ -166,7 +166,7 @@
         [HttpPost]
         public async Task<ActionResult> StartAnalyzeCharts()
         {
-            object response = null;
+            string response = null;
 
             try
             {

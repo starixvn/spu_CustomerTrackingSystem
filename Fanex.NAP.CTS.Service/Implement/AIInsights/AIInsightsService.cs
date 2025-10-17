@@ -97,8 +97,12 @@
                     await SendChartProcessingEventAsync(msg, pushMsgDelegate).ConfigureAwait(false);
                 }
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException ex)
             {
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    throw ex;
+                }
                 // Normal cancellation - no logging needed
             }
             catch (Exception ex)
