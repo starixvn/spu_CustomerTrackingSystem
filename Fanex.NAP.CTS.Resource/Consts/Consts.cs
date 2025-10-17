@@ -683,7 +683,8 @@ namespace Fanex.NAP.CTS.Resource.Consts
         public static readonly HashSet<string> AIInsightFileSupportExtensions = new HashSet<string>
         {
             ".xls",
-            ".xlsx"
+            ".xlsx",
+            ".csv"
         };
     }
 }

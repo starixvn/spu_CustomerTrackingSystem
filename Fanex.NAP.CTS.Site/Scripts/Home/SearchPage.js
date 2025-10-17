@@ -101,7 +101,7 @@ function SearchPage() {
                 return;
             }
 
-            if (/\.(xls|xlsx)$/i.test(file.name)) {
+            if (/\.(xls|xlsx|csv)$/i.test(file.name)) {
                 const dataTransfer = new DataTransfer();
 
                 errorMessage.addClass('hide').text('');

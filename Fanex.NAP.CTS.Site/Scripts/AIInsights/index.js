@@ -2,7 +2,7 @@ function AIInsights() {
     // Constants and Configuration
     const CONFIG = {
         MAX_FILE_SIZE_MB: 200,
-        SUPPORTED_FILE_EXTENSIONS: /\.(xls|xlsx)$/i,
+        SUPPORTED_FILE_EXTENSIONS: /\.(xls|xlsx|csv)$/i,
         NO_FILE_UPLOADED: "No file uploaded",
         RECONNECT_DELAY: 3000,
         CHAT_SCROLL_DELAY: 100,
