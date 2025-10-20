@@ -12,6 +12,7 @@
 
     public static class ApiWithHttpClientRotatorHelper
     {
+        private const string MEDIA_JSON_TYPE = "application/json";
         #region Post
         public static async Task<TResult> PostAsync<TResult>(string url, object param, double timeOutbySeconds = 120, CancellationToken? cancellationToken = null)
         {
@@ -23,7 +24,7 @@
                         timeoutCts)
             {
                 var json = JsonConvert.SerializeObject(param);
-                using (var content = new StringContent(json, Encoding.UTF8, "application/json"))
+                using (var content = new StringContent(json, Encoding.UTF8, MEDIA_JSON_TYPE))
                 {
                     return await HandleExceptionWhileExecutingAsync(async () =>
                     {
@@ -122,12 +123,12 @@
 
             stream.Position = 0;
             var content = new StreamContent(stream);
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            content.Headers.ContentType = new MediaTypeHeaderValue(MEDIA_JSON_TYPE);
 
             return content;
         }
 
-        private static void WriteEscapedJsonStringFromStringBuilder(StreamWriter writer, StringBuilder sb, int bufferSize = 3 * 1024) // chunk 3MB
+        private static void WriteEscapedJsonStringFromStringBuilder(StreamWriter writer, StringBuilder sb, int bufferSize = 10 * 1024 * 1024) // chunk 10MB
         {
             char[] buffer = new char[bufferSize];
 
@@ -139,14 +140,7 @@
                 int length = Math.Min(bufferSize, totalLength - offset);
                 sb.CopyTo(offset, buffer, 0, length);
 
-                var text = new string(buffer)
-                             .Replace("\"", "\\\"")
-                             .Replace("\\", "\\\\")
-                             .Replace("\b", "\\b")
-                             .Replace("\f", "\\f")
-                             .Replace("\n", "\\n")
-                             .Replace("\r", "\\r")
-                             .Replace("\t", "\\t");
+                var text = new string(buffer, 0, length).EscapeJsonString();
 
                 writer.Write(text);
             }
@@ -157,17 +151,22 @@
         private static void WriteEscapedJsonString(StreamWriter writer, string value)
         {
             writer.Write('"');
-            var text = value
-                             .Replace("\"", "\\\"")
-                             .Replace("\\", "\\\\")
-                             .Replace("\b", "\\b")
-                             .Replace("\f", "\\f")
-                             .Replace("\n", "\\n")
-                             .Replace("\r", "\\r")
-                             .Replace("\t", "\\t");
+            var text = value.EscapeJsonString();
 
             writer.Write(text);
             writer.Write('"');
+        }
+
+        private static string EscapeJsonString(this string val)
+        {
+            return val
+                    .Replace("\"", "\\\"")
+                    .Replace("\\", "\\\\")
+                    .Replace("\b", "\\b")
+                    .Replace("\f", "\\f")
+                    .Replace("\n", "\\n")
+                    .Replace("\r", "\\r")
+                    .Replace("\t", "\\t");
         }
         #endregion
 

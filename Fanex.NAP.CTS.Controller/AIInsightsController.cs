@@ -55,7 +55,8 @@
 
         public ActionResult Index()
         {
-            return View();
+            var model = new AIInsightsFileUploadModel();
+            return View(model);
         }
 
         [HttpGet]

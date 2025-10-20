@@ -56,6 +56,19 @@
 
         public static string AIInsightsChatBotUrl => GetConfigStringByName("AIInsightsChatBotUrl");
 
+        public static string AIUploadSupportExtension => GetConfigStringByName("AIUploadSupportExtension");
+
+        public static int AIUploadMaxFileSizeMB
+        {
+            get
+            {
+                var size = 50;
+                var configSize = GetConfigStringByName("AIUploadMaxFileSizeMB");
+                int.TryParse(configSize, out size);
+                return size == 0 ? 50 : size;
+            }
+        }
+
         public static string RedisConnection => GetConfigStringByName("RedisConnection");
 
         public static bool IsWriteLogInfoAIInsight

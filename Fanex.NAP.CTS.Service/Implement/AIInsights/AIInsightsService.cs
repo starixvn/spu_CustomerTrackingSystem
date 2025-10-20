@@ -208,7 +208,7 @@
 
             if (uploadFile.ContentLength > _aiInsightsFileUploadModel.MaxFileSizeBytes)
             {
-                throw new InvalidDataException($"Exceeds the allowed limit of {_aiInsightsFileUploadModel.MaxFileSizeBytes / (1024 * 1024)} MB.");
+                throw new InvalidDataException($"Exceeds the allowed limit of {_aiInsightsFileUploadModel.MaxFileSizeMB} MB.");
             }
 
             var fileBase64 = await Task.Run(() => uploadFile.ConvertExcelToCsvBase64Optimized());
