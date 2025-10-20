@@ -2,88 +2,93 @@
 {
     using ExcelDataReader;
     using System;
-    using System.Collections.Concurrent;
+    using System.Buffers;
     using System.Collections.Generic;
     using System.IO;
     using System.IO.Compression;
     using System.Linq;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Reflection;
     using System.Text;
     using System.Web;
     using System.Xml;
+    using static Fanex.NAP.CTS.Core.Extentions.Extentions;
 
     public static class FileExtensions
     {
-        private const int ChunkSize = 10 * 1024 * 1024; // 10MB chunks for Base64
-        private const string CSV_Extension = ".csv";
+        private const int CHUNK_SIZE = 10 * 1024 * 1024; // 10MB chunks for Base64 for csv processing
+        private const int ROW_BATCH_SIZE = 10_000; // number of rows per batch for xls, xlsx processing
+        private const string CSV_EXTENSION = ".csv";
+        private const string MEDIA_JSON_TYPE = "application/json";
 
-        public static StringBuilder FileBaseToBase64StringChunked(this HttpPostedFileBase fileBase)
+        public static IEnumerable<byte[]> FileBaseToChunked(this HttpPostedFileBase fileBase)
         {
-            var sb = new StringBuilder();
-            var buffer = new byte[ChunkSize];
-            int bytesRead;
+            if (fileBase == null || fileBase.InputStream == null)
+                throw new ArgumentNullException(nameof(fileBase));
 
-            while ((bytesRead = fileBase.InputStream.Read(buffer, 0, buffer.Length)) > 0)
+            var pool = ArrayPool<byte>.Shared;
+            byte[] buffer = pool.Rent(CHUNK_SIZE);
+
+            try
             {
-                // Convert chunk to Base64
-                if (bytesRead == ChunkSize)
+                int bytesRead;
+                while ((bytesRead = fileBase.InputStream.Read(buffer, 0, CHUNK_SIZE)) > 0)
                 {
-                    sb.Append(Convert.ToBase64String(buffer));
-                }
-                else
-                {
-                    // Handle last chunk which may be smaller
-                    var lastChunk = new byte[bytesRead];
-                    Array.Copy(buffer, lastChunk, bytesRead);
-                    sb.Append(Convert.ToBase64String(lastChunk));
+                    // Copy only the valid portion
+                    var chunk = new byte[bytesRead];
+                    Buffer.BlockCopy(buffer, 0, chunk, 0, bytesRead);
+                    yield return chunk;
                 }
             }
-
-            return sb;
+            finally
+            {
+                pool.Return(buffer);
+            }
         }
 
-        public static StringBuilder ConvertExcelToCsvBase64Optimized(this HttpPostedFileBase file)
+        public static IEnumerable<byte[]> ConvertHttpPostedExcelFileToCsvChunked(this HttpPostedFileBase file)
         {
             if (file == null || file.ContentLength == 0)
                 throw new ArgumentException("Invalid file upload.");
 
             string ext = Path.GetExtension(file.FileName).ToLowerInvariant();
 
-            if (ext == CSV_Extension)
-                return file.FileBaseToBase64StringChunked(); // Existing method for CSV
-
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-            var sb = new StringBuilder();
-            var csvBuffer = new MemoryStream();
-            var base64Chunks = new ConcurrentQueue<string>();
-
-            switch (ext)
+            if (ext == CSV_EXTENSION)
             {
-                case ".xlsx":
-                    ConvertXlsxStream(file.InputStream, csvBuffer, base64Chunks);
-                    break;
-
-                case ".xls":
-                    ConvertXlsStream(file.InputStream, csvBuffer, base64Chunks);
-                    break;
-
-                default:
-                    throw new InvalidOperationException("Unsupported file type.");
+                foreach (var item in file.FileBaseToChunked())
+                {
+                    yield return item;
+                }
             }
+            else
+            {
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            // Flush remaining bytes
-            if (csvBuffer.Length > 0)
-                AppendBase64Chunk(csvBuffer, base64Chunks, flushAll: true);
+                switch (ext)
+                {
+                    case ".xlsx":
+                        foreach (var item in ConvertXlsxStreamToChunked(file.InputStream))
+                        {
+                            yield return item;
+                        }
+                        break;
 
-            // Combine all Base64 chunks
-            while (base64Chunks.TryDequeue(out var chunk))
-                sb.Append(chunk);
+                    case ".xls":
+                        foreach (var item in ConvertXlsStreamToChunked(file.InputStream))
+                        {
+                            yield return item;
+                        }
+                        break;
 
-            return sb;
+                    default:
+                        throw new InvalidOperationException("Unsupported file type.");
+                }
+            }
         }
 
         #region XLSX (OpenXML, SAX)
-        private static void ConvertXlsxStream(Stream xlsxStream, MemoryStream csvBuffer, ConcurrentQueue<string> base64Chunks)
+        private static IEnumerable<byte[]> ConvertXlsxStreamToChunked(Stream xlsxStream)
         {
             using (var archive = new ZipArchive(xlsxStream, ZipArchiveMode.Read, leaveOpen: true))
             {
@@ -95,22 +100,41 @@
                 using (var sheetStream = sheetEntry.Open())
                 using (var reader = XmlReader.Create(sheetStream, new XmlReaderSettings { IgnoreWhitespace = true }))
                 {
-                    WriteUtf8BomOnce(csvBuffer);
-                    ProcessSheetRows(reader, sharedStrings, csvBuffer, base64Chunks);
+                    yield return WriteUtf8BomOnce();
+                    foreach (var item in ProcessSheetRowsBatch(reader, sharedStrings))
+                    {
+                        yield return item;
+                    }
+                    ;
                 }
             }
         }
 
-        private static void ProcessSheetRows(XmlReader reader, string[] sharedStrings, MemoryStream csvBuffer, ConcurrentQueue<string> base64Chunks)
+        private static IEnumerable<byte[]> ProcessSheetRowsBatch(XmlReader reader, string[] sharedStrings)
         {
             char delimiter = ',';
+            var sb = new StringBuilder();
+            int count = 0;
 
             while (reader.Read())
             {
                 if (!IsRowStart(reader)) continue;
+
                 var rowText = ReadRow(reader, sharedStrings, delimiter);
-                WriteCsvRow(csvBuffer, base64Chunks, rowText);
+                sb.AppendLine(rowText);
+                count++;
+
+                if (count >= ROW_BATCH_SIZE)
+                {
+                    yield return Encoding.UTF8.GetBytes(sb.ToString());
+                    sb.Clear();
+                    count = 0;
+                }
             }
+
+            // Return leftover rows
+            if (sb.Length > 0)
+                yield return Encoding.UTF8.GetBytes(sb.ToString());
         }
 
         private static bool IsRowStart(XmlReader reader)
@@ -163,20 +187,10 @@
             return value;
         }
 
-        private static void WriteCsvRow(MemoryStream csvBuffer, ConcurrentQueue<string> base64Chunks, string rowText)
+        private static byte[] WriteUtf8BomOnce()
         {
-            byte[] lineBytes = Encoding.UTF8.GetBytes(rowText + "\r\n");
-            csvBuffer.Write(lineBytes, 0, lineBytes.Length);
-
-            if (csvBuffer.Length >= ChunkSize)
-                AppendBase64Chunk(csvBuffer, base64Chunks);
-        }
-
-        private static void WriteUtf8BomOnce(MemoryStream csvBuffer)
-        {
-            if (csvBuffer.Length > 0) return;
             var bom = Encoding.UTF8.GetPreamble();
-            csvBuffer.Write(bom, 0, bom.Length);
+            return bom;
         }
 
         private static string[] LoadSharedStrings(ZipArchive archive)
@@ -215,26 +229,43 @@
         #endregion
 
         #region XLS (BIFF) using ExcelDataReader
-        private static void ConvertXlsStream(Stream xlsStream, MemoryStream csvBuffer, ConcurrentQueue<string> base64Chunks)
+        private static IEnumerable<byte[]> ConvertXlsStreamToChunked(Stream xlsStream)
         {
             using (var reader = ExcelReaderFactory.CreateReader(xlsStream))
             {
 
                 do
                 {
-                    ProcessSheet(reader, csvBuffer, base64Chunks);
+                    foreach (var item in ProcessSheetBatch(reader))
+                    {
+                        yield return item;
+                    }
                 }
                 while (reader.NextResult());
             }
         }
 
-        private static void ProcessSheet(IExcelDataReader reader, MemoryStream csvBuffer, ConcurrentQueue<string> base64Chunks)
+        private static IEnumerable<byte[]> ProcessSheetBatch(IExcelDataReader reader)
         {
+            var sb = new StringBuilder();
+            int count = 0;
+
             while (reader.Read())
             {
                 string rowText = BuildCsvRow(reader);
-                WriteCsvRow(csvBuffer, base64Chunks, rowText);
+                sb.AppendLine(rowText);
+                count++;
+
+                if (count >= ROW_BATCH_SIZE)
+                {
+                    yield return Encoding.UTF8.GetBytes(sb.ToString());
+                    sb.Clear();
+                    count = 0;
+                }
             }
+
+            if (sb.Length > 0)
+                yield return Encoding.UTF8.GetBytes(sb.ToString());
         }
 
         private static string BuildCsvRow(IExcelDataReader reader)
@@ -254,36 +285,133 @@
         }
         #endregion
 
-        #region Base64 Chunk
-        private static void AppendBase64Chunk(MemoryStream csvBuffer, ConcurrentQueue<string> base64Chunks, bool flushAll = false)
+        #region Create StreamContent
+        public static StreamContent CreateFileStreamContentFromModel(this HttpPostedFileBase file, object model, string nameOfFileBase)
         {
-            csvBuffer.Position = 0;
-            long totalBytes = csvBuffer.Length;
-            long bytesToEncode = flushAll ? totalBytes : (totalBytes / 3) * 3;
-
-            if (bytesToEncode > 0)
+            var stream = new MemoryStream();
+            using (var writer = new StreamWriter(stream, Encoding.UTF8, 1024, leaveOpen: true))
             {
-                var chunk = new byte[bytesToEncode];
-                csvBuffer.Read(chunk, 0, (int)bytesToEncode);
+                writer.Write("{");
 
-                // Encode chunk parallel-safe
-                string base64 = Convert.ToBase64String(chunk);
-                base64Chunks.Enqueue(base64);
+                var props = model.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                bool first = true;
+
+                foreach (var prop in props)
+                {
+                    var value = prop.GetValue(model);
+                    if (value == null && prop.Name != nameOfFileBase)
+                    {
+                        continue;
+                    }
+
+                    if (!first)
+                    {
+                        writer.Write(",");
+                    }
+                    first = false;
+
+                    writer.Write($"\"{prop.Name}\":");
+
+                    switch (value)
+                    {
+                        case string str:
+                            WriteEscapedJsonString(writer, str);
+                            break;
+                        case int i:
+                            writer.Write(i.ToString());
+                            break;
+                        case null when prop.Name == nameOfFileBase:
+                            {
+                                WriteEscapedJsonStringFromHttpPostedFileBase(writer, file);
+                                break;
+                            }
+                        case StringBuilder sb:
+                            WriteEscapedJsonStringFromStringBuilder(writer, sb);
+                            break;
+                        default:
+                            writer.Write($"\"{value.ToString()}\""); // fallback
+                            break;
+                    }
+                }
+
+                writer.Write("}");
+                writer.Flush();
             }
 
-            long remainingBytes = totalBytes - bytesToEncode;
-            var remaining = new MemoryStream();
+            stream.Position = 0;
 
-            if (remainingBytes > 0)
+            var content = new StreamContent(stream);
+            content.Headers.ContentType = new MediaTypeHeaderValue(MEDIA_JSON_TYPE);
+
+            return content;
+        }
+
+        private static void WriteEscapedJsonStringFromHttpPostedFileBase(StreamWriter writer, HttpPostedFileBase file)
+        {
+            if (file == null || file.ContentLength == 0)
+                throw new ArgumentException("Invalid file upload.");
+
+            writer.Write('"');
+
+            byte[] leftover = new byte[2]; // max 2 byte leftover for Base64
+            int leftoverCount = 0;
+            char[] base64Buffer = ArrayPool<char>.Shared.Rent(4 * CHUNK_SIZE / 3 + 8);
+
+            try
             {
-                var leftover = new byte[remainingBytes];
-                csvBuffer.Read(leftover, 0, (int)remainingBytes);
-                remaining.Write(leftover, 0, (int)remainingBytes);
+                foreach (var chunk in ConvertHttpPostedExcelFileToCsvChunked(file))
+                {
+                    int offset = 0;
+                    int length = chunk.Length;
+
+                    if (leftoverCount > 0)
+                    {
+                        byte[] combined = new byte[leftoverCount + length];
+                        Buffer.BlockCopy(leftover, 0, combined, 0, leftoverCount);
+                        Buffer.BlockCopy(chunk, 0, combined, leftoverCount, length);
+
+                        offset = 0;
+                        length = combined.Length;
+
+                        int fullLength = length / 3 * 3;
+                        int base64Len = Convert.ToBase64CharArray(combined, offset, fullLength, base64Buffer, 0);
+                        writer.Write(base64Buffer, 0, base64Len);
+
+                        leftoverCount = length - fullLength;
+                        if (leftoverCount > 0)
+                        {
+                            Buffer.BlockCopy(combined, fullLength, leftover, 0, leftoverCount);
+                        }
+                    }
+                    else
+                    {
+                        // Encode current chunk
+                        int fullLen = length / 3 * 3;
+                        int b64Len = Convert.ToBase64CharArray(chunk, 0, fullLen, base64Buffer, 0);
+                        writer.Write(base64Buffer, 0, b64Len);
+
+                        leftoverCount = length - fullLen;
+                        if (leftoverCount > 0)
+                        {
+                            Buffer.BlockCopy(chunk, fullLen, leftover, 0, leftoverCount);
+                        }
+                    }
+                }
+
+                // Encode remaining leftover
+                if (leftoverCount > 0)
+                {
+                    int b64Len = Convert.ToBase64CharArray(leftover, 0, leftoverCount, base64Buffer, 0);
+                    writer.Write(base64Buffer, 0, b64Len);
+                }
+            }
+            finally
+            {
+                ArrayPool<char>.Shared.Return(base64Buffer);
             }
 
-            csvBuffer.SetLength(0);
-            remaining.Position = 0;
-            remaining.CopyTo(csvBuffer);
+            writer.Write('"');
+            writer.Flush();
         }
         #endregion
     }

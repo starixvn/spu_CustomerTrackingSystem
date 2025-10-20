@@ -4,6 +4,7 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.AIInsights;
     using Fanex.NAP.CTS.Model.AIInsights.Api;
+    using System.Net.Http;
     using System.Threading.Tasks;
 
     public class AIInsightsApiForwarderService : IAIInsightsApiForwarderService
@@ -44,14 +45,14 @@
             return response;
         }
 
-        public async Task<AIInsightsFileUploadResponseModel> UploadFile(AIInsightsFileUploadRequestModel request, string url)
+        public async Task<AIInsightsFileUploadResponseModel> UploadFile(StreamContent request, string url)
         {
             if (string.IsNullOrEmpty(url))
             {
                 return new AIInsightsFileUploadResponseModel();
             }
 
-            var response = await ApiWithHttpClientRotatorHelper.PostWithStreamWritterAsync<AIInsightsFileUploadResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout);
+            var response = await ApiWithHttpClientRotatorHelper.PostWithStreamConttentAsync<AIInsightsFileUploadResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout);
 
             return response;
         }

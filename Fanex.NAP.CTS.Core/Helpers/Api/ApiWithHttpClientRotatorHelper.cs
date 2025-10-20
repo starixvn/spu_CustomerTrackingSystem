@@ -9,6 +9,7 @@
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using static Fanex.NAP.CTS.Core.Extentions.Extentions;
 
     public static class ApiWithHttpClientRotatorHelper
     {
@@ -53,6 +54,25 @@
         #endregion
 
         #region PostWithStreamWritter
+        public static async Task<TResult> PostWithStreamConttentAsync<TResult>(string url, StreamContent streamContent, double timeOutbySeconds = 120)
+        {
+            var web = HttpClientRotator.GetClient();
+
+            using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(timeOutbySeconds)))
+            {
+                var response = await web.PostAsync(url, streamContent, cts.Token);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(await response.Content.ReadAsStringAsync());
+                }
+
+                var result = await response.Content.ReadAsStringAsync();
+
+                return JsonConvert.DeserializeObject<TResult>(result);
+            }
+        }
+
         public static async Task<TResult> PostWithStreamWritterAsync<TResult>(string url, object param, double timeOutbySeconds = 120)
         {
             var web = HttpClientRotator.GetClient();
@@ -126,61 +146,6 @@
             content.Headers.ContentType = new MediaTypeHeaderValue(MEDIA_JSON_TYPE);
 
             return content;
-        }
-
-        private static void WriteEscapedJsonStringFromStringBuilder(StreamWriter writer, StringBuilder sb, int bufferSize = 10 * 1024 * 1024) // chunk 10MB
-        {
-            char[] buffer = new char[bufferSize];
-            var escaped = new StringBuilder(bufferSize + bufferSize / 10); // preallocate ~10% overhead
-
-            writer.Write('"');
-
-            int totalLength = sb.Length;
-
-            for (int offset = 0; offset < totalLength; offset += bufferSize)
-            {
-                int length = Math.Min(bufferSize, totalLength - offset);
-                sb.CopyTo(offset, buffer, 0, length);
-
-                escaped.Clear();
-
-                for (int i = 0; i < length; i++)
-                {
-                    escaped.AppendEscapedJsonChar(buffer[i]);
-                }
-
-                writer.Write(escaped);
-            }
-
-            writer.Write('"');
-        }
-
-        private static void WriteEscapedJsonString(StreamWriter writer, string value)
-        {
-            writer.Write('"');
-            var sb = new StringBuilder(value.Length + value.Length / 10); // pre-allocate ~10% overhead
-            foreach (char c in value)
-            {
-                AppendEscapedJsonChar(sb, c);
-            }
-
-            writer.Write(sb);
-            writer.Write('"');
-        }
-
-        private static void AppendEscapedJsonChar(this StringBuilder sb, char c)
-        {
-            switch (c)
-            {
-                case '\\': sb.Append("\\\\"); break;
-                case '"': sb.Append("\\\""); break;
-                case '\b': sb.Append("\\b"); break;
-                case '\f': sb.Append("\\f"); break;
-                case '\n': sb.Append("\\n"); break;
-                case '\r': sb.Append("\\r"); break;
-                case '\t': sb.Append("\\t"); break;
-                default: sb.Append(c); break;
-            }
         }
         #endregion
 
