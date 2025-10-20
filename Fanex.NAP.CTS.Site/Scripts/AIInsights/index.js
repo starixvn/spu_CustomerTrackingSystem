@@ -1,14 +1,22 @@
 function AIInsights() {
     // Constants and Configuration
-    const CONFIG = {
-        MAX_FILE_SIZE_MB: 200,
-        SUPPORTED_FILE_EXTENSIONS: /\.(xls|xlsx|csv)$/i,
-        NO_FILE_UPLOADED: "No file uploaded",
-        RECONNECT_DELAY: 3000,
-        CHAT_SCROLL_DELAY: 100,
-        CHART_RESIZE_DELAY: 300,
-        MAX_CHAT_HEIGHT_RATIO: 3
-    };
+    const CONFIG = (() => {
+        const maxFileSizeBytes = parseInt($('#divAIMaxFileSizeBytes').text()) || 50 * 1024 * 1024; // Default to 50MB
+        const maxFileSizeMB = parseInt($('#divAIUploadMaxFileSizeMB').text()) || 50; // Default to 50MB
+        const allowedFileExtensions = $('#divAIAllowedExtensions').text() || '.xls,.xlsx,.csv';
+        const exts = allowedFileExtensions.replace(/\./g, '').replace(/,/g, '|');
+        const supportedFileExtensions = new RegExp(`\\.(${exts})$`, 'i');
+
+        return {
+            MAX_FILE_SIZE_BYTES: maxFileSizeBytes,
+            MAX_FILE_SIZE_MB: maxFileSizeMB,
+            SUPPORTED_FILE_EXTENSIONS: supportedFileExtensions,
+            NO_FILE_UPLOADED: "No file uploaded",
+            CHAT_SCROLL_DELAY: 100,
+            CHART_RESIZE_DELAY: 300,
+            MAX_CHAT_HEIGHT_RATIO: 3
+        };
+    })();
 
     const AIInsightEventName = {
         AnalyzeStart: 'AnalyzeStart',
@@ -196,8 +204,7 @@ function AIInsights() {
             return false;
         }
 
-        const maxSize = CONFIG.MAX_FILE_SIZE_MB * 1024 * 1024;
-        if (file.size > maxSize) {
+        if (file.size > CONFIG.MAX_FILE_SIZE_BYTES) {
             common.showError(`Exceeds the allowed limit of ${CONFIG.MAX_FILE_SIZE_MB} MB`);
             domElements.fileInput.val('');
             return false;

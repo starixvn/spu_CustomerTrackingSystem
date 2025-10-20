@@ -1,16 +1,19 @@
 namespace Fanex.NAP.CTS.Controller
 {
+    using Fanex.Logging;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Model.AIInsights;
+    using Fanex.NAP.CTS.Model.AIInsights.Api;
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.ViewModel.Home;
     using System.Collections.Generic;
     using System.Text;
     using System.Web.Mvc;
-    using Fanex.Logging;
 
     [NapSuperAuth]
     public class HomeController : BaseController
@@ -42,7 +45,9 @@ namespace Fanex.NAP.CTS.Controller
                        FSFunctionKeys.ProbationManagement,
                        NAP.Core.Business.Constant.Policy.Read);
 
-            return View(CurrentSession.MenuItemList);
+            var model = new AIInsightsFileUploadModel();
+
+            return View(model);
         }
 
         public override string BaseControllerName { get => Consts.MenuItemHome; }
@@ -66,42 +71,6 @@ namespace Fanex.NAP.CTS.Controller
             ViewBag.Message = "Your contact page.";
 
             return View();
-        }
-
-        [HttpGet]
-        public ActionResult Search()
-        {
-            return View(new SearchResultViewModel { SearchResults = new List<SearchResultModel>(), InputValue = string.Empty });
-        }
-
-        private string ValidateUserName(string inputUserName)
-        {
-            var words = inputUserName.Split(new char[] { '$', '@', '-', '(', ')' });
-            var result = new StringBuilder();
-
-            if (words.Length == 1)
-            {
-                result.Append($"{words[0]}*");
-            }
-            else
-            {
-                foreach (var word in words)
-                {
-                    if (!string.IsNullOrWhiteSpace(word))
-                    {
-                        if (word.Length <= 2)
-                        {
-                            result.Append($"{word} ");
-                        }
-                        else
-                        {
-                            result.Append($"+{word}* ");
-                        }
-                    }
-                }
-            }
-
-            return "\'" + result.ToString() + "\'";
         }
 
         public ActionResult UpdateMenuSettingForLoginPartialPage()

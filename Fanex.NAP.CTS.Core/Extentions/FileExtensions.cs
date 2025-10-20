@@ -41,9 +41,6 @@
             return sb;
         }
 
-        /// <summary>
-        /// Convert HttpPostedFileBase (xls or xlsx) to Base64 CSV
-        /// </summary>
         public static StringBuilder ConvertExcelToCsvBase64Optimized(this HttpPostedFileBase file)
         {
             if (file == null || file.ContentLength == 0)
@@ -52,9 +49,7 @@
             string ext = Path.GetExtension(file.FileName).ToLowerInvariant();
 
             if (ext == CSV_Extension)
-            {
-                return file.FileBaseToBase64StringChunked(); // existing method for csv
-            }
+                return file.FileBaseToBase64StringChunked(); // Existing method for CSV
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
@@ -65,32 +60,24 @@
             switch (ext)
             {
                 case ".xlsx":
-                    {
-                        ConvertXlsxStream(file.InputStream, csvBuffer, base64Chunks);
-                        break;
-                    }
+                    ConvertXlsxStream(file.InputStream, csvBuffer, base64Chunks);
+                    break;
+
                 case ".xls":
-                    {
-                        ConvertXlsStream(file.InputStream, csvBuffer, base64Chunks);
-                        break;
-                    }
+                    ConvertXlsStream(file.InputStream, csvBuffer, base64Chunks);
+                    break;
+
                 default:
-                    {
-                        throw new InvalidOperationException("Unsupported file type.");
-                    }
+                    throw new InvalidOperationException("Unsupported file type.");
             }
 
             // Flush remaining bytes
             if (csvBuffer.Length > 0)
-            {
                 AppendBase64Chunk(csvBuffer, base64Chunks, flushAll: true);
-            }
 
             // Combine all Base64 chunks
             while (base64Chunks.TryDequeue(out var chunk))
-            {
                 sb.Append(chunk);
-            }
 
             return sb;
         }
@@ -102,68 +89,101 @@
             {
                 string[] sharedStrings = LoadSharedStrings(archive);
 
-                var sheetEntry = archive.GetEntry("xl/worksheets/sheet1.xml");
-                if (sheetEntry == null)
-                    throw new InvalidOperationException("sheet1.xml not found.");
+                var sheetEntry = archive.GetEntry("xl/worksheets/sheet1.xml")
+                    ?? throw new InvalidOperationException("sheet1.xml not found.");
 
                 using (var sheetStream = sheetEntry.Open())
                 using (var reader = XmlReader.Create(sheetStream, new XmlReaderSettings { IgnoreWhitespace = true }))
                 {
-                    // Write UTF-8 BOM once
-                    if (csvBuffer.Length == 0)
-                    {
-                        var bom = Encoding.UTF8.GetPreamble();
-                        csvBuffer.Write(bom, 0, bom.Length);
-                    }
-
-                    char delimiter = ',';
-
-                    while (reader.Read())
-                    {
-                        if (reader.NodeType == XmlNodeType.Element && reader.Name == "row")
-                        {
-                            var rowBuilder = new StringBuilder();
-
-                            while (reader.Read() && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "row"))
-                            {
-                                if (reader.NodeType == XmlNodeType.Element && reader.Name == "c")
-                                {
-                                    string cellType = reader.GetAttribute("t");
-                                    string value = ReadCellValue(reader);
-
-                                    if (cellType == "s" && int.TryParse(value, out int ssi) && ssi >= 0 && ssi < sharedStrings.Length)
-                                        value = sharedStrings[ssi];
-
-                                    if (value != null)
-                                    {
-                                        if (value.Contains("\"") || value.Contains(delimiter) || value.Contains("\n") || value.Contains("\r"))
-                                            value = "\"" + value.Replace("\"", "\"\"") + "\"";
-                                    }
-                                    else value = "";
-
-                                    if (rowBuilder.Length > 0)
-                                        rowBuilder.Append(delimiter);
-
-                                    rowBuilder.Append(value);
-                                }
-                            }
-
-                            byte[] lineBytes = Encoding.UTF8.GetBytes(rowBuilder.ToString() + "\r\n");
-                            csvBuffer.Write(lineBytes, 0, lineBytes.Length);
-
-                            if (csvBuffer.Length >= ChunkSize)
-                                AppendBase64Chunk(csvBuffer, base64Chunks);
-                        }
-                    }
+                    WriteUtf8BomOnce(csvBuffer);
+                    ProcessSheetRows(reader, sharedStrings, csvBuffer, base64Chunks);
                 }
             }
         }
 
+        private static void ProcessSheetRows(XmlReader reader, string[] sharedStrings, MemoryStream csvBuffer, ConcurrentQueue<string> base64Chunks)
+        {
+            char delimiter = ',';
+
+            while (reader.Read())
+            {
+                if (!IsRowStart(reader)) continue;
+                var rowText = ReadRow(reader, sharedStrings, delimiter);
+                WriteCsvRow(csvBuffer, base64Chunks, rowText);
+            }
+        }
+
+        private static bool IsRowStart(XmlReader reader)
+            => reader.NodeType == XmlNodeType.Element && reader.Name == "row";
+
+        private static string ReadRow(XmlReader reader, string[] sharedStrings, char delimiter)
+        {
+            var rowBuilder = new StringBuilder();
+
+            while (reader.Read())
+            {
+                if (IsRowEnd(reader)) break;
+                if (!IsCellStart(reader)) continue;
+
+                string value = ResolveCellValue(reader, sharedStrings);
+                if (rowBuilder.Length > 0)
+                    rowBuilder.Append(delimiter);
+
+                rowBuilder.Append(value);
+            }
+
+            return rowBuilder.ToString();
+        }
+
+        private static bool IsRowEnd(XmlReader reader)
+            => reader.NodeType == XmlNodeType.EndElement && reader.Name == "row";
+
+        private static bool IsCellStart(XmlReader reader)
+            => reader.NodeType == XmlNodeType.Element && reader.Name == "c";
+
+        private static string ResolveCellValue(XmlReader reader, string[] sharedStrings)
+        {
+            string cellType = reader.GetAttribute("t");
+            string value = ReadCellValue(reader);
+
+            if (cellType == "s" && int.TryParse(value, out int ssi) && ssi >= 0 && ssi < sharedStrings.Length)
+                value = sharedStrings[ssi];
+
+            return EscapeCsvValue(value);
+        }
+
+        private static string EscapeCsvValue(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return "";
+
+            if (value.Contains("\"") || value.Contains(',') || value.Contains('\n') || value.Contains('\r'))
+                return $"\"{value.Replace("\"", "\"\"")}\"";
+
+            return value;
+        }
+
+        private static void WriteCsvRow(MemoryStream csvBuffer, ConcurrentQueue<string> base64Chunks, string rowText)
+        {
+            byte[] lineBytes = Encoding.UTF8.GetBytes(rowText + "\r\n");
+            csvBuffer.Write(lineBytes, 0, lineBytes.Length);
+
+            if (csvBuffer.Length >= ChunkSize)
+                AppendBase64Chunk(csvBuffer, base64Chunks);
+        }
+
+        private static void WriteUtf8BomOnce(MemoryStream csvBuffer)
+        {
+            if (csvBuffer.Length > 0) return;
+            var bom = Encoding.UTF8.GetPreamble();
+            csvBuffer.Write(bom, 0, bom.Length);
+        }
 
         private static string[] LoadSharedStrings(ZipArchive archive)
         {
             var sharedEntry = archive.GetEntry("xl/sharedStrings.xml");
-            if (sharedEntry == null) return Array.Empty<string>();
+            if (sharedEntry == null)
+                return Array.Empty<string>();
 
             var strings = new List<string>();
             using (var stream = sharedEntry.Open())
@@ -175,6 +195,7 @@
                         strings.Add(reader.ReadElementContentAsString());
                 }
             }
+
             return strings.ToArray();
         }
 
@@ -184,9 +205,11 @@
             {
                 if (reader.NodeType == XmlNodeType.Element && reader.Name == "v")
                     return reader.ReadElementContentAsString();
+
                 if (reader.NodeType == XmlNodeType.EndElement && reader.Name == "c")
                     break;
             }
+
             return string.Empty;
         }
         #endregion
@@ -196,28 +219,38 @@
         {
             using (var reader = ExcelReaderFactory.CreateReader(xlsStream))
             {
+
                 do
                 {
-                    while (reader.Read())
-                    {
-                        var rowBuilder = new StringBuilder();
-                        for (int i = 0; i < reader.FieldCount; i++)
-                        {
-                            var value = reader.GetValue(i)?.ToString().Replace("\"", "\"\"");
-                            if (i > 0)
-                                rowBuilder.Append(',');
-
-                            rowBuilder.Append('"').Append(value).Append('"');
-                        }
-
-                        byte[] lineBytes = Encoding.UTF8.GetBytes(rowBuilder.ToString() + "\n");
-                        csvBuffer.Write(lineBytes, 0, lineBytes.Length);
-
-                        if (csvBuffer.Length >= ChunkSize)
-                            AppendBase64Chunk(csvBuffer, base64Chunks);
-                    }
-                } while (reader.NextResult());
+                    ProcessSheet(reader, csvBuffer, base64Chunks);
+                }
+                while (reader.NextResult());
             }
+        }
+
+        private static void ProcessSheet(IExcelDataReader reader, MemoryStream csvBuffer, ConcurrentQueue<string> base64Chunks)
+        {
+            while (reader.Read())
+            {
+                string rowText = BuildCsvRow(reader);
+                WriteCsvRow(csvBuffer, base64Chunks, rowText);
+            }
+        }
+
+        private static string BuildCsvRow(IExcelDataReader reader)
+        {
+            var rowBuilder = new StringBuilder();
+
+            for (int i = 0; i < reader.FieldCount; i++)
+            {
+                string value = EscapeCsvValue(reader.GetValue(i)?.ToString() ?? "");
+                if (i > 0)
+                    rowBuilder.Append(',');
+
+                rowBuilder.Append(value);
+            }
+
+            return rowBuilder.ToString();
         }
         #endregion
 
@@ -230,7 +263,7 @@
 
             if (bytesToEncode > 0)
             {
-                byte[] chunk = new byte[bytesToEncode];
+                var chunk = new byte[bytesToEncode];
                 csvBuffer.Read(chunk, 0, (int)bytesToEncode);
 
                 // Encode chunk parallel-safe
@@ -240,9 +273,10 @@
 
             long remainingBytes = totalBytes - bytesToEncode;
             var remaining = new MemoryStream();
+
             if (remainingBytes > 0)
             {
-                byte[] leftover = new byte[remainingBytes];
+                var leftover = new byte[remainingBytes];
                 csvBuffer.Read(leftover, 0, (int)remainingBytes);
                 remaining.Write(leftover, 0, (int)remainingBytes);
             }
