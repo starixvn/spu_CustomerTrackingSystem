@@ -24,9 +24,6 @@
 
         public static IEnumerable<byte[]> FileBaseToChunked(this HttpPostedFileBase fileBase)
         {
-            if (fileBase == null || fileBase.InputStream == null)
-                throw new ArgumentNullException(nameof(fileBase));
-
             var pool = ArrayPool<byte>.Shared;
             byte[] buffer = pool.Rent(CHUNK_SIZE);
 
@@ -35,7 +32,6 @@
                 int bytesRead;
                 while ((bytesRead = fileBase.InputStream.Read(buffer, 0, CHUNK_SIZE)) > 0)
                 {
-                    // Copy only the valid portion
                     var chunk = new byte[bytesRead];
                     Buffer.BlockCopy(buffer, 0, chunk, 0, bytesRead);
                     yield return chunk;
@@ -361,7 +357,6 @@
             {
                 foreach (var chunk in ConvertHttpPostedExcelFileToCsvChunked(file))
                 {
-                    int offset = 0;
                     int length = chunk.Length;
 
                     if (leftoverCount > 0)
@@ -370,31 +365,25 @@
                         Buffer.BlockCopy(leftover, 0, combined, 0, leftoverCount);
                         Buffer.BlockCopy(chunk, 0, combined, leftoverCount, length);
 
-                        offset = 0;
-                        length = combined.Length;
+                        int fullLen = (leftoverCount + length) / 3 * 3;
+                        int b64Len = Convert.ToBase64CharArray(combined, 0, fullLen, base64Buffer, 0);
+                        writer.Write(base64Buffer, 0, b64Len);
 
-                        int fullLength = length / 3 * 3;
-                        int base64Len = Convert.ToBase64CharArray(combined, offset, fullLength, base64Buffer, 0);
-                        writer.Write(base64Buffer, 0, base64Len);
-
-                        leftoverCount = length - fullLength;
+                        leftoverCount = leftoverCount + length - fullLen;
                         if (leftoverCount > 0)
                         {
-                            Buffer.BlockCopy(combined, fullLength, leftover, 0, leftoverCount);
+                            Buffer.BlockCopy(combined, fullLen, leftover, 0, leftoverCount);
                         }
                     }
                     else
                     {
-                        // Encode current chunk
                         int fullLen = length / 3 * 3;
                         int b64Len = Convert.ToBase64CharArray(chunk, 0, fullLen, base64Buffer, 0);
                         writer.Write(base64Buffer, 0, b64Len);
 
                         leftoverCount = length - fullLen;
                         if (leftoverCount > 0)
-                        {
                             Buffer.BlockCopy(chunk, fullLen, leftover, 0, leftoverCount);
-                        }
                     }
                 }
 
