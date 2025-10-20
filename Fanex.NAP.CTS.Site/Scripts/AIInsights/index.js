@@ -246,6 +246,7 @@ function AIInsights() {
     function HandleUploadStart() {
         common.showLoading();
         domElements.btnGenerate.prop('disabled', true);
+        domElements.sendButton.prop('disabled', true);
     }
 
     function HandleUploadSuccess(response, fileName) {
@@ -254,6 +255,7 @@ function AIInsights() {
             common.showError("Upload failed " + response.message);
         } else {
             domElements.btnGenerate.prop('disabled', false);
+            domElements.sendButton.prop('disabled', false);
             domElements.fileNameLabel.text(fileName);
             common.showSuccess('File uploaded successfully: ' + fileName, 2000);
         }
@@ -330,6 +332,7 @@ function AIInsights() {
                 common.closeLoading();
                 domElements.headerSummarySection.removeClass('loading');
                 domElements.btnGenerate.prop('disabled', false);
+                domElements.sendButton.prop('disabled', false);
                 EnableReCheckin();
             }
         });
@@ -340,6 +343,7 @@ function AIInsights() {
         domElements.headerSummarySection.addClass('loading');
         domElements.headerChartSection.addClass('loading');
         domElements.btnGenerate.prop('disabled', true);
+        domElements.sendButton.prop('disabled', true);
     }
 
     function AnalyzeChartsGetSSEId() {
@@ -375,6 +379,7 @@ function AIInsights() {
             evtSource = null;
             domElements.headerChartSection.removeClass('loading');
             domElements.btnGenerate.prop('disabled', false);
+            domElements.sendButton.prop('disabled', false);
             // console.log("✅ Connection closed");
         }
     }
@@ -410,12 +415,14 @@ function AIInsights() {
                 // console.log("Analyze Charts completed");
                 domElements.headerChartSection.removeClass('loading');
                 domElements.btnGenerate.prop('disabled', false);
+                domElements.sendButton.prop('disabled', false);
                 evtSource.close();
                 break;
             case AIInsightEventStatus.Failed:
                 // common.showError('Sorry Analyze Charts failed: ');
                 domElements.headerChartSection.removeClass('loading');
                 domElements.btnGenerate.prop('disabled', false);
+                domElements.sendButton.prop('disabled', false);
                 evtSource.close();
                 break;
         }
@@ -684,7 +691,9 @@ function AIInsights() {
         domElements.chatInput.on('keypress', function (e) {
             if (e.which === 13 && !e.shiftKey) {
                 e.preventDefault();
-                SendChatMessage();
+                if (domElements.sendButton.prop('disabled') === false) {
+                    SendChatMessage();
+                }
             }
         });
 
