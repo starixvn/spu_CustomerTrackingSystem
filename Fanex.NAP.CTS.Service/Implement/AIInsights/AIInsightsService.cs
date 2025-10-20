@@ -211,19 +211,16 @@
                 throw new InvalidDataException($"Exceeds the allowed limit of {_aiInsightsFileUploadModel.MaxFileSizeMB} MB.");
             }
 
-            var fileBase64 = await Task.Run(() => uploadFile.ConvertExcelToCsvBase64Optimized());
             var request = new AIInsightsFileUploadRequestModel
             {
-                file_base64image = fileBase64,
+                file_base64image = null,
                 file_name = Path.GetFileNameWithoutExtension(uploadFile.FileName) + ".csv",
                 session_id = session_id
             };
 
-            WriteLog($"Request: {nameof(UploadFile)}", $"{request.session_id}_{request.file_name}");
+            var streamContentRequest = await Task.Run(() => uploadFile.CreateFileStreamContentFromModel(request, nameof(request.file_base64image)));
 
-            var result = await _apiForwarderService.UploadFile(request, ConfigSettings.AIInsightsUploadUrl);
-
-            WriteLog($"Response: {nameof(UploadFile)}", result);
+            var result = await _apiForwarderService.UploadFile(streamContentRequest, ConfigSettings.AIInsightsUploadUrl);
 
             ValidateResponse(result);
 
