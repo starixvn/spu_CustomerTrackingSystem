@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Core.Extentions
 {
     using ExcelDataReader;
+    using NPOI.SS.Formula.Functions;
     using System;
     using System.Buffers;
     using System.Collections.Generic;
@@ -18,8 +19,13 @@
     public static class FileExtensions
     {
         private const int CHUNK_SIZE = 10 * 1024 * 1024; // 10MB chunks for Base64 for csv processing
+
         private const int ROW_BATCH_SIZE = 10_000; // number of rows per batch for xls, xlsx processing
+        private const int BASE64_BUFFER_SIZE = 10 * 1024 * 1024; // 10MB chunks for ROW_BATCH_SIZE processing
+
         private const string CSV_EXTENSION = ".csv";
+        private const string XLSX_EXTENSION = ".xlsx";
+        private const string XLS_EXTENSION = ".xls";
         private const string MEDIA_JSON_TYPE = "application/json";
 
         public static IEnumerable<byte[]> FileBaseToChunked(this HttpPostedFileBase fileBase)
@@ -63,14 +69,14 @@
 
                 switch (ext)
                 {
-                    case ".xlsx":
+                    case XLSX_EXTENSION:
                         foreach (var item in ConvertXlsxStreamToChunked(file.InputStream))
                         {
                             yield return item;
                         }
                         break;
 
-                    case ".xls":
+                    case XLS_EXTENSION:
                         foreach (var item in ConvertXlsStreamToChunked(file.InputStream))
                         {
                             yield return item;
@@ -349,9 +355,9 @@
 
             writer.Write('"');
 
-            byte[] leftover = new byte[2]; // max 2 byte leftover for Base64
-            int leftoverCount = 0;
-            char[] base64Buffer = ArrayPool<char>.Shared.Rent(4 * CHUNK_SIZE / 3 + 8);
+            byte[] leftover = new byte[2]; // Store leftover bytes that don't form complete 3-byte groups
+            int leftoverCount = 0; // Number of leftover bytes
+            char[] base64Buffer = ArrayPool<char>.Shared.Rent(BASE64_BUFFER_SIZE);
 
             try
             {
@@ -361,33 +367,43 @@
 
                     if (leftoverCount > 0)
                     {
+                        // Combine leftover bytes with new chunk
                         byte[] combined = new byte[leftoverCount + length];
                         Buffer.BlockCopy(leftover, 0, combined, 0, leftoverCount);
                         Buffer.BlockCopy(chunk, 0, combined, leftoverCount, length);
 
+                        // LOGIC 1: Round down to nearest multiple of 3 for Base64 processing
+                        // Base64 processes data in groups of 3 bytes (3 bytes → 4 characters)
+                        // We need to ensure we only process complete 3-byte groups
                         int fullLen = (leftoverCount + length) / 3 * 3;
-                        int b64Len = Convert.ToBase64CharArray(combined, 0, fullLen, base64Buffer, 0);
-                        writer.Write(base64Buffer, 0, b64Len);
+                        ProcessBase64Chunk(writer, combined, 0, fullLen, base64Buffer);
 
+                        // Calculate new leftover count after processing complete groups
                         leftoverCount = leftoverCount + length - fullLen;
                         if (leftoverCount > 0)
                         {
+                            // Store remaining bytes for next iteration
                             Buffer.BlockCopy(combined, fullLen, leftover, 0, leftoverCount);
                         }
                     }
                     else
                     {
+                        // LOGIC 1: Round down to nearest multiple of 3 for Base64 processing
+                        // Process only complete 3-byte groups, leave remainder for next iteration
                         int fullLen = length / 3 * 3;
-                        int b64Len = Convert.ToBase64CharArray(chunk, 0, fullLen, base64Buffer, 0);
-                        writer.Write(base64Buffer, 0, b64Len);
+                        ProcessBase64Chunk(writer, chunk, 0, fullLen, base64Buffer);
 
+                        // Calculate leftover bytes that don't form complete groups
                         leftoverCount = length - fullLen;
                         if (leftoverCount > 0)
+                        {
+                            // Store remaining bytes for next iteration
                             Buffer.BlockCopy(chunk, fullLen, leftover, 0, leftoverCount);
+                        }
                     }
                 }
 
-                // Encode remaining leftover
+                // Process final leftover bytes with padding
                 if (leftoverCount > 0)
                 {
                     int b64Len = Convert.ToBase64CharArray(leftover, 0, leftoverCount, base64Buffer, 0);
@@ -401,6 +417,32 @@
 
             writer.Write('"');
             writer.Flush();
+        }
+
+        private static void ProcessBase64Chunk(StreamWriter writer, byte[] data, int startIndex, int length, char[] base64Buffer)
+        {
+            // LOGIC 2: Calculate maximum input bytes that fit in output buffer
+            // Base64 ratio: 3 bytes → 4 characters
+            // So 1 character → 3/4 bytes
+            // We need to ensure output doesn't exceed buffer size
+            const int MAX_CHUNK_SIZE = BASE64_BUFFER_SIZE * 3 / 4;
+
+            int processed = 0;
+            while (processed < length)
+            {
+                // Split large data into smaller chunks that fit in buffer
+                // This prevents IndexOutOfRangeException when encoding
+                int chunkSize = Math.Min(length - processed, MAX_CHUNK_SIZE);
+
+                // Convert bytes to Base64 characters
+                int b64Len = Convert.ToBase64CharArray(data, startIndex + processed, chunkSize, base64Buffer, 0);
+
+                // Write Base64 string to output
+                writer.Write(base64Buffer, 0, b64Len);
+                writer.Flush(); // Force flush to reduce memory pressure
+
+                processed += chunkSize;
+            }
         }
         #endregion
     }
