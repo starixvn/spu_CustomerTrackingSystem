@@ -86,8 +86,8 @@ function SearchPage() {
 
     function handleFiles(files) {
         if (files.length > 0) {
-            const maxMBSize = 50;
-            const maxSize = maxMBSize * 1024 * 1024; // 50MB in bytes
+            const maxMBSize = 500;
+            const maxSize = maxMBSize * 1024 * 1024; // 500MB in bytes
             const file = files[0];
 
             if (file.size > maxSize) {

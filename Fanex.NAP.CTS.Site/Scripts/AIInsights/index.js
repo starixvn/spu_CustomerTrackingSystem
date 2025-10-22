@@ -1,7 +1,7 @@
 function AIInsights() {
     // Constants and Configuration
     const CONFIG = {
-        MAX_FILE_SIZE_MB: 50,
+        MAX_FILE_SIZE_MB: 500,
         SUPPORTED_FILE_EXTENSIONS: /\.(xls|xlsx)$/i,
         NO_FILE_UPLOADED: "No file uploaded",
         RECONNECT_DELAY: 3000,
