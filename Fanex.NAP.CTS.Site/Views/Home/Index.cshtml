@@ -55,7 +55,7 @@
                              <span class="file-type">Supported file type: @Model.AllowedExtensions (Limit @Model.MaxFileSizeMB MB per file)</span>
 				         </label>
 
-				         <input id="fileUpload" name="uploadFile" type="file" class="file-input" accept=".xls,.xlsx,.csv" />
+				         <input id="fileUpload" name="uploadFile" type="file" class="file-input" accept="@Model.AllowedExtensions" />
 			         </div>
 
 			         <div class="search-icon-wrapper">
