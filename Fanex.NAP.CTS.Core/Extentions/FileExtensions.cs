@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Core.Extentions
 {
     using ExcelDataReader;
-    using NPOI.SS.Formula.Functions;
     using System;
     using System.Buffers;
     using System.Collections.Generic;
@@ -12,6 +11,7 @@
     using System.Net.Http.Headers;
     using System.Reflection;
     using System.Text;
+    using System.Text.RegularExpressions;
     using System.Web;
     using System.Xml;
     using static Fanex.NAP.CTS.Core.Extentions.Extentions;
@@ -146,19 +146,39 @@
         {
             var rowBuilder = new StringBuilder();
 
+            // First pass: collect all cell values with their column positions
             while (reader.Read())
             {
                 if (IsRowEnd(reader)) break;
                 if (!IsCellStart(reader)) continue;
 
-                string value = ResolveCellValue(reader, sharedStrings);
+                (var value, var columnIndex) = ResolveCellValue(reader, sharedStrings, rowBuilder, delimiter);
+
                 if (rowBuilder.Length > 0)
+                {
                     rowBuilder.Append(delimiter);
+                }
 
                 rowBuilder.Append(value);
             }
 
             return rowBuilder.ToString();
+        }
+
+        private static int GetColumnIndex(string cellRef)
+        {
+            if (string.IsNullOrEmpty(cellRef))
+                return 0;
+
+            // Extract column part (e.g., "C3" -> "C")
+            string columnPart = Regex.Replace(cellRef, @"\d+", "");
+
+            int result = 0;
+            foreach (char c in columnPart)
+            {
+                result = result * 26 + (c - 'A' + 1);
+            }
+            return result - 1; // Convert to 0-based index
         }
 
         private static bool IsRowEnd(XmlReader reader)
@@ -167,15 +187,104 @@
         private static bool IsCellStart(XmlReader reader)
             => reader.NodeType == XmlNodeType.Element && reader.Name == "c";
 
-        private static string ResolveCellValue(XmlReader reader, string[] sharedStrings)
+        private static (string, int) ResolveCellValue(XmlReader reader, string[] sharedStrings, StringBuilder rowBuilder, char delimiter)
         {
-            string cellType = reader.GetAttribute("t");
-            string value = ReadCellValue(reader);
+            (var value, var cellRef, var cellType, var styleRef) = ReadAndAppendIfEmptyCellValue(reader, rowBuilder, delimiter);
+           
+            value = ConvertCellValue(value, cellType, styleRef, sharedStrings);
 
-            if (cellType == "s" && int.TryParse(value, out int ssi) && ssi >= 0 && ssi < sharedStrings.Length)
-                value = sharedStrings[ssi];
+            return (EscapeCsvValue(value), GetColumnIndex(cellRef));
+        }
 
-            return EscapeCsvValue(value);
+        private static string ConvertCellValue(string value, string cellType, string styleRef, string[] sharedStrings)
+        {
+            if (string.IsNullOrEmpty(value))
+                return string.Empty;
+
+            switch (cellType)
+            {
+                case "s": // Shared String
+                    if (int.TryParse(value, out int ssi) && ssi >= 0 && ssi < sharedStrings.Length)
+                    {
+                        value = sharedStrings[ssi];
+                    }
+                    break;
+
+                case "str": // Inline String
+                case "inlineStr": // Inline String (alternative)
+                                  // Value is already the string, no processing needed
+                    break;
+
+                case "n": // Number
+                          // Regular number, no processing needed
+                    break;
+
+                case "d": // Date/DateTime
+                    value = ConvertExcelDateTime(value);
+                    break;
+
+                case "b": // Boolean
+                    value = ConvertBoolean(value);
+                    break;
+
+                case "e": // Error
+                          // Keep error value as is
+                    break;
+
+                case "f": // Formula
+                          // Formula cells - you might want to get the calculated value
+                          // The value is usually the result of the formula
+                    break;
+
+                case null: // No type specified (most common)
+                default:
+                    // Check if it might be a datetime based on numeric value
+                    if (styleRef == "4")
+                    {
+                        value = ConvertExcelDateTime(value);
+                    }
+                    break;
+            }
+
+            return value;
+        }
+
+        private static string ConvertBoolean(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return string.Empty;
+
+            if (value == "1" || value.ToLower() == "true")
+                return "TRUE";
+            if (value == "0" || value.ToLower() == "false")
+                return "FALSE";
+
+            return value;
+        }
+
+        private static string ConvertExcelDateTime(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return string.Empty;
+
+            if (double.TryParse(value, out double serialNumber))
+            {
+                try
+                {
+                    // Excel datetime conversion
+                    DateTime excelEpoch = new DateTime(1900, 1, 1);
+                    DateTime dateTime = excelEpoch.AddDays(serialNumber - 2); // -2 for Excel's leap year bug
+
+                    // Return in your preferred format
+                    return dateTime.ToString("yyyy-MM-dd HH:mm:ss");
+                }
+                catch
+                {
+                    return value; // Return original if conversion fails
+                }
+            }
+
+            return value;
         }
 
         private static string EscapeCsvValue(string value)
@@ -215,18 +324,35 @@
             return strings.ToArray();
         }
 
-        private static string ReadCellValue(XmlReader reader)
+        private static (string value, string cellRef, string cellType, string styleRef) ReadAndAppendIfEmptyCellValue(XmlReader reader, StringBuilder rowBuilder, char delimiter)
         {
+            string cellRef = reader.GetAttribute("r");
+            string cellType = reader.GetAttribute("t");
+            string styleRef = reader.GetAttribute("s");
+
             while (reader.Read())
             {
+                if (reader.NodeType == XmlNodeType.Element && reader.Name == "c")
+                {
+                    rowBuilder.Append(delimiter);
+
+                    cellRef = reader.GetAttribute("r");
+                    cellType = reader.GetAttribute("t");
+                    styleRef = reader.GetAttribute("s");
+                }
+
                 if (reader.NodeType == XmlNodeType.Element && reader.Name == "v")
-                    return reader.ReadElementContentAsString();
+                {
+                    string value = reader.ReadElementContentAsString();
+
+                    return (value ?? string.Empty, cellRef, cellType, styleRef);
+                }
 
                 if (reader.NodeType == XmlNodeType.EndElement && reader.Name == "c")
                     break;
             }
 
-            return string.Empty;
+            return (string.Empty, cellRef, cellType, styleRef);
         }
         #endregion
 
