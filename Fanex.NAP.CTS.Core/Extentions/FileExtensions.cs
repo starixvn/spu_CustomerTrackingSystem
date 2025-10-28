@@ -1,19 +1,16 @@
 ﻿namespace Fanex.NAP.CTS.Core.Extentions
 {
-    using ExcelDataReader;
+    using Sylvan.Data.Excel;
     using System;
     using System.Buffers;
     using System.Collections.Generic;
+    using System.Data.Common;
     using System.IO;
-    using System.IO.Compression;
-    using System.Linq;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Reflection;
     using System.Text;
-    using System.Text.RegularExpressions;
     using System.Web;
-    using System.Xml;
     using static Fanex.NAP.CTS.Core.Extentions.Extentions;
 
     public static class FileExtensions
@@ -70,14 +67,14 @@
                 switch (ext)
                 {
                     case XLSX_EXTENSION:
-                        foreach (var item in ConvertXlsxStreamToChunked(file.InputStream))
+                        foreach (var item in ConvertExcelToCsvChunked(file.InputStream, ExcelWorkbookType.ExcelXml))
                         {
                             yield return item;
                         }
                         break;
 
                     case XLS_EXTENSION:
-                        foreach (var item in ConvertXlsStreamToChunked(file.InputStream))
+                        foreach (var item in ConvertExcelToCsvChunked(file.InputStream, ExcelWorkbookType.Excel))
                         {
                             yield return item;
                         }
@@ -89,210 +86,72 @@
             }
         }
 
-        #region XLSX (OpenXML, SAX)
-        private static IEnumerable<byte[]> ConvertXlsxStreamToChunked(Stream xlsxStream)
+        #region EXCEL (Sylvan)
+        private static IEnumerable<byte[]> ConvertExcelToCsvChunked(Stream xlsxStream, ExcelWorkbookType excelType)
         {
-            using (var archive = new ZipArchive(xlsxStream, ZipArchiveMode.Read, leaveOpen: true))
+            using (var reader = ExcelDataReader.Create(xlsxStream, excelType))
             {
-                string[] sharedStrings = LoadSharedStrings(archive);
+                yield return WriteUtf8BomOnce();
 
-                var sheetEntry = archive.GetEntry("xl/worksheets/sheet1.xml")
-                    ?? throw new InvalidOperationException("sheet1.xml not found.");
-
-                using (var sheetStream = sheetEntry.Open())
-                using (var reader = XmlReader.Create(sheetStream, new XmlReaderSettings { IgnoreWhitespace = true }))
+                foreach (var chunk in ProcessExcelRowsBatch(reader))
                 {
-                    yield return WriteUtf8BomOnce();
-                    foreach (var item in ProcessSheetRowsBatch(reader, sharedStrings))
-                    {
-                        yield return item;
-                    }
-                    ;
+                    yield return chunk;
                 }
             }
         }
 
-        private static IEnumerable<byte[]> ProcessSheetRowsBatch(XmlReader reader, string[] sharedStrings)
+        private static IEnumerable<byte[]> ProcessExcelRowsBatch(DbDataReader reader)
         {
-            char delimiter = ',';
             var sb = new StringBuilder();
-            int count = 0;
+            int rowCount = 0;
+
+            // Write header once
+            WriteHeader(reader, sb);
 
             while (reader.Read())
             {
-                if (!IsRowStart(reader)) continue;
+                WriteRow(reader, sb);
+                rowCount++;
 
-                var rowText = ReadRow(reader, sharedStrings, delimiter);
-                sb.AppendLine(rowText);
-                count++;
-
-                if (count >= ROW_BATCH_SIZE)
+                if (rowCount >= ROW_BATCH_SIZE)
                 {
                     yield return Encoding.UTF8.GetBytes(sb.ToString());
                     sb.Clear();
-                    count = 0;
+                    rowCount = 0;
                 }
             }
 
-            // Return leftover rows
+            // flush remaining rows
             if (sb.Length > 0)
                 yield return Encoding.UTF8.GetBytes(sb.ToString());
         }
 
-        private static bool IsRowStart(XmlReader reader)
-            => reader.NodeType == XmlNodeType.Element && reader.Name == "row";
-
-        private static string ReadRow(XmlReader reader, string[] sharedStrings, char delimiter)
+        private static void WriteHeader(DbDataReader reader, StringBuilder sb)
         {
-            var rowBuilder = new StringBuilder();
-
-            // First pass: collect all cell values with their column positions
-            while (reader.Read())
+            for (int i = 0; i < reader.FieldCount; i++)
             {
-                if (IsRowEnd(reader)) break;
-                if (!IsCellStart(reader)) continue;
-
-                (var value, var columnIndex) = ResolveCellValue(reader, sharedStrings, rowBuilder, delimiter);
-
-                if (rowBuilder.Length > 0)
-                {
-                    rowBuilder.Append(delimiter);
-                }
-
-                rowBuilder.Append(value);
+                if (i > 0) sb.Append(',');
+                sb.Append(EscapeCsv(reader.GetName(i)));
             }
-
-            return rowBuilder.ToString();
+            sb.AppendLine();
         }
 
-        private static int GetColumnIndex(string cellRef)
+        private static void WriteRow(DbDataReader reader, StringBuilder sb)
         {
-            if (string.IsNullOrEmpty(cellRef))
-                return 0;
-
-            // Extract column part (e.g., "C3" -> "C")
-            string columnPart = Regex.Replace(cellRef, @"\d+", "");
-
-            int result = 0;
-            foreach (char c in columnPart)
+            for (int i = 0; i < reader.FieldCount; i++)
             {
-                result = result * 26 + (c - 'A' + 1);
+                if (i > 0) sb.Append(',');
+                sb.Append(EscapeCsv(reader.GetValue(i)?.ToString() ?? ""));
             }
-            return result - 1; // Convert to 0-based index
+            sb.AppendLine();
         }
 
-        private static bool IsRowEnd(XmlReader reader)
-            => reader.NodeType == XmlNodeType.EndElement && reader.Name == "row";
-
-        private static bool IsCellStart(XmlReader reader)
-            => reader.NodeType == XmlNodeType.Element && reader.Name == "c";
-
-        private static (string, int) ResolveCellValue(XmlReader reader, string[] sharedStrings, StringBuilder rowBuilder, char delimiter)
-        {
-            (var value, var cellRef, var cellType, var styleRef) = ReadAndAppendIfEmptyCellValue(reader, rowBuilder, delimiter);
-           
-            value = ConvertCellValue(value, cellType, styleRef, sharedStrings);
-
-            return (EscapeCsvValue(value), GetColumnIndex(cellRef));
-        }
-
-        private static string ConvertCellValue(string value, string cellType, string styleRef, string[] sharedStrings)
+        private static string EscapeCsv(string value)
         {
             if (string.IsNullOrEmpty(value))
                 return string.Empty;
 
-            switch (cellType)
-            {
-                case "s": // Shared String
-                    if (int.TryParse(value, out int ssi) && ssi >= 0 && ssi < sharedStrings.Length)
-                    {
-                        value = sharedStrings[ssi];
-                    }
-                    break;
-
-                case "str": // Inline String
-                case "inlineStr": // Inline String (alternative)
-                                  // Value is already the string, no processing needed
-                    break;
-
-                case "n": // Number
-                          // Regular number, no processing needed
-                    break;
-
-                case "d": // Date/DateTime
-                    value = ConvertExcelDateTime(value);
-                    break;
-
-                case "b": // Boolean
-                    value = ConvertBoolean(value);
-                    break;
-
-                case "e": // Error
-                          // Keep error value as is
-                    break;
-
-                case "f": // Formula
-                          // Formula cells - you might want to get the calculated value
-                          // The value is usually the result of the formula
-                    break;
-
-                case null: // No type specified (most common)
-                default:
-                    // Check if it might be a datetime based on numeric value
-                    if (styleRef == "4")
-                    {
-                        value = ConvertExcelDateTime(value);
-                    }
-                    break;
-            }
-
-            return value;
-        }
-
-        private static string ConvertBoolean(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-                return string.Empty;
-
-            if (value == "1" || value.ToLower() == "true")
-                return "TRUE";
-            if (value == "0" || value.ToLower() == "false")
-                return "FALSE";
-
-            return value;
-        }
-
-        private static string ConvertExcelDateTime(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-                return string.Empty;
-
-            if (double.TryParse(value, out double serialNumber))
-            {
-                try
-                {
-                    // Excel datetime conversion
-                    DateTime excelEpoch = new DateTime(1900, 1, 1);
-                    DateTime dateTime = excelEpoch.AddDays(serialNumber - 2); // -2 for Excel's leap year bug
-
-                    // Return in your preferred format
-                    return dateTime.ToString("yyyy-MM-dd HH:mm:ss");
-                }
-                catch
-                {
-                    return value; // Return original if conversion fails
-                }
-            }
-
-            return value;
-        }
-
-        private static string EscapeCsvValue(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-                return "";
-
-            if (value.Contains("\"") || value.Contains(',') || value.Contains('\n') || value.Contains('\r'))
+            if (value.Contains(",") || value.Contains("\"") || value.Contains("\n") || value.Contains("\r"))
                 return $"\"{value.Replace("\"", "\"\"")}\"";
 
             return value;
@@ -300,116 +159,7 @@
 
         private static byte[] WriteUtf8BomOnce()
         {
-            var bom = Encoding.UTF8.GetPreamble();
-            return bom;
-        }
-
-        private static string[] LoadSharedStrings(ZipArchive archive)
-        {
-            var sharedEntry = archive.GetEntry("xl/sharedStrings.xml");
-            if (sharedEntry == null)
-                return Array.Empty<string>();
-
-            var strings = new List<string>();
-            using (var stream = sharedEntry.Open())
-            using (var reader = XmlReader.Create(stream))
-            {
-                while (reader.Read())
-                {
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "t")
-                        strings.Add(reader.ReadElementContentAsString());
-                }
-            }
-
-            return strings.ToArray();
-        }
-
-        private static (string value, string cellRef, string cellType, string styleRef) ReadAndAppendIfEmptyCellValue(XmlReader reader, StringBuilder rowBuilder, char delimiter)
-        {
-            string cellRef = reader.GetAttribute("r");
-            string cellType = reader.GetAttribute("t");
-            string styleRef = reader.GetAttribute("s");
-
-            while (reader.Read())
-            {
-                if (reader.NodeType == XmlNodeType.Element && reader.Name == "c")
-                {
-                    rowBuilder.Append(delimiter);
-
-                    cellRef = reader.GetAttribute("r");
-                    cellType = reader.GetAttribute("t");
-                    styleRef = reader.GetAttribute("s");
-                }
-
-                if (reader.NodeType == XmlNodeType.Element && reader.Name == "v")
-                {
-                    string value = reader.ReadElementContentAsString();
-
-                    return (value ?? string.Empty, cellRef, cellType, styleRef);
-                }
-
-                if (reader.NodeType == XmlNodeType.EndElement && reader.Name == "c")
-                    break;
-            }
-
-            return (string.Empty, cellRef, cellType, styleRef);
-        }
-        #endregion
-
-        #region XLS (BIFF) using ExcelDataReader
-        private static IEnumerable<byte[]> ConvertXlsStreamToChunked(Stream xlsStream)
-        {
-            using (var reader = ExcelReaderFactory.CreateReader(xlsStream))
-            {
-
-                do
-                {
-                    foreach (var item in ProcessSheetBatch(reader))
-                    {
-                        yield return item;
-                    }
-                }
-                while (reader.NextResult());
-            }
-        }
-
-        private static IEnumerable<byte[]> ProcessSheetBatch(IExcelDataReader reader)
-        {
-            var sb = new StringBuilder();
-            int count = 0;
-
-            while (reader.Read())
-            {
-                string rowText = BuildCsvRow(reader);
-                sb.AppendLine(rowText);
-                count++;
-
-                if (count >= ROW_BATCH_SIZE)
-                {
-                    yield return Encoding.UTF8.GetBytes(sb.ToString());
-                    sb.Clear();
-                    count = 0;
-                }
-            }
-
-            if (sb.Length > 0)
-                yield return Encoding.UTF8.GetBytes(sb.ToString());
-        }
-
-        private static string BuildCsvRow(IExcelDataReader reader)
-        {
-            var rowBuilder = new StringBuilder();
-
-            for (int i = 0; i < reader.FieldCount; i++)
-            {
-                string value = EscapeCsvValue(reader.GetValue(i)?.ToString() ?? "");
-                if (i > 0)
-                    rowBuilder.Append(',');
-
-                rowBuilder.Append(value);
-            }
-
-            return rowBuilder.ToString();
+            return Encoding.UTF8.GetPreamble();
         }
         #endregion
 
