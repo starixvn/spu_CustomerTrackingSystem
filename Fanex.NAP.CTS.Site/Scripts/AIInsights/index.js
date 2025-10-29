@@ -239,7 +239,7 @@ function AIInsights() {
             beforeSend: HandleUploadStart,
             success: (response) => HandleUploadSuccess(response, fileName),
             complete: HandleUploadComplete,
-            error: HandleUploadError
+            error: function (error) { HandleUploadError(error); }
         });
     }
 
@@ -250,15 +250,11 @@ function AIInsights() {
     }
 
     function HandleUploadSuccess(response, fileName) {
-        if (response.success === false) {
-            domElements.fileNameLabel.text(CONFIG.NO_FILE_UPLOADED);
-            common.showError("Upload failed " + response.message);
-        } else {
-            domElements.btnGenerate.prop('disabled', false);
-            domElements.sendButton.prop('disabled', false);
-            domElements.fileNameLabel.text(fileName);
-            common.showSuccess('File uploaded successfully: ' + fileName, 2000);
-        }
+        domElements.btnGenerate.prop('disabled', false);
+        domElements.sendButton.prop('disabled', false);
+        domElements.fileNameLabel.text(fileName);
+        common.showSuccess('File uploaded successfully: ' + fileName, 2000);
+
         UpdateTitle();
     }
 
@@ -267,8 +263,11 @@ function AIInsights() {
         CleanUploadedFileInput();
     }
 
-    function HandleUploadError() {
+    function HandleUploadError(response) {
         common.closeLoading();
+
+        domElements.fileNameLabel.text(CONFIG.NO_FILE_UPLOADED);
+        common.showError("Upload failed " + response.responseJSON.message);
     }
 
     function CleanUploadedFileInput() {
@@ -310,32 +309,33 @@ function AIInsights() {
             },
             success: function (data) {
                 dataLogSentry.analyzeSummary = data;
+                let response = data?.message?.response;
 
-                if (data && data.status_code != -1) {
-                    if (data.response.summary) {
-                        RenderVisualizationSummary(data.response.summary);
-                    }
-
-                    RenderStatistics(data.response.statistics_html);
-
-                    domElements.contentCardSection.show();
-                } else {
-                    common.showError('Sorry Analyze Summary failed: ' + data.error);
+                if (response.summary) {
+                    RenderVisualizationSummary(response.summary);
                 }
+
+                RenderStatistics(response.statistics_html);
+
+                domElements.contentCardSection.show();
             },
             complete: function () {
                 common.closeLoading();
                 domElements.headerSummarySection.removeClass('loading');
                 ResizePlotlyCharts();
             },
-            error: function (errMsg) {
-                common.closeLoading();
-                domElements.headerSummarySection.removeClass('loading');
-                domElements.btnGenerate.prop('disabled', false);
-                domElements.sendButton.prop('disabled', false);
-                EnableReCheckin();
-            }
+            error: function (errMsg) { HandleAnalyzeSummaryError(errMsg); }
         });
+    }
+
+    function HandleAnalyzeSummaryError(errMsg) {
+        common.showError('Sorry Analyze Summary failed: ' + errMsg.responseJSON.message);
+
+        common.closeLoading();
+        domElements.headerSummarySection.removeClass('loading');
+        domElements.btnGenerate.prop('disabled', false);
+        domElements.sendButton.prop('disabled', false);
+        EnableReCheckin();
     }
 
     function ShowAnalysisLoading() {
