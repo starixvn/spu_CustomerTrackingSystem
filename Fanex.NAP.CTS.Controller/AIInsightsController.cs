@@ -15,9 +15,11 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Web;
+    using System.Web.Http.Results;
     using System.Web.Mvc;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
@@ -86,13 +88,21 @@
             {
                 var fileResponse = GetUploadFileResponse(TabId);
                 data = await _aiInsightsService.AnalyzeSummary(fileResponse);
+
+                return CreateSuccessResponse(data);
+            }
+            catch (HttpListenerException httpEx)
+            {
+                LogExtension.LogError("CTS - AI Insights AnalyzeSummary - AI Service Error", httpEx);
+
+                return CreateErrorResponse(httpEx.Message);
             }
             catch (Exception ex)
             {
-                LogExtension.LogError("CTS - AI Insights AnalyzeSummary", ex);
-            }
+                LogExtension.LogError("CTS - AI Insights AnalyzeSummary Error", ex);
 
-            return Json(data, JsonRequestBehavior.AllowGet);
+                return CreateErrorResponse("An error occurred while analyzing the summary.");
+            }
         }
 
         [HttpPost]
@@ -156,6 +166,12 @@
             catch (InvalidDataException ex)
             {
                 return CreateErrorResponse(ex.Message);
+            }
+            catch (HttpListenerException httpEx)
+            {
+                LogExtension.LogError("CTS - AI Insights UploadFile - AI Service Error", httpEx);
+
+                return CreateErrorResponse(httpEx.Message);
             }
             catch (Exception ex)
             {
@@ -273,16 +289,16 @@
         {
             return Json(new
             {
-                success = true,
                 message = data
             }, JsonRequestBehavior.AllowGet);
         }
 
         private ActionResult CreateErrorResponse(string message)
         {
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+
             return Json(new
             {
-                success = false,
                 message = message
             }, JsonRequestBehavior.AllowGet);
         }
