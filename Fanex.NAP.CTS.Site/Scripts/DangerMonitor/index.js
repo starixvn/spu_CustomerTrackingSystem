@@ -31,7 +31,7 @@
         dpkFromDate: $('#dpkFromDate'),
         dpkToDate: $('#dpkToDate'),
         cbbAssociation: $('#cbbAssociation'),
-        cbbIsVerified: $('#cbbIsVerified'),
+        bIsVerified: $('#cbbIsVerified'),
         cbbBetType: $('#cbbBetType'),
         cbbDgr: $('#cbbDgr'),
         cbbSport: $('#cbbSport'),
@@ -390,6 +390,17 @@
         return `${count} of ${total} selected`;
     }
 
+    function ConvertGroupCheckboxToRadio() {
+        const $menu = domElements.cbbAssociation.multiselect("widget");
+        $menu.find("a.ui-multiselect-grouplabel input.optgroup-input").each(function () {
+            const $input = $(this);
+            if ($input.attr("type") !== "radio") {
+                $input.attr("type", "radio");
+                $input.attr("name", "assocGroupRadio");
+            }
+        });
+    }
+
     function Initial() {
         domElements.dpkFromDate
             .datepicker({
@@ -453,7 +464,8 @@
             menuHeight: 260,
             // selectedText: "# of # selected",
             noneSelectedText: "Select Association",
-            selectedText: SelectedTextCbbAssociation
+            selectedText: SelectedTextCbbAssociation,
+            open: ConvertGroupCheckboxToRadio
         }).multiselectfilter({
             width: 260,
             placeholder: '',
@@ -468,44 +480,61 @@
             const $menu = domElements.cbbAssociation.multiselect("widget");
             const $optgroups = domElements.cbbAssociation.find("optgroup");
 
-            // remove old event to avoid multiple binding
-            $menu.off("click.assoc change.assoc");
+            // Remove old event handlers to prevent duplicate bindings
+            $menu.off(".assoc");
 
-            // handle optgroup click
+            // Convert optgroup checkboxes to radio buttons
+            $menu.find("a.ui-multiselect-grouplabel input.optgroup-input")
+                .attr("type", "radio")
+                .attr("name", "assocGroupRadio");
+
+            // ===== Optgroup label click (radio behavior) =====
             $menu.on("click.assoc", "a.ui-multiselect-grouplabel", function (e) {
                 e.stopPropagation();
 
-                const $anchors = $menu.find("a.ui-multiselect-grouplabel");
-                const idx = $anchors.index(this);
-                if (idx < 0) return;
-
-                const $clickedGroup = $optgroups.eq(idx);
+                const $groupLabels = $menu.find("a.ui-multiselect-grouplabel");
+                const groupIndex = $groupLabels.index(this);
+                const $clickedGroup = $optgroups.eq(groupIndex);
                 if (!$clickedGroup.length) return;
 
-                const isChecked = $(this).find("input.optgroup-input").prop("checked");
-
+                // Deselect all other groups
                 $optgroups.not($clickedGroup).find("option").prop("selected", false);
 
-                $clickedGroup.find("option").prop("selected", isChecked);
+                // Select all options within clicked group
+                $clickedGroup.find("option").prop("selected", true);
 
+                // Refresh UI
                 domElements.cbbAssociation.multiselect("refresh");
+
+                // Keep radio checked state
+                const $radios = $menu.find("input.optgroup-input");
+                $radios.prop("checked", false).eq(groupIndex).prop("checked", true);
             });
 
-            // handle individual option of optgroup change
+            // ===== Individual option checkbox change =====
             $menu.on("change.assoc", "input[type='checkbox']:not(.optgroup-input)", function () {
                 const $input = $(this);
-                const val = $input.val();
-                const $option = domElements.cbbAssociation.find(`option[value="${val}"]`).first();
-                if (!$option.length) return;
-
-                const $thisGroup = $option.closest("optgroup");
+                const value = $input.val();
+                const $option = domElements.cbbAssociation.find(`option[value="${value}"]`);
+                const $group = $option.closest("optgroup");
 
                 if ($input.is(":checked")) {
-                    $optgroups.not($thisGroup).find("option").prop("selected", false);
+                    // Deselect all options from other groups
+                    $optgroups.not($group).find("option").prop("selected", false);
                 }
 
+                // Refresh UI
                 domElements.cbbAssociation.multiselect("refresh");
+
+                // Sync radio checked state with current group
+                const groupIndex = $optgroups.index($group);
+                const $radios = $menu.find("input.optgroup-input");
+                $radios.prop("checked", false).eq(groupIndex).prop("checked", true);
             });
+        });
+
+        domElements.cbbAssociation.on("multiselectrefresh", function () {
+            ConvertGroupCheckboxToRadio();
         });
 
         domElements.dpkToDate.on('change', function () {

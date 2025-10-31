@@ -1307,3 +1307,7 @@ html {
 .divAddProblemAccount .icon-delete.delete-invalid::before {
   color: #FF0000;
 }
+
+input[type=radio] {
+  accent-color: #458A00;
+}
