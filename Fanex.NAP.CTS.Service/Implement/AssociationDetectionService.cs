@@ -43,7 +43,7 @@
 
         byte[] ExportToExcelAssociationDetect(IEnumerable<ExportAssociationDetectModel> AssociationDetect, string fileName, string templatePath);
 
-        string DetectAssociationCustByUserRoot(DangerMonitorSearchModel filter);
+        string DetectAssociationCustByUserRoot(DetectAssociationByUserRootFilterModel filter);
     }
 
     public class AssociationDetectionService : IAssociationDetectionService
@@ -281,20 +281,9 @@
             return writer.ToBytes();
         }
        
-        public string DetectAssociationCustByUserRoot(DangerMonitorSearchModel filter)
-        {            
-            var assFilter = new DetectAssociationByUserRootFilterModel
-            {
-                UserNames = filter.UserNameList,
-                //IsAI = filter.IsAI,   Tobe continue...
-                //IsDevice = filter.IsDevice, Tobe continue...
-                //IsIP = filter.IsIP, Tobe continue...
-                IsAI = true,
-                IsDevice = true,
-                IsIP = true
-            };
-
-            var assWithRootCust = GetAssociationCustByUserRoot(assFilter);
+        public string DetectAssociationCustByUserRoot(DetectAssociationByUserRootFilterModel filterAss)
+        {
+            var assWithRootCust = GetAssociationCustByUserRoot(filterAss);
 
             return JsonConvert.SerializeObject(assWithRootCust);
         }

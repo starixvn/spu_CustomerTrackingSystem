@@ -298,7 +298,7 @@
                     ConfigSettings.GetCtsApiEndPoint(ApiEndpoint.DetectAssociationCustByUserRoot),
                     filterAss,
                     ConfigSettings.ApiKeyFanexAPIDirect, ConfigSettings.AssociationDetectionTimeout).Result
-                : _associationDetectionService.DetectAssociationCustByUserRoot(filter);
+                : _associationDetectionService.DetectAssociationCustByUserRoot(filterAss);
 
             return result;
         }

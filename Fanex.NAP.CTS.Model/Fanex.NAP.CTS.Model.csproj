@@ -262,11 +262,11 @@
     <Compile Include="AssociationDetection\DetectAssociationByAgentModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByBPDeviceIPAgentModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByPrimaryFilterModel.cs" />
-    <Compile Include="AssociationDetection\DetectAssociationByPrimaryLv1Model.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByPrimaryModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationBySharedIPMatchesModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationBySharedIPModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByUserRootFilterModel.cs" />
+    <Compile Include="AssociationDetection\DetectAssociationByUserRootModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationMergeGroupModel.cs" />
     <Compile Include="AssociationDetection\ExportAssociationDetectModel.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectDetailAgentModel.cs" />
