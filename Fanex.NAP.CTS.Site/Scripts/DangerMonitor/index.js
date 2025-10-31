@@ -1,7 +1,7 @@
 ﻿function DangerousSetting() {
     const DangerMode = {
         DangerTypeMode: 0,
-        UsernameMode: 1 
+        UsernameMode: 1
     }
     let dangerMode = DangerMode.DangerTypeMode;
 
@@ -30,6 +30,7 @@
         userId: $("#hdCTSCustId").val(),
         dpkFromDate: $('#dpkFromDate'),
         dpkToDate: $('#dpkToDate'),
+        cbbAssociation: $('#cbbAssociation'),
         cbbIsVerified: $('#cbbIsVerified'),
         cbbBetType: $('#cbbBetType'),
         cbbDgr: $('#cbbDgr'),
@@ -57,6 +58,7 @@
         spanAddSpecialCustomerAccountChangeHidden: $('#spanAddProblemAccountChangeHidden'),
         spanSpecialCustomerAccountActionHidden: $('#spanProblemAccountActionHidden'),
         maxTags: 1000,
+        maxRootUsernameWithAssociation: 1,
         divAddUsername: $('#divAddProblemAccount'),
         inputTagUsername: $('#inputTagUsername'),
         btnSave: $('#btnSave'),
@@ -360,6 +362,34 @@
         }, 10);
     }
 
+    function SelectedTextCbbAssociation(numChecked, numTotal, checkedItems) {
+        const $select = domElements.cbbAssociation;
+        const $optgroups = $select.find("optgroup");
+
+        let selectedGroup = null;
+
+        $optgroups.each(function () {
+            const $group = $(this);
+            if ($group.find("option:selected").length > 0) {
+                selectedGroup = $group.attr("data-group");
+                return false;
+            }
+        });
+
+        if (!selectedGroup) {
+            return "Select Association";
+        }
+
+        const count = $select.find(`optgroup[data-group="${selectedGroup}"] option:selected`).length;
+        const total = $select.find(`optgroup[data-group="${selectedGroup}"] option`).length;
+
+        if (selectedGroup === "none") {
+            return "None";
+        }
+
+        return `${count} of ${total} selected`;
+    }
+
     function Initial() {
         domElements.dpkFromDate
             .datepicker({
@@ -387,20 +417,6 @@
         domElements.cbbSport.select2();
 
         domElements.cbbMarket.select2();
-        // domElements.cbbSport.multiselect({
-        //     menuWidth: 260,
-        //     menuHeight: 260,
-        //     selectedText: "# of # select",
-        //     noneSelectedText: `Select Sports`,
-        //     enableClickableOptGroups: true,
-        //     includeSelectAllOption: true,
-        //     groupsCollapsable: true,
-        //     optGroupChecked: true
-        // }).multiselectfilter({
-        //     width: 150,
-        //     placeholder: '',
-        //     label: ''
-        // });
 
         domElements.cbbBetType.multiselect({
             menuWidth: 250,
@@ -431,8 +447,65 @@
             label: ''
         });
 
+        domElements.cbbAssociation.multiselect({
+            header: false,
+            menuWidth: 250,
+            menuHeight: 260,
+            // selectedText: "# of # selected",
+            noneSelectedText: "Select Association",
+            selectedText: SelectedTextCbbAssociation
+        }).multiselectfilter({
+            width: 260,
+            placeholder: '',
+            label: ''
+        });
+
         domElements.groupDropDown.hover(function () {
             domElements.refreshList.toggleClass('block-box');
+        });
+
+        domElements.cbbAssociation.on("multiselectopen", function () {
+            const $menu = domElements.cbbAssociation.multiselect("widget");
+            const $optgroups = domElements.cbbAssociation.find("optgroup");
+
+            // remove old event to avoid multiple binding
+            $menu.off("click.assoc change.assoc");
+
+            // handle optgroup click
+            $menu.on("click.assoc", "a.ui-multiselect-grouplabel", function (e) {
+                e.stopPropagation();
+
+                const $anchors = $menu.find("a.ui-multiselect-grouplabel");
+                const idx = $anchors.index(this);
+                if (idx < 0) return;
+
+                const $clickedGroup = $optgroups.eq(idx);
+                if (!$clickedGroup.length) return;
+
+                const isChecked = $(this).find("input.optgroup-input").prop("checked");
+
+                $optgroups.not($clickedGroup).find("option").prop("selected", false);
+
+                $clickedGroup.find("option").prop("selected", isChecked);
+
+                domElements.cbbAssociation.multiselect("refresh");
+            });
+
+            // handle individual option of optgroup change
+            $menu.on("change.assoc", "input[type='checkbox']:not(.optgroup-input)", function () {
+                const $input = $(this);
+                const val = $input.val();
+                const $option = domElements.cbbAssociation.find(`option[value="${val}"]`).first();
+                if (!$option.length) return;
+
+                const $thisGroup = $option.closest("optgroup");
+
+                if ($input.is(":checked")) {
+                    $optgroups.not($thisGroup).find("option").prop("selected", false);
+                }
+
+                domElements.cbbAssociation.multiselect("refresh");
+            });
         });
 
         domElements.dpkToDate.on('change', function () {
@@ -477,7 +550,7 @@
         FetchSports();
 
         domElements.btnClearUsername.on('click', function () {
-            domElements.txtUsername.val('');
+            domElements.txtUsername.val('').change();
             domElements.txtUsername.removeClass("input-invalid");
         })
 
@@ -520,7 +593,7 @@
             var result = GetInputUserName('');
 
             if (result) {
-                domElements.txtUsername.val(GetInputUserName(''));
+                domElements.txtUsername.val(GetInputUserName('')).change();
                 domElements.divAddUsername.dialog('close');
                 domElements.txtUsername.removeClass("input-invalid");
             }
@@ -551,6 +624,8 @@
             isFocusValidUsername = true;
         });
 
+        domElements.txtUsername.on('change', ChangeCbbAssociationDisplay);
+
         $(document).on('click', function (e) {
             if ($(e.target).closest('#txtUsername').length == 0 && isFocusValidUsername) {
                 ValidateTxtUsername()
@@ -577,7 +652,7 @@
     }
 
     function ResetFilterValueDefault() {
-        domElements.txtUsername.val('');
+        domElements.txtUsername.val('').change();
         domElements.txtEvent.val('');
         domElements.cbbMarket.val('').trigger('change');
         domElements.cbbMatchSection.multiselect("checkAll");
@@ -590,6 +665,7 @@
     function ChangeSelectRadioButton(value) {
         domElements.txtUsername.prop('disabled', value == 0);
         domElements.cbbDgr.prop('disabled', value == 1);
+        ChangeCbbAssociationDisplay();
 
         if (value == 0) {
             domElements.btnClearUsername.addClass('hide');
@@ -600,6 +676,15 @@
             domElements.btnClearUsername.removeClass('hide');
             domElements.btnModifyUsername.removeClass('hide');
         }
+    }
+
+    function ChangeCbbAssociationDisplay() {
+        let usernameTotal = domElements.txtUsername.val().split(',').length;
+
+        let isCbbDgrDisabled = domElements.cbbDgr.prop('disabled');
+        let isAssociationEnabled = usernameTotal <= domElements.maxRootUsernameWithAssociation;
+
+        domElements.cbbAssociation.multiselect(isCbbDgrDisabled && isAssociationEnabled ? "enable" : "disable");
     }
 
     function OnGenerate() {
@@ -1008,7 +1093,7 @@
                 success: function (response) {
                     if (response?.data) {
                         isValidUsername = response.data.InvalidateUsernames.length == 0 && ValidateTxtUsernameMaxRange(usernames);
-                        domElements.txtUsername.val(usernames);
+                        domElements.txtUsername.val(usernames).change();
 
                         if (!isValidUsername) {
                             domElements.txtUsername.addClass("input-invalid");

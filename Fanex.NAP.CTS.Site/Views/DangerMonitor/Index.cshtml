@@ -19,7 +19,7 @@
                 <div class="group-control">
                     <div class="title-association">                      
                     <div class="form-filter">
-                        <div class="group width-180">
+                        <div class="group width-custom">
                             <div class="radio-button">
                                 <input type="radio" id="rbtnDgr" name="radioSelect" value="0" checked>
                                 <label for="rbtnDgr" class="text">Dgr</label>
@@ -36,6 +36,23 @@
                                 <span class="icon-clear icon-icon-clear" id="btnClearUsername"></span>
                                 <span class="icon-modify icon-icon-modify" id="btnModifyUsername"><span class="path1"></span><span class="path2"></span></span>
                             </div>
+                        </div>
+
+                        <div class="group width-custom">
+                            <div class="text">
+                                <!-- <input id="checkboxFrom" type="checkbox" style="display:inline" checked/> -->
+                                <label>Association</label>
+                            </div>
+                            <select class="control width-select" id="cbbAssociation" multiple="multiple">
+                                <optgroup label="Association" data-group="with">
+                                    <option value="BettingPattern">Betting Pattern</option>
+                                    <option value="Device">Device</option>
+                                    <option value="IP">IP</option>
+                                </optgroup>
+                                <optgroup label="No Association" data-group="none">
+                                    <option value="None" selected>None</option>
+                                </optgroup>
+                            </select>
                         </div>
 
                         <div class="group width-180">
@@ -61,7 +78,7 @@
                                     <span class="icon-calendar-text"></span>
                             </div>
                         </div>
-                        <div class="group width-180">
+                        <div class="group width-custom">
                             <label class="text">Sport</label>
                             <select class="control width-select" id="cbbSport"></select>
                         </div>
@@ -71,11 +88,11 @@
                             <select class="control width-select" id="cbbLeagueGroup" multiple="multiple"></select>
                         </div>
 
-                        <div class="group width-180">
+                        <div class="group width-custom">
                             <label class="text">Event</label>
                             <input class="control input-event" type="text" id="txtEvent" placeholder="League/Match" />
                         </div>
-                        <div class="group width-180">
+                        <div class="group width-custom">
                             <label class="text">Market</label>
                             <select class="control width-select" id="cbbMarket">
                                 <option value="" selected>All</option>
@@ -83,7 +100,7 @@
                                 <option value="0">Non-Live</option>
                             </select>
                         </div>
-                        <div class="group width-180">
+                        <div class="group width-custom">
                             <label class="text">Match Section</label>
                             <select class="control width-select" id="cbbMatchSection" multiple="multiple">
                                 <option value="1" selected>Live</option>
@@ -93,13 +110,13 @@
                             </select>
                         </div>
 
-                        <div class="group width-180">
+                        <div class="group width-custom">
                             <label class="text">Bet Type</label>
                             <select class="control width-select" id="cbbBetType" multiple="multiple">
                             </select>
                         </div>
 
-                        <div class="group width-180">
+                        <div class="group width-custom">
                             <label class="text">Username's Amt (RM)</label>
                             <div class="input-amount">
                                 <input class="control input-event" type="text" id="txtUsernameAmt" placeholder=">= please input amount" maxlength="15" />
@@ -107,7 +124,7 @@
                             </div>
                         </div>
 
-                         <div class="group width-180">
+                         <div class="group width-custom">
                             <label class="text">Total Amt (RM)</label>
                             <div class="input-amount">
                                 <input class="control input-event" type="text" id="txtTotalAmt" placeholder=">= please input amount" maxlength="15" />

@@ -86,6 +86,21 @@
                             transform: scale(1);
                         }
                     }
+
+                    select,
+                    .ui-multiselect {
+                        font-family: $font-family !important;
+                    }
+
+                    select:disabled,
+                    input[type="text"]:disabled,
+                    .ui-multiselect.ui-state-disabled {
+                        background-color: #ededed !important;
+                        border-color: #d9d9d9 !important;
+                        color: #777 !important;
+                        cursor: not-allowed !important;
+                        opacity: 1 !important;
+                    }
                 }
 
                 .form-filter {
@@ -253,7 +268,7 @@
 
                             input {
                                 padding-right: 30px;
-                                padding-bottom: 3px;
+                                padding-bottom: 2px;
                                 font-size: 13px;
 
                                 &::placeholder {
@@ -633,8 +648,8 @@
     }
 }
 
-.group.width-280 {
-    width: 15rem !important;
+.group.width-custom {
+    width: 16rem !important;
 }
 
 .group.width-380 {
@@ -723,7 +738,7 @@ html {
 
         .text {
             color: #545454;
-            font-family: Lato;
+            font-family: $font-family;
             font-size: 13px;
             line-height: 16px;
             letter-spacing: 0em;
@@ -737,7 +752,7 @@ html {
 
     .label {
         color: #545454;
-        font-family: 'Lato';
+        font-family: $font-family;
         font-size: 13px;
         font-weight: 400;
         line-height: 16px;
@@ -746,7 +761,7 @@ html {
     }
 
     .tagify__input:empty::before {
-        font-family: 'Lato';
+        font-family: $font-family;
         color: #8C8C8C;
         font-size: 13px;
         font-style: italic;
@@ -817,7 +832,7 @@ html {
             font-size: 13px;
             font-weight: 400;
             line-height: 15.6px;
-            font-family: Lato;
+            font-family: $font-family;
             font-size: 13px;
             font-weight: 400;
             line-height: 16px;
