@@ -8,6 +8,7 @@
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.DangerMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Implement;
@@ -17,10 +18,12 @@
     using Fanex.NAP.CTS.ViewModel.DangerMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.DetectGroup;
+    using Newtonsoft.Json;
     using RabbitMQ.Client.Framing.Impl;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.Json;
     using System.Web.Mvc;
     using System.Web.Script.Serialization;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -278,6 +281,26 @@
             {
                 ItemList = this.RearrangeAssGroup(data, true)
             };
+        }
+
+        public string DetectAssociationCustByUserRoot(DangerMonitorSearchModel filter)
+        {
+            var filterAss = new DetectAssociationByUserRootFilterModel 
+            {
+                UserNames = filter.UserNameList,
+                IsAI = true, // hardcode, Tobe continue...
+                IsDevice = true, // hardcode, Tobe continue...
+                IsIP = true // hardcode, Tobe continue...
+            };
+
+            var result = ConfigSettings.IsUsingFanexAPIDirect
+                ? ApiHelper.PostWithApiKey<string>(
+                    ConfigSettings.GetCtsApiEndPoint(ApiEndpoint.DetectAssociationCustByUserRoot),
+                    filterAss,
+                    ConfigSettings.ApiKeyFanexAPIDirect, ConfigSettings.AssociationDetectionTimeout).Result
+                : _associationDetectionService.DetectAssociationCustByUserRoot(filter);
+
+            return result;
         }
 
         #endregion Association Detect

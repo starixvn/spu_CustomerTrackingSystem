@@ -7,6 +7,7 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.Common;
+    using Fanex.NAP.CTS.Model.DangerMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
@@ -41,6 +42,8 @@
         IEnumerable<GetAssociationDetectDetailMatchModel> GetDetectAssociationDetailMatch(long rootCustID, string custIDList, int queryType);
 
         byte[] ExportToExcelAssociationDetect(IEnumerable<ExportAssociationDetectModel> AssociationDetect, string fileName, string templatePath);
+
+        string DetectAssociationCustByUserRoot(DangerMonitorSearchModel filter);
     }
 
     public class AssociationDetectionService : IAssociationDetectionService
@@ -53,8 +56,6 @@
             _repository = new CriteriaService();
             _commonService = new CommonService();
         }
-
-        #region Query From MySQL
 
         #region Public Methods
 
@@ -279,10 +280,40 @@
 
             return writer.ToBytes();
         }
+       
+        public string DetectAssociationCustByUserRoot(DangerMonitorSearchModel filter)
+        {            
+            var assFilter = new DetectAssociationByUserRootFilterModel
+            {
+                UserNames = filter.UserNameList,
+                //IsAI = filter.IsAI,   Tobe continue...
+                //IsDevice = filter.IsDevice, Tobe continue...
+                //IsIP = filter.IsIP, Tobe continue...
+                IsAI = true,
+                IsDevice = true,
+                IsIP = true
+            };
 
+            var assWithRootCust = GetAssociationCustByUserRoot(assFilter);
+
+            return JsonConvert.SerializeObject(assWithRootCust);
+        }
         #endregion
 
         #region Private Methods
+        private IEnumerable<DetectAssociationByUserRootModel> GetAssociationCustByUserRoot(DetectAssociationByUserRootFilterModel assFilter)
+        {
+            var criteria = new DetectAssociationByUserRootCriteria
+            {
+                UserNames = assFilter.UserNames,
+                IsAI = assFilter.IsAI,
+                IsDevice = assFilter.IsDevice,
+                IsIP = assFilter.IsIP
+            };
+
+            return _repository.Fetch<DetectAssociationByUserRootModel>(criteria);
+        }
+
         private void FillRowData(IEnumerable<ExportAssociationDetectModel> AssociationDetect, ref ExcelTemplateWriter writer)
         {
             var idx = 1;
@@ -392,8 +423,6 @@
 
             return ObjectHelper.SerializeObj(input);
         }
-
-        #endregion
 
         #endregion
     }

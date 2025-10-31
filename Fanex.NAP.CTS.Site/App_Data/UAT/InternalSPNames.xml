@@ -77,6 +77,7 @@
 		<Setting Key="CTS_DC_Association_Agent_GetCustEdge" SpName="CTS_DC_Association_Agent_GetCustEdge_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="300" />
 		<Setting Key="CTS_DC_Association_DetectGroup" SpName="CTS_DC_Association_DetectGroup_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="300" />
 		<Setting Key="CTS_DC_AssociationDetection_GetDetail" SpName="CTS_DC_AssociationDetection_GetDetail_xtest" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="300" />
+    <Setting Key="CTS_DC_Association_GetByUserNameList" SpName="CTS_DC_Association_GetByUserNameList" DbName="CTSMain.CTS_DataCenter.ctsWeb" Timeout="300" />
 	</Function>
 
 	<Function Name="AssociationDetail">
