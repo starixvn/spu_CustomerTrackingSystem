@@ -41,7 +41,6 @@
         }
 
         #region Customer Profile
-
         public IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs)
         {
             var criteria = new CustInfoByCustIdGetCriteria()

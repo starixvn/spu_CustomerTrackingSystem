@@ -27,7 +27,7 @@ namespace Fanex.NAP.CTS.Test.Services
         }
 
         [TestMethod]
-        public void GetDangerMonitorSummary_WithValidFilter_ReturnsCorrectResults()
+        public void GetDangerMonitorInfoWithNoAssociation_WithValidFilter_ReturnsCorrectResults()
         {
             // Arrange
             var filter = new DangerMonitorSearchModel
@@ -102,11 +102,11 @@ namespace Fanex.NAP.CTS.Test.Services
                 }
             };
 
-            _mockRepository.Setup(x => x.Fetch<DangerMMTicketInfoEntity>(It.IsAny<DangerMonitorTicketSummaryCriteria>()))
+            _mockRepository.Setup(x => x.Fetch<DangerMMTicketInfoEntity>(It.IsAny<DangerMonitorSearchMatchInfoCriteria>()))
                 .Returns(entities);
 
             // Act
-            var result = InvokeGetDangerMonitorSummary(filter);
+            var result = InvokeGetDangerMonitorInfoWithNoAssociation(filter);
 
             // Assert
             Assert.IsNotNull(result);
@@ -125,11 +125,11 @@ namespace Fanex.NAP.CTS.Test.Services
             Assert.AreEqual(0, secondItem.LiveIndicator); // false converts to 0
             Assert.AreEqual(12346, secondItem.MatchId);
 
-            _mockRepository.Verify(x => x.Fetch<DangerMMTicketInfoEntity>(It.IsAny<DangerMonitorTicketSummaryCriteria>()), Times.Once);
+            _mockRepository.Verify(x => x.Fetch<DangerMMTicketInfoEntity>(It.IsAny<DangerMonitorSearchMatchInfoCriteria>()), Times.Once);
         }
 
         [TestMethod]
-        public void GetDangerMonitorSummary_WithEmptyResults_ReturnsEmptyList()
+        public void GetDangerMonitorInfoWithNoAssociation_WithEmptyResults_ReturnsEmptyList()
         {
             // Arrange
             var filter = new DangerMonitorSearchModel
@@ -140,20 +140,20 @@ namespace Fanex.NAP.CTS.Test.Services
 
             var entities = new List<DangerMMTicketInfoEntity>();
 
-            _mockRepository.Setup(x => x.Fetch<DangerMMTicketInfoEntity>(It.IsAny<DangerMonitorTicketSummaryCriteria>()))
+            _mockRepository.Setup(x => x.Fetch<DangerMMTicketInfoEntity>(It.IsAny<DangerMonitorSearchMatchInfoCriteria>()))
                 .Returns(entities);
 
             // Act
-            var result = InvokeGetDangerMonitorSummary(filter);
+            var result = InvokeGetDangerMonitorInfoWithNoAssociation(filter);
 
             // Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(0, result.Count());
-            _mockRepository.Verify(x => x.Fetch<DangerMMTicketInfoEntity>(It.IsAny<DangerMonitorTicketSummaryCriteria>()), Times.Once);
+            _mockRepository.Verify(x => x.Fetch<DangerMMTicketInfoEntity>(It.IsAny<DangerMonitorSearchMatchInfoCriteria>()), Times.Once);
         }
 
         [TestMethod]
-        public void GetDangerMonitorSummary_WithNullResults_ReturnsEmptyList()
+        public void GetDangerMonitorInfoWithNoAssociation_WithNullResults_ReturnsEmptyList()
         {
             // Arrange
             var filter = new DangerMonitorSearchModel
@@ -162,11 +162,11 @@ namespace Fanex.NAP.CTS.Test.Services
                 ToDate = new DateTime(2023, 1, 31)
             };
 
-            _mockRepository.Setup(x => x.Fetch<DangerMMTicketInfoEntity>(It.IsAny<DangerMonitorTicketSummaryCriteria>()))
+            _mockRepository.Setup(x => x.Fetch<DangerMMTicketInfoEntity>(It.IsAny<DangerMonitorSearchMatchInfoCriteria>()))
                 .Returns((IEnumerable<DangerMMTicketInfoEntity>)null);
 
             // Act
-            var result = InvokeGetDangerMonitorSummary(filter);
+            var result = InvokeGetDangerMonitorInfoWithNoAssociation(filter);
 
             // Assert
             Assert.IsNotNull(result);
@@ -174,7 +174,7 @@ namespace Fanex.NAP.CTS.Test.Services
         }
 
         [TestMethod]
-        public void GetDangerMonitorSummary_PassesCorrectCriteria()
+        public void GetDangerMonitorInfoWithNoAssociation_PassesCorrectCriteria()
         {
             // Arrange
             var filter = new DangerMonitorSearchModel
@@ -200,13 +200,13 @@ namespace Fanex.NAP.CTS.Test.Services
                 .Returns(new List<DangerMMTicketInfoEntity>());
 
             // Act
-            InvokeGetDangerMonitorSummary(filter);
+            InvokeGetDangerMonitorInfoWithNoAssociation(filter);
 
             // Assert
             Assert.IsNotNull(actualCriteria);
-            Assert.IsInstanceOfType(actualCriteria, typeof(DangerMonitorTicketSummaryCriteria));
+            Assert.IsInstanceOfType(actualCriteria, typeof(DangerMonitorSearchMatchInfoCriteria));
 
-            var typedCriteria = actualCriteria as DangerMonitorTicketSummaryCriteria;
+            var typedCriteria = actualCriteria as DangerMonitorSearchMatchInfoCriteria;
             Assert.IsNotNull(typedCriteria);
             Assert.AreEqual(filter.FromDate, typedCriteria.FromDate);
             Assert.AreEqual(filter.ToDate, typedCriteria.ToDate);
@@ -224,7 +224,7 @@ namespace Fanex.NAP.CTS.Test.Services
         }
 
         [TestMethod]
-        public void GetDangerMonitorSummary_WithNullOptionalFields_HandlesGracefully()
+        public void GetDangerMonitorInfoWithNoAssociation_WithNullOptionalFields_HandlesGracefully()
         {
             // Arrange
             var filter = new DangerMonitorSearchModel
@@ -244,10 +244,10 @@ namespace Fanex.NAP.CTS.Test.Services
                 .Returns(new List<DangerMMTicketInfoEntity>());
 
             // Act
-            InvokeGetDangerMonitorSummary(filter);
+            InvokeGetDangerMonitorInfoWithNoAssociation(filter);
 
             // Assert
-            var typedCriteria = actualCriteria as DangerMonitorTicketSummaryCriteria;
+            var typedCriteria = actualCriteria as DangerMonitorSearchMatchInfoCriteria;
             Assert.IsNotNull(typedCriteria);
             Assert.AreEqual(string.Empty, typedCriteria.LeagueEvent);
             Assert.AreEqual(string.Empty, typedCriteria.QueryDanger);
@@ -255,7 +255,7 @@ namespace Fanex.NAP.CTS.Test.Services
         }
 
         [TestMethod]
-        public void GetDangerMonitorSummary_SportListProcessing_WorksCorrectly()
+        public void GetDangerMonitorInfoWithNoAssociation_SportListProcessing_WorksCorrectly()
         {
             // Arrange
             var filter = new DangerMonitorSearchModel
@@ -272,10 +272,10 @@ namespace Fanex.NAP.CTS.Test.Services
                 .Returns(new List<DangerMMTicketInfoEntity>());
 
             // Act
-            InvokeGetDangerMonitorSummary(filter);
+            InvokeGetDangerMonitorInfoWithNoAssociation(filter);
 
             // Assert
-            var typedCriteria = actualCriteria as DangerMonitorTicketSummaryCriteria;
+            var typedCriteria = actualCriteria as DangerMonitorSearchMatchInfoCriteria;
             Assert.IsNotNull(typedCriteria);
             Assert.AreEqual("1,3", typedCriteria.SportList); // Should get sports with "null"
             Assert.AreEqual("2_LeagueGroup,4_AnotherGroup", typedCriteria.SportSabaLgGroup); // Should get sports without "null"
@@ -283,7 +283,7 @@ namespace Fanex.NAP.CTS.Test.Services
 
         [TestMethod]
         [ExpectedException(typeof(TargetInvocationException))]
-        public void GetDangerMonitorSummary_WhenRepositoryThrows_PropagatesException()
+        public void GetDangerMonitorInfoWithNoAssociation_WhenRepositoryThrows_PropagatesException()
         {
             // Arrange
             var filter = new DangerMonitorSearchModel
@@ -292,23 +292,23 @@ namespace Fanex.NAP.CTS.Test.Services
                 ToDate = new DateTime(2023, 1, 31)
             };
 
-            _mockRepository.Setup(x => x.Fetch<DangerMMTicketInfoEntity>(It.IsAny<DangerMonitorTicketSummaryCriteria>()))
+            _mockRepository.Setup(x => x.Fetch<DangerMMTicketInfoEntity>(It.IsAny<DangerMonitorSearchMatchInfoCriteria>()))
                 .Throws(new Exception("Database error"));
 
             // Act
-            InvokeGetDangerMonitorSummary(filter);
+            InvokeGetDangerMonitorInfoWithNoAssociation(filter);
 
             // Assert
             // Exception should be thrown
         }
 
         // Helper method to invoke private method using reflection
-        private IEnumerable<DangerMMTicketInfoModel> InvokeGetDangerMonitorSummary(DangerMonitorSearchModel filter)
+        private IEnumerable<DangerMMTicketInfoModel> InvokeGetDangerMonitorInfoWithNoAssociation(DangerMonitorSearchModel filter)
         {
-            var method = typeof(DangerMonitorService).GetMethod("GetDangerMonitorSummary",
+            var method = typeof(DangerMonitorService).GetMethod("GetDangerMonitorInfoWithNoAssociation",
                 BindingFlags.NonPublic | BindingFlags.Instance);
 
-            Assert.IsNotNull(method, "GetDangerMonitorSummary method not found");
+            Assert.IsNotNull(method, "GetDangerMonitorInfoWithNoAssociation method not found");
 
             return (IEnumerable<DangerMMTicketInfoModel>)method.Invoke(_dangerMonitorService, new object[] { filter });
         }

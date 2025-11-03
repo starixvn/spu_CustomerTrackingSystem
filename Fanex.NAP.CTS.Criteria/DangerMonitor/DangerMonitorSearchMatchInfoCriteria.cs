@@ -4,7 +4,7 @@
     using Fanex.Data.Repository;
     using System;
 
-    public class DangerMonitorTicketSummaryCriteria : CriteriaBase
+    public class DangerMonitorSearchMatchInfoCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "FromDate")]
         public DateTime? FromDate { get; set; }

@@ -4,6 +4,7 @@
         UsernameMode: 1
     }
     let dangerMode = DangerMode.DangerTypeMode;
+    let isRootUserAssociationMode = false;
 
     let dateEmptyString = "------,----";
     let dataTable;
@@ -297,10 +298,32 @@
         return optgroup;
     }
 
+    function GetRootUserOption() {
+        const isAssociationEnabled = !domElements.cbbAssociation.prop("disabled");
+        if (!isAssociationEnabled) {
+            return { IsAI: false, IsDevice: false, IsIP: false };
+        }
+
+        const selectedValue = domElements.cbbAssociation.val() || "";
+        const isNoneSelected = selectedValue.includes("-1");
+        if (isNoneSelected) {
+            return { IsAI: false, IsDevice: false, IsIP: false };
+        }
+
+        return {
+            IsAI: selectedValue.includes("1"),
+            IsDevice: selectedValue.includes("2"),
+            IsIP: selectedValue.includes("3")
+        };
+    };
+
     function GetDangerMonitor() {
         timeoutRenderTicketDetail = setTimeout(() => {
+            let rootUserOption = GetRootUserOption();
+
             $('#txtEventHeader').val('');
             dangerMode = domElements.rbtnSelect.filter(":checked").val();
+            isRootUserAssociationMode = rootUserOption.IsAI || rootUserOption.IsDevice || rootUserOption.IsIP;
 
             let data = {
                 FromDate: domElements.dpkFromDate.val(),
@@ -319,6 +342,7 @@
                 LeagueGroupList: domElements.cbbLeagueGroup.val().join(),
                 UserAmount: GetInputAmount(domElements.txtUsernameAmt.val()),
                 TotalAmount: GetInputAmount(domElements.txtTotalAmt.val()),
+                rootUserOption: rootUserOption
             };
 
             if (dangerMode == DangerMode.DangerTypeMode) {
@@ -873,7 +897,16 @@
                 });
             }
 
-            RedirectToDangerMonitorDetail("DangerMonitor/Detail?" + para, obj.username);
+            let hideRequestInfo = null;
+            if (dangerMode == DangerMode.UsernameMode) {
+                hideRequestInfo = {
+                    Username: obj.username,
+                    IsRootUserAssociationMode: isRootUserAssociationMode,
+                    ListCustID: obj.ListCustID
+                }
+            }
+
+            RedirectToDangerMonitorDetail("DangerMonitor/Detail?" + para, hideRequestInfo);
         });
 
         return table;
@@ -1234,7 +1267,7 @@
         return false;
     }
 
-    function RedirectToDangerMonitorDetail(url, username) {
+    function RedirectToDangerMonitorDetail(url, hideRequest) {
         var form = document.createElement("form");
         form.target = "_blank";
         form.method = "POST";
@@ -1243,8 +1276,8 @@
 
         var input = document.createElement("input");
         input.type = "hidden";
-        input.name = "username";
-        input.value = username ?? "";
+        input.name = "hideRequest";
+        input.value = hideRequest ? JSON.stringify(hideRequest) : "";
         form.appendChild(input);
 
         document.body.appendChild(form);

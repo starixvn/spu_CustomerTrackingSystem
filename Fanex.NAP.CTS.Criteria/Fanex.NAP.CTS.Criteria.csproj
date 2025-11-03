@@ -152,7 +152,8 @@
     <Compile Include="CustomerClassification\PushDataToExternal\CustClassificationToMainDB\CustomerClassificationUpdateBySportCriteria.cs" />
     <Compile Include="CustomerClassification\PushDataToExternal\CustClassificationToMainDB\GetCustomerClassificationBySportCriteria.cs" />
     <Compile Include="CustomerClassification\RescanNormalClassificationBySport\PreprocessRescanNormalClassificationBySportCriteria.cs" />
-    <Compile Include="DangerMonitor\DangerMonitorTicketSummaryCriteria.cs" />
+    <Compile Include="DangerMonitor\DangerMonitorSearchMatchInfoCriteria.cs" />
+    <Compile Include="DangerMonitor\DangerMonitorSearchMatchInfoWithAssociationRootUserCriteria.cs" />
     <Compile Include="ImportEvidences\CheckCleanCustFlaggedEvidenceCriteria.cs" />
     <Compile Include="LogInputData\LogInputDataCriteria.cs" />
     <Compile Include="CustomerClassification\GetRoleCustomerCriteria.cs" />

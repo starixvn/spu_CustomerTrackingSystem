@@ -372,7 +372,9 @@
     <Compile Include="CustomerClassification\LatestClassification4ReportModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\RescanCustClassificationModel.cs" />
     <Compile Include="DangerMonitor\DangerMMTicketInfoModel.cs" />
+    <Compile Include="DangerMonitor\DangerMonitorDetailHideRequestModel.cs" />
     <Compile Include="DangerMonitor\DangerMonitorSearchModel.cs" />
+    <Compile Include="DangerMonitor\DangerMonitorUserRootOptionModel.cs" />
     <Compile Include="DangerMonitor\Entities\DangerMMTicketInfoEntity.cs" />
     <Compile Include="DTO\CustomerEvidence.cs" />
     <Compile Include="DTO\CustomerEvidenceForTW.cs" />

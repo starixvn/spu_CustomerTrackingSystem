@@ -3,7 +3,6 @@
     using Fanex.NAP.CTS.Core.Extentions;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     public class DangerMonitorSearchModel
     {
@@ -31,6 +30,16 @@
         public decimal UserAmount { get; set; }
 
         public decimal TotalAmount { get; set; }
+
+        public DangerMonitorUserRootOptionModel RootUserOption { get; set; }
+
+        public bool IsRootUserAssociationMode
+        {
+            get
+            {
+                return RootUserOption != null && (RootUserOption.IsAI || RootUserOption.IsDevice || RootUserOption.IsIP);
+            }
+        }
 
         public bool Validate
         {

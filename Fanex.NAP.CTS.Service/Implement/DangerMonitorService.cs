@@ -106,11 +106,11 @@
             return result;
         }
 
-        public GetDangerMonitorResultViewModel GetDangerMonitor(DangerMonitorSearchModel filter)
+        public GetDangerMonitorResultViewModel GetDangerMonitorWithNoAssociation(DangerMonitorSearchModel filter)
         {
             var result = Enumerable.Empty<GetDangerMonitorItemViewModel>();
 
-            var dangerMMItems = GetDangerMonitorSummary(filter);
+            var dangerMMItems = GetDangerMonitorInfoWithNoAssociation(filter);
 
             result = dangerMMItems != null ? MappingDangerMonitorWithSportBettype(dangerMMItems) : null;
 
@@ -118,6 +118,32 @@
             {
                 Items = result ?? new List<GetDangerMonitorItemViewModel>()
             };
+        }
+
+        public GetDangerMonitorResultViewModel GetDangerMonitorWithAssociationByRootUser(DangerMonitorSearchModel filter, string associationData)
+        {
+            var result = Enumerable.Empty<GetDangerMonitorItemViewModel>();
+
+            if (associationData.IsNotNullOrEmpty() && associationData != "[]")
+            {
+                var dangerMMItems = GetDangerMonitorInfoWithAssociationRootUser(filter, associationData);
+                result = dangerMMItems != null ? MappingDangerMonitorWithSportBettype(dangerMMItems) : null;
+            }
+
+            return new GetDangerMonitorResultViewModel
+            {
+                Items = result ?? new List<GetDangerMonitorItemViewModel>()
+            };
+        }
+
+        public IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs)
+        {
+            if (custIDs.IsNullOrEmpty())
+            {
+                return Enumerable.Empty<CustInfoModel>();
+            }
+
+            return _matchMonitorService.GetCustInfoByCustID(custIDs);
         }
 
         public byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath, int sportType)
@@ -186,9 +212,9 @@
             return _commonService.GetBetTypeSettings(paras);
         }
 
-        private IEnumerable<DangerMMTicketInfoModel> GetDangerMonitorSummary(DangerMonitorSearchModel filter)
+        private IEnumerable<DangerMMTicketInfoModel> GetDangerMonitorInfoWithNoAssociation(DangerMonitorSearchModel filter)
         {
-            var criteria = new DangerMonitorTicketSummaryCriteria
+            var criteria = new DangerMonitorSearchMatchInfoCriteria
             {
                 FromDate = filter.FromDate,
                 ToDate = filter.ToDate,
@@ -204,6 +230,29 @@
                 TotalAmount = filter.TotalAmount,
                 UserAmount = filter.UserAmount
             };           
+
+            var result = _repository.Fetch<DangerMMTicketInfoEntity>(criteria);
+
+            return result?.Select(x => new DangerMMTicketInfoModel(x)) ?? Enumerable.Empty<DangerMMTicketInfoModel>();
+        }
+
+        private IEnumerable<DangerMMTicketInfoModel> GetDangerMonitorInfoWithAssociationRootUser(DangerMonitorSearchModel filter, string associatedData)
+        {
+            var criteria = new DangerMonitorSearchMatchInfoWithAssociationRootUserCriteria
+            {
+                FromDate = filter.FromDate,
+                ToDate = filter.ToDate,
+                SportList = filter.SportList?.Where(x => x.Contains("null"))?.Select(x => x.Split('_')[0])?.Join(),
+                SportSabaLgGroup = filter.SportList?.Where(x => !x.Contains("null"))?.Join(),
+                LeagueEvent = filter.Event ?? string.Empty,
+                BettypeList = filter.BetTypes,
+                MatchSection = filter.MatchSection,
+                MarketList = filter.Market,
+                LeagueGroupList = filter.LeagueGroupList,
+                TotalAmount = filter.TotalAmount,
+                UserAmount = filter.UserAmount,
+                AssociationRootUser = associatedData
+            };
 
             var result = _repository.Fetch<DangerMMTicketInfoEntity>(criteria);
 

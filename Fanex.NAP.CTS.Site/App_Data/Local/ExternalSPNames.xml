@@ -59,6 +59,7 @@
 
 	<Function name="DangerMonitor">
 		<Setting Key="CTS_MatchTicketInfo_Get" SpName="CTS_MatchTicketInfo_Get" DbName="DBCTS.WASAVerse.wsv_cts" />
+		<Setting Key="CTS_MatchTicketInfo_Associations_Get" SpName="CTS_MatchTicketInfo_Associations_Get_xpre" DbName="DBCTS.WASAVerse.wsv_cts" />
 	</Function>
 
 	<Function name="RescanNormalClassificationBySport">

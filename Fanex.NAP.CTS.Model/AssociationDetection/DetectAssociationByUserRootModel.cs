@@ -4,6 +4,6 @@
     {      
         public long RootCustID { get; set; }
       
-        public string AssCustIDList { get; set; }
+        public string CustIDAssociations { get; set; }
     }
 }
