@@ -15,11 +15,11 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Web;
-    using System.Web.Http.Results;
     using System.Web.Mvc;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
@@ -162,6 +162,37 @@
                 await _memoryCacheService.PushValueAsync(cacheKey, result?.response, CACHE_EXPIRATION_HOURS);
 
                 return CreateSuccessResponse(result);
+            }
+            catch (InvalidDataException ex)
+            {
+                return CreateErrorResponse(ex.Message);
+            }
+            catch (HttpListenerException httpEx)
+            {
+                LogExtension.LogError("CTS - AI Insights UploadFile - AI Service Error", httpEx);
+
+                return CreateErrorResponse(httpEx.Message);
+            }
+            catch (Exception ex)
+            {
+                LogExtension.LogError("CTS - AI Insights Upload File", ex);
+                return CreateErrorResponse("An error occurred while uploading the file.");
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ConvertToCsvFile(HttpPostedFileBase uploadFile)
+        {
+            if (uploadFile == null || uploadFile.ContentLength == 0)
+            {
+                return CreateErrorResponse("No file provided or file is empty.");
+            }
+
+            try
+            {
+                var byteArray = await Task.Run(() => uploadFile.ConvertHttpPostedExcelFileToCsvChunked());
+
+                return File(byteArray.SelectMany(x => x).ToArray(), "text/csv", Path.GetFileNameWithoutExtension(uploadFile.FileName) + ".csv");
             }
             catch (InvalidDataException ex)
             {
