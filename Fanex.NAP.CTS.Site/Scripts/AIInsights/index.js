@@ -46,6 +46,8 @@ function AIInsights() {
         askChatBot: null
     };
 
+    let fileUpload = null;
+
     // DOM Elements Cache
     const domElements = {
         btnGenerate: $('#btnGenerate'),
@@ -142,6 +144,7 @@ function AIInsights() {
         domElements.closeChatbot.on('click', ToggleChatbot);
         domElements.btnGenerate.on('click', AnalyzeFile);
         domElements.fileTitle.on('click', SaveLog);
+        domElements.fileNameLabel.on('click', ExportExcelConvertCsv);
     }
 
     // Chatbot Management
@@ -180,7 +183,8 @@ function AIInsights() {
     }
 
     function HandleFileSelection(e) {
-        const file = e.target.files[0];
+        fileUpload = e.target.files[0];
+        const file = fileUpload;
 
         ResetDefault();
         domElements.contentCardSection.hide();
@@ -741,6 +745,48 @@ function AIInsights() {
         }, 400);
 
         return () => clearInterval(interval);
+    }
+
+    function ExportExcelConvertCsv() {
+        // handle file
+        if (fileUpload) {
+            const file = fileUpload;
+            const formData = new FormData();
+            const fileName = file.name.replace(/\.[^/.]+$/, "");
+
+            formData.append("uploadFile", file);
+
+            $.ajax({
+                url: common.modifyRelativeUrl('AIInsights/ConvertToCsvFile'),
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function (blob, status, xhr) {
+                    const disposition = xhr.getResponseHeader('Content-Disposition');
+                    let downloadFileName = fileName + ".csv";
+                    if (disposition && disposition.indexOf('filename=') !== -1) {
+                        const matches = /filename="?([^"]+)"?/.exec(disposition);
+                        if (matches != null && matches[1]) downloadFileName = matches[1];
+                    }
+
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = downloadFileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+                },
+                error: function (error) {
+                    console.log('ConvertToCsvFile error:', error);
+                }
+            });
+        }
     }
 
     // Utility Functions
