@@ -77,6 +77,7 @@ function AIInsights() {
 
     // Initialization
     function Initialize() {
+        BlockedLibraryPlotly();
         AttachEventListeners();
         UpdateFileNameFromServer();
         AnalyzeFile();
@@ -834,6 +835,59 @@ function AIInsights() {
                 $chartSection.append($card);
             });
         }
+    }
+
+    function BlockedLibraryPlotly() {
+        const PLOTLY_KEYWORD = "cdn.plot.ly/plotly";
+        const HAS_PLOTLY = !!window.Plotly;
+
+        if (HAS_PLOTLY) {
+            console.log("✅ Plotly already loaded, blocking future loads of any version.");
+        }
+
+        function isPlotlyScript(node) {
+            if (!node || node.tagName !== "SCRIPT") return false;
+            const src = node.src || "";
+            return src.includes(PLOTLY_KEYWORD);
+        }
+
+        const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                for (const node of mutation.addedNodes) {
+                    if (isPlotlyScript(node)) {
+                        console.warn("🚫 Blocked duplicate Plotly load:", node.src);
+                        node.remove();
+                    }
+                }
+            }
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+
+        const origAppendChild = Element.prototype.appendChild;
+        Element.prototype.appendChild = function (el) {
+            if (isPlotlyScript(el)) {
+                console.warn("🚫 Prevented Plotly append:", el.src);
+                return el;
+            }
+            return origAppendChild.call(this, el);
+        };
+
+        const origCreateElement = document.createElement;
+        document.createElement = function (tagName, ...args) {
+            const el = origCreateElement.call(document, tagName, ...args);
+            if (tagName.toLowerCase() === "script") {
+                const origSetAttribute = el.setAttribute;
+                el.setAttribute = function (name, value) {
+                    if (name === "src" && value.includes(PLOTLY_KEYWORD)) {
+                        console.warn("🚫 Prevented setting Plotly src:", value);
+                        return;
+                    }
+                    origSetAttribute.call(el, name, value);
+                };
+            }
+            return el;
+        };
     }
 
     // Initialize the application
