@@ -318,20 +318,30 @@
 
         private ActionResult CreateSuccessResponse(object data)
         {
-            return Json(new
+            return new JsonResult
             {
-                message = data
-            }, JsonRequestBehavior.AllowGet);
+                Data = new
+                {
+                    message = data
+                },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                MaxJsonLength = int.MaxValue
+            };
         }
 
         private ActionResult CreateErrorResponse(string message)
         {
             Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
-            return Json(new
+            return new JsonResult
             {
-                message = message
-            }, JsonRequestBehavior.AllowGet);
+                Data = new
+                {
+                    message = message
+                },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                MaxJsonLength = int.MaxValue
+            };
         }
 
         #endregion
