@@ -108,13 +108,6 @@
                     : _dangerMonitorService.GetDangerMonitorWithNoAssociation(filter);
 
                 data.Items = OrderDangerMonitorItems(data.Items);
-
-                var testItems = data.Items?.ToList();
-
-                if (testItems.IsNotNullOrEmpty())
-                    testItems[0].ListCustID = "TEST";
-
-                data.Items = testItems;
             }
 
             return Json(new { data }, JsonRequestBehavior.AllowGet);

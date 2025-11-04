@@ -85,6 +85,11 @@
                     return false;
                 }
 
+                if (RootUserOption == null)
+                {
+                    return false;
+                }
+
                 return true;
             }
         }

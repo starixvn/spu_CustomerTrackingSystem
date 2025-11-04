@@ -300,21 +300,18 @@
 
     function GetRootUserOption() {
         const isAssociationEnabled = !domElements.cbbAssociation.prop("disabled");
-        if (!isAssociationEnabled) {
-            return { IsAI: false, IsDevice: false, IsIP: false };
-        }
+        if (!isAssociationEnabled) return { IsAI: false, IsDevice: false, IsIP: false };
 
         const selectedValue = domElements.cbbAssociation.val() || "";
-        const isNoneSelected = selectedValue.includes("-1");
-        if (isNoneSelected) {
-            return { IsAI: false, IsDevice: false, IsIP: false };
-        }
+        if (selectedValue.includes("-1")) return { IsAI: false, IsDevice: false, IsIP: false };
 
-        return {
+        const result = {
             IsAI: selectedValue.includes("1"),
             IsDevice: selectedValue.includes("2"),
             IsIP: selectedValue.includes("3")
         };
+
+        return (result.IsAI || result.IsDevice || result.IsIP) ? result : null;
     };
 
     function GetDangerMonitor() {
@@ -323,7 +320,7 @@
 
             $('#txtEventHeader').val('');
             dangerMode = domElements.rbtnSelect.filter(":checked").val();
-            isRootUserAssociationMode = rootUserOption.IsAI || rootUserOption.IsDevice || rootUserOption.IsIP;
+            isRootUserAssociationMode = rootUserOption && (rootUserOption.IsAI || rootUserOption.IsDevice || rootUserOption.IsIP);
 
             let data = {
                 FromDate: domElements.dpkFromDate.val(),
