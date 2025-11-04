@@ -218,9 +218,10 @@
                 session_id = session_id
             };
 
-            var streamContentRequest = await Task.Run(() => uploadFile.CreateFileStreamContentFromModel(request, nameof(request.file_base64image)));
-
-            var result = await _apiForwarderService.UploadFile(streamContentRequest, ConfigSettings.AIInsightsUploadUrl);
+            var result =
+                await _apiForwarderService.UploadFile(
+                    () => uploadFile.CreateFileHttpContentFromModel(request, nameof(request.file_base64image)),
+                    ConfigSettings.AIInsightsUploadUrl);
 
             ValidateResponse(result);
 

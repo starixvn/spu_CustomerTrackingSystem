@@ -2,12 +2,13 @@
 {
     using Fanex.NAP.CTS.Model.AIInsights;
     using Fanex.NAP.CTS.Model.AIInsights.Api;
+    using System;
     using System.Net.Http;
     using System.Threading.Tasks;
 
     public interface IAIInsightsApiForwarderService
     {
-        Task<AIInsightsFileUploadResponseModel> UploadFile(StreamContent request, string url);
+        Task<AIInsightsFileUploadResponseModel> UploadFile(Func<HttpContent> createContent, string url);
 
         Task<AIInsightsAnalyzeSummaryResponseModel> AnalyzeSummary(AIInsightsAnalyzeRequestModel request, string url);
 
