@@ -54,22 +54,36 @@
         #endregion
 
         #region PostWithStreamWritter
-        public static async Task<TResult> PostWithStreamConttentAsync<TResult>(string url, StreamContent streamContent, double timeOutbySeconds = 120)
+        public static async Task<TResult> PostWithStreamConttentAsync<TResult>(string url, Func<HttpContent> createContent, double timeOutbySeconds = 120)
         {
-            var web = HttpClientRotator.GetClient();
-
-            using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(timeOutbySeconds)))
+            using (var httpContent = createContent())
             {
-                var response = await web.PostAsync(url, streamContent, cts.Token);
+                httpContent.Headers.ContentLength = null;
 
-                if (!response.IsSuccessStatusCode)
+                using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(timeOutbySeconds)))
                 {
-                    throw new Exception(await response.Content.ReadAsStringAsync());
+                    var web = HttpClientRotator.GetClient();
+
+                    using (var request = new HttpRequestMessage(HttpMethod.Post, url))
+                    {
+                        request.Content = httpContent;
+                        request.Headers.TransferEncodingChunked = true;
+
+                        var response = await web.SendAsync(
+                            request,
+                            HttpCompletionOption.ResponseHeadersRead,
+                            cts.Token);
+
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            var error = await response.Content.ReadAsStringAsync();
+                            throw new Exception(error);
+                        }
+
+                        var result = await response.Content.ReadAsStringAsync();
+                        return JsonConvert.DeserializeObject<TResult>(result);
+                    }
                 }
-
-                var result = await response.Content.ReadAsStringAsync();
-
-                return JsonConvert.DeserializeObject<TResult>(result);
             }
         }
 

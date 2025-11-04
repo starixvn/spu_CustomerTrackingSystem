@@ -19,6 +19,7 @@
 
         private const int ROW_BATCH_SIZE = 10_000; // number of rows per batch for xls, xlsx processing
         private const int BASE64_BUFFER_SIZE = 10 * 1024 * 1024; // 10MB chunks for ROW_BATCH_SIZE processing
+        private const int FLUSH_THRESHOLD = 10 * 1024 * 1024; // 10MB
 
         private const string CSV_EXTENSION = ".csv";
         private const string XLSX_EXTENSION = ".xlsx";
@@ -164,64 +165,61 @@
         #endregion
 
         #region Create StreamContent
-        public static StreamContent CreateFileStreamContentFromModel(this HttpPostedFileBase file, object model, string nameOfFileBase)
+        public static HttpContent CreateFileHttpContentFromModel(this HttpPostedFileBase file, object model, string nameOfFileBase)
         {
-            var stream = new MemoryStream();
-            using (var writer = new StreamWriter(stream, Encoding.UTF8, 1024, leaveOpen: true))
+            return new PushStreamContent(async (outputStream, _, __) =>
             {
-                writer.Write("{");
-
-                var props = model.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                bool first = true;
-
-                foreach (var prop in props)
+                using (var writer = new StreamWriter(outputStream, Encoding.UTF8, 1024, leaveOpen: true))
                 {
-                    var value = prop.GetValue(model);
-                    if (value == null && prop.Name != nameOfFileBase)
-                    {
-                        continue;
-                    }
+                    writer.Write("{");
 
-                    if (!first)
-                    {
-                        writer.Write(",");
-                    }
-                    first = false;
+                    var props = model.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                    bool first = true;
 
-                    writer.Write($"\"{prop.Name}\":");
-
-                    switch (value)
+                    foreach (var prop in props)
                     {
-                        case string str:
-                            WriteEscapedJsonString(writer, str);
-                            break;
-                        case int i:
-                            writer.Write(i.ToString());
-                            break;
-                        case null when prop.Name == nameOfFileBase:
-                            {
-                                WriteEscapedJsonStringFromHttpPostedFileBase(writer, file);
+                        var value = prop.GetValue(model);
+                        if (value == null && prop.Name != nameOfFileBase)
+                        {
+                            continue;
+                        }
+
+                        if (!first)
+                        {
+                            writer.Write(",");
+                        }
+                        first = false;
+
+                        writer.Write($"\"{prop.Name}\":");
+
+                        switch (value)
+                        {
+                            case string str:
+                                WriteEscapedJsonString(writer, str);
                                 break;
-                            }
-                        case StringBuilder sb:
-                            WriteEscapedJsonStringFromStringBuilder(writer, sb);
-                            break;
-                        default:
-                            writer.Write($"\"{value.ToString()}\""); // fallback
-                            break;
+                            case int i:
+                                writer.Write(i.ToString());
+                                break;
+                            case null when prop.Name == nameOfFileBase:
+                                {
+                                    WriteEscapedJsonStringFromHttpPostedFileBase(writer, file);
+                                    break;
+                                }
+                            case StringBuilder sb:
+                                WriteEscapedJsonStringFromStringBuilder(writer, sb);
+                                break;
+                            default:
+                                writer.Write($"\"{value.ToString()}\""); // fallback
+                                break;
+                        }
                     }
+
+                    writer.Write("}");
+                    await writer.FlushAsync();
                 }
 
-                writer.Write("}");
-                writer.Flush();
-            }
-
-            stream.Position = 0;
-
-            var content = new StreamContent(stream);
-            content.Headers.ContentType = new MediaTypeHeaderValue(MEDIA_JSON_TYPE);
-
-            return content;
+                outputStream.Close();
+            }, MEDIA_JSON_TYPE);
         }
 
         private static void WriteEscapedJsonStringFromHttpPostedFileBase(StreamWriter writer, HttpPostedFileBase file)
@@ -234,6 +232,8 @@
             byte[] leftover = new byte[2]; // Store leftover bytes that don't form complete 3-byte groups
             int leftoverCount = 0; // Number of leftover bytes
             char[] base64Buffer = ArrayPool<char>.Shared.Rent(BASE64_BUFFER_SIZE);
+
+            long totalWrittenSinceFlush = 0;
 
             try
             {
@@ -261,6 +261,8 @@
                             // Store remaining bytes for next iteration
                             Buffer.BlockCopy(combined, fullLen, leftover, 0, leftoverCount);
                         }
+
+                        totalWrittenSinceFlush += fullLen;
                     }
                     else
                     {
@@ -276,6 +278,14 @@
                             // Store remaining bytes for next iteration
                             Buffer.BlockCopy(chunk, fullLen, leftover, 0, leftoverCount);
                         }
+
+                        totalWrittenSinceFlush += fullLen;
+                    }
+
+                    if (totalWrittenSinceFlush >= FLUSH_THRESHOLD)
+                    {
+                        writer.Flush();
+                        totalWrittenSinceFlush = 0;
                     }
                 }
 
@@ -309,13 +319,17 @@
                 // Split large data into smaller chunks that fit in buffer
                 // This prevents IndexOutOfRangeException when encoding
                 int chunkSize = Math.Min(length - processed, MAX_CHUNK_SIZE);
+                chunkSize = (chunkSize / 3) * 3;
+                if (chunkSize == 0)
+                {
+                    break;
+                }
 
                 // Convert bytes to Base64 characters
                 int b64Len = Convert.ToBase64CharArray(data, startIndex + processed, chunkSize, base64Buffer, 0);
 
                 // Write Base64 string to output
                 writer.Write(base64Buffer, 0, b64Len);
-                writer.Flush(); // Force flush to reduce memory pressure
 
                 processed += chunkSize;
             }
