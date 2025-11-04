@@ -13,6 +13,7 @@
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
     using Fanex.NAP.TGRS.Core.ExcelUtility;
     using Newtonsoft.Json;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -43,7 +44,7 @@
 
         byte[] ExportToExcelAssociationDetect(IEnumerable<ExportAssociationDetectModel> AssociationDetect, string fileName, string templatePath);
 
-        string DetectAssociationCustByUserRoot(DetectAssociationByUserRootFilterModel filter);
+        IEnumerable<DetectAssociationByUserRootModel> DetectAssociationCustByUserRoot(DetectAssociationByUserRootFilterModel assFilter);
     }
 
     public class AssociationDetectionService : IAssociationDetectionService
@@ -281,16 +282,7 @@
             return writer.ToBytes();
         }
        
-        public string DetectAssociationCustByUserRoot(DetectAssociationByUserRootFilterModel filterAss)
-        {
-            var assWithRootCust = GetAssociationCustByUserRoot(filterAss);
-
-            return JsonConvert.SerializeObject(assWithRootCust);
-        }
-        #endregion
-
-        #region Private Methods
-        private IEnumerable<DetectAssociationByUserRootModel> GetAssociationCustByUserRoot(DetectAssociationByUserRootFilterModel assFilter)
+        public IEnumerable<DetectAssociationByUserRootModel> DetectAssociationCustByUserRoot(DetectAssociationByUserRootFilterModel assFilter)
         {
             var criteria = new DetectAssociationByUserRootCriteria
             {
@@ -302,6 +294,9 @@
 
             return _repository.Fetch<DetectAssociationByUserRootModel>(criteria);
         }
+        #endregion
+
+        #region Private Methods      
 
         private void FillRowData(IEnumerable<ExportAssociationDetectModel> AssociationDetect, ref ExcelTemplateWriter writer)
         {

@@ -39,7 +39,7 @@
         [SpParam(SqlParamName = "TotalAmount")]
         public decimal TotalAmount { get; set; }
 
-        [SpParam(SqlParamName = "RootCustomerAssociationJson")]
+        [SpParam(SqlParamName = "AssociationsList")]
         public string AssociationRootUser { get; set; }
 
         public override string GetSettingKey() => "CTS_MatchTicketInfo_Associations_Get";

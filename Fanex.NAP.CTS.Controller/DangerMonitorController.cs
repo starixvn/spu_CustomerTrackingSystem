@@ -200,7 +200,7 @@
                         .Distinct();
 
                     usernames = usernameArr.IsNotNullOrEmpty()
-                        ? string.Join(", ", usernameArr)
+                        ? string.Join(",", usernameArr)
                         : string.Empty;
                 }
                 else
@@ -328,13 +328,13 @@
             };
 
             var result = ConfigSettings.IsUsingFanexAPIDirect
-                ? ApiHelper.PostWithApiKey<string>(
+                ? ApiHelper.PostWithApiKey<IEnumerable<DetectAssociationByUserRootModel>>(
                     ConfigSettings.GetCtsApiEndPoint(ApiEndpoint.DetectAssociationCustByUserRoot),
                     filterAss,
                     ConfigSettings.ApiKeyFanexAPIDirect, ConfigSettings.AssociationDetectionTimeout).Result
                 : _associationDetectionService.DetectAssociationCustByUserRoot(filterAss);
 
-            return result;
+            return JsonConvert.SerializeObject(result);
         }
 
         #endregion Association Detect
