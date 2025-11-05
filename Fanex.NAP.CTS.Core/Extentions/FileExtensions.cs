@@ -7,9 +7,9 @@
     using System.Data.Common;
     using System.IO;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Reflection;
     using System.Text;
+    using System.Threading.Tasks;
     using System.Web;
     using static Fanex.NAP.CTS.Core.Extentions.Extentions;
 
@@ -169,65 +169,73 @@
         {
             return new PushStreamContent(async (outputStream, _, __) =>
             {
-                using (var writer = new StreamWriter(outputStream, Encoding.UTF8, 1024, leaveOpen: true))
+                StreamWriter writer = null;
+                try
                 {
-                    writer.Write("{");
-
-                    var props = model.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                    bool first = true;
-
-                    foreach (var prop in props)
+                    using (writer = new StreamWriter(outputStream, Encoding.UTF8, 1024, leaveOpen: true))
                     {
-                        var value = prop.GetValue(model);
-                        if (value == null && prop.Name != nameOfFileBase)
-                        {
-                            continue;
-                        }
+                        await writer.WriteAsync("{");
 
-                        if (!first)
-                        {
-                            writer.Write(",");
-                        }
-                        first = false;
+                        var props = model.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                        bool first = true;
 
-                        writer.Write($"\"{prop.Name}\":");
-
-                        switch (value)
+                        foreach (var prop in props)
                         {
-                            case string str:
-                                WriteEscapedJsonString(writer, str);
-                                break;
-                            case int i:
-                                writer.Write(i.ToString());
-                                break;
-                            case null when prop.Name == nameOfFileBase:
-                                {
-                                    WriteEscapedJsonStringFromHttpPostedFileBase(writer, file);
+                            var value = prop.GetValue(model);
+                            if (value == null && prop.Name != nameOfFileBase)
+                            {
+                                continue;
+                            }
+
+                            if (!first)
+                            {
+                                await writer.WriteAsync(",");
+                            }
+                            first = false;
+
+                            await writer.WriteAsync($"\"{prop.Name}\":");
+
+                            switch (value)
+                            {
+                                case string str:
+                                    await WriteEscapedJsonString(writer, str);
                                     break;
-                                }
-                            case StringBuilder sb:
-                                WriteEscapedJsonStringFromStringBuilder(writer, sb);
-                                break;
-                            default:
-                                writer.Write($"\"{value.ToString()}\""); // fallback
-                                break;
+                                case int i:
+                                    await writer.WriteAsync(i.ToString());
+                                    break;
+                                case null when prop.Name == nameOfFileBase:
+                                    {
+                                        await WriteEscapedJsonStringFromHttpPostedFileBase(writer, file);
+                                        break;
+                                    }
+                                case StringBuilder sb:
+                                    await WriteEscapedJsonStringFromStringBuilder(writer, sb);
+                                    break;
+                                default:
+                                    await writer.WriteAsync($"\"{value.ToString()}\""); // fallback
+                                    break;
+                            }
                         }
-                    }
 
-                    writer.Write("}");
-                    await writer.FlushAsync();
+                        await writer.WriteAsync("}");
+                        await writer.FlushAsync();
+                    }
+                }
+                finally
+                {
+                    writer?.Dispose();
+                    outputStream.Close();
                 }
 
-                outputStream.Close();
             }, MEDIA_JSON_TYPE);
         }
 
-        private static void WriteEscapedJsonStringFromHttpPostedFileBase(StreamWriter writer, HttpPostedFileBase file)
+        private static async Task WriteEscapedJsonStringFromHttpPostedFileBase(StreamWriter writer, HttpPostedFileBase file)
         {
             if (file == null || file.ContentLength == 0)
                 throw new ArgumentException("Invalid file upload.");
 
-            writer.Write('"');
+            await writer.WriteAsync('"');
 
             byte[] leftover = new byte[2]; // Store leftover bytes that don't form complete 3-byte groups
             int leftoverCount = 0; // Number of leftover bytes
@@ -252,7 +260,7 @@
                         // Base64 processes data in groups of 3 bytes (3 bytes → 4 characters)
                         // We need to ensure we only process complete 3-byte groups
                         int fullLen = (leftoverCount + length) / 3 * 3;
-                        ProcessBase64Chunk(writer, combined, 0, fullLen, base64Buffer);
+                        await ProcessBase64ChunkAsync(writer, combined, 0, fullLen, base64Buffer);
 
                         // Calculate new leftover count after processing complete groups
                         leftoverCount = leftoverCount + length - fullLen;
@@ -269,7 +277,7 @@
                         // LOGIC 1: Round down to nearest multiple of 3 for Base64 processing
                         // Process only complete 3-byte groups, leave remainder for next iteration
                         int fullLen = length / 3 * 3;
-                        ProcessBase64Chunk(writer, chunk, 0, fullLen, base64Buffer);
+                        await ProcessBase64ChunkAsync(writer, chunk, 0, fullLen, base64Buffer);
 
                         // Calculate leftover bytes that don't form complete groups
                         leftoverCount = length - fullLen;
@@ -284,7 +292,7 @@
 
                     if (totalWrittenSinceFlush >= FLUSH_THRESHOLD)
                     {
-                        writer.Flush();
+                        await writer.FlushAsync();
                         totalWrittenSinceFlush = 0;
                     }
                 }
@@ -293,7 +301,7 @@
                 if (leftoverCount > 0)
                 {
                     int b64Len = Convert.ToBase64CharArray(leftover, 0, leftoverCount, base64Buffer, 0);
-                    writer.Write(base64Buffer, 0, b64Len);
+                    await writer.WriteAsync(base64Buffer, 0, b64Len);
                 }
             }
             finally
@@ -301,11 +309,11 @@
                 ArrayPool<char>.Shared.Return(base64Buffer);
             }
 
-            writer.Write('"');
-            writer.Flush();
+            await writer.WriteAsync('"');
+            await writer.FlushAsync();
         }
 
-        private static void ProcessBase64Chunk(StreamWriter writer, byte[] data, int startIndex, int length, char[] base64Buffer)
+        private static async Task ProcessBase64ChunkAsync(StreamWriter writer, byte[] data, int startIndex, int length, char[] base64Buffer)
         {
             // LOGIC 2: Calculate maximum input bytes that fit in output buffer
             // Base64 ratio: 3 bytes → 4 characters
@@ -329,7 +337,7 @@
                 int b64Len = Convert.ToBase64CharArray(data, startIndex + processed, chunkSize, base64Buffer, 0);
 
                 // Write Base64 string to output
-                writer.Write(base64Buffer, 0, b64Len);
+                await writer.WriteAsync(base64Buffer, 0, b64Len);
 
                 processed += chunkSize;
             }
