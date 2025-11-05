@@ -172,7 +172,7 @@
                 StreamWriter writer = null;
                 try
                 {
-                    using (writer = new StreamWriter(outputStream, Encoding.UTF8, 1024, leaveOpen: true))
+                    using (writer = new StreamWriter(outputStream, Encoding.UTF8, 32 * 1024, leaveOpen: true))
                     {
                         await writer.WriteAsync("{");
 

@@ -282,6 +282,10 @@ function AIInsights() {
         }
 
         function onError(msg) {
+            variable.domElements.btnGenerate.prop('disabled', false);
+            variable.domElements.sendButton.prop('disabled', false);
+            EnableReCheckin();
+
             common.showError('Sorry Analyze Chart failed: ' + msg);
         }
     }
@@ -299,68 +303,68 @@ function AIInsights() {
         // variable.evtSource.onopen = () => console.log("✅ Connected");
         variable.evtSource.onerror = HandleEventSourceError;
         variable.evtSource.onmessage = HandleEventSourceMessage;
-    }
 
-    function HandleEventSourceError() {
-        if (variable.evtSource) {
-            variable.evtSource.close();
-            variable.evtSource = null;
-            variable.domElements.headerChartSection.removeClass('loading');
-            variable.domElements.btnGenerate.prop('disabled', false);
-            variable.domElements.sendButton.prop('disabled', false);
-            // console.log("✅ Connection closed");
-        }
-    }
-
-    function HandleEventSourceMessage(e) {
-        try {
-            const response = JSON.parse(e.data);
-            // console.log("Realtime data:", response);
-            ProcessEventResponse(response);
-        } catch (error) {
-            console.error("Error parsing SSE message:", error);
-        }
-    }
-
-    function ProcessEventResponse(response) {
-        switch (response.EventName) {
-            case variable.AIInsightEventName.AnalyzeCharts:
-                HandleAnalyzeChartsEvent(response);
-                break;
-        }
-    }
-
-    function HandleAnalyzeChartsEvent(response) {
-        switch (response.EventStatus) {
-            case variable.AIInsightEventStatus.Started:
-                // console.log("Analyze Charts started");
-                $('#chart-section .card-body').remove();
-                break;
-            case variable.AIInsightEventStatus.Processing:
-                HandleChartsProcessing(response.Data);
-                break;
-            case variable.AIInsightEventStatus.Completed:
-                // console.log("Analyze Charts completed");
+        function HandleEventSourceError() {
+            if (variable.evtSource) {
+                variable.evtSource.close();
+                variable.evtSource = null;
                 variable.domElements.headerChartSection.removeClass('loading');
                 variable.domElements.btnGenerate.prop('disabled', false);
                 variable.domElements.sendButton.prop('disabled', false);
-                variable.evtSource.close();
-                break;
-            case variable.AIInsightEventStatus.Failed:
-                // common.showError('Sorry Analyze Charts failed: ');
-                variable.domElements.headerChartSection.removeClass('loading');
-                variable.domElements.btnGenerate.prop('disabled', false);
-                variable.domElements.sendButton.prop('disabled', false);
-                variable.evtSource.close();
-                break;
+                // console.log("✅ Connection closed");
+            }
         }
-    }
 
-    function HandleChartsProcessing(chart) {
-        // console.log("Analyze Charts processing");
-        const $chartSection = variable.domElements.chartSection;
-        const $card = CreateChartCard(chart);
-        $chartSection.append($card);
+        function HandleEventSourceMessage(e) {
+            try {
+                const response = JSON.parse(e.data);
+                // console.log("Realtime data:", response);
+                ProcessEventResponse(response);
+            } catch (error) {
+                console.error("Error parsing SSE message:", error);
+            }
+        }
+
+        function ProcessEventResponse(response) {
+            switch (response.EventName) {
+                case variable.AIInsightEventName.AnalyzeCharts:
+                    HandleAnalyzeChartsEvent(response);
+                    break;
+            }
+        }
+
+        function HandleAnalyzeChartsEvent(response) {
+            switch (response.EventStatus) {
+                case variable.AIInsightEventStatus.Started:
+                    // console.log("Analyze Charts started");
+                    $('#chart-section .card-body').remove();
+                    break;
+                case variable.AIInsightEventStatus.Processing:
+                    HandleChartsProcessing(response.Data);
+                    break;
+                case variable.AIInsightEventStatus.Completed:
+                    // console.log("Analyze Charts completed");
+                    variable.domElements.headerChartSection.removeClass('loading');
+                    variable.domElements.btnGenerate.prop('disabled', false);
+                    variable.domElements.sendButton.prop('disabled', false);
+                    variable.evtSource.close();
+                    break;
+                case variable.AIInsightEventStatus.Failed:
+                    // common.showError('Sorry Analyze Charts failed: ');
+                    variable.domElements.headerChartSection.removeClass('loading');
+                    variable.domElements.btnGenerate.prop('disabled', false);
+                    variable.domElements.sendButton.prop('disabled', false);
+                    variable.evtSource.close();
+                    break;
+            }
+        }
+
+        function HandleChartsProcessing(chart) {
+            // console.log("Analyze Charts processing");
+            const $chartSection = variable.domElements.chartSection;
+            const $card = CreateChartCard(chart);
+            $chartSection.append($card);
+        }
     }
 
     // Rendering Functions

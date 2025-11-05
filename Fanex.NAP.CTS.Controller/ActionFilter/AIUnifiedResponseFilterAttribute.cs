@@ -73,10 +73,13 @@
                 case InvalidDataException invalidDataException:
                     return CreateErrorResponse(ex.Message, (int)Consts.HttpStatus.InvalidData);
                 case HttpRequestException httpRequestException when httpRequestException.InnerException?.Message?.Contains("connection was closed unexpectedly") == true:
-                    return CreateErrorResponse("The connection was interrupted and then reconnected...", (int)Consts.HttpStatus.HttpNetworkClose);
+                    return CreateErrorResponse("The connection was interrupted, please retry again", (int)Consts.HttpStatus.HttpNetworkClose);
                 case HttpListenerException httpListenerException:
                     LogExtension.LogError($"CTS - AI Insights {nameOfFunction} - AI Service Error", httpListenerException);
-                    return CreateErrorResponse(httpListenerException.Message, (int)Consts.HttpStatus.AIServiceError);
+                    return CreateErrorResponse($"An error occurred while {nameOfFunction}", (int)Consts.HttpStatus.AIServiceError);
+                case AggregateException agr:
+                    LogExtension.LogError($"CTS - AI Insights {nameOfFunction} Inner Failed", agr);
+                    return CreateErrorResponse($"An error occurred while {nameOfFunction}");
                 default:
                     LogExtension.LogError($"CTS - AI Insights {nameOfFunction}", ex);
                     return CreateErrorResponse($"An error occurred while {nameOfFunction}");
