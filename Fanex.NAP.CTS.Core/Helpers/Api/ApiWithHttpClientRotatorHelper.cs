@@ -54,7 +54,7 @@
         #endregion
 
         #region PostWithStreamWritter
-        public static async Task<TResult> PostWithStreamConttentAsync<TResult>(string url, Func<HttpContent> createContent, double timeOutbySeconds = 120)
+        public static async Task<TResult> PostWithContentAsync<TResult>(string url, Func<HttpContent> createContent, double timeOutbySeconds = 120)
         {
             using (var httpContent = createContent())
             {
@@ -95,7 +95,7 @@
             {
                 var content = CreateStreamContent(param);
 
-                var response = await web.PostAsync(url, content, cts.Token);
+                var response = await web.PostAsync(url, await content, cts.Token);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -108,12 +108,12 @@
             }
         }
 
-        public static StreamContent CreateStreamContent(object model)
+        public static async Task<StreamContent> CreateStreamContent(object model)
         {
             var stream = new MemoryStream();
             using (var writer = new StreamWriter(stream, Encoding.UTF8, 1024, leaveOpen: true))
             {
-                writer.Write("{");
+                await writer.WriteAsync("{");
 
                 var props = model.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
                 bool first = true;
@@ -128,31 +128,31 @@
 
                     if (!first)
                     {
-                        writer.Write(",");
+                        await writer.WriteAsync(",");
                     }
                     first = false;
 
-                    writer.Write($"\"{prop.Name}\":");
+                    await writer.WriteAsync($"\"{prop.Name}\":");
 
                     switch (value)
                     {
                         case string str:
-                            WriteEscapedJsonString(writer, str);
+                            await WriteEscapedJsonString(writer, str);
                             break;
                         case int i:
-                            writer.Write(i.ToString());
+                            await writer.WriteAsync(i.ToString());
                             break;
                         case StringBuilder sb:
-                            WriteEscapedJsonStringFromStringBuilder(writer, sb);
+                            await WriteEscapedJsonStringFromStringBuilder(writer, sb);
                             break;
                         default:
-                            writer.Write($"\"{value.ToString()}\""); // fallback
+                            await writer.WriteAsync($"\"{value.ToString()}\""); // fallback
                             break;
                     }
                 }
 
-                writer.Write("}");
-                writer.Flush();
+                await writer.WriteAsync("}");
+                await writer.FlushAsync();
             }
 
             stream.Position = 0;
@@ -224,7 +224,7 @@
                         }
                         else if (line.StartsWith("{") || line.StartsWith("["))
                         {
-                                onMessage?.Invoke(line.Trim());
+                            onMessage?.Invoke(line.Trim());
                         }
                     }
 

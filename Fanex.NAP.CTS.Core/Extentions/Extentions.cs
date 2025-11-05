@@ -11,6 +11,7 @@
     using System.Runtime.CompilerServices;
     using System.Security.Cryptography;
     using System.Text;
+    using System.Threading.Tasks;
 
     public static class Extentions
     {
@@ -110,13 +111,13 @@
         public static string CleanSpecialCharactor(this string input) =>
             string.IsNullOrEmpty(input) ? "" : input.Replace("\r\n", string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty).Replace("__", "_").Trim();
 
-        public static void WriteEscapedJsonStringFromStringBuilder(StreamWriter writer, StringBuilder sb, int bufferSize = 10 * 1024 * 1024) // chunk 10MB
+        public static async Task WriteEscapedJsonStringFromStringBuilder(StreamWriter writer, StringBuilder sb, int bufferSize = 10 * 1024 * 1024) // chunk 10MB
         {
             var pool = ArrayPool<char>.Shared;
             char[] buffer = pool.Rent(bufferSize);
             char[] writeBuf = pool.Rent(bufferSize * 2);
 
-            writer.Write('"');
+            await writer.WriteAsync('"');
             int totalLength = sb.Length;
 
             try
@@ -139,7 +140,7 @@
                     }
 
                     if (w > 0)
-                        writer.Write(writeBuf, 0, w);
+                        await writer.WriteAsync(writeBuf, 0, w);
                 }
             }
             finally
@@ -148,12 +149,12 @@
                 pool.Return(writeBuf);
             }
 
-            writer.Write('"');
+            await writer.WriteAsync('"');
         }
 
-        public static void WriteEscapedJsonString(StreamWriter writer, string value)
+        public static async Task WriteEscapedJsonString(StreamWriter writer, string value)
         {
-            writer.Write('"');
+            await writer.WriteAsync('"');
 
             int estimatedLength = value.Length + value.Length / 10;
             char[] buffer = ArrayPool<char>.Shared.Rent(estimatedLength);
@@ -167,14 +168,14 @@
 
                     if (w > buffer.Length - 8)
                     {
-                        writer.Write(buffer, 0, w);
+                        await writer.WriteAsync(buffer, 0, w);
                         w = 0;
                     }
                 }
 
                 if (w > 0)
                 {
-                    writer.Write(buffer, 0, w);
+                    await writer.WriteAsync(buffer, 0, w);
                 }
             }
             finally
@@ -182,7 +183,7 @@
                 ArrayPool<char>.Shared.Return(buffer);
             }
 
-            writer.Write('"');
+            await writer.WriteAsync('"');
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

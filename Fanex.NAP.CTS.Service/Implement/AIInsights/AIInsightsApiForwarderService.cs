@@ -53,7 +53,7 @@
                 return new AIInsightsFileUploadResponseModel();
             }
 
-            var response = await ApiWithHttpClientRotatorHelper.PostWithStreamConttentAsync<AIInsightsFileUploadResponseModel>(url, createContent, ConfigSettings.AIAnalyzeRequestTimeout);
+            var response = await ApiWithHttpClientRotatorHelper.PostWithContentAsync<AIInsightsFileUploadResponseModel>(url, createContent, ConfigSettings.AIAnalyzeRequestTimeout);
 
             return response;
         }
