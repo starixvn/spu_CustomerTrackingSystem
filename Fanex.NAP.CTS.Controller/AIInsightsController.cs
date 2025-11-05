@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Controller.ActionFilter;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
@@ -17,6 +18,7 @@
     using System.IO;
     using System.Linq;
     using System.Net;
+    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Web;
@@ -80,29 +82,13 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AIInsightsAnalyzeFile)]
+        [AIUnifiedResponseFilter]
         public async Task<ActionResult> AnalyzeSummary()
         {
-            var data = new AIInsightsAnalyzeSummaryResponseModel();
+            var fileResponse = GetUploadFileResponse(TabId);
+            var data = await _aiInsightsService.AnalyzeSummary(fileResponse);
 
-            try
-            {
-                var fileResponse = GetUploadFileResponse(TabId);
-                data = await _aiInsightsService.AnalyzeSummary(fileResponse);
-
-                return CreateSuccessResponse(data);
-            }
-            catch (HttpListenerException httpEx)
-            {
-                LogExtension.LogError("CTS - AI Insights AnalyzeSummary - AI Service Error", httpEx);
-
-                return CreateErrorResponse(httpEx.Message);
-            }
-            catch (Exception ex)
-            {
-                LogExtension.LogError("CTS - AI Insights AnalyzeSummary Error", ex);
-
-                return CreateErrorResponse("An error occurred while analyzing the summary.");
-            }
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -148,36 +134,19 @@
         }
 
         [HttpPost]
+        [AIUnifiedResponseFilter]
         public async Task<ActionResult> UploadFile(HttpPostedFileBase uploadFile)
         {
             if (uploadFile == null || uploadFile.ContentLength == 0)
             {
-                return CreateErrorResponse("No file provided or file is empty.");
+                throw new InvalidDataException("No file provided or file is empty.");
             }
 
-            try
-            {
-                var result = await _aiInsightsService.UploadFile(uploadFile, UserId);
-                var cacheKey = GetUploadFileCacheKey(TabId);
-                await _memoryCacheService.PushValueAsync(cacheKey, result?.response, CACHE_EXPIRATION_HOURS);
+            var result = await _aiInsightsService.UploadFile(uploadFile, UserId);
+            var cacheKey = GetUploadFileCacheKey(TabId);
+            await _memoryCacheService.PushValueAsync(cacheKey, result?.response, CACHE_EXPIRATION_HOURS);
 
-                return CreateSuccessResponse(result);
-            }
-            catch (InvalidDataException ex)
-            {
-                return CreateErrorResponse(ex.Message);
-            }
-            catch (HttpListenerException httpEx)
-            {
-                LogExtension.LogError("CTS - AI Insights UploadFile - AI Service Error", httpEx);
-
-                return CreateErrorResponse(httpEx.Message);
-            }
-            catch (Exception ex)
-            {
-                LogExtension.LogError("CTS - AI Insights Upload File", ex);
-                return CreateErrorResponse("An error occurred while uploading the file.");
-            }
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -212,21 +181,13 @@
         }
 
         [HttpPost]
+        [AIUnifiedResponseFilter]
         public async Task<ActionResult> StartAnalyzeCharts()
         {
-            string response = null;
+            var fileResponse = GetUploadFileResponse(TabId);
+            var response = await _aiInsightsService.StartAnalyzeChartsAsync(fileResponse);
 
-            try
-            {
-                var fileResponse = GetUploadFileResponse(TabId);
-                response = await _aiInsightsService.StartAnalyzeChartsAsync(fileResponse);
-            }
-            catch (Exception ex)
-            {
-                LogExtension.LogError("CTS - AI Insights StartAnalyzeCharts", ex);
-            }
-
-            return Json(response, JsonRequestBehavior.AllowGet);
+            return CreateResponse(response);
         }
 
         [HttpGet]
@@ -316,20 +277,17 @@
 
         #region Response Helpers
 
-        private ActionResult CreateSuccessResponse(object data)
+        private ActionResult CreateResponse(object data)
         {
             return new JsonResult
             {
-                Data = new
-                {
-                    message = data
-                },
+                Data = data,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet,
                 MaxJsonLength = int.MaxValue
             };
         }
 
-        private ActionResult CreateErrorResponse(string message)
+        private ActionResult CreateErrorResponse(string message, int statuscode = 400)
         {
             Response.StatusCode = (int)HttpStatusCode.BadRequest;
 

@@ -1,82 +1,8 @@
 function AIInsights() {
-    // Constants and Configuration
-    const CONFIG = (() => {
-        const maxFileSizeBytes = parseInt($('#divAIMaxFileSizeBytes').text()) || 50 * 1024 * 1024; // Default to 50MB
-        const maxFileSizeMB = parseInt($('#divAIUploadMaxFileSizeMB').text()) || 50; // Default to 50MB
-        const allowedFileExtensions = $('#divAIAllowedExtensions').text() || '.xls,.xlsx,.csv';
-        const exts = allowedFileExtensions.replace(/\./g, '').replace(/,/g, '|');
-        const supportedFileExtensions = new RegExp(`\\.(${exts})$`, 'i');
-
-        return {
-            MAX_FILE_SIZE_BYTES: maxFileSizeBytes,
-            MAX_FILE_SIZE_MB: maxFileSizeMB,
-            SUPPORTED_FILE_EXTENSIONS: supportedFileExtensions,
-            NO_FILE_UPLOADED: "No file uploaded",
-            CHAT_SCROLL_DELAY: 100,
-            CHART_RESIZE_DELAY: 300,
-            MAX_CHAT_HEIGHT_RATIO: 3
-        };
-    })();
-
-    const AIInsightEventName = {
-        AnalyzeStart: 'AnalyzeStart',
-        AnalyzeSummary: 'AnalyzeSummary',
-        AnalyzeCharts: 'AnalyzeCharts',
-        AnalyzeComplete: 'AnalyzeComplete',
-        Chatbot: 'Chatbot',
-        Error: 'Error',
-    };
-
-    const AIInsightEventStatus = {
-        Started: 'Started',
-        Processing: 'Processing',
-        Completed: 'Completed',
-        Failed: 'Failed',
-    };
-
-    const ViewMode = {
-        VISUALIZATION: "visualization",
-        STATISTICS: "statistics"
-    };
-
-    // State Management
-    let dataLogSentry = {
-        analyzeSummary: null,
-        analyzeCharts: null,
-        askChatBot: null
-    };
-
-    let fileUpload = null;
-
-    // DOM Elements Cache
-    const domElements = {
-        btnGenerate: $('#btnGenerate'),
-        chatbotToggle: $('.chatbot-toggle'),
-        closeChatbot: $('.close-chatbot'),
-        fileInput: $('#fileInput'),
-        fileNameLabel: $('#file-name-label'),
-        chatbotPanel: $('#chatbotPanel'),
-        container: $('.ai-insights-container'),
-        divVisualization: $('#divVisualization'),
-        divStatistics: $('#divStatistics'),
-        chatInput: $('#chatInput'),
-        chatMessages: $('#chatMessages'),
-        sendButton: $('#sendButton'),
-        viewOptions: $('input[name="view"]'),
-        summarySection: $('#summary-section ul'),
-        headerSummarySection: $('#summary-section .card-header'),
-        chartSection: $('#chart-section'),
-        headerChartSection: $('#chart-section .card-header'),
-        contentCardSection: $('.content-card-section'),
-        fileTitle: $('.file-title')
-    };
-
-    let $contentWrapper = EnsureContentWrapperExists();
-    let streamToken = null;
-    let evtSource = null;
-
     // Initialization
     function Initialize() {
+        variable.$contentWrapper = EnsureContentWrapperExists();
+
         BlockedLibraryPlotly();
         AttachEventListeners();
         UpdateFileNameFromServer();
@@ -86,19 +12,19 @@ function AIInsights() {
 
     // DOM Management
     function EnsureContentWrapperExists() {
-        let $wrapper = domElements.container.find('.ai-insights-content');
+        let $wrapper = variable.domElements.container.find('.ai-insights-content');
 
         if ($wrapper.length === 0) {
             $wrapper = $('<div class="ai-insights-content"></div>');
             MoveChildrenToWrapper($wrapper);
-            domElements.container.append($wrapper);
+            variable.domElements.container.append($wrapper);
         }
 
         return $wrapper;
     }
 
     function MoveChildrenToWrapper($wrapper) {
-        domElements.container.children().each(function () {
+        variable.domElements.container.children().each(function () {
             const $child = $(this);
             const isChatbotToggle = $child.hasClass('chatbot-toggle');
             const isChatbotPanel = $child.attr('id') === 'chatbotPanel';
@@ -111,13 +37,13 @@ function AIInsights() {
 
     // View Management
     function ToggleSections(viewMode) {
-        const isVisualization = viewMode === ViewMode.VISUALIZATION;
+        const isVisualization = viewMode === variable.ViewMode.VISUALIZATION;
 
-        domElements.divVisualization.toggleClass('hidden', !isVisualization);
-        domElements.divStatistics.toggleClass('hidden', isVisualization);
+        variable.domElements.divVisualization.toggleClass('hidden', !isVisualization);
+        variable.domElements.divStatistics.toggleClass('hidden', isVisualization);
 
         if (!isVisualization) {
-            ResizePlotlyCharts(domElements.divStatistics);
+            ResizePlotlyCharts(variable.domElements.divStatistics);
         }
     }
 
@@ -131,64 +57,64 @@ function AIInsights() {
 
     // Event Listeners
     function AttachEventListeners() {
-        domElements.viewOptions.on('change', function () {
+        variable.domElements.viewOptions.on('change', function () {
             ToggleSections($(this).val());
         });
 
         AttachFileUploadEvents();
         AttachChatbotEvents();
 
-        ToggleSections(ViewMode.VISUALIZATION);
+        ToggleSections(variable.ViewMode.VISUALIZATION);
 
         // Button event handlers
-        domElements.chatbotToggle.on('click', ToggleChatbot);
-        domElements.closeChatbot.on('click', ToggleChatbot);
-        domElements.btnGenerate.on('click', AnalyzeFile);
-        domElements.fileTitle.on('click', SaveLog);
-        domElements.fileNameLabel.on('click', ExportExcelConvertCsv);
+        variable.domElements.chatbotToggle.on('click', ToggleChatbot);
+        variable.domElements.closeChatbot.on('click', ToggleChatbot);
+        variable.domElements.btnGenerate.on('click', AnalyzeFile);
+        variable.domElements.fileTitle.on('click', SaveLog);
+        variable.domElements.fileNameLabel.on('click', ExportExcelConvertCsv);
     }
 
     // Chatbot Management
     function ToggleChatbot() {
-        if (!domElements.chatbotPanel.length || !domElements.container.length) {
+        if (!variable.domElements.chatbotPanel.length || !variable.domElements.container.length) {
             return;
         }
 
-        const isOpen = domElements.chatbotPanel.hasClass('active');
+        const isOpen = variable.domElements.chatbotPanel.hasClass('active');
 
-        domElements.chatbotPanel.toggleClass('active');
-        $contentWrapper.toggleClass('chatbot-open', !isOpen);
-        domElements.chatbotToggle.css('display', isOpen ? 'flex' : 'none');
-        domElements.closeChatbot.css('display', isOpen ? 'none' : 'flex');
+        variable.domElements.chatbotPanel.toggleClass('active');
+        variable.$contentWrapper.toggleClass('chatbot-open', !isOpen);
+        variable.domElements.chatbotToggle.css('display', isOpen ? 'flex' : 'none');
+        variable.domElements.closeChatbot.css('display', isOpen ? 'none' : 'flex');
 
         if (!isOpen) {
-            setTimeout(ScrollToBottomChat, CONFIG.CHAT_SCROLL_DELAY);
+            setTimeout(ScrollToBottomChat, variable.CONFIG.CHAT_SCROLL_DELAY);
         }
 
         setTimeout(() => {
-            ResizePlotlyCharts(domElements.divVisualization);
-        }, CONFIG.CHART_RESIZE_DELAY);
+            ResizePlotlyCharts(variable.domElements.divVisualization);
+        }, variable.CONFIG.CHART_RESIZE_DELAY);
     }
 
     // File Upload Management
     function AttachFileUploadEvents() {
-        if (!domElements.fileInput.length || !domElements.fileNameLabel.length) {
+        if (!variable.domElements.fileInput.length || !variable.domElements.fileNameLabel.length) {
             return;
         }
 
-        const initialFileName = domElements.fileNameLabel.text() || CONFIG.NO_FILE_UPLOADED;
-        domElements.fileNameLabel.text(initialFileName);
+        const initialFileName = variable.domElements.fileNameLabel.text() || variable.CONFIG.NO_FILE_UPLOADED;
+        variable.domElements.fileNameLabel.text(initialFileName);
         UpdateTitle();
 
-        domElements.fileInput.on('change', HandleFileSelection);
+        variable.domElements.fileInput.on('change', HandleFileSelection);
     }
 
     function HandleFileSelection(e) {
-        fileUpload = e.target.files[0];
-        const file = fileUpload;
+        variable.fileUpload = e.target.files[0];
+        const file = variable.fileUpload;
 
         ResetDefault();
-        domElements.contentCardSection.hide();
+        variable.domElements.contentCardSection.hide();
 
         if (!file) {
             SetNoFileState();
@@ -203,15 +129,15 @@ function AIInsights() {
     }
 
     function ValidateFile(file) {
-        if (!CONFIG.SUPPORTED_FILE_EXTENSIONS.test(file.name)) {
+        if (!variable.CONFIG.SUPPORTED_FILE_EXTENSIONS.test(file.name)) {
             common.showError('Please upload a .xls or .xlsx file!');
-            domElements.fileInput.val('');
+            variable.domElements.fileInput.val('');
             return false;
         }
 
-        if (file.size > CONFIG.MAX_FILE_SIZE_BYTES) {
-            common.showError(`Exceeds the allowed limit of ${CONFIG.MAX_FILE_SIZE_MB} MB`);
-            domElements.fileInput.val('');
+        if (file.size > variable.CONFIG.MAX_FILE_SIZE_BYTES) {
+            common.showError(`Exceeds the allowed limit of ${variable.CONFIG.MAX_FILE_SIZE_MB} MB`);
+            variable.domElements.fileInput.val('');
             return false;
         }
 
@@ -219,76 +145,66 @@ function AIInsights() {
     }
 
     function SetNoFileState() {
-        domElements.fileNameLabel.text(CONFIG.NO_FILE_UPLOADED);
+        variable.domElements.fileNameLabel.text(variable.CONFIG.NO_FILE_UPLOADED);
         UpdateTitle();
     }
 
     function UpdateTitle() {
-        const currentText = domElements.fileNameLabel.text();
-        domElements.fileNameLabel.attr('title', currentText || CONFIG.NO_FILE_UPLOADED);
+        const currentText = variable.domElements.fileNameLabel.text();
+        variable.domElements.fileNameLabel.attr('title', currentText || variable.CONFIG.NO_FILE_UPLOADED);
     }
 
     function UploadFile(file) {
-        const formData = new FormData();
-        const fileName = file.name;
+        api.UploadFile(file,
+            {
+                onStart: onStart,
+                onSuccess: (res, fileName) => onSuccess(res, fileName),
+                onComplete: onComplete,
+                onError: (message) => onError(message)
+            });
 
-        formData.append("uploadFile", file);
-        domElements.fileNameLabel.text(fileName);
-
-        $.ajax(common.modifyRelativeUrl('AIInsights/UploadFile'), {
-            type: 'POST',
-            headers: { "X-Tab-Id": common.getTabId() },
-            data: formData,
-            processData: false,
-            contentType: false,
-            beforeSend: HandleUploadStart,
-            success: (response) => HandleUploadSuccess(response, fileName),
-            complete: HandleUploadComplete,
-            error: function (error) { HandleUploadError(error); }
-        });
-    }
-
-    function HandleUploadStart() {
-        common.showLoading();
-        domElements.btnGenerate.prop('disabled', true);
-        domElements.sendButton.prop('disabled', true);
-    }
-
-    function HandleUploadSuccess(response, fileName) {
-        domElements.btnGenerate.prop('disabled', false);
-        domElements.sendButton.prop('disabled', false);
-        domElements.fileNameLabel.text(fileName);
-        common.showSuccess('File uploaded successfully: ' + fileName, 2000);
-
-        UpdateTitle();
-    }
-
-    function HandleUploadComplete() {
-        common.closeLoading();
-        CleanUploadedFileInput();
-    }
-
-    function HandleUploadError(response) {
-        common.closeLoading();
-
-        domElements.fileNameLabel.text(CONFIG.NO_FILE_UPLOADED);
-        common.showError("Upload failed " + response.responseJSON.message);
-    }
-
-    function CleanUploadedFileInput() {
-        if (domElements.fileInput && domElements.fileInput[0]) {
-            domElements.fileInput[0].value = "";
+        function onStart() {
+            common.showLoading();
+            variable.domElements.btnGenerate.prop('disabled', true);
+            variable.domElements.sendButton.prop('disabled', true);
         }
-        if (domElements.fileInput) {
-            domElements.fileInput.val("");
+
+        function onSuccess(response, fileName) {
+            variable.domElements.btnGenerate.prop('disabled', false);
+            variable.domElements.sendButton.prop('disabled', false);
+            variable.domElements.fileNameLabel.text(fileName);
+            common.showSuccess('File uploaded successfully: ' + fileName, 2000);
+
+            UpdateTitle();
+        }
+
+        function onComplete() {
+            common.closeLoading();
+            CleanUploadedFileInput();
+        }
+
+        function onError(msg) {
+            common.closeLoading();
+
+            variable.domElements.fileNameLabel.text(variable.CONFIG.NO_FILE_UPLOADED);
+            common.showError("Upload failed " + msg);
+        }
+
+        function CleanUploadedFileInput() {
+            if (variable.domElements.fileInput && variable.domElements.fileInput[0]) {
+                variable.domElements.fileInput[0].value = "";
+            }
+            if (variable.domElements.fileInput) {
+                variable.domElements.fileInput.val("");
+            }
         }
     }
 
     // Analysis Functions
     function AnalyzeFile() {
-        const fileName = domElements.fileNameLabel.text().trim();
+        const fileName = variable.domElements.fileNameLabel.text().trim();
 
-        if (fileName === CONFIG.NO_FILE_UPLOADED || fileName === '') {
+        if (fileName === variable.CONFIG.NO_FILE_UPLOADED || fileName === '') {
             return;
         }
 
@@ -307,84 +223,91 @@ function AIInsights() {
     }
 
     function AnalyzeSummary() {
-        return $.ajax(common.modifyRelativeUrl('AIInsights/AnalyzeSummary'), {
-            type: 'POST',
-            headers: {
-                "X-Tab-Id": common.getTabId()
-            },
-            success: function (data) {
-                dataLogSentry.analyzeSummary = data;
-                let response = data?.message?.response;
-
-                if (response.summary) {
-                    RenderVisualizationSummary(response.summary);
-                }
-
-                RenderStatistics(response.statistics_html);
-
-                domElements.contentCardSection.show();
-            },
-            complete: function () {
-                common.closeLoading();
-                domElements.headerSummarySection.removeClass('loading');
-                ResizePlotlyCharts();
-            },
-            error: function (errMsg) { HandleAnalyzeSummaryError(errMsg); }
+        return api.AnalyzeSummary({
+            onStart: () => { },
+            onSuccess: (res) => onSuccess(res),
+            onComplete: onComplete,
+            onError: (xhr) => onError(xhr)
         });
-    }
 
-    function HandleAnalyzeSummaryError(errMsg) {
-        common.showError('Sorry Analyze Summary failed: ' + errMsg.responseJSON.message);
+        function onSuccess(res) {
+            variable.dataLogSentry.analyzeSummary = res;
+            let response = res?.data?.response;
 
-        common.closeLoading();
-        domElements.headerSummarySection.removeClass('loading');
-        domElements.btnGenerate.prop('disabled', false);
-        domElements.sendButton.prop('disabled', false);
-        EnableReCheckin();
+            if (response.summary) {
+                RenderVisualizationSummary(response.summary);
+            }
+
+            RenderStatistics(response.statistics_html);
+
+            variable.domElements.contentCardSection.show();
+        }
+
+        function onComplete() {
+            common.closeLoading();
+            variable.domElements.headerSummarySection.removeClass('loading');
+            ResizePlotlyCharts();
+        }
+
+        function onError(msg) {
+            common.closeLoading();
+            variable.domElements.headerSummarySection.removeClass('loading');
+            variable.domElements.btnGenerate.prop('disabled', false);
+            variable.domElements.sendButton.prop('disabled', false);
+            EnableReCheckin();
+
+            common.showError('Sorry Analyze Summary failed: ' + msg);
+        }
+
     }
 
     function ShowAnalysisLoading() {
         common.showLoading();
-        domElements.headerSummarySection.addClass('loading');
-        domElements.headerChartSection.addClass('loading');
-        domElements.btnGenerate.prop('disabled', true);
-        domElements.sendButton.prop('disabled', true);
+        variable.domElements.headerSummarySection.addClass('loading');
+        variable.domElements.headerChartSection.addClass('loading');
+        variable.domElements.btnGenerate.prop('disabled', true);
+        variable.domElements.sendButton.prop('disabled', true);
     }
 
     function AnalyzeChartsGetSSEId() {
-        return $.ajax(common.modifyRelativeUrl('AIInsights/StartAnalyzeCharts'), {
-            type: 'POST',
-            headers: {
-                "X-Tab-Id": common.getTabId()
-            },
-            success: function (data) {
-                streamToken = data;
-            }
+        return api.StartAnalyzeCharts({
+            onStart: () => { },
+            onSuccess: onSuccess,
+            onComplete: () => { },
+            onError: (msg) => onError(msg)
         });
+
+        function onSuccess(res) {
+            variable.streamToken = res?.data || null;
+        }
+
+        function onError(msg) {
+            common.showError('Sorry Analyze Chart failed: ' + msg);
+        }
     }
 
     // Server-Sent Events AnalyzeCharts
     function AnalyzeChartsSSEConnection() {
-        if (evtSource) {
-            evtSource.close();
+        if (variable.evtSource) {
+            variable.evtSource.close();
         }
 
-        evtSource = new EventSource(
-            common.modifyRelativeUrl(`AIInsights/StreamAnalyzeCharts?streamToken=${streamToken}`)
+        variable.evtSource = new EventSource(
+            common.modifyRelativeUrl(`AIInsights/StreamAnalyzeCharts?streamToken=${variable.streamToken}`)
         );
 
-        // evtSource.onopen = () => console.log("✅ Connected");
-        evtSource.onerror = HandleEventSourceError;
-        evtSource.onmessage = HandleEventSourceMessage;
+        // variable.evtSource.onopen = () => console.log("✅ Connected");
+        variable.evtSource.onerror = HandleEventSourceError;
+        variable.evtSource.onmessage = HandleEventSourceMessage;
     }
 
     function HandleEventSourceError() {
-        if (evtSource) {
-            evtSource.close();
-            evtSource = null;
-            domElements.headerChartSection.removeClass('loading');
-            domElements.btnGenerate.prop('disabled', false);
-            domElements.sendButton.prop('disabled', false);
+        if (variable.evtSource) {
+            variable.evtSource.close();
+            variable.evtSource = null;
+            variable.domElements.headerChartSection.removeClass('loading');
+            variable.domElements.btnGenerate.prop('disabled', false);
+            variable.domElements.sendButton.prop('disabled', false);
             // console.log("✅ Connection closed");
         }
     }
@@ -401,7 +324,7 @@ function AIInsights() {
 
     function ProcessEventResponse(response) {
         switch (response.EventName) {
-            case AIInsightEventName.AnalyzeCharts:
+            case variable.AIInsightEventName.AnalyzeCharts:
                 HandleAnalyzeChartsEvent(response);
                 break;
         }
@@ -409,40 +332,40 @@ function AIInsights() {
 
     function HandleAnalyzeChartsEvent(response) {
         switch (response.EventStatus) {
-            case AIInsightEventStatus.Started:
+            case variable.AIInsightEventStatus.Started:
                 // console.log("Analyze Charts started");
                 $('#chart-section .card-body').remove();
                 break;
-            case AIInsightEventStatus.Processing:
+            case variable.AIInsightEventStatus.Processing:
                 HandleChartsProcessing(response.Data);
                 break;
-            case AIInsightEventStatus.Completed:
+            case variable.AIInsightEventStatus.Completed:
                 // console.log("Analyze Charts completed");
-                domElements.headerChartSection.removeClass('loading');
-                domElements.btnGenerate.prop('disabled', false);
-                domElements.sendButton.prop('disabled', false);
-                evtSource.close();
+                variable.domElements.headerChartSection.removeClass('loading');
+                variable.domElements.btnGenerate.prop('disabled', false);
+                variable.domElements.sendButton.prop('disabled', false);
+                variable.evtSource.close();
                 break;
-            case AIInsightEventStatus.Failed:
+            case variable.AIInsightEventStatus.Failed:
                 // common.showError('Sorry Analyze Charts failed: ');
-                domElements.headerChartSection.removeClass('loading');
-                domElements.btnGenerate.prop('disabled', false);
-                domElements.sendButton.prop('disabled', false);
-                evtSource.close();
+                variable.domElements.headerChartSection.removeClass('loading');
+                variable.domElements.btnGenerate.prop('disabled', false);
+                variable.domElements.sendButton.prop('disabled', false);
+                variable.evtSource.close();
                 break;
         }
     }
 
     function HandleChartsProcessing(chart) {
         // console.log("Analyze Charts processing");
-        const $chartSection = domElements.chartSection;
+        const $chartSection = variable.domElements.chartSection;
         const $card = CreateChartCard(chart);
         $chartSection.append($card);
     }
 
     // Rendering Functions
     function RenderVisualizationSummary(visualizationSummary) {
-        const $ul = domElements.summarySection;
+        const $ul = variable.domElements.summarySection;
         $ul.empty();
 
         if (visualizationSummary) {
@@ -547,11 +470,11 @@ function AIInsights() {
     }
 
     function RenderStatistics(statisticsHtml) {
-        domElements.divStatistics.html(statisticsHtml);
+        variable.domElements.divStatistics.html(statisticsHtml);
 
         if (statisticsHtml) {
             AdjustStatsItemsLayout();
-            ResizePlotlyCharts(domElements.divStatistics);
+            ResizePlotlyCharts(variable.domElements.divStatistics);
         }
     }
 
@@ -587,7 +510,7 @@ function AIInsights() {
     }
 
     function RenderChatHistory(history) {
-        const $chatMessages = domElements.chatMessages;
+        const $chatMessages = variable.domElements.chatMessages;
 
         $.each(history, function (index, item) {
             const $message = CreateChatMessage(item.Sender, item.Message);
@@ -614,7 +537,7 @@ function AIInsights() {
     }
 
     function SendChatMessage() {
-        const message = domElements.chatInput.val().trim();
+        const message = variable.domElements.chatInput.val().trim();
         if (!message) return;
 
         AddUserMessage(message);
@@ -634,12 +557,12 @@ function AIInsights() {
 
     function AddUserMessage(message) {
         const $userMessage = CreateChatMessage('u', message);
-        domElements.chatMessages.append($userMessage);
+        variable.domElements.chatMessages.append($userMessage);
     }
 
     function ClearChatInput() {
-        domElements.chatInput.val('');
-        const textarea = domElements.chatInput[0];
+        variable.domElements.chatInput.val('');
+        const textarea = variable.domElements.chatInput[0];
         textarea.style.height = 'auto';
         textarea.style.height = '36px';
     }
@@ -648,7 +571,7 @@ function AIInsights() {
         const $loadingDots = CreateLoadingDots();
         const $loadingMessage = CreateLoadingMessage($loadingDots);
 
-        domElements.chatMessages.append($loadingMessage);
+        variable.domElements.chatMessages.append($loadingMessage);
         ScrollToBottomChat();
 
         return StartDotLoading($loadingDots);
@@ -668,13 +591,13 @@ function AIInsights() {
     }
 
     function HandleChatbotResponse(response) {
-        dataLogSentry.askChatBot = response;
+        variable.dataLogSentry.askChatBot = response;
         $('.loading-message').remove();
 
         const answer = response?.answer || 'No response from bot.';
         const $botMessage = CreateChatMessage('bot', answer);
 
-        domElements.chatMessages.append($botMessage);
+        variable.domElements.chatMessages.append($botMessage);
         ScrollToBottomChat();
 
         if (response.chart_infos) {
@@ -686,32 +609,32 @@ function AIInsights() {
         $('.loading-message').remove();
 
         const $errorMessage = CreateChatMessage('bot', 'Oops! Something went wrong.');
-        domElements.chatMessages.append($errorMessage);
+        variable.domElements.chatMessages.append($errorMessage);
         ScrollToBottomChat();
     }
 
     function AttachChatbotEvents() {
-        domElements.sendButton.on('click', SendChatMessage);
+        variable.domElements.sendButton.on('click', SendChatMessage);
 
-        domElements.chatInput.on('keypress', function (e) {
+        variable.domElements.chatInput.on('keypress', function (e) {
             if (e.which === 13 && !e.shiftKey) {
                 e.preventDefault();
-                if (domElements.sendButton.prop('disabled') === false) {
+                if (variable.domElements.sendButton.prop('disabled') === false) {
                     SendChatMessage();
                 }
             }
         });
 
-        domElements.chatInput.on('input', AutoResizeTextarea);
+        variable.domElements.chatInput.on('input', AutoResizeTextarea);
         AutoResizeTextarea();
     }
 
     function AutoResizeTextarea() {
-        const textarea = domElements.chatInput[0];
+        const textarea = variable.domElements.chatInput[0];
         if (!textarea) return;
 
         textarea.style.height = 'auto';
-        const maxHeight = window.innerHeight / CONFIG.MAX_CHAT_HEIGHT_RATIO;
+        const maxHeight = window.innerHeight / variable.CONFIG.MAX_CHAT_HEIGHT_RATIO;
 
         if (textarea.scrollHeight > maxHeight) {
             textarea.style.height = maxHeight + 'px';
@@ -723,7 +646,7 @@ function AIInsights() {
     }
 
     function ScrollToBottomChat() {
-        const $chatMessages = domElements.chatMessages;
+        const $chatMessages = variable.domElements.chatMessages;
         $chatMessages.scrollTop($chatMessages[0].scrollHeight);
     }
 
@@ -750,8 +673,8 @@ function AIInsights() {
 
     function ExportExcelConvertCsv() {
         // handle file
-        if (fileUpload) {
-            const file = fileUpload;
+        if (variable.fileUpload) {
+            const file = variable.fileUpload;
             const formData = new FormData();
             const fileName = file.name.replace(/\.[^/.]+$/, "");
 
@@ -793,7 +716,7 @@ function AIInsights() {
     // Utility Functions
     function SaveLog() {
         const filename = common.getUID() + '.json';
-        const content = JSON.stringify(dataLogSentry);
+        const content = JSON.stringify(variable.dataLogSentry);
         SaveTextFile(filename, content);
     }
 
@@ -813,7 +736,7 @@ function AIInsights() {
             headers: { "X-Tab-Id": common.getTabId() },
             success: (response) => {
                 if (response) {
-                    domElements.fileNameLabel.text(response);
+                    variable.domElements.fileNameLabel.text(response);
                 }
             }
         });
@@ -826,7 +749,7 @@ function AIInsights() {
     }
 
     function RenderVisualizationChart(visualizationChart) {
-        const $chartSection = domElements.chartSection;
+        const $chartSection = variable.domElements.chartSection;
         $('#chart-section .card-body').remove();
 
         if (visualizationChart && visualizationChart.length > 0) {
@@ -894,16 +817,16 @@ function AIInsights() {
     $(document).ready(Initialize);
 
     $(window).on('beforeunload', function () {
-        if (evtSource) {
-            evtSource.close();
-            evtSource = null;
+        if (variable.evtSource) {
+            variable.evtSource.close();
+            variable.evtSource = null;
         }
     });
 
     $(window).on('unload', function () {
-        if (evtSource) {
-            evtSource.close();
-            evtSource = null;
+        if (variable.evtSource) {
+            variable.evtSource.close();
+            variable.evtSource = null;
         }
     });
 }
