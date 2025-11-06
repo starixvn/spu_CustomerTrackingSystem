@@ -4,18 +4,23 @@
     using System;
     using System.IO;
     using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Reflection;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using static Fanex.NAP.CTS.Core.Extentions.Extentions;
 
     public static class ApiWithHttpClientRotatorHelper
     {
         private const string MEDIA_JSON_TYPE = "application/json";
+        private const string MEDIA_XNDJSON_TYPE = "application/x-ndjson";
+
         #region Post
-        public static async Task<TResult> PostAsync<TResult>(string url, object param, double timeOutbySeconds = 120, CancellationToken? cancellationToken = null)
+        public static async Task<TResult> PostAsync<TResult>(
+            string url,
+            object param,
+            double timeOutbySeconds = 120,
+            CancellationToken? cancellationToken = null,
+            int maxRetryCount = 3,
+            int retryDelayMs = 2000)
         {
             var client = HttpClientRotator.GetClient();
 
@@ -47,119 +52,58 @@
                         {
                             throw new InvalidOperationException($"Failed to deserialize response from {url}. Content: {resultString}", ex);
                         }
-                    }, url, timeOutbySeconds, linkedCts.Token);
+                    }, 
+                    url, 
+                    timeOutbySeconds, 
+                    linkedCts.Token,
+                    maxRetryCount,
+                    retryDelayMs).ConfigureAwait(false);
                 }
             }
         }
         #endregion
 
-        #region PostWithStreamWritter
-        public static async Task<TResult> PostWithContentAsync<TResult>(string url, Func<HttpContent> createContent, double timeOutbySeconds = 120)
+        #region PostWithConttent
+        public static async Task<TResult> PostWithContentAsync<TResult>(
+            string url,
+            Func<HttpContent> createContent,
+            double timeOutbySeconds = 120,
+            int maxRetryCount = 3,
+            int retryDelayMs = 2000)
         {
-            using (var httpContent = createContent())
+            using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(timeOutbySeconds)))
             {
-                httpContent.Headers.ContentLength = null;
+                var httpClient = HttpClientRotator.GetClient();
 
-                using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(timeOutbySeconds)))
+                return await HandleExceptionWhileExecutingAsync(async () =>
                 {
-                    var web = HttpClientRotator.GetClient();
-
+                    using (var httpContent = createContent()) // create per request, if not will did not data in next request
                     using (var request = new HttpRequestMessage(HttpMethod.Post, url))
                     {
                         request.Content = httpContent;
                         request.Headers.TransferEncodingChunked = true;
 
-                        var response = await web.SendAsync(
+                        var response = await httpClient.SendAsync(
                             request,
                             HttpCompletionOption.ResponseHeadersRead,
                             cts.Token);
 
                         if (!response.IsSuccessStatusCode)
                         {
-                            var error = await response.Content.ReadAsStringAsync();
+                            var error = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new Exception(error);
                         }
 
-                        var result = await response.Content.ReadAsStringAsync();
+                        var result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                         return JsonConvert.DeserializeObject<TResult>(result);
                     }
-                }
+                },
+                url,
+                timeOutbySeconds,
+                cts.Token,
+                maxRetryCount,
+                retryDelayMs).ConfigureAwait(false);
             }
-        }
-
-        public static async Task<TResult> PostWithStreamWritterAsync<TResult>(string url, object param, double timeOutbySeconds = 120)
-        {
-            var web = HttpClientRotator.GetClient();
-
-            using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(timeOutbySeconds)))
-            {
-                var content = CreateStreamContent(param);
-
-                var response = await web.PostAsync(url, await content, cts.Token);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new Exception(await response.Content.ReadAsStringAsync());
-                }
-
-                var result = await response.Content.ReadAsStringAsync();
-
-                return JsonConvert.DeserializeObject<TResult>(result);
-            }
-        }
-
-        public static async Task<StreamContent> CreateStreamContent(object model)
-        {
-            var stream = new MemoryStream();
-            using (var writer = new StreamWriter(stream, Encoding.UTF8, 1024, leaveOpen: true))
-            {
-                await writer.WriteAsync("{");
-
-                var props = model.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                bool first = true;
-
-                foreach (var prop in props)
-                {
-                    var value = prop.GetValue(model);
-                    if (value == null)
-                    {
-                        continue;
-                    }
-
-                    if (!first)
-                    {
-                        await writer.WriteAsync(",");
-                    }
-                    first = false;
-
-                    await writer.WriteAsync($"\"{prop.Name}\":");
-
-                    switch (value)
-                    {
-                        case string str:
-                            await WriteEscapedJsonString(writer, str);
-                            break;
-                        case int i:
-                            await writer.WriteAsync(i.ToString());
-                            break;
-                        case StringBuilder sb:
-                            await WriteEscapedJsonStringFromStringBuilder(writer, sb);
-                            break;
-                        default:
-                            await writer.WriteAsync($"\"{value.ToString()}\""); // fallback
-                            break;
-                    }
-                }
-
-                await writer.WriteAsync("}");
-                await writer.FlushAsync();
-            }
-
-            stream.Position = 0;
-            var content = new StreamContent(stream);
-            content.Headers.ContentType = new MediaTypeHeaderValue(MEDIA_JSON_TYPE);
-
-            return content;
         }
         #endregion
 
@@ -168,7 +112,9 @@
             string url,
             Action<string> onMessage,
             int timeOutbySeconds = 120,
-            CancellationToken? cancellationToken = null)
+            CancellationToken? cancellationToken = null,
+            int maxRetryCount = 3,
+            int retryDelayMs = 2000)
         {
 
             var client = HttpClientRotator.GetClient();
@@ -181,7 +127,7 @@
             {
                 await HandleExceptionWhileExecutingAsync(async () =>
                 {
-                    request.Headers.Accept.ParseAdd("application/x-ndjson");
+                    request.Headers.Accept.ParseAdd(MEDIA_XNDJSON_TYPE);
 
                     var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, linkedCts.Token);
                     response.EnsureSuccessStatusCode();
@@ -229,7 +175,12 @@
                     }
 
                     return Task.CompletedTask;
-                }, url, timeOutbySeconds, linkedCts.Token).ConfigureAwait(false);
+                }, 
+                url, 
+                timeOutbySeconds, 
+                linkedCts.Token,
+                maxRetryCount,
+                retryDelayMs).ConfigureAwait(false);
             }
         }
         #endregion

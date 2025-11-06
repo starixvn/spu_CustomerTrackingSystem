@@ -10,6 +10,15 @@
 
     public class AIInsightsApiForwarderService : IAIInsightsApiForwarderService
     {
+        private readonly int RETRY_COUNT_TIME;
+        private readonly int RETRY_DELAY_TIME_MS;
+
+        public AIInsightsApiForwarderService()
+        {
+            RETRY_COUNT_TIME = ConfigSettings.AIRequestRetryCountTime;
+            RETRY_DELAY_TIME_MS = ConfigSettings.AIRequestRetryDelayTimeMs;
+        }
+
         public async Task<AIInsightsStartAnalyzeChartsResponseModel> StartAnalyzeChartsAsync(AIInsightsAnalyzeRequestModel request, string url)
         {
             if (string.IsNullOrEmpty(url))
@@ -17,7 +26,14 @@
                 return new AIInsightsStartAnalyzeChartsResponseModel();
             }
 
-            var response = await ApiWithHttpClientRotatorHelper.PostAsync<AIInsightsStartAnalyzeChartsResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout);
+            var response = 
+                await ApiWithHttpClientRotatorHelper.PostAsync<AIInsightsStartAnalyzeChartsResponseModel>(
+                    url,
+                    request,
+                    ConfigSettings.AIAnalyzeChartRequestTimeout,
+                    null,
+                    RETRY_COUNT_TIME,
+                    RETRY_DELAY_TIME_MS);
 
             return response;
         }
@@ -29,7 +45,14 @@
                 return new AIInsightsAnalyzeSummaryResponseModel();
             }
 
-            var response = await ApiWithHttpClientRotatorHelper.PostAsync<AIInsightsAnalyzeSummaryResponseModel>(url, request, ConfigSettings.AIAnalyzeRequestTimeout);
+            var response = 
+                await ApiWithHttpClientRotatorHelper.PostAsync<AIInsightsAnalyzeSummaryResponseModel>(
+                    url, 
+                    request, 
+                    ConfigSettings.AIAnalyzeSummaryRequestTimeout,
+                    null,
+                    RETRY_COUNT_TIME,
+                    RETRY_DELAY_TIME_MS);
 
             return response;
         }
@@ -41,7 +64,14 @@
                 return new AIInsightsChatbotResponseModel();
             }
 
-            var response = await ApiWithHttpClientRotatorHelper.PostAsync<AIInsightsChatbotResponseModel>(url, request, ConfigSettings.ChatbotRequestTimeout);
+            var response = 
+                await ApiWithHttpClientRotatorHelper.PostAsync<AIInsightsChatbotResponseModel>(
+                    url, 
+                    request, 
+                    ConfigSettings.ChatbotRequestTimeout,
+                    null,
+                    RETRY_COUNT_TIME,
+                    RETRY_DELAY_TIME_MS);
 
             return response;
         }
@@ -53,7 +83,13 @@
                 return new AIInsightsFileUploadResponseModel();
             }
 
-            var response = await ApiWithHttpClientRotatorHelper.PostWithContentAsync<AIInsightsFileUploadResponseModel>(url, createContent, ConfigSettings.AIAnalyzeRequestTimeout);
+            var response = 
+                await ApiWithHttpClientRotatorHelper.PostWithContentAsync<AIInsightsFileUploadResponseModel>(
+                    url, 
+                    createContent, 
+                    ConfigSettings.AIAnalyzeUploadFileRequestTimeout,
+                    RETRY_COUNT_TIME,
+                    RETRY_DELAY_TIME_MS);
 
             return response;
         }

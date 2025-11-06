@@ -15,7 +15,9 @@
             string url,
             Action<string> onMessage,
             CancellationToken cancellationToken,
-            int timeOutbySeconds = 120)
+            int timeOutbySeconds = 120,
+            int maxRetryCount = 3,
+            int retryDelayMs = 2000)
         {
             if (string.IsNullOrWhiteSpace(url))
                 throw new ArgumentException("url cannot be null or empty.", nameof(url));
@@ -23,7 +25,7 @@
                 throw new ArgumentNullException(nameof(onMessage));
 
             await ApiWithHttpClientRotatorHelper
-                .GetServerSentEventAsync(url, onMessage, timeOutbySeconds, cancellationToken)
+                .GetServerSentEventAsync(url, onMessage, timeOutbySeconds, cancellationToken, maxRetryCount, retryDelayMs)
                 .ConfigureAwait(false);
         }
     }
