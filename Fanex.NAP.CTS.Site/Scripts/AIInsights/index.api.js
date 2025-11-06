@@ -25,7 +25,7 @@
             }
         });
 
-        return RetryOnNetworkClose(doRequest, 3, 1500, onError)
+        return RetryOnNetworkClose(doRequest, variable.CONFIG.RETRY_TIME, variable.CONFIG.RETRY_DELAY_IN_SECONDS * 1000, onError)
             .done(response => onSuccess?.(response, fileName))
             .fail(response => onError?.(response?.message ?? "Upload failed."))
             .always(onComplete);
@@ -49,7 +49,7 @@
             }
         });
 
-        return RetryOnNetworkClose(doRequest, 3, 1500, onError)
+        return RetryOnNetworkClose(doRequest, variable.CONFIG.RETRY_TIME, variable.CONFIG.RETRY_DELAY_IN_SECONDS * 1000, onError)
             .done(response => onSuccess?.(response))
             .fail(response => onError?.(response?.message ?? "AnalyzeSummary failed."))
             .always(onComplete);
@@ -67,7 +67,7 @@
             beforeSend: onStart
         });
 
-        return RetryOnNetworkClose(doRequest, 3, 1500)
+        return RetryOnNetworkClose(doRequest, variable.CONFIG.RETRY_TIME, variable.CONFIG.RETRY_DELAY_IN_SECONDS * 1000, onError)
             .done(response => {
                 onSuccess?.(response);
             })
@@ -80,12 +80,13 @@
 
     /**
      * Retry AJAX call if response.statuscode == HttpNetworkClose
-     * @param {function} ajaxFn - function trả về $.ajax promise
+     * @param {function} ajaxFn
      * @param {number} retries
      * @param {number} delay
+     * @param {onError} handle Error
      * @returns {Promise} jQuery Deferred Promise
      */
-    function RetryOnNetworkClose(ajaxFn, retries = 3, delay = 1500) {
+    function RetryOnNetworkClose(ajaxFn, retries, delay, onError) {
         const deferred = $.Deferred();
 
         function attempt(remaining) {

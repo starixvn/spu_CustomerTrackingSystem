@@ -235,38 +235,67 @@
         #endregion
 
         #region private method
-        private static async Task<T> HandleExceptionWhileExecutingAsync<T>(Func<Task<T>> func, string url, double timeOutbySeconds, CancellationToken cancellationToken)
+        private static async Task<T> HandleExceptionWhileExecutingAsync<T>(
+            Func<Task<T>> func,
+            string url,
+            double timeOutbySeconds,
+            CancellationToken cancellationToken,
+            int maxRetryCount = 3,
+            int retryDelayMs = 2000)
         {
-            try
-            {
-                return await func();
-            }
-            catch (IOException ex)
-            {
-                if (IsCancellationRequestedToken(cancellationToken))
-                {
-                    throw new TaskCanceledException($"Request to {url} was canceled by caller.", ex);
-                }
+            int retryAttempt = 0;
 
-                throw ex; // Re-throw unknown cancellation
-            }
-            catch (OperationCanceledException ex)
+            while (true)
             {
-                if (cancellationToken.IsCancellationRequested)
+                try
                 {
-                    throw new TimeoutException($"Request to {url} timed out after {timeOutbySeconds} seconds.", ex);
+                    return await func();
                 }
-
-                if (IsCancellationRequestedToken(cancellationToken))
+                catch (HttpRequestException httpRequestException)
                 {
-                    throw new TaskCanceledException($"Request to {url} was canceled by caller.", ex);
-                }
+                    string innerMsg = httpRequestException.InnerException?.Message ?? string.Empty;
 
-                throw ex; // Re-throw unknown cancellation
-            }
-            catch (Exception ex)
-            {
-                throw ex;
+                    bool isTransientConnectionIssue =
+                        innerMsg.Contains("connection was closed unexpectedly") ||
+                        innerMsg.Contains("expected to be kept alive was closed by the server");
+
+                    if (isTransientConnectionIssue && retryAttempt < maxRetryCount)
+                    {
+                        retryAttempt++;
+
+                        await Task.Delay(retryDelayMs, cancellationToken);
+                        continue; // Retry the request
+                    }
+
+                    throw; // Re-throw if max retries reached or not a transient issue
+                }
+                catch (IOException ex)
+                {
+                    if (IsCancellationRequestedToken(cancellationToken))
+                    {
+                        throw new TaskCanceledException($"Request to {url} was canceled by caller.", ex);
+                    }
+
+                    throw;
+                }
+                catch (OperationCanceledException ex)
+                {
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        throw new TimeoutException($"Request to {url} timed out after {timeOutbySeconds} seconds.", ex);
+                    }
+
+                    if (IsCancellationRequestedToken(cancellationToken))
+                    {
+                        throw new TaskCanceledException($"Request to {url} was canceled by caller.", ex);
+                    }
+
+                    throw;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
         }
 
