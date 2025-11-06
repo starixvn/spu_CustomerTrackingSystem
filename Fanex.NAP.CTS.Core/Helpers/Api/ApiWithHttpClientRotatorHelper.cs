@@ -22,8 +22,6 @@
             int maxRetryCount = 3,
             int retryDelayMs = 2000)
         {
-            var client = HttpClientRotator.GetClient();
-
             using (var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(timeOutbySeconds)))
             using (var linkedCts = cancellationToken.HasValue ?
                         CancellationTokenSource.CreateLinkedTokenSource(timeoutCts.Token, cancellationToken.Value) :
@@ -34,6 +32,8 @@
                 {
                     return await HandleExceptionWhileExecutingAsync(async () =>
                     {
+                        var client = HttpClientRotator.GetClient();
+
                         var response = await client.PostAsync(url, content, linkedCts.Token).ConfigureAwait(false);
 
                         if (!response.IsSuccessStatusCode)
@@ -52,9 +52,9 @@
                         {
                             throw new InvalidOperationException($"Failed to deserialize response from {url}. Content: {resultString}", ex);
                         }
-                    }, 
-                    url, 
-                    timeOutbySeconds, 
+                    },
+                    url,
+                    timeOutbySeconds,
                     linkedCts.Token,
                     maxRetryCount,
                     retryDelayMs).ConfigureAwait(false);
@@ -73,10 +73,11 @@
         {
             using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(timeOutbySeconds)))
             {
-                var httpClient = HttpClientRotator.GetClient();
 
                 return await HandleExceptionWhileExecutingAsync(async () =>
                 {
+                    var httpClient = HttpClientRotator.GetClient();
+
                     using (var httpContent = createContent()) // create per request, if not will did not data in next request
                     using (var request = new HttpRequestMessage(HttpMethod.Post, url))
                     {
@@ -116,9 +117,6 @@
             int maxRetryCount = 3,
             int retryDelayMs = 2000)
         {
-
-            var client = HttpClientRotator.GetClient();
-
             using (var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(timeOutbySeconds)))
             using (var linkedCts = cancellationToken.HasValue ?
                         CancellationTokenSource.CreateLinkedTokenSource(timeoutCts.Token, cancellationToken.Value) :
@@ -127,6 +125,8 @@
             {
                 await HandleExceptionWhileExecutingAsync(async () =>
                 {
+                    var client = HttpClientRotator.GetClient();
+
                     request.Headers.Accept.ParseAdd(MEDIA_XNDJSON_TYPE);
 
                     var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, linkedCts.Token);
@@ -175,9 +175,9 @@
                     }
 
                     return Task.CompletedTask;
-                }, 
-                url, 
-                timeOutbySeconds, 
+                },
+                url,
+                timeOutbySeconds,
                 linkedCts.Token,
                 maxRetryCount,
                 retryDelayMs).ConfigureAwait(false);

@@ -263,12 +263,32 @@
         #endregion
 
         #region AI Config
+        public static double AIInsightsHttpTimeoutHours
+        {
+            get
+            {
+                var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIInsightsHttpTimeoutHours"];
+                var timeout = double.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 1.5;
+                return timeout;
+            }
+        }
+
+        public static int AIInsightsHttpClientInstanceCount
+        {
+            get
+            {
+                var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIInsightsHttpClientInstanceCount"];
+                var timeout = int.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 3;
+                return timeout;
+            }
+        }
+
         public static int AIRequestRetryCountTime
         {
             get
             {
                 var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIRequestRetryCountTime"];
-                var timeout = int.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 300;
+                var timeout = int.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 3;
                 return timeout;
             }
         }

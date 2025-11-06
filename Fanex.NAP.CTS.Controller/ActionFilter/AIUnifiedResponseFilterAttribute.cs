@@ -76,6 +76,8 @@
                     when httpRequestException.InnerException?.Message?.Contains("connection was closed unexpectedly") == true ||
                          httpRequestException.InnerException?.Message?.Contains("expected to be kept alive was closed by the server") == true:
                     return CreateErrorResponse("The connection was interrupted, please retry again", (int)Consts.HttpStatus.HttpNetworkClose);
+                case ObjectDisposedException objectDisposedException:
+                    return CreateErrorResponse("The connection was interrupted, please retry again", (int)Consts.HttpStatus.HttpNetworkClose);
                 case HttpListenerException httpListenerException:
                     LogExtension.LogError($"CTS - AI Insights {nameOfFunction} - AI Service Error", httpListenerException);
                     return CreateErrorResponse($"An error occurred while {nameOfFunction}", (int)Consts.HttpStatus.AIServiceError);

@@ -330,6 +330,7 @@
     <Compile Include="Extentions\LogExtension.cs" />
     <Compile Include="Helpers\Api\ApiHelper.cs" />
     <Compile Include="Helpers\Api\ApiWithHttpClientRotatorHelper.cs" />
+    <Compile Include="Helpers\Api\HttpClientLoadBalance.cs" />
     <Compile Include="Helpers\Api\HttpClientRotator.cs" />
     <Compile Include="Helpers\AppSettings.cs" />
     <Compile Include="Helpers\BetListHelper.cs" />
