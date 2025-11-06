@@ -72,7 +72,9 @@
             {
                 case InvalidDataException invalidDataException:
                     return CreateErrorResponse(ex.Message, (int)Consts.HttpStatus.InvalidData);
-                case HttpRequestException httpRequestException when httpRequestException.InnerException?.Message?.Contains("connection was closed unexpectedly") == true:
+                case HttpRequestException httpRequestException
+                    when httpRequestException.InnerException?.Message?.Contains("connection was closed unexpectedly") == true ||
+                         httpRequestException.InnerException?.Message?.Contains("expected to be kept alive was closed by the server") == true:
                     return CreateErrorResponse("The connection was interrupted, please retry again", (int)Consts.HttpStatus.HttpNetworkClose);
                 case HttpListenerException httpListenerException:
                     LogExtension.LogError($"CTS - AI Insights {nameOfFunction} - AI Service Error", httpListenerException);

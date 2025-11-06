@@ -20,7 +20,9 @@
             NO_FILE_UPLOADED: "No file uploaded",
             CHAT_SCROLL_DELAY: 100,
             CHART_RESIZE_DELAY: 300,
-            MAX_CHAT_HEIGHT_RATIO: 3
+            MAX_CHAT_HEIGHT_RATIO: 3,
+            RETRY_TIME: 2,
+            RETRY_DELAY_IN_SECONDS: 5
         };
     })();
 
