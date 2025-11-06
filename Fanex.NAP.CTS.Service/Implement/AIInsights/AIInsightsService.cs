@@ -69,7 +69,9 @@
                     string.Format(ConfigSettings.AIInsightsAnalyzeChartsSseProcessUrl, streamToken),
                     msg => { messageQueue.TryAdd(msg, 100, linkedCts.Token); },
                     linkedCts.Token,
-                    timeOutbySeconds: ConfigSettings.AIAnalyzeRequestTimeout)
+                    timeOutbySeconds: ConfigSettings.AIAnalyzeChartRequestTimeout,
+                    maxRetryCount: ConfigSettings.AIRequestRetryCountTime,
+                    retryDelayMs: ConfigSettings.AIRequestRetryDelayTimeMs)
                 .ConfigureAwait(false),
                 linkedCts.Token);
 

@@ -24,10 +24,16 @@
             _senderService = sender ?? new SseSenderService();
         }
 
-        public async Task ListenerAsync(string url, Action<string> onMessage, CancellationToken cancellationToken, int timeOutbySeconds = 120)
+        public async Task ListenerAsync(
+            string url, 
+            Action<string> onMessage, 
+            CancellationToken cancellationToken, 
+            int timeOutbySeconds = 120,
+            int maxRetryCount = 3,
+            int retryDelayMs = 2000)
         {
             await _listenerService
-                .ListenerAsync(url, onMessage, cancellationToken, timeOutbySeconds)
+                .ListenerAsync(url, onMessage, cancellationToken, timeOutbySeconds, maxRetryCount, retryDelayMs)
                 .ConfigureAwait(false);
         }
 

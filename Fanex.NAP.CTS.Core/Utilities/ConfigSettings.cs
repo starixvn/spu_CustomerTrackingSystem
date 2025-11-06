@@ -262,11 +262,52 @@
         }
         #endregion
 
-        public static int AIAnalyzeRequestTimeout
+        #region AI Config
+        public static int AIRequestRetryCountTime
         {
             get
             {
-                var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIAnalyzeRequestTimeout"];
+                var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIRequestRetryCountTime"];
+                var timeout = int.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 300;
+                return timeout;
+            }
+        }
+
+        public static int AIRequestRetryDelayTimeMs
+        {
+            get
+            {
+                var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIRequestRetryDelayTimeMs"];
+                var timeout = int.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 2000;
+                return timeout;
+            }
+        }
+
+        public static int AIAnalyzeUploadFileRequestTimeout
+        {
+            get
+            {
+                var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIAnalyzeUploadFileRequestTimeout"];
+                var timeout = int.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 300;
+                return timeout;
+            }
+        }
+
+        public static int AIAnalyzeSummaryRequestTimeout
+        {
+            get
+            {
+                var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIAnalyzeSummaryRequestTimeout"];
+                var timeout = int.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 300;
+                return timeout;
+            }
+        }
+
+        public static int AIAnalyzeChartRequestTimeout
+        {
+            get
+            {
+                var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIAnalyzeChartRequestTimeout"];
                 var timeout = int.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 300;
                 return timeout;
             }
@@ -281,5 +322,6 @@
                 return timeout;
             }
         }
+        #endregion
     }
 }
