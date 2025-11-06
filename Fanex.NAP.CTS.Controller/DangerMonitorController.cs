@@ -26,8 +26,8 @@
     using System.Web.Script.Serialization;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
-    //[NapSuperAuth]
-    //[NapAuth(FunctionKey = FSFunctionKeys.DangerMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
+    [NapSuperAuth]
+    [NapAuth(FunctionKey = FSFunctionKeys.DangerMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class DangerMonitorController : BaseController
     {
         private readonly IDangerMonitorService _dangerMonitorService;
@@ -163,13 +163,11 @@
                 ViewBag.Danger3 = para.Danger3;
                 ViewBag.Danger4 = para.Danger4;
                 ViewBag.Danger5 = para.Danger5;
-                ViewBag.UsernameAmt = para.UsernameAmt;
-                ViewBag.IsHostPermission = true;
-                // comment for support QC test - TODO Remove
-                //ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
-                //                                                            NapSettings.Settings.SiteId,
-                //                                                            FSFunctionKeys.MatchMonitor,
-                //                                                            NAP.Core.Business.Constant.Policy.Host);
+                ViewBag.UsernameAmt = para.UsernameAmt;           
+                ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
+                                                                            NapSettings.Settings.SiteId,
+                                                                            FSFunctionKeys.MatchMonitor,
+                                                                            NAP.Core.Business.Constant.Policy.Host);
             }
             catch (Exception ex)
             {
