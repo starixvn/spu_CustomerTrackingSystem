@@ -48,6 +48,11 @@ function AIInsights() {
     }
 
     function ResizePlotlyCharts(container) {
+        if (!window.Plotly || typeof Plotly.Plots === "undefined") {
+            console.warn("⚠️ Plotly not ready, skipping resize.");
+            return;
+        }
+
         if (container) {
             container.find('.js-plotly-plot').each(function () {
                 Plotly.Plots.resize(this);
@@ -766,24 +771,33 @@ function AIInsights() {
 
     function BlockedLibraryPlotly() {
         const PLOTLY_KEYWORD = "cdn.plot.ly/plotly";
-        const HAS_PLOTLY = !!window.Plotly;
+        let hasLoadedOnce = !!window.Plotly;
 
-        if (HAS_PLOTLY) {
+        if (hasLoadedOnce) {
             console.log("✅ Plotly already loaded, blocking future loads of any version.");
+        } else {
+            console.log("🕓 Waiting for first Plotly load...");
         }
 
+        // 🔍 Check if a given DOM node is a Plotly script element
         function isPlotlyScript(node) {
             if (!node || node.tagName !== "SCRIPT") return false;
             const src = node.src || "";
             return src.includes(PLOTLY_KEYWORD);
         }
 
+        // 🧩 Observe DOM changes to detect dynamically added Plotly scripts
         const observer = new MutationObserver((mutations) => {
             for (const mutation of mutations) {
                 for (const node of mutation.addedNodes) {
                     if (isPlotlyScript(node)) {
-                        console.warn("🚫 Blocked duplicate Plotly load:", node.src);
-                        node.remove();
+                        if (hasLoadedOnce) {
+                            console.warn("🚫 Blocked duplicate Plotly load:", node.src);
+                            node.remove();
+                        } else {
+                            console.log("✅ Allowing first Plotly load:", node.src);
+                            hasLoadedOnce = true;
+                        }
                     }
                 }
             }
@@ -791,15 +805,22 @@ function AIInsights() {
 
         observer.observe(document.body, { childList: true, subtree: true });
 
+        // 🧩 Intercept appendChild calls to block duplicate Plotly inserts
         const origAppendChild = Element.prototype.appendChild;
         Element.prototype.appendChild = function (el) {
             if (isPlotlyScript(el)) {
-                console.warn("🚫 Prevented Plotly append:", el.src);
-                return el;
+                if (hasLoadedOnce) {
+                    console.warn("🚫 Prevented duplicate Plotly append:", el.src);
+                    return el;
+                } else {
+                    console.log("✅ Allowing first Plotly append:", el.src);
+                    hasLoadedOnce = true;
+                }
             }
             return origAppendChild.call(this, el);
         };
 
+        // 🧩 Intercept createElement to prevent setting duplicate Plotly src attributes
         const origCreateElement = document.createElement;
         document.createElement = function (tagName, ...args) {
             const el = origCreateElement.call(document, tagName, ...args);
@@ -807,8 +828,13 @@ function AIInsights() {
                 const origSetAttribute = el.setAttribute;
                 el.setAttribute = function (name, value) {
                     if (name === "src" && value.includes(PLOTLY_KEYWORD)) {
-                        console.warn("🚫 Prevented setting Plotly src:", value);
-                        return;
+                        if (hasLoadedOnce) {
+                            console.warn("🚫 Prevented setting duplicate Plotly src:", value);
+                            return;
+                        } else {
+                            console.log("✅ Allowing first Plotly setAttribute:", value);
+                            hasLoadedOnce = true;
+                        }
                     }
                     origSetAttribute.call(el, name, value);
                 };
