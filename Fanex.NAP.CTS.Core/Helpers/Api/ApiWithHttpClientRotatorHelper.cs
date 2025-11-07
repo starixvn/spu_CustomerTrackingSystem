@@ -42,15 +42,21 @@
                             throw new HttpRequestException($"API error ({(int)response.StatusCode} {response.ReasonPhrase}): {error}");
                         }
 
-                        var resultString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
                         try
                         {
-                            return JsonConvert.DeserializeObject<TResult>(resultString);
+                            using (var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                            using (var sr = new StreamReader(stream))
+                            using (var reader = new JsonTextReader(sr))
+                            {
+                                var serializer = new JsonSerializer();
+                                var result = serializer.Deserialize<TResult>(reader);
+
+                                return result;
+                            }
                         }
                         catch (JsonException ex)
                         {
-                            throw new InvalidOperationException($"Failed to deserialize response from {url}. Content: {resultString}", ex);
+                            throw new InvalidOperationException($"Failed to deserialize response from {url}.", ex);
                         }
                     },
                     url,
