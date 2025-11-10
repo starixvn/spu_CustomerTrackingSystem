@@ -78,7 +78,7 @@
 		<Setting Key="CTS_DC_Association_Agent_GetCustEdge" SpName="CTS_DC_Association_Agent_GetCustEdge" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_Association_DetectGroup" SpName="CTS_DC_Association_DetectGroup" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_AssociationDetection_GetDetail" SpName="CTS_DC_AssociationDetection_GetDetail" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
-    <Setting Key="CTS_DC_Association_GetByUserNameList" SpName="CTS_DC_Association_GetByUserNameList_xpre" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+    <Setting Key="CTS_DC_Association_GetByUserNameList" SpName="CTS_DC_Association_GetByUserNameList" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 	</Function>
 
 	<Function Name="AssociationDetail">
