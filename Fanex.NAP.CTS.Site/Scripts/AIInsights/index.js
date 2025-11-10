@@ -297,26 +297,22 @@ function AIInsights() {
 
     // Server-Sent Events AnalyzeCharts
     function AnalyzeChartsSSEConnection() {
-        if (variable.evtSource) {
-            variable.evtSource.close();
-        }
+        api.AnalyzeChartsSSEConnection(
+            {
+                token: variable.streamToken,
+                onMessage: HandleEventSourceMessage,
+                onError: OnError,
+                retries: variable.CONFIG.RETRY_TIME,
+                delay: variable.CONFIG.RETRY_DELAY_IN_SECONDS
+            }
+        )
 
-        variable.evtSource = new EventSource(
-            common.modifyRelativeUrl(`AIInsights/StreamAnalyzeCharts?streamToken=${variable.streamToken}`)
-        );
-
-        // variable.evtSource.onopen = () => console.log("✅ Connected");
-        variable.evtSource.onerror = HandleEventSourceError;
-        variable.evtSource.onmessage = HandleEventSourceMessage;
-
-        function HandleEventSourceError() {
+        function OnError() {
             if (variable.evtSource) {
-                variable.evtSource.close();
-                variable.evtSource = null;
                 variable.domElements.headerChartSection.removeClass('loading');
                 variable.domElements.btnGenerate.prop('disabled', false);
                 variable.domElements.sendButton.prop('disabled', false);
-                // console.log("✅ Connection closed");
+                console.log("✅ Connection closed by error");
             }
         }
 

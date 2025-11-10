@@ -78,6 +78,49 @@
             .always(onComplete);
     };
 
+    this.AnalyzeChartsSSEConnection = function ({
+        token,
+        onMessage,
+        onError,
+        retries,
+        delay
+    } = {}) {
+        let retryCount = 0;
+
+        function onConnect() {
+            if (variable.evtSource) {
+                variable.evtSource.close();
+            }
+
+            variable.evtSource = new EventSource(
+                common.modifyRelativeUrl(`AIInsights/StreamAnalyzeCharts?streamToken=${token}`)
+            );
+
+            // variable.evtSource.onopen = () => console.log("✅ Connected");
+            variable.evtSource.onerror = handleEventSourceError;
+            variable.evtSource.onmessage = onMessage;
+        }
+
+        function handleEventSourceError() {
+            console.warn(`⚠ Connection closed by error. Retry ${retryCount + 1} of ${retries}`);
+
+            if (variable.evtSource) {
+                variable.evtSource.close();
+                variable.evtSource = null;
+
+                if (retryCount < retries) {
+                    retryCount++;
+                    setTimeout(onConnect, delay * 1000);
+                } else {
+                    onError?.();
+                    console.error("❌ Max retry reached. Connection failed.");
+                }
+            }
+        }
+
+        onConnect();
+    };
+
     /**
      * Retry AJAX call if response.statuscode == HttpNetworkClose
      * @param {function} ajaxFn

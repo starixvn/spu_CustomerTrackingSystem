@@ -233,10 +233,10 @@
                         retryAttempt++;
 
                         await Task.Delay(retryDelayMs, cancellationToken);
+                        LogExtension.LogInfo($"Retry {url}: {retryAttempt}/{maxRetryCount} by Reason ExceptMsg: {httpRequestException?.Message ?? "null"} InnerMsg: {innerMsg}");
+
                         continue; // Retry the request
                     }
-
-                    LogExtension.LogInfo($"Retry {url}: {retryAttempt}/{maxRetryCount} by Reason ExceptMsg: {httpRequestException?.Message ?? "null"} InnerMsg: {innerMsg}");
 
                     throw; // Re-throw if max retries reached or not a transient issue
                 }
@@ -248,10 +248,10 @@
                         retryAttempt++;
 
                         await Task.Delay(retryDelayMs, cancellationToken);
+                        LogExtension.LogInfo($"Retry {url}: {retryAttempt}/{maxRetryCount} by Reason ExceptMsg: {ex?.Message ?? "null"}");
+
                         continue; // Retry the request
                     }
-
-                    LogExtension.LogInfo($"Retry {url}: {retryAttempt}/{maxRetryCount} by Reason ExceptMsg: {ex?.Message ?? "null"}");
 
                     throw; // Re-throw if max retries reached or not a transient issue
                 }
