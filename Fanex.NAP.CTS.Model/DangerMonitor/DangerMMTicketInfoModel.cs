@@ -32,6 +32,7 @@
             TotalAmountAway = entity.TotalAmountAway;
             TotalTicketHome = entity.TotalTicketHome;
             TotalTicketAway = entity.TotalTicketAway;
+            ListCustID = entity.ListCustID;
         }
 
         public int MatchSection { get; set; }
@@ -79,5 +80,7 @@
         public int TotalTicketHome { get; set; }
 
         public int TotalTicketAway { get; set; }
+
+        public string ListCustID { get; set; }
     }
 }

@@ -330,6 +330,12 @@
                             height: auto;
                         }
 
+                        .info-select-2 {
+                            width: 160px !important;
+                            padding-left: 12px;
+                            height: auto;
+                        }
+
                         .info-input {
                             height: 32px;
                             vertical-align: middle;
@@ -604,7 +610,7 @@
                                             display: -webkit-box;
                                             display: -ms-flexbox;
                                             display: flex;
-                                            position: relative;                                         
+                                            position: relative;
 
                                             .col-title {
                                                 -webkit-box-flex: 1;

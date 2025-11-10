@@ -55,4 +55,9 @@
 		<Setting Key="CTS_Customer_RobotListSelByDate" SpName="CTS_Customer_RobotListSelByDate" DbName="DBONUSER.ON_USER.wsv_cts"/>
 	</Function>
 
+	<Function name="DangerMonitor">
+		<Setting Key="CTS_MatchTicketInfo_Get" SpName="CTS_MatchTicketInfo_Get" DbName="DBCTS.WASAVerse.wsv_cts" TimeOut="300" />
+		<Setting Key="CTS_MatchTicketInfo_Associations_Get" SpName="CTS_MatchTicketInfo_Associations_Get" DbName="DBCTS.WASAVerse.wsv_cts" />
+	</Function>
+
 </Functions>

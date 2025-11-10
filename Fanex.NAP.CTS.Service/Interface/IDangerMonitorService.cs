@@ -1,9 +1,9 @@
 ﻿namespace Fanex.NAP.CTS.Service.Interface
 {
     using Fanex.NAP.CTS.Model.DangerMonitor;
+    using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.DangerMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
-    using System;
     using System.Collections.Generic;
 
     public interface IDangerMonitorService
@@ -16,7 +16,9 @@
 
         DangerMonitorValidateUsernameViewModel ValidateUsernameForMain(string usernames);
 
-        GetDangerMonitorResultViewModel GetDangerMonitor(DangerMonitorSearchModel filter);
+        GetDangerMonitorResultViewModel GetDangerMonitorWithNoAssociation(DangerMonitorSearchModel filter);
+
+        GetDangerMonitorResultViewModel GetDangerMonitorWithAssociationByRootUser(DangerMonitorSearchModel filter, string associationData);
 
         byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath, int sportType);
 
@@ -26,5 +28,7 @@
         MMDetailTicketListViewModel GetMatchMonitorDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter);
 
         MMDetailFilterViewModel GetMatchMonitorFilter(MMDetailInfoViewModel para);
+
+        IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);
     }
 }

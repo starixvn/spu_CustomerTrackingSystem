@@ -7,11 +7,13 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.Common;
+    using Fanex.NAP.CTS.Model.DangerMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
     using Fanex.NAP.TGRS.Core.ExcelUtility;
     using Newtonsoft.Json;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -41,6 +43,8 @@
         IEnumerable<GetAssociationDetectDetailMatchModel> GetDetectAssociationDetailMatch(long rootCustID, string custIDList, int queryType);
 
         byte[] ExportToExcelAssociationDetect(IEnumerable<ExportAssociationDetectModel> AssociationDetect, string fileName, string templatePath);
+
+        IEnumerable<DetectAssociationByUserRootModel> DetectAssociationCustByUserRoot(DetectAssociationByUserRootFilterModel assFilter);
     }
 
     public class AssociationDetectionService : IAssociationDetectionService
@@ -53,8 +57,6 @@
             _repository = new CriteriaService();
             _commonService = new CommonService();
         }
-
-        #region Query From MySQL
 
         #region Public Methods
 
@@ -279,10 +281,23 @@
 
             return writer.ToBytes();
         }
+       
+        public IEnumerable<DetectAssociationByUserRootModel> DetectAssociationCustByUserRoot(DetectAssociationByUserRootFilterModel assFilter)
+        {
+            var criteria = new DetectAssociationByUserRootCriteria
+            {
+                UserNames = assFilter.UserNames,
+                IsAI = assFilter.IsAI,
+                IsDevice = assFilter.IsDevice,
+                IsIP = assFilter.IsIP
+            };
 
+            return _repository.Fetch<DetectAssociationByUserRootModel>(criteria);
+        }
         #endregion
 
-        #region Private Methods
+        #region Private Methods      
+
         private void FillRowData(IEnumerable<ExportAssociationDetectModel> AssociationDetect, ref ExcelTemplateWriter writer)
         {
             var idx = 1;
@@ -392,8 +407,6 @@
 
             return ObjectHelper.SerializeObj(input);
         }
-
-        #endregion
 
         #endregion
     }

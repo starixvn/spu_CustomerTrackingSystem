@@ -6,6 +6,8 @@
 
         public const string PrepareDataExportDetectAssociation = "AssociationDetection/PrepareDataExportDetectAssociation";
 
+        public const string DetectAssociationCustByUserRoot = "AssociationDetection/DetectAssociationCustByUserRoot";
+
         public const string DetectGroupAssWithOptions = "MatchMonitor/DetectGroupAssWithOptions";
 
         public const string GetMatchFromMainInfo = "MatchMonitor/GetMatchFromMainInfo";

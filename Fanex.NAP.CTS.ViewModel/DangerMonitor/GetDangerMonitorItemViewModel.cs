@@ -36,6 +36,8 @@
             //BetID = sportBettype.BetID;
             SportName = sportBettype.SportName;
 
+            ListCustID = matchSummary.ListCustID;
+
             // LeagueGroupID 
             // EventStatus, LiveHomeScore, LiveAwayScore -- remove
         }
@@ -84,6 +86,8 @@
         public int TotalTicketAway { get; set; }
 
         public DateTime KickOffTime { get; set; }
+
+        public string ListCustID { get; set; }
 
         public string KOTime { get { return KickOffTime.ToString(Consts.FormatTimeToString_hhmmss_2); } }
 

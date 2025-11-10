@@ -258,12 +258,15 @@
     <Compile Include="AssociatedGroupMonitor\ValidateUserAssociatedAccountModel.cs" />
     <Compile Include="AssociationDetection\AssociationCustByIPModel.cs" />
     <Compile Include="AssociationDetection\AssociationCustModel.cs" />
+    <Compile Include="AssociationDetection\AssociationWithRootCustModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByAgentModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByBPDeviceIPAgentModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByPrimaryFilterModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByPrimaryModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationBySharedIPMatchesModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationBySharedIPModel.cs" />
+    <Compile Include="AssociationDetection\DetectAssociationByUserRootFilterModel.cs" />
+    <Compile Include="AssociationDetection\DetectAssociationByUserRootModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationMergeGroupModel.cs" />
     <Compile Include="AssociationDetection\ExportAssociationDetectModel.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectDetailAgentModel.cs" />
@@ -369,7 +372,9 @@
     <Compile Include="CustomerClassification\LatestClassification4ReportModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\RescanCustClassificationModel.cs" />
     <Compile Include="DangerMonitor\DangerMMTicketInfoModel.cs" />
+    <Compile Include="DangerMonitor\DangerMonitorDetailHideRequestModel.cs" />
     <Compile Include="DangerMonitor\DangerMonitorSearchModel.cs" />
+    <Compile Include="DangerMonitor\DangerMonitorUserRootOptionModel.cs" />
     <Compile Include="DangerMonitor\Entities\DangerMMTicketInfoEntity.cs" />
     <Compile Include="DTO\CustomerEvidence.cs" />
     <Compile Include="DTO\CustomerEvidenceForTW.cs" />

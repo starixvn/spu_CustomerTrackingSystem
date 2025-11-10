@@ -1,9 +1,10 @@
 ﻿function DangerousSetting() {
     const DangerMode = {
         DangerTypeMode: 0,
-        UsernameMode: 1 
+        UsernameMode: 1
     }
     let dangerMode = DangerMode.DangerTypeMode;
+    let isRootUserAssociationMode = false;
 
     let dateEmptyString = "------,----";
     let dataTable;
@@ -30,7 +31,8 @@
         userId: $("#hdCTSCustId").val(),
         dpkFromDate: $('#dpkFromDate'),
         dpkToDate: $('#dpkToDate'),
-        cbbIsVerified: $('#cbbIsVerified'),
+        cbbAssociation: $('#cbbAssociation'),
+        bIsVerified: $('#cbbIsVerified'),
         cbbBetType: $('#cbbBetType'),
         cbbDgr: $('#cbbDgr'),
         cbbSport: $('#cbbSport'),
@@ -57,6 +59,7 @@
         spanAddSpecialCustomerAccountChangeHidden: $('#spanAddProblemAccountChangeHidden'),
         spanSpecialCustomerAccountActionHidden: $('#spanProblemAccountActionHidden'),
         maxTags: 1000,
+        maxRootUsernameWithAssociation: 1,
         divAddUsername: $('#divAddProblemAccount'),
         inputTagUsername: $('#inputTagUsername'),
         btnSave: $('#btnSave'),
@@ -295,10 +298,29 @@
         return optgroup;
     }
 
+    function GetRootUserOption() {
+        const isAssociationEnabled = !domElements.cbbAssociation.prop("disabled");
+        if (!isAssociationEnabled) return { IsAI: false, IsDevice: false, IsIP: false };
+
+        const selectedValue = domElements.cbbAssociation.val() || "";
+        if (selectedValue.includes("-1")) return { IsAI: false, IsDevice: false, IsIP: false };
+
+        const result = {
+            IsAI: selectedValue.includes("1"),
+            IsDevice: selectedValue.includes("2"),
+            IsIP: selectedValue.includes("3")
+        };
+
+        return (result.IsAI || result.IsDevice || result.IsIP) ? result : null;
+    };
+
     function GetDangerMonitor() {
         timeoutRenderTicketDetail = setTimeout(() => {
+            let rootUserOption = GetRootUserOption();
+
             $('#txtEventHeader').val('');
             dangerMode = domElements.rbtnSelect.filter(":checked").val();
+            isRootUserAssociationMode = rootUserOption && (rootUserOption.IsAI || rootUserOption.IsDevice || rootUserOption.IsIP);
 
             let data = {
                 FromDate: domElements.dpkFromDate.val(),
@@ -317,6 +339,7 @@
                 LeagueGroupList: domElements.cbbLeagueGroup.val().join(),
                 UserAmount: GetInputAmount(domElements.txtUsernameAmt.val()),
                 TotalAmount: GetInputAmount(domElements.txtTotalAmt.val()),
+                rootUserOption: rootUserOption
             };
 
             if (dangerMode == DangerMode.DangerTypeMode) {
@@ -360,6 +383,45 @@
         }, 10);
     }
 
+    function SelectedTextCbbAssociation(numChecked, numTotal, checkedItems) {
+        const $select = domElements.cbbAssociation;
+        const $optgroups = $select.find("optgroup");
+
+        let selectedGroup = null;
+
+        $optgroups.each(function () {
+            const $group = $(this);
+            if ($group.find("option:selected").length > 0) {
+                selectedGroup = $group.attr("data-group");
+                return false;
+            }
+        });
+
+        if (!selectedGroup) {
+            return "Select Association";
+        }
+
+        const count = $select.find(`optgroup[data-group="${selectedGroup}"] option:selected`).length;
+        const total = $select.find(`optgroup[data-group="${selectedGroup}"] option`).length;
+
+        if (selectedGroup === "none") {
+            return "None";
+        }
+
+        return `${count} of ${total} selected`;
+    }
+
+    function ConvertGroupCheckboxToRadio() {
+        const $menu = domElements.cbbAssociation.multiselect("widget");
+        $menu.find("a.ui-multiselect-grouplabel input.optgroup-input").each(function () {
+            const $input = $(this);
+            if ($input.attr("type") !== "radio") {
+                $input.attr("type", "radio");
+                $input.attr("name", "assocGroupRadio");
+            }
+        });
+    }
+
     function Initial() {
         domElements.dpkFromDate
             .datepicker({
@@ -387,20 +449,6 @@
         domElements.cbbSport.select2();
 
         domElements.cbbMarket.select2();
-        // domElements.cbbSport.multiselect({
-        //     menuWidth: 260,
-        //     menuHeight: 260,
-        //     selectedText: "# of # select",
-        //     noneSelectedText: `Select Sports`,
-        //     enableClickableOptGroups: true,
-        //     includeSelectAllOption: true,
-        //     groupsCollapsable: true,
-        //     optGroupChecked: true
-        // }).multiselectfilter({
-        //     width: 150,
-        //     placeholder: '',
-        //     label: ''
-        // });
 
         domElements.cbbBetType.multiselect({
             menuWidth: 250,
@@ -431,8 +479,83 @@
             label: ''
         });
 
+        domElements.cbbAssociation.multiselect({
+            header: false,
+            menuWidth: 250,
+            menuHeight: 260,
+            // selectedText: "# of # selected",
+            noneSelectedText: "Select Association",
+            selectedText: SelectedTextCbbAssociation,
+            open: ConvertGroupCheckboxToRadio
+        }).multiselectfilter({
+            width: 260,
+            placeholder: '',
+            label: ''
+        });
+
         domElements.groupDropDown.hover(function () {
             domElements.refreshList.toggleClass('block-box');
+        });
+
+        domElements.cbbAssociation.on("multiselectopen", function () {
+            const $menu = domElements.cbbAssociation.multiselect("widget");
+            const $optgroups = domElements.cbbAssociation.find("optgroup");
+
+            // Remove old event handlers to prevent duplicate bindings
+            $menu.off(".assoc");
+
+            // Convert optgroup checkboxes to radio buttons
+            $menu.find("a.ui-multiselect-grouplabel input.optgroup-input")
+                .attr("type", "radio")
+                .attr("name", "assocGroupRadio");
+
+            // ===== Optgroup label click (radio behavior) =====
+            $menu.on("click.assoc", "a.ui-multiselect-grouplabel", function (e) {
+                e.stopPropagation();
+
+                const $groupLabels = $menu.find("a.ui-multiselect-grouplabel");
+                const groupIndex = $groupLabels.index(this);
+                const $clickedGroup = $optgroups.eq(groupIndex);
+                if (!$clickedGroup.length) return;
+
+                // Deselect all other groups
+                $optgroups.not($clickedGroup).find("option").prop("selected", false);
+
+                // Select all options within clicked group
+                $clickedGroup.find("option").prop("selected", true);
+
+                // Refresh UI
+                domElements.cbbAssociation.multiselect("refresh");
+
+                // Keep radio checked state
+                const $radios = $menu.find("input.optgroup-input");
+                $radios.prop("checked", false).eq(groupIndex).prop("checked", true);
+            });
+
+            // ===== Individual option checkbox change =====
+            $menu.on("change.assoc", "input[type='checkbox']:not(.optgroup-input)", function () {
+                const $input = $(this);
+                const value = $input.val();
+                const $option = domElements.cbbAssociation.find(`option[value="${value}"]`);
+                const $group = $option.closest("optgroup");
+
+                if ($input.is(":checked")) {
+                    // Deselect all options from other groups
+                    $optgroups.not($group).find("option").prop("selected", false);
+                }
+
+                // Refresh UI
+                domElements.cbbAssociation.multiselect("refresh");
+
+                // Sync radio checked state with current group
+                const groupIndex = $optgroups.index($group);
+                const $radios = $menu.find("input.optgroup-input");
+                $radios.prop("checked", false).eq(groupIndex).prop("checked", true);
+            });
+        });
+
+        domElements.cbbAssociation.on("multiselectrefresh", function () {
+            ConvertGroupCheckboxToRadio();
         });
 
         domElements.dpkToDate.on('change', function () {
@@ -477,7 +600,7 @@
         FetchSports();
 
         domElements.btnClearUsername.on('click', function () {
-            domElements.txtUsername.val('');
+            domElements.txtUsername.val('').change();
             domElements.txtUsername.removeClass("input-invalid");
         })
 
@@ -520,7 +643,7 @@
             var result = GetInputUserName('');
 
             if (result) {
-                domElements.txtUsername.val(GetInputUserName(''));
+                domElements.txtUsername.val(GetInputUserName('')).change();
                 domElements.divAddUsername.dialog('close');
                 domElements.txtUsername.removeClass("input-invalid");
             }
@@ -551,6 +674,8 @@
             isFocusValidUsername = true;
         });
 
+        domElements.txtUsername.on('change', ChangeCbbAssociationDisplay);
+
         $(document).on('click', function (e) {
             if ($(e.target).closest('#txtUsername').length == 0 && isFocusValidUsername) {
                 ValidateTxtUsername()
@@ -577,7 +702,7 @@
     }
 
     function ResetFilterValueDefault() {
-        domElements.txtUsername.val('');
+        domElements.txtUsername.val('').change();
         domElements.txtEvent.val('');
         domElements.cbbMarket.val('').trigger('change');
         domElements.cbbMatchSection.multiselect("checkAll");
@@ -590,6 +715,7 @@
     function ChangeSelectRadioButton(value) {
         domElements.txtUsername.prop('disabled', value == 0);
         domElements.cbbDgr.prop('disabled', value == 1);
+        ChangeCbbAssociationDisplay();
 
         if (value == 0) {
             domElements.btnClearUsername.addClass('hide');
@@ -600,6 +726,15 @@
             domElements.btnClearUsername.removeClass('hide');
             domElements.btnModifyUsername.removeClass('hide');
         }
+    }
+
+    function ChangeCbbAssociationDisplay() {
+        let usernameTotal = domElements.txtUsername.val().split(',').length;
+
+        let isCbbDgrDisabled = domElements.cbbDgr.prop('disabled');
+        let isAssociationEnabled = usernameTotal <= domElements.maxRootUsernameWithAssociation;
+
+        domElements.cbbAssociation.multiselect(isCbbDgrDisabled && isAssociationEnabled ? "enable" : "disable");
     }
 
     function OnGenerate() {
@@ -759,7 +894,16 @@
                 });
             }
 
-            RedirectToDangerMonitorDetail("DangerMonitor/Detail?" + para, obj.username);
+            let hideRequestInfo = null;
+            if (dangerMode == DangerMode.UsernameMode) {
+                hideRequestInfo = {
+                    Username: obj.username,
+                    IsRootUserAssociationMode: isRootUserAssociationMode,
+                    ListCustID: obj.ListCustID
+                }
+            }
+
+            RedirectToDangerMonitorDetail("DangerMonitor/Detail?" + para, hideRequestInfo);
         });
 
         return table;
@@ -1008,7 +1152,7 @@
                 success: function (response) {
                     if (response?.data) {
                         isValidUsername = response.data.InvalidateUsernames.length == 0 && ValidateTxtUsernameMaxRange(usernames);
-                        domElements.txtUsername.val(usernames);
+                        domElements.txtUsername.val(usernames).change();
 
                         if (!isValidUsername) {
                             domElements.txtUsername.addClass("input-invalid");
@@ -1120,7 +1264,7 @@
         return false;
     }
 
-    function RedirectToDangerMonitorDetail(url, username) {
+    function RedirectToDangerMonitorDetail(url, hideRequest) {
         var form = document.createElement("form");
         form.target = "_blank";
         form.method = "POST";
@@ -1129,8 +1273,8 @@
 
         var input = document.createElement("input");
         input.type = "hidden";
-        input.name = "username";
-        input.value = username ?? "";
+        input.name = "hideRequest";
+        input.value = hideRequest ? JSON.stringify(hideRequest) : "";
         form.appendChild(input);
 
         document.body.appendChild(form);

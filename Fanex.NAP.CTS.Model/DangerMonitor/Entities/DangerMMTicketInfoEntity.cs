@@ -49,5 +49,7 @@
         public int TotalTicketHome { get; set; }
 
         public int TotalTicketAway { get; set; }
+
+        public string ListCustID { get; set; }
     }
 }

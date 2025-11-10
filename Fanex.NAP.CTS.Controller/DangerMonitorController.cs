@@ -8,6 +8,7 @@
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.DangerMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Implement;
@@ -17,7 +18,7 @@
     using Fanex.NAP.CTS.ViewModel.DangerMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.DetectGroup;
-    using RabbitMQ.Client.Framing.Impl;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -100,21 +101,26 @@
 
             if (filter.Validate)
             {
-                data = _dangerMonitorService.GetDangerMonitor(filter);
+                data = filter.IsRootUserAssociationMode
+                    ? _dangerMonitorService.GetDangerMonitorWithAssociationByRootUser(
+                          filter,
+                          DetectAssociationCustByUserRoot(filter))
+                    : _dangerMonitorService.GetDangerMonitorWithNoAssociation(filter);
 
-                data.Items = data.Items.OrderBy(x => x.MatchSection)
-                    .ThenByDescending(x => x.EventDate)
-                    .ThenByDescending(x => x.MatchID)
-                    .ThenBy(x => x.BettypeID)
-                    .ThenBy(x => x.BetID);
+                data.Items = OrderDangerMonitorItems(data.Items);
             }
 
-            return Json(new
-            {
-                data = data
-            }, JsonRequestBehavior.AllowGet);
+            return Json(new { data }, JsonRequestBehavior.AllowGet);
         }
 
+        private IEnumerable<GetDangerMonitorItemViewModel> OrderDangerMonitorItems(IEnumerable<GetDangerMonitorItemViewModel> items)
+        {
+            return items?.OrderBy(x => x.MatchSection)
+                .ThenByDescending(x => x.EventDate)
+                .ThenByDescending(x => x.MatchID)
+                .ThenBy(x => x.BettypeID)
+                .ThenBy(x => x.BetID);
+        }
         #endregion
 
         #region danger detail
@@ -131,19 +137,19 @@
                 ViewBag.ReasonGroups = this.GetReasonGroups(true);
                 ViewBag.EventDateToString = para?.EventDateToString;
                 ViewBag.MatchID = para?.MatchID;
-                ViewBag.BetTypeID = para?.BetTypeID; 
+                ViewBag.BetTypeID = para?.BetTypeID;
                 ViewBag.BettypeName = bettypes.FirstOrDefault(x => x.BetTypeID == para?.BetTypeID && x.BetID == para?.BetID)?.BetTypeName;
                 ViewBag.BetIDToString = para?.BetID.ToString();
                 ViewBag.BetTypeSettings = bettypes?.Where(x => x.SportType == para.SportType);
                 ViewBag.MapX = para?.MX;
-                ViewBag.MapYY = para?.MY;              
+                ViewBag.MapYY = para?.MY;
                 ViewBag.HomeName = para?.HomeName.ToUpper() ?? string.Empty;
                 ViewBag.AwayName = para?.AwayName.ToUpper() ?? string.Empty;
-                ViewBag.MatchName = ViewBag.HomeName + "_" + ViewBag.AwayName;                
+                ViewBag.MatchName = ViewBag.HomeName + "_" + ViewBag.AwayName;
                 ViewBag.LiveIndicator = para?.LiveIndicator ?? true;
                 ViewBag.Reason = para?.Reason;
-                ViewBag.ReasonName = para?.ReasonName ?? string.Empty;                
-                ViewBag.LeagueName = para?.LeagueName.ToUpper() ?? string.Empty;                                
+                ViewBag.ReasonName = para?.ReasonName ?? string.Empty;
+                ViewBag.LeagueName = para?.LeagueName.ToUpper() ?? string.Empty;
                 ViewBag.ReasonGroup = para?.ReasonGroup ?? string.Empty;
                 ViewBag.MarketName = para?.MarketName ?? string.Empty;
                 ViewBag.BetChoice = para?.BetChoice;
@@ -157,7 +163,7 @@
                 ViewBag.Danger3 = para.Danger3;
                 ViewBag.Danger4 = para.Danger4;
                 ViewBag.Danger5 = para.Danger5;
-                ViewBag.UsernameAmt = para.UsernameAmt;
+                ViewBag.UsernameAmt = para.UsernameAmt;           
                 ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                                                                             NapSettings.Settings.SiteId,
                                                                             FSFunctionKeys.MatchMonitor,
@@ -171,12 +177,43 @@
             }
 
             return View();
-        }     
+        }
 
         [HttpPost]
-        public ActionResult Detail(DangerMonitorDetailViewModel para, string username)
+        public ActionResult Detail(DangerMonitorDetailViewModel para, string hideRequest)
         {
-            ViewBag.UserName = username;
+            if (!hideRequest.IsNotNullOrEmpty())
+                return Detail(para);
+
+            try
+            {
+                var model = JsonConvert.DeserializeObject<DangerMonitorDetailHideRequestModel>(hideRequest);
+
+                var usernames = string.Empty;
+
+                if (model.IsRootUserAssociationMode && model.ListCustID.IsNotNullOrEmpty())
+                {
+                    var custInfos = _dangerMonitorService.GetCustInfoByCustID(model.ListCustID);
+
+                    var usernameArr = custInfos?
+                        .Select(x => x.UserName)
+                        .Distinct();
+
+                    usernames = usernameArr.IsNotNullOrEmpty()
+                        ? string.Join(",", usernameArr)
+                        : string.Empty;
+                }
+                else
+                {
+                    usernames = model.Username ?? string.Empty;
+                }
+
+                ViewBag.UserName = usernames;
+            }
+            catch (Exception ex)
+            {
+                ex.LogError($"{Region} Match Monitor Detail Hide Username Error: ");
+            }
 
             return Detail(para);
         }
@@ -213,7 +250,7 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.DangerMonitorDetailRpt)]
         public ActionResult GetMatchMonitorDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter)
         {
-            var mdResult = default(MMDetailTicketListViewModel);            
+            var mdResult = default(MMDetailTicketListViewModel);
 
             try
             {
@@ -260,7 +297,7 @@
         }
 
         private DetectGroupAssociationListViewModel DetectGroupAssociation(DetectGroupAssFilterViewModel model)
-        {            
+        {
             var orgUserList = _associationDetectionService.ValidateUserName(model.RawUserNames);
 
             var data = _associationDetectionService.DetectAssociation(new DetectAssociationByUserNamesViewModel
@@ -280,6 +317,26 @@
             };
         }
 
+        private string DetectAssociationCustByUserRoot(DangerMonitorSearchModel filter)
+        {
+            var filterAss = new DetectAssociationByUserRootFilterModel
+            {
+                UserNames = filter.UserNameList,
+                IsAI = filter.RootUserOption.IsAI,
+                IsDevice = filter.RootUserOption.IsDevice,
+                IsIP = filter.RootUserOption.IsIP,
+            };
+
+            var result = ConfigSettings.IsUsingFanexAPIDirect
+                ? ApiHelper.PostWithApiKey<IEnumerable<DetectAssociationByUserRootModel>>(
+                    ConfigSettings.GetCtsApiEndPoint(ApiEndpoint.DetectAssociationCustByUserRoot),
+                    filterAss,
+                    ConfigSettings.ApiKeyFanexAPIDirect, ConfigSettings.AssociationDetectionTimeout).Result
+                : _associationDetectionService.DetectAssociationCustByUserRoot(filterAss);
+
+            return JsonConvert.SerializeObject(result);
+        }
+
         #endregion Association Detect
 
         #region Export to Excel
@@ -297,7 +354,7 @@
             if (!string.IsNullOrEmpty(isDisplaySingleGrid) && isDisplaySingleGrid.ToLower() == "true")
             {
                 var items = serializer.Deserialize<List<ExExcelTicketInfoMMViewModel>>(from["items"]);
-              
+
                 var templatePath = GetExcelTemplatePath(true, sportType);
 
                 var fileName = string.Format("DangerMM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr);
@@ -310,7 +367,7 @@
             {
                 var homeMItems = serializer.Deserialize<List<ExExcelTicketInfoMMViewModel>>(from["homes"]);
                 var awayMItems = serializer.Deserialize<List<ExExcelTicketInfoMMViewModel>>(from["aways"]);
-                
+
                 var templatePath = GetExcelTemplatePath(false, sportType);
 
                 var fileName = string.Format("DangerMM_{0}_{1}_{2}.xlsx", matchInfo.MatchName, matchInfo.BetTypeName, matchInfo.EventDateStr);
@@ -402,7 +459,7 @@
 
             return result;
         }
-        
+
         private string GetExcelTemplatePath(bool isDisplaySingleGrid, int sportType)
         {
             var templatePath = string.Empty;

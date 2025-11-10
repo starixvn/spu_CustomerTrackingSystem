@@ -707,6 +707,11 @@
   padding-left: 12px;
   height: auto;
 }
+.detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .info-select-2 {
+  width: 160px !important;
+  padding-left: 12px;
+  height: auto;
+}
 .detailpage .monitor-container .monitor-table .group-control .first-row .first-row-info .info-input {
   height: 32px;
   vertical-align: middle;
