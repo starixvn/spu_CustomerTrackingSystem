@@ -29,11 +29,12 @@
             Action<string> onMessage, 
             CancellationToken cancellationToken, 
             int timeOutbySeconds = 120,
+            int idleTimeoutSeconds = 60,
             int maxRetryCount = 3,
             int retryDelayMs = 2000)
         {
             await _listenerService
-                .ListenerAsync(url, onMessage, cancellationToken, timeOutbySeconds, maxRetryCount, retryDelayMs)
+                .ListenerAsync(url, onMessage, cancellationToken, timeOutbySeconds, idleTimeoutSeconds, maxRetryCount, retryDelayMs)
                 .ConfigureAwait(false);
         }
 

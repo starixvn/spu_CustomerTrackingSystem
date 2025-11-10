@@ -68,8 +68,9 @@
                 async () => await _sseStreamManagerService.ListenerAsync(
                     string.Format(ConfigSettings.AIInsightsAnalyzeChartsSseProcessUrl, streamToken),
                     msg => { messageQueue.TryAdd(msg, 100, linkedCts.Token); },
-                    linkedCts.Token,
+                    cancellationToken: linkedCts.Token,
                     timeOutbySeconds: ConfigSettings.AIAnalyzeChartRequestTimeout,
+                    idleTimeoutSeconds: ConfigSettings.AIAnalyzeChartSSEResponseTimeout,
                     maxRetryCount: ConfigSettings.AIRequestRetryCountTime,
                     retryDelayMs: ConfigSettings.AIRequestRetryDelayTimeMs)
                 .ConfigureAwait(false),
