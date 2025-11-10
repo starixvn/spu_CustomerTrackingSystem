@@ -35,10 +35,14 @@ namespace Fanex.NAP.CTS.Test.Services.SseStream
             var timeout = 5;
             var ct = new CancellationTokenSource().Token;
 
-            _listener.Setup(x => x.ListenerAsync(url, onMsg, ct, timeout))
-                     .Returns(Task.CompletedTask);
+            _listener.Setup(x => x.ListenerAsync(url, onMsg, ct, timeout, 60, 3, 2000))
+                     .Returns<string, Action<string>, CancellationToken, int, int, int, int>(
+                        (u, m, t, to, idle, max, delay) => Task.CompletedTask);
 
-            await _manager.ListenerAsync(url, onMsg, ct, timeout);
+            await _manager.ListenerAsync(url, onMsg, ct, timeout,
+                             idleTimeoutSeconds: 60,
+                             maxRetryCount: 3,
+                             retryDelayMs: 2000);
 
             _listener.VerifyAll();
         }

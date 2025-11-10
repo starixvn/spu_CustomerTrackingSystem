@@ -39,12 +39,20 @@ namespace Fanex.NAP.CTS.Test.Services
             var callerCts = new CancellationTokenSource();
 
             // Listener: publish one message then complete
-            _sseStreamManagerService.Setup(x => x.ListenerAsync(It.IsAny<string>(), It.IsAny<Action<string>>(), It.IsAny<CancellationToken>(), It.IsAny<int>()))
-               .Returns<string, Action<string>, int, CancellationToken?>((url, onMsg, timeout, token) =>
-               {
-                   onMsg("{\"EventName\":\"AnalyzeCharts\",\"EventStatus\":\"Processing\",\"Data\":\"d\"}");
-                   return Task.CompletedTask;
-               });
+            _sseStreamManagerService.Setup(x => x.ListenerAsync(
+                  It.IsAny<string>(),
+                  It.IsAny<Action<string>>(),
+                  It.IsAny<CancellationToken>(),
+                  It.IsAny<int>(),       
+                  It.IsAny<int>(),       
+                  It.IsAny<int>(),       
+                  It.IsAny<int>()))     
+            .Returns<string, Action<string>, CancellationToken, int, int, int, int>(
+                (url, onMsg, token, timeout, idle, maxRetry, delay) =>
+                {
+                    onMsg("{\"EventName\":\"AnalyzeCharts\",\"EventStatus\":\"Processing\",\"Data\":\"d\"}");
+                    return Task.CompletedTask;
+                });
 
             // Sender: run tasks and then block on the provided token until canceled by the service
             var senderCancelled = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -74,7 +82,15 @@ namespace Fanex.NAP.CTS.Test.Services
             callerCts.Cancel();
 
             // Return promptly on both sides to avoid hanging even if invoked
-            _sseStreamManagerService.Setup(x => x.ListenerAsync(It.IsAny<string>(), It.IsAny<Action<string>>(), It.IsAny<CancellationToken>(), It.IsAny<int>()))
+            _sseStreamManagerService.Setup(x => x.ListenerAsync(
+                It.IsAny<string>(),
+                  It.IsAny<Action<string>>(),
+                  It.IsAny<CancellationToken>(),
+                  It.IsAny<int>(),
+                  It.IsAny<int>(),
+                  It.IsAny<int>(),
+                  It.IsAny<int>()
+                ))
                .Returns(Task.FromCanceled(new CancellationToken(true)));
             _sseStreamManagerService.Setup(x => x.SenderAsync(It.IsAny<HttpContextBase>(), It.IsAny<CancellationToken>(), It.IsAny<Func<PushEventDelegate, Task[]>>()))
                .Returns(Task.FromCanceled(new CancellationToken(true)));
@@ -90,12 +106,20 @@ namespace Fanex.NAP.CTS.Test.Services
             var callerCts = new CancellationTokenSource();
 
             // Listener: only emits a ping, then completes
-            _sseStreamManagerService.Setup(x => x.ListenerAsync(It.IsAny<string>(), It.IsAny<Action<string>>(), It.IsAny<CancellationToken>(), It.IsAny<int>()))
-               .Returns<string, Action<string>, int, CancellationToken?>((url, onMsg, timeout, token) =>
-               {
-                   onMsg("ping");
-                   return Task.CompletedTask;
-               });
+            _sseStreamManagerService.Setup(x => x.ListenerAsync(
+              It.IsAny<string>(),
+              It.IsAny<Action<string>>(),
+              It.IsAny<CancellationToken>(),
+              It.IsAny<int>(),
+              It.IsAny<int>(),
+              It.IsAny<int>(),
+              It.IsAny<int>()))
+            .Returns<string, Action<string>, CancellationToken, int, int, int, int>(
+                (url, onMsg, token, timeout, idle, maxRetry, delay) =>
+                {
+                    onMsg("ping"); // simulate ping message
+                    return Task.CompletedTask;
+                });
 
             // Sender: if push is called, fail the test
             _sseStreamManagerService.Setup(x => x.SenderAsync(It.IsAny<HttpContextBase>(), It.IsAny<CancellationToken>(), It.IsAny<Func<PushEventDelegate, Task[]>>()))
