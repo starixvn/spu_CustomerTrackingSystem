@@ -1,395 +1,456 @@
 function AIInsights() {
-    let dataLogSentry = {
-        analyzeSummary: null,
-        analyzeCharts: null,
-        askChatBot: null
+    // Initialization
+    function Initialize() {
+        variable.$contentWrapper = EnsureContentWrapperExists();
+
+        BlockedLibraryPlotly();
+        AttachEventListeners();
+        UpdateFileNameFromServer();
+        AnalyzeFile();
+        LoadHistoryChatMessage();
     }
 
-    let domElements = {
-        btnGenerate: $('#btnGenerate'),
-        chatbotToggle: $('.chatbot-toggle'),
-        closeChatbot: $('.close-chatbot'),
-        fileInput: $('#fileInput'),
-        fileNameLabel: $('#file-name-label'),
-        chatbotPanel: $('#chatbotPanel'),
-        container: $('.ai-insights-container'),
-        divVisualization: $('#divVisualization'),
-        divStatistics: $('#divStatistics'),
-        chatInput: $('#chatInput'),
-        chatMessages: $('#chatMessages'),
-        sendButton: $('#sendButton'),
-        viewOptions: $('input[name="view"]'),
-        summarySection: $('#summary-section ul'),
-        chartSection: $('#chart-section'),
-        contentCardSection: $('.content-card-section'),
-        fileTitle: $('.file-title')
-    }
-
-    const ViewMode = {
-        VISUALIZATION: "visualization",
-        STATISTICS: "statistics"
-    };
-
-    const NoFileUpload = "No file uploaded";
-
-    let $contentWrapper = EnsureContentWrapperExists();
-
+    // DOM Management
     function EnsureContentWrapperExists() {
-        let $wrapper = domElements.container.find('.ai-insights-content');
+        let $wrapper = variable.domElements.container.find('.ai-insights-content');
 
         if ($wrapper.length === 0) {
             $wrapper = $('<div class="ai-insights-content"></div>');
-
-            domElements.container.children().each(function () {
-                const $child = $(this);
-                const isChatbotToggle = $child.hasClass('chatbot-toggle');
-                const isChatbotPanel = $child.attr('id') === 'chatbotPanel';
-
-                if (!isChatbotToggle && !isChatbotPanel) {
-                    $wrapper.append($child);
-                }
-            });
-
-            domElements.container.append($wrapper);
+            MoveChildrenToWrapper($wrapper);
+            variable.domElements.container.append($wrapper);
         }
 
         return $wrapper;
     }
 
-    function ToggleSections(viewMode) {
-        switch (viewMode) {
-            case ViewMode.VISUALIZATION:
-                domElements.divVisualization.removeClass('hidden');
-                domElements.divStatistics.addClass('hidden');
+    function MoveChildrenToWrapper($wrapper) {
+        variable.domElements.container.children().each(function () {
+            const $child = $(this);
+            const isChatbotToggle = $child.hasClass('chatbot-toggle');
+            const isChatbotPanel = $child.attr('id') === 'chatbotPanel';
 
-                break;
-            case ViewMode.STATISTICS:
-                domElements.divVisualization.addClass('hidden');
-                domElements.divStatistics.removeClass('hidden');
-                $('#divStatistics .js-plotly-plot').each(function () {
-                    Plotly.Plots.resize(this);
-                });
-                break;
-            default:
-                domElements.divVisualization.removeClass('hidden');
-                domElements.divStatistics.addClass('hidden');
+            if (!isChatbotToggle && !isChatbotPanel) {
+                $wrapper.append($child);
+            }
+        });
+    }
+
+    // View Management
+    function ToggleSections(viewMode) {
+        const isVisualization = viewMode === variable.ViewMode.VISUALIZATION;
+
+        variable.domElements.divVisualization.toggleClass('hidden', !isVisualization);
+        variable.domElements.divStatistics.toggleClass('hidden', isVisualization);
+
+        if (!isVisualization) {
+            ResizePlotlyCharts(variable.domElements.divStatistics);
         }
     }
 
+    function ResizePlotlyCharts(container) {
+        if (!window.Plotly || typeof Plotly.Plots === "undefined") {
+            console.warn("⚠️ Plotly not ready, skipping resize.");
+            return;
+        }
+
+        if (container) {
+            container.find('.js-plotly-plot').each(function () {
+                Plotly.Plots.resize(this);
+            });
+        }
+    }
+
+    // Event Listeners
     function AttachEventListeners() {
-        domElements.viewOptions.on('change', function () {
+        variable.domElements.viewOptions.on('change', function () {
             ToggleSections($(this).val());
         });
 
         AttachFileUploadEvents();
         AttachChatbotEvents();
 
-        ToggleSections(ViewMode.VISUALIZATION);
+        ToggleSections(variable.ViewMode.VISUALIZATION);
 
-        domElements.chatbotToggle.on('click', function () { ToggleChatbot(); });
-        domElements.closeChatbot.on('click', function () { ToggleChatbot(); });
-        domElements.btnGenerate.on('click', function () { AnalyzeFile(); });
-        domElements.fileTitle.on('click', function () { SaveLog(); });
+        // Button event handlers
+        variable.domElements.chatbotToggle.on('click', ToggleChatbot);
+        variable.domElements.closeChatbot.on('click', ToggleChatbot);
+        variable.domElements.btnGenerate.on('click', AnalyzeFile);
+        variable.domElements.fileTitle.on('click', SaveLog);
+        variable.domElements.fileNameLabel.on('click', ExportExcelConvertCsv);
     }
 
+    // Chatbot Management
     function ToggleChatbot() {
-        if (domElements.chatbotPanel.length && domElements.container.length) {
-            const isOpen = domElements.chatbotPanel.hasClass('active');
-
-            domElements.chatbotPanel.toggleClass('active');
-            $contentWrapper.toggleClass('chatbot-open', !isOpen);
-            domElements.chatbotToggle.css('display', isOpen ? 'flex' : 'none');
-            domElements.closeChatbot.css('display', isOpen ? 'none' : 'flex');
-
-            if (!isOpen) {
-                setTimeout(ScrollToBottomChat, 100);
-            }
-
-            setTimeout(function () {
-                ResizePlotlyCharts();
-            }, 300);
+        if (!variable.domElements.chatbotPanel.length || !variable.domElements.container.length) {
+            return;
         }
+
+        const isOpen = variable.domElements.chatbotPanel.hasClass('active');
+
+        variable.domElements.chatbotPanel.toggleClass('active');
+        variable.$contentWrapper.toggleClass('chatbot-open', !isOpen);
+        variable.domElements.chatbotToggle.css('display', isOpen ? 'flex' : 'none');
+        variable.domElements.closeChatbot.css('display', isOpen ? 'none' : 'flex');
+
+        if (!isOpen) {
+            setTimeout(ScrollToBottomChat, variable.CONFIG.CHAT_SCROLL_DELAY);
+        }
+
+        setTimeout(() => {
+            ResizePlotlyCharts(variable.domElements.divVisualization);
+        }, variable.CONFIG.CHART_RESIZE_DELAY);
     }
 
-    function ResizePlotlyCharts() {
-        $('#divVisualization .js-plotly-plot').each(function () {
-            Plotly.Plots.resize(this);
-        });
+    // File Upload Management
+    function AttachFileUploadEvents() {
+        if (!variable.domElements.fileInput.length || !variable.domElements.fileNameLabel.length) {
+            return;
+        }
+
+        const initialFileName = variable.domElements.fileNameLabel.text() || variable.CONFIG.NO_FILE_UPLOADED;
+        variable.domElements.fileNameLabel.text(initialFileName);
+        UpdateTitle();
+
+        variable.domElements.fileInput.on('change', HandleFileSelection);
+    }
+
+    function HandleFileSelection(e) {
+        variable.fileUpload = e.target.files[0];
+        const file = variable.fileUpload;
+
+        ResetDefault();
+        variable.domElements.contentCardSection.hide();
+
+        if (!file) {
+            SetNoFileState();
+            return;
+        }
+
+        if (!ValidateFile(file)) {
+            return;
+        }
+
+        UploadFile(file);
+    }
+
+    function ValidateFile(file) {
+        if (!variable.CONFIG.SUPPORTED_FILE_EXTENSIONS.test(file.name)) {
+            common.showError('Please upload a .xls or .xlsx file!');
+            variable.domElements.fileInput.val('');
+            return false;
+        }
+
+        if (file.size > variable.CONFIG.MAX_FILE_SIZE_BYTES) {
+            common.showError(`Exceeds the allowed limit of ${variable.CONFIG.MAX_FILE_SIZE_MB} MB`);
+            variable.domElements.fileInput.val('');
+            return false;
+        }
+
+        return true;
+    }
+
+    function SetNoFileState() {
+        variable.domElements.fileNameLabel.text(variable.CONFIG.NO_FILE_UPLOADED);
+        UpdateTitle();
     }
 
     function UpdateTitle() {
-        let currentText = domElements.fileNameLabel.text();
-        domElements.fileNameLabel.attr('title', currentText || NoFileUpload);
-    }
-
-    function AttachFileUploadEvents() {
-        if (domElements.fileInput.length && domElements.fileNameLabel.length) {
-            let initialFileName = domElements.fileNameLabel.text() || NoFileUpload;
-
-            domElements.fileNameLabel.text(initialFileName);
-
-            UpdateTitle();
-
-            domElements.fileInput.on('change', function (e) {
-                const file = e.target.files[0];
-
-                ResetDefault();
-                domElements.contentCardSection.hide();
-
-                if (!file) {
-                    domElements.fileNameLabel.text(NoFileUpload);
-                    UpdateTitle();
-                    return;
-                }
-
-                if (!/\.(xls|xlsx)$/i.test(file.name)) {
-                    common.showError('Please upload a .xls or .xlsx file!');
-                    $(this).val('');
-                    return;
-                }
-
-                const maxMBSize = 50;
-                const maxSize = maxMBSize * 1024 * 1024; // 50MB in bytes
-
-                if (file.size > maxSize) {
-                    common.showError('Exceeds the allowed limit of ' + maxMBSize + " MB");
-                    fileInput.val('');
-                    return;
-                }
-
-                UploadFile(file);
-            });
-        }
+        const currentText = variable.domElements.fileNameLabel.text();
+        variable.domElements.fileNameLabel.attr('title', currentText || variable.CONFIG.NO_FILE_UPLOADED);
     }
 
     function UploadFile(file) {
-        const formData = new FormData();
-        let fileName = file.name;
-        domElements.fileNameLabel.text(fileName);
+        api.UploadFile(file,
+            {
+                onStart: onStart,
+                onSuccess: (res, fileName) => onSuccess(res, fileName),
+                onComplete: onComplete,
+                onError: (message) => onError(message)
+            });
 
-        formData.append("uploadFile", file);
+        function onStart() {
+            common.showLoading();
+            variable.domElements.btnGenerate.prop('disabled', true);
+            variable.domElements.sendButton.prop('disabled', true);
+        }
 
-        $.ajax(common.modifyRelativeUrl('AIInsights/UploadFile'), {
-            type: 'POST',
-            headers: {
-                "X-Tab-Id": common.getTabId()
-            },
-            data: formData,
-            processData: false,
-            contentType: false,
-            beforeSend: function () {
-                common.showLoading();
-                domElements.btnGenerate.prop('disabled', true);
-            },
-            success: function (response) {
-                if (response.success == false) {
-                    domElements.fileNameLabel.text(NoFileUpload);
+        function onSuccess(response, fileName) {
+            variable.domElements.btnGenerate.prop('disabled', false);
+            variable.domElements.sendButton.prop('disabled', false);
+            variable.domElements.fileNameLabel.text(fileName);
+            common.showSuccess('File uploaded successfully: ' + fileName, 2000);
 
-                    common.showError("Upload failed " + response.message);
+            UpdateTitle();
+        }
 
-                } else {
-                    domElements.btnGenerate.prop('disabled', false);
-                    domElements.fileNameLabel.text(fileName);
-                    common.showSuccess('File uploaded successfully: ' + fileName, 2000);
-                }
+        function onComplete() {
+            common.closeLoading();
+            CleanUploadedFileInput();
+        }
 
-                UpdateTitle();
-            },
-            complete: function () {
-                common.closeLoading();
+        function onError(msg) {
+            common.closeLoading();
 
-                CleanUploadedFileInput(file);
-            },
-            error: function (errMsg) {
-                common.closeLoading();
-                domElements.btnGenerate.prop('disabled', false);
+            variable.domElements.fileNameLabel.text(variable.CONFIG.NO_FILE_UPLOADED);
+            common.showError("Upload failed " + msg);
+        }
+
+        function CleanUploadedFileInput() {
+            if (variable.domElements.fileInput && variable.domElements.fileInput[0]) {
+                variable.domElements.fileInput[0].value = "";
             }
-        });
-    }
-
-    function CleanUploadedFileInput(file) {
-        // ✅ Clear memory after upload
-        file = null; // remove reference
-
-        if (domElements.fileInput && domElements.fileInput[0]) {
-            domElements.fileInput[0].value = ""; // native reset
-        }
-
-        if (domElements.fileInput) {
-            domElements.fileInput.val(""); // reset <input type="file">
+            if (variable.domElements.fileInput) {
+                variable.domElements.fileInput.val("");
+            }
         }
     }
 
+    // Analysis Functions
     function AnalyzeFile() {
+        const fileName = variable.domElements.fileNameLabel.text().trim();
 
-        let fileName = domElements.fileNameLabel.text().trim();
-
-        if (fileName == NoFileUpload || fileName == '') {
+        if (fileName === variable.CONFIG.NO_FILE_UPLOADED || fileName === '') {
             return;
         }
 
         ResetDefault();
-
+        ShowAnalysisLoading();
         SkipReCheckin();
-        common.showLoading();
-        domElements.summarySection.addClass('loading');
-        domElements.chartSection.addClass('loading');
-        domElements.btnGenerate.prop('disabled', true);
 
         AnalyzeSummary()
-            .always(function () {
-                AnalyzeCharts()
-                    .always(function () {
-                        domElements.btnGenerate.prop('disabled', false);
-                        EnableReCheckin();
+            .done(function () {
+                AnalyzeChartsGetSSEId()
+                    .done(function () {
+                        AnalyzeChartsSSEConnection();
                     });
+                EnableReCheckin();
             });
     }
 
     function AnalyzeSummary() {
-        return $.ajax(common.modifyRelativeUrl('AIInsights/AnalyzeSummary'), {
-            type: 'POST',
-            headers: {
-                "X-Tab-Id": common.getTabId()
-            },
-            success: function (response) {
-                dataLogSentry.analyzeSummary = response;
-
-                if (response && response.ErrorCode != -1) {
-                    if (response.summary) {
-                        RenderVisualizationSummary(response.summary);
-                    }
-
-                    RenderStatistics(response.statistics_html);
-
-                    domElements.contentCardSection.show();
-                } else {
-                    common.showError('Sorry Analyze Summary failed: ' + response.ErrorMessage);
-                }
-            },
-            complete: function () {
-                common.closeLoading();
-                domElements.summarySection.removeClass('loading');
-                ResizePlotlyCharts();
-            },
-            error: function (errMsg) {
-                common.closeLoading();
-                domElements.summarySection.removeClass('loading');
-                domElements.btnGenerate.prop('disabled', false);
-                EnableReCheckin();
-            }
+        return api.AnalyzeSummary({
+            onStart: () => { },
+            onSuccess: (res) => onSuccess(res),
+            onComplete: onComplete,
+            onError: (xhr) => onError(xhr)
         });
+
+        function onSuccess(res) {
+            variable.dataLogSentry.analyzeSummary = res;
+            let response = res?.data?.response;
+
+            if (response.summary) {
+                RenderVisualizationSummary(response.summary);
+            }
+
+            RenderStatistics(response.statistics_html);
+
+            variable.domElements.contentCardSection.show();
+        }
+
+        function onComplete() {
+            common.closeLoading();
+            variable.domElements.headerSummarySection.removeClass('loading');
+            ResizePlotlyCharts();
+        }
+
+        function onError(msg) {
+            common.closeLoading();
+            variable.domElements.headerSummarySection.removeClass('loading');
+            variable.domElements.btnGenerate.prop('disabled', false);
+            variable.domElements.sendButton.prop('disabled', false);
+            EnableReCheckin();
+
+            common.showError('Sorry Analyze Summary failed: ' + msg);
+        }
+
     }
 
-    function AnalyzeCharts() {
-        return $.ajax(common.modifyRelativeUrl('AIInsights/AnalyzeCharts'), {
-            type: 'POST',
-            headers: {
-                "X-Tab-Id": common.getTabId()
-            },
-            success: function (response) {
-                dataLogSentry.analyzeCharts = response;
-
-                if (response && response.ErrorCode != -1) {
-                    if (response.visualization_response) {
-                        RenderVisualizationChart(response.visualization_response.chart_infos);
-                    }
-
-                    domElements.contentCardSection.show();
-                } else {
-                    common.showError('Sorry Analyze Charts failed: ' + response.ErrorMessage);
-                }
-            },
-            complete: function () {
-                common.closeLoading();
-                domElements.chartSection.removeClass('loading');
-                ResizePlotlyCharts();
-            },
-            error: function (errMsg) {
-                common.closeLoading();
-                domElements.chartSection.removeClass('loading');
-                EnableReCheckin();
-            }
-        });
+    function ShowAnalysisLoading() {
+        common.showLoading();
+        variable.domElements.headerSummarySection.addClass('loading');
+        variable.domElements.headerChartSection.addClass('loading');
+        variable.domElements.btnGenerate.prop('disabled', true);
+        variable.domElements.sendButton.prop('disabled', true);
     }
 
+    function AnalyzeChartsGetSSEId() {
+        return api.StartAnalyzeCharts({
+            onStart: () => { },
+            onSuccess: onSuccess,
+            onComplete: () => { },
+            onError: (msg) => onError(msg)
+        });
+
+        function onSuccess(res) {
+            variable.streamToken = res?.data || null;
+        }
+
+        function onError(msg) {
+            variable.domElements.btnGenerate.prop('disabled', false);
+            variable.domElements.sendButton.prop('disabled', false);
+            EnableReCheckin();
+
+            common.showError('Sorry Analyze Chart failed: ' + msg);
+        }
+    }
+
+    // Server-Sent Events AnalyzeCharts
+    function AnalyzeChartsSSEConnection() {
+        if (variable.evtSource) {
+            variable.evtSource.close();
+        }
+
+        variable.evtSource = new EventSource(
+            common.modifyRelativeUrl(`AIInsights/StreamAnalyzeCharts?streamToken=${variable.streamToken}`)
+        );
+
+        // variable.evtSource.onopen = () => console.log("✅ Connected");
+        variable.evtSource.onerror = HandleEventSourceError;
+        variable.evtSource.onmessage = HandleEventSourceMessage;
+
+        function HandleEventSourceError() {
+            if (variable.evtSource) {
+                variable.evtSource.close();
+                variable.evtSource = null;
+                variable.domElements.headerChartSection.removeClass('loading');
+                variable.domElements.btnGenerate.prop('disabled', false);
+                variable.domElements.sendButton.prop('disabled', false);
+                // console.log("✅ Connection closed");
+            }
+        }
+
+        function HandleEventSourceMessage(e) {
+            try {
+                const response = JSON.parse(e.data);
+                // console.log("Realtime data:", response);
+                ProcessEventResponse(response);
+            } catch (error) {
+                console.error("Error parsing SSE message:", error);
+            }
+        }
+
+        function ProcessEventResponse(response) {
+            switch (response.EventName) {
+                case variable.AIInsightEventName.AnalyzeCharts:
+                    HandleAnalyzeChartsEvent(response);
+                    break;
+            }
+        }
+
+        function HandleAnalyzeChartsEvent(response) {
+            switch (response.EventStatus) {
+                case variable.AIInsightEventStatus.Started:
+                    // console.log("Analyze Charts started");
+                    $('#chart-section .card-body').remove();
+                    break;
+                case variable.AIInsightEventStatus.Processing:
+                    HandleChartsProcessing(response.Data);
+                    break;
+                case variable.AIInsightEventStatus.Completed:
+                    // console.log("Analyze Charts completed");
+                    variable.domElements.headerChartSection.removeClass('loading');
+                    variable.domElements.btnGenerate.prop('disabled', false);
+                    variable.domElements.sendButton.prop('disabled', false);
+                    variable.evtSource.close();
+                    break;
+                case variable.AIInsightEventStatus.Failed:
+                    // common.showError('Sorry Analyze Charts failed: ');
+                    variable.domElements.headerChartSection.removeClass('loading');
+                    variable.domElements.btnGenerate.prop('disabled', false);
+                    variable.domElements.sendButton.prop('disabled', false);
+                    variable.evtSource.close();
+                    break;
+            }
+        }
+
+        function HandleChartsProcessing(chart) {
+            // console.log("Analyze Charts processing");
+            const $chartSection = variable.domElements.chartSection;
+            const $card = CreateChartCard(chart);
+            $chartSection.append($card);
+        }
+    }
+
+    // Rendering Functions
     function RenderVisualizationSummary(visualizationSummary) {
-        const $ul = domElements.summarySection;
+        const $ul = variable.domElements.summarySection;
         $ul.empty();
 
         if (visualizationSummary) {
-            visualizationSummary.forEach(function (summary) {
-                const { content, isNumbered, isBulleted, numberValue } = NormalizeLine(summary);
-                const className = isNumbered ? 'numbered' : isBulleted ? 'bulleted' : '';
-                const numberAttr = isNumbered ? `data-number="${numberValue}"` : '';
-                $ul.append(`<li class="${className}" ${numberAttr}>${content}</li>`);
+            visualizationSummary.forEach(summary => {
+                const normalized = NormalizeLine(summary);
+                const $li = CreateSummaryListItem(normalized);
+                $ul.append($li);
             });
         }
     }
 
-    function RenderVisualizationChart(visualizationChart) {
-        var $chartSection = domElements.chartSection;
-        $('#chart-section .card-body').remove();
+    function CreateSummaryListItem(normalized) {
+        const { content, isNumbered, isBulleted, numberValue } = normalized;
+        const className = isNumbered ? 'numbered' : isBulleted ? 'bulleted' : '';
+        const numberAttr = isNumbered ? `data-number="${numberValue}"` : '';
 
-        if (visualizationChart.length > 0) {
-            visualizationChart.forEach(function (chart) {
-                var analysisItems = (chart.analysis || '')
-                    .split('\n')
-                    .filter(a => a.trim() !== '')
-                    .map(a => {
-                        const { content, isNumbered, isBulleted, numberValue } = NormalizeLine(a);
-                        const className = isNumbered ? 'numbered' : isBulleted ? 'bulleted' : '';
-                        const numberAttr = isNumbered ? `data-number="${numberValue}"` : '';
+        return `<li class="${className}" ${numberAttr}>${content}</li>`;
+    }
 
-                        return `<li class="${className}" ${numberAttr}>${content}</li>`;
-                    })
-                    .join('');
+    function CreateChartCard(chart) {
+        const analysisItems = CreateAnalysisItems(chart.analysis);
+        const suggestionItems = CreateSuggestionItems(chart.suggestions);
 
-                var suggestionItems = (chart.suggestions || [])
-                    .filter(s => s.trim() !== '')
-                    .map(s => {
-                        const { content, isNumbered, isBulleted, numberValue } = NormalizeLine(s);
-                        let className = isNumbered ? 'numbered' : isBulleted ? 'bulleted' : 'bulleted';
-                        const numberAttr = isNumbered ? `data-number="${numberValue}"` : '';
-
-                        return `<li class="${className}" ${numberAttr}>${content}</li>`;
-                    }).join('');
-
-                var $card = $(`
-                    <div class="card-body">
-                        <div class="chart-item">
-                            <div class="chart-title">
-                                <h3>${chart.title}</h3>
-                            </div>
-
-                            <div class="chart-image">
-                                ${chart.base64_image}
-                            </div>
-
-                            <div class="chart-content">
-                                <div class="chart-analysis">
-                                    <p><strong>Analysis:</strong></p>
-                                    <ul>${analysisItems}</ul>
-                                </div>
-                                <div class="chart-suggestion">
-                                    <p><strong>Suggestion:</strong></p>
-                                    <ul>${suggestionItems}</ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="divider"></div>
+        return $(`
+            <div class="card-body">
+                <div class="chart-item">
+                    <div class="chart-title">
+                        <h3>${chart.title}</h3>
                     </div>
-                `);
+                    <div class="chart-image">
+                        ${chart.base64_image}
+                    </div>
+                    <div class="chart-content">
+                        <div class="chart-analysis">
+                            <p><strong>Analysis:</strong></p>
+                            <ul>${analysisItems}</ul>
+                        </div>
+                        <div class="chart-suggestion">
+                            <p><strong>Suggestion:</strong></p>
+                            <ul>${suggestionItems}</ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="divider"></div>
+            </div>
+        `);
+    }
 
-                $chartSection.append($card);
-            });
-        }
+    function CreateAnalysisItems(analysis) {
+        return (analysis || '')
+            .split('\n')
+            .filter(a => a.trim() !== '')
+            .map(a => CreateListItem(NormalizeLine(a)))
+            .join('');
+    }
+
+    function CreateSuggestionItems(suggestions) {
+        return (suggestions || [])
+            .filter(s => s.trim() !== '')
+            .map(s => CreateListItem(NormalizeLine(s)))
+            .join('');
+    }
+
+    function CreateListItem(normalized) {
+        const { content, isNumbered, isBulleted, numberValue } = normalized;
+        const className = isNumbered ? 'numbered' : isBulleted ? 'bulleted' : 'bulleted';
+        const numberAttr = isNumbered ? `data-number="${numberValue}"` : '';
+
+        return `<li class="${className}" ${numberAttr}>${content}</li>`;
     }
 
     function NormalizeLine(line) {
         const trimmed = line.trim();
-        const numberMatch = trimmed.match(/^(\d+)\.(?!\d)\s*(.*)$/);
 
+        // Check for numbered list
+        const numberMatch = trimmed.match(/^(\d+)\.(?!\d)\s*(.*)$/);
         if (numberMatch) {
             return {
                 content: numberMatch[2],
@@ -399,6 +460,7 @@ function AIInsights() {
             };
         }
 
+        // Check for bullet points
         const bulletMatch = trimmed.match(/^[-–•]\s*(.*)$/);
         if (bulletMatch) {
             return {
@@ -408,15 +470,7 @@ function AIInsights() {
             };
         }
 
-        const weirdBulletMatch = trimmed.match(/^[-–•]\.?\s*(.*)$/);
-        if (weirdBulletMatch) {
-            return {
-                content: weirdBulletMatch[1].trim(),
-                isNumbered: false,
-                isBulleted: true
-            };
-        }
-
+        // Default to bulleted
         return {
             content: trimmed,
             isNumbered: false,
@@ -425,14 +479,11 @@ function AIInsights() {
     }
 
     function RenderStatistics(statisticsHtml) {
-        domElements.divStatistics.html(statisticsHtml);
+        variable.domElements.divStatistics.html(statisticsHtml);
 
         if (statisticsHtml) {
             AdjustStatsItemsLayout();
-
-            $('#divStatistics .js-plotly-plot').each(function () {
-                Plotly.Plots.resize(this);
-            });
+            ResizePlotlyCharts(variable.domElements.divStatistics);
         }
     }
 
@@ -447,164 +498,164 @@ function AIInsights() {
         if (remaining > 0) {
             const startIndex = fullRows * 4;
             const $lastItems = $items.slice(startIndex);
-
             $lastItems.each(function () {
                 $(this).addClass(`last-${remaining}`);
             });
         }
     }
 
+    // Chatbot Functions
     function LoadHistoryChatMessage() {
         $.ajax(common.modifyRelativeUrl('AIInsights/LoadHistoryChatMessage'), {
             type: 'POST',
-            headers: {
-                "X-Tab-Id": common.getTabId()
-            },
-            beforeSend: function () { },
-            success: function (response) {
+            headers: { "X-Tab-Id": common.getTabId() },
+            success: (response) => {
                 if (response) {
-                    let $chatMessages = domElements.chatMessages;
-                    $.each(response, function (index, item) {
-                        let $message = item.Sender == 'u' ?
-                            $(`
-                                <div class="message user-message">
-                                    <div class="icon-placeholder"></div>
-                                    <div class="message-text">${item.Message}</div>
-                                </div>
-                            `) :
-                            $(`
-                                <div class="message bot-message">
-                                    <div class="icon-wrapper bot-icon"><i class="fas fa-robot"></i></div>
-                                    <div class="message-text">${item.Message}</div>
-                                </div>
-                            `);
-
-                        $chatMessages.append($message);
-                    });
-
-                    ScrollToBottomChat();
+                    RenderChatHistory(response);
                 }
             },
-            complete: function () { },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
+            error: (errMsg) => console.log(errMsg)
         });
+    }
+
+    function RenderChatHistory(history) {
+        const $chatMessages = variable.domElements.chatMessages;
+
+        $.each(history, function (index, item) {
+            const $message = CreateChatMessage(item.Sender, item.Message);
+            $chatMessages.append($message);
+        });
+
+        ScrollToBottomChat();
+    }
+
+    function CreateChatMessage(sender, message) {
+        const isUser = sender === 'u';
+        const iconHtml = isUser
+            ? '<div class="icon-placeholder"></div>'
+            : '<div class="icon-wrapper bot-icon"><i class="fas fa-robot"></i></div>';
+
+        const messageClass = isUser ? 'user-message' : 'bot-message';
+
+        return $(`
+            <div class="message ${messageClass}">
+                ${iconHtml}
+                <div class="message-text">${message}</div>
+            </div>
+        `);
     }
 
     function SendChatMessage() {
-        let $chatMessages = domElements.chatMessages;
-        let message = domElements.chatInput.val().trim();
-
+        const message = variable.domElements.chatInput.val().trim();
         if (!message) return;
 
-        let $userMessage = $('<div class="message user-message">');
-        $userMessage.append('<div class="icon-placeholder"></div>');
-        $userMessage.append($('<div class="message-text">').text(message));
-        $chatMessages.append($userMessage);
-
-        domElements.chatInput.val('');
-        let textarea = domElements.chatInput[0];
-        textarea.style.height = 'auto';
-        textarea.style.height = '36px';
-
-        const $loadingDots = $('<span class="dot-loading dot-1"><i class="fas fa-circle dot"></i><i class="fas fa-circle dot"></i><i class="fas fa-circle dot"></i></span>');
-
-        const $loadingMessage = $(`
-        <div class="message bot-message loading-message">
-            <div class="icon-wrapper bot-icon"><i class="fas fa-robot"></i></div>
-            <div class="message-text"></div>
-        </div>
-        `);
-
-        $loadingMessage.find('.message-text').append($loadingDots);
-        $chatMessages.append($loadingMessage);
-        ScrollToBottomChat();
-
-        const stopLoading = StartDotLoading($loadingDots);
+        AddUserMessage(message);
+        ClearChatInput();
+        ShowLoadingMessage();
 
         $.ajax(common.modifyRelativeUrl('AIInsights/AskChatbot'), {
             type: 'POST',
-            headers: {
-                "X-Tab-Id": common.getTabId()
-            },
-            data: {
-                question: message
-            },
-            beforeSend: function () {
-                SkipReCheckin();
-            },
-            success: function (response) {
-                dataLogSentry.askChatBot = response;
-                stopLoading();
-                $loadingMessage.remove();
-
-                const answer = response?.answer || 'No response from bot.';
-
-                const $botMessage = $(`
-                    <div class="message bot-message">
-                        <div class="icon-wrapper bot-icon"><i class="fas fa-robot"></i></div>
-                        <div class="message-text">${answer}</div>
-                    </div>
-                `);
-
-                $chatMessages.append($botMessage);
-                ScrollToBottomChat();
-
-                RenderVisualizationChart(response.chart_infos);
-            },
-            complete: function () {
-                EnableReCheckin();
-            },
-            error: function (xhr, status, error) {
-                stopLoading();
-                $loadingMessage.remove();
-
-                const $errorMessage = $(`
-                    <div class="message bot-message">
-                        <div class="icon-wrapper bot-icon"><i class="fas fa-robot"></i></div>
-                        <div class="message-text">Oops! Something went wrong.</div>
-                    </div>
-                `);
-                $chatMessages.append($errorMessage);
-                ScrollToBottomChat();
-                EnableReCheckin();
-            }
+            headers: { "X-Tab-Id": common.getTabId() },
+            data: { question: message },
+            beforeSend: () => SkipReCheckin(),
+            success: (response) => HandleChatbotResponse(response),
+            complete: () => EnableReCheckin(),
+            error: (xhr, status, error) => HandleChatbotError()
         });
+    }
+
+    function AddUserMessage(message) {
+        const $userMessage = CreateChatMessage('u', message);
+        variable.domElements.chatMessages.append($userMessage);
+    }
+
+    function ClearChatInput() {
+        variable.domElements.chatInput.val('');
+        const textarea = variable.domElements.chatInput[0];
+        textarea.style.height = 'auto';
+        textarea.style.height = '36px';
+    }
+
+    function ShowLoadingMessage() {
+        const $loadingDots = CreateLoadingDots();
+        const $loadingMessage = CreateLoadingMessage($loadingDots);
+
+        variable.domElements.chatMessages.append($loadingMessage);
+        ScrollToBottomChat();
+
+        return StartDotLoading($loadingDots);
+    }
+
+    function CreateLoadingDots() {
+        return $('<span class="dot-loading dot-1"><i class="fas fa-circle dot"></i><i class="fas fa-circle dot"></i><i class="fas fa-circle dot"></i></span>');
+    }
+
+    function CreateLoadingMessage($loadingDots) {
+        return $(`
+            <div class="message bot-message loading-message">
+                <div class="icon-wrapper bot-icon"><i class="fas fa-robot"></i></div>
+                <div class="message-text"></div>
+            </div>
+        `).find('.message-text').append($loadingDots).end();
+    }
+
+    function HandleChatbotResponse(response) {
+        variable.dataLogSentry.askChatBot = response;
+        $('.loading-message').remove();
+
+        const answer = response?.answer || 'No response from bot.';
+        const $botMessage = CreateChatMessage('bot', answer);
+
+        variable.domElements.chatMessages.append($botMessage);
+        ScrollToBottomChat();
+
+        if (response.chart_infos) {
+            RenderVisualizationChart(response.chart_infos);
+        }
+    }
+
+    function HandleChatbotError() {
+        $('.loading-message').remove();
+
+        const $errorMessage = CreateChatMessage('bot', 'Oops! Something went wrong.');
+        variable.domElements.chatMessages.append($errorMessage);
+        ScrollToBottomChat();
     }
 
     function AttachChatbotEvents() {
-        domElements.sendButton.on('click', SendChatMessage);
+        variable.domElements.sendButton.on('click', SendChatMessage);
 
-        domElements.chatInput.on('keypress', function (e) {
+        variable.domElements.chatInput.on('keypress', function (e) {
             if (e.which === 13 && !e.shiftKey) {
                 e.preventDefault();
-                SendChatMessage();
+                if (variable.domElements.sendButton.prop('disabled') === false) {
+                    SendChatMessage();
+                }
             }
         });
 
-        function autoResizeTextarea() {
-            let textarea = domElements.chatInput[0];
-            if (!textarea) return;
+        variable.domElements.chatInput.on('input', AutoResizeTextarea);
+        AutoResizeTextarea();
+    }
 
-            textarea.style.height = 'auto';
-            const maxHeight = window.innerHeight / 3;
+    function AutoResizeTextarea() {
+        const textarea = variable.domElements.chatInput[0];
+        if (!textarea) return;
 
-            if (textarea.scrollHeight > maxHeight) {
-                textarea.style.height = maxHeight + 'px';
-                textarea.style.overflowY = 'auto';
-            } else {
-                textarea.style.height = textarea.scrollHeight + 'px';
-                textarea.style.overflowY = 'hidden';
-            }
+        textarea.style.height = 'auto';
+        const maxHeight = window.innerHeight / variable.CONFIG.MAX_CHAT_HEIGHT_RATIO;
+
+        if (textarea.scrollHeight > maxHeight) {
+            textarea.style.height = maxHeight + 'px';
+            textarea.style.overflowY = 'auto';
+        } else {
+            textarea.style.height = textarea.scrollHeight + 'px';
+            textarea.style.overflowY = 'hidden';
         }
-
-        domElements.chatInput.on('input', autoResizeTextarea);
-        autoResizeTextarea();
     }
 
     function ScrollToBottomChat() {
-        let $chatMessages = domElements.chatMessages;
+        const $chatMessages = variable.domElements.chatMessages;
         $chatMessages.scrollTop($chatMessages[0].scrollHeight);
     }
 
@@ -629,11 +680,56 @@ function AIInsights() {
         return () => clearInterval(interval);
     }
 
-    function SaveLog() {
-        saveTextFile(generateUID() + '.json', JSON.stringify(dataLogSentry))
+    function ExportExcelConvertCsv() {
+        // handle file
+        if (variable.fileUpload) {
+            const file = variable.fileUpload;
+            const formData = new FormData();
+            const fileName = file.name.replace(/\.[^/.]+$/, "");
+
+            formData.append("uploadFile", file);
+
+            $.ajax({
+                url: common.modifyRelativeUrl('AIInsights/ConvertToCsvFile'),
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function (blob, status, xhr) {
+                    const disposition = xhr.getResponseHeader('Content-Disposition');
+                    let downloadFileName = fileName + ".csv";
+                    if (disposition && disposition.indexOf('filename=') !== -1) {
+                        const matches = /filename="?([^"]+)"?/.exec(disposition);
+                        if (matches != null && matches[1]) downloadFileName = matches[1];
+                    }
+
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = downloadFileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+                },
+                error: function (error) {
+                    console.log('ConvertToCsvFile error:', error);
+                }
+            });
+        }
     }
 
-    function saveTextFile(filename, content) {
+    // Utility Functions
+    function SaveLog() {
+        const filename = common.getUID() + '.json';
+        const content = JSON.stringify(variable.dataLogSentry);
+        SaveTextFile(filename, content);
+    }
+
+    function SaveTextFile(filename, content) {
         const blob = new Blob([content], { type: 'text/plain' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
@@ -642,23 +738,14 @@ function AIInsights() {
         URL.revokeObjectURL(link.href);
     }
 
-    function generateUID() {
-        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11)
-            .replace(/[018]/g, c =>
-                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-            );
-    }
-
     function UpdateFileNameFromServer() {
         $.ajax(common.modifyRelativeUrl('AIInsights/GetFileName'), {
             type: 'GET',
             async: false,
-            headers: {
-                "X-Tab-Id": common.getTabId()
-            },
-            success: function (response) {
+            headers: { "X-Tab-Id": common.getTabId() },
+            success: (response) => {
                 if (response) {
-                    domElements.fileNameLabel.text(response);
+                    variable.domElements.fileNameLabel.text(response);
                 }
             }
         });
@@ -670,16 +757,108 @@ function AIInsights() {
         RenderStatistics('');
     }
 
-    function Initial() {
-        AttachEventListeners();
-        UpdateFileNameFromServer();
-        AnalyzeFile();
-        LoadHistoryChatMessage();
+    function RenderVisualizationChart(visualizationChart) {
+        const $chartSection = variable.domElements.chartSection;
+        $('#chart-section .card-body').remove();
+
+        if (visualizationChart && visualizationChart.length > 0) {
+            visualizationChart.forEach(chart => {
+                const $card = CreateChartCard(chart);
+                $chartSection.append($card);
+            });
+        }
     }
 
-    $(document).ready(function () {
-        Initial();
-    })
+    function BlockedLibraryPlotly() {
+        const PLOTLY_KEYWORD = "cdn.plot.ly/plotly";
+        let hasLoadedOnce = !!window.Plotly;
+
+        if (hasLoadedOnce) {
+            console.log("✅ Plotly already loaded, blocking future loads of any version.");
+        } else {
+            console.log("🕓 Waiting for first Plotly load...");
+        }
+
+        // 🔍 Check if a given DOM node is a Plotly script element
+        function isPlotlyScript(node) {
+            if (!node || node.tagName !== "SCRIPT") return false;
+            const src = node.src || "";
+            return src.includes(PLOTLY_KEYWORD);
+        }
+
+        // 🧩 Observe DOM changes to detect dynamically added Plotly scripts
+        const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                for (const node of mutation.addedNodes) {
+                    if (isPlotlyScript(node)) {
+                        if (hasLoadedOnce) {
+                            console.warn("🚫 Blocked duplicate Plotly load:", node.src);
+                            node.remove();
+                        } else {
+                            console.log("✅ Allowing first Plotly load:", node.src);
+                            hasLoadedOnce = true;
+                        }
+                    }
+                }
+            }
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+
+        // 🧩 Intercept appendChild calls to block duplicate Plotly inserts
+        const origAppendChild = Element.prototype.appendChild;
+        Element.prototype.appendChild = function (el) {
+            if (isPlotlyScript(el)) {
+                if (hasLoadedOnce) {
+                    console.warn("🚫 Prevented duplicate Plotly append:", el.src);
+                    return el;
+                } else {
+                    console.log("✅ Allowing first Plotly append:", el.src);
+                    hasLoadedOnce = true;
+                }
+            }
+            return origAppendChild.call(this, el);
+        };
+
+        // 🧩 Intercept createElement to prevent setting duplicate Plotly src attributes
+        const origCreateElement = document.createElement;
+        document.createElement = function (tagName, ...args) {
+            const el = origCreateElement.call(document, tagName, ...args);
+            if (tagName.toLowerCase() === "script") {
+                const origSetAttribute = el.setAttribute;
+                el.setAttribute = function (name, value) {
+                    if (name === "src" && value.includes(PLOTLY_KEYWORD)) {
+                        if (hasLoadedOnce) {
+                            console.warn("🚫 Prevented setting duplicate Plotly src:", value);
+                            return;
+                        } else {
+                            console.log("✅ Allowing first Plotly setAttribute:", value);
+                            hasLoadedOnce = true;
+                        }
+                    }
+                    origSetAttribute.call(el, name, value);
+                };
+            }
+            return el;
+        };
+    }
+
+    // Initialize the application
+    $(document).ready(Initialize);
+
+    $(window).on('beforeunload', function () {
+        if (variable.evtSource) {
+            variable.evtSource.close();
+            variable.evtSource = null;
+        }
+    });
+
+    $(window).on('unload', function () {
+        if (variable.evtSource) {
+            variable.evtSource.close();
+            variable.evtSource = null;
+        }
+    });
 }
 
 $(AIInsights);

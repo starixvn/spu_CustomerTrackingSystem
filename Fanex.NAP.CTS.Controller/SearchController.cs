@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
@@ -8,6 +9,7 @@
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Interface.AIInsights;
     using Fanex.NAP.CTS.ViewModel.Home;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -28,6 +30,13 @@
             _aIInsightsService = new AIInsightsService();
             _memoryCacheService = new RedisCacheService();
         }
+
+        [HttpGet]
+        public ActionResult Index()
+        {
+            return View("~/Views/Home/Search.cshtml", new SearchResultViewModel { SearchResults = new List<SearchResultModel>(), InputValue = string.Empty });
+        }
+
         [HttpPost]
         public async Task<ActionResult> Index(FormCollection form, HttpPostedFileBase uploadFile, string tabId)
         {
@@ -42,7 +51,7 @@
                 var userId = CurrentSession.UserId.ToString();
 
                 var result = await _aIInsightsService.UploadFile(uploadFile, userId);
-                _memoryCacheService.PushValueBySlidingTime(string.Format(Consts.AIInsightsUploadFileKey, userId, tabId), result?.response, 3);
+                await _memoryCacheService.PushValueAsync(string.Format(Consts.AIInsightsUploadFileKey, userId, tabId), result?.response, 3);
 
                 return RedirectToAction("Index", "AIInsights");
             }

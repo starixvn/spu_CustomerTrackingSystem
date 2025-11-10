@@ -57,13 +57,13 @@
 
             RobotBettingBundles(bundles);
 
-            RegisterCustomerCategoryBundles(bundles);        
+            RegisterCustomerCategoryBundles(bundles);
 
-            RegisterProblemAccountMonitorDetailBundles(bundles);      
+            RegisterProblemAccountMonitorDetailBundles(bundles);
 
             RegisterAssociatedAccountMonitorBundles(bundles);
 
-            RegisterSpecialCustomerClassBundles(bundles);          
+            RegisterSpecialCustomerClassBundles(bundles);
 
             RegisterManagerSubscriberBundles(bundles);
 
@@ -71,7 +71,7 @@
 
             RegisterAssociationDetailReport(bundles);
 
-            RegisterLatestTransaction(bundles);           
+            RegisterLatestTransaction(bundles);
 
             RegisterAssociationDetectionBundles(bundles);
 
@@ -89,6 +89,8 @@
         private static void RegisterAIInsightsBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/ai-insights-scripts").Include(
+                "~/Scripts/AIInsights/index.variable.js",
+                "~/Scripts/AIInsights/index.api.js",
                 "~/Scripts/AIInsights/index.js"));
 
             bundles.Add(new StyleBundle("~/ai-insights-styles").Include(
@@ -217,7 +219,7 @@
         private static void RegisterCustomerCategoryBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/account/customer-category-scripts").Include("~/Scripts/Account/CustomerCategory/*.js"));
-        }      
+        }
 
         private static void RegisterProblemAccountMonitorDetailBundles(BundleCollection bundles)
         {
@@ -229,7 +231,7 @@
                     "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
                     "~/Content/scss/MultipleSelect/jquery.multiselect.css",
                     "~/Content/scss/pages/problem-account-monitor/problem-account-monitor.css"));
-        }       
+        }
 
         private static void RegisterAssociationDetectionBundles(BundleCollection bundles)
         {
@@ -279,7 +281,7 @@
                 "~/Content/scss/MultipleSelect/jquery.multiselect.css",
                 "~/Content/scss/vendors/jquery-ui/base/tagify.css",
                 "~/Content/scss/pages/special-customer-class/special-customer-class.css"));
-        }      
+        }
 
         private static void RegisterManagerSubscriberBundles(BundleCollection bundles)
         {
@@ -354,7 +356,7 @@
                 "~/Content/scss/pages/match-monitor/match-monitor-detail.css",
                 "~/Content/scss/vendors/jquery-ui/base/tagify.css"));
         }
-       
+
         private static void RegisterTransactionReport(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/transaction-report-scripts").Include(

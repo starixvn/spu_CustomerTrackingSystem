@@ -1,4 +1,4 @@
-﻿@model IList<Fanex.NAP.Core.Models.MenuItem>
+﻿@model Fanex.NAP.CTS.Model.AIInsights.AIInsightsFileUploadModel
 @{
     ViewBag.Title = "Home Page";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
@@ -52,10 +52,10 @@
 			         <div class="upload-wrapper">
 				         <label for="fileUpload" class="upload-label">
 					         <span class="plus-icon">+</span> 
-                             <span class="file-type">Supported file type: .xls and .xlsx (Limit 50MB per file)</span>
+                             <span class="file-type">Supported file type: @Model.AllowedExtensions (Limit @Model.MaxFileSizeMB MB per file)</span>
 				         </label>
 
-				         <input id="fileUpload" name="uploadFile" type="file" class="file-input" accept=".xls,.xlsx" />
+				         <input id="fileUpload" name="uploadFile" type="file" class="file-input" accept="@Model.AllowedExtensions" />
 			         </div>
 
 			         <div class="search-icon-wrapper">
@@ -82,6 +82,9 @@
     <div hidden>
         <div id="divUserId">@ViewBag.UserId</div>
         <div id="divOnUserId">@ViewBag.OnUserId</div>
+        <div id="divAIMaxFileSizeBytes">@Model.MaxFileSizeBytes</div>
+        <div id="divAIUploadMaxFileSizeMB">@Model.MaxFileSizeMB</div>
+        <div id="divAIAllowedExtensions">@Model.AllowedExtensions</div>
         <img class="search-icon" src="~/Content/scss/images/search-icon.png" width="30" height="30" alt="Customer Tracking System" hidden />
         <img class="search-icon-enable" src="~/Content/scss/images/search-icon-enable.png" width="30" height="30" alt="Customer Tracking System" hidden />
     </div>      

@@ -1,17 +1,20 @@
 ﻿namespace Fanex.NAP.CTS.Service.Interface.AIInsights
 {
-    using System.Threading.Tasks;
-    using System.Web;
     using Fanex.NAP.CTS.Model.AIInsights;
     using Fanex.NAP.CTS.Model.AIInsights.Api;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using System.Web;
 
     public interface IAIInsightsService
     {
         Task<AIInsightsFileUploadResponseModel> UploadFile(HttpPostedFileBase uploadFile, string session_id);
 
-        Task<AIInsightsAnalyzeSummaryDataModel> AnalyzeSummary(AIInsightsFileUploadDataModel model);
+        Task<AIInsightsAnalyzeSummaryResponseModel> AnalyzeSummary(AIInsightsFileUploadDataModel model);
 
-        Task<AIInsightsAnalyzeChartsDataModel> AnalyzeCharts(AIInsightsFileUploadDataModel model);
+        Task<string> StartAnalyzeChartsAsync(AIInsightsFileUploadDataModel model);
+
+        Task StreamAnalyzeChartsAsync(string streamToken, HttpContextBase httpContext, CancellationToken cancellationToken);
 
         Task<AIInsightsChatbotDataModel> AskChatbot(AIInsightsFileUploadDataModel model, string question);
     }

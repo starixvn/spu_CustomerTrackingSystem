@@ -1,6 +1,7 @@
-namespace Fanex.NAP.CTS.Controller
+﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Controller.ActionFilter;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
@@ -15,6 +16,10 @@ namespace Fanex.NAP.CTS.Controller
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
     using System.Threading.Tasks;
     using System.Web;
     using System.Web.Mvc;
@@ -24,65 +29,64 @@ namespace Fanex.NAP.CTS.Controller
     [NapSuperAuth]
     public class AIInsightsController : BaseController
     {
-        private readonly IAIInsightsService _aIInsightsService;
+        #region Constants and Configuration
+
+        private const int CACHE_EXPIRATION_HOURS = 3;
+
+        #endregion
+
+        #region Fields and Properties
+
+        private readonly IAIInsightsService _aiInsightsService;
         private readonly IMemoryCacheService _memoryCacheService;
+
         private string UserId => CurrentSession?.UserId.ToString();
         private string TabId => Request?.Headers["X-Tab-Id"]?.ToString();
 
+        #endregion
+
+        #region Constructor
 
         public AIInsightsController()
         {
-            _aIInsightsService = new AIInsightsService();
+            _aiInsightsService = new AIInsightsService();
             _memoryCacheService = new RedisCacheService();
         }
 
+        #endregion
+
+        #region Public Actions
+
         public ActionResult Index()
         {
-            return View();
+            var model = new AIInsightsFileUploadModel();
+            return View(model);
         }
 
         [HttpGet]
         public ActionResult GetFileName()
         {
-            var fileUploadResponse = GetUploadFileResponse();
-            var fileName = fileUploadResponse?.file_name ?? string.Empty;
+            try
+            {
+                var fileUploadResponse = GetUploadFileResponse(TabId);
+                var fileName = fileUploadResponse?.file_name ?? string.Empty;
 
-            return Json(fileName, JsonRequestBehavior.AllowGet);
+                return Json(fileName, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                LogExtension.LogError("CTS - AI Insights GetFileName", ex);
+                return Json(string.Empty, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AIInsightsAnalyzeFile)]
+        [AIUnifiedResponseFilter]
         public async Task<ActionResult> AnalyzeSummary()
         {
-            var data = new AIInsightsAnalyzeSummaryDataModel();
-
-            try
-            {
-                var fileResponse = GetUploadFileResponse();
-                data = await _aIInsightsService.AnalyzeSummary(fileResponse);
-            }
-            catch (Exception ex)
-            {
-                LogExtension.LogError("CTS - AI Insights AnalyzeSummary", ex);
-            }
-
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> AnalyzeCharts()
-        {
-            var data = new AIInsightsAnalyzeChartsDataModel();
-
-            try
-            {
-                var fileResponse = GetUploadFileResponse();
-                data = await _aIInsightsService.AnalyzeCharts(fileResponse);
-            }
-            catch (Exception ex)
-            {
-                LogExtension.LogError("CTS - AI Insights AnalyzeCharts", ex);
-            }
+            var fileResponse = GetUploadFileResponse(TabId);
+            var data = await _aiInsightsService.AnalyzeSummary(fileResponse);
 
             return Json(data, JsonRequestBehavior.AllowGet);
         }
@@ -91,18 +95,24 @@ namespace Fanex.NAP.CTS.Controller
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AIInsightsAskChatBot)]
         public async Task<ActionResult> AskChatbot(string question)
         {
+            if (string.IsNullOrWhiteSpace(question))
+            {
+                return Json(new AIInsightsChatbotDataModel { answer = "Please provide a valid question." }, JsonRequestBehavior.AllowGet);
+            }
+
             var response = new AIInsightsChatbotDataModel();
 
             try
             {
-                var fileResponse = GetUploadFileResponse();
-                response = await _aIInsightsService.AskChatbot(fileResponse, question);
+                var fileResponse = GetUploadFileResponse(TabId);
+                response = await _aiInsightsService.AskChatbot(fileResponse, question);
 
-                SendMessage(question, response.answer);
+                await SaveChatMessageAsync(question, response.answer);
             }
             catch (Exception ex)
             {
                 LogExtension.LogError("CTS - AI Insights AskChatbot", ex);
+                response.answer = "Sorry, I encountered an error while processing your question.";
             }
 
             return Json(response, JsonRequestBehavior.AllowGet);
@@ -111,34 +121,114 @@ namespace Fanex.NAP.CTS.Controller
         [HttpPost]
         public ActionResult LoadHistoryChatMessage()
         {
-            var chatHistory = new List<ChatMessageModel>();
-
             try
             {
-                chatHistory = _memoryCacheService.GetValue<List<ChatMessageModel>>(string.Format(Consts.AIInsightsChatHistoryKey, UserId, TabId)) ?? new List<ChatMessageModel>();
+                var chatHistory = GetChatHistory();
+                return Json(chatHistory, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
                 LogExtension.LogError("CTS - AI Insights Load History Chat Message", ex);
+                return Json(new List<ChatMessageModel>(), JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        [AIUnifiedResponseFilter]
+        public async Task<ActionResult> UploadFile(HttpPostedFileBase uploadFile)
+        {
+            if (uploadFile == null || uploadFile.ContentLength == 0)
+            {
+                throw new InvalidDataException("No file provided or file is empty.");
             }
 
-            return Json(chatHistory, JsonRequestBehavior.AllowGet);
+            var result = await _aiInsightsService.UploadFile(uploadFile, UserId);
+            var cacheKey = GetUploadFileCacheKey(TabId);
+            await _memoryCacheService.PushValueAsync(cacheKey, result?.response, CACHE_EXPIRATION_HOURS);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private void SendMessage(string userMessage, string botMessage)
+        [HttpPost]
+        public async Task<ActionResult> ConvertToCsvFile(HttpPostedFileBase uploadFile)
         {
-            SaveMessage("u", userMessage);
+            if (uploadFile == null || uploadFile.ContentLength == 0)
+            {
+                return CreateErrorResponse("No file provided or file is empty.");
+            }
 
-            SaveMessage("b", botMessage);
+            try
+            {
+                var byteArray = await Task.Run(() => uploadFile.ConvertHttpPostedExcelFileToCsvChunked());
+
+                return File(byteArray.SelectMany(x => x).ToArray(), "text/csv", Path.GetFileNameWithoutExtension(uploadFile.FileName) + ".csv");
+            }
+            catch (InvalidDataException ex)
+            {
+                return CreateErrorResponse(ex.Message);
+            }
+            catch (HttpListenerException httpEx)
+            {
+                LogExtension.LogError("CTS - AI Insights UploadFile - AI Service Error", httpEx);
+
+                return CreateErrorResponse(httpEx.Message);
+            }
+            catch (Exception ex)
+            {
+                LogExtension.LogError("CTS - AI Insights Upload File", ex);
+                return CreateErrorResponse("An error occurred while uploading the file.");
+            }
         }
 
-        private void SaveMessage(string sender, string message)
+        [HttpPost]
+        [AIUnifiedResponseFilter]
+        public async Task<ActionResult> StartAnalyzeCharts()
         {
-            var chatHistory =
-                _memoryCacheService
-                    .GetValue<List<ChatMessageModel>>(string.Format(Consts.AIInsightsChatHistoryKey, UserId, TabId)) ??
-                    new List<ChatMessageModel>();
+            var fileResponse = GetUploadFileResponse(TabId);
+            var response = await _aiInsightsService.StartAnalyzeChartsAsync(fileResponse);
 
+            return CreateResponse(response);
+        }
+
+        [HttpGet]
+        [AsyncTimeout(1800000)] // timeout 30 mintues
+
+        public async Task StreamAnalyzeCharts(string streamToken, CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(streamToken))
+                {
+                    throw new ArgumentException("StreamToken is required.", nameof(streamToken));
+                }
+
+                await _aiInsightsService.StreamAnalyzeChartsAsync(streamToken, HttpContext, cancellationToken);
+
+            }
+            catch (AggregateException agr)
+            {
+                LogExtension.LogError("CTS - AI Insights StreamAnalyzeCharts Inner Failed", agr);
+            }
+            catch (Exception ex)
+            {
+                LogExtension.LogError("CTS - AI Insights StreamAnalyzeCharts Failed", ex);
+            }
+        }
+        #endregion
+
+        #region Private Methods
+
+        #region Chat Management
+
+        private async Task SaveChatMessageAsync(string userMessage, string botMessage)
+        {
+            await SaveMessage("u", userMessage);
+            await SaveMessage("b", botMessage);
+        }
+
+        private async Task SaveMessage(string sender, string message)
+        {
+            var chatHistory = GetChatHistory();
             chatHistory.Add(new ChatMessageModel
             {
                 Sender = sender,
@@ -146,53 +236,74 @@ namespace Fanex.NAP.CTS.Controller
                 Timestamp = DateTime.Now
             });
 
-            _memoryCacheService.PushValueBySlidingTime(string.Format(Consts.AIInsightsChatHistoryKey, UserId, TabId), chatHistory, 3);
+            var cacheKey = GetChatHistoryCacheKey();
+            await _memoryCacheService.PushValueAsync(cacheKey, chatHistory, CACHE_EXPIRATION_HOURS);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> UploadFile(HttpPostedFileBase uploadFile)
+        private List<ChatMessageModel> GetChatHistory()
         {
-            try
-            {
-                var result = await _aIInsightsService.UploadFile(uploadFile, UserId);
-                _memoryCacheService.PushValueBySlidingTime(string.Format(Consts.AIInsightsUploadFileKey, UserId, TabId), result?.response, 3);
-
-                return Json(new
-                {
-                    success = true,
-                    message = result
-                }, JsonRequestBehavior.AllowGet);
-            }
-            catch (InvalidDataException invalidDataException)
-            {
-                return Json(new
-                {
-                    success = false,
-                    message = invalidDataException.Message
-                }, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                LogExtension.LogError("CTS - AI Insights Upload File", ex);
-
-                return Json(new
-                {
-                    success = false,
-                    message = "CTS - AI Insights Upload File"
-                }, JsonRequestBehavior.AllowGet);
-            }
+            var cacheKey = GetChatHistoryCacheKey();
+            return _memoryCacheService.GetValue<List<ChatMessageModel>>(cacheKey) ?? new List<ChatMessageModel>();
         }
 
-        private AIInsightsFileUploadDataModel GetUploadFileResponse()
+        private string GetChatHistoryCacheKey()
         {
-            var fileResponse = _memoryCacheService.GetValue<AIInsightsFileUploadDataModel>(string.Format(Consts.AIInsightsUploadFileKey, UserId, TabId));
+            return string.Format(Consts.AIInsightsChatHistoryKey, UserId, TabId);
+        }
+
+        #endregion
+
+        #region File Management
+
+        private AIInsightsFileUploadDataModel GetUploadFileResponse(string tabId)
+        {
+            var cacheKey = GetUploadFileCacheKey(tabId);
+            var fileResponse = _memoryCacheService.GetValue<AIInsightsFileUploadDataModel>(cacheKey);
 
             if (ConfigSettings.IsWriteLogInfoAIInsight)
             {
-                LogExtension.LogInfo($"GetUploadFileResponse {string.Format(Consts.AIInsightsUploadFileKey, UserId, TabId)}: {JsonConvert.SerializeObject(fileResponse ?? new AIInsightsFileUploadDataModel())}");
+                LogExtension.LogInfo($"GetUploadFileResponse {cacheKey}: {JsonConvert.SerializeObject(fileResponse ?? new AIInsightsFileUploadDataModel())}");
             }
 
             return fileResponse;
         }
+
+        private string GetUploadFileCacheKey(string tabId)
+        {
+            return string.Format(Consts.AIInsightsUploadFileKey, UserId, tabId);
+        }
+
+        #endregion
+
+        #region Response Helpers
+
+        private ActionResult CreateResponse(object data)
+        {
+            return new JsonResult
+            {
+                Data = data,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                MaxJsonLength = int.MaxValue
+            };
+        }
+
+        private ActionResult CreateErrorResponse(string message, int statuscode = 400)
+        {
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+
+            return new JsonResult
+            {
+                Data = new
+                {
+                    message = message
+                },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                MaxJsonLength = int.MaxValue
+            };
+        }
+
+        #endregion
+
+        #endregion
     }
 }

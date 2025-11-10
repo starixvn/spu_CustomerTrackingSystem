@@ -52,7 +52,22 @@
 
         public static string AIInsightsAnalyzeChartsUrl => GetConfigStringByName("AIInsightsAnalyzeChartsUrl");
 
+        public static string AIInsightsAnalyzeChartsSseProcessUrl => GetConfigStringByName("AIInsightsAnalyzeChartsSseProcessUrl");
+
         public static string AIInsightsChatBotUrl => GetConfigStringByName("AIInsightsChatBotUrl");
+
+        public static string AIUploadSupportExtension => GetConfigStringByName("AIUploadSupportExtension");
+
+        public static int AIUploadMaxFileSizeMB
+        {
+            get
+            {
+                var size = 50;
+                var configSize = GetConfigStringByName("AIUploadMaxFileSizeMB");
+                int.TryParse(configSize, out size);
+                return size == 0 ? 50 : size;
+            }
+        }
 
         public static string RedisConnection => GetConfigStringByName("RedisConnection");
 
@@ -247,12 +262,83 @@
         }
         #endregion
 
-        public static int AIAnalyzeRequestTimeout
+        #region AI Config
+        public static double AIInsightsHttpTimeoutHours
         {
             get
             {
-                var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIAnalyzeRequestTimeout"];
+                var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIInsightsHttpTimeoutHours"];
+                var timeout = double.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 1.5;
+                return timeout;
+            }
+        }
+
+        public static int AIInsightsHttpClientInstanceCount
+        {
+            get
+            {
+                var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIInsightsHttpClientInstanceCount"];
+                var timeout = int.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 3;
+                return timeout;
+            }
+        }
+
+        public static int AIRequestRetryCountTime
+        {
+            get
+            {
+                var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIRequestRetryCountTime"];
+                var timeout = int.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 3;
+                return timeout;
+            }
+        }
+
+        public static int AIRequestRetryDelayTimeMs
+        {
+            get
+            {
+                var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIRequestRetryDelayTimeMs"];
+                var timeout = int.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 2000;
+                return timeout;
+            }
+        }
+
+        public static int AIAnalyzeUploadFileRequestTimeout
+        {
+            get
+            {
+                var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIAnalyzeUploadFileRequestTimeout"];
                 var timeout = int.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 300;
+                return timeout;
+            }
+        }
+
+        public static int AIAnalyzeSummaryRequestTimeout
+        {
+            get
+            {
+                var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIAnalyzeSummaryRequestTimeout"];
+                var timeout = int.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 300;
+                return timeout;
+            }
+        }
+
+        public static int AIAnalyzeChartRequestTimeout
+        {
+            get
+            {
+                var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIAnalyzeChartRequestTimeout"];
+                var timeout = int.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 300;
+                return timeout;
+            }
+        }
+
+        public static int AIAnalyzeChartSSEResponseTimeout
+        {
+            get
+            {
+                var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIAnalyzeChartSSEResponseTimeout"];
+                var timeout = int.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 60;
                 return timeout;
             }
         }
@@ -266,5 +352,6 @@
                 return timeout;
             }
         }
+        #endregion
     }
 }
