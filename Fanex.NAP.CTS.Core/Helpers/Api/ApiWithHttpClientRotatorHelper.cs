@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Core.Helpers.Api
 {
+    using Fanex.NAP.CTS.Core.Extentions;
     using Newtonsoft.Json;
     using System;
     using System.IO;
@@ -119,6 +120,7 @@
             string url,
             Action<string> onMessage,
             int timeOutbySeconds = 120,
+            int idleTimeoutSeconds = 60,
             CancellationToken? cancellationToken = null,
             int maxRetryCount = 3,
             int retryDelayMs = 2000)
@@ -151,10 +153,16 @@
                     });
 
                     string dataBuffer = "";
+                    var lastMessageTime = DateTime.UtcNow;
 
                     while (!linkedCts.Token.IsCancellationRequested)
                     {
                         if (!stream.CanRead) break;
+
+                        if ((DateTime.UtcNow - lastMessageTime).TotalSeconds > idleTimeoutSeconds)
+                        {
+                            throw new TimeoutException($"No SSE message received for {idleTimeoutSeconds} seconds. Triggering retry...");
+                        }
 
                         var line = await reader.ReadLineAsync().ConfigureAwait(false);
                         if (line == null) break;
@@ -173,10 +181,12 @@
                         if (line.StartsWith("data:", StringComparison.OrdinalIgnoreCase))
                         {
                             dataBuffer += line.Substring(5).Trim() + "\n";
+                            lastMessageTime = DateTime.UtcNow;
                         }
                         else if (line.StartsWith("{") || line.StartsWith("["))
                         {
                             onMessage?.Invoke(line.Trim());
+                            lastMessageTime = DateTime.UtcNow;
                         }
                     }
 
@@ -214,7 +224,9 @@
 
                     bool isTransientConnectionIssue =
                         innerMsg.Contains("connection was closed unexpectedly") ||
-                        innerMsg.Contains("expected to be kept alive was closed by the server");
+                        innerMsg.Contains("expected to be kept alive was closed by the server") ||
+                        httpRequestException.Message.Contains("503") ||
+                        httpRequestException.Message.Contains("Service Unavailable");
 
                     if (isTransientConnectionIssue && retryAttempt < maxRetryCount)
                     {
@@ -223,6 +235,23 @@
                         await Task.Delay(retryDelayMs, cancellationToken);
                         continue; // Retry the request
                     }
+
+                    LogExtension.LogInfo($"Retry {url}: {retryAttempt}/{maxRetryCount} by Reason ExceptMsg: {httpRequestException?.Message ?? "null"} InnerMsg: {innerMsg}");
+
+                    throw; // Re-throw if max retries reached or not a transient issue
+                }
+                catch (TimeoutException ex)
+                {
+                    var msg = ex?.Message ?? string.Empty;
+                    if (msg.Contains("Triggering retry...") && retryAttempt < maxRetryCount)
+                    {
+                        retryAttempt++;
+
+                        await Task.Delay(retryDelayMs, cancellationToken);
+                        continue; // Retry the request
+                    }
+
+                    LogExtension.LogInfo($"Retry {url}: {retryAttempt}/{maxRetryCount} by Reason ExceptMsg: {ex?.Message ?? "null"}");
 
                     throw; // Re-throw if max retries reached or not a transient issue
                 }
