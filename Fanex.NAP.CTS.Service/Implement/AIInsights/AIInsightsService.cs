@@ -70,7 +70,6 @@
                     msg => { messageQueue.TryAdd(msg, 100, linkedCts.Token); },
                     cancellationToken: linkedCts.Token,
                     timeOutbySeconds: ConfigSettings.AIAnalyzeChartRequestTimeout,
-                    idleTimeoutSeconds: ConfigSettings.AIAnalyzeChartSSEResponseTimeout,
                     maxRetryCount: ConfigSettings.AIRequestRetryCountTime,
                     retryDelayMs: ConfigSettings.AIRequestRetryDelayTimeMs)
                 .ConfigureAwait(false),

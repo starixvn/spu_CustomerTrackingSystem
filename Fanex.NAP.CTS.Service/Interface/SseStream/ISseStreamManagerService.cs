@@ -18,7 +18,6 @@
             Action<string> onMessage,
             CancellationToken cancellationToken,
             int timeOutbySeconds = 120,
-            int idleTimeoutSeconds = 60,
             int maxRetryCount = 3,
             int retryDelayMs = 2000);
     }

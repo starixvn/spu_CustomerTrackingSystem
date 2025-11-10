@@ -78,47 +78,73 @@
             .always(onComplete);
     };
 
+    let idleTimer;
     this.AnalyzeChartsSSEConnection = function ({
-        token,
         onMessage,
         onError,
         retries,
-        delay
+        delay,
+        idleTimeout = 30,
     } = {}) {
         let retryCount = 0;
+        let isClosed = false;
+
+        function resetIdleTimer() {
+            if (idleTimer) clearTimeout(idleTimer);
+            idleTimer = setTimeout(() => {
+                console.warn(`⚠ Idle timeout (${idleTimeout}s). Retrying...`);
+                handleEventSourceError(true); // true = timeout
+            }, idleTimeout * 1000);
+        }
 
         function onConnect() {
+            isClosed = false;
+
             if (variable.evtSource) {
                 variable.evtSource.close();
             }
 
             variable.evtSource = new EventSource(
-                common.modifyRelativeUrl(`AIInsights/StreamAnalyzeCharts?streamToken=${token}`)
+                common.modifyRelativeUrl(`AIInsights/StreamAnalyzeCharts?streamToken=${variable.streamToken}`)
             );
 
             // variable.evtSource.onopen = () => console.log("✅ Connected");
-            variable.evtSource.onerror = handleEventSourceError;
-            variable.evtSource.onmessage = onMessage;
+            variable.evtSource.onerror = () => handleEventSourceError(false);
+            variable.evtSource.onmessage = (e) => {
+                if (!e.data.includes('"event: keepalive\\ndata: ping\\n\\n"')) {
+                    resetIdleTimer();
+                }
+                onMessage?.(e);
+            };
         }
 
-        function handleEventSourceError() {
-            console.warn(`⚠ Connection closed by error. Retry ${retryCount + 1} of ${retries}`);
+        function handleEventSourceError(isTimeout) {
+            if (isClosed) return;
+            isClosed = true;
+
+            if (idleTimer) {
+                clearTimeout(idleTimer);
+                idleTimer = null;
+            }
 
             if (variable.evtSource) {
                 variable.evtSource.close();
                 variable.evtSource = null;
+            }
 
-                if (retryCount < retries) {
-                    retryCount++;
-                    setTimeout(onConnect, delay * 1000);
-                } else {
-                    onError?.();
-                    console.error("❌ Max retry reached. Connection failed.");
-                }
+            if (retryCount < retries) {
+                retryCount++;
+                console.warn(`⚠ Connection closed by ${isTimeout ? 'idle timeout' : 'error'}. Retry ${retryCount} of ${retries}`);
+                setTimeout(onConnect, delay * 1000);
+            } else {
+                console.error("❌ Max retry reached. Connection failed.");
+                onError?.();
             }
         }
 
-        onConnect();
+        setTimeout(() => {
+            onConnect();
+        }, 500);
     };
 
     /**

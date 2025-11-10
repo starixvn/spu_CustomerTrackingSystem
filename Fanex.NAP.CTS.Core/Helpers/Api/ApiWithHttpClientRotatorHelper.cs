@@ -120,7 +120,6 @@
             string url,
             Action<string> onMessage,
             int timeOutbySeconds = 120,
-            int idleTimeoutSeconds = 60,
             CancellationToken? cancellationToken = null,
             int maxRetryCount = 3,
             int retryDelayMs = 2000)
@@ -159,11 +158,6 @@
                     {
                         if (!stream.CanRead) break;
 
-                        if ((DateTime.UtcNow - lastMessageTime).TotalSeconds > idleTimeoutSeconds)
-                        {
-                            throw new TimeoutException($"No SSE message received for {idleTimeoutSeconds} seconds. Triggering retry...");
-                        }
-
                         var line = await reader.ReadLineAsync().ConfigureAwait(false);
                         if (line == null) break;
 
@@ -181,12 +175,10 @@
                         if (line.StartsWith("data:", StringComparison.OrdinalIgnoreCase))
                         {
                             dataBuffer += line.Substring(5).Trim() + "\n";
-                            lastMessageTime = DateTime.UtcNow;
                         }
                         else if (line.StartsWith("{") || line.StartsWith("["))
                         {
                             onMessage?.Invoke(line.Trim());
-                            lastMessageTime = DateTime.UtcNow;
                         }
                     }
 
@@ -234,21 +226,6 @@
 
                         await Task.Delay(retryDelayMs, cancellationToken);
                         LogExtension.LogInfo($"Retry {url}: {retryAttempt}/{maxRetryCount} by Reason ExceptMsg: {httpRequestException?.Message ?? "null"} InnerMsg: {innerMsg}");
-
-                        continue; // Retry the request
-                    }
-
-                    throw; // Re-throw if max retries reached or not a transient issue
-                }
-                catch (TimeoutException ex)
-                {
-                    var msg = ex?.Message ?? string.Empty;
-                    if (msg.Contains("Triggering retry...") && retryAttempt < maxRetryCount)
-                    {
-                        retryAttempt++;
-
-                        await Task.Delay(retryDelayMs, cancellationToken);
-                        LogExtension.LogInfo($"Retry {url}: {retryAttempt}/{maxRetryCount} by Reason ExceptMsg: {ex?.Message ?? "null"}");
 
                         continue; // Retry the request
                     }

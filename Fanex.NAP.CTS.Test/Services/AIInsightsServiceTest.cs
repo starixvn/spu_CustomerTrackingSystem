@@ -45,10 +45,9 @@ namespace Fanex.NAP.CTS.Test.Services
                   It.IsAny<CancellationToken>(),
                   It.IsAny<int>(),       
                   It.IsAny<int>(),       
-                  It.IsAny<int>(),       
                   It.IsAny<int>()))     
-            .Returns<string, Action<string>, CancellationToken, int, int, int, int>(
-                (url, onMsg, token, timeout, idle, maxRetry, delay) =>
+            .Returns<string, Action<string>, CancellationToken, int, int, int>(
+                (url, onMsg, token, timeout, maxRetry, delay) =>
                 {
                     onMsg("{\"EventName\":\"AnalyzeCharts\",\"EventStatus\":\"Processing\",\"Data\":\"d\"}");
                     return Task.CompletedTask;
@@ -88,7 +87,6 @@ namespace Fanex.NAP.CTS.Test.Services
                   It.IsAny<CancellationToken>(),
                   It.IsAny<int>(),
                   It.IsAny<int>(),
-                  It.IsAny<int>(),
                   It.IsAny<int>()
                 ))
                .Returns(Task.FromCanceled(new CancellationToken(true)));
@@ -112,10 +110,9 @@ namespace Fanex.NAP.CTS.Test.Services
               It.IsAny<CancellationToken>(),
               It.IsAny<int>(),
               It.IsAny<int>(),
-              It.IsAny<int>(),
               It.IsAny<int>()))
-            .Returns<string, Action<string>, CancellationToken, int, int, int, int>(
-                (url, onMsg, token, timeout, idle, maxRetry, delay) =>
+            .Returns<string, Action<string>, CancellationToken, int, int, int>(
+                (url, onMsg, token, timeout, maxRetry, delay) =>
                 {
                     onMsg("ping"); // simulate ping message
                     return Task.CompletedTask;

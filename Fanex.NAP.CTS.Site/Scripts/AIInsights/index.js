@@ -215,7 +215,7 @@ function AIInsights() {
 
         ResetDefault();
         ShowAnalysisLoading();
-        SkipReCheckin();
+        if (typeof SkipReCheckin === "function") SkipReCheckin();
 
         AnalyzeSummary()
             .done(function () {
@@ -223,7 +223,7 @@ function AIInsights() {
                     .done(function () {
                         AnalyzeChartsSSEConnection();
                     });
-                EnableReCheckin();
+                if (typeof EnableReCheckin === "function") EnableReCheckin();
             });
     }
 
@@ -276,7 +276,9 @@ function AIInsights() {
 
     function AnalyzeChartsGetSSEId() {
         return api.StartAnalyzeCharts({
-            onStart: () => { },
+            onStart: () => {
+                $('#chart-section .card-body').remove();
+            },
             onSuccess: onSuccess,
             onComplete: () => { },
             onError: (msg) => onError(msg)
@@ -299,7 +301,6 @@ function AIInsights() {
     function AnalyzeChartsSSEConnection() {
         api.AnalyzeChartsSSEConnection(
             {
-                token: variable.streamToken,
                 onMessage: HandleEventSourceMessage,
                 onError: OnError,
                 retries: variable.CONFIG.RETRY_TIME,
@@ -308,12 +309,10 @@ function AIInsights() {
         )
 
         function OnError() {
-            if (variable.evtSource) {
-                variable.domElements.headerChartSection.removeClass('loading');
-                variable.domElements.btnGenerate.prop('disabled', false);
-                variable.domElements.sendButton.prop('disabled', false);
-                console.log("✅ Connection closed by error");
-            }
+            variable.domElements.headerChartSection.removeClass('loading');
+            variable.domElements.btnGenerate.prop('disabled', false);
+            variable.domElements.sendButton.prop('disabled', false);
+            console.log("✅ Connection closed by error");
         }
 
         function HandleEventSourceMessage(e) {
@@ -338,7 +337,6 @@ function AIInsights() {
             switch (response.EventStatus) {
                 case variable.AIInsightEventStatus.Started:
                     // console.log("Analyze Charts started");
-                    $('#chart-section .card-body').remove();
                     break;
                 case variable.AIInsightEventStatus.Processing:
                     HandleChartsProcessing(response.Data);
@@ -553,9 +551,9 @@ function AIInsights() {
             type: 'POST',
             headers: { "X-Tab-Id": common.getTabId() },
             data: { question: message },
-            beforeSend: () => SkipReCheckin(),
+            beforeSend: () => { if (typeof SkipReCheckin === "function") SkipReCheckin(); },
             success: (response) => HandleChatbotResponse(response),
-            complete: () => EnableReCheckin(),
+            complete: () => { if (typeof EnableReCheckin === "function") EnableReCheckin(); },
             error: (xhr, status, error) => HandleChatbotError()
         });
     }

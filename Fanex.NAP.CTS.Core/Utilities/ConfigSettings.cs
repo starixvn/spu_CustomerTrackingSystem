@@ -333,16 +333,6 @@
             }
         }
 
-        public static int AIAnalyzeChartSSEResponseTimeout
-        {
-            get
-            {
-                var analyzeRequestTimeout = ConfigurationManager.AppSettings["AIAnalyzeChartSSEResponseTimeout"];
-                var timeout = int.TryParse(analyzeRequestTimeout, out var parsed) ? parsed : 60;
-                return timeout;
-            }
-        }
-
         public static int ChatbotRequestTimeout
         {
             get
