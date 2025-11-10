@@ -259,7 +259,7 @@ function AIInsights() {
             variable.domElements.headerSummarySection.removeClass('loading');
             variable.domElements.btnGenerate.prop('disabled', false);
             variable.domElements.sendButton.prop('disabled', false);
-            EnableReCheckin();
+            if (typeof EnableReCheckin === "function") EnableReCheckin();
 
             common.showError('Sorry Analyze Summary failed: ' + msg);
         }
@@ -291,7 +291,7 @@ function AIInsights() {
         function onError(msg) {
             variable.domElements.btnGenerate.prop('disabled', false);
             variable.domElements.sendButton.prop('disabled', false);
-            EnableReCheckin();
+            if (typeof EnableReCheckin === "function") EnableReCheckin();
 
             common.showError('Sorry Analyze Chart failed: ' + msg);
         }
@@ -346,14 +346,14 @@ function AIInsights() {
                     variable.domElements.headerChartSection.removeClass('loading');
                     variable.domElements.btnGenerate.prop('disabled', false);
                     variable.domElements.sendButton.prop('disabled', false);
-                    variable.evtSource.close();
+                    api.StopEventSource();
                     break;
                 case variable.AIInsightEventStatus.Failed:
                     // common.showError('Sorry Analyze Charts failed: ');
                     variable.domElements.headerChartSection.removeClass('loading');
                     variable.domElements.btnGenerate.prop('disabled', false);
                     variable.domElements.sendButton.prop('disabled', false);
-                    variable.evtSource.close();
+                    api.StopEventSource();
                     break;
             }
         }
@@ -841,17 +841,11 @@ function AIInsights() {
     $(document).ready(Initialize);
 
     $(window).on('beforeunload', function () {
-        if (variable.evtSource) {
-            variable.evtSource.close();
-            variable.evtSource = null;
-        }
+        api.StopEventSource();
     });
 
     $(window).on('unload', function () {
-        if (variable.evtSource) {
-            variable.evtSource.close();
-            variable.evtSource = null;
-        }
+        api.StopEventSource();
     });
 }
 

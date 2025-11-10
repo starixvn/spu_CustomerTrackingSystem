@@ -85,6 +85,7 @@
                 linkedCts.Token);
 
             await Task.WhenAny(listenerTask, senderTask).ConfigureAwait(false);
+            await Task.Delay(5000);
             messageQueue.CompleteAdding();
 
             linkedCts.Cancel();

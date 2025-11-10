@@ -84,10 +84,12 @@
         onError,
         retries,
         delay,
-        idleTimeout = 30,
+        idleTimeout = 300,
     } = {}) {
         let retryCount = 0;
         let isClosed = false;
+
+        let stopEventSource = this.StopEventSource;
 
         function resetIdleTimer() {
             if (idleTimer) clearTimeout(idleTimer);
@@ -122,15 +124,7 @@
             if (isClosed) return;
             isClosed = true;
 
-            if (idleTimer) {
-                clearTimeout(idleTimer);
-                idleTimer = null;
-            }
-
-            if (variable.evtSource) {
-                variable.evtSource.close();
-                variable.evtSource = null;
-            }
+            stopEventSource();
 
             if (retryCount < retries) {
                 retryCount++;
@@ -146,6 +140,18 @@
             onConnect();
         }, 500);
     };
+
+    this.StopEventSource = function () {
+        if (idleTimer) {
+            clearTimeout(idleTimer);
+            idleTimer = null;
+        }
+
+        if (variable.evtSource) {
+            variable.evtSource.close();
+            variable.evtSource = null;
+        }
+    }
 
     /**
      * Retry AJAX call if response.statuscode == HttpNetworkClose
