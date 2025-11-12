@@ -313,6 +313,8 @@ function AIInsights() {
             variable.domElements.btnGenerate.prop('disabled', false);
             variable.domElements.sendButton.prop('disabled', false);
             console.log("✅ Connection closed by error");
+
+            common.showError('Sorry Analyze Chart failed: Please try analysis again.');
         }
 
         function HandleEventSourceMessage(e) {
