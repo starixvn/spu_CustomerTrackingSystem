@@ -116,9 +116,11 @@
     <Compile Include="CustomerClassificationAgency\BaseCustomerClassificationAgency\RemoveCustomerClassificationAgencyCriteria.cs" />
     <Compile Include="CustomerClassificationAgency\NormalClassificationRescanAgencyCriteria.cs" />
     <Compile Include="CustomerClassificationAgency\ProblemAccount\ProblemAccountLosingAgencyGetCriteria.cs" />
-    <Compile Include="CustomerClassification\BaseCustomerClassification\BySport\RemoveCustomerClassificationBySportCriteria.cs" />
+    <Compile Include="CustomerClassificationBySport\BaseCustomerClassificationBySport\InsertCustomerClassificationBySportCriteria.cs" />
+    <Compile Include="CustomerClassificationBySport\BaseCustomerClassificationBySport\RemoveCustomerClassificationBySportCriteria.cs" />
+    <Compile Include="CustomerClassificationBySport\ProblemAccountInsertBySport\ProblemAccountClassificationBySportGetCriteria.cs" />
+    <Compile Include="CustomerClassificationBySport\RescanNormalClassificationBySport\GetRescanCustomerClassificationBySportCriteria.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\GetRescanCustomerClassificationCriteria.cs" />
-    <Compile Include="CustomerClassification\BaseCustomerClassification\BySport\InsertCustomerClassificationBySportCriteria.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\InsertCustomerClassificationCriteria.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\RemoveCustomerClassificationCriteria.cs" />
     <Compile Include="CustomerClassification\GetLastestCCDangerLevelCriteria.cs" />
@@ -151,7 +153,7 @@
     <Compile Include="CustomerClassification\BetLimitByEvidenceRemoveCriteria.cs" />
     <Compile Include="CustomerClassification\PushDataToExternal\CustClassificationToMainDB\CustomerClassificationUpdateBySportCriteria.cs" />
     <Compile Include="CustomerClassification\PushDataToExternal\CustClassificationToMainDB\GetCustomerClassificationBySportCriteria.cs" />
-    <Compile Include="CustomerClassification\RescanNormalClassificationBySport\PreprocessRescanNormalClassificationBySportCriteria.cs" />
+    <Compile Include="CustomerClassificationBySport\RescanNormalClassificationBySport\PreprocessRescanNormalClassificationBySportCriteria.cs" />
     <Compile Include="DangerMonitor\DangerMonitorSearchMatchInfoCriteria.cs" />
     <Compile Include="DangerMonitor\DangerMonitorSearchMatchInfoWithAssociationRootUserCriteria.cs" />
     <Compile Include="ImportEvidences\CheckCleanCustFlaggedEvidenceCriteria.cs" />

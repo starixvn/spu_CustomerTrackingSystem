@@ -332,6 +332,13 @@
     <Compile Include="CustomerClassificationAgency\ProblemAccountAgency\UnmarkProblemAccountAgencyModel.cs" />
     <Compile Include="CustomerClassificationAgency\RescanCustomerClassificationAgency\RescanResultAgencyModel.cs" />
     <Compile Include="CustomerClassificationAgency\RescanCustomerClassificationAgency\RescanCustClassificationAgencyModel.cs" />
+    <Compile Include="CustomerClassificationBySport\BaseCustomerInfoBySportModel.cs" />
+    <Compile Include="CustomerClassificationBySport\ProblemAccountInsertBySport\RescanCustomerClassificationBySportModel.cs" />
+    <Compile Include="CustomerClassificationBySport\ProblemAccountInsertBySport\CustomerClassificationBySportModel.cs" />
+    <Compile Include="CustomerClassificationBySport\ProblemAccountInsertBySport\InsertPABySportResultModel.cs" />
+    <Compile Include="CustomerClassificationBySport\ProblemAccountInsertBySport\InsertProblemAccountBySportModel.cs" />
+    <Compile Include="CustomerClassificationBySport\ProblemAccountInsertBySport\ProblemAccountLosingBySportModel.cs" />
+    <Compile Include="CustomerClassificationBySport\RescanCustomerClassificationBySport\RescanBySportResultModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\BySport\CustInfoClassificationBySportModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\BySport\RemoveCustomerClassificationBySportModel.cs" />
     <Compile Include="CustomerClassification\BaseCustomerClassification\BySport\ResultRemoveCCInfoBySportModel.cs" />
@@ -364,7 +371,7 @@
     <Compile Include="CustomerClassification\ProblemAccount\UnmarkProblemAccountModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\GetInitialTWGroupBettingModel.cs" />
     <Compile Include="CustomerClassification\PotentialPA\InitialTWGroupBettingModel.cs" />
-    <Compile Include="CustomerClassification\RescanCustomerClassification\RescanNormalBySportListCustModel.cs" />
+    <Compile Include="CustomerClassificationBySport\RescanCustomerClassificationBySport\RescanNormalBySportListCustModel.cs" />
     <Compile Include="CustomerClassification\PotentialPA\RescanPADangerousModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\RescanResultModel.cs" />
     <Compile Include="CustomerClassification\Robot\RobotInsetViewEntity.cs" />

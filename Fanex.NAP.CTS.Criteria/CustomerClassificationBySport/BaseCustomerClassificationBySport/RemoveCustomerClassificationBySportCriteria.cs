@@ -1,4 +1,4 @@
-namespace Fanex.NAP.CTS.Criteria.CustomerClassification.BaseCustomerClassification
+﻿namespace Fanex.NAP.CTS.Criteria.CustomerClassificationBySport.BaseCustomerClassificationBySport
 {
     using Fanex.Data;
     using Fanex.Data.Repository;

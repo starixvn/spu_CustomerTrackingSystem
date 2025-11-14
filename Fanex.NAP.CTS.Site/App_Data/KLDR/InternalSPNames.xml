@@ -207,6 +207,7 @@
 
 	<Function name="CustomerClassificationBySport">
 		<Setting Key="CTS_DC_CustClassification_BySport_Get" SpName="CTS_DC_CustClassification_BySport_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustClassification_BySport_Rescan_Get" SpName="CTS_DC_CustClassification_BySport_Rescan_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustClassification_BySport_History_Get" SpName="CTS_DC_CustClassification_BySport_History_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustClassification_BySport_Insert" SpName="CTS_DC_CustClassification_BySport_Insert" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_CustClassification_BySport_Remove" SpName="CTS_DC_CustClassification_BySport_Remove" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />

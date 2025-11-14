@@ -6,14 +6,18 @@
     using Fanex.NAP.CTS.Criteria.SpecialCustomerClass;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
-    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
+    using Fanex.NAP.CTS.Model.CustomerClassificationBySport;
+    using Fanex.NAP.CTS.Model.CustomerClassificationBySport.RescanCustomerClassificationBySport;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SpecialCustomerClass;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Implement;
-    using Fanex.NAP.CTS.Service.Implement.CustomerClassification;
-    using Fanex.NAP.CTS.Service.Interface.CustomerClassification;
+    using Fanex.NAP.CTS.Service.Implement.CustomerClassificationBySport;
+    using Fanex.NAP.CTS.Service.Implement.CustomerClassificationBySport.BaseCustomerClassificationBySport;
+    using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.Service.Interface.CustomerClassificationBySport;
+    using Fanex.NAP.CTS.Service.Interface.CustomerClassificationBySport.BaseCustomerClassificationBySport;
     using Fanex.NAP.CTS.ViewModel.SpecialCustomerClass;
     using Newtonsoft.Json;
     using System;
@@ -22,9 +26,11 @@
     using System.Threading.Tasks;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
-    public class SpecialCustomerClassService : BaseCustomerClassificationService, ISpecialCustomerClassService
+    public class SpecialCustomerClassService : ISpecialCustomerClassService
     {
         #region construction
+        private readonly IBaseCustomerClassificationService _baseCustomerClassificationService;
+        private readonly IBaseCustomerClassificationBySportService _baseCustomerClassificationBySportService;
         private readonly ICustomerClassificationService _customerClassificationService;
         private readonly ICustomerClassificationBySportService _customerClassificationBySportService;
         private readonly IRescanCustomerClassificationService _rescanGeneralService;
@@ -33,6 +39,8 @@
 
         public SpecialCustomerClassService()
         {
+            _baseCustomerClassificationService = new BaseCustomerClassificationService();
+            _baseCustomerClassificationBySportService = new BaseCustomerClassificationBySportService();
             _customerClassificationService = new CustomerClassificationService();
             _customerClassificationBySportService = new CustomerClassificationBySportService();
             _rescanGeneralService = new RescanCustomerClassificationService();
@@ -123,7 +131,7 @@
                     CustClassificationJson = JsonConvert.SerializeObject(generalCusts)
                 };
 
-                generalInsertResult = base.InsertCustomerClassification(CCInputFlow.SpecialCC, generalModelInsert);
+                generalInsertResult = _baseCustomerClassificationService.InsertCustomerClassification(CCInputFlow.SpecialCC, generalModelInsert);
             }
 
             if (sportCusts.Any())
@@ -133,7 +141,7 @@
                     CustClassificationJson = JsonConvert.SerializeObject(sportCusts)
                 };
 
-                sportInsertResult = base.InsertCustomerClassificationBySport(CCInputFlow.BySportInsertSpecialCC, sportmodelInsert);
+                sportInsertResult = _baseCustomerClassificationBySportService.InsertCustomerClassificationBySport(CCInputFlow.BySportInsertSpecialCC, sportmodelInsert);
             }          
 
             // PushCC
@@ -203,7 +211,7 @@
                     CustClassificationJson = JsonConvert.SerializeObject(custInfos)
                 };
 
-                var resultRemove = RemoveCustomerClassification(CCInputFlow.RemoveSpecialCC, removeModel);
+                var resultRemove = _baseCustomerClassificationService.RemoveCustomerClassification(CCInputFlow.RemoveSpecialCC, removeModel);
 
                 if (resultRemove.CustInfos != null && resultRemove.CustInfos.Any())
                 {
@@ -228,13 +236,13 @@
                     CustClassificationJson = JsonConvert.SerializeObject(custInfos)
                 };
 
-                var resultRemove = RemoveCustomerClassificationBySport(CCInputFlow.BySportRemoveSpecialCC, removeModel);
+                var resultRemove = _baseCustomerClassificationBySportService.RemoveCustomerClassificationBySport(CCInputFlow.BySportRemoveSpecialCC, removeModel);
 
                 if (resultRemove.CustInfos != null && resultRemove.CustInfos.Any())
                 {
-                    var rescanUserList = resultRemove.CustInfos.Select(x => new RescanNormalBySportListCustModel { CustID = x.CustID, SportID = x.SportID });
+                    var rescanUserList = resultRemove.CustInfos.Select(x => new BaseCustomerInfoBySportModel { CustID = x.CustID, SportGroup = x.SportID });
 
-                    _rescanBySportService.ResanNormalBySportForNewCustomers(rescanUserList, BySport_FunctionId.Manual);
+                    _rescanBySportService.RescanCustomerClassificationBySport(rescanUserList, BySport_FunctionId.Manual, ConfigSettings.PushCCToExternalChunkSize);
                 }
             }
         }

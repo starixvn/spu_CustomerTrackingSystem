@@ -306,6 +306,8 @@ namespace Fanex.NAP.CTS.Model
         RemovePACategory = 225,
         [Description("BySportInsertSpecialCC")]
         BySportInsertSpecialCC = 332,
+        [Description("BySportInsertPA")]
+        BySportInsertPA = 335,
         [Description("BySportInsertNormal")]
         BySportInsertNormal = 339,
         [Description("BySportRemoveSpecialCC")]
@@ -338,5 +340,13 @@ namespace Fanex.NAP.CTS.Model
         RecanConsiderable = 1120,
         [Description("RemoveConderable")]
         RemoveConderable = 1220
+    }
+
+    public enum BySportCCInputFlow
+    {
+        [Description("RescanPACategory")]
+        RescanPACategory = 115,
+        [Description("RescanNormal")]
+        RescanNormal = 9
     }
 }

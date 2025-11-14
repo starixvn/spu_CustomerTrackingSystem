@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification
+﻿namespace Fanex.NAP.CTS.Model.CustomerClassificationBySport.RescanCustomerClassificationBySport
 {
     public class RescanNormalBySportListCustModel
     {

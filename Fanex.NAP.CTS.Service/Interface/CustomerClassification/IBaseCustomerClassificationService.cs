@@ -9,10 +9,6 @@
 
         ResultInsertCustomerClassificationModel InsertCustomerClassification(CCInputFlow inputFlow, InsertCustomerClassificationModel model);
 
-        ResultRemoveCustomerClassificationModel RemoveCustomerClassification(CCInputFlow inputFlow, RemoveCustomerClassificationModel model);
-
-        ResultInsertCustomerClassificationBySportModel InsertCustomerClassificationBySport(CCInputFlow inputFlow, InsertCustomerClassificationBySportModel model);
-
-        ResultRemoveCustomerClassificationBySportModel RemoveCustomerClassificationBySport(CCInputFlow inputFlow, RemoveCustomerClassificationBySportModel model);
+        ResultRemoveCustomerClassificationModel RemoveCustomerClassification(CCInputFlow inputFlow, RemoveCustomerClassificationModel model);        
     }
 }

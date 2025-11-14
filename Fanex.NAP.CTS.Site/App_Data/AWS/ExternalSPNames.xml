@@ -48,7 +48,8 @@
 
 	<Function Name="DailyProblemClassification">
 		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily" DbName="DBVR2.bodb_VR2Model.wsv_cts" TimeOut="300" />
-    <Setting Key="CTS_ProblemAccountsClassificationAgency_Daily" SpName="CTS_ProblemAccountsClassificationAgency_Daily" DbName="DBVR2.bodb_VR2Model.wsv_cts" />
+		<Setting Key="CTS_ProblemAccountsClassificationBySport_Daily" SpName="CTS_ProblemAccountsClassificationBySport_Daily" DbName="DBVR2.bodb_VR2Model.wsv_cts" TimeOut="1200" />
+		<Setting Key="CTS_ProblemAccountsClassificationAgency_Daily" SpName="CTS_ProblemAccountsClassificationAgency_Daily" DbName="DBVR2.bodb_VR2Model.wsv_cts" />
 	</Function>
 
 	<Function Name="AssociationDetection">
