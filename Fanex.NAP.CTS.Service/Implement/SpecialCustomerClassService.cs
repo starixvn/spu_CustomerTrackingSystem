@@ -240,9 +240,16 @@
 
                 if (resultRemove.CustInfos != null && resultRemove.CustInfos.Any())
                 {
-                    var rescanUserList = resultRemove.CustInfos.Select(x => new BaseCustomerInfoBySportModel { CustID = x.CustID, SportGroup = x.SportID });
+                    var rescanUserList = resultRemove.CustInfos.Select(x => new RescanCustomerClassificationBySportRequestModel { CustID = x.CustID, SportID = x.SportID });
 
-                    _rescanBySportService.RescanCustomerClassificationBySport(rescanUserList, BySport_FunctionId.Manual, ConfigSettings.PushCCToExternalChunkSize);
+                    _rescanBySportService.RescanCustomerClassificationBySport(new RescanCustClassificationBySportModel
+                    {
+                        CustInfos = rescanUserList,
+                        FunctionId = BySport_FunctionId.Manual,
+                        InternalChunkSize = ConfigSettings.InternalChunkSize,
+                        PushCCChunkSize = ConfigSettings.PushCCToExternalChunkSize,
+                        PushCCRetryTime = ConfigSettings.PushCCToExternalRetryTime,
+                    });
                 }
             }
         }
@@ -275,7 +282,7 @@
                     SportGroup = x.SportGroup
                 });
 
-                _customerClassificationBySportService.PushCCBySportToMainDB(custInfos, ConfigSettings.PushCCToExternalChunkSize);
+                _customerClassificationBySportService.PushCCBySportToMainDB(custInfos, ConfigSettings.PushCCToExternalChunkSize, ConfigSettings.PushCCToExternalRetryTime);
             }
         }
 

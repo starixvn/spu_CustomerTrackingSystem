@@ -22,7 +22,7 @@
             _repository = new CriteriaService();
         }
 
-        public bool PushCCBySportToMainDB(IEnumerable<BaseCustomerInfoBySportModel> custInfos, int batchExternalSize)
+        public bool PushCCBySportToMainDB(IEnumerable<BaseCustomerInfoBySportModel> custInfos, int batchExternalSize, int retryTime)
         {
             var custInfoChunks = custInfos.Chunk(batchExternalSize).ToList();
 
@@ -31,7 +31,7 @@
                 var ccBySports = GetCustomerClassificationBySports(custs);
 
                 // Constants.InternalRetry 3
-                var isSuccess = RetryPushCustClassificationBySportToMainDB(ccBySports, 3);
+                var isSuccess = RetryPushCustClassificationBySportToMainDB(ccBySports, retryTime);
 
                 if (!isSuccess)
                 {

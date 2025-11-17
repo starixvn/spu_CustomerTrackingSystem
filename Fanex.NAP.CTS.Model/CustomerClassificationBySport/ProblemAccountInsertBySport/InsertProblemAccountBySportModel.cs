@@ -1,18 +1,20 @@
 ﻿namespace Fanex.NAP.CTS.Model.CustomerClassificationBySport.ProblemAccountInsertBySport
 {
+    using Fanex.NAP.CTS.Model.CustomerClassificationBySport.RescanCustomerClassificationBySport;
     using System;
 
     public class InsertProblemAccountBySportModel : CustomerClassificationBySportModel
     {
         public InsertProblemAccountBySportModel() { }
 
-        public InsertProblemAccountBySportModel(RescanCustomerClassificationBySportModel model)
+        public InsertProblemAccountBySportModel(RescanCustomerClassificationBySportResultModel model)
         {
             CTSCustID = model.CTSCustID;
             CustID = model.CustID;
             CategoryID = model.CategoryID;
             CategoryGroupID = model.CategoryGroup;
             CreatedBy = model.CreatedBy;
+            SportGroup = model.SportID;
         }
 
         public Int64 CTSCustID { get; set; }

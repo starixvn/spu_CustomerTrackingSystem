@@ -1,8 +1,8 @@
-﻿namespace Fanex.NAP.CTS.Model.CustomerClassificationBySport.ProblemAccountInsertBySport
+﻿namespace Fanex.NAP.CTS.Model.CustomerClassificationBySport.RescanCustomerClassificationBySport
 {
     using System;
 
-    public class RescanCustomerClassificationBySportModel
+    public class RescanCustomerClassificationBySportResultModel
     {
         public long CustID { get; set; }
 
@@ -14,7 +14,7 @@
 
         public Int64? CreatedBy { get; set; }
 
-        public int SportGroup { get; set; }
+        public int SportID { get; set; }
 
         public int InputFlowID { get; set; }
     }

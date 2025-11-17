@@ -5,6 +5,6 @@
 
     public interface ICustomerClassificationBySportService
     {
-        bool PushCCBySportToMainDB(IEnumerable<BaseCustomerInfoBySportModel> custInfos, int batchExternalSize);
+        bool PushCCBySportToMainDB(IEnumerable<BaseCustomerInfoBySportModel> custInfos, int batchExternalSize, int retryTime);
     }
 }

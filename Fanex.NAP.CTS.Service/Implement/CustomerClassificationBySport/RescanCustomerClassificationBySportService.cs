@@ -4,7 +4,6 @@
     using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Criteria.CustomerClassificationBySport.RescanNormalClassificationBySport;
     using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.CustomerClassificationBySport;
     using Fanex.NAP.CTS.Model.CustomerClassificationBySport.ProblemAccountInsertBySport;
     using Fanex.NAP.CTS.Model.CustomerClassificationBySport.RescanCustomerClassificationBySport;
     using Fanex.NAP.CTS.Service.Implement.CustomerClassificationBySport.ProblemAccountInsertBySport;
@@ -28,11 +27,15 @@
             _problemAccountBySport = new ProblemAccountBySportService();
         }
 
-        public bool RescanCustomerClassificationBySport(IEnumerable<BaseCustomerInfoBySportModel> custInfos, BySport_FunctionId functionId, int batchSize)
+        public bool RescanCustomerClassificationBySport(RescanCustClassificationBySportModel rescanModel)
         {
-            var result = new RescanBySportResultModel();
+            var isSuccess = true;
 
-            var custRescans = GetRescanCustomerClassificationBySport(custInfos);
+            var distinctCustInfos = rescanModel.CustInfos.Distinct(x => new { x.CustID, x.SportID }).ToList();
+
+            var custRescans = distinctCustInfos
+                .Chunk(rescanModel.InternalChunkSize)
+                .SelectMany(chunk => GetRescanCustomerClassificationBySport(chunk));
 
             if (custRescans.IsNotNullOrEmpty())
             {
@@ -40,35 +43,57 @@
 
                 foreach (var group in groupingCustRescans)
                 {
+                    if (!isSuccess) break;
+
                     if ((BySportCCInputFlow)group.Key == BySportCCInputFlow.RescanNormal)
                     {
-                        var normalCustomerBySports =
-                            group.Select(x => new RescanNormalBySportListCustModel
-                            {
-                                CustID = x.CustID,
-                                SportID = x.SportGroup,
-                            });
-
-                        ResanNormalBySportForNewCustomers(normalCustomerBySports, functionId);
+                        ProcessNormalCustomers(group, rescanModel.FunctionId, rescanModel.InternalChunkSize);
                     }
                     else
                     {
-                        result = RescanProblemAccountBySport(group, (BySportCCInputFlow)group.Key, functionId, batchSize);
+                        isSuccess = ProcessProblemAccounts(group, (BySportCCInputFlow)group.Key, rescanModel);
                     }
                 }
             }
 
-            return result.IsSuccess;
+            return isSuccess;
         }
 
         #region Private Methods
-        private RescanBySportResultModel RescanProblemAccountBySport(IEnumerable<RescanCustomerClassificationBySportModel> custInfos, BySportCCInputFlow ccInputFlow, BySport_FunctionId functionId, int batchSize)
+        private void ProcessNormalCustomers(IEnumerable<RescanCustomerClassificationBySportResultModel> group, BySport_FunctionId functionId, int internalBatchSize)
+        {
+            var normalCustomers = group.Select(x => new RescanNormalBySportListCustModel
+            {
+                CustID = x.CustID,
+                SportID = x.SportID
+            });
+
+            foreach (var chunk in normalCustomers.Chunk(internalBatchSize))
+            {
+                ResanNormalBySportForNewCustomers(chunk, functionId);
+            }
+        }
+
+        bool ProcessProblemAccounts(IEnumerable<RescanCustomerClassificationBySportResultModel> group, BySportCCInputFlow inputFlow, RescanCustClassificationBySportModel rescanModel)
+        {
+            foreach (var chunk in group.Chunk(rescanModel.InternalChunkSize))
+            {
+                var result = RescanProblemAccountBySport(chunk, inputFlow, rescanModel);
+                if (!result.IsSuccess)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private RescanBySportResultModel RescanProblemAccountBySport(IEnumerable<RescanCustomerClassificationBySportResultModel> custInfos, BySportCCInputFlow ccInputFlow, RescanCustClassificationBySportModel rescanModel)
         {
             var mappingCustInfoInsert = custInfos.Select(x => new InsertProblemAccountBySportModel(x));
 
-            var paInsertResult = _problemAccountBySport.InsertProblemAccountBySport(mappingCustInfoInsert, ccInputFlow, functionId);
+            var paInsertResult = _problemAccountBySport.InsertProblemAccountBySport(mappingCustInfoInsert, ccInputFlow, rescanModel.FunctionId);
 
-            var isSuccess = _customerClassificationBySport.PushCCBySportToMainDB(paInsertResult, batchSize);
+            var isSuccess = _customerClassificationBySport.PushCCBySportToMainDB(paInsertResult, rescanModel.PushCCChunkSize, rescanModel.PushCCRetryTime);
 
             return new RescanBySportResultModel
             {
@@ -77,7 +102,7 @@
             };
         }
 
-        private IEnumerable<RescanCustomerClassificationBySportModel> GetRescanCustomerClassificationBySport(IEnumerable<BaseCustomerInfoBySportModel> custInfos)
+        private IEnumerable<RescanCustomerClassificationBySportResultModel> GetRescanCustomerClassificationBySport(IEnumerable<RescanCustomerClassificationBySportRequestModel> custInfos)
         {
             if (custInfos.IsNotNullOrEmpty())
             {
@@ -88,10 +113,10 @@
                     CustInfoJson = custJson,
                 };
 
-                return _repository.Fetch<RescanCustomerClassificationBySportModel>(criteria);
+                return _repository.Fetch<RescanCustomerClassificationBySportResultModel>(criteria);
             }
 
-            return Enumerable.Empty<RescanCustomerClassificationBySportModel>();
+            return Enumerable.Empty<RescanCustomerClassificationBySportResultModel>();
         }
 
         private void ResanNormalBySportForNewCustomers(IEnumerable<RescanNormalBySportListCustModel> custIds, BySport_FunctionId functionId)

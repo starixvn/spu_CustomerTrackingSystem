@@ -345,7 +345,7 @@ namespace Fanex.NAP.CTS.Model
     public enum BySportCCInputFlow
     {
         [Description("RescanPACategory")]
-        RescanPACategory = 115,
+        RescanPACategory = 339,
         [Description("RescanNormal")]
         RescanNormal = 9
     }
