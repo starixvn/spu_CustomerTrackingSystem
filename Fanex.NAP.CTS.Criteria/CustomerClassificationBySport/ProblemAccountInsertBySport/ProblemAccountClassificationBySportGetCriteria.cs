@@ -8,6 +8,8 @@
         [SpParam(SqlParamName = "ListCustInfo")]
         public string CustJson { get; set; }
 
+        public int FunctionId { get; set;  }
+
         public override string GetSettingKey()
         {
             return "CTS_ProblemAccountsClassification_BySport_Daily";

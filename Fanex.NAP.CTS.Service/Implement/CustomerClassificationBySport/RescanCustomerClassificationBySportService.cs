@@ -53,7 +53,7 @@
                     }
                     else
                     {
-                        result = RescanProblemAccountBySport(group, (BySportCCInputFlow)group.Key, batchSize);
+                        result = RescanProblemAccountBySport(group, (BySportCCInputFlow)group.Key, functionId, batchSize);
                     }
                 }
             }
@@ -62,11 +62,11 @@
         }
 
         #region Private Methods
-        private RescanBySportResultModel RescanProblemAccountBySport(IEnumerable<RescanCustomerClassificationBySportModel> custInfos, BySportCCInputFlow ccInputFlow, int batchSize)
+        private RescanBySportResultModel RescanProblemAccountBySport(IEnumerable<RescanCustomerClassificationBySportModel> custInfos, BySportCCInputFlow ccInputFlow, BySport_FunctionId functionId, int batchSize)
         {
             var mappingCustInfoInsert = custInfos.Select(x => new InsertProblemAccountBySportModel(x));
 
-            var paInsertResult = _problemAccountBySport.InsertProblemAccountBySport(mappingCustInfoInsert, ccInputFlow);
+            var paInsertResult = _problemAccountBySport.InsertProblemAccountBySport(mappingCustInfoInsert, ccInputFlow, functionId);
 
             var isSuccess = _customerClassificationBySport.PushCCBySportToMainDB(paInsertResult, batchSize);
 

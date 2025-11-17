@@ -2,7 +2,6 @@
 {
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Service;
-    using Fanex.NAP.CTS.Criteria.CustomerClassification.BaseCustomerClassification;
     using Fanex.NAP.CTS.Criteria.CustomerClassificationBySport.BaseCustomerClassificationBySport;
     using Fanex.NAP.CTS.Criteria.CustomerClassificationBySport.ProblemAccountInsertBySport;
     using Fanex.NAP.CTS.Model;
@@ -13,6 +12,7 @@
     using Newtonsoft.Json;
     using System.Collections.Generic;
     using System.Linq;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class ProblemAccountBySportService : IProblemAccountBySportService
     {
@@ -24,7 +24,7 @@
         }
 
         #region Public Methods
-        public IEnumerable<ProblemAccountLosingBySportModel> GetPALosingBySport(IEnumerable<BaseCustomerInfoBySportModel> custInfos)
+        public IEnumerable<ProblemAccountLosingBySportModel> GetPALosingBySport(IEnumerable<BaseCustomerInfoBySportModel> custInfos, BySport_FunctionId functionId)
         {
             if (custInfos.IsNotNullOrEmpty())
             {
@@ -32,7 +32,8 @@
 
                 var criteria = new ProblemAccountClassificationBySportGetCriteria
                 {
-                    CustJson = custInfosJson
+                    CustJson = custInfosJson,
+                    FunctionId = (int)functionId,
                 };
 
                 return _criteriaService.Fetch<ProblemAccountLosingBySportModel>(criteria);
@@ -41,11 +42,11 @@
             return Enumerable.Empty<ProblemAccountLosingBySportModel>();
         }
 
-        public IEnumerable<InsertPABySportResultModel> InsertProblemAccountBySport(IEnumerable<InsertProblemAccountBySportModel> paBySports, BySportCCInputFlow cCInputFlow)
+        public IEnumerable<InsertPABySportResultModel> InsertProblemAccountBySport(IEnumerable<InsertProblemAccountBySportModel> paBySports, BySportCCInputFlow cCInputFlow, BySport_FunctionId functionId)
         {
             if (paBySports.IsNotNullOrEmpty())
             {
-                var paBySportClassification = CombinePAWithLosingPerformace(paBySports);
+                var paBySportClassification = CombinePAWithLosingPerformace(paBySports, functionId);
 
                 var criteria = new InsertCustomerClassificationBySportCriteria
                 {
@@ -68,19 +69,10 @@
 
             return Enumerable.Empty<InsertPABySportResultModel>();
         }
-
-        public IEnumerable<InsertPABySportResultModel> RescanCustomerClassificationBySport(IEnumerable<RescanCustomerClassificationBySportModel> custRescans, BySportCCInputFlow ccInputFlow)
-        {
-            var pas = custRescans.Select(x => new InsertProblemAccountBySportModel(x));
-
-            var insertPAResult = InsertProblemAccountBySport(pas, ccInputFlow);
-
-            return insertPAResult;
-        }
         #endregion
 
         #region Private Methods
-        private IEnumerable<InsertProblemAccountBySportModel> CombinePAWithLosingPerformace(IEnumerable<InsertProblemAccountBySportModel> paBySports)
+        private IEnumerable<InsertProblemAccountBySportModel> CombinePAWithLosingPerformace(IEnumerable<InsertProblemAccountBySportModel> paBySports, BySport_FunctionId functionId)
         {
             var custInfos = paBySports.Select(x => new BaseCustomerInfoBySportModel
             {
@@ -88,7 +80,7 @@
                 SportGroup = x.SportGroup
             }).Distinct(x => new { x.CustID, x.SportGroup });
 
-            var paBySportLosings = GetPALosingBySport(custInfos);
+            var paBySportLosings = GetPALosingBySport(custInfos, functionId);
 
             return MergePALosingClassification(paBySports, paBySportLosings);
         }
