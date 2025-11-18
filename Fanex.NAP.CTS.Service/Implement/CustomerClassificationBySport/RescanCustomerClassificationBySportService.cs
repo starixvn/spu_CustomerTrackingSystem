@@ -45,13 +45,13 @@
                 {
                     if (!isSuccess) break;
 
-                    if ((BySportCCInputFlow)group.Key == BySportCCInputFlow.RescanNormal)
+                    if ((CCInputFlow)group.Key == CCInputFlow.RescanNormal) 
                     {
                         ProcessNormalCustomers(group, rescanModel.FunctionId, rescanModel.InternalChunkSize);
                     }
                     else
                     {
-                        isSuccess = ProcessProblemAccounts(group, (BySportCCInputFlow)group.Key, rescanModel);
+                        isSuccess = ProcessProblemAccounts(group, (CCInputFlow)group.Key, rescanModel);
                     }
                 }
             }
@@ -74,7 +74,7 @@
             }
         }
 
-        bool ProcessProblemAccounts(IEnumerable<RescanCustomerClassificationBySportResultModel> group, BySportCCInputFlow inputFlow, RescanCustClassificationBySportModel rescanModel)
+        bool ProcessProblemAccounts(IEnumerable<RescanCustomerClassificationBySportResultModel> group, CCInputFlow inputFlow, RescanCustClassificationBySportModel rescanModel)
         {
             foreach (var chunk in group.Chunk(rescanModel.InternalChunkSize))
             {
@@ -87,7 +87,7 @@
             return true;
         }
 
-        private RescanBySportResultModel RescanProblemAccountBySport(IEnumerable<RescanCustomerClassificationBySportResultModel> custInfos, BySportCCInputFlow ccInputFlow, RescanCustClassificationBySportModel rescanModel)
+        private RescanBySportResultModel RescanProblemAccountBySport(IEnumerable<RescanCustomerClassificationBySportResultModel> custInfos, CCInputFlow ccInputFlow, RescanCustClassificationBySportModel rescanModel)
         {
             var mappingCustInfoInsert = custInfos.Select(x => new InsertProblemAccountBySportModel(x));
 

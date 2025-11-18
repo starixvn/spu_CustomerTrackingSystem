@@ -10,6 +10,6 @@
     {
         IEnumerable<ProblemAccountLosingBySportModel> GetPALosingBySport(IEnumerable<BaseCustomerInfoBySportModel> custInfos, BySport_FunctionId functionId);
 
-        IEnumerable<InsertPABySportResultModel> InsertProblemAccountBySport(IEnumerable<InsertProblemAccountBySportModel> paBySports, BySportCCInputFlow cCInputFlow, BySport_FunctionId functionId);
+        IEnumerable<InsertPABySportResultModel> InsertProblemAccountBySport(IEnumerable<InsertProblemAccountBySportModel> paBySports, CCInputFlow cCInputFlow, BySport_FunctionId functionId);
     }
 }

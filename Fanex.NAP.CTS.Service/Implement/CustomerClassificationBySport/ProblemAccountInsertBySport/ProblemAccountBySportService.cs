@@ -42,7 +42,7 @@
             return Enumerable.Empty<ProblemAccountLosingBySportModel>();
         }
 
-        public IEnumerable<InsertPABySportResultModel> InsertProblemAccountBySport(IEnumerable<InsertProblemAccountBySportModel> paBySports, BySportCCInputFlow cCInputFlow, BySport_FunctionId functionId)
+        public IEnumerable<InsertPABySportResultModel> InsertProblemAccountBySport(IEnumerable<InsertProblemAccountBySportModel> paBySports, CCInputFlow cCInputFlow, BySport_FunctionId functionId)
         {
             if (paBySports.IsNotNullOrEmpty())
             {
