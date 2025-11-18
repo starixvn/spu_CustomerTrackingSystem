@@ -12,6 +12,8 @@
             CTSCustID = model.CTSCustID;
             CustID = model.CustID;
             CategoryID = model.CategoryID;
+            SubscriberID = model.SubscriberID;
+            IsLicensee = model.IsLicensee;
             CreatedBy = model.CreatedBy;
             SportGroup = model.SportID;
             Remark = model.Remark;
@@ -20,15 +22,11 @@
 
         public Int64 CTSCustID { get; set; }
 
-        public int? RoleID { get; set; }
+        public int? SubscriberID { get; set; }
 
-        public int SubscriberID { get; set; }
-
-        public bool IsLicensee { get; set; }
+        public bool? IsLicensee { get; set; }
 
         public Int64? CreatedBy { get; set; }
-
-        public DateTime? LastModifiedDate { get; set; }
 
         public int? WinlossStatus { get; set; }
 

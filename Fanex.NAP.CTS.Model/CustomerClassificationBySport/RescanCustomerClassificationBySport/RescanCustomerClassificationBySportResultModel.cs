@@ -8,7 +8,11 @@
 
         public long CustID { get; set; }
 
-        public int CategoryID { get; set; }
+        public int? CategoryID { get; set; }
+
+        public int? SubscriberID { get; set;  }
+
+        public bool? IsLicensee { get; set;  }
 
         public string Remark { get; set; }
 
