@@ -12,9 +12,10 @@
             CTSCustID = model.CTSCustID;
             CustID = model.CustID;
             CategoryID = model.CategoryID;
-            CategoryGroupID = model.CategoryGroup;
             CreatedBy = model.CreatedBy;
             SportGroup = model.SportID;
+            Remark = model.Remark;
+            CreatedDate = model.CreatedDate;
         }
 
         public Int64 CTSCustID { get; set; }
@@ -36,5 +37,7 @@
         public int? MatchID { get; set; }
 
         public string Remark { get; set; }
+
+        public DateTime? CreatedDate { get; set; }
     }
 }

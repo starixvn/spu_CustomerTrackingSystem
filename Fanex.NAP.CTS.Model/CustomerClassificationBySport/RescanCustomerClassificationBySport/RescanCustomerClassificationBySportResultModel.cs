@@ -4,15 +4,17 @@
 
     public class RescanCustomerClassificationBySportResultModel
     {
-        public long CustID { get; set; }
-
         public long CTSCustID { get; set; }
+
+        public long CustID { get; set; }
 
         public int CategoryID { get; set; }
 
-        public int CategoryGroup { get; set; }
+        public string Remark { get; set; }
 
         public Int64? CreatedBy { get; set; }
+
+        public DateTime? CreatedDate { get; set; }
 
         public int SportID { get; set; }
 

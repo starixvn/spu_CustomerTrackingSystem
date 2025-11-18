@@ -10,6 +10,7 @@
     using Fanex.NAP.CTS.Service.Interface.CustomerClassificationBySport;
     using Fanex.NAP.CTS.Service.Interface.CustomerClassificationBySport.ProblemAccountInsertBySport;
     using Newtonsoft.Json;
+    using NPOI.SS.Formula.Functions;
     using System.Collections.Generic;
     using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -35,7 +36,7 @@
 
             var custRescans = distinctCustInfos
                 .Chunk(rescanModel.InternalChunkSize)
-                .SelectMany(chunk => GetRescanCustomerClassificationBySport(chunk));
+                .SelectMany(chunk => GetRescanCustomerClassificationBySport(chunk)).ToList();
 
             if (custRescans.IsNotNullOrEmpty())
             {
