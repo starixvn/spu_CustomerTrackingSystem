@@ -46,7 +46,7 @@
                 {
                     if (!isSuccess) break;
 
-                    if ((CCInputFlow)group.Key == CCInputFlow.RescanNormal) 
+                    if ((CCInputFlow)group.Key == CCInputFlow.BySportInsertNormal) 
                     {
                         ProcessNormalCustomers(group, rescanModel.FunctionId, rescanModel.InternalChunkSize);
                     }
