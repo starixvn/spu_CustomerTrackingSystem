@@ -92,7 +92,7 @@
 		<Setting Key="CTS_DC_CustClassification_ViewHistory" SpName="CTS_DC_CustClassification_ViewHistory" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustClassification_LogInputData" SpName="CTS_DC_CustClassification_LogInputData" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_CustClassification_Queue_Insert" SpName="CTS_DC_CustClassification_Queue_Insert" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />		
-		<Setting Key="CTS_DC_CustClassification_BySport_GetCC" SpName="CTS_DC_CustClassification_BySport_GetCC" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustClassification_BySport_GetCC" SpName="CTS_DC_CustClassification_BySport_GetCC_xpre" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustClassification_Insert" SpName="CTS_DC_CustClassification_Insert" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
 		<Setting Key="CTS_DC_CustClassificationAgency_Remove" SpName="CTS_DC_CustClassificationAgency_Remove" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
@@ -209,7 +209,7 @@
 	</Function>
 
 	<Function name="CustomerClassificationBySport">
-		<Setting Key="CTS_DC_CustClassification_BySport_Get" SpName="CTS_DC_CustClassification_BySport_Get" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
+		<Setting Key="CTS_DC_CustClassification_BySport_Get" SpName="CTS_DC_CustClassification_BySport_Get_xpre" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustClassification_BySport_Rescan_Get" SpName="CTS_DC_CustClassification_BySport_Rescan_Get_xpre" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustClassification_BySport_History_Get" SpName="CTS_DC_CustClassification_BySport_History_Get_xpre" DbName="CTSMain.CTS_DataCenter.ctsWeb" />
 		<Setting Key="CTS_DC_CustClassification_BySport_Insert" SpName="CTS_DC_CustClassification_BySport_Insert_xpre" DbName="CTSMain.CTS_DataCenter.ctsWebAdmin" />
