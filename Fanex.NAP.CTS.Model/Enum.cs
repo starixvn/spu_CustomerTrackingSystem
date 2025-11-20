@@ -310,8 +310,8 @@ namespace Fanex.NAP.CTS.Model
         BySportInsertPA = 335,
         [Description("BySportInsertNormal")]
         BySportInsertNormal = 339,
-        [Description("RescanPACategory")]
-        RescanPACategoryBySport = 375,
+        [Description("BySportRescanPACategory")]
+        BySportRescanPACategory = 375,
         [Description("BySportRemoveSpecialCC")]
         BySportRemoveSpecialCC = 442
     }
