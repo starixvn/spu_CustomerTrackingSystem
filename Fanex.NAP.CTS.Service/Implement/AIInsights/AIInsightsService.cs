@@ -1,47 +1,173 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement.AIInsights
 {
-    using System.IO;
-    using System.Net;
-    using System.Threading.Tasks;
-    using System.Web;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.AIInsights;
     using Fanex.NAP.CTS.Model.AIInsights.Api;
     using Fanex.NAP.CTS.Service.AIInsights;
+    using Fanex.NAP.CTS.Service.Implement.SseStream;
     using Fanex.NAP.CTS.Service.Interface.AIInsights;
+    using Fanex.NAP.CTS.Service.Interface.SseStream;
+    using Fanex.NAP.CTS.ViewModel.AIInsights;
     using Newtonsoft.Json;
+    using System;
+    using System.Collections.Concurrent;
+    using System.IO;
+    using System.Net;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using System.Web;
+    using static Fanex.NAP.CTS.Service.Delegate.SseDelegate;
 
     public class AIInsightsService : IAIInsightsService
     {
+        #region Fields
         private readonly IAIInsightsApiForwarderService _apiForwarderService;
+        private readonly ISseStreamManagerService _sseStreamManagerService;
         private AIInsightsFileUploadModel _aiInsightsFileUploadModel;
+        #endregion
 
+        #region constructor
         public AIInsightsService()
         {
+            _sseStreamManagerService = new SseStreamManagerService();
             _apiForwarderService = new AIInsightsApiForwarderService();
             _aiInsightsFileUploadModel = new AIInsightsFileUploadModel();
         }
 
-        public async Task<AIInsightsAnalyzeChartsDataModel> AnalyzeCharts(AIInsightsFileUploadDataModel model)
+        public AIInsightsService(ISseStreamManagerService sseStreamManagerService, IAIInsightsApiForwarderService apiForwarderService)
+        {
+            _apiForwarderService = apiForwarderService ?? new AIInsightsApiForwarderService();
+            _sseStreamManagerService = sseStreamManagerService ?? new SseStreamManagerService();
+            _aiInsightsFileUploadModel = new AIInsightsFileUploadModel();
+        }
+        #endregion
+
+        #region analyze charts
+        public async Task<string> StartAnalyzeChartsAsync(AIInsightsFileUploadDataModel model)
         {
             var request = new AIInsightsAnalyzeRequestModel
             {
                 cache_key = model?.cache_key,
             };
 
-            WriteLog($"Request: {nameof(AnalyzeCharts)}", request);
-
-            var result = await _apiForwarderService.AnalyzeCharts(request, ConfigSettings.AIInsightsAnalyzeChartsUrl);
-
-            WriteLog($"Response: {nameof(AnalyzeCharts)}", result);
+            var result = await _apiForwarderService.StartAnalyzeChartsAsync(request, ConfigSettings.AIInsightsAnalyzeChartsUrl);
 
             ValidateResponse(result);
 
-            return result.response;
+            return result?.response?.stream_token;
         }
 
-        public async Task<AIInsightsAnalyzeSummaryDataModel> AnalyzeSummary(AIInsightsFileUploadDataModel model)
+        public async Task StreamAnalyzeChartsAsync(string streamToken, HttpContextBase httpContext, CancellationToken cancellationToken)
+        {
+            var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+
+            var messageQueue = new BlockingCollection<string>();
+
+            var listenerTask = Task.Run(
+                async () => await _sseStreamManagerService.ListenerAsync(
+                    string.Format(ConfigSettings.AIInsightsAnalyzeChartsSseProcessUrl, streamToken),
+                    msg => { messageQueue.TryAdd(msg, 100, linkedCts.Token); },
+                    cancellationToken: linkedCts.Token,
+                    timeOutbySeconds: ConfigSettings.AIAnalyzeChartRequestTimeout,
+                    maxRetryCount: ConfigSettings.AIRequestRetryCountTime,
+                    retryDelayMs: ConfigSettings.AIRequestRetryDelayTimeMs)
+                .ConfigureAwait(false),
+                linkedCts.Token);
+
+            var senderTask = Task.Run(
+                async () => await _sseStreamManagerService.SenderAsync(
+                    httpContext,
+                    linkedCts.Token,
+                    (pushMsgDelegate) =>
+                        new Task[] { ProcessAnalyzeChartsAsync(messageQueue, pushMsgDelegate, linkedCts.Token) })
+                .ConfigureAwait(false),
+                linkedCts.Token);
+
+            await Task.WhenAny(listenerTask, senderTask).ConfigureAwait(false);
+            await Task.Delay(5000);
+            messageQueue.CompleteAdding();
+
+            linkedCts.Cancel();
+        }
+
+        private async Task ProcessAnalyzeChartsAsync(BlockingCollection<string> msgQueue, PushEventDelegate pushMsgDelegate, CancellationToken cancellationToken)
+        {
+            try
+            {
+                foreach (var msg in msgQueue.GetConsumingEnumerable(cancellationToken))
+                {
+                    await SendChartProcessingEventAsync(msg, pushMsgDelegate).ConfigureAwait(false);
+                }
+            }
+            catch (OperationCanceledException ex)
+            {
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    throw ex;
+                }
+                // Normal cancellation - no logging needed
+            }
+            catch (Exception ex)
+            {
+                LogExtension.LogError("CTS - AI Insights AnalyzeChartsAsync", ex);
+                await pushMsgDelegate(new AIInsightEventSourceViewModel(AIInsightEventName.Error, AIInsightEventStatus.Failed));
+            }
+        }
+
+        private async Task SendChartProcessingEventAsync(string chart, PushEventDelegate pushMsgDelegate)
+        {
+            try
+            {
+                var model = JsonConvert.DeserializeObject<AIInsightsProcessAnalyzeChartsResponseModel>(chart);
+
+                switch (model.type)
+                {
+                    case nameof(AIProcessChartType.chart_ready):
+                        {
+                            var aiChartInfo = JsonConvert.DeserializeObject<AIInsightProcessAnalyzeChartsChartInfoModel>(model.chart_data);
+                            var chartInfo = new ChartInfoModel(aiChartInfo);
+                            await pushMsgDelegate(
+                                new AIInsightEventSourceViewModel(
+                                    AIInsightEventName.AnalyzeCharts,
+                                    AIInsightEventStatus.Processing,
+                                    chartInfo));
+                            break;
+                        }
+                    case nameof(AIProcessChartType.ready):
+                        {
+                            await pushMsgDelegate(
+                                    new AIInsightEventSourceViewModel(
+                                        AIInsightEventName.AnalyzeCharts,
+                                        AIInsightEventStatus.Started));
+                            break;
+                        }
+                    case nameof(AIProcessChartType.complete):
+                        {
+                            await pushMsgDelegate(
+                                    new AIInsightEventSourceViewModel(
+                                        AIInsightEventName.AnalyzeCharts,
+                                        AIInsightEventStatus.Completed));
+                            break;
+                        }
+                    case nameof(AIProcessChartType.connected):
+                    default:
+                        {
+                            await pushMsgDelegate(model.message);
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                await pushMsgDelegate(chart);
+
+                throw ex;
+            }
+        }
+        #endregion
+
+        public async Task<AIInsightsAnalyzeSummaryResponseModel> AnalyzeSummary(AIInsightsFileUploadDataModel model)
         {
             var request = new AIInsightsAnalyzeRequestModel
             {
@@ -55,7 +181,7 @@
             WriteLog($"Response: {nameof(AnalyzeSummary)}", result);
 
             ValidateResponse(result);
-            return result.response;
+            return result;
         }
 
         public async Task<AIInsightsChatbotDataModel> AskChatbot(AIInsightsFileUploadDataModel model, string question)
@@ -85,23 +211,25 @@
 
             if (uploadFile.ContentLength > _aiInsightsFileUploadModel.MaxFileSizeBytes)
             {
-                throw new InvalidDataException($"Exceeds the allowed limit of {_aiInsightsFileUploadModel.MaxFileSizeBytes / (1024 * 1024)} MB.");
+                throw new InvalidDataException($"Exceeds the allowed limit of {_aiInsightsFileUploadModel.MaxFileSizeMB} MB.");
             }
 
             var request = new AIInsightsFileUploadRequestModel
             {
-                file_base64image = uploadFile.FileBaseToBase64StringChunked(),
-                file_name = Path.GetFileName(uploadFile.FileName),
+                file_base64image = null,
+                file_name = Path.GetFileNameWithoutExtension(uploadFile.FileName) + ".csv",
                 session_id = session_id
             };
 
-            WriteLog($"Request: {nameof(UploadFile)}", $"{request.session_id}_{request.file_name}");
-
-            var result = await _apiForwarderService.UploadFile(request, ConfigSettings.AIInsightsUploadUrl);
-
-            WriteLog($"Response: {nameof(UploadFile)}", result);
+            var result =
+                await _apiForwarderService.UploadFile(
+                    () => uploadFile.CreateFileHttpContentFromModel(request, nameof(request.file_base64image)),
+                    ConfigSettings.AIInsightsUploadUrl);
 
             ValidateResponse(result);
+
+            result.response.file_name = Path.GetFileName(uploadFile.FileName);
+
             return result;
         }
 

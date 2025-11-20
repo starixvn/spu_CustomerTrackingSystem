@@ -1,15 +1,17 @@
 ﻿namespace Fanex.NAP.CTS.Core.Extentions
 {
     using System;
+    using System.Buffers;
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Reflection.Emit;
+    using System.Runtime.CompilerServices;
     using System.Security.Cryptography;
     using System.Text;
-    using System.Web;
+    using System.Threading.Tasks;
 
     public static class Extentions
     {
@@ -109,30 +111,96 @@
         public static string CleanSpecialCharactor(this string input) =>
             string.IsNullOrEmpty(input) ? "" : input.Replace("\r\n", string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty).Replace("__", "_").Trim();
 
-        public static StringBuilder FileBaseToBase64StringChunked(this HttpPostedFileBase fileBase)
+        public static async Task WriteEscapedJsonStringFromStringBuilder(StreamWriter writer, StringBuilder sb, int bufferSize = 10 * 1024 * 1024) // chunk 10MB
         {
-            var sb = new StringBuilder();
-            const int chunkSize = 3 * 1024; // 3KB chunks (divisible by 3 for proper Base64 encoding)
-            var buffer = new byte[chunkSize];
-            int bytesRead;
+            var pool = ArrayPool<char>.Shared;
+            char[] buffer = pool.Rent(bufferSize);
+            char[] writeBuf = pool.Rent(bufferSize * 2);
 
-            while ((bytesRead = fileBase.InputStream.Read(buffer, 0, buffer.Length)) > 0)
+            await writer.WriteAsync('"');
+            int totalLength = sb.Length;
+
+            try
             {
-                // Convert chunk to Base64
-                if (bytesRead == chunkSize)
+                for (int offset = 0; offset < totalLength; offset += bufferSize)
                 {
-                    sb.Append(Convert.ToBase64String(buffer));
-                }
-                else
-                {
-                    // Handle last chunk which may be smaller
-                    var lastChunk = new byte[bytesRead];
-                    Array.Copy(buffer, lastChunk, bytesRead);
-                    sb.Append(Convert.ToBase64String(lastChunk));
+                    int length = Math.Min(bufferSize, totalLength - offset);
+                    sb.CopyTo(offset, buffer, 0, length);
+
+                    int w = 0;
+                    for (int i = 0; i < length; i++)
+                    {
+                        w = AppendEscapedJsonChar(buffer[i], writeBuf, w);
+
+                        if (w >= writeBuf.Length - 8)
+                        {
+                            writer.Write(writeBuf, 0, w);
+                            w = 0;
+                        }
+                    }
+
+                    if (w > 0)
+                        await writer.WriteAsync(writeBuf, 0, w);
                 }
             }
+            finally
+            {
+                pool.Return(buffer);
+                pool.Return(writeBuf);
+            }
 
-            return sb;
+            await writer.WriteAsync('"');
+        }
+
+        public static async Task WriteEscapedJsonString(StreamWriter writer, string value)
+        {
+            await writer.WriteAsync('"');
+
+            int estimatedLength = value.Length + value.Length / 10;
+            char[] buffer = ArrayPool<char>.Shared.Rent(estimatedLength);
+
+            try
+            {
+                int w = 0;
+                for (int i = 0; i < value.Length; i++)
+                {
+                    w = AppendEscapedJsonChar(value[i], buffer, w);
+
+                    if (w > buffer.Length - 8)
+                    {
+                        await writer.WriteAsync(buffer, 0, w);
+                        w = 0;
+                    }
+                }
+
+                if (w > 0)
+                {
+                    await writer.WriteAsync(buffer, 0, w);
+                }
+            }
+            finally
+            {
+                ArrayPool<char>.Shared.Return(buffer);
+            }
+
+            await writer.WriteAsync('"');
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int AppendEscapedJsonChar(char c, char[] dest, int w)
+        {
+            switch (c)
+            {
+                case '\\': dest[w++] = '\\'; dest[w++] = '\\'; break;
+                case '"': dest[w++] = '\\'; dest[w++] = '"'; break;
+                case '\b': dest[w++] = '\\'; dest[w++] = 'b'; break;
+                case '\f': dest[w++] = '\\'; dest[w++] = 'f'; break;
+                case '\n': dest[w++] = '\\'; dest[w++] = 'n'; break;
+                case '\r': dest[w++] = '\\'; dest[w++] = 'r'; break;
+                case '\t': dest[w++] = '\\'; dest[w++] = 't'; break;
+                default: dest[w++] = c; break;
+            }
+            return w;
         }
     }
 }

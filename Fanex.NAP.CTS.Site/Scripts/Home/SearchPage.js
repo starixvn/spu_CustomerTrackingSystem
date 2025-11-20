@@ -12,6 +12,20 @@ function SearchPage() {
     var removeFile = $('.remove-file');
     let hasDraggedFile = false;
 
+    const AIINSIGHTS_CONFIG = (() => {
+        const maxFileSizeBytes = parseInt($('#divAIMaxFileSizeBytes').text()) || 50 * 1024 * 1024;
+        const maxFileSizeMB = parseInt($('#divAIUploadMaxFileSizeMB').text()) || 50;
+        const allowedExts = $('#divAIAllowedExtensions').text() || '.xls,.xlsx,.csv';
+        const regexExts = allowedExts.replace(/\./g, '').replace(/,/g, '|');
+        const supportedFileExtensions = new RegExp(`\\.(${regexExts})$`, 'i');
+
+        return {
+            MAX_FILE_SIZE_BYTES: maxFileSizeBytes,
+            MAX_FILE_SIZE_MB: maxFileSizeMB,
+            SUPPORTED_FILE_EXTENSIONS: supportedFileExtensions
+        };
+    })();
+
     $(window).scroll(function () {
         var scroll = $(window).scrollTop();
 
@@ -86,12 +100,10 @@ function SearchPage() {
 
     function handleFiles(files) {
         if (files.length > 0) {
-            const maxMBSize = 50;
-            const maxSize = maxMBSize * 1024 * 1024; // 50MB in bytes
             const file = files[0];
 
-            if (file.size > maxSize) {
-                common.showError('Exceeds the allowed limit of ' + maxMBSize + " MB");
+            if (file.size > AIINSIGHTS_CONFIG.MAX_FILE_SIZE_BYTES) {
+                common.showError(`Exceeds the allowed limit of ${AIINSIGHTS_CONFIG.MAX_FILE_SIZE_MB} MB`);
 
                 fileInput.val('');
                 uploadedFile.hide();
@@ -101,7 +113,7 @@ function SearchPage() {
                 return;
             }
 
-            if (/\.(xls|xlsx)$/i.test(file.name)) {
+            if (AIINSIGHTS_CONFIG.SUPPORTED_FILE_EXTENSIONS.test(file.name)) {
                 const dataTransfer = new DataTransfer();
 
                 errorMessage.addClass('hide').text('');
@@ -141,7 +153,7 @@ function SearchPage() {
     }
 
     function AppendTabIdSubmitForm() {
-       frmSearch.on('submit', function(e) {
+        frmSearch.on('submit', function (e) {
             $('<input>').attr({
                 type: 'hidden',
                 name: 'TabId',

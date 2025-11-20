@@ -114,6 +114,7 @@
     <Compile Include="Account\Search\SearchAccountFilter.cs" />
     <Compile Include="Account\Search\SubscriberAccount.cs" />
     <Compile Include="Account\TransactionHistory\TransactionHistoryViewModel.cs" />
+    <Compile Include="AIInsights\AIInsightEventSourceViewModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AssGroupMonitorViewModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AssociatedAccountMonitorViewModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AssociatedGroupMonitorViewModel.cs" />

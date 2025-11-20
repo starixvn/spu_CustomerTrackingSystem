@@ -1,4 +1,4 @@
-@model string
+﻿@model Fanex.NAP.CTS.Model.AIInsights.AIInsightsFileUploadModel
 @{
     ViewBag.Title = "AI INSIGHTS";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -30,7 +30,7 @@
                                     <i class="icon-edit"></i>
                                 </label>
 
-                                <input type="file" id="fileInput" name="uploadFile" accept=".xls,.xlsx" />
+                                <input type="file" id="fileInput" name="uploadFile" accept="@Model.AllowedExtensions" />
                             </div>
                         }
 
@@ -85,6 +85,12 @@
 
         @Html.Partial("_ChatbotPartial")
     </section>
+
+    <div hidden>
+        <div id="divAIMaxFileSizeBytes">@Model.MaxFileSizeBytes</div>
+        <div id="divAIUploadMaxFileSizeMB">@Model.MaxFileSizeMB</div>
+        <div id="divAIAllowedExtensions">@Model.AllowedExtensions</div>
+    </div>
 </div>
 
 
@@ -92,7 +98,7 @@
     <script type="text/javascript">
         window.PlotlyConfig = { MathJaxConfig: "local" };
     </script>
-    <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>
+    <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.2.0.min.js"></script>
     @Scripts.Render("~/ai-insights-scripts")
 }
 

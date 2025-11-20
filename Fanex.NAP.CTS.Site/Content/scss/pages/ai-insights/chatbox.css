@@ -620,6 +620,11 @@
 .chatbot-panel .chatbot-body .chat-input button:hover {
   background: #1745bd;
 }
+.chatbot-panel .chatbot-body .chat-input button:disabled {
+  background-color: #ccc;
+  color: #888;
+  cursor: not-allowed;
+}
 
 .close-chatbot {
   position: fixed;

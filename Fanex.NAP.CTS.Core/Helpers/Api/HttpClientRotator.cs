@@ -1,60 +1,77 @@
 ﻿namespace Fanex.NAP.CTS.Core.Helpers.Api
 {
+    using Fanex.NAP.CTS.Core.Utilities;
     using System;
+    using System.Collections.Generic;
     using System.Net;
     using System.Net.Http;
 
     public static class HttpClientRotator
     {
-        private static readonly object _lock = new object();
-        private static HttpClient _activeClient;
-        private static HttpClient _standbyClient;
-        private static HttpClient _oldStandbyClient; // dispose this safely
-        private static DateTime _lastRotation = DateTime.UtcNow;
+        static HttpClientRotator()
+        {
+            // Global defaults
+            ServicePointManager.DefaultConnectionLimit = 500;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            ServicePointManager.Expect100Continue = false;
 
-        private static readonly TimeSpan RotationInterval = TimeSpan.FromMinutes(30);
+            _activeClients = HttpClientLoadBalance.CreateClientBatch();
+            _lastConfigHash = GetCurrentConfigHash();
+        }
+
+        private static readonly object _lock = new object();
+        private static List<HttpClient> _activeClients;
+        private static List<HttpClient> _standbyClients;
+        private static List<HttpClient> _oldStandbyClients;
+
+        private static DateTime _lastRotation = DateTime.UtcNow;
+        private static string _lastConfigHash = "";
 
         public static HttpClient GetClient()
         {
             lock (_lock)
             {
-                if (DateTime.UtcNow - _lastRotation > RotationInterval)
+                if (NeedRotation())
                 {
-                    // Dispose the oldest client (lived RotationInterval x2 minutes)
-                    _oldStandbyClient?.Dispose();
-
-                    // Promote standby → oldStandby
-                    _oldStandbyClient = _standbyClient;
-
-                    // Promote active → standby
-                    _standbyClient = _activeClient;
-
-                    // Create a new active client
-                    _activeClient = CreateHttpClient();
-
-                    _lastRotation = DateTime.UtcNow;
+                    RotateClients();
                 }
 
-                _activeClient = _activeClient ?? CreateHttpClient();
-
-                return _activeClient;
+                return HttpClientLoadBalance.GetClientFrom(_activeClients);
             }
         }
 
-        private static HttpClient CreateHttpClient()
+        private static bool NeedRotation()
         {
-            var client = new HttpClient()
-            {
-                Timeout = TimeSpan.FromHours(1.5) // 1.5 hours
-            };
+            if (DateTime.UtcNow - _lastRotation > GetRotationInterval())
+                return true;
 
-            // Global defaults
-            ServicePointManager.DefaultConnectionLimit = 500;
-            ServicePointManager.SecurityProtocol =
-                SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13; // if available
-            ServicePointManager.Expect100Continue = false;
+            var currentHash = GetCurrentConfigHash();
+            return currentHash != _lastConfigHash;
+        }
 
-            return client;
+        private static TimeSpan GetRotationInterval()
+        {
+            return TimeSpan.FromHours(ConfigSettings.AIInsightsHttpTimeoutHours / 3);
+        }
+
+        private static void RotateClients()
+        {
+            // Dispose the oldest
+            _oldStandbyClients?.ForEach(c => c.Dispose());
+
+            // Rotate generations
+            _oldStandbyClients = _standbyClients;
+            _standbyClients = _activeClients;
+            _activeClients = HttpClientLoadBalance.CreateClientBatch();
+
+            _lastRotation = DateTime.UtcNow;
+            _lastConfigHash = GetCurrentConfigHash();
+        }
+
+        private static string GetCurrentConfigHash()
+        {
+            var configString = $"{ConfigSettings.AIInsightsHttpTimeoutHours}|{ConfigSettings.AIInsightsHttpClientInstanceCount}";
+            return configString.GetHashCode().ToString();
         }
     }
 }

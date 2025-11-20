@@ -752,7 +752,9 @@
     <Content Include="Scripts\Account\BettingStatistic\winlost-statistic-scripts.js" />
     <Content Include="Scripts\Account\RobotBetting\robot-betting.js" />
     <Content Include="Scripts\Account\RobotClassification\robot-classification.js" />
+    <Content Include="Scripts\AIInsights\index.api.js" />
     <Content Include="Scripts\AIInsights\index.js" />
+    <Content Include="Scripts\AIInsights\index.variable.js" />
     <Content Include="Scripts\AssociatedAccountMonitor\index.js" />
     <Content Include="Scripts\AssociatedGroupMonitor\index.js" />
     <Content Include="Scripts\AssociatedGroupMonitor\transfer-account.js" />

@@ -134,7 +134,7 @@ namespace Fanex.NAP.CTS.Resource.Consts
         public const int MEMBER_PARENTID_PA = 20000;
         public const int MEMBER_PARENTID_POTENTIALPA = 30000;
         public const int MEMBER_PARENTID_NORMAL = 40000;
-        public const int AGENCY_PARENTID_VVIP = 101000; 
+        public const int AGENCY_PARENTID_VVIP = 101000;
         public const int AGENCY_PARENTID_PA = 120000;
         public const int AGENCY_PARENTID_NORMAL = 140000;
         public const int MEMBER_CATEID_VVIP = 1010;
@@ -154,7 +154,7 @@ namespace Fanex.NAP.CTS.Resource.Consts
         }
 
         public enum ROLE_CUSTOMER
-        {           
+        {
             MEMBER = 1,
             AGENT = 2,
             MASTER = 3,
@@ -238,7 +238,7 @@ namespace Fanex.NAP.CTS.Resource.Consts
             Badminton = 9,
             TableTennis = 18,
             ESport = 43,
-            Cricket = 50           
+            Cricket = 50
         }
 
         public enum MatchMonitorReason
@@ -311,7 +311,7 @@ namespace Fanex.NAP.CTS.Resource.Consts
             RemoveLicVIP_API = 47,
             AddLicBA_API = 48,
             RemoveLicBA_API = 49,
-            RemoveLicBABySite_API = 50,            
+            RemoveLicBABySite_API = 50,
             DangerousScoreClassification = 102,
             TWInitialGBClassification = 103,
             TWInitialSmartClassification = 104
@@ -321,7 +321,7 @@ namespace Fanex.NAP.CTS.Resource.Consts
         {
             InsertNewCustJob = 4,
             Manual = 5,
-        };       
+        };
 
         public enum RescanNormalType
         {
@@ -343,13 +343,16 @@ namespace Fanex.NAP.CTS.Resource.Consts
 
         public enum HttpStatus
         {
+            OK = 200,
+            Created = 201,
             Unauthorized = 401,
             BadRequest = 400,
             NotFound = 404,
             MethodNotAllowed = 405,
             Unprocessable = 422,
-            OK = 200,
-            Created = 201,
+            HttpNetworkClose = 440,
+            InvalidData = 441,
+            AIServiceError = 450,
             ServerUnavailable = 503,
             InternalServerError = 500
         };
@@ -358,7 +361,7 @@ namespace Fanex.NAP.CTS.Resource.Consts
         {
             CTSWEB = 1,
             CTSAPI = 2,
-            CTSServices = 3,          
+            CTSServices = 3,
             ManualTrigger = 4
         };
 
@@ -648,7 +651,7 @@ namespace Fanex.NAP.CTS.Resource.Consts
             (int) MatchMonitorSportType.Volleyball,
             (int) MatchMonitorSportType.Tennis,
             (int) MatchMonitorSportType.Cricket
-        };        
+        };
 
         public static readonly HashSet<int> CricketRunsXBetTypeIds = new HashSet<int> { 9608, 9607 };
         public static readonly HashSet<int> CricketRuns1XBetTypeIds = new HashSet<int> { 9411, 9410 };
@@ -664,7 +667,7 @@ namespace Fanex.NAP.CTS.Resource.Consts
             (int) MatchMonitorSportType.Cricket,
             (int) MatchMonitorSportType.Badminton
         };
-      
+
         public static readonly HashSet<int> CricketBetTypesWithoutBetIdPattern = new HashSet<int>
         {
             (int)MatchMonitorBetType.MatchWinner,
@@ -682,8 +685,9 @@ namespace Fanex.NAP.CTS.Resource.Consts
 
         public static readonly HashSet<string> AIInsightFileSupportExtensions = new HashSet<string>
         {
+            ".csv",
             ".xls",
-            ".xlsx"
+            ".xlsx",
         };
     }
 }
