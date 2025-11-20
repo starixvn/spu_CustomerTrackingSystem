@@ -76,7 +76,7 @@ function AIInsights() {
         variable.domElements.closeChatbot.on('click', ToggleChatbot);
         variable.domElements.btnGenerate.on('click', AnalyzeFile);
         variable.domElements.fileTitle.on('click', SaveLog);
-        variable.domElements.fileNameLabel.on('click', ExportExcelConvertCsv);
+        // variable.domElements.fileNameLabel.on('click', ExportExcelConvertCsv);
     }
 
     // Chatbot Management
