@@ -342,6 +342,16 @@
                 return timeout;
             }
         }
+
+        public static int AITimeOutGlobal
+        {
+            get
+            {
+                var chatbotRequestTimeout = ConfigurationManager.AppSettings["AITimeOutGlobal"];
+                var timeout = int.TryParse(chatbotRequestTimeout, out var parsed) ? parsed : 10;
+                return timeout;
+            }
+        }
         #endregion
     }
 }

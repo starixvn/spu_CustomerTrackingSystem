@@ -5,9 +5,12 @@ function AIInsights() {
 
         BlockedLibraryPlotly();
         AttachEventListeners();
-        UpdateFileNameFromServer();
-        AnalyzeFile();
-        LoadHistoryChatMessage();
+
+        RunWithGlobalTimeout([
+            UpdateFileNameFromServer,
+            AnalyzeFile,
+            LoadHistoryChatMessage
+        ], variable.CONFIG.TIME_OUT_GLOBAL_SECONDS);
     }
 
     // DOM Management
@@ -72,10 +75,21 @@ function AIInsights() {
         ToggleSections(variable.ViewMode.VISUALIZATION);
 
         // Button event handlers
-        variable.domElements.chatbotToggle.on('click', ToggleChatbot);
-        variable.domElements.closeChatbot.on('click', ToggleChatbot);
-        variable.domElements.btnGenerate.on('click', AnalyzeFile);
-        variable.domElements.fileTitle.on('click', SaveLog);
+        variable.domElements.chatbotToggle.on('click', function () {
+            RunWithGlobalTimeout([ToggleChatbot], variable.CONFIG.TIME_OUT_GLOBAL_SECONDS);
+        });
+
+        variable.domElements.closeChatbot.on('click', function () {
+            RunWithGlobalTimeout([ToggleChatbot], variable.CONFIG.TIME_OUT_GLOBAL_SECONDS);
+        });
+
+        variable.domElements.btnGenerate.on('click', function () {
+            RunWithGlobalTimeout([AnalyzeFile], variable.CONFIG.TIME_OUT_GLOBAL_SECONDS);
+        });
+
+        variable.domElements.fileTitle.on('click', function () {
+            RunWithGlobalTimeout([SaveLog], variable.CONFIG.TIME_OUT_GLOBAL_SECONDS);
+        });
         // variable.domElements.fileNameLabel.on('click', ExportExcelConvertCsv);
     }
 
@@ -130,7 +144,7 @@ function AIInsights() {
             return;
         }
 
-        UploadFile(file);
+        RunWithGlobalTimeout([() => UploadFile(file)], variable.CONFIG.TIME_OUT_GLOBAL_SECONDS);
     }
 
     function ValidateFile(file) {
@@ -160,7 +174,7 @@ function AIInsights() {
     }
 
     function UploadFile(file) {
-        api.UploadFile(file,
+        return api.UploadFile(file,
             {
                 onStart: onStart,
                 onSuccess: (res, fileName) => onSuccess(res, fileName),
@@ -192,7 +206,9 @@ function AIInsights() {
             common.closeLoading();
 
             variable.domElements.fileNameLabel.text(variable.CONFIG.NO_FILE_UPLOADED);
-            common.showError("Upload failed " + msg);
+            if (!variable.globalTimeoutReached) {
+                common.showError("Upload failed " + msg);
+            }
         }
 
         function CleanUploadedFileInput() {
@@ -206,7 +222,7 @@ function AIInsights() {
     }
 
     // Analysis Functions
-    function AnalyzeFile() {
+    async function AnalyzeFile() {
         const fileName = variable.domElements.fileNameLabel.text().trim();
 
         if (fileName === variable.CONFIG.NO_FILE_UPLOADED || fileName === '') {
@@ -217,14 +233,18 @@ function AIInsights() {
         ShowAnalysisLoading();
         if (typeof SkipReCheckin === "function") SkipReCheckin();
 
-        AnalyzeSummary()
-            .done(function () {
-                AnalyzeChartsGetSSEId()
-                    .done(function () {
-                        AnalyzeChartsSSEConnection();
-                    });
-                if (typeof EnableReCheckin === "function") EnableReCheckin();
-            });
+        try {
+            await AnalyzeSummary();
+            await AnalyzeChartsGetSSEId();
+            await AnalyzeChartsSSEConnection();
+            if (typeof EnableReCheckin === "function") EnableReCheckin();
+        } catch (err) {
+            console.error(err);
+            if (!variable.globalTimeoutReached) {
+                common.showError("Analysis failed");
+            }
+            if (typeof EnableReCheckin === "function") EnableReCheckin();
+        }
     }
 
     function AnalyzeSummary() {
@@ -257,13 +277,15 @@ function AIInsights() {
         function onError(msg) {
             common.closeLoading();
             variable.domElements.headerSummarySection.removeClass('loading');
+            variable.domElements.headerChartSection.removeClass('loading');
             variable.domElements.btnGenerate.prop('disabled', false);
             variable.domElements.sendButton.prop('disabled', false);
             if (typeof EnableReCheckin === "function") EnableReCheckin();
 
-            common.showError('Sorry Analyze Summary failed: ' + msg);
+            if (!variable.globalTimeoutReached) {
+                common.showError('Sorry Analyze Summary failed: ' + msg);
+            }
         }
-
     }
 
     function ShowAnalysisLoading() {
@@ -293,79 +315,95 @@ function AIInsights() {
             variable.domElements.sendButton.prop('disabled', false);
             if (typeof EnableReCheckin === "function") EnableReCheckin();
 
-            common.showError('Sorry Analyze Chart failed: ' + msg);
+            if (!variable.globalTimeoutReached) {
+                common.showError('Sorry Analyze Chart failed: ' + msg);
+            }
         }
     }
 
     // Server-Sent Events AnalyzeCharts
     function AnalyzeChartsSSEConnection() {
-        api.AnalyzeChartsSSEConnection(
-            {
-                onMessage: HandleEventSourceMessage,
-                onError: OnError,
-                retries: variable.CONFIG.RETRY_TIME,
-                delay: variable.CONFIG.RETRY_DELAY_IN_SECONDS
+        return new Promise((resolve, reject) => {
+            api.AnalyzeChartsSSEConnection(
+                {
+                    onMessage: HandleEventSourceMessage,
+                    onError: OnError,
+                    retries: variable.CONFIG.RETRY_TIME,
+                    delay: variable.CONFIG.RETRY_DELAY_IN_SECONDS
+                }
+            )
+
+            function OnError() {
+                variable.domElements.headerChartSection.removeClass('loading');
+                variable.domElements.btnGenerate.prop('disabled', false);
+                variable.domElements.sendButton.prop('disabled', false);
+                console.log("✅ Connection closed by error");
+
+                if (!variable.globalTimeoutReached) {
+                    common.showError('Sorry Analyze Chart failed: Please try analysis again.');
+                }
+
+                reject("OnError called");
             }
-        )
 
-        function OnError() {
-            variable.domElements.headerChartSection.removeClass('loading');
-            variable.domElements.btnGenerate.prop('disabled', false);
-            variable.domElements.sendButton.prop('disabled', false);
-            console.log("✅ Connection closed by error");
+            function HandleEventSourceMessage(e) {
+                try {
+                    const response = JSON.parse(e.data);
+                    // console.log("Realtime data:", response);
+                    ProcessEventResponse(response);
+                } catch (error) {
+                    console.error("Error parsing SSE message:", error);
+                    if (!variable.globalTimeoutReached) {
+                        common.showError('Sorry Analyze Chart failed: Please try analysis again.');
+                    }
 
-            common.showError('Sorry Analyze Chart failed: Please try analysis again.');
-        }
-
-        function HandleEventSourceMessage(e) {
-            try {
-                const response = JSON.parse(e.data);
-                // console.log("Realtime data:", response);
-                ProcessEventResponse(response);
-            } catch (error) {
-                console.error("Error parsing SSE message:", error);
+                    variable.StopEventSource();
+                    reject("HandleEventSourceMessage called");
+                }
             }
-        }
 
-        function ProcessEventResponse(response) {
-            switch (response.EventName) {
-                case variable.AIInsightEventName.AnalyzeCharts:
-                    HandleAnalyzeChartsEvent(response);
-                    break;
+            function ProcessEventResponse(response) {
+                switch (response.EventName) {
+                    case variable.AIInsightEventName.AnalyzeCharts:
+                        HandleAnalyzeChartsEvent(response);
+                        break;
+                }
             }
-        }
 
-        function HandleAnalyzeChartsEvent(response) {
-            switch (response.EventStatus) {
-                case variable.AIInsightEventStatus.Started:
-                    // console.log("Analyze Charts started");
-                    break;
-                case variable.AIInsightEventStatus.Processing:
-                    HandleChartsProcessing(response.Data);
-                    break;
-                case variable.AIInsightEventStatus.Completed:
-                    // console.log("Analyze Charts completed");
-                    variable.domElements.headerChartSection.removeClass('loading');
-                    variable.domElements.btnGenerate.prop('disabled', false);
-                    variable.domElements.sendButton.prop('disabled', false);
-                    api.StopEventSource();
-                    break;
-                case variable.AIInsightEventStatus.Failed:
-                    // common.showError('Sorry Analyze Charts failed: ');
-                    variable.domElements.headerChartSection.removeClass('loading');
-                    variable.domElements.btnGenerate.prop('disabled', false);
-                    variable.domElements.sendButton.prop('disabled', false);
-                    api.StopEventSource();
-                    break;
+            function HandleAnalyzeChartsEvent(response) {
+                switch (response.EventStatus) {
+                    case variable.AIInsightEventStatus.Started:
+                        // console.log("Analyze Charts started");
+                        break;
+                    case variable.AIInsightEventStatus.Processing:
+                        HandleChartsProcessing(response.Data);
+                        break;
+                    case variable.AIInsightEventStatus.Completed:
+                        // console.log("Analyze Charts completed");
+                        variable.domElements.headerChartSection.removeClass('loading');
+                        variable.domElements.btnGenerate.prop('disabled', false);
+                        variable.domElements.sendButton.prop('disabled', false);
+                        api.StopEventSource();
+                        resolve("HandleAnalyzeChartsEvent completed");
+                        break;
+                    case variable.AIInsightEventStatus.Failed:
+                        // common.showError('Sorry Analyze Charts failed: ');
+                        variable.domElements.headerChartSection.removeClass('loading');
+                        variable.domElements.btnGenerate.prop('disabled', false);
+                        variable.domElements.sendButton.prop('disabled', false);
+                        api.StopEventSource();
+                        reject("HandleAnalyzeChartsEvent failed");
+                        break;
+                }
             }
-        }
 
-        function HandleChartsProcessing(chart) {
-            // console.log("Analyze Charts processing");
-            const $chartSection = variable.domElements.chartSection;
-            const $card = CreateChartCard(chart);
-            $chartSection.append($card);
-        }
+            function HandleChartsProcessing(chart) {
+                // console.log("Analyze Charts processing");
+                const $chartSection = variable.domElements.chartSection;
+                const $card = CreateChartCard(chart);
+                $chartSection.append($card);
+            }
+        });
     }
 
     // Rendering Functions
@@ -502,15 +540,13 @@ function AIInsights() {
 
     // Chatbot Functions
     function LoadHistoryChatMessage() {
-        $.ajax(common.modifyRelativeUrl('AIInsights/LoadHistoryChatMessage'), {
-            type: 'POST',
-            headers: { "X-Tab-Id": common.getTabId() },
-            success: (response) => {
+        return api.LoadHistoryChatMessage({
+            onSuccess: (response) => {
                 if (response) {
                     RenderChatHistory(response);
                 }
             },
-            error: (errMsg) => console.log(errMsg)
+            onError: (errMsg) => console.log(errMsg)
         });
     }
 
@@ -549,15 +585,37 @@ function AIInsights() {
         ClearChatInput();
         ShowLoadingMessage();
 
-        $.ajax(common.modifyRelativeUrl('AIInsights/AskChatbot'), {
-            type: 'POST',
-            headers: { "X-Tab-Id": common.getTabId() },
-            data: { question: message },
-            beforeSend: () => { if (typeof SkipReCheckin === "function") SkipReCheckin(); },
-            success: (response) => HandleChatbotResponse(response),
-            complete: () => { if (typeof EnableReCheckin === "function") EnableReCheckin(); },
-            error: (xhr, status, error) => HandleChatbotError()
-        });
+        return api.AskChatBot(
+            {
+                data: { question: message },
+                onStart: () => { if (typeof SkipReCheckin === "function") SkipReCheckin(); },
+                onSuccess: (response) => HandleChatbotResponse(response),
+                onComplete: () => { if (typeof EnableReCheckin === "function") EnableReCheckin(); },
+                onError: () => HandleChatbotError()
+            });
+
+        function HandleChatbotResponse(response) {
+            variable.dataLogSentry.askChatBot = response;
+            $('.loading-message').remove();
+
+            const answer = response?.answer || 'No response from bot.';
+            const $botMessage = CreateChatMessage('bot', answer);
+
+            variable.domElements.chatMessages.append($botMessage);
+            ScrollToBottomChat();
+
+            if (response.chart_infos) {
+                RenderVisualizationChart(response.chart_infos);
+            }
+        }
+
+        function HandleChatbotError() {
+            $('.loading-message').remove();
+
+            const $errorMessage = CreateChatMessage('bot', 'Oops! Something went wrong.');
+            variable.domElements.chatMessages.append($errorMessage);
+            ScrollToBottomChat();
+        }
     }
 
     function AddUserMessage(message) {
@@ -595,37 +653,16 @@ function AIInsights() {
         `).find('.message-text').append($loadingDots).end();
     }
 
-    function HandleChatbotResponse(response) {
-        variable.dataLogSentry.askChatBot = response;
-        $('.loading-message').remove();
-
-        const answer = response?.answer || 'No response from bot.';
-        const $botMessage = CreateChatMessage('bot', answer);
-
-        variable.domElements.chatMessages.append($botMessage);
-        ScrollToBottomChat();
-
-        if (response.chart_infos) {
-            RenderVisualizationChart(response.chart_infos);
-        }
-    }
-
-    function HandleChatbotError() {
-        $('.loading-message').remove();
-
-        const $errorMessage = CreateChatMessage('bot', 'Oops! Something went wrong.');
-        variable.domElements.chatMessages.append($errorMessage);
-        ScrollToBottomChat();
-    }
-
     function AttachChatbotEvents() {
-        variable.domElements.sendButton.on('click', SendChatMessage);
+        variable.domElements.sendButton.on('click', function () {
+            RunWithGlobalTimeout([SendChatMessage], variable.CONFIG.TIME_OUT_GLOBAL_SECONDS);
+        });
 
         variable.domElements.chatInput.on('keypress', function (e) {
             if (e.which === 13 && !e.shiftKey) {
                 e.preventDefault();
                 if (variable.domElements.sendButton.prop('disabled') === false) {
-                    SendChatMessage();
+                    RunWithGlobalTimeout([SendChatMessage], variable.CONFIG.TIME_OUT_GLOBAL_SECONDS);
                 }
             }
         });
@@ -735,11 +772,8 @@ function AIInsights() {
     }
 
     function UpdateFileNameFromServer() {
-        $.ajax(common.modifyRelativeUrl('AIInsights/GetFileName'), {
-            type: 'GET',
-            async: false,
-            headers: { "X-Tab-Id": common.getTabId() },
-            success: (response) => {
+        return api.GetFileName({
+            onSuccess: (response) => {
                 if (response) {
                     variable.domElements.fileNameLabel.text(response);
                 }
@@ -837,6 +871,31 @@ function AIInsights() {
             }
             return el;
         };
+    }
+
+    function RunWithGlobalTimeout(funcs = [], timeoutSeconds = 600) {
+        api.StartGlobalTimeout(timeoutSeconds, () => {
+            common.showError('Timeout reached. Please try again later.');
+
+            common.closeLoading();
+            variable.domElements.headerChartSection.removeClass('loading');
+            variable.domElements.headerSummarySection.removeClass('loading');
+            variable.domElements.btnGenerate.prop('disabled', false);
+            variable.domElements.sendButton.prop('disabled', false);
+        });
+
+        const promises = funcs.map(fn => {
+            try {
+                return fn();
+            } catch (err) {
+                return $.Deferred().reject(err).promise();
+            }
+        });
+
+        return $.when.apply($, promises)
+            .always(() => {
+                api.StopGlobalTimeout();
+            });
     }
 
     // Initialize the application

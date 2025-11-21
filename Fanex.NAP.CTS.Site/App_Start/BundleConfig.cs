@@ -89,6 +89,7 @@
         private static void RegisterAIInsightsBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/ai-insights-scripts").Include(
+                "~/Scripts/Plotly/plotly-3.2.0.min.js",
                 "~/Scripts/AIInsights/index.variable.js",
                 "~/Scripts/AIInsights/index.api.js",
                 "~/Scripts/AIInsights/index.js"));

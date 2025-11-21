@@ -10,6 +10,7 @@
         const maxFileSizeBytes = parseInt($('#divAIMaxFileSizeBytes').text()) || 50 * 1024 * 1024; // Default to 50MB
         const maxFileSizeMB = parseInt($('#divAIUploadMaxFileSizeMB').text()) || 50; // Default to 50MB
         const allowedFileExtensions = $('#divAIAllowedExtensions').text() || '.xls,.xlsx,.csv';
+        const timeoutGlobal = parseInt($('#divAITimeOutGlobal').text()) || 10;
         const exts = allowedFileExtensions.replace(/\./g, '').replace(/,/g, '|');
         const supportedFileExtensions = new RegExp(`\\.(${exts})$`, 'i');
 
@@ -22,7 +23,8 @@
             CHART_RESIZE_DELAY: 300,
             MAX_CHAT_HEIGHT_RATIO: 3,
             RETRY_TIME: 2,
-            RETRY_DELAY_IN_SECONDS: 5
+            RETRY_DELAY_IN_SECONDS: 5,
+            TIME_OUT_GLOBAL_SECONDS: timeoutGlobal,
         };
     })();
 
@@ -82,6 +84,7 @@
     this.$contentWrapper = null;
     this.streamToken = null;
     this.evtSource = null;
+    this.globalTimeoutReached = false;
 }
 
 var variable = new AIInsightsVariable();

@@ -90,15 +90,12 @@
         <div id="divAIMaxFileSizeBytes">@Model.MaxFileSizeBytes</div>
         <div id="divAIUploadMaxFileSizeMB">@Model.MaxFileSizeMB</div>
         <div id="divAIAllowedExtensions">@Model.AllowedExtensions</div>
+        <div id="divAITimeOutGlobal">@Model.AITimeOutGlobal</div>
     </div>
 </div>
 
 
 @section scripts {
-    <script type="text/javascript">
-        window.PlotlyConfig = { MathJaxConfig: "local" };
-    </script>
-    <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.2.0.min.js"></script>
     @Scripts.Render("~/ai-insights-scripts")
 }
 

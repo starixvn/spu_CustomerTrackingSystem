@@ -1129,6 +1129,7 @@
     <Content Include="Scripts\MonthPicker.js" />
     <Content Include="Scripts\MonthPicker.min.js" />
     <Content Include="Scripts\NotificationSetting\notification-setting.js" />
+    <Content Include="Scripts\Plotly\plotly-3.2.0.min.js" />
     <Content Include="Scripts\popoto\d3.min.js" />
     <Content Include="Scripts\popoto\d3.v3.min.js" />
     <Content Include="Scripts\popoto\popoto.min.js" />

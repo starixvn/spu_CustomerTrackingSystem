@@ -11,5 +11,7 @@ namespace Fanex.NAP.CTS.Model.AIInsights
         public int MaxFileSizeMB => ConfigSettings.AIUploadMaxFileSizeMB;
 
         public string AllowedExtensions => ConfigSettings.AIUploadSupportExtension;
+
+        public int AITimeOutGlobal => ConfigSettings.AITimeOutGlobal;
     }
 }

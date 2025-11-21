@@ -1,4 +1,8 @@
 ﻿function AIInsightsAPI() {
+    let idleTimer;
+    let activeRequests = [];
+    let globalTimeoutId = null;
+
     this.UploadFile = function (file, {
         onStart,
         onSuccess,
@@ -25,8 +29,13 @@
             }
         });
 
-        return RetryOnNetworkClose(doRequest, variable.CONFIG.RETRY_TIME, variable.CONFIG.RETRY_DELAY_IN_SECONDS * 1000, onError)
-            .done(response => onSuccess?.(response, fileName))
+        return RetryOnNetworkClose(
+            doRequest,
+            variable.CONFIG.RETRY_TIME,
+            variable.CONFIG.RETRY_DELAY_IN_SECONDS * 1000,
+            onError
+        )
+            .done(response => onSuccess?.(response, file.name))
             .fail(response => onError?.(response?.message ?? "Upload failed."))
             .always(onComplete);
     }
@@ -49,7 +58,12 @@
             }
         });
 
-        return RetryOnNetworkClose(doRequest, variable.CONFIG.RETRY_TIME, variable.CONFIG.RETRY_DELAY_IN_SECONDS * 1000, onError)
+        return RetryOnNetworkClose(
+            doRequest,
+            variable.CONFIG.RETRY_TIME,
+            variable.CONFIG.RETRY_DELAY_IN_SECONDS * 1000,
+            onError
+        )
             .done(response => onSuccess?.(response))
             .fail(response => onError?.(response?.message ?? "AnalyzeSummary failed."))
             .always(onComplete);
@@ -67,7 +81,12 @@
             beforeSend: onStart
         });
 
-        return RetryOnNetworkClose(doRequest, variable.CONFIG.RETRY_TIME, variable.CONFIG.RETRY_DELAY_IN_SECONDS * 1000, onError)
+        return RetryOnNetworkClose(
+            doRequest,
+            variable.CONFIG.RETRY_TIME,
+            variable.CONFIG.RETRY_DELAY_IN_SECONDS * 1000,
+            onError
+        )
             .done(response => {
                 onSuccess?.(response);
             })
@@ -78,7 +97,54 @@
             .always(onComplete);
     };
 
-    let idleTimer;
+    this.AskChatBot = function ({
+        data,
+        onStart,
+        onSuccess,
+        onComplete,
+        onError
+    } = {}) {
+        const doRequest = () => $.ajax(common.modifyRelativeUrl('AIInsights/AskChatbot'), {
+            type: 'POST',
+            headers: { "X-Tab-Id": common.getTabId() },
+            data: data,
+            beforeSend: onStart,
+            success: (response) => onSuccess?.(response),
+            complete: onComplete,
+            error: onError
+        });
+
+        return WrapAjaxWithGlobalTimeout(doRequest());
+    };
+
+    this.LoadHistoryChatMessage = function ({
+        onSuccess,
+        onError
+    } = {}) {
+        const doRequest = () => $.ajax(common.modifyRelativeUrl('AIInsights/LoadHistoryChatMessage'), {
+            type: 'POST',
+            headers: { "X-Tab-Id": common.getTabId() },
+            success: (response) => onSuccess?.(response),
+            error: (errMsg) => onError?.(errMsg)
+        });
+
+        return WrapAjaxWithGlobalTimeout(doRequest());
+    }
+
+    this.GetFileName = function ({
+        onSuccess
+    } = {}) {
+        const doRequest = () =>
+            $.ajax(common.modifyRelativeUrl('AIInsights/GetFileName'), {
+                type: 'GET',
+                async: false,
+                headers: { "X-Tab-Id": common.getTabId() },
+                success: (response) => onSuccess?.(response)
+            });
+
+        return WrapAjaxWithGlobalTimeout(doRequest());
+    }
+
     this.AnalyzeChartsSSEConnection = function ({
         onMessage,
         onError,
@@ -163,31 +229,80 @@
      */
     function RetryOnNetworkClose(ajaxFn, retries, delay, onError) {
         const deferred = $.Deferred();
+        let currentRequest = null;
 
         function attempt(remaining) {
-            ajaxFn()
-                .done(response => {
-                    if (response?.statuscode === variable.AIHttpStatusCode.Success) {
-                        deferred.resolve(response);
-                    }
-                    else if (response?.statuscode === variable.AIHttpStatusCode.HttpNetworkClose && remaining > 0) {
-                        console.warn(`⚠️ Network closed, retrying... (${retries - remaining + 1}/${retries})`);
-                        setTimeout(() => attempt(remaining - 1), delay);
-                    }
-                    else {
-                        deferred.reject(response);
-                    }
-                })
-                .fail(xhr => {
-                    console.error("AJAX failed:", xhr);
-                    const msg = xhr?.responseJSON?.message ?? "Network or server error.";
-                    onError?.(msg);
-                    deferred.reject(xhr);
-                });
+            currentRequest = ajaxFn();
+
+            WrapAjaxWithGlobalTimeout(
+                currentRequest
+                    .done(response => {
+                        if (response?.statuscode === variable.AIHttpStatusCode.Success) {
+                            deferred.resolve(response);
+                        }
+                        else if (response?.statuscode === variable.AIHttpStatusCode.HttpNetworkClose && remaining > 0) {
+                            console.warn(`⚠️ Network closed, retrying... (${retries - remaining + 1}/${retries})`);
+                            setTimeout(() => attempt(remaining - 1), delay);
+                        }
+                        else {
+                            deferred.reject(response);
+                        }
+                    })
+                    .fail(xhr => {
+                        console.error("AJAX failed:", xhr);
+                        const msg = xhr?.responseJSON?.message ?? "Network or server error.";
+                        onError?.(msg);
+                        deferred.reject(xhr);
+                    }));
         }
 
         attempt(retries);
         return deferred.promise();
+    }
+
+    this.StartGlobalTimeout = function (seconds = 600, onTimeout) {
+        this.StopGlobalTimeout(); // cancel previous timer if running
+        variable.globalTimeoutReached = false;
+
+        globalTimeoutId = setTimeout(() => {
+            variable.globalTimeoutReached = true;
+            console.warn(`⛔ Global timeout reached (${seconds} seconds)!`);
+
+            // Stop all active requests
+            activeRequests.forEach(jqXHR => {
+                if (jqXHR && jqXHR.readyState !== 4) { // readyState 4 = done
+                    jqXHR.abort();
+                }
+            });
+            activeRequests = [];
+            // Stop SSE connection
+            this.StopEventSource();
+
+            if (typeof onTimeout === "function") onTimeout();
+        }, seconds * 1000);
+    };
+
+    this.StopGlobalTimeout = function () {
+        if (globalTimeoutId) {
+            clearTimeout(globalTimeoutId);
+            globalTimeoutId = null;
+        }
+        variable.globalTimeoutReached = false;
+
+        // Stop SSE connection if manually stopping timeout
+        this.StopEventSource();
+    };
+
+    function WrapAjaxWithGlobalTimeout(jqXHR) {
+        activeRequests.push(jqXHR);
+
+        // when request completes, remove it from activeRequests
+        jqXHR.always(() => {
+            const index = activeRequests.indexOf(jqXHR);
+            if (index > -1) activeRequests.splice(index, 1);
+        });
+
+        return jqXHR;
     }
 }
 
