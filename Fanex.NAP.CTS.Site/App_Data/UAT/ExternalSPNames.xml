@@ -37,14 +37,15 @@
 
 	<Function name="CustomerProfile">
 		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList_xtest" DbName="DBCTS.WASAVerse.wsv_cts" />
-		<Setting Key="CTS_Rpt_BettingPattern_MatchInfo" SpName="CTS_Rpt_BettingPattern_MatchInfo" DbName="DBCTS.bodb02.wsv_cts" />
+		<Setting Key="CTS_Rpt_BettingPattern_MatchInfo" SpName="CTS_Rpt_BettingPattern_MatchInfo_xtest" DbName="DBCTS.bodb02.wsv_cts" />
 		<Setting Key="CTS_Rpt_BettingPattern_TicketDetails" SpName="CTS_Rpt_BettingPattern_TicketDetails_xtest" DbName="DBCTS.WASAVerse.wsv_cts" TimeOut="300"/>
 		<Setting Key="CTS_TicketDetails_Get" SpName="CTS_TicketDetails_Get_xtest" DbName="DBCTS.WASAVerse.wsv_cts" />
 	</Function>
 	
 	<Function Name="DailyProblemClassification">
-		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily" DbName="DBVR2.bodb_VR2Model.wsv_cts" TimeOut="300" />
-    <Setting Key="CTS_ProblemAccountsClassificationAgency_Daily" SpName="CTS_ProblemAccountsClassificationAgency_Daily_xtest" DbName="DBVR2.bodb_VR2Model.wsv_cts" />
+		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily_xtest" DbName="DBVR2.bodb_VR2Model.wsv_cts" TimeOut="300" />
+		<Setting Key="CTS_ProblemAccountsClassification_BySport_Daily" SpName="CTS_ProblemAccountsClassification_BySport_Daily_xtest" DbName="DBVR2.bodb_VR2Model.wsv_cts" TimeOut="1200" />
+		<Setting Key="CTS_ProblemAccountsClassificationAgency_Daily" SpName="CTS_ProblemAccountsClassificationAgency_Daily_xtest" DbName="DBVR2.bodb_VR2Model.wsv_cts" />
 	</Function>
 
 	<Function Name="AssociationDetection">

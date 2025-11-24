@@ -189,6 +189,19 @@
             }
         }
 
+        public static int PushCCToExternalRetryTime
+        {
+            get
+            {
+                var size = 3;
+                var configSize = GetConfigStringByName("PushCCToExternal-RetryTime");
+
+                int.TryParse(configSize, out size);
+
+                return size == 0 ? 3 : size;
+            }
+        }
+
         public static int InternalChunkSize
         {
             get

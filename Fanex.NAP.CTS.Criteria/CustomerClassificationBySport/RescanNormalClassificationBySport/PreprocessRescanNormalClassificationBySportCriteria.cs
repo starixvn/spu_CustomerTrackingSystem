@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Criteria.CustomerClassification.RescanNormalClassificationBySport
+﻿namespace Fanex.NAP.CTS.Criteria.CustomerClassificationBySport.RescanNormalClassificationBySport
 {
     using Fanex.Data;
     using Fanex.Data.Repository;

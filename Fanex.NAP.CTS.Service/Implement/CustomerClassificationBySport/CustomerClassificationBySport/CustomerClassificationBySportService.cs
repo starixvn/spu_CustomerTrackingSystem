@@ -1,17 +1,17 @@
-﻿namespace Fanex.NAP.CTS.Service.Implement.CustomerClassification
+﻿namespace Fanex.NAP.CTS.Service.Implement.CustomerClassificationBySport
 {
-    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
+    using Fanex.NAP.CTS.Core.Service;
     using Fanex.NAP.CTS.Criteria.CustomerClassification.PushDataToExternal.CustClassificationToMainDB;
-    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassification.PushDataToExternal;
-    using Fanex.NAP.CTS.Service.Interface.CustomerClassification;
+    using Fanex.NAP.CTS.Model.CustomerClassificationBySport;
+    using Fanex.NAP.CTS.Service.Interface.CustomerClassificationBySport;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Fanex.NAP.CTS.Core.Service;
 
     public class CustomerClassificationBySportService : ICustomerClassificationBySportService
     {
@@ -22,7 +22,7 @@
             _repository = new CriteriaService();
         }
 
-        public bool PushCCBySportToMainDB(IEnumerable<InsertNormalAccountCustInfoModel> custInfos, int batchExternalSize)
+        public bool PushCCBySportToMainDB(IEnumerable<BaseCustomerInfoBySportModel> custInfos, int batchExternalSize, int retryTime)
         {
             var custInfoChunks = custInfos.Chunk(batchExternalSize).ToList();
 
@@ -31,7 +31,7 @@
                 var ccBySports = GetCustomerClassificationBySports(custs);
 
                 // Constants.InternalRetry 3
-                var isSuccess = RetryPushCustClassificationBySportToMainDB(ccBySports, 3);
+                var isSuccess = RetryPushCustClassificationBySportToMainDB(ccBySports, retryTime);
 
                 if (!isSuccess)
                 {
@@ -42,7 +42,7 @@
             return true;
         }
 
-        public IEnumerable<GetCustomerClassificationBySportModel> GetCustomerClassificationBySports(IEnumerable<InsertNormalAccountCustInfoModel> custInfos)
+        public IEnumerable<GetCustomerClassificationBySportModel> GetCustomerClassificationBySports(IEnumerable<BaseCustomerInfoBySportModel> custInfos)
         {
             if (custInfos != null && custInfos.Any())
             {
@@ -53,7 +53,7 @@
         }
 
         #region private
-        private IEnumerable<GetCustomerClassificationBySportModel> GetCustomerClassificationBySportsDataAccess(IEnumerable<InsertNormalAccountCustInfoModel> custInfos)
+        private IEnumerable<GetCustomerClassificationBySportModel> GetCustomerClassificationBySportsDataAccess(IEnumerable<BaseCustomerInfoBySportModel> custInfos)
         {
             var criteria = new GetCustomerClassificationBySportCriteria
             {

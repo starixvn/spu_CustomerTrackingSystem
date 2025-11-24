@@ -1,9 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Model.CustomerClassification
 {
-    public class InsertNormalAccountCustInfoModel
-    {
-        public long CustID { get; set; }
+    using Fanex.NAP.CTS.Model.CustomerClassificationBySport;
 
-        public int SportGroup { get; set; }
+    public class InsertNormalAccountCustInfoModel : BaseCustomerInfoBySportModel
+    {
     }
 }

@@ -147,7 +147,7 @@ namespace Fanex.NAP.CTS.Model
     {
         Insert = 1,
         Remove = 2
-    }   
+    }
 
     public enum DetectAssociation_QueryType
     {
@@ -283,13 +283,13 @@ namespace Fanex.NAP.CTS.Model
         [Description("InsertPACategory")]
         InsertPACategory = 5,
         [Description("InsertPAReason")]
-        InsertPAReason = 6,      
+        InsertPAReason = 6,
         [Description("Potential")]
         Potential = 8,
         [Description("Normal")]
         Normal = 9,
         [Description("RescanPACategory")]
-        RescanPACategory = 115,       
+        RescanPACategory = 115,
         [Description("RescanPotential")]
         RescanPotential = 118,
         [Description("RescanNormal")]
@@ -306,8 +306,12 @@ namespace Fanex.NAP.CTS.Model
         RemovePACategory = 225,
         [Description("BySportInsertSpecialCC")]
         BySportInsertSpecialCC = 332,
+        [Description("BySportInsertPA")]
+        BySportInsertPA = 335,
         [Description("BySportInsertNormal")]
         BySportInsertNormal = 339,
+        [Description("BySportRescanPACategory")]
+        BySportRescanPACategory = 375,
         [Description("BySportRemoveSpecialCC")]
         BySportRemoveSpecialCC = 442
     }
@@ -323,9 +327,9 @@ namespace Fanex.NAP.CTS.Model
         [Description("InsertVVIP")]
         InsertVVIP = 1001,
         [Description("InsertPACategory")]
-        InsertPACategory = 1005,      
+        InsertPACategory = 1005,
         [Description("Normal")]
-        Normal = 1009,      
+        Normal = 1009,
         [Description("RemovePACategory")]
         RemovePACategory = 1225,
         [Description("RescanNormal")]

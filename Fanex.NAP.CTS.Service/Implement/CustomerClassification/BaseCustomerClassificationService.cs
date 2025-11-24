@@ -62,31 +62,5 @@
 
             return new ResultRemoveCustomerClassificationModel { CustInfos = custInfos, ErrorMessage = criteria.ErrorMessage };
         }
-
-        public ResultInsertCustomerClassificationBySportModel InsertCustomerClassificationBySport(CCInputFlow inputFlow, InsertCustomerClassificationBySportModel model)
-        {
-            var criteria = new InsertCustomerClassificationBySportCriteria
-            {
-                InputFlowID = (int)inputFlow,
-                CustClassificationJson = model.CustClassificationJson
-            };
-
-            var custInfos = repository.Fetch<CustInfoClassificationBySportModel>(criteria);
-
-            return new ResultInsertCustomerClassificationBySportModel { CustInfos = custInfos, ErrorMessage = criteria.ErrorMessage };
-        }
-
-        public ResultRemoveCustomerClassificationBySportModel RemoveCustomerClassificationBySport(CCInputFlow inputFlow, RemoveCustomerClassificationBySportModel model)
-        {
-            var criteria = new RemoveCustomerClassificationBySportCriteria
-            {
-                InputFlowID = (int)inputFlow,              
-                CustClassificationJson = model.CustClassificationJson
-            };
-
-            var custInfos = repository.Fetch<ResultRemoveCCInfoBySportModel>(criteria);
-
-            return new ResultRemoveCustomerClassificationBySportModel { CustInfos = custInfos, ErrorMessage = criteria.ErrorMessage };
-        }
     }
 }
