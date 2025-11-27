@@ -43,7 +43,7 @@
 
         byte[] ExportToExcelAssociationDetect(IEnumerable<ExportAssociationDetectModel> AssociationDetect, string fileName, string templatePath);
 
-        Tuple<IEnumerable<DetectAssociationByUserRootModel>, IEnumerable<DetectAssociationAgentByUserRootModel>> DetectAssociationCustByUserRoot(DetectAssociationByUserRootFilterModel assFilter);
+        Tuple<IEnumerable<DetectAssociationByUserRootModel>, string> DetectAssociationCustByUserRoot(DetectAssociationByUserRootFilterModel assFilter);
     }
 
     public class AssociationDetectionService : IAssociationDetectionService
@@ -281,7 +281,7 @@
             return writer.ToBytes();
         }
 
-        public Tuple<IEnumerable<DetectAssociationByUserRootModel>, IEnumerable<DetectAssociationAgentByUserRootModel>> DetectAssociationCustByUserRoot(DetectAssociationByUserRootFilterModel assFilter)
+        public Tuple<IEnumerable<DetectAssociationByUserRootModel>, string> DetectAssociationCustByUserRoot(DetectAssociationByUserRootFilterModel assFilter)
         {
             var criteria = new DetectAssociationByUserRootCriteria
             {
@@ -292,9 +292,12 @@
                 IsAgent = assFilter.IsAgent,
             };
 
-            var result = _repository.Fetch<DetectAssociationByUserRootModel, DetectAssociationAgentByUserRootModel>(criteria);
+            var result = _repository.Fetch<DetectAssociationByUserRootModel, string>(criteria);
 
-            return result.ToTuple();
+            return Tuple.Create(
+                        result.firstResultSet,
+                        result.secondResultSet.FirstOrDefault() ?? "[]"
+                    );
         }
         #endregion
 

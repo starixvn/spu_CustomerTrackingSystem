@@ -329,13 +329,13 @@
             };
 
             var result = ConfigSettings.IsUsingFanexAPIDirect
-                ? ApiHelper.PostWithApiKey<Tuple<IEnumerable<DetectAssociationByUserRootModel>, IEnumerable<DetectAssociationAgentByUserRootModel>>>(
+                ? ApiHelper.PostWithApiKey<Tuple<IEnumerable<DetectAssociationByUserRootModel>, string>>(
                     ConfigSettings.GetCtsApiEndPoint(ApiEndpoint.DetectAssociationCustByUserRoot),
                     filterAss,
                     ConfigSettings.ApiKeyFanexAPIDirect, ConfigSettings.AssociationDetectionTimeout).Result
                 : _associationDetectionService.DetectAssociationCustByUserRoot(filterAss);
 
-            return (JsonConvert.SerializeObject(result.Item1), JsonConvert.SerializeObject(result.Item2));
+            return (JsonConvert.SerializeObject(result.Item1), result.Item2);
         }
 
         #endregion Association Detect
