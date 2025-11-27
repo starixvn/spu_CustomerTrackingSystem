@@ -7,13 +7,12 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.Common;
-    using Fanex.NAP.CTS.Model.DangerMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
     using Fanex.NAP.TGRS.Core.ExcelUtility;
     using Newtonsoft.Json;
-    using System.Collections;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -44,7 +43,7 @@
 
         byte[] ExportToExcelAssociationDetect(IEnumerable<ExportAssociationDetectModel> AssociationDetect, string fileName, string templatePath);
 
-        IEnumerable<DetectAssociationByUserRootModel> DetectAssociationCustByUserRoot(DetectAssociationByUserRootFilterModel assFilter);
+        Tuple<IEnumerable<DetectAssociationByUserRootModel>, IEnumerable<DetectAssociationAgentByUserRootModel>> DetectAssociationCustByUserRoot(DetectAssociationByUserRootFilterModel assFilter);
     }
 
     public class AssociationDetectionService : IAssociationDetectionService
@@ -281,18 +280,21 @@
 
             return writer.ToBytes();
         }
-       
-        public IEnumerable<DetectAssociationByUserRootModel> DetectAssociationCustByUserRoot(DetectAssociationByUserRootFilterModel assFilter)
+
+        public Tuple<IEnumerable<DetectAssociationByUserRootModel>, IEnumerable<DetectAssociationAgentByUserRootModel>> DetectAssociationCustByUserRoot(DetectAssociationByUserRootFilterModel assFilter)
         {
             var criteria = new DetectAssociationByUserRootCriteria
             {
                 UserNames = assFilter.UserNames,
                 IsAI = assFilter.IsAI,
                 IsDevice = assFilter.IsDevice,
-                IsIP = assFilter.IsIP
+                IsIP = assFilter.IsIP,
+                IsAgent = assFilter.IsAgent,
             };
 
-            return _repository.Fetch<DetectAssociationByUserRootModel>(criteria);
+            var result = _repository.Fetch<DetectAssociationByUserRootModel, DetectAssociationAgentByUserRootModel>(criteria);
+
+            return result.ToTuple();
         }
         #endregion
 
@@ -340,9 +342,9 @@
         private string GetAssociationCustByIP(IEnumerable<SharedIPInfoModel> ass)
         {
             var assCustBySharedIP = ass.Select(x => new AssociationCustByIPViewModel
-            {               
-                O = x.FromCTSCustID,               
-                D = x.ToCTSCustID              
+            {
+                O = x.FromCTSCustID,
+                D = x.ToCTSCustID
             });
 
             return ObjectHelper.SerializeObj(assCustBySharedIP);
@@ -372,9 +374,9 @@
         private string GetAssociationCustByMatch(IEnumerable<SharedIPMatchesInfoModel> ass)
         {
             var assCustBySharedIP = ass.Select(x => new AssociationCustModel
-            {               
-                FromCTSCustID = x.FromCTSCustID,              
-                ToCTSCustID = x.ToCTSCustID                
+            {
+                FromCTSCustID = x.FromCTSCustID,
+                ToCTSCustID = x.ToCTSCustID
             });
 
             return JsonConvert.SerializeObject(assCustBySharedIP);

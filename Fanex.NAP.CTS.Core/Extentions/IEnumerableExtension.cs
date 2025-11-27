@@ -16,7 +16,7 @@
             return from item in data.GroupBy(predicate) select item.First();
         }
 
-        public static bool IsNullOrEmpty<T> (this IEnumerable<T> arr)
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> arr)
         {
             return arr is null || !arr.Any();
         }
@@ -24,6 +24,11 @@
         public static bool IsNotNullOrEmpty<T>(this IEnumerable<T> arr)
         {
             return !IsNullOrEmpty(arr);
+        }
+
+        public static bool HasRealValue(this string s)
+        {
+            return s.IsNotNullOrEmpty() && s != "[]";
         }
     }
 }

@@ -300,18 +300,19 @@
 
     function GetRootUserOption() {
         const isAssociationEnabled = !domElements.cbbAssociation.prop("disabled");
-        if (!isAssociationEnabled) return { IsAI: false, IsDevice: false, IsIP: false };
+        if (!isAssociationEnabled) return { IsAI: false, IsDevice: false, IsIP: false, IsAgent: false };
 
         const selectedValue = domElements.cbbAssociation.val() || "";
-        if (selectedValue.includes("-1")) return { IsAI: false, IsDevice: false, IsIP: false };
+        if (selectedValue.includes("-1")) return { IsAI: false, IsDevice: false, IsIP: false, IsAgent: false };
 
         const result = {
             IsAI: selectedValue.includes("1"),
             IsDevice: selectedValue.includes("2"),
-            IsIP: selectedValue.includes("3")
+            IsIP: selectedValue.includes("3"),
+            IsAgent: selectedValue.includes("4")
         };
 
-        return (result.IsAI || result.IsDevice || result.IsIP) ? result : null;
+        return (result.IsAI || result.IsDevice || result.IsIP || result.IsAgent) ? result : null;
     };
 
     function GetDangerMonitor() {

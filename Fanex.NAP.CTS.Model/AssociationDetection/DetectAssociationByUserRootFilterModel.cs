@@ -10,5 +10,6 @@
 
         public bool IsIP { get; set; }
 
+        public bool IsAgent { get; set; }
     }
 }

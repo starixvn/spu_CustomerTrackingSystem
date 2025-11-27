@@ -40,7 +40,10 @@
         public decimal TotalAmount { get; set; }
 
         [SpParam(SqlParamName = "AssociationsList")]
-        public string AssociationRootUser { get; set; }
+        public string AssociationByAIDeviceIP { get; set; }
+
+        [SpParam(SqlParamName = "AssociationsAgentList")]
+        public string AssociationByAgent { get; set; }
 
         public override string GetSettingKey() => "CTS_MatchTicketInfo_Associations_Get";
 

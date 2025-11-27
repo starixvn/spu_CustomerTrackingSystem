@@ -163,7 +163,7 @@
                 ViewBag.Danger3 = para.Danger3;
                 ViewBag.Danger4 = para.Danger4;
                 ViewBag.Danger5 = para.Danger5;
-                ViewBag.UsernameAmt = para.UsernameAmt;           
+                ViewBag.UsernameAmt = para.UsernameAmt;
                 ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                                                                             NapSettings.Settings.SiteId,
                                                                             FSFunctionKeys.MatchMonitor,
@@ -317,7 +317,7 @@
             };
         }
 
-        private string DetectAssociationCustByUserRoot(DangerMonitorSearchModel filter)
+        private (string assByAIIPDevice, string assByAgent) DetectAssociationCustByUserRoot(DangerMonitorSearchModel filter)
         {
             var filterAss = new DetectAssociationByUserRootFilterModel
             {
@@ -325,16 +325,17 @@
                 IsAI = filter.RootUserOption.IsAI,
                 IsDevice = filter.RootUserOption.IsDevice,
                 IsIP = filter.RootUserOption.IsIP,
+                IsAgent = filter.RootUserOption.IsAgent,
             };
 
             var result = ConfigSettings.IsUsingFanexAPIDirect
-                ? ApiHelper.PostWithApiKey<IEnumerable<DetectAssociationByUserRootModel>>(
+                ? ApiHelper.PostWithApiKey<Tuple<IEnumerable<DetectAssociationByUserRootModel>, IEnumerable<DetectAssociationAgentByUserRootModel>>>(
                     ConfigSettings.GetCtsApiEndPoint(ApiEndpoint.DetectAssociationCustByUserRoot),
                     filterAss,
                     ConfigSettings.ApiKeyFanexAPIDirect, ConfigSettings.AssociationDetectionTimeout).Result
                 : _associationDetectionService.DetectAssociationCustByUserRoot(filterAss);
 
-            return JsonConvert.SerializeObject(result);
+            return (JsonConvert.SerializeObject(result.Item1), JsonConvert.SerializeObject(result.Item2));
         }
 
         #endregion Association Detect

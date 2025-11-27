@@ -59,7 +59,7 @@
 
                 if (result == null)
                 {
-                    result = GetSportBettypes();             
+                    result = GetSportBettypes();
 
                     _memoryCacheService.PushValue(cacheKey, result);
                 }
@@ -120,11 +120,11 @@
             };
         }
 
-        public GetDangerMonitorResultViewModel GetDangerMonitorWithAssociationByRootUser(DangerMonitorSearchModel filter, string associationData)
+        public GetDangerMonitorResultViewModel GetDangerMonitorWithAssociationByRootUser(DangerMonitorSearchModel filter, (string assByAIIPDevice, string assByAgent) associationData)
         {
             var result = Enumerable.Empty<GetDangerMonitorItemViewModel>();
 
-            if (associationData.IsNotNullOrEmpty() && associationData != "[]")
+            if (associationData.assByAIIPDevice.HasRealValue() || associationData.assByAgent.HasRealValue())
             {
                 var dangerMMItems = GetDangerMonitorInfoWithAssociationRootUser(filter, associationData);
                 result = dangerMMItems != null ? MappingDangerMonitorWithSportBettype(dangerMMItems) : null;
@@ -170,7 +170,7 @@
         {
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Sheet1");
             writer.CopyRows(0, 1);
-            
+
             if (ConditionUseSetExportExcel.Contains(sportType))
             {
                 FillRowDataBadmintonDG(homeMItems, awayMItems, ref writer);
@@ -180,7 +180,7 @@
             {
                 FillRowDataDG(homeMItems, awayMItems, ref writer);
                 writer.SyncColumnsWidth(29);
-            }                        
+            }
 
             return writer.ToBytes();
         }
@@ -190,7 +190,7 @@
         private IEnumerable<GetDangerMonitorItemViewModel> MappingDangerMonitorWithSportBettype(IEnumerable<DangerMMTicketInfoModel> dangerMonitors)
         {
             var sportBettypes = GetBettypesFromCache();
-          
+
             return dangerMonitors.Join(sportBettypes,
                                         item => $"{item.SportType}_{item.Bettype}_{item.BetID}",
                                         sportBettype => $"{sportBettype.SportType}_{sportBettype.BetTypeID}_{sportBettype.BetID}",
@@ -229,14 +229,14 @@
                 LeagueGroupList = filter.LeagueGroupList,
                 TotalAmount = filter.TotalAmount,
                 UserAmount = filter.UserAmount
-            };           
+            };
 
             var result = _repository.Fetch<DangerMMTicketInfoEntity>(criteria);
 
             return result?.Select(x => new DangerMMTicketInfoModel(x)) ?? Enumerable.Empty<DangerMMTicketInfoModel>();
         }
 
-        private IEnumerable<DangerMMTicketInfoModel> GetDangerMonitorInfoWithAssociationRootUser(DangerMonitorSearchModel filter, string associatedData)
+        private IEnumerable<DangerMMTicketInfoModel> GetDangerMonitorInfoWithAssociationRootUser(DangerMonitorSearchModel filter, (string assByAIIPDevice, string assByAgent) associatedData)
         {
             var criteria = new DangerMonitorSearchMatchInfoWithAssociationRootUserCriteria
             {
@@ -251,7 +251,8 @@
                 LeagueGroupList = filter.LeagueGroupList,
                 TotalAmount = filter.TotalAmount,
                 UserAmount = filter.UserAmount,
-                AssociationRootUser = associatedData
+                AssociationByAIDeviceIP = associatedData.assByAIIPDevice,
+                AssociationByAgent = associatedData.assByAgent,
             };
 
             var result = _repository.Fetch<DangerMMTicketInfoEntity>(criteria);
@@ -636,21 +637,21 @@
 
         #region private method
         private TicketDetailViewModel GetFraudMMDetailForCache(MMDetailInfoViewModel filter)
-        {            
+        {
             var fraudMMDetailResult = new TicketDetailViewModel() { TicketType = filter.TicketType };
-            var viewModeName = Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketFraud);       
+            var viewModeName = Enum.GetName(typeof(MMViewModeFromUI), MMViewModeFromUI.TicketFraud);
 
             try
-            {                
+            {
                 var matchDetailInfo = new MMDetailResultModel();
-                var fraudTicketDetails = new List<TicketDetailModel>();                
+                var fraudTicketDetails = new List<TicketDetailModel>();
 
                 filter.BetID?.Split(',').ToList().ForEach((betID) =>
                 {
                     var para = filter.Clone();
                     para.TypeOfTickets = MMViewModeFromUI.TicketFraud;
                     para.BetID = betID;
-                    
+
                     var matchDetailForCache = _matchMonitorService.GetMatchMonitorDetailForCache(para, Region, UserID, viewModeName);
 
                     var ticketDetails = _matchMonitorService.GetSingleTicketDetailForCache(matchDetailForCache, para, Region, UserID, viewModeName);
@@ -659,7 +660,7 @@
                     matchDetailInfo.MatchDetails.AddRange(matchDetailForCache.MatchDetails);
                     matchDetailInfo.VerifiedTrans.AddRange(matchDetailForCache.VerifiedTrans);
 
-                    fraudTicketDetails.AddRange(ticketDetails.TicketDetails);                    
+                    fraudTicketDetails.AddRange(ticketDetails.TicketDetails);
                 });
 
                 fraudMMDetailResult = new TicketDetailViewModel() { TicketType = filter.TicketType };
@@ -677,7 +678,7 @@
 
             return fraudMMDetailResult;
         }
-     
+
         private MMDetailTicketListViewModel GetFraudMMDetail(MMDetailInfoViewModel para, MMDetailFilterViewModel filter, TicketDetailViewModel fraudTicket)
         {
             var mdResult = new MMDetailTicketListViewModel();
@@ -1073,8 +1074,8 @@
                     bt => new { BettypeId = bt.BetTypeID, SporttypeId = bt.SportTypeID },
                     (main, bt) => Project(main, bt)
                 );
-           
-            return result1.Union(result2);            
+
+            return result1.Union(result2);
         }
         #endregion
     }

@@ -7,5 +7,7 @@
         public bool IsDevice { get; set; }
 
         public bool IsIP { get; set; }
+
+        public bool IsAgent { get; set; }
     }
 }

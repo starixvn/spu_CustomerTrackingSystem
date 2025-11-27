@@ -18,7 +18,7 @@
 
         GetDangerMonitorResultViewModel GetDangerMonitorWithNoAssociation(DangerMonitorSearchModel filter);
 
-        GetDangerMonitorResultViewModel GetDangerMonitorWithAssociationByRootUser(DangerMonitorSearchModel filter, string associationData);
+        GetDangerMonitorResultViewModel GetDangerMonitorWithAssociationByRootUser(DangerMonitorSearchModel filter, (string assByAIIPDevice, string assByAgent) associationData);
 
         byte[] ExportExcelMMDetailSG(IEnumerable<ExExcelTicketInfoViewModel> items, string fileName, string templatePath, int sportType);
 

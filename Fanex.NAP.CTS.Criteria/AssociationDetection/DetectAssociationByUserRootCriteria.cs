@@ -17,6 +17,9 @@
         [SpParam(SqlParamName = "ip_HasIP")]
         public bool IsIP { get; set; }
 
+        [SpParam(SqlParamName = "ip_HasAgent")]
+        public bool IsAgent { get; set; }
+
         public override string GetSettingKey()
         {
             return "CTS_DC_Association_GetByUserNameList";

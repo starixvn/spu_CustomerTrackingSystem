@@ -37,7 +37,7 @@
         {
             get
             {
-                return RootUserOption != null && (RootUserOption.IsAI || RootUserOption.IsDevice || RootUserOption.IsIP);
+                return RootUserOption != null && (RootUserOption.IsAI || RootUserOption.IsDevice || RootUserOption.IsIP || RootUserOption.IsAgent);
             }
         }
 
